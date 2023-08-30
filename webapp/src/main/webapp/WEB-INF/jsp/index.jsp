@@ -5,6 +5,6 @@
     <link rel="stylesheet" href="./css/main.css">
 </head>
 <body>
-<h2>Hello <c:out value="${user.email}" escapeXml="true"/>!</h2>
+<h2>Apuntea</h2>
 </body>
 </html>

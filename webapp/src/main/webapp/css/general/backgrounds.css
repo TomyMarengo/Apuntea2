@@ -1,0 +1,26 @@
+/* BACKGROUND COLORS */
+/* Also have bg-primary / bg-secondary / bg-white from overrided bs */
+
+.bg-primary {
+	background-color: var(--primary);
+}
+
+.bg-dark-primary {
+	background-color: var(--dark-primary);
+}
+
+.bg-secondary {
+	background-color: var(--secondary);
+}
+
+.bg-dark-secondary {
+	background-color: var(--dark-secondary);
+}
+
+.bg-bg {
+	background-color: var(--bg);
+}
+
+.bg-dark-bg {
+	background-color: var(--dark-bg);
+}

@@ -3,7 +3,6 @@ package ar.edu.itba.apuntea.services;
 import ar.edu.itba.apuntea.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import ar.edu.itba.apuntea.models.User;
 
 @Service

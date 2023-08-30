@@ -13,6 +13,14 @@
   <name>interfaces</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+    </dependency>
      <dependency>
        <groupId>${project.groupId}</groupId>
        <artifactId>models</artifactId>

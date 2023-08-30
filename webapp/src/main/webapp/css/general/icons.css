@@ -1,0 +1,42 @@
+.icon-s {
+	width: 20px;
+	height: 20px;
+}
+
+.icon-m {
+	width: 25px;
+	height: 25px;
+}
+
+.icon-l {
+	width: 30px;
+	height: 30px;
+}
+
+.fill-primary {
+	filter: var(--filter-primary);
+}
+
+.fill-dark-primary {
+	filter: var(--filter-dark-primary);
+}
+
+.fill-secondary {
+	filter: var(--filter-secondary);
+}
+
+.fill-dark-secondary {
+	filter: var(--filter-dark-secondary);
+}
+
+.fill-text {
+	filter: var(--filter-text);
+}
+
+.fill-dark-text {
+	filter: var(--filter-dark-text);
+}
+
+.fill-bg {
+	filter: var(--filter-bg);
+}

@@ -1,0 +1,42 @@
+body {
+	background: var(--background, linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%));
+	background-repeat: no-repeat;
+	/* Evita la repetición del fondo */
+	background-size: cover;
+	background-blend-mode: lighten;
+	background-attachment: fixed;
+}
+
+* {
+	font-family: 'Lato', sans-serif !important;
+	color: var(--text);
+}
+
+button {
+	font-weight: 700 !important;
+}
+
+input::placeholder {
+	color: var(--text) !important;
+}
+
+p {
+	margin: 0;
+}
+
+h5 {
+	margin-bottom: 0;
+}
+
+h6 {
+	margin-bottom: 0;
+}
+
+h3 {
+	margin-bottom: 0;
+}
+
+a {
+	text-decoration: none;
+	/* Quitar subrayado */
+}

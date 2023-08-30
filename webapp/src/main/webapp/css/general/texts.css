@@ -1,0 +1,22 @@
+/* TEXT COLORS */
+/* Also have text-primary / text-secondary / text-white from overrided bs */
+
+.text-primary {
+	color: var(--primary);
+}
+
+.text-dark-primary {
+	color: var(--dark-primary);
+}
+
+.text-secondary {
+	color: var(--secondary);
+}
+
+.text-dark-secondary {
+	color: var(--dark-secondary);
+}
+
+.text-s {
+	font-size: 14px;
+}
