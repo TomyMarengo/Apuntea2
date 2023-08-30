@@ -1,5 +1,6 @@
+/*noinspection CssReplaceWithShorthandSafely*/
 body {
-	background: var(--background, linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%));
+	background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%);
 	background-repeat: no-repeat;
 	/* Evita la repetición del fondo */
 	background-size: cover;
