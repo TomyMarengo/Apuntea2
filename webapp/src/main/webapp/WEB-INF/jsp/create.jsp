@@ -1,3 +1,4 @@
+<%--suppress HtmlUnknownTarget --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -8,7 +9,7 @@
 </head>
 <body>
 <h2>Subir Archivo</h2>
-<form action="${pageContext.request.contextPath}/create" method="post" enctype="multipart/form-data">
+<form action="create" method="post" enctype="multipart/form-data">
     <label for="file">Archivo:</label>
     <input type="file" name="file" id="file" required><br>
     <label for="university">Universidad:</label>

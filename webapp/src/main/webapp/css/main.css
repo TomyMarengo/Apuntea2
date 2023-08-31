@@ -4995,6 +4995,10 @@ fieldset:disabled .btn {
   border-radius: var(--bs-card-border-radius);
 }
 
+.card-link+.card-link {
+  margin-left: 0;
+}
+
 .card>hr {
   margin-right: 0;
   margin-left: 0;
