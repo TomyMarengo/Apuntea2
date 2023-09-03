@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class NoteServiceImpl implements NoteService{
@@ -25,6 +26,11 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public Note create(MultipartFile multipartFile, String university, String career, String subject, String type) {
         return noteDao.create(multipartFile, university, career, subject, type);
+    }
+
+    @Override
+    public byte[] getNoteFileById(UUID noteId) {
+        return noteDao.getNoteFileById(noteId);
     }
 
 }

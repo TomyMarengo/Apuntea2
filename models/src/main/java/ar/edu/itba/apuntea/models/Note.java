@@ -1,18 +1,20 @@
 package ar.edu.itba.apuntea.models;
 
+import java.util.UUID;
+
 public class Note {
-    private String filePath; //TODO: change for BLOB when we have database
-    private String university;
+    private UUID noteId;
+    private String institution; //TODO: change institution to model?
     private String career;
     private String subject;
     private String type;
-    private float score = 0f;
+    private byte[] file;
 
-    public Note(String filePath, String university, String career, String subject, String type) {
-        this.filePath = filePath;
-        this.university = university;
+    public Note(String institution, String career, String subject, String type, byte[] file) {
+        this.institution = institution;
         this.career = career;
         this.subject = subject;
         this.type = type;
+        this.file = file;
     }
 }

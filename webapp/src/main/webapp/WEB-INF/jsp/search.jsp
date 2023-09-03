@@ -15,15 +15,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/general/elements.css" />
-    <link rel="stylesheet" href="css/general/sizes.css" />
-    <link rel="stylesheet" href="css/general/backgrounds.css" />
-    <link rel="stylesheet" href="css/general/texts.css" />
-    <link rel="stylesheet" href="css/general/buttons.css" />
-    <link rel="stylesheet" href="css/general/icons.css" />
-    <link rel="stylesheet" href="css/general/boxes.css" />
-    <link rel="stylesheet" href="css/sections/navbar.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/general/elements.css" />
+    <link rel="stylesheet" href="/css/general/sizes.css" />
+    <link rel="stylesheet" href="/css/general/backgrounds.css" />
+    <link rel="stylesheet" href="/css/general/texts.css" />
+    <link rel="stylesheet" href="/css/general/buttons.css" />
+    <link rel="stylesheet" href="/css/general/icons.css" />
+    <link rel="stylesheet" href="/css/general/boxes.css" />
+    <link rel="stylesheet" href="/css/sections/navbar.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,7 +36,7 @@
     <fragment:navbar/>
 
     <!-- BOTTOM-NAVBAR -->
-    <fragment:bottom-navbar title="search:Búsqueda" extraLinks="">
+    <fragment:bottom-navbar title="notes/search:Búsqueda" extraLinks="">
     </fragment:bottom-navbar>
 
 
@@ -46,21 +46,21 @@
             <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 ">
                 <div class="col">
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><img src="svg/school.svg" alt="University" class="icon-s fill-text" /></span>
+                        <span class="input-group-text"><img src="/svg/school.svg" alt="University" class="icon-s fill-text" /></span>
                         <input type="text" class="form-control bg-bg" placeholder="Universidad">
                     </div>
                 </div>
 
                 <div class="col">
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><img src="svg/books.svg" alt="Subject" class="icon-s fill-text" /></span>
+                        <span class="input-group-text"><img src="/svg/books.svg" alt="Subject" class="icon-s fill-text" /></span>
                         <input type="text" class="form-control bg-bg" placeholder="Carrera">
                     </div>
                 </div>
 
                 <div class="col">
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><img src="svg/book-alt.svg" alt="Subject" class="icon-s fill-text" /></span>
+                        <span class="input-group-text"><img src="/svg/book-alt.svg" alt="Subject" class="icon-s fill-text" /></span>
                         <input type="text" class="form-control bg-bg" placeholder="Materia">
                     </div>
                 </div>
@@ -110,7 +110,7 @@
     <!-- TODO: NOTES FOUND -->
 
 
-    <script src="js/scripts.js"></script>
+    <script src="/js/scripts.js"></script>
 </body>
 
 </html>

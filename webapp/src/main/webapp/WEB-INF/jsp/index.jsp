@@ -1,6 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -15,18 +16,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/general/elements.css" />
-    <link rel="stylesheet" href="css/general/sizes.css" />
-    <link rel="stylesheet" href="css/general/backgrounds.css" />
-    <link rel="stylesheet" href="css/general/texts.css" />
-    <link rel="stylesheet" href="css/general/buttons.css" />
-    <link rel="stylesheet" href="css/general/icons.css" />
-    <link rel="stylesheet" href="css/general/boxes.css" />
-    <link rel="stylesheet" href="css/sections/navbar.css" />
-    <link rel="stylesheet" href="css/sections/landing/graph.css" />
-    <link rel="stylesheet" href="css/sections/landing/carousel.css" />
-    <link rel="stylesheet" href="css/sections/landing/comments.css" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/general/elements.css" />
+    <link rel="stylesheet" href="/css/general/sizes.css" />
+    <link rel="stylesheet" href="/css/general/backgrounds.css" />
+    <link rel="stylesheet" href="/css/general/texts.css" />
+    <link rel="stylesheet" href="/css/general/buttons.css" />
+    <link rel="stylesheet" href="/css/general/icons.css" />
+    <link rel="stylesheet" href="/css/general/boxes.css" />
+    <link rel="stylesheet" href="/css/sections/navbar.css" />
+    <link rel="stylesheet" href="/css/sections/landing/graph.css" />
+    <link rel="stylesheet" href="/css/sections/landing/carousel.css" />
+    <link rel="stylesheet" href="/css/sections/landing/comments.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -51,7 +52,9 @@
                 <div class="d-flex align-items-center mb-3">
                     <input type="text" class="form-control custom-input me-2 rounded-box bg-bg"
                            placeholder="Busca un apunte, materia, universidad...">
-                    <button class="btn rounded-box button-white">Buscar</button>
+                    <button class="btn rounded-box button-white">
+                        <spring:message code="search"/>
+                    </button>
                 </div>
             </div>
         </div>
@@ -62,12 +65,12 @@
         <div class="card bg-transparent border-0">
             <div class="card-body d-flex flex-column align-items-center">
                 <div class="d-flex align-items-center mb-3">
-                    <img src="svg/rocket.svg" alt="Rocket" class="me-2 icon-s fill-text">
+                    <img src="/svg/rocket.svg" alt="Rocket" class="me-2 icon-s fill-text">
                     <h5 class="fw-bold">Explora nuestras opciones</h5>
                 </div>
                 <div class="d-flex w-75 justify-content-around">
                     <button class="btn rounded-box button-primary">Registrate</button>
-                    <a href="search"><button class="btn rounded-box button-secondary">Descubre</button></a>
+                    <a href="notes/search"><button class="btn rounded-box button-secondary">Descubre</button></a>
                 </div>
             </div>
         </div>
@@ -80,10 +83,10 @@
                 <h5 class="fw-bold" style="margin-left: 120px; margin-right: 75px">Últimos apuntes</h5>
                 <div>
                     <button class="carousel-button" type="button" data-bs-target="#carouselUniversity" data-bs-slide="prev">
-                        <img src="svg/prev.svg" alt="Previous" class="icon-l fill-dark-primary">
+                        <img src="/svg/prev.svg" alt="Previous" class="icon-l fill-dark-primary">
                     </button>
                     <button class="carousel-button" type="button" data-bs-target="#carouselUniversity" data-bs-slide="next">
-                        <img src="svg/next.svg" alt="Next" class="icon-l fill-dark-primary">
+                        <img src="/svg/next.svg" alt="Next" class="icon-l fill-dark-primary">
                     </button>
                 </div>
 
@@ -99,7 +102,7 @@
                                 <div class="card-body d-flex align-items-center h-100 justify-content-around flex-wrap">
                                     <!-- University Icon and Name (in the right) -->
                                     <div class="d-flex align-items-center university-title ">
-                                        <img src="svg/graduation-cap.svg" alt="University Icon" class="icon-s fill-text">
+                                        <img src="/svg/graduation-cap.svg" alt="University Icon" class="icon-s fill-text">
                                         <h5 class=" mx-2 w-100"><strong>ITBA</strong></h5>
                                     </div>
                                     <!-- Graph with circles and lines -->
@@ -168,7 +171,7 @@
                                 <div class="card-body d-flex align-items-center h-100 justify-content-around flex-wrap">
                                     <!-- University Icon and Name (in the right) -->
                                     <div class="d-flex align-items-center university-title ">
-                                        <img src="svg/graduation-cap.svg" alt="University Icon" class="icon-s fill-text">
+                                        <img src="/svg/graduation-cap.svg" alt="University Icon" class="icon-s fill-text">
                                         <h5 class=" mx-2 w-100"><strong>UBA</strong></h5>
                                     </div>
                                     <!-- Graph with circles and lines -->
@@ -241,7 +244,7 @@
                         <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
                             <div class="card-body">
                                 <h5 class="card-title fb-">
-                                    <img src="svg/arrow-trend-up.svg" alt="University Icon" class="icon-s fill-dark-primary mx-2">
+                                    <img src="/svg/arrow-trend-up.svg" alt="University Icon" class="icon-s fill-dark-primary mx-2">
                                     <strong>Matemática Discreta</strong>
                                 </h5>
                                 <p class="card-text"><strong>Jonathan ha comentado</strong></p>
@@ -254,7 +257,7 @@
                         <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
                             <div class="card-body">
                                 <h5 class="card-title fb-">
-                                    <img src="svg/arrow-trend-up.svg" alt="University Icon" class="icon-s fill-dark-primary mx-2">
+                                    <img src="/svg/arrow-trend-up.svg" alt="University Icon" class="icon-s fill-dark-primary mx-2">
                                     <strong>Teoría de Lenguajes y Autómatas</strong>
                                 </h5>
                                 <p class="card-text"><strong>David ha comentado</strong></p>
@@ -267,7 +270,7 @@
                         <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
                             <div class="card-body">
                                 <h5 class="card-title fb-">
-                                    <img src="svg/arrow-trend-up.svg" alt="University Icon" class="icon-s fill-dark-primary mx-2">
+                                    <img src="/svg/arrow-trend-up.svg" alt="University Icon" class="icon-s fill-dark-primary mx-2">
                                     <strong>Matemática III</strong>
                                 </h5>
                                 <p class="card-text"><strong>Tomás ha comentado</strong></p>
@@ -281,7 +284,7 @@
         </div>
     </div>
 
-    <script src="js/scripts.js"></script>
+    <script src="/js/scripts.js"></script>
 </body>
 
 </html>
