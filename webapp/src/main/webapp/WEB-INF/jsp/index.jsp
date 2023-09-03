@@ -43,17 +43,16 @@
     <div class="container mt-5 mw-500">
         <div class="card bg-transparent border-0">
             <div class="card-body">
-                <h5 class="card-title fw-bold">¿Sabías qué?</h5>
+                <h5 class="card-title fw-bold"><spring:message code="index.dyk.title"/></h5>
                 <div class="d-flex align-items-center mb-3">
                     <img src="image/teacher.png" alt="Teacher" class="me-2" style="width: 40px; height: 40px;">
-                    <p class="mb-0">Al compartir apuntes, ganas niveles y te destacas en la comunidad académica. Los usuarios más
-                        activos entran en el ranking y obtienen beneficios exclusivos.</p>
+                    <p class="mb-0"><spring:message code="index.dyk.subtitle"/></p>
                 </div>
                 <div class="d-flex align-items-center mb-3">
                     <input type="text" class="form-control custom-input me-2 rounded-box bg-bg"
-                           placeholder="Busca un apunte, materia, universidad...">
+                           placeholder="<spring:message code="index.search.placeholder"/>">
                     <button class="btn rounded-box button-white">
-                        <spring:message code="search"/>
+                        <spring:message code="index.search.button"/>
                     </button>
                 </div>
             </div>
@@ -66,11 +65,13 @@
             <div class="card-body d-flex flex-column align-items-center">
                 <div class="d-flex align-items-center mb-3">
                     <img src="/svg/rocket.svg" alt="Rocket" class="me-2 icon-s fill-text">
-                    <h5 class="fw-bold">Explora nuestras opciones</h5>
+                    <h5 class="fw-bold"><spring:message code="index.explore.title"/></h5>
                 </div>
                 <div class="d-flex w-75 justify-content-around">
-                    <button class="btn rounded-box button-primary">Registrate</button>
-                    <a href="notes/search"><button class="btn rounded-box button-secondary">Descubre</button></a>
+                    <button class="btn rounded-box button-primary"><spring:message code="index.explore.register"/></button>
+                    <a href="notes/search"><button class="btn rounded-box button-secondary">
+                        <spring:message code="index.explore.discover"/></button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -80,7 +81,7 @@
         <!-- CARROUSEL LAST NOTES -->
         <div class="d-flex flex-column col-xl-6">
             <div class="d-flex justify-content-center" style="padding-left: 40px;">
-                <h5 class="fw-bold" style="margin-left: 120px; margin-right: 75px">Últimos apuntes</h5>
+                <h5 class="fw-bold" style="margin-left: 120px; margin-right: 75px"><spring:message code="index.notes.title"/></h5>
                 <div>
                     <button class="carousel-button" type="button" data-bs-target="#carouselUniversity" data-bs-slide="prev">
                         <img src="/svg/prev.svg" alt="Previous" class="icon-l fill-dark-primary">
@@ -103,7 +104,7 @@
                                     <!-- University Icon and Name (in the right) -->
                                     <div class="d-flex align-items-center university-title ">
                                         <img src="/svg/graduation-cap.svg" alt="University Icon" class="icon-s fill-text">
-                                        <h5 class=" mx-2 w-100"><strong>ITBA</strong></h5>
+                                        <h5 class=" mx-2 w-100"><strong>PLACEHOLDER</strong></h5>
                                     </div>
                                     <!-- Graph with circles and lines -->
                                     <div class="graph h-100">
@@ -117,12 +118,12 @@
                                         <div class="line line4"></div>
                                         <div class="circle circle5"></div>
                                         <div class="info1 d-flex flex-column fw-bold text-center w-25">
-                                            <p>1000</p>
-                                            <p>Alumnos</p>
+                                            <p>NUMBER</p>
+                                            <p><spring:message code="index.notes.students"/></p>
                                         </div>
                                         <div class="info2 d-flex flex-column fw-bold text-center w-25">
-                                            <p>50</p>
-                                            <p>Apuntes</p>
+                                            <p>NUMBER</p>
+                                            <p><spring:message code="index.notes.notes"/></p>
                                         </div>
                                         <!-- Add more circles and lines as needed -->
                                     </div>
@@ -136,25 +137,25 @@
                                     <a href="https://www.google.com" class="bar-link">
                                         <button class="btn rounded-pill button-white button-expansion
                           w-100 d-flex align-items-center text-s">
-                                            <span class="col-4 text-start">Ingeniería Informática</span>
-                                            <span class="col-6">Teoría de Lenguajes y Autómatas</span>
-                                            <span class="col-2 text-end">09/12/22</span>
+                                            <span class="col-4 text-start">PLACEHOLDER</span>
+                                            <span class="col-6">PLACEHOLDER</span>
+                                            <span class="col-2 text-end">PLACEHOLDER</span>
                                         </button>
                                     </a>
                                     <a href="https://www.google.com" class="bar-link">
                                         <button class="btn rounded-pill button-white button-expansion
                           w-100 d-flex justify-content-between align-items-center text-s">
-                                            <span class="col-4 text-start">Ingeniería Química</span>
-                                            <span class="col-6">Química I</span>
-                                            <span class="col-2 text-end">06/09/22</span>
+                                            <span class="col-4 text-start">PLACEHOLDER</span>
+                                            <span class="col-6">PLACEHOLDER</span>
+                                            <span class="col-2 text-end">PLACEHOLDER</span>
                                         </button>
                                     </a>
                                     <a href="https://www.google.com" class="bar-link">
                                         <button class="btn rounded-pill button-white button-expansion
                           w-100 d-flex justify-content-between align-items-center text-s">
-                                            <span class="col-4 text-start">Ingeniería Informática</span>
-                                            <span class="col-6">Matemática Discreta</span>
-                                            <span class="col-2 text-end">11/09/02</span>
+                                            <span class="col-4 text-start">PLACEHOLDER</span>
+                                            <span class="col-6">PLACEHOLDER</span>
+                                            <span class="col-2 text-end">PLACEHOLDER</span>
                                         </button>
                                     </a>
                                     </ul>
@@ -163,80 +164,13 @@
                         </div>
                     </div>
 
-                    <!-- Second "page" of carrousel -->
-                    <div class="carousel-item mb-5">
-                        <!-- University name and graph -->
-                        <div class="container mw-600">
-                            <div class="card box h-100 bg-bg">
-                                <div class="card-body d-flex align-items-center h-100 justify-content-around flex-wrap">
-                                    <!-- University Icon and Name (in the right) -->
-                                    <div class="d-flex align-items-center university-title ">
-                                        <img src="/svg/graduation-cap.svg" alt="University Icon" class="icon-s fill-text">
-                                        <h5 class=" mx-2 w-100"><strong>UBA</strong></h5>
-                                    </div>
-                                    <!-- Graph with circles and lines -->
-                                    <div class="graph h-100">
-                                        <div class="circle circle1"></div>
-                                        <div class="line line1"></div>
-                                        <div class="circle circle2"></div>
-                                        <div class="line line2"></div>
-                                        <div class="circle circle3"></div>
-                                        <div class="line line3"></div>
-                                        <div class="circle circle4"></div>
-                                        <div class="line line4"></div>
-                                        <div class="circle circle5"></div>
-                                        <div class="info1 d-flex flex-column fw-bold text-center w-25">
-                                            <p>1000</p>
-                                            <p>Alumnos</p>
-                                        </div>
-                                        <div class="info2 d-flex flex-column fw-bold text-center w-25">
-                                            <p>50</p>
-                                            <p>Apuntes</p>
-                                        </div>
-                                        <!-- Add more circles and lines as needed -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Example notes -->
-                        <div class="container mw-600">
-                            <div class="card box h-100 py-1 bg-dark-bg">
-                                <div class="card-body d-flex flex-column gap-2">
-                                    <a href="https://www.google.com" class="bar-link">
-                                        <button class="btn rounded-pill button-white button-expansion
-                          w-100 d-flex justify-content-between align-items-center text-s">
-                                            <span class="col-4 text-start">Sociologia</span>
-                                            <span class="col-6">Ciencia Política</span>
-                                            <span class="col-2 text-end">06/10/20</span>
-                                        </button>
-                                    </a>
-                                    <a href="https://www.google.com" class="bar-link">
-                                        <button class="btn rounded-pill button-white button-expansion
-                          w-100 d-flex justify-content-between align-items-center text-s">
-                                            <span class="col-4 text-start">Arquitectura</span>
-                                            <span class="col-6">Estructuras I</span>
-                                            <span class="col-2 text-end">01/12/02</span>
-                                        </button>
-                                    </a>
-                                    <a href="https://www.google.com" class="bar-link">
-                                        <button class="btn rounded-pill button-white button-expansion
-                          w-100 d-flex justify-content-between align-items-center text-s">
-                                            <span class="col-4 text-start">Administración de Empresas</span>
-                                            <span class="col-6">Economía II</span>
-                                            <span class="col-2 text-end">12/02/18</span>
-                                        </button>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
 
         <!-- LIST LAST COMMENTS -->
         <div id="last-comments" class="d-flex flex-column col-xl-6">
-            <h5 class="text-center fw-bold">Últimos comentarios</h5>
+            <h5 class="text-center fw-bold"><spring:message code="index.comments.title"/></h5>
             <div class="container mt-3">
                 <div class="row justify-content-center">
                     <!-- A COMMENT -->
