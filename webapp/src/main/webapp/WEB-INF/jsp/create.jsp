@@ -22,5 +22,7 @@
     <input type="text" name="type" id="type" required><br>
     <button type="submit">Subir</button>
 </form>
+
+<h2>${user.email}</h2>
 </body>
 </html>
