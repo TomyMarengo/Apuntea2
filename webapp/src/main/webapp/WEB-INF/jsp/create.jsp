@@ -9,11 +9,11 @@
 </head>
 <body>
 <h2>Subir Archivo</h2>
-<form action="create" method="post" enctype="multipart/form-data">
+<form action="" method="post" enctype="multipart/form-data">
     <label for="file">Archivo:</label>
     <input type="file" name="file" id="file" required><br>
-    <label for="university">Universidad:</label>
-    <input type="text" name="university" id="university" required><br>
+    <label for="institution">Institution</label>
+    <input type="text" name="institution" id="institution" required><br>
     <label for="career">Carrera:</label>
     <input type="text" name="career" id="career" required><br>
     <label for="subject">Materia:</label>

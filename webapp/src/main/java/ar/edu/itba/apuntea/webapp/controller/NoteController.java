@@ -22,21 +22,22 @@ public class NoteController {
         this.noteService = noteService;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ModelAndView create(){
         return new ModelAndView("create");
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public ModelAndView createNote(
-            @RequestParam(value = "file", required = true) final MultipartFile file,
-            @RequestParam(value = "institution", required = true) final String institution,
-            @RequestParam(value = "career", required = true) final String career,
-            @RequestParam(value = "subject", required = true) final String subject,
-            @RequestParam(value = "type", required = true) final String type
+            @RequestParam(value = "file") final MultipartFile file,
+            @RequestParam(value = "institution") final String institution,
+            @RequestParam(value = "career") final String career,
+            @RequestParam(value = "subject") final String subject,
+            @RequestParam(value = "type") final String type
     ){
         Note note = noteService.create(file, institution, career, subject, type);
-        return new ModelAndView("search"); //TODO: change for 'Has subido correctamente el archivo, etc'
+        // TODO: See if its better to load the view directly from here
+        return new ModelAndView("redirect:/notes/" + note.getNoteId());
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
@@ -58,11 +59,21 @@ public class NoteController {
         return mav;
     }
 
-    @RequestMapping( value = "/{noteId}/download", method = {RequestMethod.GET},
+    @RequestMapping(value = "/{noteId}", method = RequestMethod.GET)
+    public ModelAndView getNote(@PathVariable("noteId") String noteId) {
+        final ModelAndView mav = new ModelAndView("note");
+//        Note note = noteService.getNoteById(noteId).orElseThrow(NoteNotFoundException::new);
+        mav.addObject("noteId", noteId);
+        return mav;
+    }
+
+
+    @RequestMapping( value = "/{noteId}/file", method = {RequestMethod.GET},
     produces = {"application/pdf"} ) // TODO: change
     @ResponseBody
     public byte[] getNoteFile(@PathVariable("noteId") String noteId) {
 //        return noteService.getNoteById(noteId).orElseThrow(NoteNotFoundException::new).getBytes();
-        return noteService.getNoteFileById(new UUID(1234567890, 1234567890));
+        return noteService.getNoteFileById(UUID.fromString(noteId));
     }
+
 }
