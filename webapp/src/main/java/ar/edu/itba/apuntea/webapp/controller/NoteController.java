@@ -29,13 +29,14 @@ public class NoteController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView createNote(
+            @RequestParam(value = "name") final String name,
             @RequestParam(value = "file") final MultipartFile file,
             @RequestParam(value = "institution") final String institution,
             @RequestParam(value = "career") final String career,
             @RequestParam(value = "subject") final String subject,
             @RequestParam(value = "type") final String type
-    ){
-        Note note = noteService.create(file, institution, career, subject, type);
+    ){ // TODO: Use form
+        Note note = noteService.create(file, name);
         // TODO: See if its better to load the view directly from here
         return new ModelAndView("redirect:/notes/" + note.getNoteId());
     }

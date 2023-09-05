@@ -23,35 +23,21 @@ public class NoteJdbcDao implements NoteDao{
 
     private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
             new Note(
-                    UUID.fromString(rs.getString("noteId")),
-                    rs.getString("institution"),
-                    rs.getString("career"),
-                    rs.getString("subject"),
-                    rs.getString("type"),
-                    rs.getBytes("file")
+                    UUID.fromString(rs.getString("note_id")),
+                    rs.getString("name")
             );
 
     @Autowired
     public NoteJdbcDao(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
 
-        // TODO: move to schema.sql!!!
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS note (" +
-                "noteId UUID PRIMARY KEY DEFAULT gen_random_uuid ()," +
-                "institution VARCHAR(100) NOT NULL," +
-                "career VARCHAR(100) NOT NULL," +
-                "subject VARCHAR(100) NOT NULL," +
-                "type VARCHAR(100) NOT NULL," +
-                "file BYTEA NOT NULL" +
-                ");");
-
         this.jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("note")
-                .usingGeneratedKeyColumns("noteid");
+                .withTableName("Notes")
+                .usingGeneratedKeyColumns("note_id");
     }
 
     @Override
-    public Note create(MultipartFile multipartFile, String institution, String career, String subject, String type) {
+    public Note create(MultipartFile multipartFile, String name) {
         byte[] bytes = new byte[0];
         try {
             bytes = multipartFile.getBytes();
@@ -59,20 +45,16 @@ public class NoteJdbcDao implements NoteDao{
             System.out.println(e.getMessage());
         }
         final Map<String, Object> args = new HashMap<>();
-        args.put("institution", institution);
-        args.put("career", career);
-        args.put("subject", subject);
-        args.put("type", type);
+        args.put("name", name);
         args.put("file", bytes);
-        KeyHolder holder = jdbcInsert.executeAndReturnKeyHolder(args);
-        UUID noteId = (UUID) holder.getKeys().get("noteId");
 
-
-        return new Note(noteId, institution, career, subject, type, bytes);
+        UUID noteId = (UUID) jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get("note_id");
+        return new Note(noteId, name);
     }
 
+    @Override
     public byte[] getNoteFileById(UUID noteId){
-        final byte[] file = jdbcTemplate.queryForObject("SELECT file FROM note WHERE noteid = ?",
+        final byte[] file = jdbcTemplate.queryForObject("SELECT file FROM Notes WHERE note_id = ?",
                 new Object[]{noteId}, (rs, rowNum) -> (byte[]) rs.getObject("file"));
         // TODO: Move mapper to a constant?
         return file;

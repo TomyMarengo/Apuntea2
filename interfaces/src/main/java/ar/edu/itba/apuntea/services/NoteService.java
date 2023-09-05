@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface NoteService {
     List<Note> search(String university, String career, String subject, String type, float score);
 
-    Note create(MultipartFile multipartFile, String university, String career, String subject, String type);
+    Note create(MultipartFile multipartFile, String name);
 
     byte[] getNoteFileById(UUID noteId);
 }

@@ -6,6 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.UUID;
 
 public interface NoteDao {
-    Note create(MultipartFile multipartFile, String university, String career, String subject, String type);
+    Note create(MultipartFile multipartFile, String name);
     byte[] getNoteFileById(UUID noteId);
 }

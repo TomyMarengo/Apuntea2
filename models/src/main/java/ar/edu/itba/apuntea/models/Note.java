@@ -4,11 +4,17 @@ import java.util.UUID;
 
 public class Note {
     private UUID noteId;
+    private String name;
     private String institution; //TODO: change institution to model?
     private String career;
     private String subject;
     private String type;
     private byte[] file;
+
+    public Note(UUID noteId, String name) {
+        this.noteId = noteId;
+        this.name = name;
+    }
 
     public Note(UUID noteId, String institution, String career, String subject, String type, byte[] file) {
         this.noteId = noteId;

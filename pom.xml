@@ -11,9 +11,15 @@
   <properties>
     <postgresql.version>42.2.5</postgresql.version>
     <spring.version>4.2.5.RELEASE</spring.version>
+    <fileupload.version>1.5</fileupload.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <servlet.api.version>2.5</servlet.api.version>
+    <jstl.version>1.2</jstl.version>
+    <junit.version>4.13.2</junit.version>
+    <mockito.version>2.25.1</mockito.version>
+    <hsqldb.version>2.5.1</hsqldb.version>
   </properties>
 
   <dependencyManagement>
@@ -21,7 +27,7 @@
       <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
-        <version>1.5</version>
+        <version>${fileupload.version}</version>
       </dependency>
       <dependency>
         <groupId>org.postgresql</groupId>
@@ -51,15 +57,38 @@
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>servlet-api</artifactId>
-        <version>2.5</version>
+        <version>${servlet.api.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>jstl</artifactId>
-        <version>1.2</version>
+        <version>${jstl.version}</version>
       </dependency>
-
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hsqldb</groupId>
+        <artifactId>hsqldb</artifactId>
+        <version>${hsqldb.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${spring.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

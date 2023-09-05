@@ -6,7 +6,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -25,6 +29,23 @@ import java.nio.charset.StandardCharsets;
         "ar.edu.itba.apuntea.persistence"})
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
+
+    @Value("classpath:sql/schema.sql")
+    private Resource schemaSql;
+
+    @Bean
+    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
+        final DataSourceInitializer dsi = new DataSourceInitializer();
+        dsi.setDataSource(ds);
+        dsi.setDatabasePopulator(databasePopulator());
+        return dsi;
+    }
+
+    private DatabasePopulator databasePopulator() {
+        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+        dbp.addScript(schemaSql);
+        return dbp;
+    }
 
     @Bean
     public ViewResolver viewResolver() {
@@ -49,8 +70,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
         ds.setUrl("jdbc:postgresql://localhost/paw");
-        ds.setUsername("postgres");
-        ds.setPassword("1234");
+        ds.setUsername("admin");
+        ds.setPassword("admin");
         return ds;
     }
 
