@@ -34,30 +34,12 @@ public class NoteController {
             @RequestParam(value = "institution") final String institution,
             @RequestParam(value = "career") final String career,
             @RequestParam(value = "subject") final String subject,
-            @RequestParam(value = "type") final String type
+            @RequestParam(value = "category") final String category,
+            @RequestParam(value = "email") final String email
     ){ // TODO: Use form
         Note note = noteService.create(file, name);
         // TODO: See if its better to load the view directly from here
         return new ModelAndView("redirect:/notes/" + note.getNoteId());
-    }
-
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ModelAndView search() {
-        return new ModelAndView("search");
-    }
-
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    public ModelAndView searchNotes(
-            @RequestParam(value = "institution", required = false) final String institution,
-            @RequestParam(value = "career", required = false) final String career,
-            @RequestParam(value = "subject", required = false) final String subject,
-            @RequestParam(value = "type", required = false) final String type,
-            @RequestParam(value = "score", required = false) final float score
-    ){
-        final ModelAndView mav = new ModelAndView("search");
-        List<Note> notes = noteService.search(institution, career, subject, type, score);
-        mav.addObject("notes", notes);
-        return mav;
     }
 
     @RequestMapping(value = "/{noteId}", method = RequestMethod.GET)

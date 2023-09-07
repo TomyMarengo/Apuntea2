@@ -20,6 +20,8 @@ public class UserController {
         this.userService = userService;
     }
 
+    //TODO: remove for sprint 1
+    /*
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ModelAndView profile() {
         return new ModelAndView("profile");
@@ -36,5 +38,5 @@ public class UserController {
         mav.addObject("user", userService.findById(userId).orElseThrow(UserNotFoundException::new));
         return mav;
     }
-
+    */
 }

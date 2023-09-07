@@ -1,6 +1,7 @@
 package ar.edu.itba.apuntea.persistence;
 
 import ar.edu.itba.apuntea.models.Note;
+import ar.edu.itba.apuntea.models.SearchArguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,10 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 public class NoteJdbcDao implements NoteDao{
@@ -60,4 +58,8 @@ public class NoteJdbcDao implements NoteDao{
         return file;
     }
 
+    @Override
+    public List<Note> search(SearchArguments sa) {
+        return new ArrayList<>();
+    }
 }

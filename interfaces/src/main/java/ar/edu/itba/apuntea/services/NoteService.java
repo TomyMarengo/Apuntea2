@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface NoteService {
-    List<Note> search(String university, String career, String subject, String type, float score);
+    List<Note> search(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize);
 
     Note create(MultipartFile multipartFile, String name);
 

@@ -1,4 +1,5 @@
 --CREATE EXTENSION IF NOT EXISTS pgcrypto;
+--CREATE TYPE category_type AS ENUM('exam','practice','theory','other');
 
 CREATE TABLE IF NOT EXISTS Institutions
 (
@@ -60,7 +61,7 @@ CREATE TABLE IF NOT EXISTS Notes
     name varchar(30) NOT NULL,
     user_id uuid, -- TODO: Check if it should be NOT NULL
     file bytea NOT NULL,
-    type varchar(30),
+    category varchar(30),
     subject_id uuid,
     parent_directory_id uuid,
     created_at date,

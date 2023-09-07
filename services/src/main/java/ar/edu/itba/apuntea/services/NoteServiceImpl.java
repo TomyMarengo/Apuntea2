@@ -1,11 +1,13 @@
 package ar.edu.itba.apuntea.services;
 
 import ar.edu.itba.apuntea.models.Note;
+import ar.edu.itba.apuntea.models.SearchArguments;
 import ar.edu.itba.apuntea.persistence.NoteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,8 +21,17 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
-    public List<Note> search(String university, String career, String subject, String type, float score) {
-        return null;
+    public List<Note> search(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+        List<Note> notes = new ArrayList<>();
+        try {
+
+            SearchArguments sa = new SearchArguments(institution, career, subject, category, score, sortBy, ascending, page, pageSize);
+            noteDao.search(sa);
+        } catch (Exception e) { // TODO: Replace with more accurate exception
+
+        }
+
+        return notes;
     }
 
     @Override

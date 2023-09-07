@@ -69,7 +69,7 @@
                 </div>
                 <div class="d-flex w-75 justify-content-around">
                     <button class="btn rounded-box button-primary"><spring:message code="index.explore.register"/></button>
-                    <a href="notes/search"><button class="btn rounded-box button-secondary">
+                    <a href="search"><button class="btn rounded-box button-secondary">
                         <spring:message code="index.explore.discover"/></button>
                     </a>
                 </div>
