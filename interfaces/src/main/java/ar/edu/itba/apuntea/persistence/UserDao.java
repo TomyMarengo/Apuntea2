@@ -5,7 +5,6 @@ import ar.edu.itba.apuntea.models.User;
 import java.util.Optional;
 
 public interface UserDao {
-    User create(long userId, String email, String password);
-
+    User create(String email);
     Optional<User> findById(long id);
 }

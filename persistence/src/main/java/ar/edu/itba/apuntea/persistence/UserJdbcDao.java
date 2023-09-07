@@ -11,6 +11,7 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 class UserJdbcDao implements UserDao{
@@ -21,24 +22,30 @@ class UserJdbcDao implements UserDao{
     // Cómo es una interfaz no es necesaria que la cree cada vez que entro en un método
     // y es por eso que creo solamente una.
     private static final RowMapper<User> ROW_MAPPER = (rs, rowNum)  ->
-            new User(rs.getLong("userId"), rs.getString("email"), rs.getString("password"));
+            new User(
+                    UUID.fromString(rs.getString("user_id")),
+                    rs.getString("email")
+            );
 
     @Autowired
     public UserJdbcDao(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
         this.jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("\"User\"")
-                .usingGeneratedKeyColumns("\"userId\"");
+                .withTableName("Users")
+                .usingGeneratedKeyColumns("user_id");
     }
 
     @Override
-    public User create(final long userId, final String email, final String password) {
-        return new User(userId, email, password);
+    public User create(final String email) {
+        final Map<String, Object> args = new HashMap<>();
+        args.put("email", email);
+        jdbcInsert.execute(args);
+        return new User(email);
     }
 
     @Override
     public Optional<User> findById(final long id) {
-        return jdbcTemplate.query("SELECT * FROM \"User\" WHERE \"userId\" = ?",
+        return jdbcTemplate.query("SELECT * FROM Users WHERE user_id = ?",
                 new Object[]{id}, ROW_MAPPER).stream().findFirst();
     }
 }
