@@ -22,16 +22,13 @@ public class NoteServiceImpl implements NoteService{
 
     @Override
     public List<Note> search(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        List<Note> notes = new ArrayList<>();
-        try {
-
+//        try {
             SearchArguments sa = new SearchArguments(institution, career, subject, category, score, sortBy, ascending, page, pageSize);
-            noteDao.search(sa);
-        } catch (Exception e) { // TODO: Replace with more accurate exception
-
-        }
-
-        return notes;
+            return noteDao.search(sa);
+//        } catch (Exception e) { // TODO: Replace with more accurate exception
+//            System.out.println(e.getMessage());
+//        }
+//        return new ArrayList<>();
     }
 
     @Override

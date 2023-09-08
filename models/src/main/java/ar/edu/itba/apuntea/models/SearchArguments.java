@@ -14,18 +14,18 @@ public class SearchArguments {
     private Integer pageSize;
 
     public SearchArguments(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        this.institution = UUID.fromString(institution);
-        this.career = UUID.fromString(career);
-        this.subject = UUID.fromString(subject);
+        // TODO: Add try catchs?
+        if (institution != null && !institution.isEmpty()) this.institution = UUID.fromString(institution);
+        if (career != null && !career.isEmpty()) this.career = UUID.fromString(career);
+        if (subject != null && ! subject.isEmpty()) this.subject = UUID.fromString(subject);
         try {
-            this.category = Category.valueOf(category.toUpperCase());
+            if (category != null) this.category = Category.valueOf(category.toUpperCase());
         } catch (IllegalArgumentException e) {
             this.category = null;
         }
         this.score = score;
-
         try {
-            this.sortBy = SortBy.valueOf(sortBy.toUpperCase());
+            if (sortBy != null) this.sortBy = SortBy.valueOf(sortBy.toUpperCase());
         } catch (IllegalArgumentException e) {
             this.sortBy = SortBy.SCORE;
         }
@@ -33,16 +33,16 @@ public class SearchArguments {
         this.pageSize = pageSize;
     }
 
-    public UUID getInstitution() {
-        return institution;
+    public Optional<UUID> getInstitution() {
+        return Optional.ofNullable(institution);
     }
 
-    public UUID getCareer() {
-        return career;
+    public Optional<UUID> getCareer() {
+        return Optional.ofNullable(career);
     }
 
-    public UUID getSubject() {
-        return subject;
+    public Optional<UUID> getSubject() {
+        return Optional.ofNullable(subject);
     }
 
     public Optional<Category> getCategory() {

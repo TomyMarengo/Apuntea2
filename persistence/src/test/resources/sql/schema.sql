@@ -1,5 +1,4 @@
 --CREATE EXTENSION IF NOT EXISTS pgcrypto;
---CREATE TYPE category_type AS ENUM('exam','practice','theory','other');
 
 CREATE TABLE IF NOT EXISTS Institutions
 (
@@ -64,7 +63,7 @@ CREATE TABLE IF NOT EXISTS Notes
     category varchar(30),
     subject_id uuid,
     parent_directory_id uuid,
-    created_at date,
+    created_at timestamp DEFAULT now(),
     CONSTRAINT "Notes_pkey" PRIMARY KEY (note_id),
     CONSTRAINT "FK_note_directory" FOREIGN KEY (parent_directory_id) REFERENCES Directories (directory_id),
     CONSTRAINT "FK_note_subject" FOREIGN KEY (subject_id) REFERENCES Subjects (subject_id),

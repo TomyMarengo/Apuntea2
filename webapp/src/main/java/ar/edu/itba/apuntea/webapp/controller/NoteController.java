@@ -29,13 +29,13 @@ public class NoteController {
 
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView createNote(
-            @RequestParam(value = "name") final String name,
-            @RequestParam(value = "file") final MultipartFile file,
-            @RequestParam(value = "institution") final String institution,
-            @RequestParam(value = "career") final String career,
-            @RequestParam(value = "subject") final String subject,
-            @RequestParam(value = "category") final String category,
-            @RequestParam(value = "email") final String email
+            @RequestParam(value = "name", required = false) final String name,
+            @RequestParam(value = "file", required = false) final MultipartFile file,
+            @RequestParam(value = "institution", required = false) final String institution,
+            @RequestParam(value = "career", required = false) final String career,
+            @RequestParam(value = "subject", required = false) final String subject,
+            @RequestParam(value = "category", required = false) final String category,
+            @RequestParam(value = "email", required = false) final String email
     ){ // TODO: Use form
         Note note = noteService.create(file, name);
         // TODO: See if its better to load the view directly from here

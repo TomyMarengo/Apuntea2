@@ -22,6 +22,7 @@ public class SearchController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView searchNotes(
+            // TODO: Add validation
             @RequestParam(value = "institution", required = false) final String institution,
             @RequestParam(value = "career", required = false) final String career,
             @RequestParam(value = "subject", required = false) final String subject,
