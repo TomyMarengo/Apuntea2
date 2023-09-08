@@ -3,6 +3,19 @@ package ar.edu.itba.apuntea.models;
 import java.util.UUID;
 
 public class Institution {
-    UUID institutionId;
-    String name;
+    private UUID institutionId;
+    private String name;
+
+    public Institution(UUID institutionId, String name) {
+        this.institutionId = institutionId;
+        this.name = name;
+    }
+
+    public UUID getInstitutionId() {
+        return institutionId;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

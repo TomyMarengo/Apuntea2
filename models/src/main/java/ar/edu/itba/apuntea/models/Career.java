@@ -3,6 +3,19 @@ package ar.edu.itba.apuntea.models;
 import java.util.UUID;
 
 public class Career {
-    UUID careerId;
-    String name;
+    private UUID careerId;
+    private String name;
+    public Career(UUID careerId, String name) {
+        this.careerId = careerId;
+        this.name = name;
+    }
+
+    public UUID getCareerId() {
+        return careerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
 }

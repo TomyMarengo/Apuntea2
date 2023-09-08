@@ -15,12 +15,9 @@ import java.util.UUID;
 
 @Repository
 class UserJdbcDao implements UserDao{
-    // Templetiza todo el borderplate para evitar la repetición
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
-    // Cómo es una interfaz no es necesaria que la cree cada vez que entro en un método
-    // y es por eso que creo solamente una.
     private static final RowMapper<User> ROW_MAPPER = (rs, rowNum)  ->
             new User(
                     UUID.fromString(rs.getString("user_id")),
