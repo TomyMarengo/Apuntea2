@@ -35,7 +35,8 @@ public class NoteJdbcDao implements NoteDao{
 
         this.jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("Notes")
-                .usingGeneratedKeyColumns("note_id");
+                .usingGeneratedKeyColumns("note_id")
+                .usingColumns("name", "file", "subject_id", "category"); // TODO: Move to resource/constants?
     }
 
     @Override
@@ -51,7 +52,6 @@ public class NoteJdbcDao implements NoteDao{
         args.put("file", bytes);
         args.put("subject_id", UUID.fromString("323e4567-e89b-12d3-a456-426655440000")); // TODO: Remove
         args.put("category", "practice");
-        args.put("created_at", LocalDateTime.now()); // TODO: Remove
         UUID noteId = (UUID) jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get("note_id");
         return new Note(noteId, name);
     }
