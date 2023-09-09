@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS Reviews
 (
     note_id uuid NOT NULL,
     user_id uuid NOT NULL,
-    score smallint,
+    score smallint NOT NULL,
     CONSTRAINT "Reviews_pkey" PRIMARY KEY (note_id, user_id),
     CONSTRAINT "FK_review_note" FOREIGN KEY (note_id) REFERENCES Notes (note_id),
     CONSTRAINT "FK_review_user" FOREIGN KEY (user_id) REFERENCES Users (user_id)

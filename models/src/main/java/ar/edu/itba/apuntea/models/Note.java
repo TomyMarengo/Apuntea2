@@ -1,6 +1,7 @@
 package ar.edu.itba.apuntea.models;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Note {
@@ -13,17 +14,19 @@ public class Note {
     private Category category;
     private LocalDateTime createdAt;
     private byte[] file;
+    private Float avgScore;
 
     public Note(UUID noteId, String name) {
         this.noteId = noteId;
         this.name = name;
     }
 
-    public Note(UUID noteId, String name, Category category, LocalDateTime createdAt) {
+    public Note(UUID noteId, String name, Category category, LocalDateTime createdAt, Float avgScore) {
         this.noteId = noteId;
         this.name = name;
         this.category = category;
         this.createdAt = createdAt;
+        this.avgScore = avgScore;
     }
 
     public UUID getNoteId() {
@@ -32,4 +35,8 @@ public class Note {
     public String getName() {
         return name;
     }
+    public Optional<Float> getAvgScore(){
+        return Optional.ofNullable(avgScore);
+    }
+
 }

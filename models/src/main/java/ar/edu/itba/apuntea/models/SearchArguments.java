@@ -10,6 +10,7 @@ public class SearchArguments {
     private Category category; //TODO: check database type
     private Float score;
     private SortBy sortBy;
+    private boolean ascending;
     private Integer page;
     private Integer pageSize;
 
@@ -29,6 +30,7 @@ public class SearchArguments {
         } catch (IllegalArgumentException e) {
             this.sortBy = SortBy.SCORE;
         }
+        this.ascending = ascending;
         this.page = page;
         this.pageSize = pageSize;
     }
@@ -56,6 +58,8 @@ public class SearchArguments {
     public SortBy getSortBy() {
         return sortBy;
     }
+
+    public boolean isAscending() { return ascending; }
 
     public Integer getPage() {
         return page;

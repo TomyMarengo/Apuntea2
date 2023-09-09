@@ -37,9 +37,9 @@ public class SearchController {
             @RequestParam(value = "subject", required = false) final String subject,
             @RequestParam(value = "category", required = false) final String category,
             @RequestParam(value = "score", required = false) final Float score,
-            @RequestParam(value = "sort-by", required = false) final String sortBy,
+            @RequestParam(value = "sort-by", required = false, defaultValue = "score") final String sortBy,
             @RequestParam(value = "ascending", required = false, defaultValue = "true") final Boolean ascending,
-            @RequestParam(value = "page", required = false, defaultValue = "0") final Integer page,
+            @RequestParam(value = "page", required = false, defaultValue = "1") final Integer page,
             @RequestParam(value = "page-size", required = false, defaultValue = "10") final Integer pageSize
     ){
         final ModelAndView mav = new ModelAndView("search");
