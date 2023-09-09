@@ -20,7 +20,7 @@ public class SearchArguments {
     }
 
     public SearchArguments(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending) {
-        this(institution, career, subject, category, score, SortBy.SCORE.toString(), ascending, 1, 10);
+        this(institution, career, subject, category, score, sortBy, ascending, 1, 10);
     }
 
     public SearchArguments(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {

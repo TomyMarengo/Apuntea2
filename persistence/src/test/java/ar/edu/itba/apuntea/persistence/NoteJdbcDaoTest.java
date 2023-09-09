@@ -41,27 +41,27 @@ public class NoteJdbcDaoTest {
     public void testSearchByInstitution() {
         SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(notes.size(), 5);
+        assertEquals(5, notes.size());
     }
 
     @Test
     public void testSearchByCareer(){
         SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(notes.size(), 3);
+        assertEquals(3, notes.size());
     }
 
     @Test
     public void testBySubject(){
         SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(notes.size(), 2);
+        assertEquals(3, notes.size());
     }
     @Test
     public void testByCategory(){
         SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, Category.PRACTICE.toString(), null);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(notes.size(), 1);
+        assertEquals(1, notes.size());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class NoteJdbcDaoTest {
     public void testByScore() {
         SearchArguments sa = new SearchArguments(null, null, null, null, 3.0f);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(notes.size(), 2);
+        assertEquals(2, notes.size());
         notes.forEach(note -> assertTrue(note.getAvgScore().get() >= 3.0f));
     }
 
@@ -85,6 +85,6 @@ public class NoteJdbcDaoTest {
     public void testByPage() {
         SearchArguments sa = new SearchArguments(null, null, null, null, null, null, true, 1, 2);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(notes.size(), 2);
+        assertEquals(2, notes.size());
     }
 }

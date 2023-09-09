@@ -82,13 +82,6 @@ public class NoteJdbcDao implements NoteDao{
         return file;
     }
 
-    // automate consumer for add to query
-    private static void addIfPresent(StringBuilder query, List<Object> args, String field, String cmpOp, Optional<?> value) {
-        value.ifPresent(val -> {
-            query.append("AND ").append(field).append(" ").append(cmpOp).append(" ? ");
-            args.add(val);
-        });
-    }
 
     @Override
     public List<Note> search(SearchArguments sa) {
