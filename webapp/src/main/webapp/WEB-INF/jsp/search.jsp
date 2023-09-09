@@ -14,23 +14,22 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="/css/main.css" />
-    <link rel="stylesheet" href="/css/general/elements.css" />
-    <link rel="stylesheet" href="/css/general/sizes.css" />
-    <link rel="stylesheet" href="/css/general/backgrounds.css" />
-    <link rel="stylesheet" href="/css/general/texts.css" />
-    <link rel="stylesheet" href="/css/general/buttons.css" />
-    <link rel="stylesheet" href="/css/general/icons.css" />
-    <link rel="stylesheet" href="/css/general/boxes.css" />
-    <link rel="stylesheet" href="/css/sections/navbar.css" />
+    <link rel="stylesheet" href="<c:url value="/css/main.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -55,14 +54,14 @@
 
                 <div class="col">
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><img src="/svg/books.svg" alt="<spring:message code="search.career.placeholder"/>" class="icon-s fill-text" /></span>
+                        <span class="input-group-text"><img src="<c:url value="/svg/books.svg"/>" alt="<spring:message code="search.career.placeholder"/>" class="icon-s fill-text" /></span>
                         <input type="text" class="form-control bg-bg" placeholder="<spring:message code="search.career.placeholder"/>">
                     </div>
                 </div>
 
                 <div class="col">
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><img src="/svg/book-alt.svg" alt="<spring:message code="search.subject.placeholder"/>" class="icon-s fill-text" /></span>
+                        <span class="input-group-text"><img src="<c:url value="/svg/book-alt.svg"/>" alt="<spring:message code="search.subject.placeholder"/>" class="icon-s fill-text" /></span>
                         <input type="text" class="form-control bg-bg" placeholder="<spring:message code="search.subject.placeholder"/>">
                     </div>
                 </div>
@@ -70,10 +69,10 @@
                 <div class="col">
                     <div class="input-group mb-3">
                         <select class="form-select bg-bg" id="inputGroupSelectType">
-                            <form:option value="all"><spring:message code="form.upload.category"/></form:option>
-                            <form:option value="theory"><spring:message code="search.category.theory"/></form:option>
-                            <form:option value="practice"><spring:message code="search.category.practice"/></form:option>
-                            <form:option value="exam"><spring:message code="search.category.exam"/></form:option>
+                            <option value="all"><spring:message code="form.upload.category"/></option>
+                            <option value="theory"><spring:message code="search.category.theory"/></option>
+                            <option value="practice"><spring:message code="search.category.practice"/></option>
+                            <option value="exam"><spring:message code="search.category.exam"/></option>
                         </select>
                     </div>
                 </div>
@@ -111,8 +110,9 @@
 
     <!-- TODO: NOTES FOUND -->
 
-
-    <script src="/js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="<c:url value="/js/darkmode.js"/>"></script>
+    <script src="<c:url value="/js/autocomplete.js"/>"></script>
 </body>
 
 </html>

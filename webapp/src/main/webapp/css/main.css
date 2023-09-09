@@ -199,6 +199,8 @@
   --bs-success-text-emphasis: #75b798;
   --bs-info-text-emphasis: #6edff6;
   --bs-warning-text-emphasis: #ffda6a;
+  --bs-danger: #ff8640;
+  --bs-danger-rgb: 255, 134, 64;
   --bs-danger-text-emphasis: #ea868f;
   --bs-light-text-emphasis: #f8f9fa;
   --bs-dark-text-emphasis: #dee2e6;
@@ -3076,7 +3078,7 @@ textarea.form-control-lg {
 .input-group {
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap !important;
   align-items: stretch;
   width: 100%;
 }

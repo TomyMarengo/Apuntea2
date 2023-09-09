@@ -12,15 +12,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Apuntea</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/autocomplete.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
@@ -35,6 +32,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -71,9 +69,16 @@
             </div>
             <div class="d-flex w-75 justify-content-around">
                 <!-- TODO: Change to index.explore.register again -->
+                <!-- UPLOAD BUTTON -->
 
-                <button class="btn rounded-box button-primary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                <button class="btn rounded-box button-primary" data-bs-toggle="modal" data-bs-target="#uploadModal" id="uploadModalButton">
                     <spring:message code="index.explore.upload"/></button>
+
+                <!-- DISCOVER BUTTON -->
+                <a href="/search">
+                    <button class="btn rounded-box button-secondary">
+                        <spring:message code="index.explore.discover"/></button>
+                </a>
 
                 <div class="modal fade" id="uploadModal" data-bs-backdrop="static" data-bs-keyboard="false"
                      tabindex="-1" aria-labelledby="uploadLabel" aria-hidden="true">
@@ -81,14 +86,20 @@
                         <div class="modal-content box bg-bg">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="uploadLabel"><spring:message
-                                        code="modal.upload.title"/></h1>
+                                        code="form.upload.title"/></h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <!-- CREATE NOTE FORM -->
                                 <c:url var="createUrl" value="/create"/>
-                                <form:form modelAttribute="createNoteForm" action="${createUrl}" method="post" enctype="multipart/form-data" class="d-flex flex-column gap-4">
+                                <form:form modelAttribute="createNoteForm"
+                                           action="${createUrl}"
+                                           method="post"
+                                           enctype="multipart/form-data"
+                                           autocomplete="off"
+                                           class="d-flex flex-column gap-4">
+
                                     <div class="d-flex flex-column gap-2">
                                         <div class="input-group">
                                         <label class="input-group-text" for="file"><spring:message code="form.upload.file"/></label>
@@ -106,31 +117,49 @@
                                     </div>
 
                                     <div class="d-flex flex-column gap-2">
-                                        <div class="input-group">
-                                            <form:select path="institution" id="institutionSelect" style="">
-                                                <form:option value="all"><spring:message code="form.upload.institution"/></form:option>
+                                            <select id="institutionSelect" style="display: none;">
                                                 <c:forEach items="${institutions}" var="inst">
-                                                    <form:option value="${inst.name}">${inst.name}</form:option>
+                                                    <option value="${inst.name}">${inst.name}</option>
                                                 </c:forEach>
-                                            </form:select>
+                                            </select>
 
-                                            <input type="text" id="institutionInput" placeholder="Type to filter institutions">
-                                            <input type="hidden" id="selectedInstitution" name="selectedInstitution">
-                                        </div>
+                                            <div class="input-group">
+                                                <label class="input-group-text" for="institution"><spring:message code="form.upload.institution"/></label>
+                                                <div class="autocomplete">
+                                                    <form:input path="institution" type="text" id="institutionAutocomplete" class="form-control"/>
+                                                </div>
+                                            </div>
+                                            <form:errors path="institution" cssClass="text-danger" element="p"/>
                                     </div>
 
                                     <div class="d-flex flex-column gap-2">
+                                        <select id="careerSelect" style="display: none;">
+                                            <c:forEach items="${careers}" var="career">
+                                                <option value="${career.name}">${career.name}</option>
+                                            </c:forEach>
+                                        </select>
+
                                         <div class="input-group">
                                             <label class="input-group-text" for="career"><spring:message code="form.upload.career"/></label>
-                                            <form:input path="career" type="text" aria-label="<spring:message code=\"form.upload.career\"/>" class="form-control" id="career"/>
+                                            <div class="autocomplete">
+                                                <form:input path="career" type="text" id="careerAutocomplete" class="form-control"/>
+                                            </div>
                                         </div>
                                         <form:errors path="career" cssClass="text-danger" element="p"/>
                                     </div>
 
                                     <div class="d-flex flex-column gap-2">
+                                        <select id="subjectSelect" style="display: none;">
+                                            <c:forEach items="${subjects}" var="subject">
+                                                <option value="${subject.name}">${subject.name}</option>
+                                            </c:forEach>
+                                        </select>
+
                                         <div class="input-group">
                                             <label class="input-group-text" for="subject"><spring:message code="form.upload.subject"/></label>
-                                            <form:input path="subject" type="text" aria-label="<spring:message code=\"form.upload.subject\"/>" class="form-control" id="subject"/>
+                                            <div class="autocomplete">
+                                                <form:input path="subject" type="text" id="subjectAutocomplete" class="form-control"/>
+                                            </div>
                                         </div>
                                         <form:errors path="subject" cssClass="text-danger" element="p"/>
                                     </div>
@@ -139,10 +168,10 @@
                                         <div class="input-group">
                                             <label class="input-group-text" for="category"><spring:message code="form.upload.category"/></label>
                                             <form:select path="category" class="form-select" id="category">
-                                                <form:option value="all"><spring:message code="form.upload.category"/></form:option>
-                                                <form:option value="theory"><spring:message code="search.category.theory"/></form:option>
-                                                <form:option value="practice"><spring:message code="search.category.practice"/></form:option>
-                                                <form:option value="exam"><spring:message code="search.category.exam"/></form:option>
+                                                <form:option value="theory"><spring:message code="form.upload.category.theory"/></form:option>
+                                                <form:option value="practice"><spring:message code="form.upload.category.practice"/></form:option>
+                                                <form:option value="exam"><spring:message code="form.upload.category.exam"/></form:option>
+                                                <form:option value="other"><spring:message code="form.upload.category.other"/></form:option>
                                             </form:select>
                                         </div>
                                         <form:errors path="category" cssClass="text-danger" element="p"/>
@@ -150,9 +179,9 @@
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn rounded-box button-primary" data-bs-dismiss="modal">
-                                            <spring:message code="button.close"/></button>
+                                            <spring:message code="form.upload.button.close"/></button>
                                         <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="button.upload"/>"/>
+                                            code="form.upload.button.upload"/>"/>
                                     </div>
                                 </form:form>
                             </div>
@@ -160,10 +189,6 @@
                     </div>
                 </div>
 
-                <a href="search">
-                    <button class="btn rounded-box button-secondary">
-                        <spring:message code="index.explore.discover"/></button>
-                </a>
             </div>
         </div>
     </div>
@@ -271,7 +296,7 @@
                         <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
                             <div class="card-body">
                                 <h5 class="card-title fb-">
-                                    <img src="/svg/arrow-trend-up.svg" alt="University Icon" class="icon-s fill-dark-primary mx-2">
+                                    <img src="<c:url value="/svg/arrow-trend-up.svg"/>" alt="University Icon" class="icon-s fill-dark-primary mx-2">
                                     <strong>Matemática Discreta</strong>
                                 </h5>
                                 <p class="card-text"><strong>Jonathan ha comentado</strong></p>
@@ -284,7 +309,7 @@
                         <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
                             <div class="card-body">
                                 <h5 class="card-title fb-">
-                                    <img src="/svg/arrow-trend-up.svg" alt="University Icon" class="icon-s fill-dark-primary mx-2">
+                                    <img src="<c:url value="/svg/arrow-trend-up.svg"/>" alt="University Icon" class="icon-s fill-dark-primary mx-2">
                                     <strong>Teoría de Lenguajes y Autómatas</strong>
                                 </h5>
                                 <p class="card-text"><strong>David ha comentado</strong></p>
@@ -297,7 +322,7 @@
                         <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
                             <div class="card-body">
                                 <h5 class="card-title fb-">
-                                    <img src="/svg/arrow-trend-up.svg" alt="University Icon" class="icon-s fill-dark-primary mx-2">
+                                    <img src="<c:url value="/svg/arrow-trend-up.svg"/>" alt="University Icon" class="icon-s fill-dark-primary mx-2">
                                     <strong>Matemática III</strong>
                                 </h5>
                                 <p class="card-text"><strong>Tomás ha comentado</strong></p>
@@ -311,7 +336,17 @@
         </div>
     </div>
 
-<script src="<c:url value="/js/scripts.js"/>"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="<c:url value="/js/darkmode.js"/>"></script>
+<script src="<c:url value="/js/autocomplete.js"/>"></script>
+
+<c:if test="${errors != null}">
+    <script>
+      const uploadModalButton = document.getElementById('uploadModalButton');
+      uploadModalButton.click()
+    </script>
+</c:if>
 </body>
 
 </html>

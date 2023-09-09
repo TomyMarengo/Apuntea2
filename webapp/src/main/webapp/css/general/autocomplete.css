@@ -1,0 +1,39 @@
+.autocomplete {
+  /*the container must be positioned relative:*/
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 0;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: var(--bg);
+  color: var(--text);
+  border: 0.3rem solid var(--bs-border-color);
+}
+
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: var(--primary);
+  color: var(--bg)
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: var(--dark-primary) !important;
+  color: var(--bg);
+}
