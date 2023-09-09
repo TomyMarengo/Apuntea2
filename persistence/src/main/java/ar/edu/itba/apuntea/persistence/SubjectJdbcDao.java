@@ -35,6 +35,6 @@ public class SubjectJdbcDao implements SubjectDao {
     }
 
     public List<Subject> getSubjectsByInstitutionId(UUID institutionId) {
-        return jdbcTemplate.query("SELECT * FROM Subjects s JOIN Institutions i on s.institution_id = i.institution_id WHERE institution_id = ?", ROW_MAPPER, institutionId);
+        return jdbcTemplate.query("SELECT * FROM Subjects s JOIN Careers c on s.career_id = c.career_id WHERE c.institution_id = ?", ROW_MAPPER, institutionId);
     }
 }

@@ -224,7 +224,7 @@
   --bs-link-color-rgb: 245, 173, 163;
   --bs-link-hover-color-rgb: 247, 189, 181;
   --bs-code-color: #e685b5;
-  --bs-border-color: #495057;
+  --bs-border-color: #6d7785;
   --bs-border-color-translucent: rgba(254, 254, 254, 0.15);
   --bs-form-valid-color: #75b798;
   --bs-form-valid-border-color: #75b798;
@@ -2665,9 +2665,9 @@ textarea.form-control-lg {
 }
 
 .form-select:focus {
-  border-color: #f7bbb2;
+  border-color: var(--primary);
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(239, 119, 101, 0.25);
+  box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
 }
 
 .form-select[multiple],
@@ -3118,6 +3118,8 @@ textarea.form-control-lg {
   background-color: var(--bs-tertiary-bg);
   border: var(--bs-border-width) solid var(--bs-border-color);
   border-radius: var(--bs-border-radius);
+  min-width: 7rem;
+  justify-content: center;
 }
 
 .input-group-lg>.form-control,

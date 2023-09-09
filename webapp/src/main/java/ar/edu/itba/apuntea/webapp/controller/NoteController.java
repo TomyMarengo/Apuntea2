@@ -1,14 +1,11 @@
 package ar.edu.itba.apuntea.webapp.controller;
 
-import ar.edu.itba.apuntea.models.Note;
 import ar.edu.itba.apuntea.services.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 import java.util.UUID;
 
 
@@ -18,28 +15,8 @@ public class NoteController {
     private final NoteService noteService;
 
     @Autowired
-    public NoteController(final NoteService noteService) {
+    public NoteController(@Qualifier("noteServiceImpl") final NoteService noteService) {
         this.noteService = noteService;
-    }
-
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView create(){
-        return new ModelAndView("create");
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    public ModelAndView createNote(
-            @RequestParam(value = "name", required = false) final String name,
-            @RequestParam(value = "file", required = false) final MultipartFile file,
-            @RequestParam(value = "institution", required = false) final String institution,
-            @RequestParam(value = "career", required = false) final String career,
-            @RequestParam(value = "subject", required = false) final String subject,
-            @RequestParam(value = "category", required = false) final String category,
-            @RequestParam(value = "email", required = false) final String email
-    ){ // TODO: Use form
-        Note note = noteService.create(file, name);
-        // TODO: See if its better to load the view directly from here
-        return new ModelAndView("redirect:/notes/" + note.getNoteId());
     }
 
     @RequestMapping(value = "/{noteId}", method = RequestMethod.GET)
@@ -51,7 +28,7 @@ public class NoteController {
     }
 
 
-    @RequestMapping( value = "/{noteId}/file", method = {RequestMethod.GET},
+    @RequestMapping( value = "/{noteId}/download", method = {RequestMethod.GET},
     produces = {"application/pdf"} ) // TODO: change
     @ResponseBody
     public byte[] getNoteFile(@PathVariable("noteId") String noteId) {

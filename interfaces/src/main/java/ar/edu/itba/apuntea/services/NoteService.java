@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface NoteService {
-    List<Note> search(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize);
+    List<Note> searchNotes(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize);
 
-    Note create(MultipartFile multipartFile, String name);
+    Note createNote(MultipartFile multipartFile, String name);
 
     byte[] getNoteFileById(UUID noteId);
 }

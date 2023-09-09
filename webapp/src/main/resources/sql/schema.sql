@@ -1,4 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+DROP TYPE IF EXISTS category_type;
+CREATE TYPE category_type AS ENUM('exam','practice','theory', 'other');
 
 CREATE TABLE IF NOT EXISTS Institutions
 (
@@ -60,10 +62,10 @@ CREATE TABLE IF NOT EXISTS Notes
     name varchar NOT NULL,
     user_id uuid, -- TODO: Check if it should be NOT NULL
     file bytea NOT NULL,
-    category varchar CHECK (category IN ('practice', 'theory', 'exam', 'other')),
+    category category_type,
     subject_id uuid,
     parent_directory_id uuid,
-    created_at timestamp DEFAULT now(),
+    created_at date,
     CONSTRAINT "Notes_pkey" PRIMARY KEY (note_id),
     CONSTRAINT "FK_note_directory" FOREIGN KEY (parent_directory_id) REFERENCES Directories (directory_id),
     CONSTRAINT "FK_note_subject" FOREIGN KEY (subject_id) REFERENCES Subjects (subject_id),
@@ -78,8 +80,4 @@ CREATE TABLE IF NOT EXISTS Reviews
     CONSTRAINT "Reviews_pkey" PRIMARY KEY (note_id, user_id),
     CONSTRAINT "FK_review_note" FOREIGN KEY (note_id) REFERENCES Notes (note_id),
     CONSTRAINT "FK_review_user" FOREIGN KEY (user_id) REFERENCES Users (user_id)
-);
-
-INSERT INTO Institutions (institution_id, name) SELECT '123e4567-e89b-12d3-a456-426655440000', 'FIUBA' WHERE NOT EXISTS (SELECT 1 FROM Institutions WHERE institution_id = '123e4567-e89b-12d3-a456-426655440000');
-INSERT INTO Careers (career_id, name, institution_id) SELECT '223e4567-e89b-12d3-a456-426655440000', 'Ingenieria en AC', '123e4567-e89b-12d3-a456-426655440000' WHERE NOT EXISTS (SELECT 1 FROM Careers WHERE career_id = '223e4567-e89b-12d3-a456-426655440000');
-INSERT INTO Subjects (subject_id, name, career_id) SELECT '323e4567-e89b-12d3-a456-426655440000', 'EDA', '223e4567-e89b-12d3-a456-426655440000' WHERE NOT EXISTS (SELECT 1 FROM Subjects WHERE subject_id = '323e4567-e89b-12d3-a456-426655440000');
+)

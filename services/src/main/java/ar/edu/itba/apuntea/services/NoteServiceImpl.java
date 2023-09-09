@@ -6,8 +6,6 @@ import ar.edu.itba.apuntea.persistence.NoteDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +19,7 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
-    public List<Note> search(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+    public List<Note> searchNotes(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
 //        try {
             SearchArguments sa = new SearchArguments(institution, career, subject, category, score, sortBy, ascending, page, pageSize);
             return noteDao.search(sa);
@@ -32,7 +30,7 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
-    public Note create(MultipartFile multipartFile, String name) {
+    public Note createNote(MultipartFile multipartFile, String name) {
         return noteDao.create(multipartFile, name);
     }
 
