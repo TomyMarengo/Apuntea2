@@ -11,11 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 
 import javax.sql.DataSource;
 
 import java.util.List;
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -31,6 +32,7 @@ public class NoteJdbcDaoTest {
     private static String ITBA_ID = "10000000-0000-0000-0000-000000000000";
     private static String ING_INF = "c0000000-0000-0000-0000-000000000000";
     private static String EDA_ID = "50000000-0000-0000-0000-000000000000";
+    private static String EDA_DIRECTORY_ID = "d0000000-0000-0000-0000-000000000000";
 
     @Before
     public void setUp() {
@@ -55,7 +57,7 @@ public class NoteJdbcDaoTest {
     public void testBySubject(){
         SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(3, notes.size());
+        assertEquals(2, notes.size());
     }
     @Test
     public void testByCategory(){
@@ -85,6 +87,12 @@ public class NoteJdbcDaoTest {
     public void testByPage() {
         SearchArguments sa = new SearchArguments(null, null, null, null, null, null, true, 1, 2);
         List<Note> notes = noteDao.search(sa);
+        assertEquals(2, notes.size());
+    }
+
+    @Test
+    public void testByDirectory() {
+        List<Note> notes = noteDao.getNotesByParentDirectoryId(UUID.fromString(EDA_DIRECTORY_ID));
         assertEquals(2, notes.size());
     }
 }

@@ -1,7 +1,6 @@
 package ar.edu.itba.apuntea.persistence;
 
 import ar.edu.itba.apuntea.models.Directory;
-import ar.edu.itba.apuntea.models.Note;
 import ar.edu.itba.apuntea.models.SearchArguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -67,4 +66,16 @@ public class DirectoryJdbcDao implements DirectoryDao {
         query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
         return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);
     }
+
+    @Override
+    public Directory getDirectoryById(UUID directory_id) {
+        return jdbcTemplate.queryForObject("SELECT * FROM Directories WHERE directory_id = ?", ROW_MAPPER, directory_id);
+    }
+
+    @Override
+    public List<Directory> getChildren(UUID directory_id) {
+        return jdbcTemplate.query("SELECT * FROM Directories WHERE parent_id = ?", ROW_MAPPER, directory_id);
+    }
+
+
 }

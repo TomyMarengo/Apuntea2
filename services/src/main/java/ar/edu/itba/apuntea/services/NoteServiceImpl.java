@@ -7,6 +7,7 @@ import ar.edu.itba.apuntea.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -22,14 +23,9 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> searchNotes(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-//        try {
-            SearchArguments sa = new SearchArguments(institution, career, subject, category, score, sortBy, ascending, page, pageSize);
-            return noteDao.search(sa);
-//        } catch (Exception e) { // TODO: Replace with more accurate exception
-//            System.out.println(e.getMessage());
-//        }
-//        return new ArrayList<>();
+    public List<Note> searchNotes(String institutionId, String careerId, String subjectId, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+        SearchArguments sa = new SearchArguments(institutionId, careerId, subjectId, category, score, sortBy, ascending, page, pageSize);
+        return noteDao.search(sa);
     }
 
     @Override

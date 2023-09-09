@@ -13,4 +13,7 @@ public interface NoteDao {
     byte[] getNoteFileById(UUID noteId);
 
     List<Note> search(SearchArguments sa);
+
+    List<Note> getNotesByParentDirectoryId(UUID directory_id);
+
 }

@@ -1,6 +1,5 @@
 package ar.edu.itba.apuntea.models;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +22,9 @@ public class SearchArguments {
         this(institution, career, subject, category, score, sortBy, ascending, 1, 10);
     }
 
+    public SearchArguments(String institution, String career, String subject, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+        this(institution, career, subject, null, null, sortBy, ascending, page, pageSize);
+    }
     public SearchArguments(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
         // TODO: Add try catchs?
         if (institution != null && !institution.isEmpty()) this.institution = UUID.fromString(institution);

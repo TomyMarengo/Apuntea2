@@ -11,6 +11,8 @@ INSERT INTO Directories (directory_id, name) VALUES ('d0000000-0000-0000-0000-00
 INSERT INTO Directories (directory_id, name) VALUES ('d0000000-0000-0000-0000-000000000002', 'Mecanica Gral');
 INSERT INTO Directories (directory_id, name) VALUES ('d0000000-0000-0000-0000-000000000003', 'Dinamica de Fluidos');
 INSERT INTO Directories (directory_id, name) VALUES ('d0000000-0000-0000-0000-000000000004', 'Java Beans 101');
+INSERT INTO Directories (directory_id, name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000005', 'Guias', 'd0000000-0000-0000-0000-000000000000');
+INSERT INTO Directories (directory_id, name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000006', '1eros parciales', 'd0000000-0000-0000-0000-000000000000');
 
 INSERT INTO Careers (career_id, name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000000', 'Ingenieria Informatica', '10000000-0000-0000-0000-000000000000');
 INSERT INTO Careers (career_id, name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000001', 'Ingenieria Mecanica', '10000000-0000-0000-0000-000000000000');
@@ -22,12 +24,12 @@ INSERT INTO Subjects (subject_id, name, career_id, root_directory_id) VALUES ('5
 INSERT INTO Subjects (subject_id, name, career_id, root_directory_id) VALUES ('50000000-0000-0000-0000-000000000003', 'Dinamica de Fluidos', 'c0000000-0000-0000-0000-000000000001', 'd0000000-0000-0000-0000-000000000003');
 INSERT INTO Subjects (subject_id, name, career_id, root_directory_id) VALUES ('50000000-0000-0000-0000-000000000004', 'Java Beans 101', 'c0000000-0000-0000-0000-000000000002', 'd0000000-0000-0000-0000-000000000004');
 
-INSERT INTO Notes (note_id, name, user_id, category, subject_id) VALUES ('a0000000-0000-0000-0000-000000000000', 'guia 1 de eda', '00000000-0000-0000-0000-000000000000', 'practice', '50000000-0000-0000-0000-000000000000');
-INSERT INTO Notes (note_id, name, user_id, category, subject_id) VALUES ('a0000000-0000-0000-0000-000000000001', 'Lucene - teoria', '00000000-0000-0000-0000-000000000000', 'theory', '50000000-0000-0000-0000-000000000000');
-INSERT INTO Notes (note_id, name, user_id, category, subject_id) VALUES ('a0000000-0000-0000-0000-000000000002', 'MVC vs API REST', '00000000-0000-0000-0000-000000000000', 'theory', '50000000-0000-0000-0000-000000000001');
-INSERT INTO Notes (note_id, name, user_id, category, subject_id) VALUES ('a0000000-0000-0000-0000-000000000003', 'Guia 1 - Cinematica', '00000000-0000-0000-0000-000000000000', 'practice', '50000000-0000-0000-0000-000000000002');
-INSERT INTO Notes (note_id, name, user_id, category, subject_id) VALUES ('a0000000-0000-0000-0000-000000000004', 'Parcial 2 2018 - Dinamica de Fluidos', '00000000-0000-0000-0000-000000000000', 'exam', '50000000-0000-0000-0000-000000000003');
-INSERT INTO Notes (note_id, name, user_id, category, subject_id) VALUES ('a0000000-0000-0000-0000-000000000005', 'Java Beans Everywhere', '00000000-0000-0000-0000-000000000000', 'theory', '50000000-0000-0000-0000-000000000004');
+INSERT INTO Notes (note_id, name, user_id, category, subject_id, parent_directory_id) VALUES ('a0000000-0000-0000-0000-000000000000', 'guia 1 de eda', '00000000-0000-0000-0000-000000000000', 'practice', '50000000-0000-0000-0000-000000000000', 'd0000000-0000-0000-0000-000000000000');
+INSERT INTO Notes (note_id, name, user_id, category, subject_id, parent_directory_id) VALUES ('a0000000-0000-0000-0000-000000000001', 'Lucene - teoria', '00000000-0000-0000-0000-000000000000', 'theory', '50000000-0000-0000-0000-000000000000', 'd0000000-0000-0000-0000-000000000000');
+INSERT INTO Notes (note_id, name, user_id, category, subject_id, parent_directory_id) VALUES ('a0000000-0000-0000-0000-000000000002', 'MVC vs API REST', '00000000-0000-0000-0000-000000000000', 'theory', '50000000-0000-0000-0000-000000000001', 'd0000000-0000-0000-0000-000000000001');
+INSERT INTO Notes (note_id, name, user_id, category, subject_id, parent_directory_id) VALUES ('a0000000-0000-0000-0000-000000000003', 'Guia 1 - Cinematica', '00000000-0000-0000-0000-000000000000', 'practice', '50000000-0000-0000-0000-000000000002', 'd0000000-0000-0000-0000-000000000002');
+INSERT INTO Notes (note_id, name, user_id, category, subject_id, parent_directory_id) VALUES ('a0000000-0000-0000-0000-000000000004', 'Parcial 2 2018 - Dinamica de Fluidos', '00000000-0000-0000-0000-000000000000', 'exam', '50000000-0000-0000-0000-000000000003', 'd0000000-0000-0000-0000-000000000003');
+INSERT INTO Notes (note_id, name, user_id, category, subject_id, parent_directory_id) VALUES ('a0000000-0000-0000-0000-000000000005', 'Java Beans Everywhere', '00000000-0000-0000-0000-000000000000', 'theory', '50000000-0000-0000-0000-000000000004', 'd0000000-0000-0000-0000-000000000004');
 
 INSERT INTO Reviews (note_id, user_id, score) VALUES ('a0000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000001', 3);
 INSERT INTO Reviews (note_id, user_id, score) VALUES ('a0000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000', 4);

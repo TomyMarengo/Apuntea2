@@ -1,6 +1,7 @@
 package ar.edu.itba.apuntea.persistence;
 
 import ar.edu.itba.apuntea.models.Category;
+import ar.edu.itba.apuntea.models.Directory;
 import ar.edu.itba.apuntea.models.Note;
 import ar.edu.itba.apuntea.models.SearchArguments;
 import org.apache.tika.Tika;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,11 +19,10 @@ import static ar.edu.itba.apuntea.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
-public class NoteJdbcDao implements NoteDao{
+public class NoteJdbcDao implements NoteDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private final UserDao userDao;
@@ -82,6 +81,15 @@ public class NoteJdbcDao implements NoteDao{
         return file;
     }
 
+
+    @Override
+    public List<Note> getNotesByParentDirectoryId(UUID directory_id) {
+        return jdbcTemplate.query("SELECT n.name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score FROM Notes n " +
+                "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
+                "WHERE parent_directory_id = ? " +
+                "GROUP BY n.note_id",
+                ROW_MAPPER, directory_id);
+    }
 
     @Override
     public List<Note> search(SearchArguments sa) {

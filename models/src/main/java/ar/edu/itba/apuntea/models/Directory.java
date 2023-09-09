@@ -23,4 +23,8 @@ public class Directory {
     }
 
     public String getName() { return name; }
+
+    public UUID getDirectoryId() { return directoryId; }
+
+    public UUID getParentId() { return parentId; }
 }
