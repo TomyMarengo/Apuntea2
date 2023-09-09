@@ -2,6 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -85,50 +86,75 @@
                                         aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="" method="post" enctype="multipart/form-data" class="d-flex flex-column gap-4">
-                                    <div class="input-group">
+                                <!-- CREATE NOTE FORM -->
+                                <c:url var="createUrl" value="/create"/>
+                                <form:form modelAttribute="createNoteForm" action="${createUrl}" method="post" enctype="multipart/form-data" class="d-flex flex-column gap-4">
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="input-group">
                                         <label class="input-group-text" for="file"><spring:message code="form.upload.file"/></label>
-                                        <input type="file" class="form-control" id="file">
+                                        <form:input path="file" type="file" class="form-control" id="file"/>
+                                        </div>
+                                        <form:errors path="file" cssClass="text-danger" element="p"/>
                                     </div>
 
-                                    <div class="input-group">
-                                        <span class="input-group-text"><spring:message code="form.upload.name"/></span>
-                                        <input type="text" aria-label="<spring:message code="form.upload.name"/>" class="form-control">
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="name"><spring:message code="form.upload.name"/></label>
+                                            <form:input path="name" type="text" aria-label="<spring:message code=\"form.upload.name\"/>" class="form-control" id="name"/>
+                                        </div>
+                                        <form:errors path="name" cssClass="text-danger" element="p"/>
                                     </div>
 
-                                    <div class="input-group">
-                                        <span class="input-group-text"><spring:message code="form.upload.institution"/></span>
-                                        <input type="text" aria-label="<spring:message code="form.upload.institution"/>" class="form-control">
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="input-group">
+                                            <form:select path="institution" id="institutionSelect" style="">
+                                                <form:option value="all"><spring:message code="form.upload.institution"/></form:option>
+                                                <c:forEach items="${institutions}" var="inst">
+                                                    <form:option value="${inst.name}">${inst.name}</form:option>
+                                                </c:forEach>
+                                            </form:select>
+
+                                            <input type="text" id="institutionInput" placeholder="Type to filter institutions">
+                                            <input type="hidden" id="selectedInstitution" name="selectedInstitution">
+                                        </div>
                                     </div>
 
-                                    <div class="input-group">
-                                        <span class="input-group-text"><spring:message code="form.upload.career"/></span>
-                                        <input type="text" aria-label="<spring:message code="form.upload.career"/>" class="form-control">
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="career"><spring:message code="form.upload.career"/></label>
+                                            <form:input path="career" type="text" aria-label="<spring:message code=\"form.upload.career\"/>" class="form-control" id="career"/>
+                                        </div>
+                                        <form:errors path="career" cssClass="text-danger" element="p"/>
                                     </div>
 
-                                    <div class="input-group">
-                                        <span class="input-group-text"><spring:message code="form.upload.subject"/></span>
-                                        <input type="text" aria-label="<spring:message code="form.upload.subject"/>" class="form-control">
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="subject"><spring:message code="form.upload.subject"/></label>
+                                            <form:input path="subject" type="text" aria-label="<spring:message code=\"form.upload.subject\"/>" class="form-control" id="subject"/>
+                                        </div>
+                                        <form:errors path="subject" cssClass="text-danger" element="p"/>
                                     </div>
 
-                                    <div class="input-group mb-3">
-                                        <label class="input-group-text" for="uploadCategory"><spring:message code="form.upload.type"/></label>
-                                        <select class="form-select" id="uploadCategory">
-                                            <option selected><spring:message code="form.upload.type"/></option>
-                                            <option value="1"><spring:message code="search.category.theory"/></option>
-                                            <option value="2"><spring:message code="search.category.practice"/></option>
-                                            <option value="3"><spring:message code="search.category.exam"/></option>
-                                        </select>
+                                    <div class="d-flex flex-column gap-2">
+                                        <div class="input-group">
+                                            <label class="input-group-text" for="category"><spring:message code="form.upload.category"/></label>
+                                            <form:select path="category" class="form-select" id="category">
+                                                <form:option value="all"><spring:message code="form.upload.category"/></form:option>
+                                                <form:option value="theory"><spring:message code="search.category.theory"/></form:option>
+                                                <form:option value="practice"><spring:message code="search.category.practice"/></form:option>
+                                                <form:option value="exam"><spring:message code="search.category.exam"/></form:option>
+                                            </form:select>
+                                        </div>
+                                        <form:errors path="category" cssClass="text-danger" element="p"/>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn rounded-box button-primary" data-bs-dismiss="modal">
-                                    <spring:message code="button.close"/></button>
-                                <a href="notes/create" methods="POST">
-                                    <button type="button" class="btn rounded-box button-secondary"><spring:message
-                                            code="button.upload"/></button>
-                                </a>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn rounded-box button-primary" data-bs-dismiss="modal">
+                                            <spring:message code="button.close"/></button>
+                                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="button.upload"/>"/>
+                                    </div>
+                                </form:form>
                             </div>
                         </div>
                     </div>

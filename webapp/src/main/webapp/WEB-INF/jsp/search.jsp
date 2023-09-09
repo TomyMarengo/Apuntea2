@@ -2,6 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -69,10 +70,10 @@
                 <div class="col">
                     <div class="input-group mb-3">
                         <select class="form-select bg-bg" id="inputGroupSelectType">
-                            <option selected><spring:message code="search.category.placeholder"/></option>
-                            <option value="1"><spring:message code="search.category.exam"/></option>
-                            <option value="2"><spring:message code="search.category.practical"/></option>
-                            <option value="3"><spring:message code="search.category.theoretical"/></option>
+                            <form:option value="all"><spring:message code="form.upload.category"/></form:option>
+                            <form:option value="theory"><spring:message code="search.category.theory"/></form:option>
+                            <form:option value="practice"><spring:message code="search.category.practice"/></form:option>
+                            <form:option value="exam"><spring:message code="search.category.exam"/></form:option>
                         </select>
                     </div>
                 </div>
