@@ -1,5 +1,6 @@
 package ar.edu.itba.apuntea.models;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,6 +14,10 @@ public class SearchArguments {
     private boolean ascending;
     private Integer page;
     private Integer pageSize;
+
+    public SearchArguments(String institution, String career, String subject, String category, Float score) {
+        this(institution, career, subject, category, score, SortBy.SCORE.toString(), true, 1, 10);
+    }
 
     public SearchArguments(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
         // TODO: Add try catchs?

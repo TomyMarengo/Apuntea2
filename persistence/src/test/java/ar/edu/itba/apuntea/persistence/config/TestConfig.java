@@ -22,6 +22,9 @@ public class TestConfig {
     @Value("classpath:sql/schema.sql")
     private Resource schemaSql;
 
+    @Value("classpath:sql/inserts.sql")
+    private Resource insertsSql;
+
     @Bean
     public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
@@ -44,7 +47,7 @@ public class TestConfig {
         final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(hsqldbSql);
         populator.addScript(schemaSql);
-
+        populator.addScript(insertsSql);
         return populator;
     }
 }

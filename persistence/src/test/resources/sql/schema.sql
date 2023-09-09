@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Careers
 (
     career_id uuid NOT NULL DEFAULT UUID(),
     institution_id uuid NOT NULL,
-    name character varying(30),
+    name character varying(100),
     CONSTRAINT "Careers_pkey" PRIMARY KEY (career_id),
     CONSTRAINT "FK_career_institution" FOREIGN KEY (institution_id) REFERENCES Institutions (institution_id)
 );
@@ -19,11 +19,11 @@ CREATE TABLE IF NOT EXISTS Careers
 CREATE TABLE IF NOT EXISTS Users
 (
     user_id uuid NOT NULL DEFAULT UUID(),
-    username character varying(30),
+    username character varying(100),
     email character varying(320) NOT NULL,
-    password character varying(30),
-    name character varying(30),
-    surname character varying(30),
+    password character varying(100),
+    name character varying(100),
+    surname character varying(100),
     institution_id uuid,
     biography text ,
     CONSTRAINT "Users_pkey" PRIMARY KEY (user_id),
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS Users
 CREATE TABLE IF NOT EXISTS Directories
 (
     directory_id uuid NOT NULL DEFAULT UUID(),
-    name character varying(30),
+    name character varying(100),
     parent_id uuid,
     user_id uuid,
     CONSTRAINT "Directories_pkey" PRIMARY KEY (directory_id),
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS Directories
 CREATE TABLE IF NOT EXISTS Subjects
 (
     subject_id uuid NOT NULL DEFAULT UUID(),
-    name character varying(30),
+    name character varying(100),
     root_directory_id uuid,
     career_id uuid,
     semester smallint,
@@ -57,10 +57,10 @@ CREATE TABLE IF NOT EXISTS Subjects
 CREATE TABLE IF NOT EXISTS Notes
 (
     note_id uuid NOT NULL DEFAULT UUID(),
-    name varchar(30) NOT NULL,
+    name varchar(100) NOT NULL,
     user_id uuid, -- TODO: Check if it should be NOT NULL
-    file bytea NOT NULL,
-    category varchar(30),
+    file bytea, -- NOT NULL,
+    category varchar(100),
     subject_id uuid,
     parent_directory_id uuid,
     created_at timestamp DEFAULT now(),
