@@ -16,7 +16,11 @@ public class SearchArguments {
     private Integer pageSize;
 
     public SearchArguments(String institution, String career, String subject, String category, Float score) {
-        this(institution, career, subject, category, score, SortBy.SCORE.toString(), true, 1, 10);
+        this(institution, career, subject, category, score, SortBy.SCORE.toString(), true);
+    }
+
+    public SearchArguments(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending) {
+        this(institution, career, subject, category, score, SortBy.SCORE.toString(), ascending, 1, 10);
     }
 
     public SearchArguments(String institution, String career, String subject, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
@@ -31,8 +35,8 @@ public class SearchArguments {
         }
         this.score = score;
         try {
-            if (sortBy != null) this.sortBy = SortBy.valueOf(sortBy.toUpperCase());
-        } catch (IllegalArgumentException e) {
+            this.sortBy = SortBy.valueOf(sortBy.toUpperCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
             this.sortBy = SortBy.SCORE;
         }
         this.ascending = ascending;

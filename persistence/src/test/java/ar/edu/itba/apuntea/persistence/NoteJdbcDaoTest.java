@@ -30,7 +30,6 @@ public class NoteJdbcDaoTest {
 
     private static String ITBA_ID = "10000000-0000-0000-0000-000000000000";
     private static String ING_INF = "c0000000-0000-0000-0000-000000000000";
-
     private static String EDA_ID = "50000000-0000-0000-0000-000000000000";
 
     @Before
@@ -39,29 +38,53 @@ public class NoteJdbcDaoTest {
     }
 
     @Test
-    public void searchByInstitution() {
+    public void testSearchByInstitution() {
         SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null);
         List<Note> notes = noteDao.search(sa);
         assertEquals(notes.size(), 5);
     }
 
     @Test
-    public void searchByCareer(){
+    public void testSearchByCareer(){
         SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null);
         List<Note> notes = noteDao.search(sa);
         assertEquals(notes.size(), 3);
     }
 
     @Test
-    public void searchBySubject(){
+    public void testBySubject(){
         SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null);
         List<Note> notes = noteDao.search(sa);
         assertEquals(notes.size(), 2);
     }
     @Test
-    public void searchByCategory(){
+    public void testByCategory(){
         SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, Category.PRACTICE.toString(), null);
         List<Note> notes = noteDao.search(sa);
         assertEquals(notes.size(), 1);
+    }
+
+    @Test
+    public void testOrderBy(){
+        SearchArguments sa = new SearchArguments(null, null, null, null, null, "name", true, 1, 10);
+        List<Note> notes = noteDao.search(sa);
+        for (int i = 0; i < notes.size() - 2; i++) {
+            assertTrue(notes.get(i).getName().toUpperCase().compareTo(notes.get(i + 1).getName().toUpperCase()) <= 0);
+        }
+    }
+
+    @Test
+    public void testByScore() {
+        SearchArguments sa = new SearchArguments(null, null, null, null, 3.0f);
+        List<Note> notes = noteDao.search(sa);
+        assertEquals(notes.size(), 2);
+        notes.forEach(note -> assertTrue(note.getAvgScore().get() >= 3.0f));
+    }
+
+    @Test
+    public void testByPage() {
+        SearchArguments sa = new SearchArguments(null, null, null, null, null, null, true, 1, 2);
+        List<Note> notes = noteDao.search(sa);
+        assertEquals(notes.size(), 2);
     }
 }

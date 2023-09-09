@@ -90,8 +90,10 @@ public class NoteJdbcDao implements NoteDao{
         addIfPresent(query, args, "c." + CAREER_ID, "=", sa.getCareer());
         addIfPresent(query, args, "s." + SUBJECT_ID, "=", sa.getSubject());
         addIfPresent(query, args, CATEGORY, "=", sa.getCategory().map(Enum::toString));
-        addIfPresent(query, args, AVG_SCORE, ">=", sa.getScore());
+
         query.append("GROUP BY n.").append(NOTE_ID);
+        sa.getScore().ifPresent( score -> query.append(" HAVING AVG(r.score) >= ").append(score));
+
         query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.get(sa.getSortBy()));
         if (!sa.isAscending()) query.append(" DESC");
         query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
