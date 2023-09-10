@@ -235,9 +235,9 @@
     </div>
 </div>
 
-
+<!-- TODO: UNCOMMENT
 <div class="row mt-5 m-0 ">
-    <!-- CARROUSEL LAST NOTES -->
+    # CARROUSEL LAST NOTES
     <div class="d-flex flex-column col-xl-6">
         <div class="d-flex justify-content-center" style="padding-left: 40px;">
             <h5 class="fw-bold" style="margin-left: 120px; margin-right: 75px"><spring:message
@@ -255,19 +255,19 @@
 
         <div id="carouselUniversity" class="carousel slide mt-3">
             <div class="carousel-inner">
-                <!-- First "page" of carrousel -->
+                # First "page" of carrousel
                 <div class="carousel-item mb-5 active">
-                    <!-- University name and graph -->
+                    # University name and graph
                     <div class="container mw-600">
                         <div class="card box h-100 bg-bg">
                             <div class="card-body d-flex align-items-center h-100 justify-content-around flex-wrap">
-                                <!-- University Icon and Name (in the right) -->
+                                # University Icon and Name (in the right)
                                 <div class="d-flex align-items-center university-title ">
                                     <img src="<c:url value="/svg/graduation-cap.svg"/>" alt="University Icon"
                                          class="icon-s fill-text">
                                     <h5 class=" mx-2 w-100"><strong>PLACEHOLDER</strong></h5>
                                 </div>
-                                <!-- Graph with circles and lines -->
+                                # Graph with circles and lines
                                 <div class="graph h-100">
                                     <div class="circle circle1"></div>
                                     <div class="line line1"></div>
@@ -286,12 +286,12 @@
                                         <p>NUMBER</p>
                                         <p><spring:message code="index.notes.notes"/></p>
                                     </div>
-                                    <!-- Add more circles and lines as needed -->
+
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Example notes -->
+                    # Example notes
                     <div class="container mw-600">
                         <div class="card box h-100 py-1 bg-dark-bg">
                             <div class="card-body d-flex flex-column gap-2">
@@ -328,12 +328,12 @@
         </div>
     </div>
 
-    <!-- LIST LAST COMMENTS -->
+    # LIST LAST COMMENTS
     <div id="last-comments" class="d-flex flex-column col-xl-6">
         <h5 class="text-center fw-bold"><spring:message code="index.comments.title"/></h5>
         <div class="container mt-3">
             <div class="row justify-content-center">
-                <!-- A COMMENT -->
+                # A COMMENT
                 <div class="col-lg-12 col-xl-6 mb-4 mw-500">
                     <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
                         <div class="card-body">
@@ -347,7 +347,7 @@
                         </div>
                     </a>
                 </div>
-                <!-- A COMMENT -->
+                # A COMMENT
                 <div class="col-lg-12 col-xl-6 mb-4 mw-500">
                     <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
                         <div class="card-body">
@@ -361,7 +361,7 @@
                         </div>
                     </a>
                 </div>
-                <!-- A COMMENT -->
+                # A COMMENT
                 <div class="col-lg-12 col-xl-6 mb-4 mw-500">
                     <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
                         <div class="card-body">
@@ -379,7 +379,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"

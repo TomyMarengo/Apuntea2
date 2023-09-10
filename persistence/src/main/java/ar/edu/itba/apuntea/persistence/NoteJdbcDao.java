@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +27,7 @@ import java.util.*;
 public class NoteJdbcDao implements NoteDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final UserDao userDao;
     private final Tika tika = new Tika();
 
@@ -40,6 +43,7 @@ public class NoteJdbcDao implements NoteDao {
     @Autowired
     public NoteJdbcDao(final DataSource ds, final UserDao userDao){
         this.jdbcTemplate = new JdbcTemplate(ds);
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
         this.jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("Notes")
                 .usingGeneratedKeyColumns(NOTE_ID)
@@ -99,14 +103,14 @@ public class NoteJdbcDao implements NoteDao {
                         "INNER JOIN Careers c ON s.career_id = c.career_id " +
                         "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
                         "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
-                        "WHERE true " // TODO: Ask if this is legal
+                        "WHERE "
         );
         List<Object> args = new ArrayList<>();
 
-        addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", sa.getInstitution());
-        addIfPresent(query, args, "c." + CAREER_ID, "=", sa.getCareer());
-        addIfPresent(query, args, "s." + SUBJECT_ID, "=", sa.getSubject());
-        addIfPresent(query, args, CATEGORY, "=", sa.getCategory().map(Enum::toString));
+        addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", "", sa.getInstitution());
+        addIfPresent(query, args, "c." + CAREER_ID, "=", "AND", sa.getCareer());
+        addIfPresent(query, args, "s." + SUBJECT_ID, "=", "AND", sa.getSubject());
+        addIfPresent(query, args, CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString));
 
         query.append("GROUP BY n.").append(NOTE_ID);
         sa.getScore().ifPresent( score -> query.append(" HAVING AVG(r.score) >= ").append(score));
@@ -116,5 +120,21 @@ public class NoteJdbcDao implements NoteDao {
         query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
 
         return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);
+    }
+
+    @Override
+    public List<Note> searchByWord(String word) {
+        String query = "SELECT n.name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score FROM Notes n " +
+                "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
+                "INNER JOIN Careers c ON s.career_id = c.career_id " +
+                "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
+                "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
+                "WHERE n.name LIKE :searchWord OR i.name LIKE :searchWord OR c.name LIKE :searchWord OR s.name LIKE :searchWord " +
+                "GROUP BY n.note_id" ;
+
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("searchWord", "%" + word + "%");
+
+        return namedParameterJdbcTemplate.query(query, parameters, ROW_MAPPER);
     }
 }
