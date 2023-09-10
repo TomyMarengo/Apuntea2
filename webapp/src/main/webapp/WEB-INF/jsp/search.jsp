@@ -55,9 +55,8 @@
                         <span class="input-group-text"><img src="/svg/school.svg"
                             alt="<spring:message code="search.institution.placeholder"/>" class="icon-s fill-text" />
                         </span>
-                        <spring:message code="search.institution.placeholder" var="placeholderSearch" />
-                        <form:input path="institution" type="text" class="form-control bg-bg" placeholder='${placeholderSearch}'/>
-                    </div>
+                        <input type="text" class="form-control bg-bg" placeholder="<spring:message code="search.institution.placeholder"/>">
+                   </div>
                 </div>
 
                 <div class="col">
