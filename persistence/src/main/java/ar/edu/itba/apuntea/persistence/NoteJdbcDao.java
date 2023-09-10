@@ -43,7 +43,7 @@ public class NoteJdbcDao implements NoteDao {
         this.jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("Notes")
                 .usingGeneratedKeyColumns(NOTE_ID)
-                .usingColumns(NAME, FILE, SUBJECT_ID, CATEGORY); // TODO: Move to resource/constants?
+                .usingColumns(NAME, FILE, SUBJECT_ID, CATEGORY, USER_ID); // TODO: Move to resource/constants?
         this.userDao = userDao;
     }
 
