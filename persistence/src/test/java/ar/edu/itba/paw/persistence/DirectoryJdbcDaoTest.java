@@ -84,10 +84,21 @@ public class DirectoryJdbcDaoTest {
     }
 
     @Test
-    public void testChildren(){
+    public void testChildren() {
         List<Directory> directories = directoryDao.getChildren(EDA_DIRECTORY_ID);
         assertEquals(2, directories.size());
         assertEquals("Guias", directories.get(0).getName());
         assertEquals("1eros parciales", directories.get(1).getName());
     }
+
+    @Test
+    public void testByWord() {
+        SearchArguments sa = new SearchArguments(null, null, null, null, null, "can", "name", true, 1, 10);
+        List<Directory> directories = directoryDao.search(sa);
+        assertEquals(2, directories.size());
+        assertEquals("Dinamica de Fluidos", directories.get(0).getName());
+        assertEquals("Mecanica Gral", directories.get(1).getName());
+    }
+
+
 }

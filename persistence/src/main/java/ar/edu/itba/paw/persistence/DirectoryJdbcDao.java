@@ -61,6 +61,14 @@ public class DirectoryJdbcDao implements DirectoryDao {
         addIfPresent(query, args, "c." + CAREER_ID, "=","AND", sa.getCareerId());
         addIfPresent(query, args, "s." + SUBJECT_ID, "=","AND", sa.getSubjectId());
 
+        sa.getWord().ifPresent(w -> {
+                    String searchWord = "%" + w + "%";
+                    query.append("AND LOWER(d.name) LIKE LOWER(?) OR LOWER(i.name) LIKE LOWER(?) OR LOWER(c.name) LIKE LOWER(?) OR LOWER(s.name) LIKE LOWER(?)");
+                    for (int i = 0; i < 4; i++)
+                        args.add(searchWord);
+                }
+        );
+
         query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.get(sa.getSortBy()));
         if (!sa.isAscending()) query.append(" DESC");
         query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());

@@ -108,7 +108,7 @@ public class NoteJdbcDao implements NoteDao {
 
         sa.getWord().ifPresent(w -> {
                 String searchWord = "%" + w + "%";
-                query.append("AND LOWER(n.name) LIKE LOWER(?) OR LOWER(i.name) LIKE LOWER(?) OR c.name LIKE LOWER(?) OR LOWER(s.name) LIKE LOWER(?)");
+                query.append("AND LOWER(n.name) LIKE LOWER(?) OR LOWER(i.name) LIKE LOWER(?) OR LOWER(c.name) LIKE LOWER(?) OR LOWER(s.name) LIKE LOWER(?)");
                 for (int i = 0; i < 4; i++)
                     args.add(searchWord);
             }

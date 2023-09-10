@@ -97,7 +97,7 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testByWord() {
-        SearchArguments sa = new SearchArguments(null, null, null, null, null, "", null, true, 1, 2);
+        SearchArguments sa = new SearchArguments(null, null, null, null, null, "guIA", null, true, 1, 10);
         List<Note> notes = noteDao.search(sa);
         assertEquals(2, notes.size());
     }
