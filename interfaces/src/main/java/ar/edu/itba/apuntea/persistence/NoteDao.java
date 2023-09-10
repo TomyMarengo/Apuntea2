@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface NoteDao {
-    Note create(MultipartFile multipartFile, String name);
+    Note create(MultipartFile file, String name, String email, UUID institutionId, UUID careerId, UUID subjectId, String category);
 
     byte[] getNoteFileById(UUID noteId);
 

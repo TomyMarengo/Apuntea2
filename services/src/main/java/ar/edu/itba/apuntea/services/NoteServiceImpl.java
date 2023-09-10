@@ -30,8 +30,8 @@ public class NoteServiceImpl implements NoteService{
     }
 
     @Override
-    public Note createNote(MultipartFile multipartFile, String name) {
-        return noteDao.create(multipartFile, name);
+    public Note createNote(MultipartFile file, String name, String email, UUID institutionId, UUID careerId, UUID subjectId, String category) {
+        return noteDao.create(file, name, email, institutionId, careerId, subjectId, category);
     }
 
     @Override

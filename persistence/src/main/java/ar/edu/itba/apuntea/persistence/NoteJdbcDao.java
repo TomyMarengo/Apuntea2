@@ -3,12 +3,17 @@ package ar.edu.itba.apuntea.persistence;
 import ar.edu.itba.apuntea.models.Category;
 import ar.edu.itba.apuntea.models.Note;
 import ar.edu.itba.apuntea.models.SearchArguments;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import static ar.edu.itba.apuntea.persistence.JdbcDaoUtils.*;
 
@@ -21,6 +26,8 @@ import java.util.*;
 public class NoteJdbcDao implements NoteDao{
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
+    private final UserDao userDao;
+    private final Tika tika = new Tika();
 
     private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
             new Note(
@@ -32,28 +39,39 @@ public class NoteJdbcDao implements NoteDao{
             );
 
     @Autowired
-    public NoteJdbcDao(final DataSource ds){
+    public NoteJdbcDao(final DataSource ds, final UserDao userDao){
         this.jdbcTemplate = new JdbcTemplate(ds);
-
         this.jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("Notes")
                 .usingGeneratedKeyColumns(NOTE_ID)
                 .usingColumns(NAME, FILE, SUBJECT_ID, CATEGORY); // TODO: Move to resource/constants?
+        this.userDao = userDao;
     }
 
     @Override
-    public Note create(MultipartFile multipartFile, String name) {
+    public Note create(MultipartFile file, String name, String email, UUID institutionId, UUID careerId, UUID subjectId, String category) {
         byte[] bytes = new byte[0];
         try {
-            bytes = multipartFile.getBytes();
+            bytes = file.getBytes();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+        String contentType = tika.detect(file.getOriginalFilename());
+        if (!contentType.equals("application/pdf")) {
+            throw new IllegalArgumentException("File must be a PDF");
+        }
+
         final Map<String, Object> args = new HashMap<>();
         args.put(NAME, name);
         args.put(FILE, bytes);
-        args.put(SUBJECT_ID, UUID.fromString("323e4567-e89b-12d3-a456-426655440000")); // TODO: Remove
-        args.put(CATEGORY, "practice"); // TODO change
+        args.put(SUBJECT_ID, subjectId);
+        args.put(CATEGORY, category);
+
+        //TODO: Delete this when users are implemented
+        //Get user id from email. If it doesn't exist, create it with username = email, password = email, and institution_id
+        args.put(USER_ID, userDao.getUserIdByEmail(email, institutionId));
+
+        //Insert note
         UUID noteId = (UUID) jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get("note_id");
         return new Note(noteId, name);
     }

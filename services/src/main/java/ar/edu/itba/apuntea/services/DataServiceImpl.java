@@ -32,8 +32,8 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public Note createNote(MultipartFile file, String name) {
-        return noteService.createNote(file, name);
+    public Note createNote(MultipartFile file, String name, String email, UUID institutionId, UUID careerId, UUID subjectId, String category) {
+        return noteService.createNote(file, name, email, institutionId, careerId, subjectId, category);
     }
 
     @Override

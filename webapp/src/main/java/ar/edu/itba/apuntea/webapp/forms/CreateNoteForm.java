@@ -1,9 +1,12 @@
 package ar.edu.itba.apuntea.webapp.forms;
 
+import ar.edu.itba.apuntea.webapp.validation.MaxFileSize;
 import ar.edu.itba.apuntea.webapp.validation.ValidFileName;
+import ar.edu.itba.apuntea.webapp.validation.ValidUuid;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
+import java.util.UUID;
 
 public class CreateNoteForm {
 
@@ -12,21 +15,27 @@ public class CreateNoteForm {
     @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String name;
     @ValidFileName(allowedExtensions = {".pdf"}) // TODO: Add more extensions
+    @MaxFileSize(megabytes = 10) // 10 MB
     private MultipartFile file;
+    //TODO: Add validation for institution, career and subject
+    @ValidUuid
+    private UUID institutionId;
+    @ValidUuid
+    private UUID careerId;
+    @ValidUuid
+    private UUID subjectId;
     @NotEmpty
-    private String institution;
-    @NotEmpty
-    private String career;
-    @NotEmpty
-    private String subject;
-    @NotEmpty
-    @Pattern(regexp = "theory|practice|exam")
+    @Pattern(regexp = "theory|practice|exam|other")
     private String category;
     @NotEmpty
     @Email
     private String email;
 
     // All getters
+
+    public UUID getSubjectId() {
+        return subjectId;
+    }
     public String getName() {
         return name;
     }
@@ -35,16 +44,16 @@ public class CreateNoteForm {
         return file;
     }
 
-    public String getInstitution() {
-        return institution;
+    public UUID getInstitutionId() {
+        return institutionId;
     }
 
-    public String getCareer() {
-        return career;
+    public void setInstitutionId(UUID institutionId) {
+        this.institutionId = institutionId;
     }
 
-    public String getSubject() {
-        return subject;
+    public UUID getCareerId() {
+        return careerId;
     }
 
     public String getCategory() {
@@ -65,23 +74,19 @@ public class CreateNoteForm {
         this.file = file;
     }
 
-    public void setInstitution(String institution) {
-        this.institution = institution;
-    }
-
-    public void setCareer(String career) {
-        this.career = career;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
     public void setCategory(String category) {
         this.category = category;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setCareerId(UUID careerId) {
+        this.careerId = careerId;
+    }
+
+    public void setSubjectId(UUID subjectId) {
+        this.subjectId = subjectId;
     }
 }

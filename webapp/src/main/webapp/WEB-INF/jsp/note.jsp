@@ -14,7 +14,7 @@
     <h1>Note</h1>
     <object
         type="application/pdf"
-        data="http://localhost:8080/notes/${noteId}/file"
+        data="http://localhost:8080/notes/${noteId}/download"
         width="100%"
         height="80%">
     </object>
