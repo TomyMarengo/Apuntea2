@@ -22,6 +22,7 @@ public class UserController {
 
     //TODO: remove for sprint 1
     /*
+
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ModelAndView profile() {
         return new ModelAndView("profile");

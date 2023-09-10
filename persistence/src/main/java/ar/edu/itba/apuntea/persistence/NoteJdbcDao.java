@@ -49,7 +49,7 @@ public class NoteJdbcDao implements NoteDao{
     }
 
     @Override
-    public Note create(MultipartFile file, String name, String email, UUID institutionId, UUID careerId, UUID subjectId, String category) {
+    public Note create(MultipartFile file, String name, UUID user_id, UUID subjectId, String category) {
         byte[] bytes = new byte[0];
         try {
             bytes = file.getBytes();
@@ -67,12 +67,10 @@ public class NoteJdbcDao implements NoteDao{
         args.put(SUBJECT_ID, subjectId);
         args.put(CATEGORY, category);
 
-        //TODO: Delete this when users are implemented
-        //Get user id from email. If it doesn't exist, create it with username = email, password = email, and institution_id
-        args.put(USER_ID, userDao.getUserIdByEmail(email, institutionId));
+        args.put(USER_ID, user_id);
 
         //Insert note
-        UUID noteId = (UUID) jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get("note_id");
+        UUID noteId = (UUID) jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get(NOTE_ID);
         return new Note(noteId, name);
     }
 

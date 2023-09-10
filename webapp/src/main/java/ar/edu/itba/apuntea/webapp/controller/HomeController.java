@@ -45,9 +45,8 @@ public class HomeController {
             return mav;
         }
 
-        Note note = dataService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getEmail(),
-                createNoteForm.getInstitutionId(), createNoteForm.getCareerId(), createNoteForm.getSubjectId(), createNoteForm.getCategory());
-        return new ModelAndView("/notes/" + note.getNoteId());
+        Note note = dataService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getEmail(), createNoteForm.getSubjectId(), createNoteForm.getCategory());
+        return new ModelAndView("redirect:/notes/" + note.getNoteId());
     }
 
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.itba.apuntea.models.User;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -17,13 +18,10 @@ public class UserServiceImpl implements UserService {
         this.userDao = userDao;
     }
 
-    @Override
-    public User createUser(long userId, String email, String password) {
-        return userDao.create(email);
-    }
 
     @Override
-    public Optional<User> findById(long userId) {
-        return userDao.findById(userId);
+    public Optional<User> findById(UUID id) {
+        return userDao.findById(id);
     }
+
 }

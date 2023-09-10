@@ -38,33 +38,28 @@ class UserJdbcDao implements UserDao{
     public User create(final String email) {
         final Map<String, Object> args = new HashMap<>();
         args.put("email", email);
-        jdbcInsert.execute(args);
-        return new User(email);
+        UUID userId = (UUID) jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get("user_id");
+        return new User(userId, email);
     }
 
     @Override
-    public Optional<User> findById(final long id) {
+    public Optional<User> findById(final UUID userId) {
         return jdbcTemplate.query("SELECT * FROM Users WHERE user_id = ?",
-                new Object[]{id}, ROW_MAPPER).stream().findFirst();
+                new Object[]{userId}, ROW_MAPPER).stream().findFirst();
     }
 
+    //TODO remove when users are implemented
     @Transactional
     @Override
-    public UUID getUserIdByEmail(String email, UUID institutionId) {
+    public User createIfNotExists(String email) {
         try {
             return jdbcTemplate.queryForObject(
-                    "SELECT user_id FROM Users WHERE email = ?",
+                    "SELECT user_id, email FROM Users WHERE email = ?",
                     new Object[]{email},
-                    (rs, rowNum) -> UUID.fromString(rs.getString("user_id"))
+                    ROW_MAPPER
             );
         } catch (EmptyResultDataAccessException e) {
-            String sql = "INSERT INTO Users (username, email, institution_id) VALUES (?, ?, ?) RETURNING user_id";
-            Object[] params = {email, email, institutionId};
-            return jdbcTemplate.queryForObject(
-                    sql,
-                    params,
-                    (rs, rowNum) -> (UUID) rs.getObject("user_id")
-            );
+            return create(email);
         }
     }
 }

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface UserDao {
     User create(String email);
-    Optional<User> findById(long id);
+    Optional<User> findById(UUID userId);
 
-    public UUID getUserIdByEmail(String email, UUID institutionId);
+    User createIfNotExists(String email);
 }
