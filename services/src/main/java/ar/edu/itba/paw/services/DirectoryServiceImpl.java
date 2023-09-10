@@ -30,10 +30,10 @@ public class DirectoryServiceImpl implements DirectoryService{
     }
 
     @Override
-    public List<Directory> search(UUID institutionId, UUID careerId, UUID subjectId, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+    public List<Directory> search(UUID institutionId, UUID careerId, UUID subjectId, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
         if (sortBy.equals(SCORE.toString()))
             return new ArrayList<>();
-        SearchArguments sa = new SearchArguments(institutionId, careerId, subjectId, sortBy, ascending, page, pageSize);
+        SearchArguments sa = new SearchArguments(institutionId, careerId, subjectId, word, sortBy, ascending, page, pageSize);
         return directoryDao.search(sa);
     }
 

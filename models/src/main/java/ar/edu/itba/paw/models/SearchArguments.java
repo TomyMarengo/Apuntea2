@@ -9,23 +9,18 @@ public class SearchArguments {
     private UUID subjectId;
     private Category category; //TODO: check database type
     private Float score;
+    private String word;
     private SortBy sortBy;
     private boolean ascending;
     private Integer page;
     private Integer pageSize;
 
-    public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score) {
-        this(institutionId, careerId, subjectId, category, score, SortBy.SCORE.toString(), true);
-    }
 
-    public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score, String sortBy, boolean ascending) {
-        this(institutionId, careerId, subjectId, category, score, SortBy.SCORE.toString(), ascending, 1, 10);
+     public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+        this(institutionId, careerId, subjectId, null, null, word, sortBy, ascending, page, pageSize);
     }
-
-     public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        this(institutionId, careerId, subjectId, null, null, sortBy, ascending, page, pageSize);
-    }
-    public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+    
+    public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
         this.institutionId = institutionId;
         this.careerId = careerId;
         this.subjectId = subjectId;
@@ -34,6 +29,7 @@ public class SearchArguments {
         this.score = score;
         if (sortBy != null && !sortBy.isEmpty())
             this.sortBy = SortBy.valueOf(sortBy.toUpperCase());
+        this.word = word;
         this.ascending = ascending;
         this.page = page;
         this.pageSize = pageSize;
@@ -58,6 +54,11 @@ public class SearchArguments {
     public Optional<Float> getScore() {
         return Optional.ofNullable(score);
     }
+
+    public Optional<String> getWord() {
+        return Optional.ofNullable(word);
+    }
+
 
     public SortBy getSortBy() {
         return sortBy;

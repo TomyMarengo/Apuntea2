@@ -27,8 +27,8 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public List<Note> searchNotes(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        return noteService.searchNotes(institutionId, careerId, subjectId, category, score, sortBy, ascending, page, pageSize);
+    public List<Note> searchNotes(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+        return noteService.searchNotes(institutionId, careerId, subjectId, category, score, word, sortBy, ascending, page, pageSize);
     }
 
     @Override
@@ -55,10 +55,4 @@ public class DataServiceImpl implements DataService {
     public List<Subject> getSubjects() {
         return subjectService.getSubjects();
     }
-
-    @Override
-    public List<Note> searchNotesByWord(String word) {
-        return noteService.searchNotesByWord(word);
-    }
-
 }

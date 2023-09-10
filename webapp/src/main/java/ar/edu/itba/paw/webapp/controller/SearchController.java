@@ -27,23 +27,19 @@ public class SearchController {
     public ModelAndView searchNotes(@Valid @ModelAttribute("searchNotesForm") final SearchNotesForm searchNotesForm, final BindingResult result){
         final ModelAndView mav = new ModelAndView("search");
 
-        List<Note> notes;
-        if (searchNotesForm.getWord() == null || searchNotesForm.getWord().isEmpty()) {
-            notes = dataService.searchNotes(
+        List<Note> notes = dataService.searchNotes(
                     searchNotesForm.getInstitutionId(),
                     searchNotesForm.getCareerId(),
                     searchNotesForm.getSubjectId(),
                     searchNotesForm.getCategory(),
                     searchNotesForm.getScore(),
+                    searchNotesForm.getWord(),
                     searchNotesForm.getSortBy(),
                     searchNotesForm.getAscending(),
                     searchNotesForm.getPage(),
                     searchNotesForm.getPageSize()
-            );
-        }
-        else {
-            notes = dataService.searchNotesByWord(searchNotesForm.getWord());
-        }
+        );
+
         
         mav.addObject("notes", notes);
         mav.addObject("institutions", dataService.getInstitutions());

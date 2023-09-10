@@ -23,8 +23,8 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> searchNotes(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        SearchArguments sa = new SearchArguments(institutionId, careerId, subjectId, category, score, sortBy, ascending, page, pageSize);
+    public List<Note> searchNotes(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+        SearchArguments sa = new SearchArguments(institutionId, careerId, subjectId, category, score, word, sortBy, ascending, page, pageSize);
         return noteDao.search(sa);
     }
 
@@ -37,11 +37,6 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public byte[] getNoteFileById(UUID noteId) {
         return noteDao.getNoteFileById(noteId);
-    }
-
-    @Override
-    public List<Note> searchNotesByWord(String word) {
-        return noteDao.searchByWord(word);
     }
 
 }

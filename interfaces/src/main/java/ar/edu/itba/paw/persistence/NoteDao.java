@@ -15,6 +15,4 @@ public interface NoteDao {
     List<Note> search(SearchArguments sa);
 
     List<Note> getNotesByParentDirectoryId(UUID directory_id);
-
-    List<Note> searchByWord(String word);
 }

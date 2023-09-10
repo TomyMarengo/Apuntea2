@@ -17,6 +17,7 @@ import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.IntStream;
 
 @Repository
 public class NoteJdbcDao implements NoteDao {
@@ -105,6 +106,14 @@ public class NoteJdbcDao implements NoteDao {
         addIfPresent(query, args, "s." + SUBJECT_ID, "=", "AND", sa.getSubjectId());
         addIfPresent(query, args, CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString).map(String::toLowerCase));
 
+        sa.getWord().ifPresent(w -> {
+                String searchWord = "%" + w + "%";
+                query.append("AND LOWER(n.name) LIKE LOWER(?) OR LOWER(i.name) LIKE LOWER(?) OR c.name LIKE LOWER(?) OR LOWER(s.name) LIKE LOWER(?)");
+                for (int i = 0; i < 4; i++)
+                    args.add(searchWord);
+            }
+        );
+
         query.append("GROUP BY n.").append(NOTE_ID);
         sa.getScore().ifPresent( score -> query.append(" HAVING AVG(r.score) >= ").append(score));
 
@@ -116,21 +125,5 @@ public class NoteJdbcDao implements NoteDao {
         query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
 
         return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);
-    }
-
-    @Override
-    public List<Note> searchByWord(String word) {
-        String query = "SELECT n.note_id, n.name, n.category, n.created_at, AVG(r.score) AS avg_score FROM Notes n " +
-                "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
-                "INNER JOIN Careers c ON s.career_id = c.career_id " +
-                "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
-                "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
-                "WHERE LOWER(n.name) LIKE LOWER(:searchWord) OR LOWER(i.name) LIKE LOWER(:searchWord) OR c.name LIKE LOWER(:searchWord) OR LOWER(s.name) LIKE LOWER(:searchWord) " +
-                "GROUP BY n.note_id" ;
-
-        MapSqlParameterSource parameters = new MapSqlParameterSource();
-        parameters.addValue("searchWord", "%" + word + "%");
-
-        return namedParameterJdbcTemplate.query(query, parameters, ROW_MAPPER);
     }
 }

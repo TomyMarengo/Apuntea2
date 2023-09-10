@@ -9,7 +9,7 @@ import java.util.UUID;
 public interface DirectoryService {
     Optional<Directory> create(String name, String parentId, String userId);
 
-    List<Directory> search(UUID institutionId, UUID careerId, UUID subjectId, String sortBy, boolean ascending, Integer page, Integer pageSize);
+    List<Directory> search(UUID institutionId, UUID careerId, UUID subjectId, String word, String sortBy, boolean ascending, Integer page, Integer pageSize);
 
     Optional<Directory> getDirectoryById(String id);
 
