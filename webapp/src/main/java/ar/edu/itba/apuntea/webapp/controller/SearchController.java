@@ -31,7 +31,7 @@ public class SearchController {
         final ModelAndView mav = new ModelAndView("search");
 
         List<Note> notes;
-        if (searchNotesForm.getWord().isEmpty()) {
+        if (searchNotesForm.getWord() == null || searchNotesForm.getWord().isEmpty()) {
             notes = dataService.searchNotes(
                     searchNotesForm.getInstitutionId(),
                     searchNotesForm.getCareerId(),

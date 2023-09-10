@@ -35,8 +35,8 @@ public class Note {
     public String getName() {
         return name;
     }
-    public Optional<Float> getAvgScore(){
-        return Optional.ofNullable(avgScore);
+    public Float getAvgScore(){
+        return avgScore == null ? 0 : avgScore;
     }
 
 

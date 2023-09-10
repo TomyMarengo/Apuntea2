@@ -44,12 +44,19 @@
 
     <!-- SEARCH -->
     <div class="container d-flex flex-column w-100">
-        <form class="">
+        <c:url var="searchUrl" value="/search"/>
+        <form:form modelAttribute="searchNotesForm"
+                   action="${searchUrl}"
+                   method="get"
+                   id="searchWordForm">
             <div class="row row-cols-1 row-cols-md-3 row-cols-lg-6 ">
                 <div class="col">
                     <div class="input-group mb-3">
-                        <span class="input-group-text"><img src="/svg/school.svg" alt="<spring:message code="search.institution.placeholder"/>" class="icon-s fill-text" /></span>
-                        <input type="text" class="form-control bg-bg" placeholder="<spring:message code="search.institution.placeholder"/>">
+                        <span class="input-group-text"><img src="/svg/school.svg"
+                            alt="<spring:message code="search.institution.placeholder"/>" class="icon-s fill-text" />
+                        </span>
+                        <spring:message code="search.institution.placeholder" var="placeholderSearch" />
+                        <form:input path="institution" type="text" class="form-control bg-bg" placeholder='${placeholderSearch}'/>
                     </div>
                 </div>
 
@@ -106,7 +113,7 @@
             </div>
 
             <button type="submit" class="btn button-primary w-100 "><spring:message code="search.button"/></button>
-        </form>
+        </form:form>
     </div>
 
     <div class="container mt-4">

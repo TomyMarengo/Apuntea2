@@ -123,7 +123,7 @@ public class NoteJdbcDao implements NoteDao {
                 "INNER JOIN Careers c ON s.career_id = c.career_id " +
                 "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
                 "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
-                "WHERE n.name LIKE :searchWord OR i.name LIKE :searchWord OR c.name LIKE :searchWord OR s.name LIKE :searchWord " +
+                "WHERE LOWER(n.name) LIKE LOWER(:searchWord) OR LOWER(i.name) LIKE LOWER(:searchWord) OR c.name LIKE LOWER(:searchWord) OR LOWER(s.name) LIKE LOWER(:searchWord) " +
                 "GROUP BY n.note_id" ;
 
         MapSqlParameterSource parameters = new MapSqlParameterSource();

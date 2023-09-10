@@ -79,8 +79,8 @@ public class NoteJdbcDaoTest {
     public void testByScore() {
         SearchArguments sa = new SearchArguments(null, null, null, null, 3.0f);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(2, notes.size());
-        notes.forEach(note -> assertTrue(note.getAvgScore().get() >= 3.0f));
+        assertEquals(notes.size(), 2);
+        notes.forEach(note -> assertTrue(note.getAvgScore() >= 3.0f));
     }
 
     @Test
