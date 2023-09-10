@@ -39,4 +39,12 @@ public class Note {
         return Optional.ofNullable(avgScore);
     }
 
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

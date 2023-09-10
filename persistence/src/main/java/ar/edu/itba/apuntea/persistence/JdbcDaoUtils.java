@@ -28,9 +28,9 @@ public class JdbcDaoUtils {
         SORTBY.put(SortBy.NAME, NAME);
     }
 
-    static void addIfPresent(StringBuilder query, List<Object> args, String field, String cmpOp, Optional<?> value) {
+    static void addIfPresent(StringBuilder query, List<Object> args, String field, String compareOp, String logicOp, Optional<?> value) {
         value.ifPresent(val -> {
-            query.append("AND ").append(field).append(" ").append(cmpOp).append(" ? ");
+            query.append(logicOp).append(" ").append(field).append(" ").append(compareOp).append(" ? ");
             args.add(val);
         });
     }

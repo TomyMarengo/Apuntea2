@@ -2,12 +2,18 @@ package ar.edu.itba.apuntea.webapp.controller;
 
 import ar.edu.itba.apuntea.models.Note;
 import ar.edu.itba.apuntea.services.DataService;
+import ar.edu.itba.apuntea.webapp.forms.CreateNoteForm;
+import ar.edu.itba.apuntea.webapp.forms.SearchNotesForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -20,21 +26,28 @@ public class SearchController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView searchNotes(
-            // TODO: Add validation
-            @RequestParam(value = "institution", required = false) final String institution,
-            @RequestParam(value = "career", required = false) final String career,
-            @RequestParam(value = "subject", required = false) final String subject,
-            @RequestParam(value = "category", required = false) final String category,
-            @RequestParam(value = "score", required = false) final Float score,
-            @RequestParam(value = "sort-by", required = false, defaultValue = "score") final String sortBy,
-            @RequestParam(value = "ascending", required = false, defaultValue = "true") final Boolean ascending,
-            @RequestParam(value = "page", required = false, defaultValue = "1") final Integer page,
-            @RequestParam(value = "page-size", required = false, defaultValue = "10") final Integer pageSize
+    public ModelAndView searchNotes(@Valid @ModelAttribute final SearchNotesForm searchNotesForm, final BindingResult result
     ){
         final ModelAndView mav = new ModelAndView("search");
 
-        List<Note> notes = dataService.searchNotes(institution, career, subject, category, score, sortBy, ascending, page, pageSize);
+        List<Note> notes;
+        if (searchNotesForm.getWord().isEmpty()) {
+            notes = dataService.searchNotes(
+                    searchNotesForm.getInstitutionId(),
+                    searchNotesForm.getCareerId(),
+                    searchNotesForm.getSubjectId(),
+                    searchNotesForm.getCategory(),
+                    searchNotesForm.getScore(),
+                    searchNotesForm.getSortBy(),
+                    searchNotesForm.getAscending(),
+                    searchNotesForm.getPage(),
+                    searchNotesForm.getPageSize()
+            );
+        }
+        else {
+            notes = dataService.searchNotesByWord(searchNotesForm.getWord());
+        }
+        
         mav.addObject("notes", notes);
         mav.addObject("institutions", dataService.getInstitutions());
         mav.addObject("careers", dataService.getCareers());

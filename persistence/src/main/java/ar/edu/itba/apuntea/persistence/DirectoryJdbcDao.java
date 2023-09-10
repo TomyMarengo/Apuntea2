@@ -57,9 +57,9 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
         // TODO: Modularize?
         List<Object> args = new ArrayList<>();
-        addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", sa.getInstitution());
-        addIfPresent(query, args, "c." + CAREER_ID, "=", sa.getCareer());
-        addIfPresent(query, args, "s." + SUBJECT_ID, "=", sa.getSubject());
+        addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
+        addIfPresent(query, args, "c." + CAREER_ID, "=","AND", sa.getCareerId());
+        addIfPresent(query, args, "s." + SUBJECT_ID, "=","AND", sa.getSubjectId());
 
         query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.get(sa.getSortBy()));
         if (!sa.isAscending()) query.append(" DESC");

@@ -109,7 +109,24 @@
         </form>
     </div>
 
-    <!-- TODO: NOTES FOUND -->
+    <div class="container mt-4">
+        <div class="row">
+            <c:forEach items="${notes}" var="note">
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">${note.name}</h5>
+                            <p class="card-text">${note.category.formattedName}</p>
+                            <c:set var="date" value="${note.createdAt}" />
+                            <p class="card-text"><spring:message code="date.format" arguments="${date.year},${date.monthValue
+                            },${date.dayOfMonth}"/></p>
+                            <p class="card-text">${note.avgScore}</p>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <script src="<c:url value="/js/darkmode.js"/>"></script>

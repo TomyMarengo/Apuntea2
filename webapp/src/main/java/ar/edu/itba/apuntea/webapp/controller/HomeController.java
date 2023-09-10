@@ -3,6 +3,7 @@ package ar.edu.itba.apuntea.webapp.controller;
 import ar.edu.itba.apuntea.models.Note;
 import ar.edu.itba.apuntea.services.DataService;
 import ar.edu.itba.apuntea.webapp.forms.CreateNoteForm;
+import ar.edu.itba.apuntea.webapp.forms.SearchNotesForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,7 +25,8 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView index(@ModelAttribute("createNoteForm") final CreateNoteForm createNoteForm) {
+    public ModelAndView index(@ModelAttribute("createNoteForm") final CreateNoteForm createNoteForm,
+                              @ModelAttribute("searchNotesForm") final SearchNotesForm searchNotesForm) {
         ModelAndView mav = new ModelAndView("index");
         mav.addObject("institutions", dataService.getInstitutions());
         mav.addObject("careers", dataService.getCareers());

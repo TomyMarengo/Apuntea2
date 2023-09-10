@@ -50,13 +50,18 @@
                 <img src="image/teacher.png" alt="Teacher" class="me-2" style="width: 40px; height: 40px;">
                 <p class="mb-0"><spring:message code="index.dyk.subtitle"/></p>
             </div>
-            <div class="d-flex align-items-center mb-3">
-                <input type="text" class="form-control custom-input me-2 rounded-box bg-bg"
-                       placeholder="<spring:message code="index.search.placeholder"/>">
-                <button class="btn rounded-box button-white">
-                    <spring:message code="index.search.button"/>
-                </button>
-            </div>
+            <c:url var="searchUrl" value="/search"/>
+            <form:form modelAttribute="searchNotesForm"
+                       action="${searchUrl}"
+                       method="get"
+                       class="d-flex align-items-center mb-3"
+                       id="searchWordForm">
+                <spring:message code="index.search.placeholder" var="placeholderSearch" />
+                <form:input path="word" type="text" class="form-control custom-input me-2 rounded-box bg-bg"
+                            placeholder='${placeholderSearch}'/>
+                <input type="submit" class="btn rounded-box button-white" value="<spring:message code="index.search.button"/>"/>
+                <form:errors path="word" cssClass="text-danger" element="p"/>
+            </form:form>
         </div>
     </div>
 </div>

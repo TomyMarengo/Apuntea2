@@ -30,7 +30,7 @@ public class DirectoryServiceImpl implements DirectoryService{
     }
 
     @Override
-    public List<Directory> search(String institutionId, String careerId, String subjectId, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+    public List<Directory> search(UUID institutionId, UUID careerId, UUID subjectId, String sortBy, boolean ascending, Integer page, Integer pageSize) {
         if (sortBy.equals(SCORE.toString()))
             return new ArrayList<>();
         SearchArguments sa = new SearchArguments(institutionId, careerId, subjectId, sortBy, ascending, page, pageSize);

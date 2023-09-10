@@ -6,16 +6,12 @@ import ar.edu.itba.apuntea.models.Note;
 import ar.edu.itba.apuntea.models.SearchArguments;
 import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import static ar.edu.itba.apuntea.persistence.JdbcDaoUtils.*;
 
@@ -28,7 +24,6 @@ public class NoteJdbcDao implements NoteDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private final UserDao userDao;
     private final Tika tika = new Tika();
 
     private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
@@ -47,8 +42,7 @@ public class NoteJdbcDao implements NoteDao {
         this.jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("Notes")
                 .usingGeneratedKeyColumns(NOTE_ID)
-                .usingColumns(NAME, FILE, SUBJECT_ID, CATEGORY, USER_ID); // TODO: Move to resource/constants?
-        this.userDao = userDao;
+                .usingColumns(NAME, FILE, SUBJECT_ID, CATEGORY, USER_ID); // TODO: Move to resource/constants
     }
 
     @Override
@@ -98,18 +92,18 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     public List<Note> search(SearchArguments sa) {
         StringBuilder query = new StringBuilder(
-                "SELECT n.name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score FROM Notes n " +
+                "SELECT n.note_id, n.name, n.category, n.created_at, AVG(r.score) AS avg_score FROM Notes n " +
                         "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
                         "INNER JOIN Careers c ON s.career_id = c.career_id " +
                         "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
                         "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
-                        "WHERE "
+                        "WHERE true "
         );
         List<Object> args = new ArrayList<>();
 
-        addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", "", sa.getInstitution());
-        addIfPresent(query, args, "c." + CAREER_ID, "=", "AND", sa.getCareer());
-        addIfPresent(query, args, "s." + SUBJECT_ID, "=", "AND", sa.getSubject());
+        addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
+        addIfPresent(query, args, "c." + CAREER_ID, "=", "AND", sa.getCareerId());
+        addIfPresent(query, args, "s." + SUBJECT_ID, "=", "AND", sa.getSubjectId());
         addIfPresent(query, args, CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString));
 
         query.append("GROUP BY n.").append(NOTE_ID);
@@ -124,7 +118,7 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public List<Note> searchByWord(String word) {
-        String query = "SELECT n.name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score FROM Notes n " +
+        String query = "SELECT n.note_id, n.name, n.category, n.created_at, AVG(r.score) AS avg_score FROM Notes n " +
                 "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
                 "INNER JOIN Careers c ON s.career_id = c.career_id " +
                 "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +

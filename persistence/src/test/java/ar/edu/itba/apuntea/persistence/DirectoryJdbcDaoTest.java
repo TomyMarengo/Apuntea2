@@ -28,10 +28,10 @@ public class DirectoryJdbcDaoTest {
     private JdbcTemplate jdbcTemplate;
 
     // TODO: Group IDs in a single file?
-    private static String ITBA_ID = "10000000-0000-0000-0000-000000000000";
-    private static String ING_INF = "c0000000-0000-0000-0000-000000000000";
-    private static String EDA_ID = "50000000-0000-0000-0000-000000000000";
-    private static String EDA_DIRECTORY_ID = "d0000000-0000-0000-0000-000000000000";
+    private static UUID ITBA_ID = UUID.fromString("10000000-0000-0000-0000-000000000000");
+    private static UUID ING_INF = UUID.fromString("c0000000-0000-0000-0000-000000000000");
+    private static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
+    private static UUID EDA_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000000");
 
     @Before
     public void setUp() {
@@ -40,21 +40,21 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testSearchByInstitution() {
-        SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null, "name", true);
+        SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null, "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
         assertEquals(4, directories.size());
     }
 
     @Test
     public void testSearchByCareer(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null, "name", true);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null, "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
         assertEquals(2, directories.size());
     }
 
     @Test
     public void testBySubject(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null, "name", true);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null, "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
         assertEquals(1, directories.size());
     }
@@ -77,17 +77,15 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testDirectoryById() {
-        UUID directoryId = UUID.fromString(EDA_DIRECTORY_ID);
-        Directory directory = directoryDao.getDirectoryById(directoryId);
-        assertEquals(directoryId, directory.getDirectoryId());
+        Directory directory = directoryDao.getDirectoryById(EDA_DIRECTORY_ID);
+        assertEquals(EDA_DIRECTORY_ID, directory.getDirectoryId());
         assertEquals("EDA", directory.getName());
         assertNull(directory.getParentId());
     }
 
     @Test
     public void testChildren(){
-        UUID directoryId = UUID.fromString(EDA_DIRECTORY_ID);
-        List<Directory> directories = directoryDao.getChildren(directoryId);
+        List<Directory> directories = directoryDao.getChildren(EDA_DIRECTORY_ID);
         assertEquals(2, directories.size());
         assertEquals("Guias", directories.get(0).getName());
         assertEquals("1eros parciales", directories.get(1).getName());

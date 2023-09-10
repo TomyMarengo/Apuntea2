@@ -29,10 +29,10 @@ public class NoteJdbcDaoTest {
     private NoteDao noteDao;
     private JdbcTemplate jdbcTemplate;
 
-    private static String ITBA_ID = "10000000-0000-0000-0000-000000000000";
-    private static String ING_INF = "c0000000-0000-0000-0000-000000000000";
-    private static String EDA_ID = "50000000-0000-0000-0000-000000000000";
-    private static String EDA_DIRECTORY_ID = "d0000000-0000-0000-0000-000000000000";
+    private static UUID ITBA_ID = UUID.fromString("10000000-0000-0000-0000-000000000000");
+    private static UUID ING_INF = UUID.fromString("c0000000-0000-0000-0000-000000000000");
+    private static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
+    private static UUID EDA_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000000");
 
     @Before
     public void setUp() {
@@ -61,7 +61,7 @@ public class NoteJdbcDaoTest {
     }
     @Test
     public void testByCategory(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, Category.PRACTICE.toString(), null);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, "practice", null);
         List<Note> notes = noteDao.search(sa);
         assertEquals(1, notes.size());
     }
@@ -92,7 +92,7 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testByDirectory() {
-        List<Note> notes = noteDao.getNotesByParentDirectoryId(UUID.fromString(EDA_DIRECTORY_ID));
+        List<Note> notes = noteDao.getNotesByParentDirectoryId(EDA_DIRECTORY_ID);
         assertEquals(2, notes.size());
     }
 }
