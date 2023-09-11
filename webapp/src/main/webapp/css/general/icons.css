@@ -40,3 +40,7 @@
 .fill-bg {
 	filter: var(--filter-bg);
 }
+
+.input-group-icon {
+	min-width: auto !important;
+}

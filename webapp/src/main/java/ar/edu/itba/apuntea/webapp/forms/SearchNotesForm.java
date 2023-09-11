@@ -21,7 +21,7 @@ public class SearchNotesForm {
     @FloatRange(min = 0, max = 5)
     private Float score;
     @Pattern(regexp = "score|name|date")
-    private String sortBy = "score";
+    private String sortBy;
     @NotNull
     private Boolean ascending = true;
     @NotNull
@@ -46,6 +46,14 @@ public class SearchNotesForm {
 
     public void setCareerId(UUID careerId) {
         this.careerId = careerId;
+    }
+
+    public Boolean getAscending() {
+        return ascending;
+    }
+
+    public void setAscending(Boolean ascending) {
+        this.ascending = ascending;
     }
 
     public UUID getSubjectId() {
@@ -78,14 +86,6 @@ public class SearchNotesForm {
 
     public void setSortBy(String sortBy) {
         this.sortBy = sortBy;
-    }
-
-    public Boolean getAscending() {
-        return ascending;
-    }
-
-    public void setAscending(Boolean ascending) {
-        this.ascending = ascending;
     }
 
     public Integer getPage() {

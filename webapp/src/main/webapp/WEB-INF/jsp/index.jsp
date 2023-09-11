@@ -34,7 +34,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -202,9 +201,9 @@
 
                                     <div class="d-flex flex-column gap-2">
                                         <div class="input-group">
-                                            <label class="input-group-text" for="category"><spring:message
+                                            <label class="input-group-text" for="categorySelect"><spring:message
                                                     code="form.upload.category"/></label>
-                                            <form:select path="category" class="form-select" id="category">
+                                            <form:select path="category" class="form-select" id="categorySelect">
                                                 <form:option
                                                         value="theory"><spring:message
                                                         code="form.upload.category.theory"/></form:option>

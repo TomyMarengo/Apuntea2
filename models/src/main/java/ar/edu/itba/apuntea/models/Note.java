@@ -47,4 +47,12 @@ public class Note {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "name='" + name + '\'' +
+                ", owner=" + owner +
+                '}';
+    }
 }

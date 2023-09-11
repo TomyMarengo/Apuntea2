@@ -22,17 +22,18 @@ public class SearchArguments {
         this(institutionId, careerId, subjectId, category, score, SortBy.SCORE.toString(), ascending, 1, 10);
     }
 
-     public SearchArguments(UUID institution, UUID career, UUID subject, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        this(institution, career, subject, null, null, sortBy, ascending, page, pageSize);
+     public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+        this(institutionId, careerId, subjectId, null, null, sortBy, ascending, page, pageSize);
     }
     public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score, String sortBy, boolean ascending, Integer page, Integer pageSize) {
         this.institutionId = institutionId;
         this.careerId = careerId;
         this.subjectId = subjectId;
-        if (category != null)
+        if (category != null && !category.isEmpty())
             this.category = Category.valueOf(category.toUpperCase());
         this.score = score;
-        this.sortBy = sortBy == null ? SortBy.SCORE : SortBy.valueOf(sortBy.toUpperCase());
+        if (sortBy != null && !sortBy.isEmpty())
+            this.sortBy = SortBy.valueOf(sortBy.toUpperCase());
         this.ascending = ascending;
         this.page = page;
         this.pageSize = pageSize;

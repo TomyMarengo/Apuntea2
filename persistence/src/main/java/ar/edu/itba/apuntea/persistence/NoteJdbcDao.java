@@ -62,7 +62,7 @@ public class NoteJdbcDao implements NoteDao {
         args.put(NAME, name);
         args.put(FILE, bytes);
         args.put(SUBJECT_ID, subjectId);
-        args.put(CATEGORY, category);
+        args.put(CATEGORY, category.toLowerCase());
 
         args.put(USER_ID, user_id);
 
@@ -104,13 +104,16 @@ public class NoteJdbcDao implements NoteDao {
         addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
         addIfPresent(query, args, "c." + CAREER_ID, "=", "AND", sa.getCareerId());
         addIfPresent(query, args, "s." + SUBJECT_ID, "=", "AND", sa.getSubjectId());
-        addIfPresent(query, args, CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString));
+        addIfPresent(query, args, CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString).map(String::toLowerCase));
 
         query.append("GROUP BY n.").append(NOTE_ID);
         sa.getScore().ifPresent( score -> query.append(" HAVING AVG(r.score) >= ").append(score));
 
-        query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.get(sa.getSortBy()));
-        if (!sa.isAscending()) query.append(" DESC");
+        if (sa.getSortBy() != null) {
+            query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.get(sa.getSortBy()));
+            if (!sa.isAscending()) query.append(" DESC");
+        }
+
         query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
 
         return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);

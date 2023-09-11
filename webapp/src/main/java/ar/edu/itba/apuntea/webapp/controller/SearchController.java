@@ -2,7 +2,6 @@ package ar.edu.itba.apuntea.webapp.controller;
 
 import ar.edu.itba.apuntea.models.Note;
 import ar.edu.itba.apuntea.services.DataService;
-import ar.edu.itba.apuntea.webapp.forms.CreateNoteForm;
 import ar.edu.itba.apuntea.webapp.forms.SearchNotesForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -26,10 +24,10 @@ public class SearchController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView searchNotes(@Valid @ModelAttribute final SearchNotesForm searchNotesForm, final BindingResult result
-    ){
+    public ModelAndView searchNotes(@Valid @ModelAttribute("searchNotesForm") final SearchNotesForm searchNotesForm, final BindingResult result){
         final ModelAndView mav = new ModelAndView("search");
 
+        System.out.println("category: " + searchNotesForm.getCategory());
         List<Note> notes;
         if (searchNotesForm.getWord() == null || searchNotesForm.getWord().isEmpty()) {
             notes = dataService.searchNotes(

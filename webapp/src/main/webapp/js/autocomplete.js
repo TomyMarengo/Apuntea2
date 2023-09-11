@@ -151,16 +151,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	let careerAutocomplete = document.getElementById('careerAutocomplete');
 	let subjectAutocomplete = document.getElementById('subjectAutocomplete');
 
-	console.log(institutionValue);
-	console.log(careerValue);
-	console.log(subjectValue);
-
 	let ins = institutions.find( x => x.value === institutionValue);
-	console.log(institutions)
 	let career = careers.find( x => x.value === careerValue);
-	console.log(careers)
 	let subject = subjects.find( x => x.value === subjectValue);
-	console.log(subjects)
 	// Establece el valor de los elementos select según los valores de id
 	institutionAutocomplete.value = ins ? ins.text : '';
 	careerAutocomplete.value = career ? career.text : '';
