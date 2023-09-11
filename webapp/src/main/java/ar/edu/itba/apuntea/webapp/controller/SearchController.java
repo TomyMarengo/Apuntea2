@@ -27,7 +27,6 @@ public class SearchController {
     public ModelAndView searchNotes(@Valid @ModelAttribute("searchNotesForm") final SearchNotesForm searchNotesForm, final BindingResult result){
         final ModelAndView mav = new ModelAndView("search");
 
-        System.out.println("category: " + searchNotesForm.getCategory());
         List<Note> notes;
         if (searchNotesForm.getWord() == null || searchNotesForm.getWord().isEmpty()) {
             notes = dataService.searchNotes(
