@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,6 +36,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    public Optional<Note> getNoteById(UUID noteId) {
+        return noteDao.getNoteById(noteId);
+    }
+
+    @Override
     public byte[] getNoteFileById(UUID noteId) {
         return noteDao.getNoteFileById(noteId);
     }
@@ -43,4 +49,11 @@ public class NoteServiceImpl implements NoteService {
     public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score) {
         return noteDao.createOrUpdateReview(noteId, userId, score);
     }
+    @Override
+    public Integer createOrUpdateReview(UUID noteId, String email, Integer score) {
+        UUID userId = userDao.createIfNotExists(email).getUserId();
+        return createOrUpdateReview(noteId, userId, score);
+    }
+
+
 }

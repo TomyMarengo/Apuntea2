@@ -33,6 +33,15 @@ public class NoteJdbcDao implements NoteDao {
                     rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                     rs.getFloat(AVG_SCORE)
             );
+    private final static RowMapper<Note> ROW_MAPPER_WITH_FILE = (rs, rowNum) ->
+            new Note(
+                    UUID.fromString(rs.getString(NOTE_ID)),
+                    rs.getString(NAME),
+                    Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
+                    rs.getTimestamp(CREATED_AT).toLocalDateTime(),
+                    rs.getFloat(AVG_SCORE),
+                    rs.getBytes(FILE)
+            );
 
     @Autowired
     public NoteJdbcDao(final DataSource ds, final UserDao userDao){
@@ -64,9 +73,18 @@ public class NoteJdbcDao implements NoteDao {
 
         args.put(USER_ID, user_id);
 
-        //Insert note
         UUID noteId = (UUID) jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get(NOTE_ID);
         return new Note(noteId, name);
+    }
+
+    @Override
+    public Optional<Note> getNoteById(UUID noteId) {
+        return Optional.ofNullable(
+                jdbcTemplate.queryForObject("SELECT n.name, n.file, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id WHERE n.note_id = ? GROUP BY n.note_id",
+                    ROW_MAPPER_WITH_FILE,
+                    noteId
+                )
+        );
     }
 
     @Override

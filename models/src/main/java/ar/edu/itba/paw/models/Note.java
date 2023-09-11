@@ -21,11 +21,15 @@ public class Note {
     }
 
     public Note(UUID noteId, String name, Category category, LocalDateTime createdAt, Float avgScore) {
-        this.noteId = noteId;
-        this.name = name;
+        this(noteId, name);
         this.category = category;
         this.createdAt = createdAt;
         this.avgScore = avgScore;
+    }
+
+    public Note(UUID noteId, String name, Category category, LocalDateTime createdAt, Float avgScore, byte[] file) {
+        this(noteId, name, category, createdAt, avgScore);
+        this.file = file;
     }
 
     public UUID getNoteId() {
@@ -53,5 +57,9 @@ public class Note {
                 "name='" + name + '\'' +
                 ", owner=" + owner +
                 '}';
+    }
+    
+    public byte[] getFile() {
+        return file;
     }
 }

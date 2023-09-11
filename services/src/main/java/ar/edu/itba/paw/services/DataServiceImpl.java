@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,6 +38,10 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
+    public Optional<Note> getNoteById(UUID noteId) {
+        return noteService.getNoteById(noteId);
+    }
+    @Override
     public byte[] getNoteFileById(UUID noteId) {
         return noteService.getNoteFileById(noteId);
     }
@@ -46,6 +51,10 @@ public class DataServiceImpl implements DataService {
         return noteService.createOrUpdateReview(noteId, userId, score);
     }
 
+    @Override
+    public Integer createOrUpdateReview(UUID noteId, String email, Integer score) {
+        return noteService.createOrUpdateReview(noteId, email, score);
+    }
     @Override
     public List<Institution> getInstitutions() {
         return institutionService.getInstitutions();
