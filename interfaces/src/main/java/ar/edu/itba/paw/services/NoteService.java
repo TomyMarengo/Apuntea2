@@ -13,4 +13,6 @@ public interface NoteService {
 
     byte[] getNoteFileById(UUID noteId);
 
+    Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score);
+
 }

@@ -31,9 +31,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Value("classpath:sql/schema.sql")
     private Resource schemaSql;
 
-    @Value("classpath:sql/stored_procedures.sql")
-    private Resource storeProceduresSql;
-
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
         final DataSourceInitializer dsi = new DataSourceInitializer();
@@ -45,7 +42,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
         dbp.addScript(schemaSql);
-        dbp.addScript(storeProceduresSql);
         return dbp;
     }
 

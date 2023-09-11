@@ -42,6 +42,11 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
+    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score) {
+        return noteService.createOrUpdateReview(noteId, userId, score);
+    }
+
+    @Override
     public List<Institution> getInstitutions() {
         return institutionService.getInstitutions();
     }

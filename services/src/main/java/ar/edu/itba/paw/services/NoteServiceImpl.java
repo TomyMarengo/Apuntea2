@@ -39,4 +39,8 @@ public class NoteServiceImpl implements NoteService {
         return noteDao.getNoteFileById(noteId);
     }
 
+    @Override
+    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score) {
+        return noteDao.createOrUpdateReview(noteId, userId, score);
+    }
 }

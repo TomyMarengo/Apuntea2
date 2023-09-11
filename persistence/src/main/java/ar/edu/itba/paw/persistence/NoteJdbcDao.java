@@ -127,7 +127,9 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score) {
-        jdbcTemplate.update("CALL create_or_update_review(?, ?, ?)", score, userId, noteId);
+        jdbcTemplate.update("MERGE INTO reviews r USING (VALUES(?, ?, ?)) as t(u,n,s) ON r.user_id = t.u AND r.note_id = t.n " +
+                "WHEN MATCHED THEN UPDATE SET score = t.s " +
+                "WHEN NOT MATCHED THEN INSERT (user_id, note_id, score) VALUES(t.u, t.n, t.s)", userId, noteId, score);
         return score;
     }
 }
