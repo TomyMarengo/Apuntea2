@@ -7,8 +7,6 @@ import ar.edu.itba.paw.models.SearchArguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +14,8 @@ import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -23,7 +23,6 @@ import java.util.stream.IntStream;
 public class NoteJdbcDao implements NoteDao {
     private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 //    private final Tika tika = new Tika();
 
     private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
@@ -38,7 +37,6 @@ public class NoteJdbcDao implements NoteDao {
     @Autowired
     public NoteJdbcDao(final DataSource ds, final UserDao userDao){
         this.jdbcTemplate = new JdbcTemplate(ds);
-        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
         this.jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("Notes")
                 .usingGeneratedKeyColumns(NOTE_ID)
@@ -125,5 +123,11 @@ public class NoteJdbcDao implements NoteDao {
         query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
 
         return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);
+    }
+
+    @Override
+    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score) {
+        jdbcTemplate.update("CALL create_or_update_review(?, ?, ?)", score, userId, noteId);
+        return score;
     }
 }

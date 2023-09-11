@@ -31,6 +31,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Value("classpath:sql/schema.sql")
     private Resource schemaSql;
 
+    @Value("classpath:sql/stored_procedures.sql")
+    private Resource storeProceduresSql;
+
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
         final DataSourceInitializer dsi = new DataSourceInitializer();
@@ -42,6 +45,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private DatabasePopulator databasePopulator() {
         final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
         dbp.addScript(schemaSql);
+        dbp.addScript(storeProceduresSql);
         return dbp;
     }
 
@@ -67,9 +71,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost/paw-2023b-12");
-        ds.setUsername("paw-2023b-12");
-        ds.setPassword("7chPz1plU");
+//        ds.setUrl("jdbc:postgresql://localhost/paw-2023b-12");
+//        ds.setUsername("paw-2023b-12");
+//        ds.setPassword("7chPz1plU");
+        ds.setUrl("jdbc:postgresql://localhost/paw");
+        ds.setUsername("admin");
+        ds.setPassword("1234");
         return ds;
     }
 

@@ -32,6 +32,10 @@ public class NoteJdbcDaoTest {
     private static UUID ING_INF = UUID.fromString("c0000000-0000-0000-0000-000000000000");
     private static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
     private static UUID EDA_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000000");
+    private static UUID MVC_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000002");
+
+    private static UUID PEPE_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
 
     @Before
     public void setUp() {
@@ -101,4 +105,10 @@ public class NoteJdbcDaoTest {
         List<Note> notes = noteDao.search(sa);
         assertEquals(2, notes.size());
     }
+
+//    @Test
+//    public void testCreateReview(){
+//        noteDao.createOrUpdateReview(MVC_NOTE_ID, PEPE_ID , 5);
+//        assertEquals(1,JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + MVC_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 5"));
+//    }
 }

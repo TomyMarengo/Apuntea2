@@ -15,4 +15,6 @@ public interface NoteDao {
     List<Note> search(SearchArguments sa);
 
     List<Note> getNotesByParentDirectoryId(UUID directory_id);
+
+    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score);
 }
