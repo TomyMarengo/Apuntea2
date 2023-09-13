@@ -7,6 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 public class JdbcDaoUtils {
+    static final String NOTES = "Notes";
+    static final String REVIEWS = "Reviews";
+    static final String INSTITUTIONS = "Institutions";
+    static final String CAREERS = "Careers";
+    static final String SUBJECTS = "Subjects";
+    static final String DIRECTORIES = "Directories";
+
+
     static final String INSTITUTION_ID = "institution_id";
     static final String NAME = "name";
     static final String CAREER_ID = "career_id";
@@ -19,6 +27,8 @@ public class JdbcDaoUtils {
     static final String FILE = "file";
     static final String PARENT_ID = "parent_id";
     static final String DIRECTORY_ID = "directory_id";
+
+    static final String SCORE = "score";
 
     static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SortBy.class);
 

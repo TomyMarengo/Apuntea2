@@ -5,6 +5,8 @@ import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.SearchArguments;
 //import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -14,16 +16,14 @@ import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.sql.CallableStatement;
-import java.sql.PreparedStatement;
 import java.util.*;
-import java.util.stream.IntStream;
 
 @Repository
 public class NoteJdbcDao implements NoteDao {
     private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert jdbcInsert;
-//    private final Tika tika = new Tika();
+    private final SimpleJdbcInsert jdbcNoteInsert;
+    private final SimpleJdbcInsert jdbcReviewInsert;
+    //    private final Tika tika = new Tika();
 
     private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
             new Note(
@@ -44,12 +44,15 @@ public class NoteJdbcDao implements NoteDao {
             );
 
     @Autowired
-    public NoteJdbcDao(final DataSource ds, final UserDao userDao){
+    public NoteJdbcDao(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("Notes")
+        this.jdbcNoteInsert = new SimpleJdbcInsert(ds)
+                .withTableName(NOTES)
                 .usingGeneratedKeyColumns(NOTE_ID)
-                .usingColumns(NAME, FILE, SUBJECT_ID, CATEGORY, USER_ID); // TODO: Move to resource/constants
+                .usingColumns(NAME, FILE, SUBJECT_ID, CATEGORY, USER_ID);
+        this.jdbcReviewInsert = new SimpleJdbcInsert(ds)
+                .withTableName(REVIEWS)
+                .usingColumns(NOTE_ID, USER_ID, SCORE);
     }
 
     @Override
@@ -73,7 +76,7 @@ public class NoteJdbcDao implements NoteDao {
 
         args.put(USER_ID, user_id);
 
-        UUID noteId = (UUID) jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get(NOTE_ID);
+        UUID noteId = (UUID) jdbcNoteInsert.executeAndReturnKeyHolder(args).getKeys().get(NOTE_ID);
         return new Note(noteId, name);
     }
 
@@ -145,9 +148,17 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score) {
-        jdbcTemplate.update("MERGE INTO reviews r USING (VALUES(?, ?, ?)) as t(u,n,s) ON r.user_id = t.u AND r.note_id = t.n " +
-                "WHEN MATCHED THEN UPDATE SET score = t.s " +
-                "WHEN NOT MATCHED THEN INSERT (user_id, note_id, score) VALUES(t.u, t.n, t.s)", userId, noteId, score);
+        try {
+            jdbcReviewInsert.execute(new HashMap<String, Object>(){{
+                put(NOTE_ID, noteId);
+                put(USER_ID, userId);
+                put(SCORE, score);
+            }});
+        } catch (DuplicateKeyException e) {
+            jdbcTemplate.update("UPDATE Reviews SET score = ? WHERE note_id = ? AND user_id = ?", score, noteId, userId);
+        } catch (DataIntegrityViolationException e) {
+            return null;
+        }
         return score;
     }
 }
