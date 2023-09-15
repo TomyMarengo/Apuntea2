@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Directory;
+import ar.edu.itba.paw.models.RootDirectory;
 import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,6 +27,17 @@ public class DirectoryJdbcDao implements DirectoryDao {
                 rs.getString(NAME),
                 rs.getString(PARENT_ID) != null?  UUID.fromString(rs.getString(PARENT_ID)) : null
         );
+
+    private static final RowMapper<RootDirectory> ROW_MAPPER_WITH_SUBJECT = (rs, rowNum)  ->
+            new RootDirectory(
+                    UUID.fromString(rs.getString(DIRECTORY_ID)),
+                    rs.getString(NAME),
+                    rs.getString(PARENT_ID) != null?  UUID.fromString(rs.getString(PARENT_ID)) : null,
+                    new Subject(
+                            UUID.fromString(rs.getString(SUBJECT_ID)),
+                            rs.getString(NAME)
+                    ));
+    ;
 
     @Autowired
     public DirectoryJdbcDao(final DataSource ds){
@@ -85,5 +98,16 @@ public class DirectoryJdbcDao implements DirectoryDao {
         return jdbcTemplate.query("SELECT * FROM Directories WHERE parent_id = ?", ROW_MAPPER, directory_id);
     }
 
+
+    @Override
+    public RootDirectory getRootAncestor(UUID directory_id) {
+        // If we needed all ancestors we could use LEFT JOIN and order by a new column 'level'
+        return jdbcTemplate.queryForObject("WITH RECURSIVE Ancestors(directory_id, name, parent_id) AS ( " +
+                        "VALUES(null, null, ?) " +
+                        "UNION " +
+                        "SELECT d.directory_id, d.name, d.parent_id FROM Ancestors a INNER JOIN Directories d ON a.parent_id = d.directory_id " +
+                        ") SELECT * FROM Ancestors INNER JOIN Subjects s ON s.root_directory_id = directory_id ",
+                ROW_MAPPER_WITH_SUBJECT, directory_id);
+    }
 
 }

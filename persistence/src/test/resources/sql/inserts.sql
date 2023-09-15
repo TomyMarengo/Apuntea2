@@ -11,8 +11,12 @@ INSERT INTO Directories (directory_id, name) VALUES ('d0000000-0000-0000-0000-00
 INSERT INTO Directories (directory_id, name) VALUES ('d0000000-0000-0000-0000-000000000002', 'Mecanica Gral');
 INSERT INTO Directories (directory_id, name) VALUES ('d0000000-0000-0000-0000-000000000003', 'Dinamica de Fluidos');
 INSERT INTO Directories (directory_id, name) VALUES ('d0000000-0000-0000-0000-000000000004', 'Java Beans 101');
+
 INSERT INTO Directories (directory_id, name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000005', 'Guias', 'd0000000-0000-0000-0000-000000000000');
 INSERT INTO Directories (directory_id, name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000006', '1eros parciales', 'd0000000-0000-0000-0000-000000000000');
+
+INSERT INTO Directories (directory_id, name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000009', 'Teoria', 'd0000000-0000-0000-0000-000000000001');
+INSERT INTO Directories (directory_id, name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000008', 'MVC', 'd0000000-0000-0000-0000-000000000009');
 
 INSERT INTO Careers (career_id, name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000000', 'Ingenieria Informatica', '10000000-0000-0000-0000-000000000000');
 INSERT INTO Careers (career_id, name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000001', 'Ingenieria Mecanica', '10000000-0000-0000-0000-000000000000');

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Directory;
+import ar.edu.itba.paw.models.RootDirectory;
 import ar.edu.itba.paw.models.SearchArguments;
 
 import java.util.List;
@@ -11,5 +12,6 @@ public interface DirectoryDao {
     List<Directory> search(SearchArguments sa);
     Directory getDirectoryById(UUID directory_id);
     List<Directory> getChildren(UUID directory_id);
+    RootDirectory getRootAncestor(UUID directory_id);
 
 }

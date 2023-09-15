@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Directory;
+import ar.edu.itba.paw.models.RootDirectory;
 import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
@@ -32,6 +33,9 @@ public class DirectoryJdbcDaoTest {
     private static UUID ING_INF = UUID.fromString("c0000000-0000-0000-0000-000000000000");
     private static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
     private static UUID EDA_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000000");
+    private static UUID PAW_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000001");
+    private static UUID GUIAS_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000005");
+    private static UUID MVC_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000008");
 
     @Before
     public void setUp() {
@@ -100,5 +104,23 @@ public class DirectoryJdbcDaoTest {
         assertEquals("Mecanica Gral", directories.get(1).getName());
     }
 
+    @Test
+    public void testRootAncestor() {
+        RootDirectory directory = directoryDao.getRootAncestor(GUIAS_DIRECTORY_ID);
+        assertEquals(EDA_DIRECTORY_ID, directory.getDirectoryId());
+        assertEquals("EDA", directory.getName());
+        assertNull(directory.getParentId());
+        assertEquals(directory.getSubject().getSubjectId(), EDA_ID);
+        assertEquals(directory.getSubject().getName(), "EDA");
+    }
+
+    @Test
+    public void testRootAncestorMoreLevels() {
+        RootDirectory directory = directoryDao.getRootAncestor(MVC_DIRECTORY_ID);
+        assertEquals(PAW_DIRECTORY_ID, directory.getDirectoryId());
+        assertEquals("PAW", directory.getName());
+        assertNull(directory.getParentId());
+        assertEquals(directory.getSubject().getName(), "PAW");
+    }
 
 }

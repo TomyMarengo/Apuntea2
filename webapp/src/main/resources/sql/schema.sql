@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS Directories
   parent_id uuid,
   user_id uuid,
   CONSTRAINT "PK_directories" PRIMARY KEY (directory_id),
-  CONSTRAINT "FK_directories_users" FOREIGN KEY (user_id) REFERENCES Users (user_id)
+  CONSTRAINT "FK_directories_users" FOREIGN KEY (user_id) REFERENCES Users (user_id),
+  CONSTRAINT "FK_directories_directories" FOREIGN KEY (parent_id) REFERENCES Directories (directory_id)
 );
 
 CREATE TABLE IF NOT EXISTS Subjects
@@ -84,4 +85,5 @@ CREATE TABLE IF NOT EXISTS Reviews
 
 INSERT INTO Institutions (institution_id, name) SELECT '123e4567-e89b-12d3-a456-426655440000', 'FIUBA' WHERE NOT EXISTS (SELECT 1 FROM Institutions WHERE institution_id = '123e4567-e89b-12d3-a456-426655440000');
 INSERT INTO Careers (career_id, name, institution_id) SELECT '223e4567-e89b-12d3-a456-426655440000', 'Ingenieria en AC', '123e4567-e89b-12d3-a456-426655440000' WHERE NOT EXISTS (SELECT 1 FROM Careers WHERE career_id = '223e4567-e89b-12d3-a456-426655440000');
+INSERT INTO Directories (directory_id, name) SELECT '423e4567-e89b-12d3-a456-426655440000', 'EDA'  WHERE NOT EXISTS (SELECT 1 FROM Directories WHERE directory_id = '423e4567-e89b-12d3-a456-426655440000');
 INSERT INTO Subjects (subject_id, name, career_id) SELECT '323e4567-e89b-12d3-a456-426655440000', 'EDA', '223e4567-e89b-12d3-a456-426655440000' WHERE NOT EXISTS (SELECT 1 FROM Subjects WHERE subject_id = '323e4567-e89b-12d3-a456-426655440000');
