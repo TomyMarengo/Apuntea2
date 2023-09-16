@@ -82,7 +82,7 @@ const copyButtons = document.querySelectorAll('.copy-button');
 
 // Función para descargar una nota
 function downloadNote(noteId) {
-  window.location.href = `/notes/${noteId}/download`;
+  window.location.href = `../notes/${noteId}/download`;
 }
 
 // Función para copiar texto al portapapeles
@@ -107,7 +107,14 @@ downloadButtons.forEach(button => {
 copyButtons.forEach(button => {
   button.addEventListener('click', () => {
     const noteId = button.getAttribute('id');
-    copyToClipboard(`http://pawserver.it.itba.edu.ar/paw-2023b-12/notes/${noteId.slice(0, -2)}/`);
+    const currentUrl = window.location.origin
+    const path = window.location.pathname.split('/')[1];
+    if(path === 'search'){
+      copyToClipboard(`${currentUrl}/notes/${noteId.slice(0, -2)}`);
+    }
+    else {
+      copyToClipboard(`${currentUrl}/${path}/notes/${noteId.slice(0, -2)}`);
+    }
   });
 });
 
