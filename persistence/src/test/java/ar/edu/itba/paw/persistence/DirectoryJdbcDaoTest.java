@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Directory;
+import ar.edu.itba.paw.models.DirectoryPath;
 import ar.edu.itba.paw.models.RootDirectory;
 import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.persistence.config.TestConfig;
@@ -11,10 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
+import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
 
 import javax.sql.DataSource;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -27,15 +29,6 @@ public class DirectoryJdbcDaoTest {
     private DirectoryDao directoryDao;
 
     private JdbcTemplate jdbcTemplate;
-
-    // TODO: Group IDs in a single file?
-    private static UUID ITBA_ID = UUID.fromString("10000000-0000-0000-0000-000000000000");
-    private static UUID ING_INF = UUID.fromString("c0000000-0000-0000-0000-000000000000");
-    private static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
-    private static UUID EDA_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000000");
-    private static UUID PAW_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000001");
-    private static UUID GUIAS_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000005");
-    private static UUID MVC_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000008");
 
     @Before
     public void setUp() {
@@ -106,21 +99,48 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testRootAncestor() {
-        RootDirectory directory = directoryDao.getRootAncestor(GUIAS_DIRECTORY_ID);
-        assertEquals(EDA_DIRECTORY_ID, directory.getDirectoryId());
-        assertEquals("EDA", directory.getName());
-        assertNull(directory.getParentId());
-        assertEquals(directory.getSubject().getSubjectId(), EDA_ID);
-        assertEquals(directory.getSubject().getName(), "EDA");
+        DirectoryPath path = directoryDao.getDirectoryPath(GUIAS_DIRECTORY_ID);
+
+        RootDirectory rootDirectory = path.getRootDirectory();
+        Directory parentDirectory = path.getParentDirectory();
+
+        assertEquals(EDA_DIRECTORY_ID, rootDirectory.getDirectoryId());
+        assertEquals("EDA", rootDirectory.getName());
+        assertNull(rootDirectory.getParentId());
+        assertEquals(EDA_ID, rootDirectory.getSubject().getSubjectId());
+        assertEquals("EDA", rootDirectory.getSubject().getName());
+        assertEquals(parentDirectory.getDirectoryId(), rootDirectory.getDirectoryId());
     }
 
     @Test
     public void testRootAncestorMoreLevels() {
-        RootDirectory directory = directoryDao.getRootAncestor(MVC_DIRECTORY_ID);
-        assertEquals(PAW_DIRECTORY_ID, directory.getDirectoryId());
-        assertEquals("PAW", directory.getName());
-        assertNull(directory.getParentId());
-        assertEquals(directory.getSubject().getName(), "PAW");
+        DirectoryPath path = directoryDao.getDirectoryPath(MVC_DIRECTORY_ID);
+
+        RootDirectory rootDirectory = path.getRootDirectory();
+        Directory parentDirectory = path.getParentDirectory();
+        Directory currentDirectory = path.getCurrentDirectory();
+
+        assertEquals(PAW_DIRECTORY_ID, rootDirectory.getDirectoryId());
+        assertEquals("PAW", rootDirectory.getName());
+        assertNull(rootDirectory.getParentId());
+        assertEquals("PAW", rootDirectory.getSubject().getName());
+        assertEquals(THEORY_DIRECTORY_ID, parentDirectory.getDirectoryId());
+        assertEquals(MVC_DIRECTORY_ID, currentDirectory.getDirectoryId());
+    }
+
+    @Test
+    public void testDelete() {
+        int qtyBasuraPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "name LIKE " + "'%Basura%'");
+        directoryDao.delete(BASURA_ID);
+        assertEquals(2, qtyBasuraPrev);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "name LIKE " + "'%Basura%'"));
+    }
+
+    @Test
+    public void testCreate() {
+        Directory directory = directoryDao.create("Nueva basura", EDA_DIRECTORY_ID, PEPE_ID);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + directory.getDirectoryId() + "' AND name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "' AND user_id = '" + PEPE_ID + "'"));
+        JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "Directories", "user_id = '" + PEPE_ID + "' AND name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "'");
     }
 
 }

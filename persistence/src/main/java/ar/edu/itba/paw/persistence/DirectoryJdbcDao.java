@@ -1,13 +1,14 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Directory;
-import ar.edu.itba.paw.models.RootDirectory;
-import ar.edu.itba.paw.models.SearchArguments;
-import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -18,6 +19,7 @@ import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 @Repository
 public class DirectoryJdbcDao implements DirectoryDao {
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -28,20 +30,30 @@ public class DirectoryJdbcDao implements DirectoryDao {
                 rs.getString(PARENT_ID) != null?  UUID.fromString(rs.getString(PARENT_ID)) : null
         );
 
-    private static final RowMapper<RootDirectory> ROW_MAPPER_WITH_SUBJECT = (rs, rowNum)  ->
-            new RootDirectory(
+    private static final RowMapper<Directory> ROW_MAPPER_WITH_SUBJECT = (rs, rowNum)  -> {
+        String subjectId = rs.getString(SUBJECT_ID);
+        if (subjectId != null) {
+            return new RootDirectory(
                     UUID.fromString(rs.getString(DIRECTORY_ID)),
                     rs.getString(NAME),
-                    rs.getString(PARENT_ID) != null?  UUID.fromString(rs.getString(PARENT_ID)) : null,
+                    null,
                     new Subject(
-                            UUID.fromString(rs.getString(SUBJECT_ID)),
+                            UUID.fromString(subjectId),
                             rs.getString(NAME)
                     ));
-    ;
+        } else {
+            return new Directory(
+                    UUID.fromString(rs.getString(DIRECTORY_ID)),
+                    rs.getString(NAME),
+                    UUID.fromString(rs.getString(PARENT_ID))
+            );
+        }
+    };
 
     @Autowired
     public DirectoryJdbcDao(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
         this.jdbcInsert = new SimpleJdbcInsert(ds)
                 .withTableName("Directories")
                 .usingGeneratedKeyColumns(DIRECTORY_ID);
@@ -49,11 +61,15 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
     @Override
     public Directory create(String name, UUID parentId, UUID userId) {
-        Map<String, Object> args = new HashMap<>();
-        args.put(NAME, name);
-        args.put(PARENT_ID, parentId);
-        args.put(USER_ID, userId);
-        UUID directoryId = (UUID) jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get(DIRECTORY_ID);
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(NAME, name);
+        args.addValue(PARENT_ID, parentId);
+        args.addValue(USER_ID, userId);
+
+        KeyHolder holder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Directories (name, user_id, parent_id) VALUES (:name, :user_id, :parent_id)",
+                args, holder, new String[]{DIRECTORY_ID});
+        UUID directoryId = (UUID) holder.getKeys().get(DIRECTORY_ID);
         return new Directory(directoryId, name, parentId, userId);
     }
 
@@ -89,25 +105,32 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
-    public Directory getDirectoryById(UUID directory_id) {
-        return jdbcTemplate.queryForObject("SELECT * FROM Directories WHERE directory_id = ?", ROW_MAPPER, directory_id);
+    public Directory getDirectoryById(UUID directoryId) {
+        return jdbcTemplate.queryForObject("SELECT * FROM Directories WHERE directory_id = ?", ROW_MAPPER, directoryId);
     }
 
     @Override
-    public List<Directory> getChildren(UUID directory_id) {
-        return jdbcTemplate.query("SELECT * FROM Directories WHERE parent_id = ?", ROW_MAPPER, directory_id);
+    public List<Directory> getChildren(UUID directoryId) {
+        return jdbcTemplate.query("SELECT * FROM Directories WHERE parent_id = ?", ROW_MAPPER, directoryId);
     }
 
 
     @Override
-    public RootDirectory getRootAncestor(UUID directory_id) {
-        // If we needed all ancestors we could use LEFT JOIN and order by a new column 'level'
-        return jdbcTemplate.queryForObject("WITH RECURSIVE Ancestors(directory_id, name, parent_id) AS ( " +
-                        "VALUES(null, null, ?) " +
+    public DirectoryPath getDirectoryPath(UUID directoryId) {
+        List<Directory> dirs = jdbcTemplate.query("WITH RECURSIVE Ancestors(directory_id, name, parent_id, level) AS ( " +
+                        "VALUES(null, null, ?, 0) " +
                         "UNION " +
-                        "SELECT d.directory_id, d.name, d.parent_id FROM Ancestors a INNER JOIN Directories d ON a.parent_id = d.directory_id " +
-                        ") SELECT * FROM Ancestors INNER JOIN Subjects s ON s.root_directory_id = directory_id ",
-                ROW_MAPPER_WITH_SUBJECT, directory_id);
+                        "SELECT d.directory_id, d.name, d.parent_id, a.level + 1 FROM Ancestors a INNER JOIN Directories d ON a.parent_id = d.directory_id " +
+                        ") SELECT * FROM Ancestors LEFT JOIN Subjects s ON s.root_directory_id = directory_id " +
+                        "WHERE directory_id IS NOT NULL ORDER BY level DESC ",
+                ROW_MAPPER_WITH_SUBJECT, directoryId);
+
+        return new DirectoryPath(dirs);
+    }
+
+    @Override
+    public void delete(UUID directoryId) {
+        jdbcTemplate.update("DELETE FROM Directories WHERE directory_id = ?", directoryId);
     }
 
 }

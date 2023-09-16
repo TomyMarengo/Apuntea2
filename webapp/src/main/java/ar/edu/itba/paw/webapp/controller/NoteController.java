@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -23,7 +24,7 @@ public class NoteController {
     private final NoteService noteService;
 
     @Autowired
-    public NoteController(@Qualifier("noteServiceImpl") final NoteService noteService) {
+    public NoteController(NoteService noteService) {
         this.noteService = noteService;
     }
 
@@ -50,7 +51,7 @@ public class NoteController {
         return new ModelAndView("redirect:/notes/"+noteId);
     }*/
 
-    //TODO remove when users are implemented
+    //TODO: remove when users are implemented
     @RequestMapping(value = "/{noteId}/review", method = {RequestMethod.POST})
     public ModelAndView reviewNoteMail(@PathVariable("noteId") String noteId,
                                    @Valid @ModelAttribute final ReviewForm reviewForm,
@@ -72,5 +73,54 @@ public class NoteController {
 //        return noteService.getNoteById(noteId).orElseThrow(NoteNotFoundException::new).getBytes();
         return noteService.getNoteFileById(UUID.fromString(noteId));
     }
+
+    // TODO: Remove after first sprint
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    public ModelAndView createNote(@Valid @ModelAttribute final CreateNoteForm createNoteForm,
+                                   final BindingResult result,
+                                   final RedirectAttributes redirectAttributes)
+    {
+        if(result.hasErrors()) {
+            return new ModelAndView("redirect:/");
+        }
+
+        Note note = noteService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getEmail(), createNoteForm.getSubjectId(), createNoteForm.getCategory());
+        return new ModelAndView("redirect:/notes/" + note.getNoteId());
+    }
+
+    @RequestMapping(value = "/create/{directoryId}", method = RequestMethod.POST)
+    public ModelAndView createNoteWithParent(@Valid @ModelAttribute final CreateNoteForm createNoteForm,
+                                  @PathVariable("directoryId") String directoryId,
+                                   final BindingResult result,
+                                   final RedirectAttributes redirectAttributes)
+    {
+
+        UUID parentId = UUID.fromString(directoryId);
+
+        if(result.hasErrors()) {
+            return new ModelAndView("redirect:/");
+        }
+
+        Note note = noteService.createNote(
+                createNoteForm.getFile(),
+                createNoteForm.getName(),
+                createNoteForm.getEmail(),
+                createNoteForm.getSubjectId(),
+                createNoteForm.getCategory(),
+                parentId
+        );
+        return new ModelAndView("redirect:/notes/" + note.getNoteId());
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    public ModelAndView deleteNote(
+            @RequestParam("noteId") final String noteId,
+            final RedirectAttributes redirectAttributes
+    ) {
+        UUID nId = UUID.fromString(noteId);
+        noteService.delete(nId);
+        return new ModelAndView("redirect:/");
+    }
+
 
 }

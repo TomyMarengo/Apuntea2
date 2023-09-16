@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,7 +33,21 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public Note createNote(MultipartFile file, String name, String email, UUID subjectId, String category) {
         UUID userId = userDao.createIfNotExists(email).getUserId();
-        return noteDao.create(file, name, userId, subjectId, category);
+        try {
+            return noteDao.create(file.getBytes(), name, userId, subjectId, category);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Note createNote(MultipartFile file, String name, String email, UUID subjectId, String category, UUID parentId) {
+        UUID userId = userDao.createIfNotExists(email).getUserId();
+        try {
+            return noteDao.create(file.getBytes(), name, userId, subjectId, category);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     @Override
@@ -55,5 +70,14 @@ public class NoteServiceImpl implements NoteService {
         return createOrUpdateReview(noteId, userId, score);
     }
 
+    @Override
+    public void delete(UUID noteId) {
+        noteDao.delete(noteId);
+    }
+
+    @Override
+    public List<Note> getNotesByParentDirectory(UUID directoryId) {
+        return noteDao.getNotesByParentDirectoryId(directoryId);
+    }
 
 }

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.services.DataService;
+import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.webapp.forms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,13 +19,14 @@ import javax.validation.Valid;
 public class HomeController {
 
     private final DataService dataService;
-
+    private final NoteService noteService;
     // TODO: Ask if this is a good practice
     private static final String CREATE_NOTE_FORM_BINDING = "org.springframework.validation.BindingResult.createNoteForm";
 
     @Autowired
-    public HomeController(final DataService dataService) {
+    public HomeController(final DataService dataService, final NoteService noteService) {
         this.dataService = dataService;
+        this.noteService = noteService;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -42,19 +44,4 @@ public class HomeController {
         }
         return mav;
     }
-
-    @RequestMapping(value = "/create" ,method = RequestMethod.POST)
-    public ModelAndView createNote(@Valid @ModelAttribute final CreateNoteForm createNoteForm,
-                                   final BindingResult result,
-                                   final RedirectAttributes redirectAttributes)
-    {
-        if(result.hasErrors()) {
-            redirectAttributes.addFlashAttribute(CREATE_NOTE_FORM_BINDING, result);
-            return new ModelAndView("redirect:/");
-        }
-
-        Note note = dataService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getEmail(), createNoteForm.getSubjectId(), createNoteForm.getCategory());
-        return new ModelAndView("redirect:/notes/" + note.getNoteId());
-    }
-
 }

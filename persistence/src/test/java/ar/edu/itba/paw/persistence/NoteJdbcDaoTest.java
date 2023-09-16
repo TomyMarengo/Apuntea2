@@ -12,6 +12,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
 
 import javax.sql.DataSource;
 
@@ -29,15 +30,6 @@ public class NoteJdbcDaoTest {
     @Autowired
     private NoteDao noteDao;
     private JdbcTemplate jdbcTemplate;
-
-    private static UUID ITBA_ID = UUID.fromString("10000000-0000-0000-0000-000000000000");
-    private static UUID ING_INF = UUID.fromString("c0000000-0000-0000-0000-000000000000");
-    private static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
-    private static UUID EDA_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000000");
-    private static UUID MVC_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000002");
-    private static UUID GUIA1EDA_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000000");
-    private static UUID PEPE_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-
 
     @Before
     public void setUp() {
@@ -119,5 +111,18 @@ public class NoteJdbcDaoTest {
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 4"));
         noteDao.createOrUpdateReview(GUIA1EDA_NOTE_ID, PEPE_ID , 5);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 5"));
+    }
+
+    @Test
+    public void createNote() {
+        Note note = noteDao.create(new byte[]{1, 2, 3}, "RBT", PEPE_ID, EDA_ID, "practice");
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'practice'"));
+        JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "notes", "note_id = '" + note.getNoteId() + "'");
+    }
+
+    @Test
+    public void deleteNote() {
+        noteDao.delete(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
     }
 }

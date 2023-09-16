@@ -42,13 +42,8 @@ class UserJdbcDao implements UserDao{
         return new User(userId, email);
     }
 
-    @Override
-    public Optional<User> findById(final UUID userId) {
-        return jdbcTemplate.query("SELECT * FROM Users WHERE user_id = ?",
-                new Object[]{userId}, ROW_MAPPER).stream().findFirst();
-    }
 
-    //TODO remove when users are implemented
+    //TODO: remove when users are implemented
     @Transactional
     @Override
     public User createIfNotExists(String email) {

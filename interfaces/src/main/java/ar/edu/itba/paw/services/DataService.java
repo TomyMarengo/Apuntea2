@@ -1,4 +1,4 @@
 package ar.edu.itba.paw.services;
 
-public interface DataService extends NoteService, InstitutionService, CareerService, SubjectService{
+public interface DataService extends InstitutionService, CareerService, SubjectService{
 }

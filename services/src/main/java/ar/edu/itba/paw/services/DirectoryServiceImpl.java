@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Directory;
+import ar.edu.itba.paw.models.DirectoryPath;
 import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.persistence.DirectoryDao;
+import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +18,23 @@ import static ar.edu.itba.paw.models.SearchArguments.SortBy.*;
 @Service
 public class DirectoryServiceImpl implements DirectoryService{
     private final DirectoryDao directoryDao;
+    private final UserDao userDao;
 
     @Autowired
-    public DirectoryServiceImpl(DirectoryDao directoryDao) { this.directoryDao = directoryDao; }
+    public DirectoryServiceImpl(DirectoryDao directoryDao, UserDao userDao) {
+        this.directoryDao = directoryDao;
+        this.userDao = userDao;
+    }
 
     @Override
-    public Optional<Directory> create(String name, String parentId, String userId) {
-        try {
-            return Optional.ofNullable(directoryDao.create(name, UUID.fromString(parentId), UUID.fromString(userId)));
-        } catch (IllegalArgumentException e) {
-            return Optional.empty();
-        }
+    public Optional<Directory> create(String name, UUID parentId, UUID userId) {
+        return Optional.ofNullable(directoryDao.create(name, parentId, userId));
+    }
+
+    @Override
+    public Optional<Directory> create(String name, UUID parentId, String email) {
+        UUID userId = userDao.createIfNotExists(email).getUserId();
+        return Optional.ofNullable(directoryDao.create(name, parentId, userId));
     }
 
     @Override
@@ -38,20 +46,22 @@ public class DirectoryServiceImpl implements DirectoryService{
     }
 
     @Override
-    public Optional<Directory> getDirectoryById(String id) {
-        try {
-            return Optional.ofNullable(directoryDao.getDirectoryById(UUID.fromString(id)));
-        } catch (IllegalArgumentException e) {
-            return Optional.empty();
-        }
+    public Optional<Directory> getDirectoryById(UUID directoryId) {
+        return Optional.ofNullable(directoryDao.getDirectoryById(directoryId));
     }
 
     @Override
-    public List<Directory> getChildren(String id) {
-        try {
-            return directoryDao.getChildren(UUID.fromString(id));
-        } catch (IllegalArgumentException e) {
-            return new ArrayList<>();
-        }
+    public List<Directory> getChildren(UUID directoryId) {
+        return directoryDao.getChildren(directoryId);
+    }
+
+    @Override
+    public DirectoryPath getDirectoryPath(UUID directoryId) {
+        return directoryDao.getDirectoryPath(directoryId);
+    }
+
+    @Override
+    public void delete(UUID directoryId) {
+        directoryDao.delete(directoryId);
     }
 }

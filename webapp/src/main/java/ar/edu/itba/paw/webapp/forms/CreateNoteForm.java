@@ -13,7 +13,7 @@ import java.util.UUID;
 public class CreateNoteForm {
 
     @NotEmpty
-    @Size(min = 5, max = 50)
+    @Size(min = 2, max = 50)
     @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String name;
     @ValidFileName(allowedExtensions = {".pdf"}) // TODO: Add more extensions
@@ -32,12 +32,15 @@ public class CreateNoteForm {
     @NotEmpty
     @Email
     private String email;
+    @ValidUuid
+    private UUID parentId;
 
     // All getters
 
     public UUID getSubjectId() {
         return subjectId;
     }
+
     public String getName() {
         return name;
     }
@@ -50,9 +53,6 @@ public class CreateNoteForm {
         return institutionId;
     }
 
-    public void setInstitutionId(UUID institutionId) {
-        this.institutionId = institutionId;
-    }
 
     public UUID getCareerId() {
         return careerId;
@@ -64,6 +64,10 @@ public class CreateNoteForm {
 
     public String getEmail() {
         return email;
+    }
+
+    public UUID getParentId() {
+        return parentId;
     }
 
     // All setters
@@ -84,11 +88,19 @@ public class CreateNoteForm {
         this.email = email;
     }
 
+    public void setInstitutionId(UUID institutionId) {
+        this.institutionId = institutionId;
+    }
+
     public void setCareerId(UUID careerId) {
         this.careerId = careerId;
     }
 
     public void setSubjectId(UUID subjectId) {
         this.subjectId = subjectId;
+    }
+
+    public void setParentId(UUID parentId) {
+        this.parentId = parentId;
     }
 }

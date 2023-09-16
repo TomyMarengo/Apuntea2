@@ -12,6 +12,8 @@ public interface NoteService {
 
     Note createNote(MultipartFile file, String name, String email, UUID subjectId, String category);
 
+    Note createNote(MultipartFile file, String name, String email, UUID subjectId, String category, UUID parentId);
+
     Optional<Note> getNoteById(UUID noteId);
 
     byte[] getNoteFileById(UUID noteId);
@@ -20,4 +22,8 @@ public interface NoteService {
 
     //TODO remove when users are implemented
     Integer createOrUpdateReview(UUID noteId, String email, Integer score);
+
+    void delete(UUID noteId);
+
+    List<Note> getNotesByParentDirectory(UUID directoryId);
 }

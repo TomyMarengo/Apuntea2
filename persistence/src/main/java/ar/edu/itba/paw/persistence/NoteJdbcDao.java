@@ -9,18 +9,25 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 
 @Repository
 public class NoteJdbcDao implements NoteDao {
     private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert jdbcNoteInsert;
     private final SimpleJdbcInsert jdbcReviewInsert;
     //    private final Tika tika = new Tika();
@@ -46,6 +53,7 @@ public class NoteJdbcDao implements NoteDao {
     @Autowired
     public NoteJdbcDao(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
+        this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
         this.jdbcNoteInsert = new SimpleJdbcInsert(ds)
                 .withTableName(NOTES)
                 .usingGeneratedKeyColumns(NOTE_ID)
@@ -56,13 +64,29 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
-    public Note create(MultipartFile file, String name, UUID user_id, UUID subjectId, String category) {
-        byte[] bytes = new byte[0];
-        try {
-            bytes = file.getBytes();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+    public Note create(byte[] file, String name, UUID user_id, UUID subjectId, String category) {
+//        String contentType = tika.detect(file.getOriginalFilename());
+//        if (!contentType.equals("application/pdf")) {
+//            throw new IllegalArgumentException("File must be a PDF");
+//        }
+
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(NAME, name);
+        args.addValue(FILE, file);
+        args.addValue(SUBJECT_ID, subjectId);
+        args.addValue(CATEGORY, category.toLowerCase());
+        args.addValue(USER_ID, user_id);
+
+        KeyHolder holder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Notes (name, file, subject_id, category, user_id, parent_id) " +
+                " SELECT :name, :file, :subject_id, :category, :user_id, s.root_directory_id FROM Subjects s WHERE s.subject_id = :subject_id"
+                , args, holder, new String[]{NOTE_ID});
+        UUID noteId = (UUID) holder.getKeys().get(NOTE_ID);
+        return new Note(noteId, name);
+    }
+
+    @Override
+    public Note create(byte[] file, String name, UUID user_id, UUID subjectId, String category, UUID parentId) {
 //        String contentType = tika.detect(file.getOriginalFilename());
 //        if (!contentType.equals("application/pdf")) {
 //            throw new IllegalArgumentException("File must be a PDF");
@@ -70,9 +94,10 @@ public class NoteJdbcDao implements NoteDao {
 
         final Map<String, Object> args = new HashMap<>();
         args.put(NAME, name);
-        args.put(FILE, bytes);
+        args.put(FILE, file);
         args.put(SUBJECT_ID, subjectId);
         args.put(CATEGORY, category.toLowerCase());
+        args.put(PARENT_ID, parentId);
 
         args.put(USER_ID, user_id);
 
@@ -103,7 +128,7 @@ public class NoteJdbcDao implements NoteDao {
     public List<Note> getNotesByParentDirectoryId(UUID directory_id) {
         return jdbcTemplate.query("SELECT n.name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score FROM Notes n " +
                 "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
-                "WHERE parent_directory_id = ? " +
+                "WHERE parent_id = ? " +
                 "GROUP BY n.note_id",
                 ROW_MAPPER, directory_id);
     }
@@ -160,5 +185,10 @@ public class NoteJdbcDao implements NoteDao {
             return null;
         }
         return score;
+    }
+
+    @Override
+    public void delete(UUID noteId) {
+        jdbcTemplate.update("DELETE FROM Notes WHERE note_id = ?", noteId);
     }
 }

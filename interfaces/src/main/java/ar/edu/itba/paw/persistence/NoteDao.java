@@ -9,7 +9,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface NoteDao {
-    Note create(MultipartFile file, String name, UUID user_id, UUID subjectId, String category);
+    Note create(byte[] file, String name, UUID userId, UUID subjectId, String category);
+
+    Note create(byte[] file, String name, UUID userId, UUID subjectId, String category, UUID parentId);
 
     byte[] getNoteFileById(UUID noteId);
 
@@ -20,4 +22,6 @@ public interface NoteDao {
     Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score);
 
     Optional<Note> getNoteById(UUID noteId);
+
+    void delete(UUID noteId);
 }

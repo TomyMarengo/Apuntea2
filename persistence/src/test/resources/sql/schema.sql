@@ -41,7 +41,9 @@ CREATE TABLE IF NOT EXISTS Directories
   parent_id uuid,
   user_id uuid,
   CONSTRAINT "PK_directories" PRIMARY KEY (directory_id),
-  CONSTRAINT "FK_directories_users" FOREIGN KEY (user_id) REFERENCES Users (user_id)
+  CONSTRAINT "UQ_directories" UNIQUE (name, user_id, parent_id),
+  CONSTRAINT "FK_directories_users" FOREIGN KEY (user_id) REFERENCES Users (user_id),
+  CONSTRAINT "FK_directories_directories" FOREIGN KEY (parent_id) REFERENCES Directories (directory_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Subjects
@@ -64,10 +66,11 @@ CREATE TABLE IF NOT EXISTS Notes
   file bytea,
   category varchar(100) CHECK (category IN ('practice', 'theory', 'exam', 'other')),
   subject_id uuid,
-  parent_directory_id uuid,
+  parent_id uuid,
   created_at timestamp DEFAULT now(),
   CONSTRAINT "PK_notes" PRIMARY KEY (note_id),
-  CONSTRAINT "FK_notes_directories" FOREIGN KEY (parent_directory_id) REFERENCES Directories (directory_id),
+  CONSTRAINT "UQ_notes" UNIQUE (name, user_id, parent_id),
+  CONSTRAINT "FK_notes_directories" FOREIGN KEY (parent_id) REFERENCES Directories (directory_id) ON DELETE CASCADE,
   CONSTRAINT "FK_notes_subjects" FOREIGN KEY (subject_id) REFERENCES Subjects (subject_id),
   CONSTRAINT "FK_notes_users" FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
@@ -78,6 +81,6 @@ CREATE TABLE IF NOT EXISTS Reviews
   user_id uuid NOT NULL,
   score smallint NOT NULL,
   CONSTRAINT "PK_reviews" PRIMARY KEY (note_id, user_id),
-  CONSTRAINT "FK_reviews_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id),
-  CONSTRAINT "FK_reviews_users" FOREIGN KEY (user_id) REFERENCES Users (user_id)
+  CONSTRAINT "FK_reviews_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE,
+  CONSTRAINT "FK_reviews_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE
 );

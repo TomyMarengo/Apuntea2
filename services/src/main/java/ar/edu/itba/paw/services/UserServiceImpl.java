@@ -18,10 +18,4 @@ public class UserServiceImpl implements UserService {
         this.userDao = userDao;
     }
 
-
-    @Override
-    public Optional<User> findById(UUID id) {
-        return userDao.findById(id);
-    }
-
 }
