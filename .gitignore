@@ -49,3 +49,6 @@ Thumbs.db
 *.wmv
 
 files/
+
+#Application properties
+webapp/src/main/resources/application.properties

@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.webapp.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.jdbc.datasource.init.DataSourceInitializer;
@@ -25,11 +28,15 @@ import java.nio.charset.StandardCharsets;
 
 @EnableWebMvc
 @ComponentScan({"ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence"})
+@PropertySource("classpath:application.properties")
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Value("classpath:sql/schema.sql")
     private Resource schemaSql;
+
+    @Autowired
+    private Environment env;
 
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
@@ -64,15 +71,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource(
+
+    ){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-//        ds.setUrl("jdbc:postgresql://localhost/paw-2023b-12");
-//        ds.setUsername("paw-2023b-12");
-//        ds.setPassword("7chPz1plU");
-        ds.setUrl("jdbc:postgresql://localhost/paw");
-        ds.setUsername("david");
-        ds.setPassword("admin");
+        ds.setUrl(env.getProperty("datasource.url"));
+        ds.setUsername(env.getProperty("datasource.username"));
+        ds.setPassword(env.getProperty("datasource.password"));
         return ds;
     }
 
