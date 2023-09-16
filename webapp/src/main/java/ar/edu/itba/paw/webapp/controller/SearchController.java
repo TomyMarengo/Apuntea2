@@ -43,6 +43,7 @@ public class SearchController {
                     searchNotesForm.getPageSize()
         );
 
+        System.out.println(notes);
         
         mav.addObject("notes", notes);
         mav.addObject("institutions", dataService.getInstitutions());

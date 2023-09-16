@@ -49,7 +49,7 @@
                 <img src="image/teacher.png" alt="Teacher" class="me-2" style="width: 40px; height: 40px;">
                 <p class="mb-0"><spring:message code="index.dyk.subtitle"/></p>
             </div>
-            <c:url var="searchUrl" value="/search"/>
+            <c:url var="searchUrl" value="./search"/>
             <form:form modelAttribute="searchNotesForm"
                        action="${searchUrl}"
                        method="get"
@@ -99,7 +99,7 @@
                             </div>
                             <div class="modal-body">
                                 <!-- CREATE NOTE FORM -->
-                                <c:url var="createUrl" value="/create"/>
+                                <c:url var="createUrl" value="./create"/>
                                 <form:form modelAttribute="createNoteForm"
                                            action="${createUrl}"
                                            method="post"
