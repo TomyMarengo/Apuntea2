@@ -1,24 +1,33 @@
+const darkModeIcon = document.getElementById('darkModeIcon');
 const darkModeToggle = document.getElementById('darkModeToggle');
-const modeIcon = document.getElementById('darkModeIcon');
 
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-  document.documentElement.setAttribute('data-bs-theme', savedTheme);
-  if (savedTheme === 'dark') {
-    modeIcon.src = '../svg/moon.svg';
-  } else {
-    modeIcon.src = '../svg/sun.svg';
-  }
+// Obtener el valor del estado almacenado en el localStorage
+const storedTheme = localStorage.getItem('theme');
+if (!storedTheme) {
+  // Si no hay un valor almacenado, se establece el valor por defecto
+  localStorage.setItem('theme', 'light');
 }
 
-darkModeToggle.addEventListener('click', () => {
-  if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
-    modeIcon.src = '../svg/moon.svg';
+// Verificar y mostrar la vista según el valor almacenado
+if (storedTheme === 'dark') {
+  darkModeIcon.src = '/svg/sun.svg';
+  document.documentElement.setAttribute('data-bs-theme', 'dark');
+} else {
+  darkModeIcon.src = '/svg/moon.svg';
+  document.documentElement.setAttribute('data-bs-theme', 'light');
+}
+
+function toggleDarkMode() {
+  if (localStorage.getItem('theme') === 'dark') {
+    darkModeIcon.src = '/svg/sun.svg';
     document.documentElement.setAttribute('data-bs-theme', 'light');
     localStorage.setItem('theme', 'light'); // Guarda el modo seleccionado en localStorage
   } else {
-    modeIcon.src = '../svg/sun.svg';
+    darkModeIcon.src = '/svg/sun.svg';
     document.documentElement.setAttribute('data-bs-theme', 'dark');
     localStorage.setItem('theme', 'dark'); // Guarda el modo seleccionado en localStorage
   }
-});
+}
+
+// Asociar la función de cambio de vista al botón
+darkModeToggle.addEventListener('click', toggleDarkMode);

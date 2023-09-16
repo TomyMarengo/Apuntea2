@@ -1,0 +1,69 @@
+#horizontal-list {
+  display: none;
+}
+
+#box-list {
+  display: none;
+}
+
+/*******************/
+/* HORIZONTAL LIST */
+/*******************/
+
+.search-actions {
+  text-align: right;
+}
+
+.search-actions button {
+  visibility: hidden;
+}
+
+.note-found:hover {
+  background-color: rgba(var(--secondary-rgb), 0.5);
+  cursor: pointer;
+}
+
+.note-found:hover .search-actions button {
+  visibility: visible;
+}
+
+.active-note-found {
+  background-color: rgba(var(--secondary-rgb), 0.7);
+}
+
+.active-note-found .search-actions button {
+  visibility: visible;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+}
+
+.table th:last-child,
+.table td:last-child {
+  max-width: 50px; /* Ajusta el valor según tus necesidades */
+  white-space: nowrap; /* Evita que el contenido se divida en múltiples líneas */
+}
+
+@media (max-width: 1024px) {
+  .table th:last-child,
+  .table td:last-child{
+    display: none;
+  }
+}
+
+/*******************/
+/***** BOX LIST ****/
+/*******************/
+
+.search-note-box {
+  transition: transform 0.2s ease;
+}
+
+.search-note-box:hover {
+    cursor: pointer;
+    border-color : var(--primary);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(var(--secondary-rgb), 0.6);
+    transform: scale(1.05); /* Aumenta el tamaño en un 5% */
+}

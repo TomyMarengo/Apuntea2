@@ -10,11 +10,25 @@
 }
 
 .nav-icon-button {
-	padding: 0;
-	margin-right: 20px;
-	width: fit-content;
-	height: fit-content;
-	font-size: 1.25rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background-color: transparent; /* Fondo transparente por defecto */
+	border: none; /* Sin borde */
+	border-radius: 50%; /* Hace el botón circular */
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.nav-icon-button:hover {
+	background-color: rgba(var(--text-rgb), 0.1); /* Fondo ligeramente transparente al pasar el mouse */
+}
+
+/* Estilo para el botón en :active */
+.nav-icon-button:active {
+	outline: none; /* Elimina el borde al hacer clic */
 }
 
 .nav-user-circle {

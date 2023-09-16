@@ -44,7 +44,7 @@
         <section class="col-md-8">
             <iframe
                     class="iframe-note"
-                    src="http://localhost:8080/notes/${noteId}/download"
+                    src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}/notes/${noteId}/download"
             >
             </iframe>
         </section>

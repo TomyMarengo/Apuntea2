@@ -247,10 +247,10 @@
                     code="index.notes.title"/></h5>
             <div>
                 <button class="carousel-button" type="button" data-bs-target="#carouselUniversity" data-bs-slide="prev">
-                    <img src="<c:url value="/svg/prev.svg"/>" alt="Previous" class="icon-l fill-dark-primary">
+                    <img src="<c:url value="/svg/arrow-left.svg"/>" alt="Previous" class="icon-l fill-dark-primary">
                 </button>
                 <button class="carousel-button" type="button" data-bs-target="#carouselUniversity" data-bs-slide="next">
-                    <img src="<c:url value="/svg/next.svg"/>" alt="Next" class="icon-l fill-dark-primary">
+                    <img src="<c:url value="/svg/arrow-right.svg"/>" alt="Next" class="icon-l fill-dark-primary">
                 </button>
             </div>
 

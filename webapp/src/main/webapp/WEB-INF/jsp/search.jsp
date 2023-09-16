@@ -6,7 +6,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark" data-search-view="horizontal">
 
 <head>
     <meta charset="utf-8"/>
@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/search/table-list.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,7 +51,7 @@
                action="${searchUrl}"
                method="get"
                id="searchForm">
-        <div class="row row-cols-1 row-cols-md-3 row-cols-xl-6"class="row row-cols-1 row-cols-md-3 row-cols-xl-6">
+        <div class="row row-cols-3 row-cols-xl-6">
             <div class="col">
                 <select id="institutionSelect" style="display: none;">
                     <option disabled selected value></option>
@@ -190,53 +191,108 @@
 </div>
 
 <!-- LIST OF NOTES MATCHING -->
+<spring:message code="download" var="download"/>
+<spring:message code="copy" var="copy"/>
+<spring:message code="search.toggleView" var="searchViewImage"/>
+<c:url value="/svg/box-list.svg" var="boxViewUrl"/>
+<c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
 
-<div class="container">
+<div class="container mt-4">
+    <button id="search-view-toggle" class="btn nav-icon-button" type="button">
+        <img id="search-view-icon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
+    </button>
+</div>
+
+
+<!-- HORIZONTAL LIST -->
+<section class="container mt-4" id="horizontal-list">
     <div class="table-responsive">
-        <table class="table table-hover ">
+        <table class="table table-hover table-search">
             <thead>
             <tr>
-                <th>Name of Note</th>
-                <th>Owner</th>
-                <th>Created At</th>
-                <th>Score</th>
+                <th><spring:message code="name"/></th>
+                <th><spring:message code="owner"/></th>
+                <th><spring:message code="createdAt"/></th>
+                <th><spring:message code="score"/></th>
+                <th></th>
                 <!-- TODO: ADD SIZE OF FILE -->
             </tr>
             </thead>
             <tbody>
             <c:forEach var="note" items="${notes}">
                 <c:set var="date" value="${note.createdAt}"/>
-                <tr>
+                <tr class="note-found" id="${note.noteId}1">
                     <td>${note.name}</td>
                     <td>owner</td>
                     <td><spring:message code="date.format"
                                         arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
                     <td>${note.avgScore}</td>
+                    <td class="search-actions">
+                        <button class="btn button-expansion rounded-circle download-button" id="${note.noteId}d1">
+                            <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
+                        </button>
+                        <button class="btn button-expansion rounded-circle copy-button" id="${note.noteId}c1">
+                            <img src="<c:url value="/svg/copy.svg"/>" alt="${copy}" class="icon-xs fill-text">
+                        </button>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
     </div>
-</div>
+</section>
 
-<div class="container mt-4">
+<!-- BOX LIST -->
+<section class="container mt-4" id="box-list">
     <div class="row">
         <c:forEach items="${notes}" var="note">
             <div class="col-md-4 mb-4">
-                <div class="card">
+                <div class="note-found card box search-note-box" data-node-id="${note.noteId}2">
                     <div class="card-body">
-                        <h5 class="card-title">${note.name}</h5>
-                        <p class="card-text">${note.category.formattedName}</p>
+                        <h4 class="card-title">${note.name}</h4>
 
-                        <p class="card-text"><spring:message code="date.format" arguments="${date.year},${date.monthValue
-                            },${date.dayOfMonth}"/></p>
-                        <p class="card-text">${note.avgScore}</p>
+                        <span class="card-text">
+                            <strong><spring:message code="owner"/></strong>:
+                            owner
+                        </span>
+
+                        <br>
+
+                        <span class="card-text"><strong><spring:message code="category"/></strong>:
+                            <c:if test="${note.category.formattedName eq 'Theory'}">
+                                <spring:message code="search.category.theory"/>
+                            </c:if>
+                            <c:if test="${note.category.formattedName eq 'Practice'}">
+                                <spring:message code="search.category.practice"/>
+                            </c:if>
+                            <c:if test="${note.category.formattedName eq 'Exam'}">
+                                <spring:message code="search.category.exam"/>
+                            </c:if>
+                            <c:if test="${note.category.formattedName eq 'Other'}">
+                                <spring:message code="search.category.other"/>
+                            </c:if>
+                        </span>
+
+                        <br>
+
+                        <span class="card-text">
+                            <strong><spring:message code="createdAt"/></strong>:
+                            <spring:message code="date.format" arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                        </span>
+
+                        <br>
+
+                        <span class="card-text">
+                            <strong><spring:message code="score"/></strong>:
+                            ${note.avgScore}
+                        </span>
+
                     </div>
                 </div>
             </div>
         </c:forEach>
     </div>
-</div>
+</section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -244,6 +300,7 @@
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
+<script src="<c:url value="/js/search-list.js"/>"></script>
 
 </body>
 
