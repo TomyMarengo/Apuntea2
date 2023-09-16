@@ -9,6 +9,7 @@ import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,16 +24,22 @@ import java.util.UUID;
 public class NoteController {
     private final NoteService noteService;
 
+    private static final String CREATE_REVIEW_FORM_BINDING = "org.springframework.validation.BindingResult.reviewForm";
+
     @Autowired
     public NoteController(NoteService noteService) {
         this.noteService = noteService;
     }
 
     @RequestMapping(value = "/{noteId}", method = RequestMethod.GET)
-    public ModelAndView getNote(@PathVariable("noteId") String noteId,
-                                @ModelAttribute("reviewForm") ReviewForm reviewForm) {
+    public ModelAndView getNote(@PathVariable("noteId") String noteId, final ModelMap model) {
         final ModelAndView mav = new ModelAndView("note");
 
+        if(model.containsAttribute(CREATE_REVIEW_FORM_BINDING)) {
+            mav.addObject("errors", ((BindingResult) model.get(CREATE_REVIEW_FORM_BINDING)).getAllErrors());
+        } else {
+            mav.addObject("reviewForm", new ReviewForm());
+        }
         Note note = noteService.getNoteById(UUID.fromString(noteId)).orElseThrow(NoteNotFoundException::new);
         mav.addObject("note", note);
         return mav;
@@ -55,14 +62,14 @@ public class NoteController {
     @RequestMapping(value = "/{noteId}/review", method = {RequestMethod.POST})
     public ModelAndView reviewNoteMail(@PathVariable("noteId") String noteId,
                                    @Valid @ModelAttribute final ReviewForm reviewForm,
-                                   final BindingResult result) {
+                                   final BindingResult result, final RedirectAttributes redirectAttributes) {
+        final ModelAndView mav = new ModelAndView("redirect:/notes/"+noteId);
         if (result.hasErrors()) {
-            // TODO: Handle errors
-            System.out.println(result.getAllErrors());
+            redirectAttributes.addFlashAttribute(CREATE_REVIEW_FORM_BINDING, result);
         } else {
             noteService.createOrUpdateReview(UUID.fromString(noteId), reviewForm.getEmail(), reviewForm.getScore());
         }
-        return new ModelAndView("redirect:/notes/"+noteId);
+        return mav;
     }
 
 

@@ -1,0 +1,26 @@
+.reviews-comments-button {
+    width: 100%;
+    color: var(--bg);
+    background-color: var(--secondary);
+    pointer-events: none;
+}
+
+/*.reviews-comments-button.reviews {*/
+/*    border-bottom-right-radius: 0;*/
+/*    border-top-right-radius: 0;*/
+/*}*/
+
+/*.reviews-comments-button.comments {*/
+/*    border-bottom-left-radius: 0;*/
+/*    border-top-left-radius: 0;*/
+/*}*/
+
+.reviews-comments-button.section-active {
+    background-color: var(--dark-secondary);
+}
+
+.reviews-comments {
+    overflow-y: auto;
+    height: 15rem;
+}
+

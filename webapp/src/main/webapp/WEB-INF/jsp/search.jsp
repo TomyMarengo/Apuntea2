@@ -50,7 +50,7 @@
                action="${searchUrl}"
                method="get"
                id="searchForm">
-        <div class="row row-cols-1 row-cols-md-3 row-cols-xl-6">
+        <div class="row row-cols-1 row-cols-md-3 row-cols-xl-6"class="row row-cols-1 row-cols-md-3 row-cols-xl-6">
             <div class="col">
                 <select id="institutionSelect" style="display: none;">
                     <option disabled selected value></option>

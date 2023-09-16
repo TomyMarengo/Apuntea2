@@ -11,7 +11,6 @@ import javax.validation.constraints.*;
 import java.util.UUID;
 
 public class CreateNoteForm {
-
     @NotEmpty
     @Size(min = 2, max = 50)
     @Pattern(regexp = "[a-zA-Z0-9 ]+")
@@ -71,7 +70,6 @@ public class CreateNoteForm {
     }
 
     // All setters
-
     public void setName(String name) {
         this.name = name;
     }

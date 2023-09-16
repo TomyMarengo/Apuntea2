@@ -3,24 +3,29 @@ package ar.edu.itba.paw.webapp.forms;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 public class ReviewForm {
 //    @ValidUuid
     private UUID userId;
 
+    @NotEmpty
     @Email
-    @NotNull
     private String email; // TODO: Remove this field and move not null to uid
 
-    @Min(value = 1)
-    @Max(value = 5)
-    @NotNull
+    @Range(min = 1, max = 5)
     private Integer score;
+
+    @Length(max = 255)
+    private String text;
 
     public UUID getUserId() {
         return userId;
@@ -46,4 +51,11 @@ public class ReviewForm {
         this.email = email;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
 }

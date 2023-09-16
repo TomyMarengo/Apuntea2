@@ -76,7 +76,6 @@
             <div class="d-flex w-75 justify-content-around">
                 <!-- TODO: Change to index.explore.register again -->
                 <!-- UPLOAD BUTTON -->
-
                 <button class="btn rounded-box button-primary" data-bs-toggle="modal" data-bs-target="#uploadModal"
                         id="uploadModalButton">
                     <spring:message code="index.explore.upload"/></button>

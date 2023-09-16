@@ -41,3 +41,12 @@ a {
 	text-decoration: none;
 	/* Quitar subrayado */
 }
+
+textarea.form-control {
+	resize: none !important;
+}
+
+textarea::placeholder {
+	color: var(--text) !important;
+	opacity: 1;
+}
