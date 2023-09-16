@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.SearchArguments;
 //import org.apache.tika.Tika;
+import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -35,18 +36,28 @@ public class NoteJdbcDao implements NoteDao {
     private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
             new Note(
                     UUID.fromString(rs.getString(NOTE_ID)),
-                    rs.getString(NAME),
+                    rs.getString(NOTE_NAME),
                     Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
                     rs.getTimestamp(CREATED_AT).toLocalDateTime(),
-                    rs.getFloat(AVG_SCORE)
+                    rs.getFloat(AVG_SCORE),
+                    new Subject(
+                            UUID.fromString(rs.getString(SUBJECT_ID)),
+                            rs.getString(SUBJECT_NAME),
+                            UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
+                    )
             );
     private final static RowMapper<Note> ROW_MAPPER_WITH_FILE = (rs, rowNum) ->
             new Note(
                     UUID.fromString(rs.getString(NOTE_ID)),
-                    rs.getString(NAME),
+                    rs.getString(NOTE_NAME),
                     Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
                     rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                     rs.getFloat(AVG_SCORE),
+                    new Subject(
+                            UUID.fromString(rs.getString(SUBJECT_ID)),
+                            rs.getString(SUBJECT_NAME),
+                            UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
+                    ),
                     rs.getBytes(FILE)
             );
 
@@ -57,7 +68,7 @@ public class NoteJdbcDao implements NoteDao {
         this.jdbcNoteInsert = new SimpleJdbcInsert(ds)
                 .withTableName(NOTES)
                 .usingGeneratedKeyColumns(NOTE_ID)
-                .usingColumns(NAME, FILE, SUBJECT_ID, CATEGORY, USER_ID);
+                .usingColumns(NOTE_NAME, FILE, SUBJECT_ID, CATEGORY, USER_ID);
         this.jdbcReviewInsert = new SimpleJdbcInsert(ds)
                 .withTableName(REVIEWS)
                 .usingColumns(NOTE_ID, USER_ID, SCORE);
@@ -71,15 +82,15 @@ public class NoteJdbcDao implements NoteDao {
 //        }
 
         MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(NAME, name);
+        args.addValue(NOTE_NAME, name);
         args.addValue(FILE, file);
         args.addValue(SUBJECT_ID, subjectId);
         args.addValue(CATEGORY, category.toLowerCase());
         args.addValue(USER_ID, user_id);
 
         KeyHolder holder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Notes (name, file, subject_id, category, user_id, parent_id) " +
-                " SELECT :name, :file, :subject_id, :category, :user_id, s.root_directory_id FROM Subjects s WHERE s.subject_id = :subject_id"
+        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, file, subject_id, category, user_id, parent_id) " +
+                " SELECT :note_name, :file, :subject_id, :category, :user_id, s.root_directory_id FROM Subjects s WHERE s.subject_id = :subject_id"
                 , args, holder, new String[]{NOTE_ID});
         UUID noteId = (UUID) holder.getKeys().get(NOTE_ID);
         return new Note(noteId, name);
@@ -93,7 +104,7 @@ public class NoteJdbcDao implements NoteDao {
 //        }
 
         final Map<String, Object> args = new HashMap<>();
-        args.put(NAME, name);
+        args.put(NOTE_NAME, name);
         args.put(FILE, file);
         args.put(SUBJECT_ID, subjectId);
         args.put(CATEGORY, category.toLowerCase());
@@ -108,7 +119,8 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
         return Optional.ofNullable(
-                jdbcTemplate.queryForObject("SELECT n.name, n.file, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id WHERE n.note_id = ? GROUP BY n.note_id",
+                jdbcTemplate.queryForObject("SELECT n.note_name, n.file, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score , s.subject_id, s.subject_name, s.root_directory_id " +
+                                "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id WHERE n.note_id = ? GROUP BY n.note_id, s.subject_id",
                     ROW_MAPPER_WITH_FILE,
                     noteId
                 )
@@ -126,19 +138,21 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public List<Note> getNotesByParentDirectoryId(UUID directory_id) {
-        return jdbcTemplate.query("SELECT n.name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score FROM Notes n " +
+        return jdbcTemplate.query("SELECT n.note_id, n.note_name, n.created_at, n.category, AVG(r.score) AS avg_score, s.subject_id, s.subject_name, s.root_directory_id FROM Notes n " +
+                "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
                 "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
                 "WHERE parent_id = ? " +
-                "GROUP BY n.note_id",
+                "GROUP BY n.note_id, s.subject_id",
                 ROW_MAPPER, directory_id);
     }
 
     @Override
     public List<Note> search(SearchArguments sa) {
         StringBuilder query = new StringBuilder(
-                "SELECT n.note_id, n.name, n.category, n.created_at, AVG(r.score) AS avg_score FROM Notes n " +
+                "SELECT DISTINCT n.note_id, n.note_name, n.category, n.created_at, AVG(r.score) AS avg_score, s.subject_id, s.subject_name, s.root_directory_id FROM Notes n " +
                         "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
-                        "INNER JOIN Careers c ON s.career_id = c.career_id " +
+                        "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id " +
+                        "INNER JOIN Careers c ON sc.career_id = c.career_id " +
                         "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
                         "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
                         "WHERE true "
@@ -152,17 +166,17 @@ public class NoteJdbcDao implements NoteDao {
 
         sa.getWord().ifPresent(w -> {
                 String searchWord = "%" + w + "%";
-                query.append("AND LOWER(n.name) LIKE LOWER(?) OR LOWER(i.name) LIKE LOWER(?) OR LOWER(c.name) LIKE LOWER(?) OR LOWER(s.name) LIKE LOWER(?)");
+                query.append("AND LOWER(n.note_name) LIKE LOWER(?) OR LOWER(i.institution_name) LIKE LOWER(?) OR LOWER(c.career_name) LIKE LOWER(?) OR LOWER(s.subject_name) LIKE LOWER(?)");
                 for (int i = 0; i < 4; i++)
                     args.add(searchWord);
             }
         );
 
-        query.append("GROUP BY n.").append(NOTE_ID);
+        query.append("GROUP BY n.").append(NOTE_ID).append(", s.").append(SUBJECT_ID);
         sa.getScore().ifPresent( score -> query.append(" HAVING AVG(r.score) >= ").append(score));
 
         if (sa.getSortBy() != null) {
-            query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.get(sa.getSortBy()));
+            query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NOTE_NAME));
             if (!sa.isAscending()) query.append(" DESC");
         }
 

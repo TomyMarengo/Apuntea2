@@ -16,7 +16,12 @@ public class JdbcDaoUtils {
 
 
     static final String INSTITUTION_ID = "institution_id";
-    static final String NAME = "name";
+//    static final String NAME = "name";
+    static final String NOTE_NAME = "note_name";
+    static final String DIRECTORY_NAME = "directory_name";
+    static final String INSTITUTION_NAME = "institution_name";
+    static final String CAREER_NAME = "career_name";
+    static final String SUBJECT_NAME = "subject_name";
     static final String CAREER_ID = "career_id";
     static final String SUBJECT_ID = "subject_id";
     static final String CATEGORY = "category";
@@ -30,12 +35,13 @@ public class JdbcDaoUtils {
 
     static final String SCORE = "score";
 
+    static final String ROOT_DIRECTORY_ID = "root_directory_id";
     static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SortBy.class);
 
     static{
         SORTBY.put(SortBy.SCORE, AVG_SCORE);
         SORTBY.put(SortBy.DATE, CREATED_AT);
-        SORTBY.put(SortBy.NAME, NAME);
+//        SORTBY.put(SortBy.NAME, NAME);
     }
 
     static void addIfPresent(StringBuilder query, List<Object> args, String field, String compareOp, String logicOp, Optional<?> value) {

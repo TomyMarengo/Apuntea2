@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -16,8 +17,8 @@ public class CareerJdbcDao implements CareerDao{
 
     private static final RowMapper<Career> ROW_MAPPER = (rs, rowNum)  ->
         new Career(
-                UUID.fromString(rs.getString("career_id")),
-                rs.getString("name")
+                UUID.fromString(rs.getString(CAREER_ID)),
+                rs.getString(CAREER_NAME)
         );
 
     @Autowired

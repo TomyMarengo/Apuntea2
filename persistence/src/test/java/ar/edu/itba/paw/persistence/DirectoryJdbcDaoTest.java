@@ -39,14 +39,14 @@ public class DirectoryJdbcDaoTest {
     public void testSearchByInstitution() {
         SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null, null, "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
-        assertEquals(4, directories.size());
+        assertEquals(5, directories.size());
     }
 
     @Test
     public void testSearchByCareer(){
         SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null, null, "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
-        assertEquals(2, directories.size());
+        assertEquals(3, directories.size());
     }
 
     @Test
@@ -92,9 +92,10 @@ public class DirectoryJdbcDaoTest {
     public void testByWord() {
         SearchArguments sa = new SearchArguments(null, null, null, null, null, "can", "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
-        assertEquals(2, directories.size());
+        assertEquals(3, directories.size());
         assertEquals("Dinamica de Fluidos", directories.get(0).getName());
-        assertEquals("Mecanica Gral", directories.get(1).getName());
+        assertEquals("Matematica I", directories.get(1).getName());
+        assertEquals("Mecanica Gral", directories.get(2).getName());
     }
 
     @Test
@@ -130,17 +131,17 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testDelete() {
-        int qtyBasuraPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "name LIKE " + "'%Basura%'");
+        int qtyBasuraPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_name LIKE " + "'%Basura%'");
         directoryDao.delete(BASURA_ID);
         assertEquals(2, qtyBasuraPrev);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "name LIKE " + "'%Basura%'"));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_name LIKE " + "'%Basura%'"));
     }
 
     @Test
     public void testCreate() {
         Directory directory = directoryDao.create("Nueva basura", EDA_DIRECTORY_ID, PEPE_ID);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + directory.getDirectoryId() + "' AND name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "' AND user_id = '" + PEPE_ID + "'"));
-        JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "Directories", "user_id = '" + PEPE_ID + "' AND name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "'");
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + directory.getDirectoryId() + "' AND directory_name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "' AND user_id = '" + PEPE_ID + "'"));
+        JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "Directories", "user_id = '" + PEPE_ID + "' AND directory_name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "'");
     }
 
 }

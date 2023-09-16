@@ -17,7 +17,6 @@ import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
 import javax.sql.DataSource;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -40,14 +39,14 @@ public class NoteJdbcDaoTest {
     public void testSearchByInstitution() {
         SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null, null, "score", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(5, notes.size());
+        assertEquals(6, notes.size());
     }
 
     @Test
     public void testSearchByCareer(){
         SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null, null, "score", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
-        assertEquals(3, notes.size());
+        assertEquals(4, notes.size());
     }
 
     @Test
@@ -114,15 +113,31 @@ public class NoteJdbcDaoTest {
     }
 
     @Test
-    public void createNote() {
+    public void testCreateNote() {
         Note note = noteDao.create(new byte[]{1, 2, 3}, "RBT", PEPE_ID, EDA_ID, "practice");
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'practice'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'practice'"));
         JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "notes", "note_id = '" + note.getNoteId() + "'");
     }
 
     @Test
-    public void deleteNote() {
+    public void testDeleteNote() {
         noteDao.delete(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
+    }
+
+    @Test
+    public void testMultipleCareerSubject() {
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, MATE_ID, null, null, null, "score", true, 1, 10);
+        List<Note> notes = noteDao.search(sa);
+        assertEquals(1, notes.size());
+        assertEquals(TVM_ID ,notes.get(0).getNoteId());
+    }
+
+    @Test
+    public void testMultipleCareerSubjectBis() {
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_MEC , MATE_ID, null, null, null, "score", true, 1, 10);
+        List<Note> notes = noteDao.search(sa);
+        assertEquals(1, notes.size());
+        assertEquals(TVM_ID, notes.get(0).getNoteId());
     }
 }

@@ -7,7 +7,7 @@ public class Note {
     private UUID noteId;
     private String name;
     private User owner;
-    private Institution institution; //TODO: change institution to model?
+    private Institution institution;
     private Career career;
     private Subject subject;
     private Category category;
@@ -20,17 +20,19 @@ public class Note {
         this.name = name;
     }
 
-    public Note(UUID noteId, String name, Category category, LocalDateTime createdAt, Float avgScore) {
+    public Note(UUID noteId, String name, Category category, LocalDateTime createdAt, Float avgScore, Subject subject ) {
         this(noteId, name);
         this.category = category;
         this.createdAt = createdAt;
         this.avgScore = avgScore;
+        this.subject = subject;
     }
 
-    public Note(UUID noteId, String name, Category category, LocalDateTime createdAt, Float avgScore, byte[] file) {
-        this(noteId, name, category, createdAt, avgScore);
+    public Note(UUID noteId, String name, Category category, LocalDateTime createdAt, Float avgScore, Subject subject, byte[] file) {
+        this(noteId, name, category, createdAt, avgScore, subject);
         this.file = file;
     }
+
 
     public UUID getNoteId() {
         return noteId;
