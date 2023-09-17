@@ -81,7 +81,7 @@
                     <spring:message code="index.explore.upload"/></button>
 
                 <!-- DISCOVER BUTTON -->
-                <a href="/search">
+                <a href="./search">
                     <button class="btn rounded-box button-secondary">
                         <spring:message code="index.explore.discover"/></button>
                 </a>
@@ -98,7 +98,7 @@
                             </div>
                             <div class="modal-body">
                                 <!-- CREATE NOTE FORM -->
-                                <c:url var="createUrl" value="./create"/>
+                                <c:url var="createUrl" value="./notes/create"/>
                                 <form:form modelAttribute="createNoteForm"
                                            action="${createUrl}"
                                            method="post"
@@ -142,7 +142,7 @@
                                         <select id="institutionSelect" style="display: none;">
                                             <option disabled selected value></option>
                                             <c:forEach items="${institutions}" var="inst">
-                                                <option value="${inst.institutionId}">${inst.name}</option>
+                                                <option value="<c:out value="${inst.institutionId}"/>"><c:out value="${inst.name}"/></option>
                                             </c:forEach>
                                         </select>
 
@@ -162,7 +162,7 @@
                                         <select id="careerSelect" style="display: none;">
                                             <option disabled selected value></option>
                                             <c:forEach items="${careers}" var="career">
-                                                <option value="${career.careerId}">${career.name}</option>
+                                                <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>
                                             </c:forEach>
                                         </select>
 
@@ -182,7 +182,7 @@
                                         <select id="subjectSelect" style="display: none;">
                                             <option disabled selected value></option>
                                             <c:forEach items="${subjects}" var="subject">
-                                                <option value="${subject.subjectId}">${subject.name}</option>
+                                                <option value="<c:out value="${subject.subjectId}"/>"><c:out value="${subject.name}"/></option>
                                             </c:forEach>
                                         </select>
 

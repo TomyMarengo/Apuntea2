@@ -25,7 +25,7 @@ public class ReviewForm {
     private Integer score;
 
     @Length(max = 255)
-    private String text;
+    private String content;
 
     public UUID getUserId() {
         return userId;
@@ -48,14 +48,14 @@ public class ReviewForm {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.email = email.trim();
     }
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setContent(String text) {
+        this.content = text;
     }
 }

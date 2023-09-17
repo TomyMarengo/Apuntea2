@@ -4,6 +4,7 @@
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark" data-search-view="horizontal">
@@ -56,7 +57,7 @@
                 <select id="institutionSelect" style="display: none;">
                     <option disabled selected value></option>
                     <c:forEach items="${institutions}" var="inst">
-                        <option value="${inst.institutionId}">${inst.name}</option>
+                        <option value="<c:out value="${inst.institutionId}"/>"><c:out value="${inst.name}"/></option>
                     </c:forEach>
                 </select>
 
@@ -80,7 +81,7 @@
                 <select id="careerSelect" style="display: none;">
                     <option disabled selected value></option>
                     <c:forEach items="${careers}" var="career">
-                        <option value="${career.careerId}">${career.name}</option>
+                        <option value="<c:out value="${career.careerId}"/>"><<c:out value="${career.name}"/></option>
                     </c:forEach>
                 </select>
 
@@ -103,7 +104,7 @@
                 <select id="subjectSelect" style="display: none;">
                     <option disabled selected value></option>
                     <c:forEach items="${subjects}" var="subject">
-                        <option value="${subject.subjectId}">${subject.name}</option>
+                        <option value="<c:out value="${subject.subjectId}"/>"><c:out value="${subject.name}"/></option>
                     </c:forEach>
                 </select>
 
@@ -211,7 +212,7 @@
             <thead>
             <tr>
                 <th><spring:message code="name"/></th>
-                <th><spring:message code="owner"/></th>
+<%--                <th><spring:message code="owner"/></th>--%>
                 <th><spring:message code="createdAt"/></th>
                 <th><spring:message code="score"/></th>
                 <th></th>
@@ -221,17 +222,17 @@
             <tbody>
             <c:forEach var="note" items="${notes}">
                 <c:set var="date" value="${note.createdAt}"/>
-                <tr class="note-found" id="${note.noteId}1">
-                    <td>${note.name}</td>
-                    <td>owner</td>
+                <tr class="note-found" id="<c:out value="${note.noteId}"/>1">
+                    <td><c:out value="${note.name}"/></td>
+<%--                    <td>owner</td>--%>
                     <td><spring:message code="date.format"
                                         arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
-                    <td>${note.avgScore}</td>
+                    <td><fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/></td>
                     <td class="search-actions">
-                        <button class="btn button-expansion rounded-circle download-button" id="${note.noteId}d1">
+                        <button class="btn button-expansion rounded-circle download-button" id="<c:out value="${note.noteId}"/>d1">
                             <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
                         </button>
-                        <button class="btn button-expansion rounded-circle copy-button" id="${note.noteId}c1">
+                        <button class="btn button-expansion rounded-circle copy-button" id="<c:out value="${note.noteId}"/>c1">
                             <img src="<c:url value="/svg/copy.svg"/>" alt="${copy}" class="icon-xs fill-text">
                         </button>
                     </td>
@@ -247,16 +248,17 @@
     <div class="row">
         <c:forEach items="${notes}" var="note">
             <div class="col-md-4 mb-4">
-                <div class="note-found card box search-note-box" data-node-id="${note.noteId}2">
+                <div class="note-found card box search-note-box" id="<c:out value="${note.noteId}"/>2">
                     <div class="card-body">
-                        <h4 class="card-title">${note.name}</h4>
+                        <h4 class="card-title">
+                                <c:out value="${note.name}"/>
+                        </h4>
 
-                        <span class="card-text">
-                            <strong><spring:message code="owner"/></strong>:
-                            owner
-                        </span>
-
-                        <br>
+<%--                        <span class="card-text">--%>
+<%--                            <strong><spring:message code="owner"/></strong>:--%>
+<%--                            owner--%>
+<%--                        </span>--%>
+<%--                        <br>--%>
 
                         <span class="card-text"><strong><spring:message code="category"/></strong>:
                             <c:if test="${note.category.formattedName eq 'Theory'}">
@@ -284,7 +286,7 @@
 
                         <span class="card-text">
                             <strong><spring:message code="score"/></strong>:
-                            ${note.avgScore}
+                            <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
                         </span>
 
                     </div>

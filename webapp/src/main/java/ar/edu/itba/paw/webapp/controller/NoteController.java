@@ -25,6 +25,7 @@ public class NoteController {
     private final NoteService noteService;
 
     private static final String CREATE_REVIEW_FORM_BINDING = "org.springframework.validation.BindingResult.reviewForm";
+    private static final String CREATE_NOTE_FORM_BINDING = "org.springframework.validation.BindingResult.createNoteForm";
 
     @Autowired
     public NoteController(NoteService noteService) {
@@ -42,6 +43,7 @@ public class NoteController {
         }
         Note note = noteService.getNoteById(UUID.fromString(noteId)).orElseThrow(NoteNotFoundException::new);
         mav.addObject("note", note);
+        mav.addObject("reviews", noteService.getReviews(UUID.fromString(noteId)));
         return mav;
     }
     /*
@@ -67,7 +69,7 @@ public class NoteController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute(CREATE_REVIEW_FORM_BINDING, result);
         } else {
-            noteService.createOrUpdateReview(UUID.fromString(noteId), reviewForm.getEmail(), reviewForm.getScore());
+            noteService.createOrUpdateReview(UUID.fromString(noteId), reviewForm.getEmail(), reviewForm.getScore(), reviewForm.getContent());
         }
         return mav;
     }
@@ -88,6 +90,7 @@ public class NoteController {
                                    final RedirectAttributes redirectAttributes)
     {
         if(result.hasErrors()) {
+            redirectAttributes.addFlashAttribute(CREATE_NOTE_FORM_BINDING, result);
             return new ModelAndView("redirect:/");
         }
 

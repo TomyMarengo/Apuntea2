@@ -62,13 +62,13 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score) {
-        return noteDao.createOrUpdateReview(noteId, userId, score);
+    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
+        return noteDao.createOrUpdateReview(noteId, userId, score, content);
     }
     @Override
-    public Integer createOrUpdateReview(UUID noteId, String email, Integer score) {
+    public Integer createOrUpdateReview(UUID noteId, String email, Integer score, String content) {
         UUID userId = userDao.createIfNotExists(email).getUserId();
-        return createOrUpdateReview(noteId, userId, score);
+        return createOrUpdateReview(noteId, userId, score, content);
     }
 
     @Override

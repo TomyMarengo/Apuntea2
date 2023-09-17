@@ -31,7 +31,9 @@ public class CreateNoteForm {
     @NotEmpty
     @Email
     private String email;
-    @ValidUuid
+
+    //TODO: Add again next sprint
+//    @ValidUuid
     private UUID parentId;
 
     // All getters

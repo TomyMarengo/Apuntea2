@@ -19,7 +19,7 @@ public interface NoteDao {
 
     List<Note> getNotesByParentDirectoryId(UUID directory_id);
 
-    Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score);
+    Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content);
 
     Optional<Note> getNoteById(UUID noteId);
 

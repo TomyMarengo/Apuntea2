@@ -74,7 +74,7 @@ public class NoteJdbcDao implements NoteDao {
                 .usingColumns(NOTE_NAME, FILE, SUBJECT_ID, CATEGORY, USER_ID);
         this.jdbcReviewInsert = new SimpleJdbcInsert(ds)
                 .withTableName(REVIEWS)
-                .usingColumns(NOTE_ID, USER_ID, SCORE);
+                .usingColumns(NOTE_ID, USER_ID, SCORE, CONTENT);
     }
 
     @Override
@@ -122,9 +122,9 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
         return Optional.ofNullable(
-                jdbcTemplate.queryForObject("SELECT n.note_name, n.file, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score , s.subject_id, s.subject_name, s.root_directory_id " +
+                jdbcTemplate.queryForObject("SELECT n.note_name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score , s.subject_id, s.subject_name, s.root_directory_id " +
                                 "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id WHERE n.note_id = ? GROUP BY n.note_id, s.subject_id",
-                    ROW_MAPPER_WITH_FILE,
+                    ROW_MAPPER,
                     noteId
                 )
         );
@@ -189,15 +189,16 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
-    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score) {
+    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
         try {
             jdbcReviewInsert.execute(new HashMap<String, Object>(){{
                 put(NOTE_ID, noteId);
                 put(USER_ID, userId);
                 put(SCORE, score);
+                put(CONTENT, content);
             }});
         } catch (DuplicateKeyException e) {
-            jdbcTemplate.update("UPDATE Reviews SET score = ? WHERE note_id = ? AND user_id = ?", score, noteId, userId);
+            jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ? WHERE note_id = ? AND user_id = ?", score, content, noteId, userId);
         } catch (DataIntegrityViolationException e) {
             return null;
         }

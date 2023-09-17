@@ -19,10 +19,10 @@ public interface NoteService {
 
     byte[] getNoteFileById(UUID noteId);
 
-    Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score);
+    Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content);
 
     //TODO remove when users are implemented
-    Integer createOrUpdateReview(UUID noteId, String email, Integer score);
+    Integer createOrUpdateReview(UUID noteId, String email, Integer score, String content);
 
     void delete(UUID noteId);
 
