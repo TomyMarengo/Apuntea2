@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS Reviews
   note_id uuid NOT NULL,
   user_id uuid NOT NULL,
   score smallint NOT NULL,
+  content text,
   CONSTRAINT "PK_reviews" PRIMARY KEY (note_id, user_id),
   CONSTRAINT "FK_reviews_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE,
   CONSTRAINT "FK_reviews_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE

@@ -27,6 +27,8 @@ public class JdbcDaoUtils {
     static final String CATEGORY = "category";
     static final String NOTE_ID = "note_id";
     static final String USER_ID = "user_id";
+    static final String EMAIL = "email";
+    static final String CONTENT = "content";
     static final String CREATED_AT = "created_at";
     static final String AVG_SCORE = "avg_score";
     static final String FILE = "file";

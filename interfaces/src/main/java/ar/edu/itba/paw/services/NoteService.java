@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Note;
+import ar.edu.itba.paw.models.Review;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -26,4 +27,6 @@ public interface NoteService {
     void delete(UUID noteId);
 
     List<Note> getNotesByParentDirectory(UUID directoryId);
+
+    List<Review> getReviews(UUID noteId);
 }

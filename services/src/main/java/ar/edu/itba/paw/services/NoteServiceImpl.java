@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Note;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.persistence.NoteDao;
 import ar.edu.itba.paw.persistence.UserDao;
@@ -78,6 +79,11 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public List<Note> getNotesByParentDirectory(UUID directoryId) {
         return noteDao.getNotesByParentDirectoryId(directoryId);
+    }
+
+    @Override
+    public List<Review> getReviews(UUID noteId) {
+        return noteDao.getReviews(noteId);
     }
 
 }

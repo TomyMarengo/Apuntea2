@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Category;
-import ar.edu.itba.paw.models.Note;
-import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.*;
 //import org.apache.tika.Tika;
-import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -16,13 +13,9 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.*;
 
 @Repository
@@ -59,6 +52,16 @@ public class NoteJdbcDao implements NoteDao {
                             UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
                     ),
                     rs.getBytes(FILE)
+            );
+
+    private final static RowMapper<Review> REVIEW_ROW_MAPPER = (rs, rowNum) ->
+            new Review(
+                    new User(
+                            UUID.fromString(rs.getString(USER_ID)),
+                            rs.getString(EMAIL)
+                    ),
+                    rs.getString(CONTENT),
+                    rs.getInt(SCORE)
             );
 
     @Autowired
@@ -204,5 +207,14 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     public void delete(UUID noteId) {
         jdbcTemplate.update("DELETE FROM Notes WHERE note_id = ?", noteId);
+    }
+
+    @Override
+    public List<Review> getReviews(UUID noteId) {
+        return jdbcTemplate.query(
+                "SELECT u.user_id, u.email, r.score, r.content FROM Reviews r INNER JOIN Users u ON r.user_id = u.user_id WHERE r.note_id = ?",
+                    new Object[]{noteId},
+                    REVIEW_ROW_MAPPER
+        );
     }
 }

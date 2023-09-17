@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Note;
+import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
@@ -139,5 +140,12 @@ public class NoteJdbcDaoTest {
         List<Note> notes = noteDao.search(sa);
         assertEquals(1, notes.size());
         assertEquals(TVM_ID, notes.get(0).getNoteId());
+    }
+
+    @Test
+    public void testGetReviews() {
+        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
+        assertEquals(2, reviews.size());
+        assertEquals(PEPE_ID, reviews.get(0).getUser().getUserId());
     }
 }
