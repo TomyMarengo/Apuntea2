@@ -91,9 +91,3 @@ CREATE TABLE IF NOT EXISTS Reviews
   CONSTRAINT "FK_reviews_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE,
   CONSTRAINT "FK_reviews_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE
 );
-
-INSERT INTO Institutions (institution_id, institution_name) SELECT '123e4567-e89b-12d3-a456-426655440000', 'FIUBA' WHERE NOT EXISTS (SELECT 1 FROM Institutions WHERE institution_id = '123e4567-e89b-12d3-a456-426655440000');
-INSERT INTO Careers (career_id, career_name, institution_id) SELECT '223e4567-e89b-12d3-a456-426655440000', 'Ingenieria en AC', '123e4567-e89b-12d3-a456-426655440000' WHERE NOT EXISTS (SELECT 1 FROM Careers WHERE career_id = '223e4567-e89b-12d3-a456-426655440000');
-INSERT INTO Directories (directory_id, directory_name) SELECT '423e4567-e89b-12d3-a456-426655440000', 'EDA'  WHERE NOT EXISTS (SELECT 1 FROM Directories WHERE directory_id = '423e4567-e89b-12d3-a456-426655440000');
-INSERT INTO Subjects (subject_id, subject_name, root_directory_id) SELECT '323e4567-e89b-12d3-a456-426655440000', 'EDA', '423e4567-e89b-12d3-a456-426655440000'  WHERE NOT EXISTS (SELECT 1 FROM Subjects WHERE subject_id = '323e4567-e89b-12d3-a456-426655440000');
-INSERT INTO Subjects_Careers (subject_id, career_id) SELECT '323e4567-e89b-12d3-a456-426655440000', '223e4567-e89b-12d3-a456-426655440000' WHERE NOT EXISTS (SELECT 1 FROM Subjects_Careers WHERE subject_id = '323e4567-e89b-12d3-a456-426655440000' AND career_id = '223e4567-e89b-12d3-a456-426655440000');
