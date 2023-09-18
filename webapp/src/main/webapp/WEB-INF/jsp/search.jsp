@@ -138,7 +138,7 @@
 
             <div class="col">
                 <div class="input-group mb-3">
-                    <span class="input-group-text input-group-icon">
+                    <span class="input-group-text input-group-icon clickable">
                         <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
                             <c:if test="${searchNotesForm.ascending}">
                                 <img src="<c:url value="/svg/arrow-up.svg"/>"

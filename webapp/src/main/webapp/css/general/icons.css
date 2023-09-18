@@ -49,3 +49,7 @@
 .input-group-icon {
 	min-width: auto !important;
 }
+
+.input-group-icon.clickable {
+	cursor: pointer;
+}

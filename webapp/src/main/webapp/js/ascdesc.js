@@ -1,3 +1,4 @@
+// const arrowSpan = document.getElementById("arrow-span");
 const arrowImage = document.getElementById("arrowImage");
 const ascCheckbox = document.getElementById("ascCheckbox");
 
