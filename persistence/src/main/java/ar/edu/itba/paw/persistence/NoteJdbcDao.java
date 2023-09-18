@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -106,13 +107,17 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
-        return Optional.ofNullable(
-                jdbcTemplate.queryForObject("SELECT n.note_name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score , s.subject_id, s.subject_name, s.root_directory_id " +
-                                "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id WHERE n.note_id = ? GROUP BY n.note_id, s.subject_id",
-                    ROW_MAPPER,
-                    noteId
-                )
-        );
+        try {
+            return Optional.ofNullable(
+                    jdbcTemplate.queryForObject("SELECT n.note_name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score , s.subject_id, s.subject_name, s.root_directory_id " +
+                                    "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id WHERE n.note_id = ? GROUP BY n.note_id, s.subject_id",
+                            ROW_MAPPER,
+                            noteId
+                    )
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
