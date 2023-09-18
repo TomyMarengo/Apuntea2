@@ -17,9 +17,6 @@ public class SearchNotesForm {
     private UUID subjectId;
     @Pattern(regexp = "theory|practice|exam|other")
     private String category;
-    //Between 0 and 5
-    @FloatRange(min = 0, max = 5)
-    private Float score;
     @Pattern(regexp = "score|name|date")
     private String sortBy;
     @NotNull
@@ -70,14 +67,6 @@ public class SearchNotesForm {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public Float getScore() {
-        return score;
-    }
-
-    public void setScore(Float score) {
-        this.score = score;
     }
 
     public String getSortBy() {

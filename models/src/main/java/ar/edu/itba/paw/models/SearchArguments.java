@@ -8,7 +8,6 @@ public class SearchArguments {
     private UUID careerId;
     private UUID subjectId;
     private Category category; //TODO: check database type
-    private Float score;
     private String word;
     private SortBy sortBy;
     private boolean ascending;
@@ -17,16 +16,15 @@ public class SearchArguments {
 
 
      public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        this(institutionId, careerId, subjectId, null, null, word, sortBy, ascending, page, pageSize);
+        this(institutionId, careerId, subjectId, null, word, sortBy, ascending, page, pageSize);
     }
     
-    public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String category, Float score, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+    public SearchArguments(UUID institutionId, UUID careerId, UUID subjectId, String category, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
         this.institutionId = institutionId;
         this.careerId = careerId;
         this.subjectId = subjectId;
         if (category != null && !category.isEmpty())
             this.category = Category.valueOf(category.toUpperCase());
-        this.score = score;
         if (sortBy != null && !sortBy.isEmpty())
             this.sortBy = SortBy.valueOf(sortBy.toUpperCase());
         this.word = word;
@@ -51,21 +49,13 @@ public class SearchArguments {
         return Optional.ofNullable(category);
     }
 
-    public Optional<Float> getScore() {
-        return Optional.ofNullable(score);
-    }
-
     public Optional<String> getWord() {
         return Optional.ofNullable(word);
     }
-
-
     public SortBy getSortBy() {
         return sortBy;
     }
-
     public boolean isAscending() { return ascending; }
-
     public Integer getPage() {
         return page;
     }

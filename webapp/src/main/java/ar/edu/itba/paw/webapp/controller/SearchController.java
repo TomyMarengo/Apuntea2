@@ -35,7 +35,6 @@ public class SearchController {
                     searchNotesForm.getCareerId(),
                     searchNotesForm.getSubjectId(),
                     searchNotesForm.getCategory(),
-                    searchNotesForm.getScore(),
                     searchNotesForm.getWord(),
                     searchNotesForm.getSortBy(),
                     searchNotesForm.getAscending(),

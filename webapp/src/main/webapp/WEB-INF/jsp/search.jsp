@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/search/table-list.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/search/search-form.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,15 +46,15 @@
 </fragment:bottom-navbar>
 
 
+<c:url var="searchUrl" value="./search"/>
+<form:form modelAttribute="searchNotesForm"
+           action="${searchUrl}"
+           method="get"
+           id="searchForm">
 <!-- SEARCH -->
 <div class="container d-flex flex-column w-100">
-    <c:url var="searchUrl" value="./search"/>
-    <form:form modelAttribute="searchNotesForm"
-               action="${searchUrl}"
-               method="get"
-               id="searchForm">
-        <div class="row row-cols-3 row-cols-xl-6">
-            <div class="col">
+        <div class="row row-cols-3 row-cols-xl-6 justify-content-between">
+            <div class="search-input">
                 <select id="institutionSelect" style="display: none;">
                     <option disabled selected value></option>
                     <c:forEach items="${institutions}" var="inst">
@@ -77,11 +78,11 @@
                 </div>
             </div>
 
-            <div class="col">
+            <div class="search-input">
                 <select id="careerSelect" style="display: none;">
                     <option disabled selected value></option>
                     <c:forEach items="${careers}" var="career">
-                        <option value="<c:out value="${career.careerId}"/>"><<c:out value="${career.name}"/></option>
+                        <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>
                     </c:forEach>
                 </select>
 
@@ -100,7 +101,7 @@
                 </div>
             </div>
 
-            <div class="col">
+            <div class="search-input">
                 <select id="subjectSelect" style="display: none;">
                     <option disabled selected value></option>
                     <c:forEach items="${subjects}" var="subject">
@@ -123,7 +124,7 @@
                 </div>
             </div>
 
-            <div class="col">
+            <div class="search-input">
                 <div class="input-group mb-3">
                     <form:select path="category" class="form-select bg-bg" id="categorySelect">
                         <form:option
@@ -145,50 +146,33 @@
                 </div>
             </div>
 
-            <div class="col">
+            <div class="search-input">
                 <div class="input-group mb-3">
-                    <form:select path="score" class="form-select bg-bg" id="scoreSelect">
-                        <form:option value=""><spring:message code="search.score.all"/></form:option>
-                        <form:option value="5">⭐⭐⭐⭐⭐</form:option>
-                        <form:option value="4">⭐⭐⭐⭐</form:option>
-                        <form:option value="3">⭐⭐⭐</form:option>
-                        <form:option value="2">⭐⭐</form:option>
-                        <form:option value="1">⭐</form:option>
-                    </form:select>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="input-group mb-3">
-                        <span class="input-group-text input-group-icon">
-
-                            <form:checkbox path="ascending" id="ascCheckbox" name="ascending" cssClass="d-none"/>
-
-                            <c:if test="${searchNotesForm.ascending}">
-                                <img src="<c:url value="/svg/arrow-up.svg"/>"
-                                     alt="<spring:message code="search.sort.image"/>"
-                                     class="icon-s fill-text"
-                                     id="arrowImage" title="ascending"/>
-                            </c:if>
-                            <c:if test="${!searchNotesForm.ascending}">
-                                <img src="<c:url value="/svg/arrow-down.svg"/>"
-                                     alt="<spring:message code="search.sort.image"/>"
-                                     class="icon-s fill-text"
-                                     id="arrowImage" title="descending"/>
-                            </c:if>
-                        </span>
                     <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect">
-                        <form:option value=""><spring:message code="search.sort.placeholder"/></form:option>
-                        <form:option value="name"><spring:message code="search.sort.name"/></form:option>
                         <form:option value="score"><spring:message code="search.sort.score"/></form:option>
+                        <%--                        <form:option value=""><spring:message code="search.sort.placeholder"/></form:option>--%>
+                        <form:option value="name"><spring:message code="search.sort.name"/></form:option>
+                        <form:option value="date"><spring:message code="search.sort.date"/></form:option>
                     </form:select>
                 </div>
             </div>
 
         </div>
 
-        <button type="submit" class="btn button-primary w-100 "><spring:message code="search.button"/></button>
-    </form:form>
+        <div class="row d-flex justify-content-between">
+            <div class="input-group mb-3 search-word">
+                <span class="input-group-text input-group-icon" id="basic-addon1">
+                    <img src="<c:url value="/svg/search.svg"/>"
+                         alt="<spring:message code="search.institution.placeholder"/>"
+                         class="icon-s fill-text"/>
+                </span>
+                <spring:message code="search.word.placeholder" var="placeholderSearch" />
+                <form:input path="word" type="text" id="email" class="form-control" placeholder='${placeholderSearch}'/>
+            </div>
+            <div class="search-input">
+                <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
+            </div>
+        </div>
 </div>
 
 <!-- LIST OF NOTES MATCHING -->
@@ -198,12 +182,29 @@
 <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
 <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
 
-<div class="container mt-4">
+<div class="d-flex container mt-4 justify-content-between">
     <button id="search-view-toggle" class="btn nav-icon-button" type="button">
         <img id="search-view-icon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
     </button>
+
+        <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
+        <button class="btn nav-icon-button" type="submit">
+            <c:if test="${searchNotesForm.ascending}">
+                <img src="<c:url value="/svg/arrow-up.svg"/>"
+                     alt="<spring:message code="search.sort.image"/>"
+                     class="icon-s fill-dark-primary"
+                     id="arrowImage" title="ascending"/>
+            </c:if>
+            <c:if test="${!searchNotesForm.ascending}">
+                <img src="<c:url value="/svg/arrow-down.svg"/>"
+                     alt="<spring:message code="search.sort.image"/>"
+                     class="icon-s fill-dark-primary"
+                     id="arrowImage" title="descending"/>
+            </c:if>
+        </button>
 </div>
 
+</form:form>
 
 <!-- HORIZONTAL LIST -->
 <section class="container mt-4" id="horizontal-list">

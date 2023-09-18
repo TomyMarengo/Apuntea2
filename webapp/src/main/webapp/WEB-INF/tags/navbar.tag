@@ -2,9 +2,10 @@
 <%--suppress JspAbsolutePathInspection --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ tag pageEncoding="UTF-8"%>
+<c:set var="baseURL" value="${pageContext.request.serverName}"/>
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid d-flex align-items-center">
-        <a class="navbar-brand text-dark-primary" href="/">Apuntea</a>
+        <a class="navbar-brand text-dark-primary" href="http://${baseURL}:${pageContext.request.serverPort}">Apuntea</a>
         <div class="d-flex justify-content-center align-items-center" style="height: 58px">
             <!--<button class="btn nav-icon-button" type="button">
                 <img src="/svg/bell.svg" alt="Notifications" class="icon-s fill-dark-primary" />

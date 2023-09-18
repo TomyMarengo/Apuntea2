@@ -38,34 +38,34 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testSearchByInstitution() {
-        SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null, null, "score", true, 1, 10);
+        SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null, "score", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
         assertEquals(6, notes.size());
     }
 
     @Test
     public void testSearchByCareer(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null, null, "score", true, 1, 10);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null, "score", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
         assertEquals(4, notes.size());
     }
 
     @Test
     public void testBySubject(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null, null, "score", true, 1, 10);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null, "score", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
         assertEquals(2, notes.size());
     }
     @Test
     public void testByCategory(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, "practice", null, null, "score", true, 1, 10);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, "practice", null, "score", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
         assertEquals(1, notes.size());
     }
 
     @Test
     public void testOrderBy(){
-        SearchArguments sa = new SearchArguments(null, null, null, null, null, null, "name", true, 1, 10);
+        SearchArguments sa = new SearchArguments(null, null, null, null, null, "name", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
         for (int i = 0; i < notes.size() - 2; i++) {
             assertTrue(notes.get(i).getName().toUpperCase().compareTo(notes.get(i + 1).getName().toUpperCase()) <= 0);
@@ -73,19 +73,21 @@ public class NoteJdbcDaoTest {
     }
 
     @Test
-    public void testByScore() {
-        SearchArguments sa = new SearchArguments(null, null, null, null, 3.0f, null, "score", true, 1, 10);
+    public void testOrderByScore(){
+        SearchArguments sa = new SearchArguments(null, null, null, null, null, "score", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
-        assertTrue( notes.size() >= 2); // TODO: Prevent race conditions so this can equal 2
-        notes.forEach(note -> assertTrue(note.getAvgScore() >= 3.0f));
+        for (int i = 0; i < notes.size() - 2; i++) {
+            assertTrue(notes.get(i).getAvgScore() <= notes.get(i + 1).getAvgScore());
+        }
     }
 
-    @Test
-    public void testByPage() {
-        SearchArguments sa = new SearchArguments(null, null, null, null, null, null, null, true, 1, 2);
-        List<Note> notes = noteDao.search(sa);
-        assertEquals(2, notes.size());
-    }
+    // TODO: Uncomment when pagination is implemented
+//    @Test
+//    public void testByPage() {
+//        SearchArguments sa = new SearchArguments(null, null, null, null, null, null, true, 1, 2);
+//        List<Note> notes = noteDao.search(sa);
+//        assertEquals(2, notes.size());
+//    }
 
     @Test
     public void testByDirectory() {
@@ -95,7 +97,7 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testByWord() {
-        SearchArguments sa = new SearchArguments(null, null, null, null, null, "guIA", null, true, 1, 10);
+        SearchArguments sa = new SearchArguments(null, null, null, null, "guIA", null, true, 1, 10);
         List<Note> notes = noteDao.search(sa);
         assertEquals(2, notes.size());
     }
@@ -128,7 +130,7 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testMultipleCareerSubject() {
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, MATE_ID, null, null, null, "score", true, 1, 10);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, MATE_ID, null, null, "score", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
         assertEquals(1, notes.size());
         assertEquals(TVM_ID ,notes.get(0).getNoteId());
@@ -136,7 +138,7 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testMultipleCareerSubjectBis() {
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_MEC , MATE_ID, null, null, null, "score", true, 1, 10);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_MEC , MATE_ID, null, null, "score", true, 1, 10);
         List<Note> notes = noteDao.search(sa);
         assertEquals(1, notes.size());
         assertEquals(TVM_ID, notes.get(0).getNoteId());

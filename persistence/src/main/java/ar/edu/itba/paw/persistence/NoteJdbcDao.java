@@ -39,21 +39,6 @@ public class NoteJdbcDao implements NoteDao {
                             UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
                     )
             );
-    private final static RowMapper<Note> ROW_MAPPER_WITH_FILE = (rs, rowNum) ->
-            new Note(
-                    UUID.fromString(rs.getString(NOTE_ID)),
-                    rs.getString(NOTE_NAME),
-                    Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
-                    rs.getTimestamp(CREATED_AT).toLocalDateTime(),
-                    rs.getFloat(AVG_SCORE),
-                    new Subject(
-                            UUID.fromString(rs.getString(SUBJECT_ID)),
-                            rs.getString(SUBJECT_NAME),
-                            UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
-                    ),
-                    rs.getBytes(FILE)
-            );
-
     private final static RowMapper<Review> REVIEW_ROW_MAPPER = (rs, rowNum) ->
             new Review(
                     new User(
@@ -152,7 +137,7 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     public List<Note> search(SearchArguments sa) {
         StringBuilder query = new StringBuilder(
-                "SELECT DISTINCT n.note_id, n.note_name, n.category, n.created_at, AVG(r.score) AS avg_score, s.subject_id, s.subject_name, s.root_directory_id FROM Notes n " +
+                "SELECT DISTINCT n.note_id, n.note_name, n.category, n.created_at, COALESCE(AVG(r.score), 0) AS avg_score, s.subject_id, s.subject_name, s.root_directory_id FROM Notes n " +
                         "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
                         "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id " +
                         "INNER JOIN Careers c ON sc.career_id = c.career_id " +
@@ -169,21 +154,20 @@ public class NoteJdbcDao implements NoteDao {
 
         sa.getWord().ifPresent(w -> {
                 String searchWord = "%" + w + "%";
-                query.append("AND LOWER(n.note_name) LIKE LOWER(?) OR LOWER(i.institution_name) LIKE LOWER(?) OR LOWER(c.career_name) LIKE LOWER(?) OR LOWER(s.subject_name) LIKE LOWER(?)");
+                query.append("AND (LOWER(n.note_name) LIKE LOWER(?) OR LOWER(i.institution_name) LIKE LOWER(?) OR LOWER(c.career_name) LIKE LOWER(?) OR LOWER(s.subject_name) LIKE LOWER(?)) ");
                 for (int i = 0; i < 4; i++)
                     args.add(searchWord);
             }
         );
 
         query.append("GROUP BY n.").append(NOTE_ID).append(", s.").append(SUBJECT_ID);
-        sa.getScore().ifPresent( score -> query.append(" HAVING AVG(r.score) >= ").append(score));
 
         if (sa.getSortBy() != null) {
             query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NOTE_NAME));
             if (!sa.isAscending()) query.append(" DESC");
         }
 
-        query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
+//        query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
 
         return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);
     }

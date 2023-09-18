@@ -37,28 +37,28 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testSearchByInstitution() {
-        SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null, null, "name", true, 1, 10);
+        SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null, "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
         assertEquals(5, directories.size());
     }
 
     @Test
     public void testSearchByCareer(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null, null, "name", true, 1, 10);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null, "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
         assertEquals(3, directories.size());
     }
 
     @Test
     public void testBySubject(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null, null, "name", true, 1, 10);
+        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null, "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
         assertEquals(1, directories.size());
     }
 
     @Test
     public void testOrderBy(){
-        SearchArguments sa = new SearchArguments(null, null, null, null, null, null, "name", true, 1, 10);
+        SearchArguments sa = new SearchArguments(null, null, null, null, null, "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
         for (int i = 0; i < directories.size() - 2; i++) {
             assertTrue(directories.get(i).getName().toUpperCase().compareTo(directories.get(i + 1).getName().toUpperCase()) <= 0);
@@ -67,7 +67,7 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testByPage() {
-        SearchArguments sa = new SearchArguments(null, null, null, null, null, null, "name", true, 1, 2);
+        SearchArguments sa = new SearchArguments(null, null, null, null, null, "name", true, 1, 2);
         List<Directory> directories = directoryDao.search(sa);
         assertEquals(2, directories.size());
     }
@@ -90,7 +90,7 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testByWord() {
-        SearchArguments sa = new SearchArguments(null, null, null, null, null, "can", "name", true, 1, 10);
+        SearchArguments sa = new SearchArguments(null, null, null, null, "can", "name", true, 1, 10);
         List<Directory> directories = directoryDao.search(sa);
         assertEquals(3, directories.size());
         assertEquals("Dinamica de Fluidos", directories.get(0).getName());
