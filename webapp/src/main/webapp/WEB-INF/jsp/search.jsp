@@ -49,97 +49,97 @@
 
 
 <!-- SEARCH -->
-<div class="container d-flex flex-column w-100">
+<div class="container">
     <c:url var="searchUrl" value="./search"/>
     <form:form modelAttribute="searchNotesForm"
                action="${searchUrl}"
                method="get"
-               id="searchForm">
-    <div class="row row-cols-2 row-cols-md-3">
-        <div class="col">
-            <select id="institutionSelect" style="display: none;">
-                <option disabled selected value></option>
-                <c:forEach items="${institutions}" var="inst">
-                    <option value="<c:out value="${inst.institutionId}"/>"><c:out value="${inst.name}"/></option>
-                </c:forEach>
-            </select>
+               id="searchForm"
+               cssClass="d-flex flex-column w-100 align-items-center">
+        <div class="row row-cols-2 row-cols-md-3">
+            <div class="col">
+                <select id="institutionSelect" style="display: none;">
+                    <option disabled selected value></option>
+                    <c:forEach items="${institutions}" var="inst">
+                        <option value="<c:out value="${inst.institutionId}"/>"><c:out value="${inst.name}"/></option>
+                    </c:forEach>
+                </select>
 
-            <form:input path="institutionId" id="institutionId" style="display: none;"/>
+                <form:input path="institutionId" id="institutionId" style="display: none;"/>
 
-            <div class="input-group mb-3">
-                <div class="autocomplete">
-                    <spring:message code="search.institution.placeholder" var="placeholderInstitution"/>
-                    <input type="text" id="institutionAutocomplete" class="form-control bg-bg"
-                           placeholder="${placeholderInstitution}"/>
+                <div class="input-group mb-3">
+                    <div class="autocomplete">
+                        <spring:message code="search.institution.placeholder" var="placeholderInstitution"/>
+                        <input type="text" id="institutionAutocomplete" class="form-control bg-bg"
+                               placeholder="${placeholderInstitution}"/>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col">
-            <select id="careerSelect" style="display: none;">
-                <option disabled selected value></option>
-                <c:forEach items="${careers}" var="career">
-                    <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>
-                </c:forEach>
-            </select>
+            <div class="col">
+                <select id="careerSelect" style="display: none;">
+                    <option disabled selected value></option>
+                    <c:forEach items="${careers}" var="career">
+                        <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>
+                    </c:forEach>
+                </select>
 
-            <form:input path="careerId" id="careerId" style="display: none;"/>
+                <form:input path="careerId" id="careerId" style="display: none;"/>
 
-            <div class="input-group mb-3">
-                <div class="autocomplete">
-                    <spring:message code="search.career.placeholder" var="placeholderCareer"/>
-                    <input type="text" id="careerAutocomplete" class="form-control bg-bg"
-                           placeholder="${placeholderCareer}"/>
+                <div class="input-group mb-3">
+                    <div class="autocomplete">
+                        <spring:message code="search.career.placeholder" var="placeholderCareer"/>
+                        <input type="text" id="careerAutocomplete" class="form-control bg-bg"
+                               placeholder="${placeholderCareer}"/>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col">
-            <select id="subjectSelect" style="display: none;">
-                <option disabled selected value></option>
-                <c:forEach items="${subjects}" var="subject">
-                    <option value="<c:out value="${subject.subjectId}"/>"><c:out value="${subject.name}"/></option>
-                </c:forEach>
-            </select>
+            <div class="col">
+                <select id="subjectSelect" style="display: none;">
+                    <option disabled selected value></option>
+                    <c:forEach items="${subjects}" var="subject">
+                        <option value="<c:out value="${subject.subjectId}"/>"><c:out value="${subject.name}"/></option>
+                    </c:forEach>
+                </select>
 
-            <form:input path="subjectId" id="subjectId" style="display: none;"/>
+                <form:input path="subjectId" id="subjectId" style="display: none;"/>
 
-            <div class="input-group mb-3">
-                <div class="autocomplete">
-                    <spring:message code="search.subject.placeholder" var="placeholderSubject"/>
-                    <input type="text" id="subjectAutocomplete" class="form-control bg-bg"
-                           placeholder="${placeholderSubject}"/>
+                <div class="input-group mb-3">
+                    <div class="autocomplete">
+                        <spring:message code="search.subject.placeholder" var="placeholderSubject"/>
+                        <input type="text" id="subjectAutocomplete" class="form-control bg-bg"
+                               placeholder="${placeholderSubject}"/>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col" >
-            <div class="input-group mb-3">
-                <form:select path="category" class="form-select bg-bg" id="categorySelect">
-                    <form:option
-                            value=""><spring:message
-                            code="search.category.all"/></form:option>
-                    <form:option
-                            value="theory"><spring:message
-                            code="search.category.theory"/></form:option>
-                    <form:option
-                            value="practice"><spring:message
-                            code="search.category.practice"/></form:option>
-                    <form:option
-                            value="exam"><spring:message
-                            code="search.category.exam"/></form:option>
-                    <form:option
-                            value="other"><spring:message
-                            code="search.category.other"/></form:option>
-                </form:select>
+            <div class="col" >
+                <div class="input-group mb-3">
+                    <form:select path="category" class="form-select bg-bg" id="categorySelect">
+                        <form:option
+                                value=""><spring:message
+                                code="search.category.all"/></form:option>
+                        <form:option
+                                value="theory"><spring:message
+                                code="search.category.theory"/></form:option>
+                        <form:option
+                                value="practice"><spring:message
+                                code="search.category.practice"/></form:option>
+                        <form:option
+                                value="exam"><spring:message
+                                code="search.category.exam"/></form:option>
+                        <form:option
+                                value="other"><spring:message
+                                code="search.category.other"/></form:option>
+                    </form:select>
+                </div>
             </div>
-        </div>
 
-        <div class="col">
-            <div class="input-group mb-3">
-                <span class="input-group-text input-group-icon">
-                    <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
-                        <button class="btn nav-icon-button" type="submit">
+            <div class="col">
+                <div class="input-group mb-3">
+                    <span class="input-group-text input-group-icon">
+                        <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
                             <c:if test="${searchNotesForm.ascending}">
                                 <img src="<c:url value="/svg/arrow-up.svg"/>"
                                      alt="<spring:message code="search.sort.image"/>"
@@ -152,31 +152,31 @@
                                      class="icon-s fill-dark-primary"
                                      id="arrowImage" title="descending"/>
                             </c:if>
-                        </button>
-                </span>
+                    </span>
 
-                <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect">
-                    <form:option value="score"><spring:message code="search.sort.score"/></form:option>
-                    <%--                        <form:option value=""><spring:message code="search.sort.placeholder"/></form:option>--%>
-                    <form:option value="name"><spring:message code="search.sort.name"/></form:option>
-                    <form:option value="date"><spring:message code="search.sort.date"/></form:option>
-                </form:select>
+                    <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect">
+                        <form:option value="score"><spring:message code="search.sort.score"/></form:option>
+                        <%--                        <form:option value=""><spring:message code="search.sort.placeholder"/></form:option>--%>
+                        <form:option value="name"><spring:message code="search.sort.name"/></form:option>
+                        <form:option value="date"><spring:message code="search.sort.date"/></form:option>
+                    </form:select>
+                </div>
             </div>
+
+            <div class="col">
+                <div class="input-group mb-3">
+                    <spring:message code="search.word.placeholder" var="placeholderSearch" />
+                    <form:input path="word" type="text" class="form-control bg-bg" placeholder='${placeholderSearch}'/>
+                </div>
+            </div>
+
         </div>
 
-        <div class="col">
-            <div class="input-group mb-3">
-                <spring:message code="search.word.placeholder" var="placeholderSearch" />
-                <form:input path="word" type="text" class="form-control" placeholder='${placeholderSearch}'/>
-            </div>
+        <div class="search-input w-25">
+            <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
         </div>
+    </form:form>
 
-    </div>
-
-
-    <div class="search-input">
-        <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
-    </div>
 </div>
 
 <!-- LIST OF NOTES MATCHING -->
@@ -191,8 +191,6 @@
         <img id="search-view-icon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
     </button>
 </div>
-
-</form:form>
 
 <!-- HORIZONTAL LIST -->
 <section class="container mt-4" id="horizontal-list">

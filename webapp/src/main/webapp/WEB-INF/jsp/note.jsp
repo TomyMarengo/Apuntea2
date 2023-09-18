@@ -43,15 +43,15 @@
 
 <fragment:bottom-navbar title="./${noteId}:${note.name}" extraLinks=""/>
 <div class="container-fluid">
-    <div class="row row-cols-1 row-cols-md-2">
-        <section class="col-md-9">
+    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2">
+        <section class="col  col-lg-9 col-xl-9">
             <iframe
                     class="iframe-note"
                     src="${baseUrl}/notes/${noteId}/download"
             >
             </iframe>
         </section>
-        <section class="col-md-3">
+        <section class="col  col-lg-3 col-xl-3">
             <div class="container-fluid">
                 <%--                <div class="d-flex justify-content-around ">&ndash;%&gt;--%>
                 <%--                    <!-- <c:if test="${reviews != null}"> -->--%>
