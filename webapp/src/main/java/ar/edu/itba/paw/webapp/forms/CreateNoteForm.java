@@ -18,11 +18,6 @@ public class CreateNoteForm {
     @ValidFileName(allowedExtensions = {".pdf"}) // TODO: Add more extensions
     @MaxFileSize(megabytes = 10) // 10 MB
     private MultipartFile file;
-    //TODO: Add validation for institution, career and subject
-    @ValidUuid
-    private UUID institutionId;
-    @ValidUuid
-    private UUID careerId;
     @ValidUuid
     private UUID subjectId;
     @NotEmpty
@@ -48,15 +43,6 @@ public class CreateNoteForm {
 
     public MultipartFile getFile() {
         return file;
-    }
-
-    public UUID getInstitutionId() {
-        return institutionId;
-    }
-
-
-    public UUID getCareerId() {
-        return careerId;
     }
 
     public String getCategory() {
@@ -86,14 +72,6 @@ public class CreateNoteForm {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setInstitutionId(UUID institutionId) {
-        this.institutionId = institutionId;
-    }
-
-    public void setCareerId(UUID careerId) {
-        this.careerId = careerId;
     }
 
     public void setSubjectId(UUID subjectId) {

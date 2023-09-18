@@ -4,6 +4,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl" />
+
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -45,7 +47,7 @@
         <section class="col-md-9">
             <iframe
                     class="iframe-note"
-                    src="http://${pageContext.request.serverName}:${pageContext.request.serverPort}/notes/${noteId}/download"
+                    src="${baseUrl}/notes/${noteId}/download"
             >
             </iframe>
         </section>
@@ -62,7 +64,7 @@
                 <%--                </div>--%>
                 <h4><spring:message code="notes.review.score"/><fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/></h4>
                 <div class="card p-3">
-                    <form:form action="/notes/${noteId}/review" method="post" modelAttribute="reviewForm">
+                    <form:form action="./${note.noteId}/review" method="post" modelAttribute="reviewForm">
                         <div class="input-group mb-3">
                             <span class="input-group-text input-group-icon" id="basic-addon1">@</span>
                             <spring:message code="notes.review.email.placeholder" var="placeholderEmail" />

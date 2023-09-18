@@ -19,14 +19,12 @@ import javax.validation.Valid;
 public class HomeController {
 
     private final DataService dataService;
-    private final NoteService noteService;
     // TODO: Ask if this is a good practice
     private static final String CREATE_NOTE_FORM_BINDING = "org.springframework.validation.BindingResult.createNoteForm";
 
     @Autowired
-    public HomeController(final DataService dataService, final NoteService noteService) {
+    public HomeController(final DataService dataService) {
         this.dataService = dataService;
-        this.noteService = noteService;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

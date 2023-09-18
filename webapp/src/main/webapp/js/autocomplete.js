@@ -106,28 +106,30 @@ function autocomplete(inp, sel, arr) {
 /* INSTITUTIONS */
 /* ------------ */
 let selectElement = document.getElementById('institutionSelect');
-// Initialize an empty array to store the option values
 const institutions = [];
-// Iterate through the option elements and add their text values to the array
-for (let i = 1; i < selectElement.options.length; i++) {
-	const option = selectElement.options[i];
-	institutions.push({value:option.value, text:option.text});
+if (selectElement) {
+	// Initialize an empty array to store the option values
+	// Iterate through the option elements and add their text values to the array
+	for (let i = 1; i < selectElement.options.length; i++) {
+		const option = selectElement.options[i];
+		institutions.push({value: option.value, text: option.text});
+	}
+	autocomplete(document.getElementById("institutionAutocomplete"), document.getElementById("institutionId"), institutions);
 }
-autocomplete(document.getElementById("institutionAutocomplete"), document.getElementById("institutionId"), institutions);
-
 /* ------------ */
 /* -- CAREERS - */
 /* ------------ */
 selectElement = document.getElementById('careerSelect');
-// Initialize an empty array to store the option values
 const careers = [];
-// Iterate through the option elements and add their text values to the array
-for (let i = 1; i < selectElement.options.length; i++) {
-	const option = selectElement.options[i];
-	careers.push({value:option.value, text:option.text});
+if (selectElement) {
+	// Initialize an empty array to store the option values
+	// Iterate through the option elements and add their text values to the array
+	for (let i = 1; i < selectElement.options.length; i++) {
+		const option = selectElement.options[i];
+		careers.push({value: option.value, text: option.text});
+	}
+	autocomplete(document.getElementById("careerAutocomplete"), document.getElementById("careerId"), careers);
 }
-autocomplete(document.getElementById("careerAutocomplete"), document.getElementById("careerId"), careers);
-
 /* ------------ */
 /* - SUBJECTS - */
 /* ------------ */
@@ -142,9 +144,9 @@ for (let i = 1; i < selectElement.options.length; i++) {
 autocomplete(document.getElementById("subjectAutocomplete"), document.getElementById("subjectId"), subjects);
 
 document.addEventListener('DOMContentLoaded', function () {
-	const institutionValue = document.getElementById('institutionId').value;
-	const careerValue = document.getElementById('careerId').value;
-	const subjectValue = document.getElementById('subjectId').value;
+	const institutionValue = document.getElementById('institutionId')?.value;
+	const careerValue = document.getElementById('careerId')?.value;
+	const subjectValue = document.getElementById('subjectId')?.value;
 
 	// Los valores no están vacíos, ahora actualiza los elementos select correspondientes
 	let institutionAutocomplete = document.getElementById('institutionAutocomplete');
@@ -155,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	let career = careers.find( x => x.value === careerValue);
 	let subject = subjects.find( x => x.value === subjectValue);
 	// Establece el valor de los elementos select según los valores de id
-	institutionAutocomplete.value = ins ? ins.text : '';
-	careerAutocomplete.value = career ? career.text : '';
+	if (institutionAutocomplete) institutionAutocomplete.value = ins ? ins.text : '';
+	if (careerAutocomplete) careerAutocomplete.value = career ? career.text : '';
 	subjectAutocomplete.value = subject ? subject.text : '';
 });

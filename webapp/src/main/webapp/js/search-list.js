@@ -1,12 +1,18 @@
 const rows = document.querySelectorAll('.note-found');
 
+if (!baseUrl) {
+  const currentUrl = window.location.origin + '/'
+  const path = window.location.pathname.split('/')[1];
+  const baseUrl = currentUrl + path
+}
+
 rows.forEach(row => {
   row.addEventListener('dblclick', () => {
     // Acción de doble clic aquí (por ejemplo, redirigir a /notes/{noteId})
     const noteId = row.getAttribute('id');
     console.log(noteId);
 
-    window.location.href = `/notes/${noteId.slice(0, -1)}`;
+    window.location.href = `./notes/${noteId.slice(0, -1)}`;
   });
 });
 
@@ -44,10 +50,10 @@ if (!storedViewState) {
 // Verificar y mostrar la vista según el valor almacenado
 if (storedViewState === 'box') {
   boxListSection.style.display = 'block';
-  searchViewIcon.src = '/svg/horizontal-list.svg';
+  searchViewIcon.src = `${baseUrl}/svg/horizontal-list.svg`;
 } else {
   horizontalListSection.style.display = 'block';
-  searchViewIcon.src = '/svg/box-list.svg';
+  searchViewIcon.src = `${baseUrl}/svg/box-list.svg`;
 }
 
 // Función para cambiar la vista
@@ -57,14 +63,14 @@ function toggleView() {
     // Cambiar a la vista de caja
     boxListSection.style.display = 'none';
     horizontalListSection.style.display = 'block';
-    searchViewIcon.src = '/svg/box-list.svg';
+    searchViewIcon.src = `${baseUrl}/svg/box-list.svg`;
     // Actualizar el valor almacenado en el localStorage
     localStorage.setItem('viewState', 'horizontal');
   } else {
     // Cambiar a la vista horizontal
     boxListSection.style.display = 'block';
     horizontalListSection.style.display = 'none';
-    searchViewIcon.src = '/svg/horizontal-list.svg';
+    searchViewIcon.src = `${baseUrl}/svg/horizontal-list.svg`;
     // Actualizar el valor almacenado en el localStorage
     localStorage.setItem('viewState', 'box');
   }

@@ -138,46 +138,46 @@
                                         <form:errors path="email" cssClass="text-danger" element="p"/>
                                     </div>
 
-                                    <div class="d-flex flex-column gap-2">
-                                        <select id="institutionSelect" style="display: none;">
-                                            <option disabled selected value></option>
-                                            <c:forEach items="${institutions}" var="inst">
-                                                <option value="<c:out value="${inst.institutionId}"/>"><c:out value="${inst.name}"/></option>
-                                            </c:forEach>
-                                        </select>
+<%--                                    <div class="d-flex flex-column gap-2">--%>
+<%--                                        <select id="institutionSelect" style="display: none;">--%>
+<%--                                            <option disabled selected value></option>--%>
+<%--                                            <c:forEach items="${institutions}" var="inst">--%>
+<%--                                                <option value="<c:out value="${inst.institutionId}"/>"><c:out value="${inst.name}"/></option>--%>
+<%--                                            </c:forEach>--%>
+<%--                                        </select>--%>
 
-                                        <form:input path="institutionId" id="institutionId" style="display: none;"/>
+<%--                                        <form:input path="institutionId" id="institutionId" style="display: none;"/>--%>
 
-                                        <div class="input-group">
-                                            <label class="input-group-text" for="institutionAutocomplete"><spring:message
-                                                    code="form.upload.institution"/></label>
-                                            <div class="autocomplete">
-                                                <input type="text" id="institutionAutocomplete" class="form-control"/>
-                                            </div>
-                                        </div>
-                                        <form:errors path="institutionId" cssClass="text-danger" element="p"/>
-                                    </div>
+<%--                                        <div class="input-group">--%>
+<%--                                            <label class="input-group-text" for="institutionAutocomplete"><spring:message--%>
+<%--                                                    code="form.upload.institution"/></label>--%>
+<%--                                            <div class="autocomplete">--%>
+<%--                                                <input type="text" id="institutionAutocomplete" class="form-control"/>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
+<%--                                        <form:errors path="institutionId" cssClass="text-danger" element="p"/>--%>
+<%--                                    </div>--%>
 
-                                    <div class="d-flex flex-column gap-2">
-                                        <select id="careerSelect" style="display: none;">
-                                            <option disabled selected value></option>
-                                            <c:forEach items="${careers}" var="career">
-                                                <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>
-                                            </c:forEach>
-                                        </select>
+<%--                                    <div class="d-flex flex-column gap-2">--%>
+<%--                                        <select id="careerSelect" style="display: none;">--%>
+<%--                                            <option disabled selected value></option>--%>
+<%--                                            <c:forEach items="${careers}" var="career">--%>
+<%--                                                <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>--%>
+<%--                                            </c:forEach>--%>
+<%--                                        </select>--%>
 
-                                        <form:input path="careerId" id="careerId" style="display: none;"/>
+<%--                                        <form:input path="careerId" id="careerId" style="display: none;"/>--%>
 
-                                        <div class="input-group">
-                                            <label class="input-group-text" for="careerAutocomplete"><spring:message
-                                                    code="form.upload.career"/></label>
-                                            <div class="autocomplete">
-                                                <input type="text" id="careerAutocomplete" class="form-control"/>
-                                            </div>
-                                        </div>
-                                        <form:errors path="careerId" cssClass="text-danger" element="p"/>
-                                    </div>
-
+<%--                                        <div class="input-group">--%>
+<%--                                            <label class="input-group-text" for="careerAutocomplete"><spring:message--%>
+<%--                                                    code="form.upload.career"/></label>--%>
+<%--                                            <div class="autocomplete">--%>
+<%--                                                <input type="text" id="careerAutocomplete" class="form-control"/>--%>
+<%--                                            </div>--%>
+<%--                                        </div>--%>
+<%--                                        <form:errors path="careerId" cssClass="text-danger" element="p"/>--%>
+<%--                                    </div>--%>
+<%--                                    --%>
                                     <div class="d-flex flex-column gap-2">
                                         <select id="subjectSelect" style="display: none;">
                                             <option disabled selected value></option>
