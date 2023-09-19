@@ -40,6 +40,9 @@ public class JdbcDaoUtils {
     static final String ROOT_DIRECTORY_ID = "root_directory_id";
     static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SortBy.class);
 
+    static final String OWNER_ID = "owner_id";
+    static final String OWNER_EMAIL = "owner_email";
+
     static{
         SORTBY.put(SortBy.SCORE, AVG_SCORE);
         SORTBY.put(SortBy.DATE, CREATED_AT);

@@ -158,6 +158,16 @@
 <!--      <groupId>org.logback-extensions</groupId>-->
 <!--      <artifactId>logback-ext-spring</artifactId>-->
 <!--    </dependency>-->
+
+    <!-- Email dependencies -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.thymeleaf</groupId>
+      <artifactId>thymeleaf-spring4</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

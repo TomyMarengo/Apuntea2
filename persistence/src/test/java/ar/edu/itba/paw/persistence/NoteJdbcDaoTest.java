@@ -18,6 +18,7 @@ import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
 import javax.sql.DataSource;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -117,9 +118,9 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testCreateNote() {
-        Note note = noteDao.create(new byte[]{1, 2, 3}, "RBT", PEPE_ID, EDA_ID, "practice");
+        UUID noteId = noteDao.create(new byte[]{1, 2, 3}, "RBT", PEPE_ID, EDA_ID, "practice");
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'practice'"));
-        JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "notes", "note_id = '" + note.getNoteId() + "'");
+        JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "'");
     }
 
     @Test

@@ -49,6 +49,23 @@ public class NoteJdbcDao implements NoteDao {
                     rs.getString(CONTENT),
                     rs.getInt(SCORE)
             );
+    private final static RowMapper<Review> COMPLETE_REVIEW_ROW_MAPPER = (rs, rowNum) ->
+            new Review(
+                    new User(
+                            UUID.fromString(rs.getString(USER_ID)),
+                            rs.getString(EMAIL)
+                    ),
+                    rs.getString(CONTENT),
+                    rs.getInt(SCORE),
+                    new Note(
+                            UUID.fromString(rs.getString(NOTE_ID)),
+                            rs.getString(NOTE_NAME),
+                            new User(
+                                    UUID.fromString(rs.getString(OWNER_ID)),
+                                    rs.getString(OWNER_EMAIL)
+                            )
+                    )
+            );
 
     @Autowired
     public NoteJdbcDao(final DataSource ds){
@@ -64,7 +81,7 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
-    public Note create(byte[] file, String name, UUID user_id, UUID subjectId, String category) {
+    public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category) {
 //        String contentType = tika.detect(file.getOriginalFilename());
 //        if (!contentType.equals("application/pdf")) {
 //            throw new IllegalArgumentException("File must be a PDF");
@@ -82,11 +99,11 @@ public class NoteJdbcDao implements NoteDao {
                 " SELECT :note_name, :file, :subject_id, :category, :user_id, s.root_directory_id FROM Subjects s WHERE s.subject_id = :subject_id"
                 , args, holder, new String[]{NOTE_ID});
         UUID noteId = (UUID) holder.getKeys().get(NOTE_ID);
-        return new Note(noteId, name);
+        return noteId;
     }
 
     @Override
-    public Note create(byte[] file, String name, UUID user_id, UUID subjectId, String category, UUID parentId) {
+    public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category, UUID parentId) {
 //        String contentType = tika.detect(file.getOriginalFilename());
 //        if (!contentType.equals("application/pdf")) {
 //            throw new IllegalArgumentException("File must be a PDF");
@@ -102,7 +119,7 @@ public class NoteJdbcDao implements NoteDao {
         args.put(USER_ID, user_id);
 
         UUID noteId = (UUID) jdbcNoteInsert.executeAndReturnKeyHolder(args).getKeys().get(NOTE_ID);
-        return new Note(noteId, name);
+        return noteId;
     }
 
     @Override
@@ -178,7 +195,7 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
-    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
+    public Review createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
         try {
             jdbcReviewInsert.execute(new HashMap<String, Object>(){{
                 put(NOTE_ID, noteId);
@@ -191,7 +208,15 @@ public class NoteJdbcDao implements NoteDao {
         } catch (DataIntegrityViolationException e) {
             return null;
         }
-        return score;
+        return jdbcTemplate.queryForObject(
+                "SELECT u.user_id, u.email, r.score, r.content, n.note_id, n.note_name, o.user_id AS owner_id, o.email AS owner_email FROM Reviews r " +
+                        "INNER JOIN Users u ON r.user_id = u.user_id " +
+                        "INNER JOIN Notes n ON r.note_id = n.note_id " +
+                        "INNER JOIN Users o ON n.user_id = o.user_id " +
+                        "WHERE r.note_id = ? AND r.user_id = ?",
+                new Object[]{noteId, userId},
+                COMPLETE_REVIEW_ROW_MAPPER
+        );
     }
 
     @Override

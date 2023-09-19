@@ -46,6 +46,11 @@
     <mockito.version>2.25.1</mockito.version>
     <hsqldb.version>2.5.1</hsqldb.version>
 
+    <!-- Email dependencies -->
+    <javax.mail.version>1.6.2</javax.mail.version>
+    <spring.email.version>2.5.6</spring.email.version>
+    <thymeleaf-version>3.0.11.RELEASE</thymeleaf-version>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
@@ -306,6 +311,18 @@
         <artifactId>hsqldb</artifactId>
         <version>${hsqldb.version}</version>
         <scope>test</scope>
+      </dependency>
+
+      <!-- Email dependencies -->
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-mail</artifactId>
+        <version>${spring.email.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.thymeleaf</groupId>
+        <artifactId>thymeleaf-spring4</artifactId>
+        <version>${thymeleaf-version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

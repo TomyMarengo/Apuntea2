@@ -94,8 +94,8 @@ public class NoteController {
             return new ModelAndView("redirect:/");
         }
 
-        Note note = noteService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getEmail(), createNoteForm.getSubjectId(), createNoteForm.getCategory());
-        return new ModelAndView("redirect:/notes/" + note.getNoteId());
+        UUID noteId = noteService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getEmail(), createNoteForm.getSubjectId(), createNoteForm.getCategory());
+        return new ModelAndView("redirect:/notes/" + noteId);
     }
 
     @RequestMapping(value = "/create/{directoryId}", method = RequestMethod.POST)
@@ -111,7 +111,7 @@ public class NoteController {
             return new ModelAndView("redirect:/");
         }
 
-        Note note = noteService.createNote(
+        UUID noteId = noteService.createNote(
                 createNoteForm.getFile(),
                 createNoteForm.getName(),
                 createNoteForm.getEmail(),
@@ -119,7 +119,7 @@ public class NoteController {
                 createNoteForm.getCategory(),
                 parentId
         );
-        return new ModelAndView("redirect:/notes/" + note.getNoteId());
+        return new ModelAndView("redirect:/notes/" + noteId);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)

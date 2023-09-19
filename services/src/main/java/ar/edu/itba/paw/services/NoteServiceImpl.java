@@ -18,11 +18,13 @@ import java.util.UUID;
 public class NoteServiceImpl implements NoteService {
     private final NoteDao noteDao;
     private final UserDao userDao;
+    private final EmailService emailService;
 
     @Autowired
-    public NoteServiceImpl(final NoteDao noteDao, final UserDao userDao) {
+    public NoteServiceImpl(final NoteDao noteDao, final UserDao userDao, final EmailService emailService) {
         this.noteDao = noteDao;
         this.userDao = userDao;
+        this.emailService = emailService;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note createNote(MultipartFile file, String name, String email, UUID subjectId, String category) {
+    public UUID createNote(MultipartFile file, String name, String email, UUID subjectId, String category) {
         UUID userId = userDao.createIfNotExists(email).getUserId();
         try {
             return noteDao.create(file.getBytes(), name, userId, subjectId, category);
@@ -42,7 +44,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note createNote(MultipartFile file, String name, String email, UUID subjectId, String category, UUID parentId) {
+    public UUID createNote(MultipartFile file, String name, String email, UUID subjectId, String category, UUID parentId) {
         UUID userId = userDao.createIfNotExists(email).getUserId();
         try {
             return noteDao.create(file.getBytes(), name, userId, subjectId, category);
@@ -63,7 +65,9 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
-        return noteDao.createOrUpdateReview(noteId, userId, score, content);
+        Review review = noteDao.createOrUpdateReview(noteId, userId, score, content);
+        emailService.sendReviewEmail(review);
+        return review.getScore();
     }
     @Override
     public Integer createOrUpdateReview(UUID noteId, String email, Integer score, String content) {

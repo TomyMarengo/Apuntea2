@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Note {
     private UUID noteId;
     private String name;
-    private User owner;
+    private User user;
     private Institution institution;
     private Career career;
     private Subject subject;
@@ -15,13 +15,15 @@ public class Note {
     private byte[] file;
     private Float avgScore;
 
-    public Note(UUID noteId, String name) {
+    public Note(UUID noteId, String name, User user) {
         this.noteId = noteId;
         this.name = name;
+        this.user = user;
     }
 
     public Note(UUID noteId, String name, Category category, LocalDateTime createdAt, Float avgScore, Subject subject ) {
-        this(noteId, name);
+        this.noteId = noteId;
+        this.name = name;
         this.category = category;
         this.createdAt = createdAt;
         this.avgScore = avgScore;
@@ -57,11 +59,15 @@ public class Note {
     public String toString() {
         return "Note{" +
                 "name='" + name + '\'' +
-                ", owner=" + owner +
+                ", owner=" + user +
                 '}';
     }
     
     public byte[] getFile() {
         return file;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

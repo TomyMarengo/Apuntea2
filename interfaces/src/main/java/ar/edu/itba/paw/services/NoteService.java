@@ -11,9 +11,9 @@ import java.util.UUID;
 public interface NoteService {
     List<Note> searchNotes(UUID institutionId, UUID careerId, UUID subjectId, String category, String word, String sortBy, boolean ascending, Integer page, Integer pageSize);
 
-    Note createNote(MultipartFile file, String name, String email, UUID subjectId, String category);
+    UUID createNote(MultipartFile file, String name, String email, UUID subjectId, String category);
 
-    Note createNote(MultipartFile file, String name, String email, UUID subjectId, String category, UUID parentId);
+    UUID createNote(MultipartFile file, String name, String email, UUID subjectId, String category, UUID parentId);
 
     Optional<Note> getNoteById(UUID noteId);
 
