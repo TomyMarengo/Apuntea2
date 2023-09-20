@@ -35,10 +35,10 @@ rows.forEach(row => {
 /*************/
 
 // Obtener las secciones por su ID
-const horizontalListSection = document.getElementById('horizontal-list');
-const boxListSection = document.getElementById('box-list');
-const searchViewIcon = document.getElementById('search-view-icon');
-const toggleViewBtn = document.getElementById('search-view-toggle');
+const horizontalListSection = document.getElementById('horizontalList');
+const boxListSection = document.getElementById('boxList');
+const searchViewIcon = document.getElementById('searchViewIcon');
+const toggleViewBtn = document.getElementById('searchViewToggle');
 
 // Obtener el valor del estado almacenado en el localStorage
 const storedViewState = localStorage.getItem('viewState');

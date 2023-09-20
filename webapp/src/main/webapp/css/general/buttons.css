@@ -20,6 +20,18 @@
 	color: var(--bg);
 }
 
+.button-outlined-primary {
+	border: 1px solid var(--primary);
+	background-color: transparent;
+	color: var(--primary);
+}
+
+.button-outlined-primary:hover {
+	border: 1px solid var(--primary);
+	background-color: var(--primary);
+	color: var(--bg);
+}
+
 .button-secondary {
 	border: 0;
 	background-color: var(--secondary);

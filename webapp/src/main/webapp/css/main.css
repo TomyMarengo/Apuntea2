@@ -28,6 +28,10 @@
   --gradient-mid: #F5F1E7;
   --gradient-bot: #F8EBCA;
 
+  --gradient-primary-top: #fccbc2;
+  --gradient-primary-mid: #ffa292;
+  --gradient-primary-bot: #f57c6a;
+
   --bs-black: #000000;
   --bs-white: #FEFEFE;
   --bs-primary: #EF7765;

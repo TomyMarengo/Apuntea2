@@ -30,7 +30,6 @@
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/search/table-list.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/search/search-form.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -187,13 +186,13 @@
 <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
 
 <div class="d-flex container mt-4 justify-content-between">
-    <button id="search-view-toggle" class="btn nav-icon-button" type="button">
-        <img id="search-view-icon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
+    <button id="searchViewToggle" class="btn nav-icon-button" type="button">
+        <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
     </button>
 </div>
 
 <!-- HORIZONTAL LIST -->
-<section class="container mt-4" id="horizontal-list">
+<section class="container mt-4" id="horizontalList">
     <div class="table-responsive">
         <table class="table table-hover table-search">
             <thead>
@@ -231,7 +230,7 @@
 </section>
 
 <!-- BOX LIST -->
-<section class="container mt-4" id="box-list">
+<section class="container mt-4" id="boxList">
     <div class="row">
         <c:forEach items="${notes}" var="note">
             <div class="col-md-4 mb-4">

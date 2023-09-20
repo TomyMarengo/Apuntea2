@@ -66,7 +66,7 @@
                 <div class="card p-3">
                     <form:form action="./${note.noteId}/review" method="post" modelAttribute="reviewForm">
                         <div class="input-group mb-3">
-                            <span class="input-group-text input-group-icon" id="basic-addon1">@</span>
+                            <span class="input-group-text input-group-icon">@</span>
                             <spring:message code="notes.review.email.placeholder" var="placeholderEmail" />
                             <form:input path="email" type="text" id="email" class="form-control" placeholder='${placeholderEmail}'/>
                         </div>

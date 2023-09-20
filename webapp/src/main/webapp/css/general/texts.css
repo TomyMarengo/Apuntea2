@@ -17,6 +17,10 @@
 	color: var(--dark-secondary);
 }
 
+.text-bg {
+	color: var(--bg)
+}
+
 .text-s {
 	font-size: 14px;
 }
