@@ -24,8 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         final User user = us.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("No user for email " + username));
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_COMMON_USER"));
-        authorities.add(new SimpleGrantedAuthority("ROLE_MODERATOR"));
+//        authorities.add(new SimpleGrantedAuthority("ROLE_COMMON_USER"));
+//        authorities.add(new SimpleGrantedAuthority("ROLE_MODERATOR"));
 
         return new CustomUserDetails(user.getEmail(), user.getPassword(), authorities);
     }

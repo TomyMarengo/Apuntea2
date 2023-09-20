@@ -28,25 +28,38 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
         http.sessionManagement()
                 .invalidSessionUrl("/login")
+
                 .and().authorizeRequests()
-                .antMatchers("/login", "/register").anonymous()
-                // TODO: Block not logged users trying to upload files
-                .antMatchers("/**").authenticated()
+                    .antMatchers("/login",
+                                "/register").anonymous()
+                    .antMatchers("/",
+                                "/search",
+                                "/notes/{noteId}",
+                                "/notes/{noteId}/download",
+                                "/errors/**").permitAll()
+                    .antMatchers("/**").authenticated()
+
                 .and().formLogin()
-                .loginPage("/login")
-                .usernameParameter("email").passwordParameter("password")
-                .defaultSuccessUrl("/", false)
+                    .loginPage("/login")
+                    .usernameParameter("email").passwordParameter("password")
+                    .defaultSuccessUrl("/", false)
+
                 .and().rememberMe()
-                .rememberMeParameter("rememberMe")
-                .userDetailsService(userDetailsService)
+                    .rememberMeParameter("rememberMe")
+                    .userDetailsService(userDetailsService)
 //                 .rememberMeCookieName("remember-me-cookie")
-//                 .key("")
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(1))
+    //                 .key("") // TODO: Create a key
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(1))
+
                 .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login")
+
                 .and().exceptionHandling()
-                .accessDeniedPage("/errors/403")
+                    .accessDeniedPage("/errors/403")
+
+                .and().headers().frameOptions().sameOrigin()
+
                 .and().csrf().disable();
     }
 

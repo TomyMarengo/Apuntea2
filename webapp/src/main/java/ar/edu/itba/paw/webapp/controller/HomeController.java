@@ -32,15 +32,17 @@ public class HomeController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/")
     public ModelAndView index(@ModelAttribute("searchNotesForm") final SearchNotesForm searchNotesForm,
                               ModelMap model) {
-        final CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ModelAndView mav = new ModelAndView("index");
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() != "anonymousUser") {
+            final CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            mav.addObject("username", userDetails.getUsername());
+        }
         mav.addObject("institutions", dataService.getInstitutions());
         mav.addObject("careers", dataService.getCareers());
         mav.addObject("subjects", dataService.getSubjects());
-        mav.addObject("username", userDetails.getUsername());
 
         if (model.containsAttribute(CREATE_NOTE_FORM_BINDING)) {
             mav.addObject("errors", ((BindingResult) model.get(CREATE_NOTE_FORM_BINDING)).getAllErrors());

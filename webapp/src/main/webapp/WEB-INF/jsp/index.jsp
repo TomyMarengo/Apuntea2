@@ -44,7 +44,9 @@
 <div class="container mt-5 mw-500">
     <div class="card bg-transparent border-0">
         <div class="card-body">
-            <h3 class="card-title fw-bold"><spring:message code="index.dyk.greetings" arguments="${username}"/></h3>
+            <c:if test="${username != null}">
+                <h3 class="card-title fw-bold"><spring:message code="index.dyk.greetings" arguments="${username}"/></h3>
+            </c:if>
             <h5 class="card-title fw-bold"><spring:message code="index.dyk.title"/></h5>
             <div class="d-flex align-items-center mb-3">
                 <img src="image/teacher.png" alt="Teacher" class="me-2" style="width: 40px; height: 40px;">
