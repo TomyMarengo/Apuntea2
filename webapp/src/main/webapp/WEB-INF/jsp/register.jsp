@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Apuntea | <spring:message code="register.title"/> </title>
+    <title>Apuntea | <spring:message code="register.title"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -45,22 +45,6 @@
 <section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
 
     <div class="row">
-
-        <div class="d-flex my-4 w-100 px-0">
-            <a href="." class="w-50">
-                <button class="btn box login-register-button login w-100">
-                    <spring:message code="login.title"/>
-                </button>
-            </a>
-
-            <a href="./register" class="w-50">
-                <button class="btn box login-register-button active register w-100">
-                    <spring:message code="register.title"/>
-                </button>
-            </a>
-
-        </div>
-
         <div class="card box">
             <div class="row">
                 <div class="col-lg-6">

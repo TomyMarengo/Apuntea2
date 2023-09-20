@@ -44,22 +44,6 @@
 <section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
 
     <div class="row">
-
-        <div class="d-flex my-4 w-100 px-0">
-            <a href="." class="w-50">
-                <button class="btn box login-register-button active login w-100">
-                    <spring:message code="login.title"/>
-                </button>
-            </a>
-
-            <a href="./register" class="w-50">
-                <button class="btn box login-register-button register w-100">
-                     <spring:message code="register.title"/>
-                </button>
-            </a>
-
-        </div>
-
         <div class="card box">
             <div class="row">
                 <div class="col-lg-6">
