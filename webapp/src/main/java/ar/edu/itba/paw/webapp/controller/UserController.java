@@ -3,6 +3,9 @@ package ar.edu.itba.paw.webapp.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ar.edu.itba.paw.services.UserService;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class UserController {
@@ -14,9 +17,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    //TODO: remove for sprint 1
-    /*
-
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ModelAndView profile() {
         return new ModelAndView("profile");
@@ -26,12 +26,4 @@ public class UserController {
     public ModelAndView settings() {
         return new ModelAndView("settings");
     }
-
-    @RequestMapping("/{id:\\d+}")
-    public ModelAndView profile(@PathVariable("id") final long userId){
-        final ModelAndView mav = new ModelAndView("create");
-        mav.addObject("user", userService.findById(userId).orElseThrow(UserNotFoundException::new));
-        return mav;
-    }
-    */
 }

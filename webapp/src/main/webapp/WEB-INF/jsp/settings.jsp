@@ -1,25 +1,27 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Apuntea | Ajustes</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Apuntea | <spring:message code="settings"/></title>
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/general/elements.css" />
-    <link rel="stylesheet" href="css/general/icons.css" />
-    <link rel="stylesheet" href="css/general/boxes.css" />
-    <link rel="stylesheet" href="css/sections/navbar.css" />
+    <link rel="stylesheet" href="<c:url value="/css/main.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>" />
+    <link rel="stylesheet" href=<c:url value="/css/general/buttons.css"/> />
+    <link rel="stylesheet" href=<c:url value="/css/general/icons.css"/> />
+    <link rel="stylesheet" href=<c:url value="/css/general/boxes.css"/> />
+    <link rel="stylesheet" href=<c:url value="/css/sections/navbar.css"/> />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -145,8 +147,11 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+<script src="<c:url value="/js/darkmode.js"/>"></script>
 
-<script src="js/scripts.js"></script>
 </body>
 
 </html>
