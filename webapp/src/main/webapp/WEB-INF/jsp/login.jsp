@@ -71,18 +71,18 @@
                             <div class="">
                                 <spring:message var="loginEmail" code="email"/>
                                 <label for="email"></label>
-                                <input type="email" id="email" class="form-control bg-bg" placeholder="${loginEmail}"/>
+                                <input type="text" name="email" id="email" class="form-control bg-bg" placeholder="${loginEmail}"/>
                             </div>
 
                             <div class="">
                                 <spring:message var="loginPassword" code="password"/>
                                 <label for="password"></label>
-                                <input type="password" id="password" class="form-control bg-bg"
+                                <input type="password" name="password" id="password" class="form-control bg-bg"
                                        placeholder="${loginPassword}"/>
                             </div>
 
                             <div class="mt-4">
-                                <input class="form-check-input" type="checkbox" value="" id="rememberMe" checked/>
+                                <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"/>
                                 <label class="form-check-label mx-1" for="rememberMe"> <spring:message code="login.rememberMe"/> </label>
                             </div>
 

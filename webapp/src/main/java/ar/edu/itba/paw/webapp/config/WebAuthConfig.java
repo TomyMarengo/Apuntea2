@@ -37,7 +37,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email").passwordParameter("password")
                 .defaultSuccessUrl("/", false)
                 .and().rememberMe()
-                .rememberMeParameter("rememberme")
+                .rememberMeParameter("rememberMe")
                 .userDetailsService(userDetailsService)
 //                 .rememberMeCookieName("remember-me-cookie")
 //                 .key("")
