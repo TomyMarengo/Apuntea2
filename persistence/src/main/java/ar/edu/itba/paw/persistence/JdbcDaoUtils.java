@@ -13,8 +13,7 @@ public class JdbcDaoUtils {
     static final String CAREERS = "Careers";
     static final String SUBJECTS = "Subjects";
     static final String DIRECTORIES = "Directories";
-
-
+    static final String USERS = "Users";
     static final String INSTITUTION_ID = "institution_id";
 //    static final String NAME = "name";
     static final String NOTE_NAME = "note_name";
@@ -27,6 +26,7 @@ public class JdbcDaoUtils {
     static final String CATEGORY = "category";
     static final String NOTE_ID = "note_id";
     static final String USER_ID = "user_id";
+    static final String PASSWORD = "password";
     static final String EMAIL = "email";
     static final String CONTENT = "content";
     static final String CREATED_AT = "created_at";
@@ -34,21 +34,16 @@ public class JdbcDaoUtils {
     static final String FILE = "file";
     static final String PARENT_ID = "parent_id";
     static final String DIRECTORY_ID = "directory_id";
-
     static final String SCORE = "score";
-
     static final String ROOT_DIRECTORY_ID = "root_directory_id";
     static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SortBy.class);
-
     static final String OWNER_ID = "owner_id";
     static final String OWNER_EMAIL = "owner_email";
-
     static{
         SORTBY.put(SortBy.SCORE, AVG_SCORE);
         SORTBY.put(SortBy.DATE, CREATED_AT);
 //        SORTBY.put(SortBy.NAME, NAME);
     }
-
     static void addIfPresent(StringBuilder query, List<Object> args, String field, String compareOp, String logicOp, Optional<?> value) {
         value.ifPresent(val -> {
             query.append(logicOp).append(" ").append(field).append(" ").append(compareOp).append(" ? ");

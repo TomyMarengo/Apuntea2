@@ -28,4 +28,7 @@ public class User {
     public UUID getUserId() {
         return userId;
     }
+    public String getPassword() {
+        return password;
+    }
 }

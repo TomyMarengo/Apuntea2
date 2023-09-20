@@ -28,9 +28,9 @@
     <!-- Jersey dependencies
     <jersey.version>3.0-SNAPSHOT</jersey.version>
     -->
-    <!-- Security dependencies
+    <!--    Security dependencies-->
     <spring-security.version>4.2.0.RELEASE</spring-security.version>
-    -->
+
 
     <!-- Persistence dependencies -->
     <postgresql.version>42.2.5</postgresql.version>
@@ -203,22 +203,22 @@
 <!--        <version>${jersey.version}</version>-->
 <!--      </dependency>-->
 
-      <!-- Security dependencies -->
-<!--      <dependency>-->
-<!--        <groupId>org.springframework.security</groupId>-->
-<!--        <artifactId>spring-security-core</artifactId>-->
-<!--        <version>${spring-security.version}</version>-->
-<!--      </dependency>-->
-<!--      <dependency>-->
-<!--        <groupId>org.springframework.security</groupId>-->
-<!--        <artifactId>spring-security-web</artifactId>-->
-<!--        <version>${spring-security.version}</version>-->
-<!--      </dependency>-->
-<!--      <dependency>-->
-<!--        <groupId>org.springframework.security</groupId>-->
-<!--        <artifactId>spring-security-config</artifactId>-->
-<!--        <version>${spring-security.version}</version>-->
-<!--      </dependency>-->
+<!--       Security dependencies -->
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-core</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-web</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.security</groupId>
+        <artifactId>spring-security-config</artifactId>
+        <version>${spring-security.version}</version>
+      </dependency>
 
       <!-- Persistence dependencies -->
       <dependency>
