@@ -253,6 +253,7 @@
                                     <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
                                 </button>
                             </a>
+
                             <button class="btn button-expansion rounded-circle copy-button" id="<c:out value="${note.noteId}"/>c1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>" data-bs-trigger="hover">
                                 <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
                             </button>
@@ -264,6 +265,15 @@
             </table>
         </div>
     </section>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body justify-content-between d-flex">
+                <span class="text-dark-primary"><spring:message code="toast.linkCopied"/></span>
+                <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
 
     <!-- BOX LIST -->
     <section class="container mt-4 p-0" id="boxList">
@@ -341,7 +351,7 @@
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
 <script src="<c:url value="/js/note-list.js"/>"></script>
 <script src="<c:url value="/js/buttons.js"/>"></script>
-<script src="<c:url value="/js/tooltips.js"/>"></script>
+<script src="<c:url value="/js/popups.js"/>"></script>
 
 </body>
 

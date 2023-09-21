@@ -142,7 +142,7 @@
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/buttons.js"/>"></script>
-<script src="<c:url value="/js/tooltips.js"/>"></script>
+<script src="<c:url value="/js/popups.js"/>"></script>
 
 </body>
 </html>
