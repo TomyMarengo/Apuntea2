@@ -191,7 +191,14 @@
             <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
         </button>
         <div class="d-flex">
-            <div id="selectedButtons" style="display: none;">
+            <div id="selectedButtons" class="align-items-center" style="display: none;">
+                <button id="deselectAllButton" class="btn nav-icon-button" type="button">
+                    <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary" />
+                </button>
+                <span class="text-dark-primary mx-2">
+                    <strong id="selectedCount" class="text-dark-primary"> 0 </strong>
+                    <spring:message code="search.selected"/>
+                </span>
                 <button id="downloadSelectedButton" class="btn nav-icon-button" type="button">
                     <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary" />
                 </button>
@@ -200,7 +207,7 @@
                 </button>
             </div>
             <button id="selectAllButton" class="btn nav-icon-button" type="button">
-                <img src="<c:url value="/svg/checkbox.svg"/>" alt="select all" class="icon-s fill-dark-primary" />
+                <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary" />
             </button>
         </div>
 
