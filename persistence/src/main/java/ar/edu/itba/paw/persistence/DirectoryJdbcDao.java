@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.*;
@@ -59,6 +60,7 @@ public class DirectoryJdbcDao implements DirectoryDao {
                 .usingGeneratedKeyColumns(DIRECTORY_ID);
     }
 
+    @Transactional
     @Override
     public Directory create(String name, UUID parentId, UUID userId) {
         MapSqlParameterSource args = new MapSqlParameterSource();

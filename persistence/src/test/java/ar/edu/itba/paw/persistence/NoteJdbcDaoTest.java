@@ -13,6 +13,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
+
 import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
 
 import javax.sql.DataSource;
@@ -22,6 +24,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
+@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Rollback

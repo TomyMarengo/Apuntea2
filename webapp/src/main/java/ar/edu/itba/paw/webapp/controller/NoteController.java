@@ -46,7 +46,7 @@ public class NoteController {
         return mav;
     }
 
-    
+
     @RequestMapping(value = "/{noteId}/review", method = {RequestMethod.POST})
     public ModelAndView reviewNote(@PathVariable("noteId") String noteId,
                                    @Valid @ModelAttribute final ReviewForm reviewForm,

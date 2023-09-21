@@ -3,7 +3,6 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -37,6 +36,7 @@ class UserJdbcDao implements UserDao{
                 .usingGeneratedKeyColumns(USER_ID);
     }
 
+    @Transactional
     @Override
     public void create(final String email, final String password) {
         final Map<String, Object> args = new HashMap<>();

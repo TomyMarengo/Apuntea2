@@ -3,11 +3,10 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.SearchArguments;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistence.NoteDao;
-import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -34,12 +33,14 @@ public class NoteServiceImpl implements NoteService {
         return noteDao.search(sa);
     }
 
+    @Transactional
     @Override
     public UUID createNote(MultipartFile file, String name, UUID subjectId, String category) throws IOException {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
         return noteDao.create(file.getBytes(), name, userId, subjectId, category);
     }
 
+    @Transactional
     @Override
     public UUID createNote(MultipartFile file, String name, UUID subjectId, String category, UUID parentId) throws IOException {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
@@ -64,6 +65,7 @@ public class NoteServiceImpl implements NoteService {
         return review.getScore();
     }
 
+    @Transactional
     @Override
     public void delete(UUID noteId) {
         noteDao.delete(noteId);

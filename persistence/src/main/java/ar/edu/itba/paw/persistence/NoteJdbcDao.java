@@ -14,13 +14,19 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
 import java.util.*;
 
+
 @Repository
 public class NoteJdbcDao implements NoteDao {
+    private final Logger LOGGER = LoggerFactory.getLogger(NoteJdbcDao.class);
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert jdbcNoteInsert;
@@ -81,6 +87,7 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
+    @Transactional
     public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category) {
 //        String contentType = tika.detect(file.getOriginalFilename());
 //        if (!contentType.equals("application/pdf")) {
@@ -102,6 +109,7 @@ public class NoteJdbcDao implements NoteDao {
         return noteId;
     }
 
+    @Transactional
     @Override
     public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category, UUID parentId) {
 //        String contentType = tika.detect(file.getOriginalFilename());
@@ -194,6 +202,7 @@ public class NoteJdbcDao implements NoteDao {
         return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);
     }
 
+    //@Transactional
     @Override
     public Review createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
         try {
@@ -206,7 +215,8 @@ public class NoteJdbcDao implements NoteDao {
         } catch (DuplicateKeyException e) {
             jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ? WHERE note_id = ? AND user_id = ?", score, content, noteId, userId);
         } catch (DataIntegrityViolationException e) {
-            return null;
+            //TODO: create custom exception
+            throw e;
         }
         return jdbcTemplate.queryForObject(
                 "SELECT u.user_id, u.email, r.score, r.content, n.note_id, n.note_name, o.user_id AS owner_id, o.email AS owner_email FROM Reviews r " +

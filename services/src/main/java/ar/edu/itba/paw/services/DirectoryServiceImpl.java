@@ -3,11 +3,10 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Directory;
 import ar.edu.itba.paw.models.DirectoryPath;
 import ar.edu.itba.paw.models.SearchArguments;
-import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
-import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,7 @@ public class DirectoryServiceImpl implements DirectoryService{
         this.securityService = securityService;
     }
 
+    @Transactional
     @Override
     public Directory create(String name, UUID parentId) {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
@@ -55,6 +55,7 @@ public class DirectoryServiceImpl implements DirectoryService{
         return directoryDao.getDirectoryPath(directoryId);
     }
 
+    @Transactional
     @Override
     public void delete(UUID directoryId) {
         directoryDao.delete(directoryId);

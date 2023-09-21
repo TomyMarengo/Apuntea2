@@ -29,7 +29,7 @@
     <jersey.version>3.0-SNAPSHOT</jersey.version>
     -->
     <!--    Security dependencies-->
-    <spring-security.version>4.2.0.RELEASE</spring-security.version>
+    <spring-security.version>4.0.4.RELEASE</spring-security.version>
 
 
     <!-- Persistence dependencies -->
