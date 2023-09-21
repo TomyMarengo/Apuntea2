@@ -28,7 +28,6 @@
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/notes/iframe.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/notes/reviews-comments.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,84 +41,118 @@
 <fragment:navbar/>
 
 <fragment:bottom-navbar title="./${noteId}:${note.name}" extraLinks=""/>
+
 <div class="container-fluid">
-    <div class="row row-cols-1 row-cols-sm-1 row-cols-md-1 row-cols-lg-2">
-        <section class="col  col-lg-9 col-xl-9">
-            <iframe
-                    class="iframe-note"
-                    src="${baseUrl}/notes/${noteId}/download"
-            >
-            </iframe>
-        </section>
-        <section class="col  col-lg-3 col-xl-3">
-            <div class="container-fluid">
-                <%--                <div class="d-flex justify-content-around ">&ndash;%&gt;--%>
-                <%--                    <!-- <c:if test="${reviews != null}"> -->--%>
-                <input type="submit" class="btn reviews-comments-button mb-3" value="<spring:message code="notes.reviews.button"/>"/>
-                <%--                    <input type="submit" class="btn reviews-comments-button" value="<spring:message code="notes.comments.button"/>"/>--%>
+    <div class="row">
+        <section class="col-8 h-100-navs">
+            <iframe class=" w-100" style="height: 90%" src="${baseUrl}/notes/${noteId}/download"></iframe>
 
-                <%--                    <!-- <c:if test="${comments != null}">--%>
-                <%--                        <input type="submit" class="btn reviews-comments-button" value="<spring:message code="notes.reviews.button"/>"/>--%>
-                <%--                        <input type="submit" class="btn reviews-comments-button active" value="<spring:message code="notes.comments.button"/>"/>--%>
-                <%--                </div>--%>
-                <h4><spring:message code="notes.review.score"/><fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/></h4>
-                <div class="card p-3">
-                    <form:form action="./${note.noteId}/review" method="post" modelAttribute="reviewForm">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text input-group-icon">@</span>
-                            <spring:message code="notes.review.email.placeholder" var="placeholderEmail" />
-                            <form:input path="email" type="text" id="email" class="form-control" placeholder='${placeholderEmail}'/>
-                        </div>
-                        <form:errors path="email" cssClass="text-danger" element="p"/>
+            <div class="d-flex justify-content-between">
+                <h1 class="mb-0 !imp">${note.name}</h1>
+                <div>
+                    <button class="btn button-expansion rounded-circle edit-button" id="<c:out value="${note.noteId}"/>e1">
+                        <img src="<c:url value="/svg/pencil.svg"/>" alt="${edit}" class="icon-xs fill-text">
+                    </button>
 
-                        <div class="my-3">
-                            <spring:message code="notes.review.text.placeholder" var="placeholderText" />
-                            <form:textarea path="content" class="form-control" placeholder='${placeholderText}'/>
-                        </div>
-                        <form:errors path="content" cssClass="text-danger" element="p"/>
+                    <a href="./${note.noteId}/download" download="${note.name}">
+                        <button class="btn button-expansion rounded-circle">
+                            <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
+                        </button>
+                    </a>
 
-                        <div class="d-flex justify-content-between my-3">
-                            <div class="input-group w-75">
-                                <form:select path="score" class="form-select bg-bg" id="scoreSelect">
-                                    <form:option value="5">⭐⭐⭐⭐⭐</form:option>
-                                    <form:option value="4">⭐⭐⭐⭐</form:option>
-                                    <form:option value="3">⭐⭐⭐</form:option>
-                                    <form:option value="2">⭐⭐</form:option>
-                                    <form:option value="1">⭐</form:option>
-                                </form:select>
-                            </div>
-                            <input type="submit" class="btn rounded-box button-primary " value="<spring:message code="notes.send.button"/>"/>
-                        </div>
-                    </form:form>
                 </div>
+            </div>
+            <span>
+                <c:if test="${note.category.formattedName eq 'Theory'}">
+                    <spring:message code="search.category.theory"/>
+                </c:if>
+                <c:if test="${note.category.formattedName eq 'Practice'}">
+                    <spring:message code="search.category.practice"/>
+                </c:if>
+                <c:if test="${note.category.formattedName eq 'Exam'}">
+                    <spring:message code="search.category.exam"/>
+                </c:if>
+                <c:if test="${note.category.formattedName eq 'Other'}">
+                    <spring:message code="search.category.other"/>
+                </c:if>
+            </span>
+            <div class="mt-2 mb-2">
+                <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
+                     style="width: 40px; height: 40px; margin-right: 5px">
+                <span><strong>Owner <!--${note.user}--></strong></span>
+            </div>
+            <span>
+                <c:set var="date" value="${note.createdAt}"/>
+                <spring:message code="date.format" arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+            </span>
+        </section>
 
-                <c:if test="${not empty reviews}">
-                    <div class="reviews-comments">
-                        <c:forEach items="${reviews}" var="review">
-                            <div class="card box review-card mb-3 p-3 justify-content-center" >
-                                <div class="d-flex justify-content-between">
-                                    <h4 class="card-title">
-                                        <c:out value="${review.user.email}"/>
-                                    </h4>
-                                    <span class="card-text">
-                                        <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
+        <section class="col-4">
+            <div class="h-100 d-flex flex-column">
+
+                <div class="container-fluid pb-3">
+                    <input type="submit" class="btn reviews-comments-button mb-3" value="<spring:message code="notes.reviews.button"/>"/>
+
+
+                    <c:if test="${not empty reviews}">
+                        <span><spring:message code="score"/>: <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/> ⭐</span>
+
+                        <div class="reviews-comments">
+                            <c:forEach items="${reviews}" var="review">
+                                <div class="card box review-card mb-3 p-3" >
+
+                                    <div class="d-flex flex-wrap justify-content-between">
+                                        <h4 class="card-title overflow-hidden">
+                                            <c:out value="${review.user.email}"/>
+                                        </h4>
+                                        <span class="card-header-pills">
+                                    <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
+                                        </span>
+                                    </div>
+
+                                    <span class="card-text reviews-comment">
+                                <c:out value="${review.content}"/>
                                     </span>
                                 </div>
-                                <span class="card-text">
-                                    <c:out value="${review.content}"/>
-                                </span>
-                            </div>
-                        </c:forEach>
-                    </div>
-                </c:if>
+                            </c:forEach>
+                        </div>
+                    </c:if>
 
-                <!-- BOTTOM-NAVBAR -->
-                <%--            <h1><c:out value="${note.name}"/></h1>--%>
-                <%--            <h2><spring:message code="notes.currentScore"/><c:out value="${note.avgScore}"/></h2>--%>
+                    <c:if test="${empty reviews}">
+                        <p class="mb-2"><spring:message code="notes.reviews.noReviews"/></p>
+                    </c:if>
+
+                    <div class="card box p-3">
+                        <form:form action="./${note.noteId}/review" method="post" modelAttribute="reviewForm">
+                            <div>
+                                <spring:message code="notes.review.text.placeholder" var="placeholderText" />
+                                <form:textarea path="content" class="form-control" placeholder='${placeholderText}'/>
+                            </div>
+                            <form:errors path="content" cssClass="text-danger" element="p"/>
+
+                            <div class="d-flex justify-content-between mt-3">
+                                <div class="input-group w-75">
+                                    <form:select path="score" class="form-select bg-bg" id="scoreSelect">
+                                        <form:option value="5">⭐⭐⭐⭐⭐</form:option>
+                                        <form:option value="4">⭐⭐⭐⭐</form:option>
+                                        <form:option value="3">⭐⭐⭐</form:option>
+                                        <form:option value="2">⭐⭐</form:option>
+                                        <form:option value="1">⭐</form:option>
+                                    </form:select>
+                                </div>
+                                <input type="submit" class="btn rounded-box button-primary " value="<spring:message code="notes.send.button"/>"/>
+                            </div>
+                        </form:form>
+                    </div>
+                </div>
+            </div>
+
 
         </section>
     </div>
 </div>
+
+
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -127,6 +160,7 @@
         crossorigin="anonymous"></script>
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>
+<script src="<c:url value="/js/buttons.js"/>"></script>
 
 </body>
 </html>

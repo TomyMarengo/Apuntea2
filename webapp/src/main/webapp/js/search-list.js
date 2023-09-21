@@ -79,43 +79,5 @@ function toggleView() {
 // Asociar la función de cambio de vista al botón
 toggleViewBtn.addEventListener('click', toggleView);
 
-/**************************/
-/* COPY DOWNLOAD BUTTONS */
-/*************************/
-
-const downloadButtons = document.querySelectorAll('.download-button');
-const copyButtons = document.querySelectorAll('.copy-button');
-
-// Función para descargar una nota
-function downloadNote(noteId) {
-  window.location.href = `${baseUrl}/notes/${noteId}/download`;
-}
-
-// Función para copiar texto al portapapeles
-function copyToClipboard(text) {
-  const el = document.createElement('textarea');
-  el.value = text;
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand('copy');
-  document.body.removeChild(el);
-}
-
-// Agregar eventos de clic a los botones de descarga
-downloadButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const noteId = button.getAttribute('id');
-    downloadNote(noteId.slice(0, -2));
-  });
-});
-
-// Agregar eventos de clic a los botones de copia
-copyButtons.forEach(button => {
-  button.addEventListener('click', () => {
-    const noteId = button.getAttribute('id');
-    copyToClipboard(`${baseUrl}/notes/${noteId.slice(0, -2)}`);
-  });
-});
-
 
 

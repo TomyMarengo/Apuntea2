@@ -215,9 +215,11 @@
                                         arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
                     <td><fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/></td>
                     <td class="search-actions">
-                        <button class="btn button-expansion rounded-circle download-button" id="<c:out value="${note.noteId}"/>d1">
-                            <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
-                        </button>
+                        <a href="./notes/${note.noteId}/download" download="${note.name}">
+                            <button class="btn button-expansion rounded-circle">
+                                <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
+                            </button>
+                        </a>
                         <button class="btn button-expansion rounded-circle copy-button" id="<c:out value="${note.noteId}"/>c1">
                             <img src="<c:url value="/svg/copy.svg"/>" alt="${copy}" class="icon-xs fill-text">
                         </button>
@@ -289,6 +291,7 @@
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
 <script src="<c:url value="/js/search-list.js"/>"></script>
+<script src="<c:url value="/js/buttons.js"/>"></script>
 
 </body>
 
