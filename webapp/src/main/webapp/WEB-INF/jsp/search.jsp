@@ -185,104 +185,141 @@
 <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
 <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
 
-<div class="d-flex container mt-4 justify-content-between">
-    <button id="searchViewToggle" class="btn nav-icon-button" type="button">
-        <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
-    </button>
-</div>
+<c:if test="${not empty notes}">
+    <div class="d-flex container mt-4 justify-content-between p-0">
+        <button id="searchViewToggle" class="btn nav-icon-button" type="button">
+            <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
+        </button>
+        <div class="d-flex">
+            <div id="selectedButtons" style="display: none;">
+                <button id="downloadSelectedButton" class="btn nav-icon-button" type="button">
+                    <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary" />
+                </button>
+                <button id="copySelectedButton" class="btn nav-icon-button" type="button">
+                    <img src="<c:url value="/svg/link.svg"/>" alt="copy" class="icon-s fill-dark-primary" />
+                </button>
+            </div>
+            <button id="selectAllButton" class="btn nav-icon-button" type="button">
+                <img src="<c:url value="/svg/checkbox.svg"/>" alt="select all" class="icon-s fill-dark-primary" />
+            </button>
+        </div>
 
-<!-- HORIZONTAL LIST -->
-<section class="container mt-4" id="horizontalList">
-    <div class="table-responsive">
-        <table class="table table-hover table-search">
-            <thead>
-            <tr>
-                <th><spring:message code="name"/></th>
-<%--                <th><spring:message code="owner"/></th>--%>
-                <th><spring:message code="createdAt"/></th>
-                <th><spring:message code="score"/></th>
-                <th></th>
-                <!-- TODO: ADD SIZE OF FILE -->
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="note" items="${notes}">
-                <c:set var="date" value="${note.createdAt}"/>
-                <tr class="note-found" id="<c:out value="${note.noteId}"/>1">
-                    <td><c:out value="${note.name}"/></td>
-<%--                    <td>owner</td>--%>
-                    <td><spring:message code="date.format"
-                                        arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
-                    <td><fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/></td>
-                    <td class="search-actions">
-                        <a href="./notes/${note.noteId}/download" download="${note.name}">
-                            <button class="btn button-expansion rounded-circle">
-                                <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
-                            </button>
-                        </a>
-                        <button class="btn button-expansion rounded-circle copy-button" id="<c:out value="${note.noteId}"/>c1">
-                            <img src="<c:url value="/svg/copy.svg"/>" alt="${copy}" class="icon-xs fill-text">
-                        </button>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
     </div>
-</section>
 
-<!-- BOX LIST -->
-<section class="container mt-4" id="boxList">
-    <div class="row">
-        <c:forEach items="${notes}" var="note">
-            <div class="col-md-4 mb-4">
-                <div class="note-found card box search-note-box" id="<c:out value="${note.noteId}"/>2">
-                    <div class="card-body">
-                        <h4 class="card-title">
-                                <c:out value="${note.name}"/>
-                        </h4>
-
-<%--                        <span class="card-text">--%>
-<%--                            <strong><spring:message code="owner"/></strong>:--%>
-<%--                            owner--%>
-<%--                        </span>--%>
-<%--                        <br>--%>
-
-                        <span class="card-text"><strong><spring:message code="category"/></strong>:
-                            <c:if test="${note.category.formattedName eq 'Theory'}">
-                                <spring:message code="search.category.theory"/>
+    <!-- HORIZONTAL LIST -->
+    <section class="container mt-4 p-0" id="horizontalList">
+        <div class="table-responsive">
+            <table class="table table-hover table-search">
+                <thead>
+                <tr>
+                    <th><spring:message code="name"/></th>
+    <%--                <th><spring:message code="owner"/></th>--%>
+                    <th><spring:message code="createdAt"/></th>
+                    <th><spring:message code="score"/></th>
+                    <th></th>
+                    <!-- TODO: ADD SIZE OF FILE -->
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="note" items="${notes}">
+                    <c:set var="date" value="${note.createdAt}"/>
+                    <tr class="note-found no-select" id="<c:out value="${note.noteId}"/>1">
+                        <td>
+                            <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
+                            <c:out value="${note.name}"/>
+                        </td>
+    <%--                    <td>owner</td>--%>
+                        <td><spring:message code="date.format"
+                                            arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
+                        <td>
+                            <c:if test="${note.avgScore eq 0}">
+                                <spring:message code="score.none"/>
                             </c:if>
-                            <c:if test="${note.category.formattedName eq 'Practice'}">
-                                <spring:message code="search.category.practice"/>
+                            <c:if test="${note.avgScore ne 0}">
+                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
                             </c:if>
-                            <c:if test="${note.category.formattedName eq 'Exam'}">
-                                <spring:message code="search.category.exam"/>
-                            </c:if>
-                            <c:if test="${note.category.formattedName eq 'Other'}">
-                                <spring:message code="search.category.other"/>
-                            </c:if>
-                        </span>
+                        </td>
 
-                        <br>
+                        <td class="search-actions">
+                            <a href="./notes/${note.noteId}/download" download="${note.name}">
+                                <button class="btn button-expansion rounded-circle">
+                                    <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
+                                </button>
+                            </a>
+                            <button class="btn button-expansion rounded-circle copy-button" id="<c:out value="${note.noteId}"/>c1">
+                                <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
+                            </button>
+                            <input type="checkbox" class="select-checkbox d-none"/>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-                        <span class="card-text">
-                            <strong><spring:message code="createdAt"/></strong>:
-                            <spring:message code="date.format" arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
-                        </span>
+    <!-- BOX LIST -->
+    <section class="container mt-4 p-0" id="boxList">
+        <div class="row">
+            <c:forEach items="${notes}" var="note">
+                <div class="col-md-4 mb-4">
+                    <div class="note-found card box search-note-box" id="<c:out value="${note.noteId}"/>2">
+                        <div class="card-body no-select">
+                            <h4 class="card-title">
+                                    <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
+                                    <c:out value="${note.name}"/>
+                            </h4>
 
-                        <br>
+    <%--                        <span class="card-text">--%>
+    <%--                            <strong><spring:message code="owner"/></strong>:--%>
+    <%--                            owner--%>
+    <%--                        </span>--%>
+    <%--                        <br>--%>
 
-                        <span class="card-text">
-                            <strong><spring:message code="score"/></strong>:
-                            <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
-                        </span>
+                            <span class="card-text"><strong><spring:message code="category"/></strong>:
+                                <c:if test="${note.category.formattedName eq 'Theory'}">
+                                    <spring:message code="search.category.theory"/>
+                                </c:if>
+                                <c:if test="${note.category.formattedName eq 'Practice'}">
+                                    <spring:message code="search.category.practice"/>
+                                </c:if>
+                                <c:if test="${note.category.formattedName eq 'Exam'}">
+                                    <spring:message code="search.category.exam"/>
+                                </c:if>
+                                <c:if test="${note.category.formattedName eq 'Other'}">
+                                    <spring:message code="search.category.other"/>
+                                </c:if>
+                            </span>
 
+                            <br>
+
+                            <span class="card-text">
+                                <strong><spring:message code="createdAt"/></strong>:
+                                <spring:message code="date.format" arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                            </span>
+
+                            <br>
+
+                            <span class="card-text">
+                                <strong><spring:message code="score"/></strong>:
+                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
+                            </span>
+
+                            <input type="checkbox" class="select-checkbox d-none"/>
+
+                        </div>
                     </div>
                 </div>
-            </div>
-        </c:forEach>
-    </div>
-</section>
+            </c:forEach>
+        </div>
+    </section>
+</c:if>
+
+<c:if test="${empty notes}">
+    <section class="container mt-4">
+        <p><spring:message code="notes.noNotes"/></p>
+    </section>
+</c:if>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -290,7 +327,7 @@
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
-<script src="<c:url value="/js/search-list.js"/>"></script>
+<script src="<c:url value="/js/note-list.js"/>"></script>
 <script src="<c:url value="/js/buttons.js"/>"></script>
 
 </body>

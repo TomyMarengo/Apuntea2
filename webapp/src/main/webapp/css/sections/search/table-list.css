@@ -20,7 +20,6 @@
 
 .note-found:hover {
   background-color: rgba(var(--secondary-rgb), 0.5);
-  cursor: pointer;
 }
 
 .note-found:hover .search-actions button {
@@ -61,7 +60,6 @@
 }
 
 .search-note-box:hover {
-    cursor: pointer;
     border-color : var(--primary);
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgba(var(--secondary-rgb), 0.6);

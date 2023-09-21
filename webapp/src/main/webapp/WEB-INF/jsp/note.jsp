@@ -62,20 +62,6 @@
 
                 </div>
             </div>
-            <span>
-                <c:if test="${note.category.formattedName eq 'Theory'}">
-                    <spring:message code="search.category.theory"/>
-                </c:if>
-                <c:if test="${note.category.formattedName eq 'Practice'}">
-                    <spring:message code="search.category.practice"/>
-                </c:if>
-                <c:if test="${note.category.formattedName eq 'Exam'}">
-                    <spring:message code="search.category.exam"/>
-                </c:if>
-                <c:if test="${note.category.formattedName eq 'Other'}">
-                    <spring:message code="search.category.other"/>
-                </c:if>
-            </span>
             <div class="mt-2 mb-2">
                 <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
                      style="width: 40px; height: 40px; margin-right: 5px">
