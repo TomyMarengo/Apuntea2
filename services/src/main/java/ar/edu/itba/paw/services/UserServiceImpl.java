@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
         return userDao.findByEmail(email);
     }
 
-    @Transactional
+//    @Transactional
     @Override
     public void create(String email, String password) {
         userDao.create(email, passwordEncoder.encode(password));

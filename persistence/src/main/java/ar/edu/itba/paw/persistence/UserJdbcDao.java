@@ -36,7 +36,8 @@ class UserJdbcDao implements UserDao{
                 .usingGeneratedKeyColumns(USER_ID);
     }
 
-    @Transactional
+    // TODO: Make transactional in 3rd sprint
+//    @Transactional
     @Override
     public void create(final String email, final String password) {
         final Map<String, Object> args = new HashMap<>();
