@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User create(String email, String password) {
-        return userDao.create(email, passwordEncoder.encode(password));
+    public void create(String email, String password) {
+        userDao.create(email, passwordEncoder.encode(password));
     }
 }

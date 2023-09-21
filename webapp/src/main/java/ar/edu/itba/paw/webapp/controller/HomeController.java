@@ -69,8 +69,8 @@ public class HomeController {
             return registerForm(userForm);
         }
 
-        final User user = userService.create(userForm.getEmail(), userForm.getPassword());
+        userService.create(userForm.getEmail(), userForm.getPassword());
 
-        return new ModelAndView("redirect:/" + user.getUserId());
+        return new ModelAndView("redirect:/login" );
     }
 }
