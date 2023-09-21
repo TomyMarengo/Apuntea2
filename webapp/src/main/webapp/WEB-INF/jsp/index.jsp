@@ -130,17 +130,6 @@
                                         <form:errors path="name" cssClass="text-danger" element="p"/>
                                     </div>
 
-                                    <div class="d-flex flex-column gap-2">
-                                        <div class="input-group">
-                                            <label class="input-group-text" for="email"><spring:message
-                                                    code="form.upload.email"/></label>
-                                            <form:input path="email" type="text"
-                                                        aria-label="<spring:message code=\"form.upload.email\"/>"
-                                                        class="form-control" id="email"/>
-                                        </div>
-                                        <form:errors path="email" cssClass="text-danger" element="p"/>
-                                    </div>
-
 <%--                                    <div class="d-flex flex-column gap-2">--%>
 <%--                                        <select id="institutionSelect" style="display: none;">--%>
 <%--                                            <option disabled selected value></option>--%>

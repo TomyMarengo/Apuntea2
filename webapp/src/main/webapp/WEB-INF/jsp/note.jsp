@@ -46,7 +46,6 @@
     <div class="row">
         <section class="col-8 h-100-navs">
             <iframe class=" w-100" style="height: 90%" src="${baseUrl}/notes/${noteId}/download"></iframe>
-
             <div class="d-flex justify-content-between">
                 <h1 class="mb-0 !imp">${note.name}</h1>
                 <div>
@@ -59,7 +58,6 @@
                             <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
                         </button>
                     </a>
-
                 </div>
             </div>
             <div class="mt-2 mb-2">

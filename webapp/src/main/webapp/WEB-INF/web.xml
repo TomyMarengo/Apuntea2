@@ -48,6 +48,12 @@ http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <location>/WEB-INF/jsp/errors/403.jsp</location>
   </error-page>
 
+  <!-- TODO: Uncomment in production -->
+<!--    <error-page>-->
+<!--        <error-code>500</error-code>-->
+<!--        <location>/WEB-INF/jsp/errors/500.jsp</location>-->
+<!--    </error-page>-->
+
   <!--
       Tenemos dos formas de mapear los archivos css. Una es la que está habilitada, que es agregando resource handlers
       en WebConfig.addResourceHandlers(), y la otra es con un servlet mapping como se muestra en este comentario:

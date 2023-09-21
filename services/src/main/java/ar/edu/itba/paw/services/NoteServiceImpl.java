@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistence.NoteDao;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,13 @@ import java.util.UUID;
 @Service
 public class NoteServiceImpl implements NoteService {
     private final NoteDao noteDao;
-    private final UserDao userDao;
+    private final SecurityService securityService;
     private final EmailService emailService;
 
     @Autowired
-    public NoteServiceImpl(final NoteDao noteDao, final UserDao userDao, final EmailService emailService) {
+    public NoteServiceImpl(final NoteDao noteDao, final SecurityService securityService, final EmailService emailService) {
         this.noteDao = noteDao;
-        this.userDao = userDao;
+        this.securityService = securityService;
         this.emailService = emailService;
     }
 
@@ -34,23 +35,15 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public UUID createNote(MultipartFile file, String name, String email, UUID subjectId, String category) {
-        UUID userId = userDao.createIfNotExists(email).getUserId();
-        try {
-            return noteDao.create(file.getBytes(), name, userId, subjectId, category);
-        } catch (IOException e) {
-            return null;
-        }
+    public UUID createNote(MultipartFile file, String name, UUID subjectId, String category) throws IOException {
+        UUID userId = securityService.getCurrentUserOrThrow().getUserId();
+        return noteDao.create(file.getBytes(), name, userId, subjectId, category);
     }
 
     @Override
-    public UUID createNote(MultipartFile file, String name, String email, UUID subjectId, String category, UUID parentId) {
-        UUID userId = userDao.createIfNotExists(email).getUserId();
-        try {
-            return noteDao.create(file.getBytes(), name, userId, subjectId, category);
-        } catch (IOException e) {
-            return null;
-        }
+    public UUID createNote(MultipartFile file, String name, UUID subjectId, String category, UUID parentId) throws IOException {
+        UUID userId = securityService.getCurrentUserOrThrow().getUserId();
+        return noteDao.create(file.getBytes(), name, userId, subjectId, category, parentId);
     }
 
     @Override
@@ -64,15 +57,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Integer createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
+    public Integer createOrUpdateReview(UUID noteId, Integer score, String content) {
+        UUID userId = securityService.getCurrentUserOrThrow().getUserId();
         Review review = noteDao.createOrUpdateReview(noteId, userId, score, content);
         emailService.sendReviewEmail(review);
         return review.getScore();
-    }
-    @Override
-    public Integer createOrUpdateReview(UUID noteId, String email, Integer score, String content) {
-        UUID userId = userDao.createIfNotExists(email).getUserId();
-        return createOrUpdateReview(noteId, userId, score, content);
     }
 
     @Override

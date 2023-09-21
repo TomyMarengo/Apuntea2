@@ -44,7 +44,8 @@ public class DirectoryController {
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ModelAndView createDirectory(@ModelAttribute("createDirectoryForm") final CreateDirectoryForm createDirectoryForm,
                                         final BindingResult result) {
-        directoryService.create(createDirectoryForm.getName(), createDirectoryForm.getParentId(), createDirectoryForm.getEmail());
+        // TODO: Handle error of same name directories
+        directoryService.create(createDirectoryForm.getName(), createDirectoryForm.getParentId());
         return new ModelAndView("redirect:/");
     }
 

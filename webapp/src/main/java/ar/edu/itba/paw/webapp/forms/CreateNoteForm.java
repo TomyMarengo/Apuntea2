@@ -16,22 +16,17 @@ public class CreateNoteForm {
     @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String name;
     @ValidFileName(allowedExtensions = {".pdf"}) // TODO: Add more extensions
-    @MaxFileSize(megabytes = 10) // 10 MB
+    @MaxFileSize(megabytes = 500)
     private MultipartFile file;
     @ValidUuid
     private UUID subjectId;
     @NotEmpty
     @Pattern(regexp = "theory|practice|exam|other")
     private String category;
-    @NotEmpty
-    @Email
-    private String email;
 
     //TODO: Add again next sprint
 //    @ValidUuid
     private UUID parentId;
-
-    // All getters
 
     public UUID getSubjectId() {
         return subjectId;
@@ -49,10 +44,6 @@ public class CreateNoteForm {
         return category;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public UUID getParentId() {
         return parentId;
     }
@@ -68,10 +59,6 @@ public class CreateNoteForm {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setSubjectId(UUID subjectId) {

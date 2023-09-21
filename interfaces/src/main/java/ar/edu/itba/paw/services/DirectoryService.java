@@ -8,9 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface DirectoryService {
-    Optional<Directory> create(String name, UUID parentId, UUID userId);
-
-    Optional<Directory> create(String name, UUID parentId, String email);
+    Directory create(String name, UUID parentId);
 
     List<Directory> search(UUID institutionId, UUID careerId, UUID subjectId, String word, String sortBy, boolean ascending, Integer page, Integer pageSize);
 

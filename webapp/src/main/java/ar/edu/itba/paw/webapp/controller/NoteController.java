@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.UUID;
 
 
@@ -69,7 +70,7 @@ public class NoteController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute(CREATE_REVIEW_FORM_BINDING, result);
         } else {
-            noteService.createOrUpdateReview(UUID.fromString(noteId), reviewForm.getEmail(), reviewForm.getScore(), reviewForm.getContent());
+            noteService.createOrUpdateReview(UUID.fromString(noteId), reviewForm.getScore(), reviewForm.getContent());
         }
         return mav;
     }
@@ -91,11 +92,16 @@ public class NoteController {
     {
         if(result.hasErrors()) {
             redirectAttributes.addFlashAttribute(CREATE_NOTE_FORM_BINDING, result);
-            return new ModelAndView("redirect:/");
+            return new ModelAndView("redirect:/"); // TODO: Handle errors
+        }
+        try {
+            UUID noteId = noteService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getSubjectId(), createNoteForm.getCategory());
+            return new ModelAndView("redirect:/notes/" + noteId);
+        }
+        catch (IOException e){
+            return new ModelAndView("redirect:/"); // TODO: Handle errors
         }
 
-        UUID noteId = noteService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getEmail(), createNoteForm.getSubjectId(), createNoteForm.getCategory());
-        return new ModelAndView("redirect:/notes/" + noteId);
     }
 
     @RequestMapping(value = "/create/{directoryId}", method = RequestMethod.POST)
@@ -108,18 +114,21 @@ public class NoteController {
         UUID parentId = UUID.fromString(directoryId);
 
         if(result.hasErrors()) {
-            return new ModelAndView("redirect:/");
+            return new ModelAndView("redirect:/"); // TODO: Handle errors
         }
 
-        UUID noteId = noteService.createNote(
-                createNoteForm.getFile(),
-                createNoteForm.getName(),
-                createNoteForm.getEmail(),
-                createNoteForm.getSubjectId(),
-                createNoteForm.getCategory(),
-                parentId
-        );
-        return new ModelAndView("redirect:/notes/" + noteId);
+        try {
+             UUID noteId = noteService.createNote(
+                    createNoteForm.getFile(),
+                    createNoteForm.getName(),
+                    createNoteForm.getSubjectId(),
+                    createNoteForm.getCategory(),
+                    parentId
+            );
+            return new ModelAndView("redirect:/notes/" + noteId);
+        } catch (IOException e){
+            return new ModelAndView("redirect:/"); // TODO: Handle errors
+        }
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)

@@ -16,10 +16,6 @@ public class CreateDirectoryForm {
     @ValidUuid
     private UUID parentId;
 
-    @NotEmpty
-    @Email
-    private String email;
-
     public String getName() {
         return name;
     }
@@ -28,20 +24,12 @@ public class CreateDirectoryForm {
         return parentId;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
     public void setParentId(UUID parentId) {
         this.parentId = parentId;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
 }

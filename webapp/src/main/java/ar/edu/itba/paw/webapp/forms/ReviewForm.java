@@ -14,26 +14,11 @@ import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 public class ReviewForm {
-//    @ValidUuid
-    private UUID userId;
-
-    @NotEmpty
-    @Email
-    private String email; // TODO: Remove this field and move not null to uid
-
     @Range(min = 1, max = 5)
     private Integer score;
 
     @Length(max = 255)
     private String content;
-
-    public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
 
     public Integer getScore() {
         return score;
@@ -41,14 +26,6 @@ public class ReviewForm {
 
     public void setScore(Integer score) {
         this.score = score;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email.trim();
     }
 
     public String getContent() {

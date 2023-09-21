@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Directory;
 import ar.edu.itba.paw.models.DirectoryPath;
 import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +19,17 @@ import static ar.edu.itba.paw.models.SearchArguments.SortBy.*;
 @Service
 public class DirectoryServiceImpl implements DirectoryService{
     private final DirectoryDao directoryDao;
-    private final UserDao userDao;
-
+    private final SecurityService securityService;
     @Autowired
-    public DirectoryServiceImpl(DirectoryDao directoryDao, UserDao userDao) {
+    public DirectoryServiceImpl(DirectoryDao directoryDao, SecurityService securityService) {
         this.directoryDao = directoryDao;
-        this.userDao = userDao;
+        this.securityService = securityService;
     }
 
     @Override
-    public Optional<Directory> create(String name, UUID parentId, UUID userId) {
-        return Optional.ofNullable(directoryDao.create(name, parentId, userId));
-    }
-
-    @Override
-    public Optional<Directory> create(String name, UUID parentId, String email) {
-        UUID userId = userDao.createIfNotExists(email).getUserId();
-        return Optional.ofNullable(directoryDao.create(name, parentId, userId));
+    public Directory create(String name, UUID parentId) {
+        UUID userId = securityService.getCurrentUserOrThrow().getUserId();
+        return directoryDao.create(name, parentId, userId);
     }
 
     @Override

@@ -7,6 +7,5 @@ import java.util.UUID;
 
 public interface UserDao {
     User create(String email, String password);
-    User createIfNotExists(String email);
     Optional<User> findByEmail(String email);
 }
