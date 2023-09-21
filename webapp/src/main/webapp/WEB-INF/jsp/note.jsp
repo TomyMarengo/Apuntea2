@@ -49,12 +49,11 @@
             <div class="d-flex justify-content-between">
                 <h1 class="mb-0 !imp">${note.name}</h1>
                 <div>
-                    <button class="btn button-expansion rounded-circle edit-button" id="<c:out value="${note.noteId}"/>e1">
+                    <button class="btn button-expansion rounded-circle edit-button" id="<c:out value="${note.noteId}"/>e1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                         <img src="<c:url value="/svg/pencil.svg"/>" alt="${edit}" class="icon-xs fill-text">
                     </button>
-
                     <a href="./${note.noteId}/download" download="${note.name}">
-                        <button class="btn button-expansion rounded-circle">
+                        <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
                             <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
                         </button>
                     </a>
@@ -136,15 +135,14 @@
     </div>
 </div>
 
-
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+</script>
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/buttons.js"/>"></script>
+<script src="<c:url value="/js/tooltips.js"/>"></script>
 
 </body>
 </html>

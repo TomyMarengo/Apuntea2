@@ -187,7 +187,12 @@ if (storedViewState === 'box') {
   searchViewIcon.src = `${baseUrl}/svg/box-list.svg`;
 }
 
+
+const dataTitleBox = toggleViewBtn.getAttribute('data-title-box');
+const dataTitleList = toggleViewBtn.getAttribute('data-title-list');
+
 // Función para cambiar la vista
+changeTooltipText()
 function toggleView() {
   // Verificar si la vista actual es horizontal
   if (localStorage.getItem('viewState') === 'box') {
@@ -204,6 +209,23 @@ function toggleView() {
     searchViewIcon.src = `${baseUrl}/svg/horizontal-list.svg`;
     // Actualizar el valor almacenado en el localStorage
     localStorage.setItem('viewState', 'box');
+  }
+    changeTooltipText();
+}
+
+function changeTooltipText() {
+  let ttInner = document.getElementsByClassName("tooltip-inner")[0];
+  if(localStorage.getItem('viewState') === 'box'){
+    toggleViewBtn.setAttribute('data-bs-title', dataTitleList);
+    if(ttInner) {
+      ttInner.innerHTML = dataTitleList;
+    }
+  }
+  else{
+    toggleViewBtn.setAttribute('data-bs-title', dataTitleBox);
+    if(ttInner) {
+      ttInner.innerHTML = dataTitleBox;
+    }
   }
 }
 

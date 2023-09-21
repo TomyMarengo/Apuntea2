@@ -187,26 +187,26 @@
 
 <c:if test="${not empty notes}">
     <div class="d-flex container mt-4 justify-content-between p-0">
-        <button id="searchViewToggle" class="btn nav-icon-button" type="button">
+        <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>" data-title-list="<spring:message code="search.button.listView"/>" data-title-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
             <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
         </button>
         <div class="d-flex">
             <div id="selectedButtons" class="align-items-center" style="display: none;">
-                <button id="deselectAllButton" class="btn nav-icon-button" type="button">
+                <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.deselectAll"/>" data-bs-trigger="hover">
                     <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary" />
                 </button>
                 <span class="text-dark-primary mx-2">
                     <strong id="selectedCount" class="text-dark-primary"> 0 </strong>
                     <spring:message code="search.selected"/>
                 </span>
-                <button id="downloadSelectedButton" class="btn nav-icon-button" type="button">
+                <button id="downloadSelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
                     <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary" />
                 </button>
-                <button id="copySelectedButton" class="btn nav-icon-button" type="button">
+                <button id="copySelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>" data-bs-trigger="hover">
                     <img src="<c:url value="/svg/link.svg"/>" alt="copy" class="icon-s fill-dark-primary" />
                 </button>
             </div>
-            <button id="selectAllButton" class="btn nav-icon-button" type="button">
+            <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>" data-bs-trigger="hover">
                 <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary" />
             </button>
         </div>
@@ -249,11 +249,11 @@
 
                         <td class="search-actions">
                             <a href="./notes/${note.noteId}/download" download="${note.name}">
-                                <button class="btn button-expansion rounded-circle">
+                                <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
                                     <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
                                 </button>
                             </a>
-                            <button class="btn button-expansion rounded-circle copy-button" id="<c:out value="${note.noteId}"/>c1">
+                            <button class="btn button-expansion rounded-circle copy-button" id="<c:out value="${note.noteId}"/>c1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>" data-bs-trigger="hover">
                                 <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
                             </button>
                             <input type="checkbox" class="select-checkbox d-none"/>
@@ -341,6 +341,7 @@
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
 <script src="<c:url value="/js/note-list.js"/>"></script>
 <script src="<c:url value="/js/buttons.js"/>"></script>
+<script src="<c:url value="/js/tooltips.js"/>"></script>
 
 </body>
 
