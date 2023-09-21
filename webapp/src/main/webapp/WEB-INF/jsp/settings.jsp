@@ -17,10 +17,13 @@
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>" />
-    <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>" />
-    <link rel="stylesheet" href=<c:url value="/css/general/buttons.css"/> />
-    <link rel="stylesheet" href=<c:url value="/css/general/icons.css"/> />
-    <link rel="stylesheet" href=<c:url value="/css/general/boxes.css"/> />
+    <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href=<c:url value="/css/sections/navbar.css"/> />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />

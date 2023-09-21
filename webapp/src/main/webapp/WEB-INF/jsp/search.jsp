@@ -308,8 +308,13 @@
                             <br>
 
                             <span class="card-text">
-                                <strong><spring:message code="score"/></strong>:
-                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
+                                <c:if test="${note.avgScore eq 0}">
+                                    <strong><spring:message code="score.none"/></strong>
+                                </c:if>
+                                <c:if test="${note.avgScore ne 0}">
+                                    <strong><spring:message code="score"/></strong>:
+                                    <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
+                                </c:if>
                             </span>
 
                             <input type="checkbox" class="select-checkbox d-none"/>

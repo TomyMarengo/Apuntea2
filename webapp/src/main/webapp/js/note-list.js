@@ -141,7 +141,7 @@ function selectAll() {
 }
 
 function deselectAll() {
-    for (let i = 0; i < rows.length; i++) {
+    for (let i = 0; i < rows.length / 2; i++) {
       const checkbox = rows[i].querySelector('.select-checkbox');
       checkbox.checked = false;
       rows[i].classList.remove('active-note-found');
