@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Review;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -29,6 +31,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private MessageSource messageSource;
 
+
+    private	static	final Logger LOGGER	=	LoggerFactory.getLogger(EmailServiceImpl.class);
+
     @Async
     @Override
     public void sendReviewEmail(Review review) {
@@ -38,11 +43,11 @@ public class EmailServiceImpl implements EmailService {
         final Map<String, Object> data = new HashMap<>();
         data.put("score", review.getScore());
         try {
+            LOGGER.info("Sending review email to {}", review.getNote().getUser().getEmail());
             sendMessageUsingThymeleafTemplate(to,subject,"new-review.html", data, locale);
-//            LOGGER.info("Verification email sent to {}", user.getEmail());
+            LOGGER.info("Review email sent to {}", review.getNote().getUser().getEmail());
         } catch (MessagingException e) {
-            System.err.println(e.getMessage()); // TODO: Fix with logger
-//            LOGGER.warn("Verification email could not be sent to {}",user.getEmail());
+            LOGGER.warn("Review email could not be sent to {}",review.getNote().getUser().getEmail());
         }
     }
 

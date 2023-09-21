@@ -41,9 +41,6 @@ public class SearchController {
                     searchNotesForm.getPage(),
                     searchNotesForm.getPageSize()
         );
-
-        System.out.println(notes);
-        
         mav.addObject("notes", notes);
         mav.addObject("institutions", dataService.getInstitutions());
         mav.addObject("careers", dataService.getCareers());

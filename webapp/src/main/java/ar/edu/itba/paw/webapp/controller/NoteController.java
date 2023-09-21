@@ -5,9 +5,7 @@ import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.webapp.forms.CreateNoteForm;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
-import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -47,23 +45,10 @@ public class NoteController {
         mav.addObject("reviews", noteService.getReviews(UUID.fromString(noteId)));
         return mav;
     }
-    /*
+
+    
     @RequestMapping(value = "/{noteId}/review", method = {RequestMethod.POST})
     public ModelAndView reviewNote(@PathVariable("noteId") String noteId,
-                                   @Valid @ModelAttribute final ReviewForm reviewForm,
-                                   final BindingResult result) {
-        if (result.hasErrors()) {
-            // TODO: Handle errors
-            System.out.println(result.getAllErrors());
-        } else {
-            noteService.createOrUpdateReview(UUID.fromString(noteId), reviewForm.getUserId(), reviewForm.getScore());
-        }
-        return new ModelAndView("redirect:/notes/"+noteId);
-    }*/
-
-    //TODO: remove when users are implemented
-    @RequestMapping(value = "/{noteId}/review", method = {RequestMethod.POST})
-    public ModelAndView reviewNoteMail(@PathVariable("noteId") String noteId,
                                    @Valid @ModelAttribute final ReviewForm reviewForm,
                                    final BindingResult result, final RedirectAttributes redirectAttributes) {
         final ModelAndView mav = new ModelAndView("redirect:/notes/"+noteId);
