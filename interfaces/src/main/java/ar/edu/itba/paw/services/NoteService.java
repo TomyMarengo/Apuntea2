@@ -10,8 +10,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface NoteService {
-    List<Note> searchNotes(UUID institutionId, UUID careerId, UUID subjectId, String category, String word, String sortBy, boolean ascending, Integer page, Integer pageSize);
-
     UUID createNote(MultipartFile file, String name, UUID subjectId, String category) throws IOException;
 
     UUID createNote(MultipartFile file, String name, UUID subjectId, String category, UUID parentId) throws IOException;
@@ -20,6 +18,5 @@ public interface NoteService {
     byte[] getNoteFileById(UUID noteId);
     Integer createOrUpdateReview(UUID noteId, Integer score, String content);
     void delete(UUID noteId);
-    List<Note> getNotesByParentDirectory(UUID directoryId);
     List<Review> getReviews(UUID noteId);
 }

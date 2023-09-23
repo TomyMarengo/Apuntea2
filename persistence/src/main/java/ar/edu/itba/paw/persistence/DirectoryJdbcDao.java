@@ -62,7 +62,7 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
     @Transactional
     @Override
-    public Directory create(String name, UUID parentId, UUID userId) {
+    public UUID create(String name, UUID parentId, UUID userId) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(DIRECTORY_NAME, name);
         args.addValue(PARENT_ID, parentId);
@@ -71,52 +71,13 @@ public class DirectoryJdbcDao implements DirectoryDao {
         KeyHolder holder = new GeneratedKeyHolder();
         namedParameterJdbcTemplate.update("INSERT INTO Directories (directory_name, user_id, parent_id) VALUES (:directory_name, :user_id, :parent_id)",
                 args, holder, new String[]{DIRECTORY_ID});
-        UUID directoryId = (UUID) holder.getKeys().get(DIRECTORY_ID);
-        return new Directory(directoryId, name, parentId, userId);
-    }
-
-    @Override
-    public List<Directory> search(SearchArguments sa) {
-        // TODO: add created_at column to directory
-        StringBuilder query = new StringBuilder(
-                "SELECT DISTINCT d.directory_name, d.directory_id, d.parent_id FROM Directories d " +
-                        "INNER JOIN Subjects s ON d.directory_id = s.root_directory_id " +
-                        "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id " +
-                        "INNER JOIN Careers c ON sc.career_id = c.career_id " +
-                        "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
-                        "WHERE true " // TODO: Ask if this is legal
-        );
-
-        // TODO: Modularize?
-        List<Object> args = new ArrayList<>();
-        addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
-        addIfPresent(query, args, "c." + CAREER_ID, "=","AND", sa.getCareerId());
-        addIfPresent(query, args, "s." + SUBJECT_ID, "=","AND", sa.getSubjectId());
-
-        sa.getWord().ifPresent(w -> {
-                    String searchWord = "%" + w + "%";
-                    query.append("AND LOWER(d.directory_name) LIKE LOWER(?) OR LOWER(i.institution_name) LIKE LOWER(?) OR LOWER(c.career_name) LIKE LOWER(?) OR LOWER(s.subject_name) LIKE LOWER(?)");
-                    for (int i = 0; i < 4; i++)
-                        args.add(searchWord);
-                }
-        );
-
-        query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), DIRECTORY_NAME));
-        if (!sa.isAscending()) query.append(" DESC");
-        query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
-        return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);
+        return (UUID) holder.getKeys().get(DIRECTORY_ID);
     }
 
     @Override
     public Directory getDirectoryById(UUID directoryId) {
         return jdbcTemplate.queryForObject("SELECT * FROM Directories WHERE directory_id = ?", ROW_MAPPER, directoryId);
     }
-
-    @Override
-    public List<Directory> getChildren(UUID directoryId) {
-        return jdbcTemplate.query("SELECT * FROM Directories WHERE parent_id = ?", ROW_MAPPER, directoryId);
-    }
-
 
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {

@@ -40,71 +40,6 @@ public class NoteJdbcDaoTest {
         jdbcTemplate = new JdbcTemplate(ds);
     }
 
-    @Test
-    public void testSearchByInstitution() {
-        SearchArguments sa = new SearchArguments(ITBA_ID, null, null, null, null, "score", true, 1, 10);
-        List<Note> notes = noteDao.search(sa);
-        assertEquals(6, notes.size());
-    }
-
-    @Test
-    public void testSearchByCareer(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, null, null, null, "score", true, 1, 10);
-        List<Note> notes = noteDao.search(sa);
-        assertEquals(4, notes.size());
-    }
-
-    @Test
-    public void testBySubject(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, null, null, "score", true, 1, 10);
-        List<Note> notes = noteDao.search(sa);
-        assertEquals(2, notes.size());
-    }
-    @Test
-    public void testByCategory(){
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, EDA_ID, "practice", null, "score", true, 1, 10);
-        List<Note> notes = noteDao.search(sa);
-        assertEquals(1, notes.size());
-    }
-
-    @Test
-    public void testOrderBy(){
-        SearchArguments sa = new SearchArguments(null, null, null, null, null, "name", true, 1, 10);
-        List<Note> notes = noteDao.search(sa);
-        for (int i = 0; i < notes.size() - 2; i++) {
-            assertTrue(notes.get(i).getName().toUpperCase().compareTo(notes.get(i + 1).getName().toUpperCase()) <= 0);
-        }
-    }
-
-    @Test
-    public void testOrderByScore(){
-        SearchArguments sa = new SearchArguments(null, null, null, null, null, "score", true, 1, 10);
-        List<Note> notes = noteDao.search(sa);
-        for (int i = 0; i < notes.size() - 2; i++) {
-            assertTrue(notes.get(i).getAvgScore() <= notes.get(i + 1).getAvgScore());
-        }
-    }
-
-    // TODO: Uncomment when pagination is implemented
-//    @Test
-//    public void testByPage() {
-//        SearchArguments sa = new SearchArguments(null, null, null, null, null, null, true, 1, 2);
-//        List<Note> notes = noteDao.search(sa);
-//        assertEquals(2, notes.size());
-//    }
-
-    @Test
-    public void testByDirectory() {
-        List<Note> notes = noteDao.getNotesByParentDirectoryId(EDA_DIRECTORY_ID);
-        assertEquals(2, notes.size());
-    }
-
-    @Test
-    public void testByWord() {
-        SearchArguments sa = new SearchArguments(null, null, null, null, "guIA", null, true, 1, 10);
-        List<Note> notes = noteDao.search(sa);
-        assertEquals(2, notes.size());
-    }
 
     @Test
     public void testCreateReview(){
@@ -132,21 +67,6 @@ public class NoteJdbcDaoTest {
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
     }
 
-    @Test
-    public void testMultipleCareerSubject() {
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_INF, MATE_ID, null, null, "score", true, 1, 10);
-        List<Note> notes = noteDao.search(sa);
-        assertEquals(1, notes.size());
-        assertEquals(TVM_ID ,notes.get(0).getNoteId());
-    }
-
-    @Test
-    public void testMultipleCareerSubjectBis() {
-        SearchArguments sa = new SearchArguments(ITBA_ID, ING_MEC , MATE_ID, null, null, "score", true, 1, 10);
-        List<Note> notes = noteDao.search(sa);
-        assertEquals(1, notes.size());
-        assertEquals(TVM_ID, notes.get(0).getNoteId());
-    }
 
     @Test
     public void testGetReviews() {

@@ -15,7 +15,8 @@ public class JdbcDaoUtils {
     static final String DIRECTORIES = "Directories";
     static final String USERS = "Users";
     static final String INSTITUTION_ID = "institution_id";
-//    static final String NAME = "name";
+    static final String ID = "id";
+    static final String NAME = "name";
     static final String NOTE_NAME = "note_name";
     static final String DIRECTORY_NAME = "directory_name";
     static final String INSTITUTION_NAME = "institution_name";
@@ -39,13 +40,15 @@ public class JdbcDaoUtils {
     static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SortBy.class);
     static final String OWNER_ID = "owner_id";
     static final String OWNER_EMAIL = "owner_email";
+    static final String LAST_MODIFIED_AT = "last_modified_at";
+    static final String ICON_COLOR = "icon_color";
 
     static final String FILE_TYPE = "file_type";
 
     static{
         SORTBY.put(SortBy.SCORE, AVG_SCORE);
         SORTBY.put(SortBy.DATE, CREATED_AT);
-//        SORTBY.put(SortBy.NAME, NAME);
+        SORTBY.put(SortBy.NAME, NAME);
     }
     static void addIfPresent(StringBuilder query, List<Object> args, String field, String compareOp, String logicOp, Optional<?> value) {
         value.ifPresent(val -> {
@@ -54,4 +57,5 @@ public class JdbcDaoUtils {
         });
     }
 
+    private JdbcDaoUtils() {} // Make class non-instantiable
 }

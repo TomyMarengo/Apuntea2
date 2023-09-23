@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.models;
 
 public enum Category {
-    EXAM("Exam"),
-    PRACTICE("Practice"),
-    THEORY("Theory"),
-    OTHER("Other");
+    EXAM("exam"),
+    PRACTICE("practice"),
+    THEORY("theory"),
+    OTHER("other"),
+
+    DIRECTORY("directory"),
+    NOTE("note"); // Abstraction for all categories except directory
 
     private final String displayName;
 

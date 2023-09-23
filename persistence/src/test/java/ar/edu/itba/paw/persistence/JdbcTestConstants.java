@@ -20,4 +20,6 @@ public class JdbcTestConstants {
 
     static UUID MATE_ID = UUID.fromString("50000000-0000-0000-0000-000000000005");
     static UUID TVM_ID = UUID.fromString("a0000000-0000-0000-0000-000000000006");
+
+    private JdbcTestConstants() {}
 }

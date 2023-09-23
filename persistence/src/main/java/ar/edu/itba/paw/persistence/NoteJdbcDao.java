@@ -31,20 +31,26 @@ public class NoteJdbcDao implements NoteDao {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert jdbcNoteInsert;
     private final SimpleJdbcInsert jdbcReviewInsert;
-    //    private final Tika tika = new Tika();
 
     private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
             new Note(
                     UUID.fromString(rs.getString(NOTE_ID)),
                     rs.getString(NOTE_NAME),
-                    Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
-                    rs.getTimestamp(CREATED_AT).toLocalDateTime(),
-                    rs.getFloat(AVG_SCORE),
+                    new User(
+                            UUID.fromString(rs.getString(USER_ID)),
+                            rs.getString(EMAIL)
+                    ),
+                    UUID.fromString(rs.getString(PARENT_ID)),
                     new Subject(
                             UUID.fromString(rs.getString(SUBJECT_ID)),
                             rs.getString(SUBJECT_NAME),
                             UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
-                    )
+                    ),
+                    Category.valueOf(rs.getString(CATEGORY)),
+                    rs.getTimestamp(CREATED_AT).toLocalDateTime(),
+                    rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
+                    rs.getString(FILE_TYPE),
+                    rs.getFloat(AVG_SCORE)
             );
     private final static RowMapper<Review> REVIEW_ROW_MAPPER = (rs, rowNum) ->
             new Review(
@@ -89,11 +95,6 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     @Transactional
     public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category, String file_type) {
-//        String contentType = tika.detect(file.getOriginalFilename());
-//        if (!contentType.equals("application/pdf")) {
-//            throw new IllegalArgumentException("File must be a PDF");
-//        }
-
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(NOTE_NAME, name);
         args.addValue(FILE, file);
@@ -113,11 +114,6 @@ public class NoteJdbcDao implements NoteDao {
     @Transactional
     @Override
     public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category, UUID parentId, String file_type) {
-//        String contentType = tika.detect(file.getOriginalFilename());
-//        if (!contentType.equals("application/pdf")) {
-//            throw new IllegalArgumentException("File must be a PDF");
-//        }
-
         final Map<String, Object> args = new HashMap<>();
         args.put(NOTE_NAME, name);
         args.put(FILE, file);
@@ -133,17 +129,15 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
-        try {
-            return Optional.ofNullable(
-                    jdbcTemplate.queryForObject("SELECT n.note_name, n.note_id, n.created_at, n.category, COALESCE(AVG(r.score), 0) AS avg_score , s.subject_id, s.subject_name, s.root_directory_id " +
-                                    "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id WHERE n.note_id = ? GROUP BY n.note_id, s.subject_id",
-                            ROW_MAPPER,
-                            noteId
-                    )
-            );
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
+        return jdbcTemplate.query(
+                "SELECT DISTINCT n.note_id, n.note_name, n.parent_id, n.category, n.created_at, n.last_modified_at, n.avg_score, n.file_type, " +
+                        "u.user_id, u.email " +
+                        "s.subject_id, s.subject_name, s.root_directory_id, " +
+                        "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id JOIN Users u ON n.user_id = u.user_id " +
+                        "WHERE n.note_id = ? GROUP BY n.note_id, s.subject_id",
+                ROW_MAPPER,
+                noteId
+        ).stream().findFirst();
     }
 
     @Override
@@ -152,55 +146,6 @@ public class NoteJdbcDao implements NoteDao {
                 new Object[]{noteId}, (rs, rowNum) -> (byte[]) rs.getObject(FILE));
         // TODO: Move mapper to a constant?
         return file;
-    }
-
-
-    @Override
-    public List<Note> getNotesByParentDirectoryId(UUID directory_id) {
-        return jdbcTemplate.query("SELECT n.note_id, n.note_name, n.created_at, n.category, COALESCE(AVG(r.score), 0) AS avg_score, s.subject_id, s.subject_name, s.root_directory_id FROM Notes n " +
-                "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
-                "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
-                "WHERE parent_id = ? " +
-                "GROUP BY n.note_id, s.subject_id",
-                ROW_MAPPER, directory_id);
-    }
-
-    @Override
-    public List<Note> search(SearchArguments sa) {
-        StringBuilder query = new StringBuilder(
-                "SELECT DISTINCT n.note_id, n.note_name, n.category, n.created_at, COALESCE(AVG(r.score), 0) AS avg_score, s.subject_id, s.subject_name, s.root_directory_id FROM Notes n " +
-                        "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
-                        "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id " +
-                        "INNER JOIN Careers c ON sc.career_id = c.career_id " +
-                        "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
-                        "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
-                        "WHERE true "
-        );
-        List<Object> args = new ArrayList<>();
-
-        addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
-        addIfPresent(query, args, "c." + CAREER_ID, "=", "AND", sa.getCareerId());
-        addIfPresent(query, args, "s." + SUBJECT_ID, "=", "AND", sa.getSubjectId());
-        addIfPresent(query, args, CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString).map(String::toLowerCase));
-
-        sa.getWord().ifPresent(w -> {
-                String searchWord = "%" + w + "%";
-                query.append("AND (LOWER(n.note_name) LIKE LOWER(?) OR LOWER(i.institution_name) LIKE LOWER(?) OR LOWER(c.career_name) LIKE LOWER(?) OR LOWER(s.subject_name) LIKE LOWER(?)) ");
-                for (int i = 0; i < 4; i++)
-                    args.add(searchWord);
-            }
-        );
-
-        query.append("GROUP BY n.").append(NOTE_ID).append(", s.").append(SUBJECT_ID);
-
-        if (sa.getSortBy() != null) {
-            query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NOTE_NAME));
-            if (!sa.isAscending()) query.append(" DESC");
-        }
-
-//        query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
-
-        return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);
     }
 
     //@Transactional

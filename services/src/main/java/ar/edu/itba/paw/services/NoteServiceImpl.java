@@ -28,12 +28,6 @@ public class NoteServiceImpl implements NoteService {
         this.emailService = emailService;
     }
 
-    @Override
-    public List<Note> searchNotes(UUID institutionId, UUID careerId, UUID subjectId, String category, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        SearchArguments sa = new SearchArguments(institutionId, careerId, subjectId, category, word, sortBy, ascending, page, pageSize);
-        return noteDao.search(sa);
-    }
-
     @Transactional
     @Override
     public UUID createNote(MultipartFile file, String name, UUID subjectId, String category) throws IOException {
@@ -70,11 +64,6 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public void delete(UUID noteId) {
         noteDao.delete(noteId);
-    }
-
-    @Override
-    public List<Note> getNotesByParentDirectory(UUID directoryId) {
-        return noteDao.getNotesByParentDirectoryId(directoryId);
     }
 
     @Override

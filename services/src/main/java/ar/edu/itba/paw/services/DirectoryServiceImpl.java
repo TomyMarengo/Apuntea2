@@ -27,29 +27,14 @@ public class DirectoryServiceImpl implements DirectoryService{
 
     @Transactional
     @Override
-    public Directory create(String name, UUID parentId) {
+    public UUID create(String name, UUID parentId) {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
         return directoryDao.create(name, parentId, userId);
     }
-
-    @Override
-    public List<Directory> search(UUID institutionId, UUID careerId, UUID subjectId, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        if (sortBy.equals(SCORE.toString()))
-            return new ArrayList<>();
-        SearchArguments sa = new SearchArguments(institutionId, careerId, subjectId, word, sortBy, ascending, page, pageSize);
-        return directoryDao.search(sa);
-    }
-
     @Override
     public Optional<Directory> getDirectoryById(UUID directoryId) {
         return Optional.ofNullable(directoryDao.getDirectoryById(directoryId));
     }
-
-    @Override
-    public List<Directory> getChildren(UUID directoryId) {
-        return directoryDao.getChildren(directoryId);
-    }
-
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
         return directoryDao.getDirectoryPath(directoryId);

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.DataService;
+import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.webapp.forms.CreateDirectoryForm;
 import ar.edu.itba.paw.webapp.forms.CreateNoteForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,15 +31,17 @@ public class DirectoryController {
     private final DirectoryService directoryService;
     private final NoteService noteService;
     private final DataService dataService;
+    private final SearchService searchService;
 
     private static final String CREATE_NOTE_FORM_BINDING = "org.springframework.validation.BindingResult.createNoteForm";
     private static final String CREATE_DIRECTORY_FORM_BINDING = "org.springframework.validation.BindingResult.createDirectoryForm";
 
     @Autowired
-    public DirectoryController(DirectoryService directoryService, NoteService noteService, DataService dataService) {
+    public DirectoryController(DirectoryService directoryService, NoteService noteService, DataService dataService, SearchService searchService) {
         this.directoryService = directoryService;
         this.noteService = noteService;
         this.dataService = dataService;
+        this.searchService = searchService;
     }
 
     @RequestMapping(value = "/{directoryId}" ,method = RequestMethod.GET)

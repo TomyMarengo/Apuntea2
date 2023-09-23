@@ -1,12 +1,20 @@
 package ar.edu.itba.paw.models;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Directory {
+public class Directory implements Searchable {
     private final UUID directoryId;
     private String name;
+    private User user;
     private UUID parentId;
-    private UUID userId;
+//  private Institution institution;
+//  private Career career;
+    private Subject subject;
+    private LocalDateTime createdAt;
+    private LocalDateTime lastModifiedAt;
+
+    private String iconColor;
 
 
     public Directory(UUID directoryId, String name, UUID parentId) {
@@ -15,16 +23,63 @@ public class Directory {
         this.parentId = parentId;
     }
 
-    public Directory(UUID directoryId, String name, UUID parentId, UUID userId) {
+
+    public Directory(UUID directoryId, String name, User user, UUID parentId, Subject subject, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String iconColor) {
         this.directoryId = directoryId;
         this.name = name;
+        this.user = user;
         this.parentId = parentId;
-        this.userId = userId;
+        this.subject = subject;
+        this.createdAt = createdAt;
+        this.lastModifiedAt = lastModifiedAt;
+        this.iconColor = iconColor;
     }
 
-    public String getName() { return name; }
+    public UUID getId() { return directoryId; }
+    @Override
+    public UUID getParentId() {
+        return parentId;
+    }
+    @Override
+    public User getUser() {
+        return user;
+    }
+    @Override
+    public Subject getSubject() {
+        return subject;
+    }
+    @Override
+    public String getName() {
+        return name;
+    }
+    @Override
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+    @Override
+    public LocalDateTime getLastModifiedAt() {
+        return lastModifiedAt;
+    }
 
-    public UUID getDirectoryId() { return directoryId; }
-
-    public UUID getParentId() { return parentId; }
+    //TODO: change when visibility is implemented
+    @Override
+    public boolean isVisible() {
+        return true;
+    }
+    @Override
+    public Category getCategory() {
+        return Category.DIRECTORY;
+    }
+    @Override
+    public String getFileType() {
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public float getAvgScore(){
+        throw new UnsupportedOperationException();
+    }
+    @Override
+    public String getIconColor() {
+        return iconColor;
+    }
 }

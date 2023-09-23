@@ -8,15 +8,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface DirectoryDao {
-    Directory create(String name, UUID parentId, UUID userId);
-
-    List<Directory> search(SearchArguments sa);
-
+    UUID create(String name, UUID parentId, UUID userId);
     Directory getDirectoryById(UUID directoryId);
-
-    List<Directory> getChildren(UUID directoryId);
-
     DirectoryPath getDirectoryPath(UUID directoryId);
-
     void delete(UUID directoryId);
 }
