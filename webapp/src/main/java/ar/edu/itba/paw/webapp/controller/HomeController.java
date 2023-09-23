@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.DataService;
 import ar.edu.itba.paw.services.NoteService;
+import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.auth.CustomUserDetails;
 import ar.edu.itba.paw.webapp.forms.*;
@@ -24,22 +25,21 @@ public class HomeController {
 
     private final DataService dataService;
     private final UserService userService;
+    private final SecurityService securityService;
     private static final String CREATE_NOTE_FORM_BINDING = "org.springframework.validation.BindingResult.createNoteForm";
 
     @Autowired
-    public HomeController(final DataService dataService, final UserService userService) {
+    public HomeController(final DataService dataService, final UserService userService, final SecurityService securityService) {
         this.dataService = dataService;
         this.userService = userService;
+        this.securityService = securityService;
     }
 
     @RequestMapping(value = "/")
     public ModelAndView index(@ModelAttribute("searchNotesForm") final SearchNotesForm searchNotesForm,
                               ModelMap model) {
         ModelAndView mav = new ModelAndView("index");
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() != "anonymousUser") {
-            final CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            mav.addObject("username", userDetails.getUsername());
-        }
+        securityService.getCurrentUserEmail().ifPresent(email -> mav.addObject("username", email));
         mav.addObject("institutions", dataService.getInstitutions());
         mav.addObject("careers", dataService.getCareers());
         mav.addObject("subjects", dataService.getSubjects());
