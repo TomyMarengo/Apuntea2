@@ -39,6 +39,9 @@ public class JdbcDaoUtils {
     static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SortBy.class);
     static final String OWNER_ID = "owner_id";
     static final String OWNER_EMAIL = "owner_email";
+
+    static final String FILE_TYPE = "file_type";
+
     static{
         SORTBY.put(SortBy.SCORE, AVG_SCORE);
         SORTBY.put(SortBy.DATE, CREATED_AT);

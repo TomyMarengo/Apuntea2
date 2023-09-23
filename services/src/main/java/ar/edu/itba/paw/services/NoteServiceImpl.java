@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.Review;
 import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.persistence.NoteDao;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,14 +38,14 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public UUID createNote(MultipartFile file, String name, UUID subjectId, String category) throws IOException {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-        return noteDao.create(file.getBytes(), name, userId, subjectId, category);
+        return noteDao.create(file.getBytes(), name, userId, subjectId, category, FilenameUtils.getExtension(file.getOriginalFilename()));
     }
 
     @Transactional
     @Override
     public UUID createNote(MultipartFile file, String name, UUID subjectId, String category, UUID parentId) throws IOException {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-        return noteDao.create(file.getBytes(), name, userId, subjectId, category, parentId);
+        return noteDao.create(file.getBytes(), name, userId, subjectId, category, parentId, FilenameUtils.getExtension(file.getOriginalFilename()));
     }
 
     @Override

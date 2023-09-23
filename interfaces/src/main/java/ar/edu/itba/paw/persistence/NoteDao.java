@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface NoteDao {
-    UUID create(byte[] file, String name, UUID userId, UUID subjectId, String category);
+    UUID create(byte[] file, String name, UUID userId, UUID subjectId, String category, String fileType);
 
-    UUID create(byte[] file, String name, UUID userId, UUID subjectId, String category, UUID parentId);
+    UUID create(byte[] file, String name, UUID userId, UUID subjectId, String category, UUID parentId, String fileType);
 
     byte[] getNoteFileById(UUID noteId);
 

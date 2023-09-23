@@ -88,7 +88,7 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     @Transactional
-    public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category) {
+    public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category, String file_type) {
 //        String contentType = tika.detect(file.getOriginalFilename());
 //        if (!contentType.equals("application/pdf")) {
 //            throw new IllegalArgumentException("File must be a PDF");
@@ -100,10 +100,11 @@ public class NoteJdbcDao implements NoteDao {
         args.addValue(SUBJECT_ID, subjectId);
         args.addValue(CATEGORY, category.toLowerCase());
         args.addValue(USER_ID, user_id);
+        args.addValue(FILE_TYPE, file_type);
 
         KeyHolder holder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, file, subject_id, category, user_id, parent_id) " +
-                " SELECT :note_name, :file, :subject_id, :category, :user_id, s.root_directory_id FROM Subjects s WHERE s.subject_id = :subject_id"
+        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, file, subject_id, category, user_id, parent_id, file_type) " +
+                " SELECT :note_name, :file, :subject_id, :category, :user_id, s.root_directory_id, :file_type FROM Subjects s WHERE s.subject_id = :subject_id"
                 , args, holder, new String[]{NOTE_ID});
         UUID noteId = (UUID) holder.getKeys().get(NOTE_ID);
         return noteId;
@@ -111,7 +112,7 @@ public class NoteJdbcDao implements NoteDao {
 
     @Transactional
     @Override
-    public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category, UUID parentId) {
+    public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category, UUID parentId, String file_type) {
 //        String contentType = tika.detect(file.getOriginalFilename());
 //        if (!contentType.equals("application/pdf")) {
 //            throw new IllegalArgumentException("File must be a PDF");
@@ -123,8 +124,8 @@ public class NoteJdbcDao implements NoteDao {
         args.put(SUBJECT_ID, subjectId);
         args.put(CATEGORY, category.toLowerCase());
         args.put(PARENT_ID, parentId);
-
         args.put(USER_ID, user_id);
+        args.put(FILE_TYPE, file_type);
 
         UUID noteId = (UUID) jdbcNoteInsert.executeAndReturnKeyHolder(args).getKeys().get(NOTE_ID);
         return noteId;
@@ -134,7 +135,7 @@ public class NoteJdbcDao implements NoteDao {
     public Optional<Note> getNoteById(UUID noteId) {
         try {
             return Optional.ofNullable(
-                    jdbcTemplate.queryForObject("SELECT n.note_name, n.note_id, n.created_at, n.category, AVG(r.score) AS avg_score , s.subject_id, s.subject_name, s.root_directory_id " +
+                    jdbcTemplate.queryForObject("SELECT n.note_name, n.note_id, n.created_at, n.category, COALESCE(AVG(r.score), 0) AS avg_score , s.subject_id, s.subject_name, s.root_directory_id " +
                                     "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id WHERE n.note_id = ? GROUP BY n.note_id, s.subject_id",
                             ROW_MAPPER,
                             noteId
@@ -156,7 +157,7 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public List<Note> getNotesByParentDirectoryId(UUID directory_id) {
-        return jdbcTemplate.query("SELECT n.note_id, n.note_name, n.created_at, n.category, AVG(r.score) AS avg_score, s.subject_id, s.subject_name, s.root_directory_id FROM Notes n " +
+        return jdbcTemplate.query("SELECT n.note_id, n.note_name, n.created_at, n.category, COALESCE(AVG(r.score), 0) AS avg_score, s.subject_id, s.subject_name, s.root_directory_id FROM Notes n " +
                 "INNER JOIN Subjects s ON n.subject_id = s.subject_id " +
                 "LEFT JOIN Reviews r ON n.note_id = r.note_id " +
                 "WHERE parent_id = ? " +

@@ -43,7 +43,7 @@ public class Note {
         return name;
     }
     public Float getAvgScore(){
-        return avgScore == null ? 0 : avgScore;
+        return avgScore;
     }
 
 

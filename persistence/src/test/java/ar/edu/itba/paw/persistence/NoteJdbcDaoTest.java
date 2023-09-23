@@ -121,7 +121,7 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testCreateNote() {
-        UUID noteId = noteDao.create(new byte[]{1, 2, 3}, "RBT", PEPE_ID, EDA_ID, "practice");
+        UUID noteId = noteDao.create(new byte[]{1, 2, 3}, "RBT", PEPE_ID, EDA_ID, "practice", "jpg");
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'practice'"));
         JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "'");
     }
