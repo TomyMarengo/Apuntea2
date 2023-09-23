@@ -16,9 +16,6 @@
     <title>Apuntea | <spring:message code="search.title"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
@@ -191,7 +188,8 @@
     <div class="d-flex container mt-4 justify-content-between p-0">
         <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
                 data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
-                data-bs-trigger="hover">
+                data-horizontal="<spring:message code="search.button.listView"/>"
+                data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
             <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
                  class="icon-s fill-dark-primary"/>
         </button>
@@ -370,11 +368,13 @@
         <ul class="pagination">
             <c:if test="${searchNotesForm.pageNumber gt 1}">
                 <li class="page-item">
+                    <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
                 </li>
             </c:if>
             <c:if test="${searchNotesForm.pageNumber le 1}">
                 <li class="page-item disabled">
+                    <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
                 </li>
             </c:if>
@@ -394,11 +394,13 @@
 
             <c:if test="${searchNotesForm.pageNumber lt maxPage}">
                 <li class="page-item">
+                    <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
                 </li>
             </c:if>
             <c:if test="${searchNotesForm.pageNumber ge maxPage}">
                 <li class="page-item disabled">
+                    <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
                 </li>
             </c:if>
@@ -409,6 +411,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>

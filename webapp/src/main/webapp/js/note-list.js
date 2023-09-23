@@ -175,24 +175,22 @@ if (!storedViewState) {
 const horizontalListSection = document.getElementById('horizontalList');
 const boxListSection = document.getElementById('boxList');
 const searchViewIcon = document.getElementById('searchViewIcon');
-const toggleViewBtn = document.getElementById('searchViewToggle');
+const searchViewToggle = document.getElementById('searchViewToggle');
 
 
 // Verificar y mostrar la vista según el valor almacenado
 if (storedViewState === 'box') {
   boxListSection.style.display = 'block';
   searchViewIcon.src = `${baseUrl}/svg/horizontal-list.svg`;
+  const attr = searchViewToggle.getAttribute('data-box');
+  searchViewToggle.setAttribute('data-bs-title', attr);
 } else {
   horizontalListSection.style.display = 'block';
   searchViewIcon.src = `${baseUrl}/svg/box-list.svg`;
+  const attr = searchViewToggle.getAttribute('data-horizontal');
+  searchViewToggle.setAttribute('data-bs-title', attr);
 }
 
-
-const dataTitleBox = toggleViewBtn.getAttribute('data-title-box');
-const dataTitleList = toggleViewBtn.getAttribute('data-title-list');
-
-// Función para cambiar la vista
-changeTooltipText()
 function toggleView() {
   // Verificar si la vista actual es horizontal
   if (localStorage.getItem('viewState') === 'box') {
@@ -214,22 +212,21 @@ function toggleView() {
 }
 
 function changeTooltipText() {
-  let ttInner = document.getElementsByClassName("tooltip-inner")[0];
   if(localStorage.getItem('viewState') === 'box'){
-    toggleViewBtn.setAttribute('data-bs-title', dataTitleList);
-    if(ttInner) {
-      ttInner.innerHTML = dataTitleList;
-    }
+    const attr = searchViewToggle.getAttribute('data-box');
+    searchViewToggle.setAttribute('data-bs-title', attr);
   }
   else{
-    toggleViewBtn.setAttribute('data-bs-title', dataTitleBox);
-    if(ttInner) {
-      ttInner.innerHTML = dataTitleBox;
-    }
+    const attr = searchViewToggle.getAttribute('data-horizontal');
+    searchViewToggle.setAttribute('data-bs-title', attr);
   }
+  // delete element with tooltip class
+    const tooltip = document.querySelector('.tooltip');
+    tooltip.remove();
+    new bootstrap.Tooltip(searchViewToggle);
 }
 
 // Asociar la función de cambio de vista al botón
-toggleViewBtn.addEventListener('click', toggleView);
+searchViewToggle.addEventListener('click', toggleView);
 
 
