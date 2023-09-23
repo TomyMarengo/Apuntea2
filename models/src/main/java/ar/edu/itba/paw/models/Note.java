@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Note {
-    private UUID noteId;
+    private final UUID noteId;
     private String name;
     private User user;
     private Institution institution;

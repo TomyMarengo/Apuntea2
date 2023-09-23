@@ -20,6 +20,7 @@ import java.util.List;
 public class SearchController {
     private final DataService dataService;
     private final NoteService noteService;
+
     @Autowired
     public SearchController(final DataService dataService, final NoteService noteService) {
         this.dataService = dataService;

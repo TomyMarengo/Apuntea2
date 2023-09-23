@@ -23,9 +23,7 @@ public class CreateNoteForm {
     @NotEmpty
     @Pattern(regexp = "theory|practice|exam|other")
     private String category;
-
-    //TODO: Add again next sprint
-//    @ValidUuid
+    @ValidUuid
     private UUID parentId;
 
     public UUID getSubjectId() {

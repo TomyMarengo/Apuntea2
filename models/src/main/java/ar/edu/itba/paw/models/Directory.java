@@ -3,7 +3,7 @@ package ar.edu.itba.paw.models;
 import java.util.UUID;
 
 public class Directory {
-    private UUID directoryId;
+    private final UUID directoryId;
     private String name;
     private UUID parentId;
     private UUID userId;
