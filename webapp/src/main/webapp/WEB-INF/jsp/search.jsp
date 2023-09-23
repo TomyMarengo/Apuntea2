@@ -5,7 +5,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl" />
+<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark" data-search-view="horizontal">
@@ -44,7 +44,6 @@
 <!-- BOTTOM-NAVBAR -->
 <fragment:bottom-navbar title="./search:Búsqueda" extraLinks="">
 </fragment:bottom-navbar>
-
 
 
 <!-- SEARCH -->
@@ -113,7 +112,7 @@
                 </div>
             </div>
 
-            <div class="col" >
+            <div class="col">
                 <div class="input-group mb-3">
                     <form:select path="category" class="form-select bg-bg" id="categorySelect">
                         <form:option
@@ -164,12 +163,15 @@
 
             <div class="col">
                 <div class="input-group mb-3">
-                    <spring:message code="search.word.placeholder" var="placeholderSearch" />
+                    <spring:message code="search.word.placeholder" var="placeholderSearch"/>
                     <form:input path="word" type="text" class="form-control bg-bg" placeholder='${placeholderSearch}'/>
                 </div>
             </div>
 
         </div>
+
+        <form:hidden path="pageNumber" id="pageNumber" />
+        <form:hidden path="pageSize" id="pageSize" />
 
         <div class="search-input w-25">
             <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
@@ -187,27 +189,38 @@
 
 <c:if test="${not empty notes}">
     <div class="d-flex container mt-4 justify-content-between p-0">
-        <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>" data-title-list="<spring:message code="search.button.listView"/>" data-title-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
-            <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}" class="icon-s fill-dark-primary" />
+        <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
+                data-bs-trigger="hover">
+            <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
+                 class="icon-s fill-dark-primary"/>
         </button>
         <div class="d-flex">
             <div id="selectedButtons" class="align-items-center" style="display: none;">
-                <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.deselectAll"/>" data-bs-trigger="hover">
-                    <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary" />
+                <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.deselectAll"/>"
+                        data-bs-trigger="hover">
+                    <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary"/>
                 </button>
                 <span class="text-dark-primary mx-2">
                     <strong id="selectedCount" class="text-dark-primary"> 0 </strong>
                     <spring:message code="search.selected"/>
                 </span>
-                <button id="downloadSelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
-                    <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary" />
+                <button id="downloadSelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
+                        data-bs-trigger="hover">
+                    <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
                 </button>
-                <button id="copySelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>" data-bs-trigger="hover">
-                    <img src="<c:url value="/svg/link.svg"/>" alt="copy" class="icon-s fill-dark-primary" />
+                <button id="copySelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
+                        data-bs-trigger="hover">
+                    <img src="<c:url value="/svg/link.svg"/>" alt="copy" class="icon-s fill-dark-primary"/>
                 </button>
             </div>
-            <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>" data-bs-trigger="hover">
-                <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary" />
+            <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
+                    data-bs-trigger="hover">
+                <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary"/>
             </button>
         </div>
 
@@ -220,7 +233,7 @@
                 <thead>
                 <tr>
                     <th><spring:message code="name"/></th>
-    <%--                <th><spring:message code="owner"/></th>--%>
+                        <%--                <th><spring:message code="owner"/></th>--%>
                     <th><spring:message code="createdAt"/></th>
                     <th><spring:message code="score"/></th>
                     <th></th>
@@ -235,7 +248,7 @@
                             <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
                             <c:out value="${note.name}"/>
                         </td>
-    <%--                    <td>owner</td>--%>
+                            <%--                    <td>owner</td>--%>
                         <td><spring:message code="date.format"
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
                         <td>
@@ -249,12 +262,18 @@
 
                         <td class="search-actions">
                             <a href="./notes/${note.noteId}/download" download="${note.name}">
-                                <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
-                                    <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
+                                <button type="button" class="btn button-expansion rounded-circle"
+                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                        data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
+                                    <img src="<c:url value="/svg/download.svg"/>" alt="${download}"
+                                         class="icon-xs fill-text">
                                 </button>
                             </a>
 
-                            <button class="btn button-expansion rounded-circle copy-button" id="<c:out value="${note.noteId}"/>c1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>" data-bs-trigger="hover">
+                            <button class="btn button-expansion rounded-circle copy-button"
+                                    id="<c:out value="${note.noteId}"/>c1" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
+                                    data-bs-trigger="hover">
                                 <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
                             </button>
                             <input type="checkbox" class="select-checkbox d-none"/>
@@ -270,7 +289,8 @@
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-body justify-content-between d-flex">
                 <span class="text-dark-primary"><spring:message code="toast.linkCopied"/></span>
-                <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
             </div>
         </div>
     </div>
@@ -283,15 +303,15 @@
                     <div class="note-found card box search-note-box" id="<c:out value="${note.noteId}"/>2">
                         <div class="card-body no-select">
                             <h4 class="card-title">
-                                    <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
-                                    <c:out value="${note.name}"/>
+                                <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
+                                <c:out value="${note.name}"/>
                             </h4>
 
-    <%--                        <span class="card-text">--%>
-    <%--                            <strong><spring:message code="owner"/></strong>:--%>
-    <%--                            owner--%>
-    <%--                        </span>--%>
-    <%--                        <br>--%>
+                                <%--                        <span class="card-text">--%>
+                                <%--                            <strong><spring:message code="owner"/></strong>:--%>
+                                <%--                            owner--%>
+                                <%--                        </span>--%>
+                                <%--                        <br>--%>
 
                             <span class="card-text"><strong><spring:message code="category"/></strong>:
                                 <c:if test="${note.category.formattedName eq 'Theory'}">
@@ -312,7 +332,8 @@
 
                             <span class="card-text">
                                 <strong><spring:message code="createdAt"/></strong>:
-                                <spring:message code="date.format" arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                                <spring:message code="date.format"
+                                                arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
                             </span>
 
                             <br>
@@ -343,6 +364,48 @@
     </section>
 </c:if>
 
+<!-- PAGINATION -->
+<div class="container d-flex justify-content-center mt-3">
+    <nav aria-label="...">
+        <ul class="pagination">
+            <c:if test="${searchNotesForm.pageNumber gt 1}">
+                <li class="page-item">
+                    <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
+                </li>
+            </c:if>
+            <c:if test="${searchNotesForm.pageNumber le 1}">
+                <li class="page-item disabled">
+                    <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
+                </li>
+            </c:if>
+
+            <c:forEach begin="1" end="${maxPage}" var="page">
+                <c:if test="${page eq searchNotesForm.pageNumber}">
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" data-page="${page}">${page}</a>
+                    </li>
+                </c:if>
+                <c:if test="${page ne searchNotesForm.pageNumber}">
+                    <li class="page-item">
+                        <a class="page-link" data-page="${page}">${page}</a>
+                    </li>
+                </c:if>
+            </c:forEach>
+
+            <c:if test="${searchNotesForm.pageNumber lt maxPage}">
+                <li class="page-item">
+                    <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
+                </li>
+            </c:if>
+            <c:if test="${searchNotesForm.pageNumber ge maxPage}">
+                <li class="page-item disabled">
+                    <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
+                </li>
+            </c:if>
+        </ul>
+    </nav>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
@@ -352,6 +415,7 @@
 <script src="<c:url value="/js/note-list.js"/>"></script>
 <script src="<c:url value="/js/buttons.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
+<script src="<c:url value="/js/pagination.js"/>"></script>
 
 </body>
 

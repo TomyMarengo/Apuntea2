@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.webapp.forms;
 
-import ar.edu.itba.paw.webapp.validation.FloatRange;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -22,7 +22,8 @@ public class SearchNotesForm {
     @NotNull
     private Boolean ascending = true;
     @NotNull
-    private Integer page = 1;
+    @Min(1)
+    private Integer pageNumber = 1;
     @NotNull
     private Integer pageSize = 10;
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
@@ -77,12 +78,12 @@ public class SearchNotesForm {
         this.sortBy = sortBy;
     }
 
-    public Integer getPage() {
-        return page;
+    public Integer getPageNumber() {
+        return pageNumber;
     }
 
-    public void setPage(Integer page) {
-        this.page = page;
+    public void setPageNumber(Integer pageNumber) {
+        this.pageNumber = pageNumber;
     }
 
     public Integer getPageSize() {

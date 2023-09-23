@@ -69,7 +69,7 @@ public class HomeController {
             return registerForm(userForm);
         }
 
-        userService.create(userForm.getEmail(), userForm.getPassword());
+        userService.create(userForm.getEmail(), userForm.getPassword()); //TODO: handle errors
 
         return new ModelAndView("redirect:/login" );
     }

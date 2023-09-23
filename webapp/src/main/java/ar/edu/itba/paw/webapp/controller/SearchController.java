@@ -38,9 +38,11 @@ public class SearchController {
                     searchNotesForm.getWord(),
                     searchNotesForm.getSortBy(),
                     searchNotesForm.getAscending(),
-                    searchNotesForm.getPage(),
+                    searchNotesForm.getPageNumber(),
                     searchNotesForm.getPageSize()
         );
+
+        mav.addObject("maxPage", 5); //TODO: Change this mocked element
         mav.addObject("notes", notes);
         mav.addObject("institutions", dataService.getInstitutions());
         mav.addObject("careers", dataService.getCareers());
