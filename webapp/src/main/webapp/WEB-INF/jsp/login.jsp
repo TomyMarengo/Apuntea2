@@ -62,7 +62,7 @@
                                        placeholder="${loginPassword}"/>
                             </div>
 
-                            <div class="mt-4">
+                            <div class="mt-4 d-flex align-items-center">
                                 <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"/>
                                 <label class="form-check-label mx-1" for="rememberMe"> <spring:message code="login.rememberMe"/> </label>
                             </div>

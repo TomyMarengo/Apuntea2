@@ -26,6 +26,19 @@
   visibility: visible;
 }
 
+.note-found-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 1024px) {
+    .note-found-title {
+        max-width: 100px;
+    }
+
+}
+
 .active-note-found {
   background-color: rgba(var(--secondary-rgb), 0.7);
 }

@@ -13,7 +13,7 @@
     <title>Apuntea | <spring:message code="settings"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
-    <link rel="stylesheet" href="<c:url value="/css/main.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>"/>
@@ -21,11 +21,11 @@
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
-    <link rel="stylesheet" href=<c:url value="/css/sections/navbar.css"/> />
+    <link rel="stylesheet" href=<c:url value="/css/sections/navbar.css"/>/>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet"/>
 
 </head>
 

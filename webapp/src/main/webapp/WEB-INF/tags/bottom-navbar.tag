@@ -7,7 +7,7 @@
 <div class="bottom-navbar">
     <c:set var="titleData" value="${fn:split(title, ':')}" />
     <a href="<c:url value="${titleData[0]}"/>">
-        <div class="bottom-navbar-item active">
+        <div class="bottom-navbar-item overflow-hidden active">
             <c:out value="${titleData[1]}"/>
         </div>
     </a>
@@ -15,7 +15,7 @@
         <c:forEach var="link" begin="0" items="${extraLinks}">
             <c:set var="linkData" value="${fn:split(link, ':')}" />
             <a href="<c:url value="${linkData[0]}"/>">
-                <div class="bottom-navbar-item">
+                <div class="bottom-navbar-item overflow-hidden">
                         <c:out value="${linkData[1]}"/>
                 </div>
             </a>

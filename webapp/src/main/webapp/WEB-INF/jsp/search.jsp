@@ -167,8 +167,8 @@
 
         </div>
 
-        <form:hidden path="pageNumber" id="pageNumber" />
-        <form:hidden path="pageSize" id="pageSize" />
+        <form:hidden path="pageNumber" id="pageNumber"/>
+        <form:hidden path="pageSize" id="pageSize"/>
 
         <div class="search-input w-25">
             <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
@@ -184,7 +184,9 @@
 <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
 <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
 
+
 <c:if test="${not empty notes}">
+    <!-- TOP BUTTONS -->
     <div class="d-flex container mt-4 justify-content-between p-0">
         <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
                 data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
@@ -230,11 +232,11 @@
             <table class="table table-hover table-search">
                 <thead>
                 <tr>
-                    <th><spring:message code="name"/></th>
+                    <th class="col-md-6"><spring:message code="name"/></th>
                         <%--                <th><spring:message code="owner"/></th>--%>
-                    <th><spring:message code="createdAt"/></th>
-                    <th><spring:message code="score"/></th>
-                    <th></th>
+                    <th class="col-md-2"><spring:message code="createdAt"/></th>
+                    <th class="col-md-2"><spring:message code="score"/></th>
+                    <th class="col-md-2"></th>
                     <!-- TODO: ADD SIZE OF FILE -->
                 </tr>
                 </thead>
@@ -242,9 +244,11 @@
                 <c:forEach var="note" items="${notes}">
                     <c:set var="date" value="${note.createdAt}"/>
                     <tr class="note-found no-select" id="<c:out value="${note.noteId}"/>1">
-                        <td>
+                        <td class="note-found-title">
                             <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
-                            <c:out value="${note.name}"/>
+                            <span class="card-title">
+                                <c:out value="${note.name}"/>
+                            </span>
                         </td>
                             <%--                    <td>owner</td>--%>
                         <td><spring:message code="date.format"
@@ -298,19 +302,19 @@
         <div class="row">
             <c:forEach items="${notes}" var="note">
                 <div class="col-md-4 mb-4">
-                    <div class="note-found card box search-note-box" id="<c:out value="${note.noteId}"/>2">
+                    <div class="note-found card box search-note-box h-100" id="<c:out value="${note.noteId}"/>2">
                         <div class="card-body no-select">
-                            <h4 class="card-title">
+                            <div class="d-flex gap-2 overflow-hidden">
                                 <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
-                                <c:out value="${note.name}"/>
-                            </h4>
-
+                                <h4 class="card-title text-truncate">
+                                    <c:out value="${note.name}"/>
+                                </h4>
+                            </div>
                                 <%--                        <span class="card-text">--%>
                                 <%--                            <strong><spring:message code="owner"/></strong>:--%>
                                 <%--                            owner--%>
                                 <%--                        </span>--%>
                                 <%--                        <br>--%>
-
                             <span class="card-text"><strong><spring:message code="category"/></strong>:
                                 <c:if test="${note.category.formattedName eq 'Theory'}">
                                     <spring:message code="search.category.theory"/>
@@ -325,27 +329,22 @@
                                     <spring:message code="search.category.other"/>
                                 </c:if>
                             </span>
-
                             <br>
-
                             <span class="card-text">
-                                <strong><spring:message code="createdAt"/></strong>:
-                                <spring:message code="date.format"
-                                                arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
-                            </span>
-
+                            <strong><spring:message code="createdAt"/></strong>:
+                            <spring:message code="date.format"
+                                            arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                        </span>
                             <br>
-
                             <span class="card-text">
-                                <c:if test="${note.avgScore eq 0}">
-                                    <strong><spring:message code="score.none"/></strong>
-                                </c:if>
-                                <c:if test="${note.avgScore ne 0}">
-                                    <strong><spring:message code="score"/></strong>:
-                                    <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
-                                </c:if>
-                            </span>
-
+                            <c:if test="${note.avgScore eq 0}">
+                                <strong><spring:message code="score.none"/></strong>
+                            </c:if>
+                            <c:if test="${note.avgScore ne 0}">
+                                <strong><spring:message code="score"/></strong>:
+                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
+                            </c:if>
+                        </span>
                             <input type="checkbox" class="select-checkbox d-none"/>
 
                         </div>
@@ -368,13 +367,13 @@
         <ul class="pagination">
             <c:if test="${searchNotesForm.pageNumber gt 1}">
                 <li class="page-item">
-                    <%--suppress XmlDuplicatedId --%>
+                        <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
                 </li>
             </c:if>
             <c:if test="${searchNotesForm.pageNumber le 1}">
                 <li class="page-item disabled">
-                    <%--suppress XmlDuplicatedId --%>
+                        <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
                 </li>
             </c:if>
@@ -394,13 +393,13 @@
 
             <c:if test="${searchNotesForm.pageNumber lt maxPage}">
                 <li class="page-item">
-                    <%--suppress XmlDuplicatedId --%>
+                        <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
                 </li>
             </c:if>
             <c:if test="${searchNotesForm.pageNumber ge maxPage}">
                 <li class="page-item disabled">
-                    <%--suppress XmlDuplicatedId --%>
+                        <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
                 </li>
             </c:if>

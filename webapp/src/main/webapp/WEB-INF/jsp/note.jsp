@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl" />
+<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 
 <!DOCTYPE html>
@@ -42,22 +42,29 @@
 <div class="container-fluid">
     <div class="row">
         <section class="col-8 h-100-navs">
+
             <iframe class=" w-100" style="height: 90%" src="${baseUrl}/notes/${noteId}/download"></iframe>
+
             <div class="d-flex justify-content-between">
-                <h1 class="mb-0 !imp">${note.name}</h1>
+                <h1 class="overflow-hidden">${note.name}</h1>
                 <div>
-                    <button class="btn button-expansion rounded-circle edit-button" id="<c:out value="${note.noteId}"/>e1" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                        <img src="<c:url value="/svg/pencil.svg"/>" alt="${edit}" class="icon-xs fill-text">
+                    <button class="btn button-expansion rounded-circle edit-button"
+                            id="<c:out value="${note.noteId}"/>e1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>" class="icon-xs fill-text">
                     </button>
                     <a href="./${note.noteId}/download" download="${note.name}">
-                        <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
-                            <img src="<c:url value="/svg/download.svg"/>" alt="${download}" class="icon-xs fill-text">
+                        <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
+                                data-bs-trigger="hover">
+                            <img src="<c:url value="/svg/download.svg"/>" alt="<spring:message code="download"/>" class="icon-xs fill-text">
                         </button>
                     </a>
                 </div>
             </div>
+
             <div class="mt-2 mb-2">
-                <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
+                <img src="<c:url value="/image/teacher.png"/>" alt="<spring:message code="logotype"/>"
                      style="width: 40px; height: 40px; margin-right: 5px">
                 <span><strong>Owner <!--${note.user}--></strong></span>
             </div>
@@ -71,15 +78,17 @@
             <div class="h-100 d-flex flex-column">
 
                 <div class="container-fluid pb-3">
-                    <input type="submit" class="btn reviews-comments-button mb-3" value="<spring:message code="notes.reviews.button"/>"/>
+                    <input type="submit" class="btn reviews-comments-button mb-3"
+                           value="<spring:message code="notes.reviews.button"/>"/>
 
 
                     <c:if test="${not empty reviews}">
-                        <span><spring:message code="score"/>: <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/> ⭐</span>
+                        <span><spring:message code="score"/>: <fmt:formatNumber type="number" maxFractionDigits="1"
+                                                                                value="${note.avgScore}"/> ⭐</span>
 
                         <div class="reviews-comments">
                             <c:forEach items="${reviews}" var="review">
-                                <div class="card box review-card mb-3 p-3" >
+                                <div class="card box review-card mb-3 p-3">
 
                                     <div class="d-flex flex-wrap justify-content-between">
                                         <h4 class="card-title overflow-hidden">
@@ -105,7 +114,7 @@
                     <div class="card box p-3">
                         <form:form action="./${note.noteId}/review" method="post" modelAttribute="reviewForm">
                             <div>
-                                <spring:message code="notes.review.text.placeholder" var="placeholderText" />
+                                <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
                                 <form:textarea path="content" class="form-control" placeholder='${placeholderText}'/>
                             </div>
                             <form:errors path="content" cssClass="text-danger" element="p"/>
@@ -120,7 +129,8 @@
                                         <form:option value="1">⭐</form:option>
                                     </form:select>
                                 </div>
-                                <input type="submit" class="btn rounded-box button-primary " value="<spring:message code="notes.send.button"/>"/>
+                                <input type="submit" class="btn rounded-box button-primary "
+                                       value="<spring:message code="notes.send.button"/>"/>
                             </div>
                         </form:form>
                     </div>
