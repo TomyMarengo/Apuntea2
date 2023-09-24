@@ -64,4 +64,11 @@ public class NoteController {
         return noteService.getNoteFileById(UUID.fromString(noteId));
     }
 
+    @RequestMapping(value = "/{noteId}/", method = RequestMethod.DELETE)
+    public ModelAndView deleteNote(@PathVariable("noteId") String noteId) {
+        UUID nId = UUID.fromString(noteId);
+        noteService.delete(nId);
+        return new ModelAndView("redirect:/");
+    }
+
 }

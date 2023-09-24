@@ -118,20 +118,17 @@ public class DirectoryController {
         }
     }
 
-    @RequestMapping(value = "/{directoryId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{directoryId}/deletes", method = RequestMethod.POST)
+    public ModelAndView deleteContent(@PathVariable("directoryId") String directoryId) {
+        UUID dId = UUID.fromString(directoryId);
+        directoryService.delete(dId); //TODO: deleteMany
+        return new ModelAndView("redirect:/");
+    }
+
+    @RequestMapping(value = "/{directoryId}/", method = RequestMethod.DELETE)
     public ModelAndView deleteDirectory(@PathVariable("directoryId") String directoryId) {
         UUID dId = UUID.fromString(directoryId);
         directoryService.delete(dId);
         return new ModelAndView("redirect:/");
     }
-
-    /*   @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ModelAndView deleteNote(
-            @RequestParam("noteId") final String noteId,
-            final RedirectAttributes redirectAttributes
-    ) {
-        UUID nId = UUID.fromString(noteId);
-        noteService.delete(nId);
-        return new ModelAndView("redirect:/");
-    } */
 }
