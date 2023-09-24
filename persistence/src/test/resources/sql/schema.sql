@@ -129,10 +129,10 @@ ALTER TABLE Users ADD COLUMN IF NOT EXISTS locale character varying(5) DEFAULT '
 
 --create view for notes and directories
 CREATE VIEW Navigation AS
-SELECT n.note_id as id, n.parent_id, n.user_id, n.note_name as name,  n.category, n.created_at, n.last_modified_at, n.visible, n.file_type, NULL as icon_color
-FROM Notes n
+SELECT n.note_id as id, n.parent_id, n.user_id, n.note_name as name,  n.category, n.created_at, n.last_modified_at, n.visible, n.file_type, NULL as icon_color, COALESCE(AVG(r.score), 0) AS avg_score
+FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id GROUP BY n.note_id
 UNION
-SELECT d.directory_id, d.parent_id, d.user_id, d.directory_name, 'directory', d.created_at, d.last_modified_at, d.visible, NULL, d.icon_color
+SELECT d.directory_id, d.parent_id, d.user_id, d.directory_name, 'directory', d.created_at, d.last_modified_at, d.visible, NULL, d.icon_color, 0
 FROM Directories d;
 
 CREATE VIEW Search AS

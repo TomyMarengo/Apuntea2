@@ -243,7 +243,7 @@
                 <tbody>
                 <c:forEach var="note" items="${notes}">
                     <c:set var="date" value="${note.createdAt}"/>
-                    <tr class="note-found no-select" id="<c:out value="${note.noteId}"/>1">
+                    <tr class="note-found no-select" id="<c:out value="${note.id}"/>1">
                         <td class="note-found-title">
                             <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
                             <span class="card-title">
@@ -263,7 +263,7 @@
                         </td>
 
                         <td class="search-actions">
-                            <a href="./notes/${note.noteId}/download" download="${note.name}">
+                            <a href="./notes/${note.id}/download" download="${note.name}">
                                 <button type="button" class="btn button-expansion rounded-circle"
                                         data-bs-toggle="tooltip" data-bs-placement="bottom"
                                         data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
@@ -273,7 +273,7 @@
                             </a>
 
                             <button class="btn button-expansion rounded-circle copy-button"
-                                    id="<c:out value="${note.noteId}"/>c1" data-bs-toggle="tooltip"
+                                    id="<c:out value="${note.id}"/>c1" data-bs-toggle="tooltip"
                                     data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
                                     data-bs-trigger="hover">
                                 <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
@@ -302,7 +302,7 @@
         <div class="row">
             <c:forEach items="${notes}" var="note">
                 <div class="col-md-4 mb-4">
-                    <div class="note-found card box search-note-box h-100" id="<c:out value="${note.noteId}"/>2">
+                    <div class="note-found card box search-note-box h-100" id="<c:out value="${note.id}"/>2">
                         <div class="card-body no-select">
                             <div class="d-flex gap-2 overflow-hidden">
                                 <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->

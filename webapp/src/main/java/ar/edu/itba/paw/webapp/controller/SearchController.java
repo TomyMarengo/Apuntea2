@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.Directory;
 import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.Searchable;
 import ar.edu.itba.paw.services.DataService;
@@ -23,13 +24,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/search")
 public class SearchController {
     private final DataService dataService;
-    private final NoteService noteService;
     private final SearchService searchService;
 
     @Autowired
-    public SearchController(final DataService dataService, final NoteService noteService, SearchService searchService) {
+    public SearchController(final DataService dataService, SearchService searchService) {
         this.dataService = dataService;
-        this.noteService = noteService;
         this.searchService = searchService;
     }
 

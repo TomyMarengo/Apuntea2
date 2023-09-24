@@ -26,7 +26,7 @@ public class SearchJdbcDao implements SearchDao {
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
     }
 
-    private final static RowMapper<Searchable> ROW_MAPPER = (rs, rowNum) -> {
+    private final static RowMapper<Searchable> SEARCH_ROW_MAPPER = (rs, rowNum) -> {
         Category c = Category.valueOf(rs.getString(CATEGORY).toUpperCase());
         if (c.equals(Category.DIRECTORY)) {
             return new Directory(
@@ -61,12 +61,45 @@ public class SearchJdbcDao implements SearchDao {
                         rs.getString(SUBJECT_NAME),
                         UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
                 ),
-                Category.valueOf(rs.getString(CATEGORY)),
+                Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
                 rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                 rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
                 rs.getString(FILE_TYPE),
                 rs.getFloat(AVG_SCORE)
             );
+    };
+
+    private final static RowMapper<Searchable> NAVIGATION_ROW_MAPPER = (rs, rowNum) -> {
+        Category c = Category.valueOf(rs.getString(CATEGORY).toUpperCase());
+        if (c.equals(Category.DIRECTORY)) {
+            return new Directory(
+                    UUID.fromString(rs.getString(ID)),
+                    rs.getString(NAME),
+                    new User(
+                            UUID.fromString(rs.getString(USER_ID)),
+                            rs.getString(EMAIL)
+                    ),
+                    UUID.fromString(rs.getString(PARENT_ID)),
+                    rs.getTimestamp(CREATED_AT).toLocalDateTime(),
+                    rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
+                    rs.getString(ICON_COLOR)
+            );
+
+        }
+        return new Note(
+                UUID.fromString(rs.getString(ID)),
+                rs.getString(NAME),
+                new User(
+                        UUID.fromString(rs.getString(USER_ID)),
+                        rs.getString(EMAIL)
+                ),
+                UUID.fromString(rs.getString(PARENT_ID)),
+                Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
+                rs.getTimestamp(CREATED_AT).toLocalDateTime(),
+                rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
+                rs.getString(FILE_TYPE),
+                rs.getFloat(AVG_SCORE)
+        );
     };
 
     @Override
@@ -91,6 +124,29 @@ public class SearchJdbcDao implements SearchDao {
         addIfPresent(query, args, "c." + CAREER_ID, "=", "AND", sa.getCareerId());
         addIfPresent(query, args, "s." + SUBJECT_ID, "=", "AND", sa.getSubjectId());
 
+        applyFiltersAndPagination(query, args, sa, "AND (LOWER(t.name) LIKE LOWER(?) ESCAPE '!' OR LOWER(i.institution_name) LIKE LOWER(?) ESCAPE '!' OR LOWER(c.career_name) LIKE LOWER(?) ESCAPE '!' OR LOWER(s.subject_name) LIKE LOWER(?) ESCAPE '!')  ");
+        return jdbcTemplate.query(query.toString(), args.toArray(), SEARCH_ROW_MAPPER);
+    }
+
+    @Override
+    public List<Searchable> getNavigationResults(SearchArguments sa) {
+        StringBuilder query = new StringBuilder(
+                "SELECT DISTINCT t.id, t.name, t.parent_id, t.category, t.created_at, t.last_modified_at, " +
+                        "t.avg_score, t.file_type, " +
+                        "t.icon_color, " +
+                        "u.user_id, u.email " +
+                        "FROM Navigation t  " +
+                        "INNER JOIN Users u ON t.user_id = u.user_id " +
+                        "WHERE t.parent_id = ? "
+        );
+        List<Object> args = new ArrayList<>();
+        args.add(sa.getParentId());
+
+        applyFiltersAndPagination(query, args, sa, "AND (LOWER(t.name) LIKE LOWER(?) ESCAPE '!'");
+        return jdbcTemplate.query(query.toString(), args.toArray(), NAVIGATION_ROW_MAPPER);
+    }
+
+    private void applyFiltersAndPagination(StringBuilder query, List<Object> args, SearchArguments sa, String wordCondition) {
         // TODO: Remove optional for category
         sa.getCategory().ifPresent(c -> {
             if (c == Category.NOTE) {
@@ -100,21 +156,18 @@ public class SearchJdbcDao implements SearchDao {
             }
         });
 
-
         sa.getWord().ifPresent(w -> {
                     String searchWord = "%" + w
-//                            .replace("!", "!!") // Use ! as escape character
-//                            .replace("%", "!%")
-//                            .replace("_", "!_")
-//                            .replace("[", "![")
+                            .replace("!", "!!") // Use ! as escape character
+                            .replace("%", "!%")
+                            .replace("_", "!_")
+                            .replace("[", "![")
                             + "%";
-                    query.append("AND (LOWER(t.name) LIKE LOWER(?) OR LOWER(i.institution_name) LIKE LOWER(?) OR LOWER(c.career_name) LIKE LOWER(?) OR LOWER(s.subject_name) LIKE LOWER(?)) ");
+                    query.append(wordCondition);
                     for (int i = 0; i < 4; i++)
                         args.add(searchWord);
                 }
         );
-
-//        query.append("GROUP BY n.").append(NOTE_ID).append(", s.").append(SUBJECT_ID).append(", u.").append(USER_ID);
 
         if (sa.getSortBy() != null) {
             query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME));
@@ -122,8 +175,7 @@ public class SearchJdbcDao implements SearchDao {
         }
 
         query.append(" LIMIT ").append(sa.getPageSize()).append(" OFFSET ").append((sa.getPage() - 1) * sa.getPageSize());
-
-        return jdbcTemplate.query(query.toString(), args.toArray(), ROW_MAPPER);
     }
+
 
 }

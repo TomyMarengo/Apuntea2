@@ -25,18 +25,23 @@ public class Note implements Searchable {
         this.user = user;
     }
 
-    // For Search
-    public Note(UUID noteId, String name, User user, UUID parentId, Subject subject,  Category category, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String file_type, float avgScore) {
+    // For navigation
+    public Note(UUID noteId, String name, User user, UUID parentId,  Category category, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String file_type, float avgScore) {
         this.noteId = noteId;
         this.name = name;
         this.user = user;
         this.parentId = parentId;
-        this.subject = subject;
         this.category = category;
         this.createdAt = createdAt;
         this.lastModifiedAt = lastModifiedAt;
         this.fileType = file_type;
         this.avgScore = avgScore;
+    }
+
+    // For Search
+    public Note(UUID noteId, String name, User user, UUID parentId, Subject subject,  Category category, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String file_type, float avgScore) {
+        this(noteId, name, user, parentId, category, createdAt, lastModifiedAt, file_type, avgScore);
+        this.subject = subject;
     }
 
     @Override

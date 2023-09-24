@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface SearchDao {
     List<Searchable> search(SearchArguments sa);
+    List<Searchable> getNavigationResults(SearchArguments sa);
 }

@@ -26,4 +26,10 @@ public class SearchServiceImpl implements SearchService {
         return searchDao.search(sa);
     }
 
+    @Override
+    public List<Searchable> getNavigationResults(UUID parentId, String category, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
+        SearchArguments sa = new SearchArguments(parentId, category, word, sortBy, ascending, page, pageSize);
+        return searchDao.getNavigationResults(sa);
+    }
+
 }

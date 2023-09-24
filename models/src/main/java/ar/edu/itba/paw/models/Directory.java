@@ -24,15 +24,19 @@ public class Directory implements Searchable {
     }
 
 
-    public Directory(UUID directoryId, String name, User user, UUID parentId, Subject subject, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String iconColor) {
+    public Directory(UUID directoryId, String name, User user, UUID parentId, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String iconColor) {
         this.directoryId = directoryId;
         this.name = name;
         this.user = user;
         this.parentId = parentId;
-        this.subject = subject;
         this.createdAt = createdAt;
         this.lastModifiedAt = lastModifiedAt;
         this.iconColor = iconColor;
+    }
+
+    public Directory(UUID directoryId, String name, User user, UUID parentId, Subject subject, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String iconColor) {
+        this(directoryId, name, user, parentId, createdAt, lastModifiedAt, iconColor);
+        this.subject = subject;
     }
 
     public UUID getId() { return directoryId; }
