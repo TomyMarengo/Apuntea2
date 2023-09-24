@@ -15,6 +15,7 @@ import org.thymeleaf.spring4.ISpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -39,9 +40,12 @@ public class EmailServiceImpl implements EmailService {
     public void sendReviewEmail(Review review) {
         final Locale locale = LocaleContextHolder.getLocale();
         final String to = review.getNote().getUser().getEmail();
-        final String subject = messageSource.getMessage("email.review.new", null, locale);
+        final String subject = messageSource.getMessage("email.review.new", null, locale) + " " + review.getNote().getName();
         final Map<String, Object> data = new HashMap<>();
         data.put("score", review.getScore());
+        data.put("content", review.getContent());
+        data.put("reviewer", review.getUser().getEmail());
+
         try {
             LOGGER.info("Sending review email to {}", review.getNote().getUser().getEmail());
             sendMessageUsingThymeleafTemplate(to,subject,"new-review.html", data, locale);
@@ -49,6 +53,7 @@ public class EmailServiceImpl implements EmailService {
         } catch (MessagingException e) {
             LOGGER.warn("Review email could not be sent to {}",review.getNote().getUser().getEmail());
         }
+
     }
 
     /* https://www.baeldung.com/spring-email-templates */
