@@ -2,7 +2,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -10,11 +10,8 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Apuntea | <spring:message code="errors.404.title"/></title>
+  <title> Apuntea | <spring:message code="errors.404.title"/></title>
   <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
   <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
   <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
@@ -31,21 +28,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
 
 </head>
+
 <body>
 
-<!-- NAVBAR -->
 <fragment:navbar/>
 
-<div class="container">
-  <h1 class="text-center">
-    <spring:message code="errors.404.title"/>
-  </h1>
-</div>
+<main>
+  <div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+      <div class="col-md-6">
+        <div class="text-center">
+          <img src="${baseUrl}/image/page_not_found.png" alt="<spring:message code="errors.404.title"/>" class="img-fluid mt-5 mb-4">
+          <h1 class="text-primary"><spring:message code="errors.404.title"/></h1>
+          <p class="text-primary"><spring:message code="errors.404.message"/></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
 <script src="<c:url value="/js/darkmode.js"/>"></script>
+
 </body>
 
 </html>
