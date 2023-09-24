@@ -95,8 +95,8 @@ public class DirectoryController {
             return new ModelAndView("redirect:/directory" + directoryId);
         }
 
-        Directory directory = directoryService.create(createDirectoryForm.getName(), createDirectoryForm.getParentId());
-        return new ModelAndView("redirect:/directory/" + directory.getDirectoryId() + "/");
+        UUID childId = directoryService.create(createDirectoryForm.getName(), createDirectoryForm.getParentId());
+        return new ModelAndView("redirect:/directory/" + childId  + "/");
     }
 
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createNote")
