@@ -25,7 +25,7 @@ public class SearchNotesForm {
     @Min(1)
     private Integer pageNumber = 1;
     @NotNull
-    private Integer pageSize = 10;
+    private Integer pageSize = 5;
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
     @Size(max = 50)
     private String word;

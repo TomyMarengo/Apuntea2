@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.models.Searchable;
 import ar.edu.itba.paw.persistence.SearchDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,27 +23,48 @@ public class SearchServiceImpl implements SearchService {
         this.securityService = securityService;
     }
 
+    @Transactional
     @Override
-    public List<Searchable> search(UUID institutionId, UUID careerId, UUID subjectId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
-        SearchArguments sa = new SearchArguments()
-                .withInstitutionId(institutionId)
-                .withCareerId(careerId)
-                .withSubjectId(subjectId)
-                .withCategory(category)
-                .withWord(word)
-                .withSortBy(sortBy)
-                .withAscending(ascending)
-                .withPage(page)
-                .withPageSize(pageSize);
-        securityService.getCurrentUser().ifPresent(u -> sa.withCurrentUserId(u.getUserId()));
-        return searchDao.search(sa);
+    public Page<Searchable> search(UUID institutionId, UUID careerId, UUID subjectId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder()
+                .institutionId(institutionId)
+                .careerId(careerId)
+                .subjectId(subjectId)
+                .category(category)
+                .word(word)
+                .sortBy(sortBy)
+                .ascending(ascending)
+                .page(page)
+                .pageSize(pageSize);
+        securityService.getCurrentUser().ifPresent(u -> sab.currentUserId(u.getUserId()));
+        SearchArguments sa = sab.build();
+
+        return new Page<>(
+                searchDao.search(sa),
+                sa.getPage(),
+                sa.getPageSize(),
+                searchDao.countSearchResults(sa)
+        );
     }
 
+    @Transactional
     @Override
-    public List<Searchable> getNavigationResults(UUID parentId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
-        SearchArguments sa = new SearchArguments().withCategory(category).withWord(word).withSortBy(sortBy).withAscending(ascending).withPage(page).withPageSize(pageSize);
-        securityService.getCurrentUser().ifPresent(u -> sa.withCurrentUserId(u.getUserId()));
-        return searchDao.getNavigationResults(sa, parentId);
+    public Page<Searchable> getNavigationResults(UUID parentId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder()
+                .category(category)
+                .word(word)
+                .sortBy(sortBy)
+                .ascending(ascending)
+                .page(page)
+                .pageSize(pageSize);
+        securityService.getCurrentUser().ifPresent(u -> sab.currentUserId(u.getUserId()));
+        SearchArguments sa = sab.build();
+        return new Page<>(
+                searchDao.getNavigationResults(sa, parentId),
+                sa.getPage(),
+                sa.getPageSize(),
+                searchDao.countNavigationResults(sa, parentId)
+        );
     }
 
 }

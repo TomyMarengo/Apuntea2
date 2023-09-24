@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface SearchDao {
     List<Searchable> search(SearchArguments sa);
     List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId);
+    int countSearchResults(SearchArguments sa);
+    int countNavigationResults(SearchArguments sa, UUID parentId);
 }

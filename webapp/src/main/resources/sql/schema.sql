@@ -130,16 +130,31 @@ ALTER TABLE Users
     ADD COLUMN IF NOT EXISTS locale character varying(5) DEFAULT 'en' NOT NULL;
 
 --create view for notes and directories
-CREATE OR REPLACE VIEW Navigation AS
-SELECT n.note_id as id, n.parent_id, n.user_id, n.note_name as name,  n.category, n.created_at, n.last_modified_at, n.visible, n.file_type, NULL as icon_color, COALESCE(AVG(r.score), 0) AS avg_score
-FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id GROUP BY n.note_id
-UNION
-SELECT d.directory_id, d.parent_id, d.user_id, d.directory_name, 'directory', d.created_at, d.last_modified_at, d.visible, NULL, d.icon_color, 0
-FROM Directories d;
+CREATE OR REPLACE VIEW Navigation AS (
+    SELECT t.*, u.email
+    FROM (
+       SELECT n.note_id as id, n.parent_id, n.user_id, n.note_name as name,  n.category, n.created_at, n.last_modified_at, n.visible, n.file_type, NULL as icon_color, COALESCE(AVG(r.score), 0) AS avg_score
+       FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id GROUP BY n.note_id
+       UNION
+       SELECT d.directory_id, d.parent_id, d.user_id, d.directory_name, 'directory', d.created_at, d.last_modified_at, d.visible, NULL, d.icon_color, 0
+       FROM Directories d
+     ) as t
+     INNER JOIN Users u ON t.user_id = u.user_id
+);
 
-CREATE OR REPLACE VIEW Search AS
-SELECT n.note_id as id, n.parent_id, n.user_id, n.subject_id, n.note_name as name, n.category, n.created_at, n.last_modified_at, COALESCE(AVG(r.score), 0) AS avg_score, n.visible, n.file_type, NULL as icon_color
-FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id GROUP BY n.note_id
-UNION
-SELECT d.directory_id, d.parent_id, d.user_id, s.subject_id, d.directory_name, 'directory', d.created_at, d.last_modified_at, 0, d.visible, NULL, d.icon_color
-FROM Directories d INNER JOIN Subjects s ON d.parent_id = s.root_directory_id;
+CREATE OR REPLACE VIEW Search AS (
+  SELECT t.*,
+         i.institution_id, i.institution_name, c.career_id, c.career_name, s.subject_name, s.root_directory_id, u.email
+      FROM (
+         SELECT n.note_id as id, n.parent_id, n.user_id, n.subject_id, n.note_name as name, n.category, n.created_at, n.last_modified_at, COALESCE(AVG(r.score), 0) AS avg_score, n.visible, n.file_type, NULL as icon_color
+         FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id GROUP BY n.note_id
+         UNION
+         SELECT d.directory_id, d.parent_id, d.user_id, s.subject_id, d.directory_name, 'directory', d.created_at, d.last_modified_at, 0, d.visible, NULL, d.icon_color
+         FROM Directories d INNER JOIN Subjects s ON d.parent_id = s.root_directory_id
+     ) AS t
+     INNER JOIN Subjects s ON t.subject_id = s.subject_id
+     INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id
+     INNER JOIN Careers c ON sc.career_id = c.career_id
+     INNER JOIN Institutions i ON c.institution_id = i.institution_id
+     INNER JOIN Users u ON t.user_id = u.user_id
+);

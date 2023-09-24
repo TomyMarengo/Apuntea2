@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Category;
-import ar.edu.itba.paw.models.Directory;
-import ar.edu.itba.paw.models.Note;
-import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.DataService;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SearchService;
@@ -36,7 +33,7 @@ public class SearchController {
     public ModelAndView searchNotes(@Valid @ModelAttribute("searchNotesForm") final SearchNotesForm searchNotesForm, final BindingResult result){
         final ModelAndView mav = new ModelAndView("search");
 
-        List<Searchable> results = searchService.search(
+        Page<Searchable> pageResult = searchService.search(
                     searchNotesForm.getInstitutionId(),
                     searchNotesForm.getCareerId(),
                     searchNotesForm.getSubjectId(),
@@ -48,8 +45,8 @@ public class SearchController {
                     searchNotesForm.getPageSize()
         );
 
-        mav.addObject("maxPage", 5); //TODO: Change this mocked element
-        mav.addObject("results", results);
+        mav.addObject("maxPage", pageResult.getTotalPages());
+        mav.addObject("results", pageResult.getContent());
         mav.addObject("institutions", dataService.getInstitutions());
         mav.addObject("careers", dataService.getCareers());
         mav.addObject("subjects", dataService.getSubjects());
