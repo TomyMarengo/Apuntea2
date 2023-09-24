@@ -80,7 +80,7 @@ public class Directory implements Searchable {
     }
     @Override
     public float getAvgScore(){
-        throw new UnsupportedOperationException();
+        return 0;
     }
     @Override
     public String getIconColor() {

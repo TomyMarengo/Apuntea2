@@ -22,8 +22,8 @@ rows.forEach(row => {
   row.addEventListener('dblclick', () => {
     // Acción de doble clic aquí (por ejemplo, redirigir a /notes/{noteId})
     const noteId = row.getAttribute('id');
-
-    window.location.href = `./notes/${noteId.slice(0, -1)}`;
+    const [id, type] = noteId.slice(0,-1).split('.');
+    window.location.href = `./${type === 'directory'? 'directory' : 'notes'}/${id}`;
   });
 });
 

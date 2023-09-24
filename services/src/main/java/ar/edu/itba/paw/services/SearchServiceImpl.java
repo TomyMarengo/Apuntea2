@@ -15,21 +15,32 @@ public class SearchServiceImpl implements SearchService {
     private final SearchDao searchDao;
 
     @Autowired
-    public SearchServiceImpl(final SearchDao searchDao, final SecurityService securityService, final EmailService emailService) {
+    public SearchServiceImpl(final SearchDao searchDao, final SecurityService securityService) {
         this.searchDao = searchDao;
         this.securityService = securityService;
     }
 
     @Override
-    public List<Searchable> search(UUID institutionId, UUID careerId, UUID subjectId, String category, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        SearchArguments sa = new SearchArguments(institutionId, careerId, subjectId, category, word, sortBy, ascending, page, pageSize);
+    public List<Searchable> search(UUID institutionId, UUID careerId, UUID subjectId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
+        SearchArguments sa = new SearchArguments()
+                .withInstitutionId(institutionId)
+                .withCareerId(careerId)
+                .withSubjectId(subjectId)
+                .withCategory(category)
+                .withWord(word)
+                .withSortBy(sortBy)
+                .withAscending(ascending)
+                .withPage(page)
+                .withPageSize(pageSize);
+        securityService.getCurrentUser().ifPresent(u -> sa.withCurrentUserId(u.getUserId()));
         return searchDao.search(sa);
     }
 
     @Override
-    public List<Searchable> getNavigationResults(UUID parentId, String category, String word, String sortBy, boolean ascending, Integer page, Integer pageSize) {
-        SearchArguments sa = new SearchArguments(parentId, category, word, sortBy, ascending, page, pageSize);
-        return searchDao.getNavigationResults(sa);
+    public List<Searchable> getNavigationResults(UUID parentId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
+        SearchArguments sa = new SearchArguments().withCategory(category).withWord(word).withSortBy(sortBy).withAscending(ascending).withPage(page).withPageSize(pageSize);
+        securityService.getCurrentUser().ifPresent(u -> sa.withCurrentUserId(u.getUserId()));
+        return searchDao.getNavigationResults(sa, parentId);
     }
 
 }

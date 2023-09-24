@@ -20,6 +20,9 @@ public class SearchJdbcDao implements SearchDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    private static final int SEARCH_CONDITIONS = 4;
+    private static final int NAVIGATION_CONDITIONS = 1;
+
     @Autowired
     public SearchJdbcDao(final DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -116,20 +119,24 @@ public class SearchJdbcDao implements SearchDao {
                         "INNER JOIN Careers c ON sc.career_id = c.career_id " +
                         "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
                         "INNER JOIN Users u ON t.user_id = u.user_id " +
-                        "WHERE true "
+                        "WHERE TRUE "
         );
         List<Object> args = new ArrayList<>();
 
-        JdbcDaoUtils.addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
+        addIfPresent(query, args, "i."  + INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
         addIfPresent(query, args, "c." + CAREER_ID, "=", "AND", sa.getCareerId());
         addIfPresent(query, args, "s." + SUBJECT_ID, "=", "AND", sa.getSubjectId());
 
-        applyFiltersAndPagination(query, args, sa, "AND (LOWER(t.name) LIKE LOWER(?) ESCAPE '!' OR LOWER(i.institution_name) LIKE LOWER(?) ESCAPE '!' OR LOWER(c.career_name) LIKE LOWER(?) ESCAPE '!' OR LOWER(s.subject_name) LIKE LOWER(?) ESCAPE '!')  ");
+        applyFiltersAndPagination(
+                query, args, sa,
+                "AND (LOWER(t.name) LIKE LOWER(?) ESCAPE '!' OR LOWER(i.institution_name) LIKE LOWER(?) ESCAPE '!' OR LOWER(c.career_name) LIKE LOWER(?) ESCAPE '!' OR LOWER(s.subject_name) LIKE LOWER(?) ESCAPE '!')  ",
+                SEARCH_CONDITIONS
+        );
         return jdbcTemplate.query(query.toString(), args.toArray(), SEARCH_ROW_MAPPER);
     }
 
     @Override
-    public List<Searchable> getNavigationResults(SearchArguments sa) {
+    public List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId){
         StringBuilder query = new StringBuilder(
                 "SELECT DISTINCT t.id, t.name, t.parent_id, t.category, t.created_at, t.last_modified_at, " +
                         "t.avg_score, t.file_type, " +
@@ -140,14 +147,13 @@ public class SearchJdbcDao implements SearchDao {
                         "WHERE t.parent_id = ? "
         );
         List<Object> args = new ArrayList<>();
-        args.add(sa.getParentId());
+        args.add(parentId);
 
-        applyFiltersAndPagination(query, args, sa, "AND (LOWER(t.name) LIKE LOWER(?) ESCAPE '!'");
+        applyFiltersAndPagination(query, args, sa, "AND LOWER(t.name) LIKE LOWER(?) ESCAPE '!' ", NAVIGATION_CONDITIONS);
         return jdbcTemplate.query(query.toString(), args.toArray(), NAVIGATION_ROW_MAPPER);
     }
 
-    private void applyFiltersAndPagination(StringBuilder query, List<Object> args, SearchArguments sa, String wordCondition) {
-        // TODO: Remove optional for category
+    private void applyFiltersAndPagination(StringBuilder query, List<Object> args, SearchArguments sa, String wordCondition, int conditionCount) {
         sa.getCategory().ifPresent(c -> {
             if (c == Category.NOTE) {
                 addIfPresent(query, args, CATEGORY, "!=", "AND", Optional.of(Category.DIRECTORY.toString().toLowerCase()));
@@ -155,6 +161,8 @@ public class SearchJdbcDao implements SearchDao {
                 addIfPresent(query, args, CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString).map(String::toLowerCase));
             }
         });
+
+        addIfPresent(query, args, "u." + USER_ID, "=", "AND", sa.getUserId());
 
         sa.getWord().ifPresent(w -> {
                     String searchWord = "%" + w
@@ -164,10 +172,17 @@ public class SearchJdbcDao implements SearchDao {
                             .replace("[", "![")
                             + "%";
                     query.append(wordCondition);
-                    for (int i = 0; i < 4; i++)
+                    for (int i = 0; i < conditionCount; i++)
                         args.add(searchWord);
                 }
         );
+
+        if (sa.getCurrentUserId().isPresent()) {
+            query.append("AND (t.visible OR t.user_id = ?) ");
+            args.add(sa.getCurrentUserId().get());
+        } else {
+            query.append("AND t.visible ");
+        }
 
         if (sa.getSortBy() != null) {
             query.append(" ORDER BY ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME));

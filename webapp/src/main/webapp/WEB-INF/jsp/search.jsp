@@ -185,7 +185,7 @@
 <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
 
 
-<c:if test="${not empty notes}">
+<c:if test="${not empty results}">
     <!-- TOP BUTTONS -->
     <div class="d-flex container mt-4 justify-content-between p-0">
         <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
@@ -241,43 +241,47 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="note" items="${notes}">
-                    <c:set var="date" value="${note.createdAt}"/>
-                    <tr class="note-found no-select" id="<c:out value="${note.id}"/>1">
+                <c:forEach var="item" items="${results}">
+                    <c:set var="date" value="${item.createdAt}"/>
+                    <tr class="note-found no-select" id="<c:out value="${item.id}.${item.category.formattedName}"/>1">
                         <td class="note-found-title">
-                            <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
+                            <c:if test="${item.category.formattedName ne 'directory'}">
+                                <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
+                            </c:if>
                             <span class="card-title">
-                                <c:out value="${note.name}"/>
+                                <c:out value="${item.name}"/>
                             </span>
                         </td>
                             <%--                    <td>owner</td>--%>
                         <td><spring:message code="date.format"
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
                         <td>
-                            <c:if test="${note.avgScore eq 0}">
+                            <c:if test="${item.avgScore eq 0}">
                                 <spring:message code="score.none"/>
                             </c:if>
-                            <c:if test="${note.avgScore ne 0}">
-                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
+                            <c:if test="${item.avgScore ne 0}">
+                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
                             </c:if>
                         </td>
 
                         <td class="search-actions">
-                            <a href="./notes/${note.id}/download" download="${note.name}">
-                                <button type="button" class="btn button-expansion rounded-circle"
-                                        data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                        data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
-                                    <img src="<c:url value="/svg/download.svg"/>" alt="${download}"
-                                         class="icon-xs fill-text">
+                            <c:if test="${item.category.formattedName ne 'directory'}">
+                                <a href="./notes/${item.id}/download" download="${item.name}">
+                                    <button type="button" class="btn button-expansion rounded-circle"
+                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                            data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
+                                        <img src="<c:url value="/svg/download.svg"/>" alt="${download}"
+                                             class="icon-xs fill-text">
+                                    </button>
+                                </a>
+                                <button class="btn button-expansion rounded-circle copy-button"
+                                        id="<c:out value="${item.id}"/>c1" data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
+                                        data-bs-trigger="hover">
+                                    <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
                                 </button>
-                            </a>
+                            </c:if>
 
-                            <button class="btn button-expansion rounded-circle copy-button"
-                                    id="<c:out value="${note.id}"/>c1" data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
-                                    data-bs-trigger="hover">
-                                <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
-                            </button>
                             <input type="checkbox" class="select-checkbox d-none"/>
                         </td>
                     </tr>
@@ -300,14 +304,14 @@
     <!-- BOX LIST -->
     <section class="container mt-4 p-0" id="boxList">
         <div class="row">
-            <c:forEach items="${notes}" var="note">
+            <c:forEach items="${results}" var="item">
                 <div class="col-md-4 mb-4">
-                    <div class="note-found card box search-note-box h-100" id="<c:out value="${note.id}"/>2">
+                    <div class="note-found card box search-note-box h-100" id="<c:out value="${item.id}"/>2">
                         <div class="card-body no-select">
                             <div class="d-flex gap-2 overflow-hidden">
                                 <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
                                 <h4 class="card-title text-truncate">
-                                    <c:out value="${note.name}"/>
+                                    <c:out value="${item.name}"/>
                                 </h4>
                             </div>
                                 <%--                        <span class="card-text">--%>
@@ -316,16 +320,16 @@
                                 <%--                        </span>--%>
                                 <%--                        <br>--%>
                             <span class="card-text"><strong><spring:message code="category"/></strong>:
-                                <c:if test="${note.category.formattedName eq 'Theory'}">
+                                <c:if test="${item.category.formattedName eq 'theory'}">
                                     <spring:message code="search.category.theory"/>
                                 </c:if>
-                                <c:if test="${note.category.formattedName eq 'Practice'}">
+                                <c:if test="${item.category.formattedName eq 'practice'}">
                                     <spring:message code="search.category.practice"/>
                                 </c:if>
-                                <c:if test="${note.category.formattedName eq 'Exam'}">
+                                <c:if test="${item.category.formattedName eq 'exam'}">
                                     <spring:message code="search.category.exam"/>
                                 </c:if>
-                                <c:if test="${note.category.formattedName eq 'Other'}">
+                                <c:if test="${item.category.formattedName eq 'other'}">
                                     <spring:message code="search.category.other"/>
                                 </c:if>
                             </span>
@@ -337,12 +341,12 @@
                         </span>
                             <br>
                             <span class="card-text">
-                            <c:if test="${note.avgScore eq 0}">
+                            <c:if test="${item.avgScore eq 0}">
                                 <strong><spring:message code="score.none"/></strong>
                             </c:if>
-                            <c:if test="${note.avgScore ne 0}">
+                            <c:if test="${item.avgScore ne 0}">
                                 <strong><spring:message code="score"/></strong>:
-                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/>
+                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
                             </c:if>
                         </span>
                             <input type="checkbox" class="select-checkbox d-none"/>
@@ -355,7 +359,7 @@
     </section>
 </c:if>
 
-<c:if test="${empty notes}">
+<c:if test="${empty results}">
     <section class="container mt-4">
         <p><spring:message code="notes.noNotes"/></p>
     </section>

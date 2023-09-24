@@ -49,9 +49,7 @@ public class SearchController {
         );
 
         mav.addObject("maxPage", 5); //TODO: Change this mocked element
-        //TODO: support directory search
-        List<Note> notes = results.stream().filter( r -> r.getCategory() != Category.DIRECTORY).map( r -> (Note) r).collect(Collectors.toList());
-        mav.addObject("notes", notes);
+        mav.addObject("results", results);
         mav.addObject("institutions", dataService.getInstitutions());
         mav.addObject("careers", dataService.getCareers());
         mav.addObject("subjects", dataService.getSubjects());
