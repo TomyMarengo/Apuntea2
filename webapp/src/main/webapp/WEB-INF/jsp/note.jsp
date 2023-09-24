@@ -49,11 +49,11 @@
                 <h1 class="overflow-hidden">${note.name}</h1>
                 <div>
                     <button class="btn button-expansion rounded-circle edit-button"
-                            id="<c:out value="${note.noteId}"/>e1" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            id="<c:out value="${note.id}"/>e1" data-bs-toggle="tooltip" data-bs-placement="bottom"
                             data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                         <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>" class="icon-xs fill-text">
                     </button>
-                    <a href="./${note.noteId}/download" download="${note.name}">
+                    <a href="./${note.id}/download" download="${note.name}">
                         <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
                                 data-bs-trigger="hover">
@@ -112,7 +112,7 @@
                     </c:if>
 
                     <div class="card box p-3">
-                        <form:form action="./${note.noteId}/review" method="post" modelAttribute="reviewForm">
+                        <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
                             <div>
                                 <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
                                 <form:textarea path="content" class="form-control" placeholder='${placeholderText}'/>

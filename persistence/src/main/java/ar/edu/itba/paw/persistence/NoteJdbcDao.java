@@ -46,7 +46,7 @@ public class NoteJdbcDao implements NoteDao {
                             rs.getString(SUBJECT_NAME),
                             UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
                     ),
-                    Category.valueOf(rs.getString(CATEGORY)),
+                    Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
                     rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                     rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
                     rs.getString(FILE_TYPE),
@@ -130,11 +130,11 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
         return jdbcTemplate.query(
-                "SELECT DISTINCT n.note_id, n.note_name, n.parent_id, n.category, n.created_at, n.last_modified_at, n.avg_score, n.file_type, " +
-                        "u.user_id, u.email " +
-                        "s.subject_id, s.subject_name, s.root_directory_id, " +
+                "SELECT DISTINCT n.note_id, n.note_name, n.parent_id, n.category, n.created_at, n.last_modified_at, COALESCE(AVG(r.score), 0) AS avg_score, n.file_type, " +
+                        "u.user_id, u.email, " +
+                        "s.subject_id, s.subject_name, s.root_directory_id " +
                         "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id JOIN Users u ON n.user_id = u.user_id " +
-                        "WHERE n.note_id = ? GROUP BY n.note_id, s.subject_id",
+                        "WHERE n.note_id = ? GROUP BY n.note_id, u.user_id, s.subject_id",
                 ROW_MAPPER,
                 noteId
         ).stream().findFirst();
