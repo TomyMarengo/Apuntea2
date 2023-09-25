@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -7,19 +9,18 @@ public class User {
     private String email;
     private String password;
 
-    public User(final String email) {
-        this.email = email;
-    }
+    private Role[] roles;
 
     public User(final UUID userId, final String email) {
         this.userId = userId;
         this.email = email;
     }
 
-    public User(final UUID userId, final String email, final String password) {
+    public User(final UUID userId, final String email, final String password, final String[] roles) {
         this.userId = userId;
         this.email = email;
         this.password = password;
+        this.roles = Arrays.stream(roles).map(Role::getRole).toArray(Role[]::new);
     }
 
     public String getEmail() {
@@ -30,5 +31,8 @@ public class User {
     }
     public String getPassword() {
         return password;
+    }
+    public Role[] getRoles() {
+        return roles;
     }
 }

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +38,8 @@ public class UserServiceImpl implements UserService {
 
 //    @Transactional
     @Override
-    public void create(String email, String password, UUID institutionId, UUID careerId) {
+    public void create(String email, String password, UUID institutionId, UUID careerId, Role role) {
         final String lang = LocaleContextHolder.getLocale().getLanguage();
-        userDao.create(email, passwordEncoder.encode(password), institutionId, careerId, lang);
+        userDao.create(email, passwordEncoder.encode(password), institutionId, careerId, lang, role);
     }
 }

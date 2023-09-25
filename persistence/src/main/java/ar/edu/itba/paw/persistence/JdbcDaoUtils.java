@@ -14,6 +14,8 @@ public class JdbcDaoUtils {
     static final String SUBJECTS = "Subjects";
     static final String DIRECTORIES = "Directories";
     static final String USERS = "Users";
+    static final String USER_ROLES = "User_Roles";
+
     static final String INSTITUTION_ID = "institution_id";
     static final String ID = "id";
     static final String NAME = "name";
@@ -22,6 +24,7 @@ public class JdbcDaoUtils {
     static final String INSTITUTION_NAME = "institution_name";
     static final String CAREER_NAME = "career_name";
     static final String SUBJECT_NAME = "subject_name";
+    static final String ROLE_NAME = "role_name";
     static final String CAREER_ID = "career_id";
     static final String SUBJECT_ID = "subject_id";
     static final String CATEGORY = "category";
@@ -43,8 +46,8 @@ public class JdbcDaoUtils {
     static final String LAST_MODIFIED_AT = "last_modified_at";
     static final String ICON_COLOR = "icon_color";
     static final String LOCALE = "locale";
-
     static final String FILE_TYPE = "file_type";
+    static final String ROLES = "roles";
 
     static{
         SORTBY.put(SortBy.SCORE, AVG_SCORE);

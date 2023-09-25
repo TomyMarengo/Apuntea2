@@ -107,8 +107,7 @@ public class NoteJdbcDao implements NoteDao {
         namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, file, subject_id, category, user_id, parent_id, file_type) " +
                 " SELECT :note_name, :file, :subject_id, :category, :user_id, s.root_directory_id, :file_type FROM Subjects s WHERE s.subject_id = :subject_id"
                 , args, holder, new String[]{NOTE_ID});
-        UUID noteId = (UUID) holder.getKeys().get(NOTE_ID);
-        return noteId;
+        return (UUID) holder.getKeys().get(NOTE_ID);
     }
 
     @Transactional

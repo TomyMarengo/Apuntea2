@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.services.DataService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
@@ -62,7 +63,7 @@ public class HomeController {
         if (errors.hasErrors()) {
             return registerForm(userForm);
         }
-        userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getInstitutionId(), userForm.getCareerId()); //TODO: handle errors
+        userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getInstitutionId(), userForm.getCareerId(), Role.ROLE_STUDENT); //TODO: handle errors
         return new ModelAndView("redirect:/login");
     }
 }
