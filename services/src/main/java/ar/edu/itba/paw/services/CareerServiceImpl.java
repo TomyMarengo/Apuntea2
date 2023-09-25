@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CareerServiceImpl implements CareerService {
@@ -20,5 +22,10 @@ public class CareerServiceImpl implements CareerService {
     @Override
     public List<Career> getCareers() {
         return careerDao.getCareers();
+    }
+
+    @Override
+    public Optional<Career> findCareerById(UUID careerId) {
+        return careerDao.findCareerById(careerId);
     }
 }

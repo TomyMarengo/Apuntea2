@@ -1,20 +1,16 @@
 package ar.edu.itba.paw.webapp.forms;
 
-import ar.edu.itba.paw.webapp.validation.ExistingInstitution;
+import ar.edu.itba.paw.webapp.validation.UnusedEmail;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public class UserForm {
-    @Email
-    @NotNull
-    @NotBlank
+    @NotEmpty
+    @UnusedEmail
     private String email;
 
     @NotNull
@@ -22,7 +18,6 @@ public class UserForm {
     private String password;
 
     @ValidUuid
-    @ExistingInstitution
     private UUID institutionId;
 
     @ValidUuid

@@ -9,6 +9,7 @@ import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -29,6 +30,11 @@ public class CareerJdbcDao implements CareerDao{
     @Override
     public List<Career> getCareers() {
         return jdbcTemplate.query("SELECT * FROM Careers", ROW_MAPPER);
+    }
+
+    @Override
+    public Optional<Career> findCareerById(UUID careerId) {
+        return jdbcTemplate.query("SELECT * FROM Careers WHERE career_id = ? ", new Object[]{careerId}, ROW_MAPPER).stream().findFirst();
     }
 
     public List<Career> getCareersByInstitutionId(UUID institutionId) {

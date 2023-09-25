@@ -33,6 +33,11 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
+    public Optional<Career> findCareerById(UUID careerId) {
+        return careerService.findCareerById(careerId);
+    }
+
+    @Override
     public List<Career> getCareers() {
         return careerService.getCareers();
     }

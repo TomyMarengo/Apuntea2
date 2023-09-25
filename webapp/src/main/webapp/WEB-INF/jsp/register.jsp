@@ -131,7 +131,7 @@
 
                         <div class="d-flex align-items-center justify-content-center mt-3">
                             <p class="mb-0 me-2"><spring:message code="register.have"/></p>
-                            <a href="./register">
+                            <a href="./login">
                                 <button type="button" class="btn login-register-button box"><spring:message
                                         code="login.title"/></button>
                             </a>
