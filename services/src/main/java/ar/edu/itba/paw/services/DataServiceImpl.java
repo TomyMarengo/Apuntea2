@@ -6,6 +6,8 @@ import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DataServiceImpl implements DataService {
@@ -23,6 +25,11 @@ public class DataServiceImpl implements DataService {
     @Override
     public List<Institution> getInstitutions() {
         return institutionService.getInstitutions();
+    }
+
+    @Override
+    public Optional<Institution> findInstitutionById(UUID institutionId) {
+        return institutionService.findInstitutionById(institutionId);
     }
 
     @Override

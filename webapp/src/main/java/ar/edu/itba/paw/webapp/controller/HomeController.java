@@ -50,7 +50,11 @@ public class HomeController {
 
     @RequestMapping(value = "/register")
     public ModelAndView registerForm(@ModelAttribute("userForm") final UserForm userForm) {
-        return new ModelAndView("register");
+        ModelAndView mav = new ModelAndView("register");
+        mav.addObject("institutions", dataService.getInstitutions());
+        mav.addObject("careers", dataService.getCareers());
+        mav.addObject("subjects", dataService.getSubjects());
+        return mav;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -58,9 +62,7 @@ public class HomeController {
         if (errors.hasErrors()) {
             return registerForm(userForm);
         }
-
-        userService.create(userForm.getEmail(), userForm.getPassword()); //TODO: handle errors
-
+        userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getInstitutionId(), userForm.getCareerId()); //TODO: handle errors
         return new ModelAndView("redirect:/login");
     }
 }

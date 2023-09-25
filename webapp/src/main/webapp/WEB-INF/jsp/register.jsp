@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/autocomplete.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
@@ -66,14 +67,60 @@
                                 <form:errors path="password" cssClass="text-danger" element="p"/>
                             </div>
 
+
+
+<%--                            <div class="">--%>
+<%--                                <spring:message var="registerRepeatPassword" code="repeatPassword"/>--%>
+<%--                                <label for="password"></label>--%>
+<%--                                <form:input path="repeatPassword" type="password" id="password"--%>
+<%--                                            class="form-control bg-bg"--%>
+<%--                                            placeholder="${registerRepeatPassword}"/>--%>
+<%--                                <form:errors path="repeatPassword" cssClass="text-danger" element="p"/>--%>
+<%--                            </div>--%>
+
                             <div class="">
-                                <spring:message var="registerRepeatPassword" code="repeatPassword"/>
-                                <label for="password"></label>
-                                <form:input path="repeatPassword" type="password" id="password"
-                                            class="form-control bg-bg"
-                                            placeholder="${registerRepeatPassword}"/>
-                                <form:errors path="repeatPassword" cssClass="text-danger" element="p"/>
+                                <label for="institutionSelect"></label>
+                                <select id="institutionSelect" style="display: none;">
+                                    <option disabled selected value></option>
+                                    <c:forEach items="${institutions}" var="institution">
+                                        <option value="<c:out value="${institution.institutionId}"/>"><c:out value="${institution.name}"/></option>
+                                    </c:forEach>
+                                </select>
+
+                                <form:input path="institutionId" id="institutionId" style="display: none;"/>
+
+                                <div class="">
+                                    <div class="autocomplete">
+                                        <spring:message code="search.institution.placeholder" var="placeholderInstitution"/>
+                                        <input type="text" id="institutionAutocomplete" class="form-control bg-bg"
+                                               placeholder="${placeholderInstitution}" autocomplete="off"/>
+                                    </div>
+                                </div>
+
+                                <form:errors path="institutionId" cssClass="text-danger" element="p"/>
                             </div>
+
+                            <div class="">
+                                <label for="careerSelect"></label>
+                                <select id="careerSelect" style="display: none;">
+                                    <option disabled selected value></option>
+                                    <c:forEach items="${careers}" var="career">
+                                        <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>
+                                    </c:forEach>
+                                </select>
+
+                                <form:input path="careerId" id="careerId" style="display: none;"/>
+
+
+                                <div class="autocomplete">
+                                    <spring:message code="search.career.placeholder" var="placeholderCareer"/>
+                                    <input type="text" id="careerAutocomplete" class="form-control bg-bg"
+                                           placeholder="${placeholderCareer}" autocomplete="off"/>
+                                </div>
+
+                                <form:errors path="careerId" cssClass="text-danger" element="p"/>
+                            </div>
+
 
                             <div class="mt-3 d-flex justify-content-center">
                                 <spring:message var="register" code="register.title"/>
@@ -114,6 +161,7 @@
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
 <script src="<c:url value="/js/darkmode.js"/>"></script>
+<script src="<c:url value="/js/autocomplete.js"/>"></script>
 
 </body>
 

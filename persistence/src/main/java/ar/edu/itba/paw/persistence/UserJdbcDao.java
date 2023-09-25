@@ -39,14 +39,18 @@ class UserJdbcDao implements UserDao{
     // TODO: Make transactional in 3rd sprint
 //    @Transactional
     @Override
-    public void create(final String email, final String password) {
+    public void create(final String email, final String password, final UUID institutionId, final UUID careerId, final String lang){
         final Map<String, Object> args = new HashMap<>();
         args.put(EMAIL, email);
         args.put(PASSWORD, password);
+        args.put(INSTITUTION_ID, institutionId);
+        args.put(CAREER_ID, careerId);
+        args.put(LOCALE, lang);
         try {
             jdbcInsert.executeAndReturnKeyHolder(args).getKeys().get(USER_ID);
         } catch (DuplicateKeyException e) {
-            int rows = jdbcTemplate.update("UPDATE users SET password = ? WHERE email = ? AND password IS NULL", password, email);
+            int rows = jdbcTemplate.update("UPDATE users SET password = ?, institution_id = ?, career_id = ?, locale = ? WHERE email = ? AND password IS NULL",
+                    password, institutionId, careerId, lang, email);
             if (rows == 0) throw e;
         }
     }

@@ -66,7 +66,7 @@
                     <div class="autocomplete">
                         <spring:message code="search.institution.placeholder" var="placeholderInstitution"/>
                         <input type="text" id="institutionAutocomplete" class="form-control bg-bg"
-                               placeholder="${placeholderInstitution}"/>
+                               placeholder="${placeholderInstitution}" autocomplete="off"/>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                     <div class="autocomplete">
                         <spring:message code="search.career.placeholder" var="placeholderCareer"/>
                         <input type="text" id="careerAutocomplete" class="form-control bg-bg"
-                               placeholder="${placeholderCareer}"/>
+                               placeholder="${placeholderCareer}" autocomplete="off"/>
                     </div>
                 </div>
             </div>
@@ -104,7 +104,7 @@
                     <div class="autocomplete">
                         <spring:message code="search.subject.placeholder" var="placeholderSubject"/>
                         <input type="text" id="subjectAutocomplete" class="form-control bg-bg"
-                               placeholder="${placeholderSubject}"/>
+                               placeholder="${placeholderSubject}" autocomplete="off"/>
                     </div>
                 </div>
             </div>

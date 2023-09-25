@@ -33,7 +33,7 @@ public class EmailServiceImpl implements EmailService {
     private MessageSource messageSource;
 
 
-    private	static	final Logger LOGGER	=	LoggerFactory.getLogger(EmailServiceImpl.class);
+    private	static	final Logger LOGGER	= LoggerFactory.getLogger(EmailServiceImpl.class);
 
     @Async
     @Override

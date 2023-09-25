@@ -42,6 +42,7 @@ public class JdbcDaoUtils {
     static final String OWNER_EMAIL = "owner_email";
     static final String LAST_MODIFIED_AT = "last_modified_at";
     static final String ICON_COLOR = "icon_color";
+    static final String LOCALE = "locale";
 
     static final String FILE_TYPE = "file_type";
 

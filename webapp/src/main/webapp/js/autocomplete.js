@@ -136,12 +136,15 @@ if (selectElement) {
 selectElement = document.getElementById('subjectSelect');
 // Initialize an empty array to store the option values
 const subjects = [];
-// Iterate through the option elements and add their text values to the array
-for (let i = 1; i < selectElement.options.length; i++) {
-	const option = selectElement.options[i];
-	subjects.push({value:option.value, text:option.text});
+if (selectElement) {
+	// Iterate through the option elements and add their text values to the array
+	for (let i = 1; i < selectElement.options.length; i++) {
+		const option = selectElement.options[i];
+		subjects.push({value:option.value, text:option.text});
+	}
+	autocomplete(document.getElementById("subjectAutocomplete"), document.getElementById("subjectId"), subjects);
 }
-autocomplete(document.getElementById("subjectAutocomplete"), document.getElementById("subjectId"), subjects);
+
 
 document.addEventListener('DOMContentLoaded', function () {
 	const institutionValue = document.getElementById('institutionId')?.value;
@@ -159,5 +162,5 @@ document.addEventListener('DOMContentLoaded', function () {
 	// Establece el valor de los elementos select según los valores de id
 	if (institutionAutocomplete) institutionAutocomplete.value = ins ? ins.text : '';
 	if (careerAutocomplete) careerAutocomplete.value = career ? career.text : '';
-	subjectAutocomplete.value = subject ? subject.text : '';
+	if (subjectAutocomplete) subjectAutocomplete.value = subject ? subject.text : '';
 });
