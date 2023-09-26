@@ -7,7 +7,6 @@ import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.forms.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +31,7 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/")
-    public ModelAndView index(@ModelAttribute("searchNotesForm") final SearchNotesForm searchNotesForm) {
+    public ModelAndView index(@ModelAttribute("searchForm") final SearchForm searchForm) {
         ModelAndView mav = new ModelAndView("index");
 
         securityService.getCurrentUserEmail().ifPresent(email -> mav.addObject("username", email));

@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Directory;
 import ar.edu.itba.paw.models.DirectoryPath;
+import ar.edu.itba.paw.models.Page;
+import ar.edu.itba.paw.models.Searchable;
 import ar.edu.itba.paw.models.exceptions.DirectoryNotFoundException;
 import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
@@ -10,6 +12,10 @@ import ar.edu.itba.paw.services.DataService;
 import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.webapp.forms.CreateDirectoryForm;
 import ar.edu.itba.paw.webapp.forms.CreateNoteForm;
+import ar.edu.itba.paw.webapp.forms.NavigationForm;
+import ar.edu.itba.paw.webapp.forms.SearchForm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,6 +42,8 @@ public class DirectoryController {
     private static final String CREATE_NOTE_FORM_BINDING = "org.springframework.validation.BindingResult.createNoteForm";
     private static final String CREATE_DIRECTORY_FORM_BINDING = "org.springframework.validation.BindingResult.createDirectoryForm";
 
+    private	static	final Logger LOGGER	= LoggerFactory.getLogger(DirectoryController.class);
+
     @Autowired
     public DirectoryController(DirectoryService directoryService, NoteService noteService, DataService dataService, SearchService searchService) {
         this.directoryService = directoryService;
@@ -44,40 +52,51 @@ public class DirectoryController {
         this.searchService = searchService;
     }
 
+    // TODO: Move to utils class
+    private void addFormOrGetWithErrors(ModelAndView mav, ModelMap model, String attribute, String errorName, String formName, Class<?> form) {
+        if(model.containsAttribute(attribute)) {
+            mav.addObject(errorName, ((BindingResult) model.get(attribute)).getAllErrors());
+        } else {
+            try {
+                mav.addObject(formName, form.newInstance());
+            } catch (InstantiationException ex) {
+                LOGGER.error("Instantiation exception creating form {}", formName);
+            } catch (IllegalAccessException ex) {
+                LOGGER.error("Illegal access exception creating form {}", formName);
+            }
+        }
+    }
+
     @RequestMapping(value = "/{directoryId}" ,method = RequestMethod.GET)
     public ModelAndView getDirectory(@PathVariable("directoryId") String directoryId,
+                                     @ModelAttribute("navigationForm") NavigationForm navigationForm,
                                      final ModelMap model) {
 
         ModelAndView mav = new ModelAndView("directory");
 
-        if(model.containsAttribute(CREATE_NOTE_FORM_BINDING)) {
-            mav.addObject("errorsNoteForm", ((BindingResult) model.get(CREATE_NOTE_FORM_BINDING)).getAllErrors());
-        } else {
-            mav.addObject("createNoteForm", new CreateNoteForm());
-        }
-
-        if(model.containsAttribute(CREATE_DIRECTORY_FORM_BINDING)) {
-            mav.addObject("errorsDirectoryForm", ((BindingResult) model.get(CREATE_DIRECTORY_FORM_BINDING)).getAllErrors());
-        } else {
-            mav.addObject("createDirectoryForm", new CreateDirectoryForm());
-        }
-
-        mav.addObject("institutions", dataService.getInstitutions());
-        mav.addObject("careers", dataService.getCareers());
-        mav.addObject("subjects", dataService.getSubjects());
-
+        addFormOrGetWithErrors(mav, model, CREATE_NOTE_FORM_BINDING, "errorsNoteForm", "createNoteForm", CreateNoteForm.class);
+        addFormOrGetWithErrors(mav, model, CREATE_DIRECTORY_FORM_BINDING, "errorsDirectoryForm", "createDirectoryForm", CreateDirectoryForm.class);
 
         UUID dId = UUID.fromString(directoryId);
         Directory directory = directoryService.getDirectoryById(dId).orElseThrow(DirectoryNotFoundException::new);
 
-        mav.addObject("directory", directory);
+        Page<Searchable> pageResult = searchService.getNavigationResults(
+                dId,
+                navigationForm.getCategory(),
+                navigationForm.getWord(),
+                navigationForm.getSortBy(),
+                navigationForm.getAscending(),
+                navigationForm.getPageNumber(),
+                navigationForm.getPageSize()
+        );
 
-        /*
-        mav.addObject("childrenDirectories", directoryService.getChildren(dId));
-        mav.addObject("childrenNotes", noteService.getNotesByParentDirectory(dId));*/
+        mav.addObject("maxPage", pageResult.getTotalPages());
+        mav.addObject("results", pageResult.getContent());
+        mav.addObject("directory", directory);
 
         return mav;
     }
+
 
     // Create a POST function with createDirectoryForm and createNoteForm, only one of them will be filled
     // If createDirectoryForm is filled, create a directory with the name and parent directory
@@ -91,12 +110,13 @@ public class DirectoryController {
                                      final RedirectAttributes redirectAttributes)
     {
         if(result.hasErrors()) {
-            redirectAttributes.addFlashAttribute(CREATE_NOTE_FORM_BINDING, result);
-            return new ModelAndView("redirect:/directory" + directoryId);
+            redirectAttributes.addFlashAttribute(CREATE_DIRECTORY_FORM_BINDING, result);
+            return new ModelAndView("redirect:/directory/" + directoryId);
         }
 
-        UUID childId = directoryService.create(createDirectoryForm.getName(), createDirectoryForm.getParentId());
-        return new ModelAndView("redirect:/directory/" + childId  + "/");
+        UUID dId = UUID.fromString(directoryId);
+        UUID childId = directoryService.create(createDirectoryForm.getName(), dId);
+        return new ModelAndView("redirect:/directory/" + dId);
     }
 
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createNote")
@@ -108,16 +128,16 @@ public class DirectoryController {
 
         if(result.hasErrors()) {
             redirectAttributes.addFlashAttribute(CREATE_NOTE_FORM_BINDING, result);
-            return new ModelAndView("redirect:/directory/" + directoryId + "/");
+            return new ModelAndView("redirect:/directory/" + directoryId);
         }
 
+        UUID dId = UUID.fromString(directoryId);
         try {
-            UUID noteId = noteService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getSubjectId(),
-                    createNoteForm.getCategory(), createNoteForm.getParentId());
-            return new ModelAndView("redirect:/notes/" + noteId + "/");
+            UUID noteId = noteService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getCategory(), dId);
+            return new ModelAndView("redirect:/notes/" + noteId);
         }
         catch (IOException e){
-            return new ModelAndView("redirect:/directory/" + directoryId + "/"); // TODO: Handle errors
+            return new ModelAndView("redirect:/directory/" + directoryId); // TODO: Handle errors
         }
     }
 

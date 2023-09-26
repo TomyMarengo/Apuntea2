@@ -18,17 +18,9 @@ public class CreateNoteForm {
     @ValidFileName(allowedExtensions = {".pdf"}) // TODO: Add more extensions
     @MaxFileSize(megabytes = 500)
     private MultipartFile file;
-    @ValidUuid
-    private UUID subjectId;
     @NotEmpty
     @Pattern(regexp = "theory|practice|exam|other")
     private String category;
-    @ValidUuid
-    private UUID parentId;
-
-    public UUID getSubjectId() {
-        return subjectId;
-    }
 
     public String getName() {
         return name;
@@ -42,10 +34,6 @@ public class CreateNoteForm {
         return category;
     }
 
-    public UUID getParentId() {
-        return parentId;
-    }
-
     // All setters
     public void setName(String name) {
         this.name = name;
@@ -57,13 +45,5 @@ public class CreateNoteForm {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public void setSubjectId(UUID subjectId) {
-        this.subjectId = subjectId;
-    }
-
-    public void setParentId(UUID parentId) {
-        this.parentId = parentId;
     }
 }

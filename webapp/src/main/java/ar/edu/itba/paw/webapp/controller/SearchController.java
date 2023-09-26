@@ -2,9 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.services.DataService;
-import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SearchService;
-import ar.edu.itba.paw.webapp.forms.SearchNotesForm;
+import ar.edu.itba.paw.webapp.forms.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/search")
@@ -30,19 +27,19 @@ public class SearchController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView searchNotes(@Valid @ModelAttribute("searchNotesForm") final SearchNotesForm searchNotesForm, final BindingResult result){
+    public ModelAndView search(@Valid @ModelAttribute("searchForm") final SearchForm searchForm, final BindingResult result){
         final ModelAndView mav = new ModelAndView("search");
 
         Page<Searchable> pageResult = searchService.search(
-                    searchNotesForm.getInstitutionId(),
-                    searchNotesForm.getCareerId(),
-                    searchNotesForm.getSubjectId(),
-                    searchNotesForm.getCategory(),
-                    searchNotesForm.getWord(),
-                    searchNotesForm.getSortBy(),
-                    searchNotesForm.getAscending(),
-                    searchNotesForm.getPageNumber(),
-                    searchNotesForm.getPageSize()
+                    searchForm.getInstitutionId(),
+                    searchForm.getCareerId(),
+                    searchForm.getSubjectId(),
+                    searchForm.getCategory(),
+                    searchForm.getWord(),
+                    searchForm.getSortBy(),
+                    searchForm.getAscending(),
+                    searchForm.getPageNumber(),
+                    searchForm.getPageSize()
         );
 
         mav.addObject("maxPage", pageResult.getTotalPages());

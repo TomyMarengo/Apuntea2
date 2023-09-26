@@ -46,7 +46,7 @@
 <!-- SEARCH -->
 <div class="container">
     <c:url var="searchUrl" value="./search"/>
-    <form:form modelAttribute="searchNotesForm"
+    <form:form modelAttribute="searchForm"
                action="${searchUrl}"
                method="get"
                id="searchForm"
@@ -135,13 +135,13 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text input-group-icon clickable">
                         <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
-                            <c:if test="${searchNotesForm.ascending}">
+                            <c:if test="${searchForm.ascending}">
                                 <img src="<c:url value="/svg/arrow-up.svg"/>"
                                      alt="<spring:message code="search.sort.image"/>"
                                      class="icon-s fill-dark-primary"
                                      id="arrowImage" title="ascending"/>
                             </c:if>
-                            <c:if test="${!searchNotesForm.ascending}">
+                            <c:if test="${!searchForm.ascending}">
                                 <img src="<c:url value="/svg/arrow-down.svg"/>"
                                      alt="<spring:message code="search.sort.image"/>"
                                      class="icon-s fill-dark-primary"
@@ -369,13 +369,13 @@
 <div class="container d-flex justify-content-center mt-3">
     <nav aria-label="...">
         <ul class="pagination">
-            <c:if test="${searchNotesForm.pageNumber gt 1}">
+            <c:if test="${searchForm.pageNumber gt 1}">
                 <li class="page-item">
                         <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
                 </li>
             </c:if>
-            <c:if test="${searchNotesForm.pageNumber le 1}">
+            <c:if test="${searchForm.pageNumber le 1}">
                 <li class="page-item disabled">
                         <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
@@ -383,25 +383,25 @@
             </c:if>
 
             <c:forEach begin="1" end="${maxPage}" var="page">
-                <c:if test="${page eq searchNotesForm.pageNumber}">
+                <c:if test="${page eq searchForm.pageNumber}">
                     <li class="page-item active" aria-current="page">
                         <a class="page-link" data-page="${page}">${page}</a>
                     </li>
                 </c:if>
-                <c:if test="${page ne searchNotesForm.pageNumber}">
+                <c:if test="${page ne searchForm.pageNumber}">
                     <li class="page-item">
                         <a class="page-link" data-page="${page}">${page}</a>
                     </li>
                 </c:if>
             </c:forEach>
 
-            <c:if test="${searchNotesForm.pageNumber lt maxPage}">
+            <c:if test="${searchForm.pageNumber lt maxPage}">
                 <li class="page-item">
                         <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
                 </li>
             </c:if>
-            <c:if test="${searchNotesForm.pageNumber ge maxPage}">
+            <c:if test="${searchForm.pageNumber ge maxPage}">
                 <li class="page-item disabled">
                         <%--suppress XmlDuplicatedId --%>
                     <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>

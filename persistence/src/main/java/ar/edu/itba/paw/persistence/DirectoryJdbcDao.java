@@ -82,11 +82,11 @@ public class DirectoryJdbcDao implements DirectoryDao {
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
         List<Directory> dirs = jdbcTemplate.query("WITH RECURSIVE Ancestors(directory_id, directory_name, parent_id, level) AS ( " +
-                        "VALUES(null, null, ?, 0) " +
+                        "SELECT d.directory_id, d.directory_name, d.parent_id, 0 as level FROM Directories d WHERE d.directory_id = ? " +
                         "UNION " +
                         "SELECT d.directory_id, d.directory_name, d.parent_id, a.level + 1 FROM Ancestors a INNER JOIN Directories d ON a.parent_id = d.directory_id " +
                         ") SELECT * FROM Ancestors LEFT JOIN Subjects s ON s.root_directory_id = directory_id " +
-                        "WHERE directory_id IS NOT NULL ORDER BY level DESC ",
+                        "ORDER BY level DESC ",
                 ROW_MAPPER_WITH_SUBJECT, directoryId);
 
         return new DirectoryPath(dirs);

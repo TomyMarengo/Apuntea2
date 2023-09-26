@@ -8,13 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
-public class SearchNotesForm {
-    @ValidUuid
-    private UUID institutionId;
-    @ValidUuid
-    private UUID careerId;
-    @ValidUuid
-    private UUID subjectId;
+public class NavigationForm {
     @Pattern(regexp = "theory|practice|exam|other")
     private String category;
     @Pattern(regexp = "score|name|date")
@@ -30,36 +24,12 @@ public class SearchNotesForm {
     @Size(max = 50)
     private String word;
 
-    public UUID getInstitutionId() {
-        return institutionId;
-    }
-
-    public void setInstitutionId(UUID institutionId) {
-        this.institutionId = institutionId;
-    }
-
-    public UUID getCareerId() {
-        return careerId;
-    }
-
-    public void setCareerId(UUID careerId) {
-        this.careerId = careerId;
-    }
-
     public Boolean getAscending() {
         return ascending;
     }
 
     public void setAscending(Boolean ascending) {
         this.ascending = ascending;
-    }
-
-    public UUID getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(UUID subjectId) {
-        this.subjectId = subjectId;
     }
 
     public String getCategory() {

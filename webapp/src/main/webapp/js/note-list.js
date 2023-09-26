@@ -16,14 +16,13 @@ if (!baseUrl) {
 }
 
 const rows = document.querySelectorAll('.note-found');
-console.log(rows)
 
 rows.forEach(row => {
   row.addEventListener('dblclick', () => {
     // Acción de doble clic aquí (por ejemplo, redirigir a /notes/{noteId})
     const noteId = row.getAttribute('id');
     const [id, type] = noteId.slice(0,-1).split('.');
-    window.location.href = `./${type === 'directory'? 'directory' : 'notes'}/${id}`;
+    window.location.href = `${baseUrl}/${type === 'directory'? 'directory' : 'notes'}/${id}`;
   });
 });
 

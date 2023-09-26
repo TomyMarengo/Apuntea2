@@ -50,7 +50,7 @@
                 <p class="mb-0"><spring:message code="index.dyk.subtitle"/></p>
             </div>
             <c:url var="searchUrl" value="./search"/>
-            <form:form modelAttribute="searchNotesForm"
+            <form:form modelAttribute="searchForm"
                        action="${searchUrl}"
                        method="get"
                        class="d-flex align-items-center mb-3"

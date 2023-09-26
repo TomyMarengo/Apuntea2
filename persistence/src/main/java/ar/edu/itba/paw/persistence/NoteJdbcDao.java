@@ -86,7 +86,7 @@ public class NoteJdbcDao implements NoteDao {
         this.jdbcNoteInsert = new SimpleJdbcInsert(ds)
                 .withTableName(NOTES)
                 .usingGeneratedKeyColumns(NOTE_ID)
-                .usingColumns(NOTE_NAME, FILE, SUBJECT_ID, CATEGORY, USER_ID);
+                .usingColumns(NOTE_NAME, FILE, SUBJECT_ID, CATEGORY, PARENT_ID, USER_ID, FILE_TYPE);
         this.jdbcReviewInsert = new SimpleJdbcInsert(ds)
                 .withTableName(REVIEWS)
                 .usingColumns(NOTE_ID, USER_ID, SCORE, CONTENT);

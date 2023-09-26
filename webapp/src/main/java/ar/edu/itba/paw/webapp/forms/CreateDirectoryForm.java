@@ -12,24 +12,11 @@ public class CreateDirectoryForm {
     @Size(min = 2, max = 50)
     private String name;
 
-    @NotEmpty
-    @ValidUuid
-    private UUID parentId;
-
     public String getName() {
         return name;
-    }
-
-    public UUID getParentId() {
-        return parentId;
     }
 
     public void setName(String name) {
         this.name = name;
     }
-
-    public void setParentId(UUID parentId) {
-        this.parentId = parentId;
-    }
-
 }

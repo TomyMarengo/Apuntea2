@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Note;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,14 +17,16 @@ import java.util.UUID;
 @Service
 public class NoteServiceImpl implements NoteService {
     private final NoteDao noteDao;
-    private final SecurityService securityService;
+    private final DirectoryDao directoryDao;
     private final EmailService emailService;
+    private final SecurityService securityService;
 
     @Autowired
-    public NoteServiceImpl(final NoteDao noteDao, final SecurityService securityService, final EmailService emailService) {
+    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService) {
         this.noteDao = noteDao;
         this.securityService = securityService;
         this.emailService = emailService;
+        this.directoryDao = directoryDao;
     }
 
     @Transactional
@@ -37,8 +38,12 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public UUID createNote(MultipartFile file, String name, UUID subjectId, String category, UUID parentId) throws IOException {
+    public UUID createNote(MultipartFile file, String name, String category, UUID parentId) throws IOException {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
+        UUID subjectId = directoryDao.getDirectoryPath(parentId)
+                                        .getRootDirectory()
+                                        .getSubject()
+                                        .getSubjectId();
         return noteDao.create(file.getBytes(), name, userId, subjectId, category, parentId, FilenameUtils.getExtension(file.getOriginalFilename()));
     }
 

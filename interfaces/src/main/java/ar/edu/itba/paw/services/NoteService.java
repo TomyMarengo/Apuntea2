@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface NoteService {
     UUID createNote(MultipartFile file, String name, UUID subjectId, String category) throws IOException;
 
-    UUID createNote(MultipartFile file, String name, UUID subjectId, String category, UUID parentId) throws IOException;
+    UUID createNote(MultipartFile file, String name, String category, UUID parentId) throws IOException;
 
     Optional<Note> getNoteById(UUID noteId);
     byte[] getNoteFileById(UUID noteId);
