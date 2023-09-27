@@ -15,7 +15,7 @@ public class SearchForm {
     private UUID careerId;
     @ValidUuid
     private UUID subjectId;
-    @Pattern(regexp = "theory|practice|exam|other")
+    @Pattern(regexp = "directory|theory|practice|exam|other")
     private String category;
     @Pattern(regexp = "score|name|date")
     private String sortBy;

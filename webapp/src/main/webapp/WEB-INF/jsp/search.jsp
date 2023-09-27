@@ -116,6 +116,9 @@
                                 value=""><spring:message
                                 code="search.category.all"/></form:option>
                         <form:option
+                                value="directory"><spring:message
+                                code="search.category.folder"/></form:option>
+                        <form:option
                                 value="theory"><spring:message
                                 code="search.category.theory"/></form:option>
                         <form:option

@@ -40,6 +40,10 @@ function autocomplete(inp, sel, arr) {
 				a.appendChild(b);
 			}
 		}
+		if (this.value.trim() === "") {
+			inp.value = '';
+			sel.value = '';
+		}
 	}
 
 	document.addEventListener("click", function (e) {
