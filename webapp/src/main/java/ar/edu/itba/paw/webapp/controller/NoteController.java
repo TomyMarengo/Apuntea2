@@ -4,7 +4,10 @@ import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.webapp.forms.CreateNoteForm;
+import ar.edu.itba.paw.webapp.forms.EditNoteForm;
+import ar.edu.itba.paw.webapp.forms.NavigationForm;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
+import ar.edu.itba.paw.webapp.forms.EditNoteForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,9 +33,10 @@ public class NoteController {
     }
 
     @RequestMapping(value = "/{noteId}", method = RequestMethod.GET)
-    public ModelAndView getNote(@PathVariable("noteId") String noteId, final ModelMap model) {
+    public ModelAndView getNote(@PathVariable("noteId") String noteId, @ModelAttribute("editNoteForm") EditNoteForm editNoteForm, final ModelMap model) {
         final ModelAndView mav = new ModelAndView("note");
 
+        // TODO: eliminar el EditNoteForm y handlear errores
         if(model.containsAttribute(CREATE_REVIEW_FORM_BINDING)) {
             mav.addObject("errors", ((BindingResult) model.get(CREATE_REVIEW_FORM_BINDING)).getAllErrors());
         } else {

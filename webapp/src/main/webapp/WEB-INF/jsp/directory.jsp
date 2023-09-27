@@ -120,22 +120,26 @@
         </div>
         <p class="text-muted"><spring:message code="directories.noContent.description"/></p>
         <div class="d-flex gap-2">
-            <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
-                    id="createNoteModalButton">
-                <img src="<c:url value="/svg/add-document.svg"/>"
-                     alt="<spring:message code="uploadNote"/>"
-                     class="icon-m fill-dark-primary"/>
-            </button>
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="uploadNote"/>"
+               data-bs-trigger="hover">
+                <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
+                        id="createNoteModalButton">
+                    <img src="<c:url value="/svg/add-document.svg"/>"
+                         alt="<spring:message code="uploadNote"/>"
+                         class="icon-m fill-dark-primary"/>
+                </button>
+            </a>
 
-            <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
-                    id="createDirectoryModalButton">
-                <img src="<c:url value="/svg/add-folder.svg"/>"
-                     alt="<spring:message code="createDirectory"/>"
-                     class="icon-m fill-dark-primary"/>
-            </button>
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="createDirectory"/>"
+               data-bs-trigger="hover">
+                <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
+                        id="createDirectoryModalButton">
+                    <img src="<c:url value="/svg/add-folder.svg"/>"
+                         alt="<spring:message code="createDirectory"/>"
+                         class="icon-m fill-dark-primary"/>
+                </button>
+            </a>
         </div>
-
-
     </section>
 </c:if>
 
@@ -151,19 +155,24 @@
     <!-- TOP BUTTONS -->
     <div class="d-flex container mt-4 justify-content-between p-0">
         <div class="d-flex">
-            <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
-                    id="createNoteModalButton">
-                <img src="<c:url value="/svg/add-document.svg"/>"
-                     alt="<spring:message code="uploadNote"/>"
-                     class="icon-m fill-dark-primary"/>
-            </button>
-
-            <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
-                    id="createDirectoryModalButton">
-                <img src="<c:url value="/svg/add-folder.svg"/>"
-                     alt="<spring:message code="createDirectory"/>"
-                     class="icon-m fill-dark-primary"/>
-            </button>
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="uploadNote"/>"
+               data-bs-trigger="hover">
+                <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
+                        id="createNoteModalButton">
+                    <img src="<c:url value="/svg/add-document.svg"/>"
+                         alt="<spring:message code="uploadNote"/>"
+                         class="icon-m fill-dark-primary"/>
+                </button>
+            </a>
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="createDirectory"/>"
+               data-bs-trigger="hover">
+                <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
+                        id="createDirectoryModalButton">
+                    <img src="<c:url value="/svg/add-folder.svg"/>"
+                         alt="<spring:message code="createDirectory"/>"
+                         class="icon-m fill-dark-primary"/>
+                </button>
+            </a>
         </div>
 
         <div class="d-flex">
@@ -243,6 +252,23 @@
                         </td>
 
                         <td class="search-actions">
+                            <c:if test="${item.category.formattedName ne 'directory'}">
+                                <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
+                                   data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                                    <button class="btn button-expansion rounded-circle" data-bs-toggle="modal" data-bs-target="#editNoteModal" id="editNoteModalButton" >
+                                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>" class="icon-xs fill-text">
+                                    </button>
+                                </a>
+                            </c:if>
+                            <c:if test="${item.category.formattedName eq 'directory'}">
+                                <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
+                                   data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                                    <button class="btn button-expansion rounded-circle" data-bs-toggle="modal" data-bs-target="#editDirectoryModal" id="editDirectoryModalButton" >
+                                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>" class="icon-xs fill-text">
+                                    </button>
+                                </a>
+                            </c:if>
+
                             <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
                                 <a href="./notes/${item.id}/download" download="${item.name}">
                                     <button type="button" class="btn button-expansion rounded-circle"
@@ -262,7 +288,6 @@
                                     data-bs-trigger="hover">
                                 <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
                             </button>
-
                             <input type="checkbox" class="select-checkbox d-none"/>
                         </td>
                     </tr>
@@ -271,16 +296,6 @@
             </table>
         </div>
     </section>
-
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-body justify-content-between d-flex">
-                <span class="text-dark-primary"><spring:message code="toast.linkCopied"/></span>
-                <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
 
     <!-- BOX LIST -->
     <section class="container mt-4 p-0" id="boxList">
@@ -396,6 +411,16 @@
     </section>
 </c:if>
 
+<!-- TOAST -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body justify-content-between d-flex">
+            <span class="text-dark-primary"><spring:message code="toast.linkCopied"/></span>
+            <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+    </div>
+</div>
 
 <!-- CREATE NOTE MODAL -->
 <div class="modal fade" id="createNoteModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -472,6 +497,7 @@
     </div>
 </div>
 
+<!-- CREATE DIRECTORY MODAL -->
 <div class="modal fade" id="createDirectoryModal" data-bs-backdrop="static" data-bs-keyboard="false"
      tabindex="-1" aria-labelledby="createLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -520,6 +546,140 @@
     </div>
 </div>
 
+
+<c:url value="../notes/" var="editNoteUrl"/>
+<c:url value="./" var="editDirectoryUrl"/>
+
+<!--  EDIT NOTE MODAL -->
+<div class="modal fade" id="editNoteModal" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="editNoteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content box bg-bg">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editNoteLabel"><spring:message
+                        code="editNote"/></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <!-- EDIT NOTE FORM -->
+                <form:form modelAttribute="editNoteForm"
+                           action="${editNoteUrl}"
+                           method="put"
+                           enctype="multipart/form-data"
+                           autocomplete="off"
+                           class="d-flex flex-column"
+                           id="editNoteForm">
+
+                    <div class="d-flex flex-column gap-2">
+                        <div class="input-group">
+                            <label class="input-group-text" for="name"><spring:message
+                                    code="name"/></label>
+                            <!-- TODO: change value JS-->
+                            <form:input path="name" type="text" value="${directoryId}"
+                                        aria-label="<spring:message code=\"form.upload.name\"/>"
+                                        class="form-control" id="name"/>
+                        </div>
+                        <form:errors path="name" cssClass="text-danger" element="p"/>
+                    </div>
+
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="categorySelect"><spring:message
+                                    code="category"/></label>
+                            <form:select path="category" class="form-select" id="categorySelect">
+                                <!-- TODO: change value JS-->
+                                <c:if test="${directoryId eq 'theory'}">
+                                    <form:option value="theory" selected="true"><spring:message code="category.theory"/></form:option>
+                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
+                                    <form:option value="other"><spring:message code="category.other"/></form:option>
+                                </c:if>
+                                <c:if test="${directoryId eq 'practice'}">
+                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
+                                    <form:option value="practice" selected="true"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
+                                    <form:option value="other"><spring:message code="category.other"/></form:option>
+                                </c:if>
+                                <c:if test="${directoryId eq 'exam'}">
+                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
+                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="exam" selected="true"><spring:message code="category.exam"/></form:option>
+                                    <form:option value="other"><spring:message code="category.other"/></form:option>
+                                </c:if>
+                                <c:if test="${directoryId eq 'other'}">
+                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
+                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
+                                    <form:option value="other" selected="true"><spring:message code="category.other"/></form:option>
+                                </c:if>
+                            </form:select>
+                        </div>
+                        <form:errors path="category" cssClass="text-danger" element="p"/>
+                    </div>
+
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn rounded-box button-primary"
+                                data-bs-dismiss="modal">
+                            <spring:message code="close"/></button>
+                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="update"/>"/>
+                    </div>
+                </form:form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EDIT DIRECTORY MODAL-->
+<div class="modal fade" id="editDirectoryModal" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="editDirectoryLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content box bg-bg">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editDirectoryLabel"><spring:message
+                        code="editDirectory"/></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <!-- EDIT DIRECTORY FORM -->
+                <form:form modelAttribute="editDirectoryForm"
+                           action="${editDirectoryUrl}"
+                           method="put"
+                           enctype="multipart/form-data"
+                           autocomplete="off"
+                           class="d-flex flex-column"
+                           id="editDirectoryForm">
+
+                    <div class="d-flex flex-column gap-2">
+                        <div class="input-group">
+                            <label class="input-group-text" for="name"><spring:message
+                                    code="name"/></label>
+                            <!-- TODO: change value JS-->
+                            <form:input path="name" type="text" value="${directoryId}"
+                                        aria-label="<spring:message code=\"form.upload.name\"/>"
+                                        class="form-control" id="name"/>
+                        </div>
+                        <form:errors path="name" cssClass="text-danger" element="p"/>
+                    </div>
+
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn rounded-box button-primary"
+                                data-bs-dismiss="modal">
+                            <spring:message code="close"/></button>
+                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="update"/>"/>
+                    </div>
+                </form:form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
@@ -534,14 +694,26 @@
 </c:if>
 <script src="<c:url value="/js/popups.js"/>"></script>
 
+<c:if test="${errorsEditNoteForm != null}">
+    <script>
+        const editNoteModalButton = document.getElementById('editNoteModalButton');
+        editNoteModalButton.click()
+    </script>
+</c:if>
+<c:if test="${errorsEditDirectoryForm != null}">
+    <script>
+        const editDirectoryModalButton = document.getElementById('editDirectoryModalButton');
+        editDirectoryModalButton.click()
+    </script>
+</c:if>
 
-<c:if test="${errorsNoteForm != null}">
+<c:if test="${errorsCreateNoteForm != null}">
     <script>
         const createNoteModalButton = document.getElementById('createNoteModalButton');
         createNoteModalButton.click()
     </script>
 </c:if>
-<c:if test="${errorsDirectoryForm != null}">
+<c:if test="${errorsCreateDirectoryForm != null}">
     <script>
         const createDirectoryModalButton = document.getElementById('createDirectoryModalButton');
         createDirectoryModalButton.click()

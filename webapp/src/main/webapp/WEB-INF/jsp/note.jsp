@@ -47,12 +47,14 @@
 
             <div class="d-flex justify-content-between">
                 <h1 class="overflow-hidden">${note.name}</h1>
-                <div>
-                    <button class="btn button-expansion rounded-circle edit-button"
-                            id="<c:out value="${note.id}"/>e1" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                            data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>" class="icon-xs fill-text">
-                    </button>
+                <div class="d-flex">
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                          data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                        <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#editNoteModal"
+                                id="editNoteModalButton" >
+                            <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>" class="icon-xs fill-text">
+                        </button>
+                    </span>
                     <a href="./${note.id}/download" download="${note.name}">
                         <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
@@ -66,7 +68,7 @@
             <div class="mt-2 mb-2">
                 <img src="<c:url value="/image/teacher.png"/>" alt="<spring:message code="logotype"/>"
                      style="width: 40px; height: 40px; margin-right: 5px">
-                <span><strong>Owner <!--${note.user}--></strong></span>
+                <span><strong><c:out value="${note.user.email}"/></strong></span>
             </div>
             <span>
                 <c:set var="date" value="${note.createdAt}"/>
@@ -136,9 +138,89 @@
                     </div>
                 </div>
             </div>
-
-
         </section>
+    </div>
+</div>
+
+<!--UPDATE NOTE MODAL-->
+<c:url var="editUrl" value="./${noteId}"/>
+
+<div class="modal fade" id="editNoteModal" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content box bg-bg">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editLabel"><spring:message
+                        code="editNote"/></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body pb-0">
+                <!-- CREATE NOTE FORM -->
+                <form:form modelAttribute="editNoteForm"
+                           action="${updateUrl}"
+                           method="put"
+                           enctype="multipart/form-data"
+                           autocomplete="off"
+                           class="d-flex flex-column"
+                           id="editNoteForm">
+
+                    <div class="d-flex flex-column gap-2">
+                        <div class="input-group">
+                            <label class="input-group-text" for="name"><spring:message
+                                    code="name"/></label>
+                            <form:input path="name" type="text" value="${note.name}"
+                                        aria-label="<spring:message code=\"form.upload.name\"/>"
+                                        class="form-control" id="name"/>
+                        </div>
+                        <form:errors path="name" cssClass="text-danger" element="p"/>
+                    </div>
+
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="categorySelect"><spring:message
+                                    code="category"/></label>
+                            <form:select path="category" class="form-select" id="categorySelect">
+                                <c:if test="${note.category.formattedName eq 'theory'}">
+                                    <form:option value="theory" selected="true"><spring:message code="category.theory"/></form:option>
+                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
+                                    <form:option value="other"><spring:message code="category.other"/></form:option>
+                                </c:if>
+                                <c:if test="${note.category.formattedName eq 'practice'}">
+                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
+                                    <form:option value="practice" selected="true"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
+                                    <form:option value="other"><spring:message code="category.other"/></form:option>
+                                </c:if>
+                                <c:if test="${note.category.formattedName eq 'exam'}">
+                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
+                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="exam" selected="true"><spring:message code="category.exam"/></form:option>
+                                    <form:option value="other"><spring:message code="category.other"/></form:option>
+                                </c:if>
+                                <c:if test="${note.category.formattedName eq 'other'}">
+                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
+                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
+                                    <form:option value="other" selected="true"><spring:message code="category.other"/></form:option>
+                                </c:if>
+                            </form:select>
+                        </div>
+                        <form:errors path="category" cssClass="text-danger" element="p"/>
+                    </div>
+
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn rounded-box button-primary"
+                                data-bs-dismiss="modal">
+                            <spring:message code="close"/></button>
+                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="update"/>"/>
+                    </div>
+                </form:form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -150,6 +232,13 @@
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/buttons.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
+
+<c:if test="${errorsEditNoteForm != null}">
+    <script>
+        const editNoteModalButton = document.getElementById('editNoteModalButton');
+        editNoteModalButton.click()
+    </script>
+</c:if>
 
 </body>
 </html>

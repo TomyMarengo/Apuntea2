@@ -13,7 +13,8 @@ import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.webapp.forms.CreateDirectoryForm;
 import ar.edu.itba.paw.webapp.forms.CreateNoteForm;
 import ar.edu.itba.paw.webapp.forms.NavigationForm;
-import ar.edu.itba.paw.webapp.forms.SearchForm;
+import ar.edu.itba.paw.webapp.forms.EditNoteForm;
+import ar.edu.itba.paw.webapp.forms.EditDirectoryForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,12 +71,15 @@ public class DirectoryController {
     @RequestMapping(value = "/{directoryId}" ,method = RequestMethod.GET)
     public ModelAndView getDirectory(@PathVariable("directoryId") String directoryId,
                                      @ModelAttribute("navigationForm") NavigationForm navigationForm,
+                                     @ModelAttribute("editNoteForm") EditNoteForm editNoteForm,
+                                     @ModelAttribute("editDirectoryForm") EditDirectoryForm editDirectoryForm,
                                      final ModelMap model) {
 
         ModelAndView mav = new ModelAndView("directory");
 
-        addFormOrGetWithErrors(mav, model, CREATE_NOTE_FORM_BINDING, "errorsNoteForm", "createNoteForm", CreateNoteForm.class);
-        addFormOrGetWithErrors(mav, model, CREATE_DIRECTORY_FORM_BINDING, "errorsDirectoryForm", "createDirectoryForm", CreateDirectoryForm.class);
+        // TODO: eliminar el EditNoteForm y EditDirectoryForm y handlear errores
+        addFormOrGetWithErrors(mav, model, CREATE_NOTE_FORM_BINDING, "errorsCreateNoteForm", "createNoteForm", CreateNoteForm.class);
+        addFormOrGetWithErrors(mav, model, CREATE_DIRECTORY_FORM_BINDING, "errorsCreateDirectoryForm", "createDirectoryForm", CreateDirectoryForm.class);
 
         UUID dId = UUID.fromString(directoryId);
         Directory directory = directoryService.getDirectoryById(dId).orElseThrow(DirectoryNotFoundException::new);
