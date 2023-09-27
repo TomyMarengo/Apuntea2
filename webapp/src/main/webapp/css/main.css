@@ -4443,6 +4443,7 @@ textarea.form-control-lg {
   color: var(--bs-pagination-hover-color);
   background-color: var(--bs-pagination-hover-bg);
   border-color: var(--bs-pagination-hover-border-color);
+  cursor: pointer;
 }
 
 .page-link:focus {

@@ -36,7 +36,9 @@ for (let i = 0; i < rows.length / 2; i++) {
 rows.forEach((row, index) => {
     row.addEventListener('dblclick', () => {
         // Acción de doble clic aquí (por ejemplo, redirigir a /notes/{noteId})
-        console.log(index);
+        if (index >= rows.length / 2)
+            index -= rows.length / 2;
+
         const [id, type] = ids[index].split('.');
         const url = `${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}`;
 

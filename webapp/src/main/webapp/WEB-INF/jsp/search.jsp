@@ -199,13 +199,6 @@
 
     <!-- TOP BUTTONS -->
     <div class="d-flex container mt-4 justify-content-between p-0">
-        <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
-                data-horizontal="<spring:message code="search.button.listView"/>"
-                data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
-            <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
-                 class="icon-s fill-dark-primary"/>
-        </button>
         <div class="d-flex">
             <div id="selectedButtons" class="align-items-center" style="display: none;">
                 <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
@@ -226,7 +219,14 @@
             <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
                     data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
                     data-bs-trigger="hover">
-                <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary"/>
+                <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-ms fill-dark-primary"/>
+            </button>
+            <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
+                    data-horizontal="<spring:message code="search.button.listView"/>"
+                    data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
+                <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
+                     class="icon-s fill-dark-primary"/>
             </button>
         </div>
 

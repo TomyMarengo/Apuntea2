@@ -47,7 +47,7 @@
     <form:form modelAttribute="navigationForm"
                action="${searchUrl}"
                method="get"
-               id="navigationForm"
+               id="searchForm"
                cssClass="d-flex flex-column w-100 align-items-center">
         <div class="row row-cols-1 row-cols-md-3">
 
@@ -151,25 +151,18 @@
     <!-- TOP BUTTONS -->
     <div class="d-flex container mt-4 justify-content-between p-0">
         <div class="d-flex">
-            <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
-                    data-horizontal="<spring:message code="search.button.listView"/>"
-                    data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
-                <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
-                     class="icon-s fill-dark-primary"/>
-            </button>
             <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
                     id="createNoteModalButton">
                 <img src="<c:url value="/svg/add-document.svg"/>"
                      alt="<spring:message code="uploadNote"/>"
-                     class="icon-s fill-dark-primary"/>
+                     class="icon-m fill-dark-primary"/>
             </button>
 
             <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
                     id="createDirectoryModalButton">
                 <img src="<c:url value="/svg/add-folder.svg"/>"
                      alt="<spring:message code="createDirectory"/>"
-                     class="icon-s fill-dark-primary"/>
+                     class="icon-m fill-dark-primary"/>
             </button>
         </div>
 
@@ -194,6 +187,13 @@
                     data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
                     data-bs-trigger="hover">
                 <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary"/>
+            </button>
+            <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
+                    data-horizontal="<spring:message code="search.button.listView"/>"
+                    data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
+                <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
+                     class="icon-s fill-dark-primary"/>
             </button>
         </div>
 
