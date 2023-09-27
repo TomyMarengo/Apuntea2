@@ -169,12 +169,12 @@ const searchViewToggle = document.getElementById('searchViewToggle');
 if (storedViewState === 'box') {
     boxListSection.style.display = 'block';
     searchViewIcon.src = `${baseUrl}/svg/horizontal-list.svg`;
-    const attr = searchViewToggle.getAttribute('data-box');
+    const attr = searchViewToggle.getAttribute('data-horizontal');
     searchViewToggle.setAttribute('data-bs-title', attr);
 } else {
     horizontalListSection.style.display = 'block';
     searchViewIcon.src = `${baseUrl}/svg/box-list.svg`;
-    const attr = searchViewToggle.getAttribute('data-horizontal');
+    const attr = searchViewToggle.getAttribute('data-box');
     searchViewToggle.setAttribute('data-bs-title', attr);
 }
 
@@ -200,15 +200,16 @@ function toggleView() {
 
 function changeTooltipText() {
     if (localStorage.getItem('viewState') === 'box') {
-        const attr = searchViewToggle.getAttribute('data-box');
+        const attr = searchViewToggle.getAttribute('data-horizontal');
         searchViewToggle.setAttribute('data-bs-title', attr);
     } else {
-        const attr = searchViewToggle.getAttribute('data-horizontal');
+        const attr = searchViewToggle.getAttribute('data-box');
         searchViewToggle.setAttribute('data-bs-title', attr);
     }
     // delete element with tooltip class
     const tooltip = document.querySelector('.tooltip');
-    tooltip.remove();
+    if (tooltip)
+        tooltip.remove();
     new bootstrap.Tooltip(searchViewToggle);
 }
 
