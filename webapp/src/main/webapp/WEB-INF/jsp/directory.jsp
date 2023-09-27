@@ -41,14 +41,6 @@
 
 <c:url var="createUrl" value="./${directoryId}"/>
 
-<button class="btn rounded-box button-primary" data-bs-toggle="modal" data-bs-target="#createNoteModal"
-        id="createNoteModalButton">
-    <spring:message code="navigation.button.uploadNote"/></button>
-
-<button class="btn rounded-box button-primary" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
-        id="createDirectoryModalButton">
-    <spring:message code="navigation.button.createDirectory"/></button>
-
 <!-- SEARCH -->
 <div class="container">
     <c:url var="searchUrl" value="./${directoryId}"/>
@@ -58,10 +50,12 @@
                id="navigationForm"
                cssClass="d-flex flex-column w-100 align-items-center">
         <div class="row row-cols-2 row-cols-md-3">
+
             <div class="col">
                 <div class="input-group mb-3">
                     <form:select path="category" class="form-select bg-bg" id="categorySelect">
                         <form:option value=""><spring:message code="search.category.all"/></form:option>
+                        <form:option value="directory"><spring:message code="search.category.folder"/></form:option>
                         <form:option value="theory"><spring:message code="search.category.theory"/></form:option>
                         <form:option value="practice"><spring:message code="search.category.practice"/></form:option>
                         <form:option value="exam"><spring:message code="search.category.exam"/></form:option>
@@ -116,24 +110,47 @@
 
 </div>
 
+<c:if test="${empty results}">
+    <section class="container mt-4">
+        <p><spring:message code="notes.noNotes"/></p>
+    </section>
+</c:if>
+
 <!-- LIST OF NOTES MATCHING -->
-<spring:message code="download" var="download"/>
-<spring:message code="copy" var="copy"/>
-<spring:message code="search.toggleView" var="searchViewImage"/>
-<c:url value="/svg/box-list.svg" var="boxViewUrl"/>
-<c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
-
-
 <c:if test="${not empty results}">
+    <!-- DEFINES -->
+    <spring:message code="download" var="download"/>
+    <spring:message code="copy" var="copy"/>
+    <spring:message code="folder" var="folder"/>
+    <spring:message code="search.toggleView" var="searchViewImage"/>
+    <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
+    <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
+
     <!-- TOP BUTTONS -->
     <div class="d-flex container mt-4 justify-content-between p-0">
-        <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
-                data-horizontal="<spring:message code="search.button.listView"/>"
-                data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
-            <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
-                 class="icon-s fill-dark-primary"/>
-        </button>
+        <div class="d-flex">
+            <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
+                    data-horizontal="<spring:message code="search.button.listView"/>"
+                    data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
+                <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
+                     class="icon-s fill-dark-primary"/>
+            </button>
+            <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
+                    id="createNoteModalButton">
+                <img src="<c:url value="/svg/add-document.svg"/>"
+                     alt="<spring:message code="navigation.button.uploadNote"/>"
+                     class="icon-s fill-dark-primary"/>
+            </button>
+
+            <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
+                    id="createDirectoryModalButton">
+                <img src="<c:url value="/svg/add-folder.svg"/>"
+                     alt="<spring:message code="navigation.button.createDirectory"/>"
+                     class="icon-s fill-dark-primary"/>
+            </button>
+        </div>
+
         <div class="d-flex">
             <div id="selectedButtons" class="align-items-center" style="display: none;">
                 <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
@@ -149,11 +166,6 @@
                         data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
                         data-bs-trigger="hover">
                     <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
-                </button>
-                <button id="copySelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
-                        data-bs-trigger="hover">
-                    <img src="<c:url value="/svg/link.svg"/>" alt="copy" class="icon-s fill-dark-primary"/>
                 </button>
             </div>
             <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
@@ -171,27 +183,32 @@
             <table class="table table-hover table-search">
                 <thead>
                 <tr>
-                    <th class="col-md-6"><spring:message code="name"/></th>
-                        <%--                <th><spring:message code="owner"/></th>--%>
-                    <th class="col-md-2"><spring:message code="createdAt"/></th>
-                    <th class="col-md-2"><spring:message code="score"/></th>
-                    <th class="col-md-2"></th>
+                    <th class="col-md-5"><spring:message code="name"/></th>
+                    <th class="col-md-2"><spring:message code="owner"/></th>
+                    <th class="col-md-1"><spring:message code="createdAt"/></th>
+                    <th class="col-md-1"><spring:message code="score"/></th>
+                    <th class="col-md-2"></th> <!-- ACTIONS -->
                     <!-- TODO: ADD SIZE OF FILE -->
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="item" items="${results}">
                     <c:set var="date" value="${item.createdAt}"/>
-                    <tr class="note-found no-select" id="<c:out value="${item.id}.${item.category.formattedName}"/>1">
+                    <tr class="note-found no-select" id="<c:out value="${item.id}.${item.category.formattedName}"/>.1">
                         <td class="note-found-title">
                             <c:if test="${item.category.formattedName ne 'directory'}">
-                                <img src="../image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
+                                <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
+                                    <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-m">
+                                </c:if>
                             </c:if>
-                            <span class="card-title">
+                            <c:if test="${item.category.formattedName eq 'directory'}">
+                                <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-m fill-text">
+                            </c:if>
+                            <span class="card-title align-middle mx-2 note-name">
                                 <c:out value="${item.name}"/>
                             </span>
                         </td>
-                            <%--                    <td>owner</td>--%>
+                        <td><c:out value="${item.user.email}"/></td>
                         <td><spring:message code="date.format"
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
                         <td>
@@ -204,7 +221,7 @@
                         </td>
 
                         <td class="search-actions">
-                            <c:if test="${item.category.formattedName ne 'directory'}">
+                            <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
                                 <a href="./notes/${item.id}/download" download="${item.name}">
                                     <button type="button" class="btn button-expansion rounded-circle"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -213,13 +230,16 @@
                                              class="icon-xs fill-text">
                                     </button>
                                 </a>
-                                <button class="btn button-expansion rounded-circle copy-button"
-                                        id="<c:out value="${item.id}"/>c1" data-bs-toggle="tooltip"
-                                        data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
-                                        data-bs-trigger="hover">
-                                    <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
-                                </button>
                             </c:if>
+
+                            <!-- ALL CAN BE COPIED -->
+                            <button class="btn button-expansion rounded-circle copy-button"
+                                    id="<c:out value="${item.id}.${item.category.formattedName}"/>.c1"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
+                                    data-bs-trigger="hover">
+                                <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
+                            </button>
 
                             <input type="checkbox" class="select-checkbox d-none"/>
                         </td>
@@ -245,34 +265,43 @@
         <div class="row">
             <c:forEach items="${results}" var="item">
                 <div class="col-md-4 mb-4">
-                    <div class="note-found card box search-note-box h-100" id="<c:out value="${item.id}"/>2">
+                    <div class="note-found card box search-note-box h-100"
+                         id="<c:out value="${item.id}.${item.category.formattedName}"/>.2">
                         <div class="card-body no-select">
-                            <div class="d-flex gap-2 overflow-hidden">
-                                <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
-                                <h4 class="card-title text-truncate">
+                            <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
+                                <c:if test="${item.category.formattedName ne 'directory'}">
+                                    <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
+                                        <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-s">
+                                    </c:if>
+                                </c:if>
+                                <c:if test="${item.category.formattedName eq 'directory'}">
+                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-s fill-text">
+                                </c:if>
+                                <h4 class="card-title text-truncate mb-0">
                                     <c:out value="${item.name}"/>
                                 </h4>
                             </div>
-                                <%--                        <span class="card-text">--%>
-                                <%--                            <strong><spring:message code="owner"/></strong>:--%>
-                                <%--                            owner--%>
-                                <%--                        </span>--%>
-                                <%--                        <br>--%>
-                            <span class="card-text"><strong><spring:message code="category"/></strong>:
-                                <c:if test="${item.category.formattedName eq 'theory'}">
-                                    <spring:message code="search.category.theory"/>
-                                </c:if>
-                                <c:if test="${item.category.formattedName eq 'practice'}">
-                                    <spring:message code="search.category.practice"/>
-                                </c:if>
-                                <c:if test="${item.category.formattedName eq 'exam'}">
-                                    <spring:message code="search.category.exam"/>
-                                </c:if>
-                                <c:if test="${item.category.formattedName eq 'other'}">
-                                    <spring:message code="search.category.other"/>
-                                </c:if>
+                            <span class="card-text">
+                                <strong><spring:message code="owner"/></strong>:
+                                <c:out value="${item.user.email}"/>
                             </span>
+
                             <br>
+                                <%--<span class="card-text"><strong><spring:message code="category"/></strong>:
+                                    <c:if test="${item.category.formattedName eq 'theory'}">
+                                        <spring:message code="search.category.theory"/>
+                                    </c:if>
+                                    <c:if test="${item.category.formattedName eq 'practice'}">
+                                        <spring:message code="search.category.practice"/>
+                                    </c:if>
+                                    <c:if test="${item.category.formattedName eq 'exam'}">
+                                        <spring:message code="search.category.exam"/>
+                                    </c:if>
+                                    <c:if test="${item.category.formattedName eq 'other'}">
+                                        <spring:message code="search.category.other"/>
+                                    </c:if>
+                                </span>
+                                <br>--%>
                             <span class="card-text">
                             <strong><spring:message code="createdAt"/></strong>:
                             <spring:message code="date.format"
@@ -296,60 +325,53 @@
             </c:forEach>
         </div>
     </section>
-</c:if>
 
-<c:if test="${empty results}">
-    <section class="container mt-4">
-        <p><spring:message code="notes.noNotes"/></p>
+    <!-- PAGINATION -->
+    <section class="container d-flex justify-content-center mt-3">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <c:if test="${navigationForm.pageNumber gt 1}">
+                    <li class="page-item">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
+                    </li>
+                </c:if>
+                <c:if test="${navigationForm.pageNumber le 1}">
+                    <li class="page-item disabled">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
+                    </li>
+                </c:if>
+
+                <c:forEach begin="1" end="${maxPage}" var="page">
+                    <c:if test="${page eq navigationForm.pageNumber}">
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" data-page="${page}">${page}</a>
+                        </li>
+                    </c:if>
+                    <c:if test="${page ne navigationForm.pageNumber}">
+                        <li class="page-item">
+                            <a class="page-link" data-page="${page}">${page}</a>
+                        </li>
+                    </c:if>
+                </c:forEach>
+
+                <c:if test="${navigationForm.pageNumber lt maxPage}">
+                    <li class="page-item">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
+                    </li>
+                </c:if>
+                <c:if test="${navigationForm.pageNumber ge maxPage}">
+                    <li class="page-item disabled">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
+                    </li>
+                </c:if>
+            </ul>
+        </nav>
     </section>
 </c:if>
-
-<!-- PAGINATION -->
-<div class="container d-flex justify-content-center mt-3">
-    <nav aria-label="...">
-        <ul class="pagination">
-            <c:if test="${navigationForm.pageNumber gt 1}">
-                <li class="page-item">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
-                </li>
-            </c:if>
-            <c:if test="${navigationForm.pageNumber le 1}">
-                <li class="page-item disabled">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
-                </li>
-            </c:if>
-
-            <c:forEach begin="1" end="${maxPage}" var="page">
-                <c:if test="${page eq navigationForm.pageNumber}">
-                    <li class="page-item active" aria-current="page">
-                        <a class="page-link" data-page="${page}">${page}</a>
-                    </li>
-                </c:if>
-                <c:if test="${page ne navigationForm.pageNumber}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="${page}">${page}</a>
-                    </li>
-                </c:if>
-            </c:forEach>
-
-            <c:if test="${navigationForm.pageNumber lt maxPage}">
-                <li class="page-item">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
-                </li>
-            </c:if>
-            <c:if test="${navigationForm.pageNumber ge maxPage}">
-                <li class="page-item disabled">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
-                </li>
-            </c:if>
-        </ul>
-    </nav>
-</div>
-
 
 
 <!-- CREATE NOTE MODAL -->
@@ -399,16 +421,20 @@
                             <label class="input-group-text" for="categorySelect"><spring:message
                                     code="form.upload.category"/></label>
                             <form:select path="category" class="form-select" id="categorySelect">
-                                <form:option value="theory"><spring:message code="form.upload.category.theory"/></form:option>
-                                <form:option value="practice"><spring:message code="form.upload.category.practice"/></form:option>
-                                <form:option value="exam"><spring:message code="form.upload.category.exam"/></form:option>
-                                <form:option value="other"><spring:message code="form.upload.category.other"/></form:option>
+                                <form:option value="theory"><spring:message
+                                        code="form.upload.category.theory"/></form:option>
+                                <form:option value="practice"><spring:message
+                                        code="form.upload.category.practice"/></form:option>
+                                <form:option value="exam"><spring:message
+                                        code="form.upload.category.exam"/></form:option>
+                                <form:option value="other"><spring:message
+                                        code="form.upload.category.other"/></form:option>
                             </form:select>
                         </div>
                         <form:errors path="category" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <input type="hidden" name="createNote" value="createNote" /> <!-- createNote -->
+                    <input type="hidden" name="createNote" value="createNote"/> <!-- createNote -->
 
                     <div class="modal-footer">
                         <button type="button" class="btn rounded-box button-primary"
@@ -455,7 +481,7 @@
                         <form:errors path="name" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <input type="hidden" name="createDirectory" value="createDirectory" /> <!-- createNote -->
+                    <input type="hidden" name="createDirectory" value="createDirectory"/> <!-- createNote -->
 
                     <div class="modal-footer">
                         <button type="button" class="btn rounded-box button-primary"
@@ -473,6 +499,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
@@ -480,7 +507,6 @@
 <script src="<c:url value="/js/buttons.js"/>"></script>
 <script src="<c:url value="/js/pagination.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
-
 
 
 <c:if test="${errorsNoteForm != null}">

@@ -253,11 +253,11 @@
                         <td class="note-found-title">
                             <c:if test="${item.category.formattedName ne 'directory'}">
                                 <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
-                                    <img src="image/pdf.png" alt="pdf" class="icon-m">
+                                    <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-m">
                                 </c:if>
                             </c:if>
                             <c:if test="${item.category.formattedName eq 'directory'}">
-                                <img src="svg/folder.svg" alt="${folder}" class="icon-m fill-text">
+                                <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-m fill-text">
                             </c:if>
                             <span class="card-title align-middle mx-2 note-name">
                                 <c:out value="${item.name}"/>
@@ -326,11 +326,11 @@
                             <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
                                 <c:if test="${item.category.formattedName ne 'directory'}">
                                     <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
-                                        <img src="image/pdf.png" alt="pdf" class="icon-s">
+                                        <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-s">
                                     </c:if>
                                 </c:if>
                                 <c:if test="${item.category.formattedName eq 'directory'}">
-                                    <img src="svg/folder.svg" alt="${folder}" class="icon-s fill-text">
+                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-s fill-text">
                                 </c:if>
                                 <h4 class="card-title text-truncate mb-0">
                                     <c:out value="${item.name}"/>

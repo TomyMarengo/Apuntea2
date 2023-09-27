@@ -10,20 +10,19 @@
 
 
 if (!baseUrl) {
-  const currentUrl = window.location.origin + '/'
-  const path = window.location.pathname.split('/')[1];
-  const baseUrl = currentUrl + path
+    const currentUrl = window.location.origin + '/'
+    const path = window.location.pathname.split('/')[1];
+    const baseUrl = currentUrl + path
 }
 
 const rows = document.querySelectorAll('.note-found');
 // for each row, get the id with category, the id is id.category.number, get only id.category
 
-if (rows.length > 0) {
 
-  const ids = []
-  const names = []
+const ids = []
+const names = []
 
-  for (let i = 0; i < rows.length / 2; i++) {
+for (let i = 0; i < rows.length / 2; i++) {
     const noteId = rows[i].getAttribute('id');
     const id = noteId.split('.', 2).join('.');
     ids.push(id)
@@ -31,186 +30,186 @@ if (rows.length > 0) {
     let noteName = noteNameElement.textContent.trim(); // Elimina espacios en blanco al principio y al final
     noteName = noteName.replace(/_/g, ''); // Elimina todos los guiones bajos ("_")
     names.push(noteName);
-  }
+}
 
 
-  rows.forEach((row, index) => {
+rows.forEach((row, index) => {
     row.addEventListener('dblclick', () => {
-      // Acción de doble clic aquí (por ejemplo, redirigir a /notes/{noteId})
-      console.log(index);
-      const [id, type] = ids[index].split('.');
-      const url = `${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}`;
+        // Acción de doble clic aquí (por ejemplo, redirigir a /notes/{noteId})
+        console.log(index);
+        const [id, type] = ids[index].split('.');
+        const url = `${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}`;
 
-      // Open the URL in a new tab
-      window.open(url, '_blank');
+        // Open the URL in a new tab
+        window.open(url, '_blank');
     });
-  });
+});
 
-  let lastClickedRow = -1;
-  const selectedRowIds = new Set();
-  const selectedButtons = document.getElementById('selectedButtons');
-  const selectedCount = document.getElementById('selectedCount');
+let lastClickedRow = -1;
+const selectedRowIds = new Set();
+const selectedButtons = document.getElementById('selectedButtons');
+const selectedCount = document.getElementById('selectedCount');
 
-  function updateSelectedButtonsState() {
+function updateSelectedButtonsState() {
     if (selectedRowIds.size > 0) {
-      selectedButtons.style.display = 'flex'; // Mostrar el botón si hay filas seleccionadas
-      downloadSelectedButton.style.display = 'flex';
-      selectedCount.textContent = selectedRowIds.size.toString(); // Actualizar el número de filas seleccionadas
+        selectedButtons.style.display = 'flex'; // Mostrar el botón si hay filas seleccionadas
+        downloadSelectedButton.style.display = 'flex';
+        selectedCount.textContent = selectedRowIds.size.toString(); // Actualizar el número de filas seleccionadas
     } else {
-      selectedButtons.style.display = 'none'; // Ocultar el botón si no hay filas seleccionadas
+        selectedButtons.style.display = 'none'; // Ocultar el botón si no hay filas seleccionadas
     }
     for (let i = 0; i < selectedRowIds.size; i++) {
-      let entries = Array.from(selectedRowIds);
-      const [id, type] = entries[i].split('.');
-      if (type === 'directory') {
-        downloadSelectedButton.style.display = 'none';
-        break;
-      }
+        let entries = Array.from(selectedRowIds);
+        const [id, type] = entries[i].split('.');
+        if (type === 'directory') {
+            downloadSelectedButton.style.display = 'none';
+            break;
+        }
     }
-  }
+}
 
-  for (let i = 0; i < rows.length; i++) {
+for (let i = 0; i < rows.length; i++) {
     rows[i].addEventListener('click', (event) => {
-      if (i >= rows.length / 2)
-        i -= rows.length / 2;
+        if (i >= rows.length / 2)
+            i -= rows.length / 2;
 
-      if (event.shiftKey && lastClickedRow >= 0) {
-        let startIndex = lastClickedRow;
-        let endIndex = i;
+        if (event.shiftKey && lastClickedRow >= 0) {
+            let startIndex = lastClickedRow;
+            let endIndex = i;
 
-        if (startIndex >= rows.length / 2)
-          startIndex -= rows.length / 2;
+            if (startIndex >= rows.length / 2)
+                startIndex -= rows.length / 2;
 
-        const [minIndex, maxIndex] = [startIndex, endIndex].sort((a, b) => a - b);
+            const [minIndex, maxIndex] = [startIndex, endIndex].sort((a, b) => a - b);
 
-        for (let j = minIndex; j <= maxIndex; j++) {
-          const checkbox = rows[j].querySelector('.select-checkbox');
-          checkbox.checked = true;
-          rows[j].classList.add('active-note-found');
+            for (let j = minIndex; j <= maxIndex; j++) {
+                const checkbox = rows[j].querySelector('.select-checkbox');
+                checkbox.checked = true;
+                rows[j].classList.add('active-note-found');
 
-          const checkbox2 = rows[j * 2].querySelector('.select-checkbox');
-          checkbox2.checked = true;
-          rows[j + rows.length / 2].classList.add('active-note-found');
+                const checkbox2 = rows[j * 2].querySelector('.select-checkbox');
+                checkbox2.checked = true;
+                rows[j + rows.length / 2].classList.add('active-note-found');
 
-          selectedRowIds.add(ids[j]);
-        }
-      } else if (event.ctrlKey) {
-        // Si se mantiene presionada la tecla Ctrl, alternar la selección de la fila
-
-        rows[i].classList.toggle('active-note-found');
-        const checkbox = rows[i].querySelector('.select-checkbox');
-        checkbox.checked = !checkbox.checked;
-
-        rows[i + rows.length / 2].classList.toggle('active-note-found');
-        const checkbox2 = rows[i + rows.length / 2].querySelector('.select-checkbox');
-        checkbox2.checked = !checkbox2.checked;
-
-        if (checkbox.checked) {
-          selectedRowIds.add(ids[i]);
-        } else {
-          selectedRowIds.delete(ids[i]);
-        }
-      } else {
-        let toggle = false;
-        rows.forEach((otherRow, index) => {
-          if (otherRow !== rows[i] && otherRow !== rows[i + rows.length / 2]) {
-            const checkbox = otherRow.querySelector('.select-checkbox');
-            checkbox.checked = false;
-            otherRow.classList.remove('active-note-found');
-
-            selectedRowIds.delete(ids[index]);
-          } else {
-            if (!toggle) {
-              toggle = true
-              rows[i].classList.toggle('active-note-found');
-              const checkbox = rows[i].querySelector('.select-checkbox');
-              checkbox.checked = !checkbox.checked;
-
-              rows[i + rows.length / 2].classList.toggle('active-note-found');
-              const checkbox2 = rows[i + rows.length / 2].querySelector('.select-checkbox');
-              checkbox2.checked = !checkbox2.checked;
-
-              if (checkbox.checked) {
-                selectedRowIds.add(ids[i]);
-                lastClickedRow = i;
-              } else {
-                selectedRowIds.delete(ids[i]);
-                lastClickedRow = -1;
-              }
+                selectedRowIds.add(ids[j]);
             }
-          }
-        });
-      }
-      updateSelectedButtonsState();
+        } else if (event.ctrlKey) {
+            // Si se mantiene presionada la tecla Ctrl, alternar la selección de la fila
+
+            rows[i].classList.toggle('active-note-found');
+            const checkbox = rows[i].querySelector('.select-checkbox');
+            checkbox.checked = !checkbox.checked;
+
+            rows[i + rows.length / 2].classList.toggle('active-note-found');
+            const checkbox2 = rows[i + rows.length / 2].querySelector('.select-checkbox');
+            checkbox2.checked = !checkbox2.checked;
+
+            if (checkbox.checked) {
+                selectedRowIds.add(ids[i]);
+            } else {
+                selectedRowIds.delete(ids[i]);
+            }
+        } else {
+            let toggle = false;
+            rows.forEach((otherRow, index) => {
+                if (otherRow !== rows[i] && otherRow !== rows[i + rows.length / 2]) {
+                    const checkbox = otherRow.querySelector('.select-checkbox');
+                    checkbox.checked = false;
+                    otherRow.classList.remove('active-note-found');
+
+                    selectedRowIds.delete(ids[index]);
+                } else {
+                    if (!toggle) {
+                        toggle = true
+                        rows[i].classList.toggle('active-note-found');
+                        const checkbox = rows[i].querySelector('.select-checkbox');
+                        checkbox.checked = !checkbox.checked;
+
+                        rows[i + rows.length / 2].classList.toggle('active-note-found');
+                        const checkbox2 = rows[i + rows.length / 2].querySelector('.select-checkbox');
+                        checkbox2.checked = !checkbox2.checked;
+
+                        if (checkbox.checked) {
+                            selectedRowIds.add(ids[i]);
+                            lastClickedRow = i;
+                        } else {
+                            selectedRowIds.delete(ids[i]);
+                            lastClickedRow = -1;
+                        }
+                    }
+                }
+            });
+        }
+        updateSelectedButtonsState();
     });
-  }
+}
 
 
-  /*************/
-  /* VIEW MODE */
-  /*************/
+/*************/
+/* VIEW MODE */
+/*************/
 
-  // Obtener el valor del estado almacenado en el localStorage
-  const storedViewState = localStorage.getItem('viewState');
-  if (!storedViewState) {
+// Obtener el valor del estado almacenado en el localStorage
+const storedViewState = localStorage.getItem('viewState');
+if (!storedViewState) {
     // Si no hay un valor almacenado, se establece el valor por defecto
     localStorage.setItem('viewState', 'box');
-  }
+}
 
-  // Obtener las secciones por su ID
-  const horizontalListSection = document.getElementById('horizontalList');
-  const boxListSection = document.getElementById('boxList');
-  const searchViewIcon = document.getElementById('searchViewIcon');
-  const searchViewToggle = document.getElementById('searchViewToggle');
+// Obtener las secciones por su ID
+const horizontalListSection = document.getElementById('horizontalList');
+const boxListSection = document.getElementById('boxList');
+const searchViewIcon = document.getElementById('searchViewIcon');
+const searchViewToggle = document.getElementById('searchViewToggle');
 
 
-  // Verificar y mostrar la vista según el valor almacenado
-  if (storedViewState === 'box') {
+// Verificar y mostrar la vista según el valor almacenado
+if (storedViewState === 'box') {
     boxListSection.style.display = 'block';
     searchViewIcon.src = `${baseUrl}/svg/horizontal-list.svg`;
     const attr = searchViewToggle.getAttribute('data-box');
     searchViewToggle.setAttribute('data-bs-title', attr);
-  } else {
+} else {
     horizontalListSection.style.display = 'block';
     searchViewIcon.src = `${baseUrl}/svg/box-list.svg`;
     const attr = searchViewToggle.getAttribute('data-horizontal');
     searchViewToggle.setAttribute('data-bs-title', attr);
-  }
+}
 
-  function toggleView() {
+function toggleView() {
     // Verificar si la vista actual es horizontal
     if (localStorage.getItem('viewState') === 'box') {
-      // Cambiar a la vista de caja
-      boxListSection.style.display = 'none';
-      horizontalListSection.style.display = 'block';
-      searchViewIcon.src = `${baseUrl}/svg/box-list.svg`;
-      // Actualizar el valor almacenado en el localStorage
-      localStorage.setItem('viewState', 'horizontal');
+        // Cambiar a la vista de caja
+        boxListSection.style.display = 'none';
+        horizontalListSection.style.display = 'block';
+        searchViewIcon.src = `${baseUrl}/svg/box-list.svg`;
+        // Actualizar el valor almacenado en el localStorage
+        localStorage.setItem('viewState', 'horizontal');
     } else {
-      // Cambiar a la vista horizontal
-      boxListSection.style.display = 'block';
-      horizontalListSection.style.display = 'none';
-      searchViewIcon.src = `${baseUrl}/svg/horizontal-list.svg`;
-      // Actualizar el valor almacenado en el localStorage
-      localStorage.setItem('viewState', 'box');
+        // Cambiar a la vista horizontal
+        boxListSection.style.display = 'block';
+        horizontalListSection.style.display = 'none';
+        searchViewIcon.src = `${baseUrl}/svg/horizontal-list.svg`;
+        // Actualizar el valor almacenado en el localStorage
+        localStorage.setItem('viewState', 'box');
     }
     changeTooltipText();
-  }
+}
 
-  function changeTooltipText() {
+function changeTooltipText() {
     if (localStorage.getItem('viewState') === 'box') {
-      const attr = searchViewToggle.getAttribute('data-box');
-      searchViewToggle.setAttribute('data-bs-title', attr);
+        const attr = searchViewToggle.getAttribute('data-box');
+        searchViewToggle.setAttribute('data-bs-title', attr);
     } else {
-      const attr = searchViewToggle.getAttribute('data-horizontal');
-      searchViewToggle.setAttribute('data-bs-title', attr);
+        const attr = searchViewToggle.getAttribute('data-horizontal');
+        searchViewToggle.setAttribute('data-bs-title', attr);
     }
     // delete element with tooltip class
     const tooltip = document.querySelector('.tooltip');
     tooltip.remove();
     new bootstrap.Tooltip(searchViewToggle);
-  }
-
-  // Asociar la función de cambio de vista al botón
-  searchViewToggle.addEventListener('click', toggleView);
 }
+
+// Asociar la función de cambio de vista al botón
+searchViewToggle.addEventListener('click', toggleView);
+

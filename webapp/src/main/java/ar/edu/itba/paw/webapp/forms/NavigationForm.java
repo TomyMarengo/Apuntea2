@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public class NavigationForm {
-    @Pattern(regexp = "theory|practice|exam|other")
+    @Pattern(regexp = "directory|theory|practice|exam|other")
     private String category;
     @Pattern(regexp = "score|name|date")
     private String sortBy;
