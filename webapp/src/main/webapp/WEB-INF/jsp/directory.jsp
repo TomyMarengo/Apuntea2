@@ -42,14 +42,14 @@
 <c:url var="createUrl" value="./${directoryId}"/>
 
 <!-- SEARCH -->
-<div class="container">
+<div class="container my-5">
     <c:url var="searchUrl" value="./${directoryId}"/>
     <form:form modelAttribute="navigationForm"
                action="${searchUrl}"
                method="get"
                id="navigationForm"
                cssClass="d-flex flex-column w-100 align-items-center">
-        <div class="row row-cols-2 row-cols-md-3">
+        <div class="row row-cols-1 row-cols-md-3">
 
             <div class="col">
                 <div class="input-group mb-3">
@@ -98,21 +98,44 @@
                 </div>
             </div>
 
+
+            <form:hidden path="pageNumber" id="pageNumber"/>
+            <form:hidden path="pageSize" id="pageSize"/>
+
         </div>
 
-        <form:hidden path="pageNumber" id="pageNumber"/>
-        <form:hidden path="pageSize" id="pageSize"/>
-
-        <div class="search-input w-25">
+        <div class="w-25">
             <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
         </div>
+
     </form:form>
 
 </div>
 
 <c:if test="${empty results}">
-    <section class="container mt-4">
-        <p><spring:message code="notes.noNotes"/></p>
+    <section class="container text-center mt-4 d-flex flex-column align-items-center gap-2">
+        <div class="d-flex align-middle gap-2 justify-content-center">
+            <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
+            <h3><spring:message code="directories.noContent"/></h3>
+        </div>
+        <p class="text-muted"><spring:message code="directories.noContent.description"/></p>
+        <div class="d-flex gap-2">
+            <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
+                    id="createNoteModalButton">
+                <img src="<c:url value="/svg/add-document.svg"/>"
+                     alt="<spring:message code="navigation.button.uploadNote"/>"
+                     class="icon-m fill-dark-primary"/>
+            </button>
+
+            <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
+                    id="createDirectoryModalButton">
+                <img src="<c:url value="/svg/add-folder.svg"/>"
+                     alt="<spring:message code="navigation.button.createDirectory"/>"
+                     class="icon-m fill-dark-primary"/>
+            </button>
+        </div>
+
+
     </section>
 </c:if>
 
@@ -275,7 +298,8 @@
                                     </c:if>
                                 </c:if>
                                 <c:if test="${item.category.formattedName eq 'directory'}">
-                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-s fill-text">
+                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
+                                         class="icon-s fill-text">
                                 </c:if>
                                 <h4 class="card-title text-truncate mb-0">
                                     <c:out value="${item.name}"/>
@@ -386,14 +410,14 @@
                         aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pb-0">
                 <!-- CREATE NOTE FORM -->
                 <form:form modelAttribute="createNoteForm"
                            action="${createUrl}"
                            method="post"
                            enctype="multipart/form-data"
                            autocomplete="off"
-                           class="d-flex flex-column gap-4"
+                           class="d-flex flex-column"
                            id="createNoteForm">
 
                     <div class="d-flex flex-column gap-2">
@@ -405,7 +429,7 @@
                         <form:errors path="file" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <div class="d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2 mt-4">
                         <div class="input-group">
                             <label class="input-group-text" for="name"><spring:message
                                     code="form.upload.name"/></label>
@@ -416,7 +440,7 @@
                         <form:errors path="name" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <div class="d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2 mt-4">
                         <div class="input-group">
                             <label class="input-group-text" for="categorySelect"><spring:message
                                     code="form.upload.category"/></label>
@@ -436,7 +460,7 @@
 
                     <input type="hidden" name="createNote" value="createNote"/> <!-- createNote -->
 
-                    <div class="modal-footer">
+                    <div class="modal-footer mt-4">
                         <button type="button" class="btn rounded-box button-primary"
                                 data-bs-dismiss="modal">
                             <spring:message code="form.upload.button.close"/></button>
@@ -460,14 +484,14 @@
                         aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pb-0">
                 <!-- CREATE NOTE FORM -->
                 <form:form modelAttribute="createDirectoryForm"
                            action="${createUrl}"
                            method="post"
                            enctype="multipart/form-data"
                            autocomplete="off"
-                           class="d-flex flex-column gap-4"
+                           class="d-flex flex-column"
                            id="createDirectoryForm">
 
                     <div class="d-flex flex-column gap-2">
@@ -483,10 +507,11 @@
 
                     <input type="hidden" name="createDirectory" value="createDirectory"/> <!-- createNote -->
 
-                    <div class="modal-footer">
+                    <div class="modal-footer mt-4">
                         <button type="button" class="btn rounded-box button-primary"
                                 data-bs-dismiss="modal">
-                            <spring:message code="form.upload.button.close"/></button>
+                            <spring:message code="form.upload.button.close"/>
+                        </button>
                         <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                             code="form.upload.button.upload"/>"/>
                     </div>
@@ -520,7 +545,7 @@
 <c:if test="${errorsDirectoryForm != null}">
     <script>
         const createDirectoryModalButton = document.getElementById('createDirectoryModalButton');
-        createNoteModalButton.click()
+        createDirectoryModalButton.click()
     </script>
 </c:if>
 </body>

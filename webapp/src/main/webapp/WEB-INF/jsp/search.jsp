@@ -44,7 +44,7 @@
 
 
 <!-- SEARCH -->
-<div class="container">
+<div class="container my-5">
     <c:url var="searchUrl" value="./search"/>
     <form:form modelAttribute="searchForm"
                action="${searchUrl}"
@@ -173,7 +173,7 @@
         <form:hidden path="pageNumber" id="pageNumber"/>
         <form:hidden path="pageSize" id="pageSize"/>
 
-        <div class="search-input w-25">
+        <div class="w-25">
             <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
         </div>
     </form:form>
