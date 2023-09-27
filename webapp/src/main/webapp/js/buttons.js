@@ -15,7 +15,6 @@ function copyToClipboard(text) {
     document.body.removeChild(el);
 }
 
-
 // Agregar eventos de clic a los botones de copia
 copyButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -25,3 +24,16 @@ copyButtons.forEach(button => {
     });
 });
 
+const downloadSelectedButton = document.getElementById('downloadSelectedButton');
+
+downloadSelectedButton.addEventListener('click', () => {
+    selectedRowIds.forEach((itemId) => {
+        const a = document.createElement('a')
+        const [id, type] = itemId.slice(0,-1).split('.');
+        a.href = `${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}/download`
+        a.download = names[ids.indexOf(itemId)]
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+    });
+});

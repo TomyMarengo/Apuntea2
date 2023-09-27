@@ -16,14 +16,30 @@ if (!baseUrl) {
 }
 
 const rows = document.querySelectorAll('.note-found');
+// for each row, get the id with category, the id is id.category.number, get only id.category
+const ids = []
+const names = []
 
-rows.forEach(row => {
+for (let i = 0; i < rows.length / 2; i++) {
+  const noteId = rows[i].getAttribute('id');
+  const id = noteId.split('.', 2).join('.');
+  ids.push(id)
+  const noteNameElement = rows[i].querySelector('.note-name');
+  let noteName = noteNameElement.textContent.trim(); // Elimina espacios en blanco al principio y al final
+  noteName = noteName.replace(/_/g, ''); // Elimina todos los guiones bajos ("_")
+  names.push(noteName);
+}
+
+
+rows.forEach((row, index) => {
   row.addEventListener('dblclick', () => {
     // Acción de doble clic aquí (por ejemplo, redirigir a /notes/{noteId})
-    const noteId = row.getAttribute('id');
-    const [id, type] = noteId.slice(0,-1).split('.');
-    console.log(id, type);
-    window.location.href = `${baseUrl}/${type === 'directory'? 'directory' : 'notes'}/${id}`;
+    console.log(index);
+    const [id, type] = ids[index].split('.');
+    const url = `${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}`;
+
+    // Open the URL in a new tab
+    window.open(url, '_blank');
   });
 });
 
@@ -35,9 +51,18 @@ const selectedCount = document.getElementById('selectedCount');
 function updateSelectedButtonsState() {
   if (selectedRowIds.size > 0) {
     selectedButtons.style.display = 'flex'; // Mostrar el botón si hay filas seleccionadas
+    downloadSelectedButton.style.display = 'flex';
     selectedCount.textContent = selectedRowIds.size.toString(); // Actualizar el número de filas seleccionadas
   } else {
     selectedButtons.style.display = 'none'; // Ocultar el botón si no hay filas seleccionadas
+  }
+  for (let i=0; i < selectedRowIds.size; i++) {
+    let entries = Array.from(selectedRowIds);
+    const [id, type] = entries[i].split('.');
+    if (type === 'directory') {
+      downloadSelectedButton.style.display = 'none';
+      break;
+    }
   }
 }
 
@@ -64,7 +89,7 @@ for (let i = 0; i < rows.length; i++) {
         checkbox2.checked = true;
         rows[j + rows.length / 2].classList.add('active-note-found');
 
-        selectedRowIds.add(rows[j].getAttribute('id').slice(0, -1));
+        selectedRowIds.add(ids[j]);
       }
     }
     else if (event.ctrlKey) {
@@ -79,20 +104,21 @@ for (let i = 0; i < rows.length; i++) {
         checkbox2.checked = !checkbox2.checked;
 
         if (checkbox.checked) {
-            selectedRowIds.add(rows[i].getAttribute('id').slice(0, -1));
+          selectedRowIds.add(ids[i]);
         }
         else {
-            selectedRowIds.delete(rows[i].getAttribute('id').slice(0, -1));
+          selectedRowIds.delete(ids[i]);
         }
     }
     else {
       let toggle = false;
-      rows.forEach(otherRow => {
+      rows.forEach((otherRow, index) => {
         if (otherRow !== rows[i] && otherRow !== rows[i + rows.length / 2]) {
           const checkbox = otherRow.querySelector('.select-checkbox');
           checkbox.checked = false;
           otherRow.classList.remove('active-note-found');
-          selectedRowIds.delete(otherRow.getAttribute('id').slice(0, -1));
+
+          selectedRowIds.delete(ids[index]);
         } else {
           if (!toggle) {
             toggle = true
@@ -105,10 +131,10 @@ for (let i = 0; i < rows.length; i++) {
             checkbox2.checked = !checkbox2.checked;
 
             if (checkbox.checked) {
-              selectedRowIds.add(rows[i].getAttribute('id').slice(0, -1));
+              selectedRowIds.add(ids[i]);
               lastClickedRow = i;
             } else {
-              selectedRowIds.delete(rows[i].getAttribute('id').slice(0, -1));
+              selectedRowIds.delete(ids[i]);
               lastClickedRow = -1;
             }
           }
@@ -134,7 +160,7 @@ function selectAll() {
       checkbox2.checked = true;
       rows[i + rows.length / 2].classList.add('active-note-found');
 
-      selectedRowIds.add(rows[i].getAttribute('id').slice(0, -1));
+      selectedRowIds.add(ids[i]);
     }
 
   updateSelectedButtonsState();
@@ -150,7 +176,7 @@ function deselectAll() {
       checkbox2.checked = false;
       rows[i + rows.length / 2].classList.remove('active-note-found');
 
-      selectedRowIds.delete(rows[i].getAttribute('id').slice(0, -1));
+      selectedRowIds.delete(ids[i]);
     }
 
   updateSelectedButtonsState();

@@ -219,11 +219,6 @@
                         data-bs-trigger="hover">
                     <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
                 </button>
-                <button id="copySelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
-                        data-bs-trigger="hover">
-                    <img src="<c:url value="/svg/link.svg"/>" alt="copy" class="icon-s fill-dark-primary"/>
-                </button>
             </div>
             <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
                     data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
@@ -261,7 +256,7 @@
                             <c:if test="${item.category.formattedName eq 'directory'}">
                                 <img src="svg/folder.svg" alt="${folder}" class="icon-m fill-text">
                             </c:if>
-                            <span class="card-title align-middle mx-2">
+                            <span class="card-title align-middle mx-2 note-name">
                                 <c:out value="${item.name}"/>
                             </span>
                         </td>
