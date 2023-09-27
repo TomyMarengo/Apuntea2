@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Apuntea | <spring:message code="profile"/></title>
+    <title>Apuntea | <spring:message code="profile.title"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>" />
