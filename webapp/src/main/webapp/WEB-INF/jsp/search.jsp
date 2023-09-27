@@ -39,7 +39,8 @@
 <fragment:navbar/>
 
 <!-- BOTTOM-NAVBAR -->
-<fragment:bottom-navbar title="./search:Búsqueda" extraLinks="">
+<spring:message code="search.title" var="title"/>
+<fragment:bottom-navbar title="./search:${title}" extraLinks="">
 </fragment:bottom-navbar>
 
 
@@ -190,7 +191,6 @@
 <c:if test="${not empty results}">
     <!-- DEFINES -->
     <spring:message code="download" var="download"/>
-    <spring:message code="copy" var="copy"/>
     <spring:message code="folder" var="folder"/>
     <spring:message code="search.toggleView" var="searchViewImage"/>
     <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
@@ -268,7 +268,7 @@
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
                         <td>
                             <c:if test="${item.avgScore eq 0}">
-                                <spring:message code="score.none"/>
+                                <spring:message code="notes.noScore"/>
                             </c:if>
                             <c:if test="${item.avgScore ne 0}">
                                 <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
@@ -365,7 +365,7 @@
                             <br>
                             <span class="card-text">
                             <c:if test="${item.avgScore eq 0}">
-                                <strong><spring:message code="score.none"/></strong>
+                                <strong><spring:message code="notes.noScore"/></strong>
                             </c:if>
                             <c:if test="${item.avgScore ne 0}">
                                 <strong><spring:message code="score"/></strong>:

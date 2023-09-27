@@ -123,14 +123,14 @@
             <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
                     id="createNoteModalButton">
                 <img src="<c:url value="/svg/add-document.svg"/>"
-                     alt="<spring:message code="navigation.button.uploadNote"/>"
+                     alt="<spring:message code="uploadNote"/>"
                      class="icon-m fill-dark-primary"/>
             </button>
 
             <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
                     id="createDirectoryModalButton">
                 <img src="<c:url value="/svg/add-folder.svg"/>"
-                     alt="<spring:message code="navigation.button.createDirectory"/>"
+                     alt="<spring:message code="createDirectory"/>"
                      class="icon-m fill-dark-primary"/>
             </button>
         </div>
@@ -143,7 +143,6 @@
 <c:if test="${not empty results}">
     <!-- DEFINES -->
     <spring:message code="download" var="download"/>
-    <spring:message code="copy" var="copy"/>
     <spring:message code="folder" var="folder"/>
     <spring:message code="search.toggleView" var="searchViewImage"/>
     <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
@@ -162,14 +161,14 @@
             <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
                     id="createNoteModalButton">
                 <img src="<c:url value="/svg/add-document.svg"/>"
-                     alt="<spring:message code="navigation.button.uploadNote"/>"
+                     alt="<spring:message code="uploadNote"/>"
                      class="icon-s fill-dark-primary"/>
             </button>
 
             <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
                     id="createDirectoryModalButton">
                 <img src="<c:url value="/svg/add-folder.svg"/>"
-                     alt="<spring:message code="navigation.button.createDirectory"/>"
+                     alt="<spring:message code="createDirectory"/>"
                      class="icon-s fill-dark-primary"/>
             </button>
         </div>
@@ -236,7 +235,7 @@
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
                         <td>
                             <c:if test="${item.avgScore eq 0}">
-                                <spring:message code="score.none"/>
+                                <spring:message code="notes.noScore"/>
                             </c:if>
                             <c:if test="${item.avgScore ne 0}">
                                 <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
@@ -334,7 +333,7 @@
                             <br>
                             <span class="card-text">
                             <c:if test="${item.avgScore eq 0}">
-                                <strong><spring:message code="score.none"/></strong>
+                                <strong><spring:message code="notes.noScore"/></strong>
                             </c:if>
                             <c:if test="${item.avgScore ne 0}">
                                 <strong><spring:message code="score"/></strong>:
@@ -405,7 +404,7 @@
         <div class="modal-content box bg-bg">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="uploadLabel"><spring:message
-                        code="form.upload.title"/></h1>
+                        code="uploadNote"/></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                 </button>
@@ -423,7 +422,7 @@
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
                             <label class="input-group-text" for="file"><spring:message
-                                    code="form.upload.file"/></label>
+                                    code="file"/></label>
                             <form:input path="file" type="file" class="form-control" id="file"/>
                         </div>
                         <form:errors path="file" cssClass="text-danger" element="p"/>
@@ -432,7 +431,7 @@
                     <div class="d-flex flex-column gap-2 mt-4">
                         <div class="input-group">
                             <label class="input-group-text" for="name"><spring:message
-                                    code="form.upload.name"/></label>
+                                    code="name"/></label>
                             <form:input path="name" type="text"
                                         aria-label="<spring:message code=\"form.upload.name\"/>"
                                         class="form-control" id="name"/>
@@ -443,16 +442,16 @@
                     <div class="d-flex flex-column gap-2 mt-4">
                         <div class="input-group">
                             <label class="input-group-text" for="categorySelect"><spring:message
-                                    code="form.upload.category"/></label>
+                                    code="category"/></label>
                             <form:select path="category" class="form-select" id="categorySelect">
                                 <form:option value="theory"><spring:message
-                                        code="form.upload.category.theory"/></form:option>
+                                        code="category.theory"/></form:option>
                                 <form:option value="practice"><spring:message
-                                        code="form.upload.category.practice"/></form:option>
+                                        code="category.practice"/></form:option>
                                 <form:option value="exam"><spring:message
-                                        code="form.upload.category.exam"/></form:option>
+                                        code="category.exam"/></form:option>
                                 <form:option value="other"><spring:message
-                                        code="form.upload.category.other"/></form:option>
+                                        code="category.other"/></form:option>
                             </form:select>
                         </div>
                         <form:errors path="category" cssClass="text-danger" element="p"/>
@@ -463,9 +462,9 @@
                     <div class="modal-footer mt-4">
                         <button type="button" class="btn rounded-box button-primary"
                                 data-bs-dismiss="modal">
-                            <spring:message code="form.upload.button.close"/></button>
+                            <spring:message code="close"/></button>
                         <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="form.upload.button.upload"/>"/>
+                                            code="upload"/>"/>
                     </div>
                 </form:form>
             </div>
@@ -479,7 +478,7 @@
         <div class="modal-content box bg-bg">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="createLabel"><spring:message
-                        code="navigation.button.createDirectory"/></h1>
+                        code="createDirectory"/></h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                 </button>
@@ -497,7 +496,7 @@
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
                             <label class="input-group-text" for="name"><spring:message
-                                    code="form.upload.name"/></label>
+                                    code="name"/></label>
                             <form:input path="name" type="text"
                                         aria-label="<spring:message code=\"form.upload.name\"/>"
                                         class="form-control" id="name"/>
@@ -510,10 +509,10 @@
                     <div class="modal-footer mt-4">
                         <button type="button" class="btn rounded-box button-primary"
                                 data-bs-dismiss="modal">
-                            <spring:message code="form.upload.button.close"/>
+                            <spring:message code="close"/>
                         </button>
                         <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="form.upload.button.upload"/>"/>
+                                            code="upload"/>"/>
                     </div>
                 </form:form>
             </div>

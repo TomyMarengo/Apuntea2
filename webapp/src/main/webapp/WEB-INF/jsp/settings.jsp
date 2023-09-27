@@ -3,6 +3,7 @@
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -35,7 +36,8 @@
 <fragment:navbar/>
 
 <!-- BOTTOM-NAVBAR -->
-<fragment:bottom-navbar title="profile:Perfil" extraLinks="settings:Ajustes">
+<spring:message code="settings" var="title"/>
+<fragment:bottom-navbar title="./settings:${title}" extraLinks="">
 </fragment:bottom-navbar>
 
 
