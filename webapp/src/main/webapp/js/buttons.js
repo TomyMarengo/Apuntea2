@@ -20,7 +20,8 @@ function copyToClipboard(text) {
 copyButtons.forEach(button => {
     button.addEventListener('click', () => {
         const noteId = button.getAttribute('id');
-        copyToClipboard(`${baseUrl}/notes/${noteId.slice(0, -2)}`);
+        const [id, type] = noteId.slice(0,-1).split('.');
+        copyToClipboard(`${baseUrl}/${type === 'directory'? 'directory' : 'notes'}/${id}`);
     });
 });
 

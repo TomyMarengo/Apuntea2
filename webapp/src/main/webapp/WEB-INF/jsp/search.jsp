@@ -177,15 +177,23 @@
 
 </div>
 
+<c:if test="${empty results}">
+    <section class="container mt-4">
+        <p><spring:message code="notes.noNotes"/></p>
+    </section>
+</c:if>
+
 <!-- LIST OF NOTES MATCHING -->
-<spring:message code="download" var="download"/>
-<spring:message code="copy" var="copy"/>
-<spring:message code="search.toggleView" var="searchViewImage"/>
-<c:url value="/svg/box-list.svg" var="boxViewUrl"/>
-<c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
-
-
 <c:if test="${not empty results}">
+    <!-- DEFINES -->
+    <spring:message code="download" var="download"/>
+    <spring:message code="copy" var="copy"/>
+    <spring:message code="folder" var="folder"/>
+    <spring:message code="search.toggleView" var="searchViewImage"/>
+    <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
+    <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
+
+
     <!-- TOP BUTTONS -->
     <div class="d-flex container mt-4 justify-content-between p-0">
         <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
@@ -232,27 +240,32 @@
             <table class="table table-hover table-search">
                 <thead>
                 <tr>
-                    <th class="col-md-6"><spring:message code="name"/></th>
-                        <%--                <th><spring:message code="owner"/></th>--%>
-                    <th class="col-md-2"><spring:message code="createdAt"/></th>
-                    <th class="col-md-2"><spring:message code="score"/></th>
-                    <th class="col-md-2"></th>
+                    <th class="col-md-5"><spring:message code="name"/></th>
+                    <th class="col-md-2"><spring:message code="owner"/></th>
+                    <th class="col-md-1"><spring:message code="createdAt"/></th>
+                    <th class="col-md-1"><spring:message code="score"/></th>
+                    <th class="col-md-2"></th> <!-- ACTIONS -->
                     <!-- TODO: ADD SIZE OF FILE -->
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="item" items="${results}">
                     <c:set var="date" value="${item.createdAt}"/>
-                    <tr class="note-found no-select" id="<c:out value="${item.id}.${item.category.formattedName}"/>1">
+                    <tr class="note-found no-select" id="<c:out value="${item.id}.${item.category.formattedName}"/>.1">
                         <td class="note-found-title">
                             <c:if test="${item.category.formattedName ne 'directory'}">
-                                <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
+                                <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
+                                    <img src="image/pdf.png" alt="pdf" class="icon-m">
+                                </c:if>
                             </c:if>
-                            <span class="card-title">
+                            <c:if test="${item.category.formattedName eq 'directory'}">
+                                <img src="svg/folder.svg" alt="${folder}" class="icon-m fill-text">
+                            </c:if>
+                            <span class="card-title align-middle mx-2">
                                 <c:out value="${item.name}"/>
                             </span>
                         </td>
-                            <%--                    <td>owner</td>--%>
+                        <td><c:out value="${item.user.email}"/></td>
                         <td><spring:message code="date.format"
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
                         <td>
@@ -265,7 +278,7 @@
                         </td>
 
                         <td class="search-actions">
-                            <c:if test="${item.category.formattedName ne 'directory'}">
+                            <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
                                 <a href="./notes/${item.id}/download" download="${item.name}">
                                     <button type="button" class="btn button-expansion rounded-circle"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -274,13 +287,16 @@
                                              class="icon-xs fill-text">
                                     </button>
                                 </a>
-                                <button class="btn button-expansion rounded-circle copy-button"
-                                        id="<c:out value="${item.id}"/>c1" data-bs-toggle="tooltip"
-                                        data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
-                                        data-bs-trigger="hover">
-                                    <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
-                                </button>
                             </c:if>
+
+                            <!-- ALL CAN BE COPIED -->
+                            <button class="btn button-expansion rounded-circle copy-button"
+                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.c1"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
+                                data-bs-trigger="hover">
+                                <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
+                            </button>
 
                             <input type="checkbox" class="select-checkbox d-none"/>
                         </td>
@@ -306,20 +322,29 @@
         <div class="row">
             <c:forEach items="${results}" var="item">
                 <div class="col-md-4 mb-4">
-                    <div class="note-found card box search-note-box h-100" id="<c:out value="${item.id}"/>2">
+                    <div class="note-found card box search-note-box h-100"
+                         id="<c:out value="${item.id}.${item.category.formattedName}"/>.2">
                         <div class="card-body no-select">
-                            <div class="d-flex gap-2 overflow-hidden">
-                                <img src="image/pdf.png" alt="pdf" class="icon-m"> <!--TODO: c:if note.type -->
-                                <h4 class="card-title text-truncate">
+                            <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
+                                <c:if test="${item.category.formattedName ne 'directory'}">
+                                    <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
+                                        <img src="image/pdf.png" alt="pdf" class="icon-s">
+                                    </c:if>
+                                </c:if>
+                                <c:if test="${item.category.formattedName eq 'directory'}">
+                                    <img src="svg/folder.svg" alt="${folder}" class="icon-s fill-text">
+                                </c:if>
+                                <h4 class="card-title text-truncate mb-0">
                                     <c:out value="${item.name}"/>
                                 </h4>
                             </div>
-                                <%--                        <span class="card-text">--%>
-                                <%--                            <strong><spring:message code="owner"/></strong>:--%>
-                                <%--                            owner--%>
-                                <%--                        </span>--%>
-                                <%--                        <br>--%>
-                            <span class="card-text"><strong><spring:message code="category"/></strong>:
+                            <span class="card-text">
+                                <strong><spring:message code="owner"/></strong>:
+                                <c:out value="${item.user.email}"/>
+                            </span>
+
+                            <br>
+                            <%--<span class="card-text"><strong><spring:message code="category"/></strong>:
                                 <c:if test="${item.category.formattedName eq 'theory'}">
                                     <spring:message code="search.category.theory"/>
                                 </c:if>
@@ -333,7 +358,7 @@
                                     <spring:message code="search.category.other"/>
                                 </c:if>
                             </span>
-                            <br>
+                            <br>--%>
                             <span class="card-text">
                             <strong><spring:message code="createdAt"/></strong>:
                             <spring:message code="date.format"
@@ -357,59 +382,54 @@
             </c:forEach>
         </div>
     </section>
-</c:if>
 
-<c:if test="${empty results}">
-    <section class="container mt-4">
-        <p><spring:message code="notes.noNotes"/></p>
+    <!-- PAGINATION -->
+    <section class="container d-flex justify-content-center mt-3">
+        <nav aria-label="...">
+            <ul class="pagination">
+                <c:if test="${searchForm.pageNumber gt 1}">
+                    <li class="page-item">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
+                    </li>
+                </c:if>
+                <c:if test="${searchForm.pageNumber le 1}">
+                    <li class="page-item disabled">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
+                    </li>
+                </c:if>
+
+                <c:forEach begin="1" end="${maxPage}" var="page">
+                    <c:if test="${page eq searchForm.pageNumber}">
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" data-page="${page}">${page}</a>
+                        </li>
+                    </c:if>
+                    <c:if test="${page ne searchForm.pageNumber}">
+                        <li class="page-item">
+                            <a class="page-link" data-page="${page}">${page}</a>
+                        </li>
+                    </c:if>
+                </c:forEach>
+
+                <c:if test="${searchForm.pageNumber lt maxPage}">
+                    <li class="page-item">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
+                    </li>
+                </c:if>
+                <c:if test="${searchForm.pageNumber ge maxPage}">
+                    <li class="page-item disabled">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
+                    </li>
+                </c:if>
+            </ul>
+        </nav>
     </section>
 </c:if>
 
-<!-- PAGINATION -->
-<div class="container d-flex justify-content-center mt-3">
-    <nav aria-label="...">
-        <ul class="pagination">
-            <c:if test="${searchForm.pageNumber gt 1}">
-                <li class="page-item">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
-                </li>
-            </c:if>
-            <c:if test="${searchForm.pageNumber le 1}">
-                <li class="page-item disabled">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
-                </li>
-            </c:if>
-
-            <c:forEach begin="1" end="${maxPage}" var="page">
-                <c:if test="${page eq searchForm.pageNumber}">
-                    <li class="page-item active" aria-current="page">
-                        <a class="page-link" data-page="${page}">${page}</a>
-                    </li>
-                </c:if>
-                <c:if test="${page ne searchForm.pageNumber}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="${page}">${page}</a>
-                    </li>
-                </c:if>
-            </c:forEach>
-
-            <c:if test="${searchForm.pageNumber lt maxPage}">
-                <li class="page-item">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
-                </li>
-            </c:if>
-            <c:if test="${searchForm.pageNumber ge maxPage}">
-                <li class="page-item disabled">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
-                </li>
-            </c:if>
-        </ul>
-    </nav>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"

@@ -22,6 +22,7 @@ rows.forEach(row => {
     // Acción de doble clic aquí (por ejemplo, redirigir a /notes/{noteId})
     const noteId = row.getAttribute('id');
     const [id, type] = noteId.slice(0,-1).split('.');
+    console.log(id, type);
     window.location.href = `${baseUrl}/${type === 'directory'? 'directory' : 'notes'}/${id}`;
   });
 });
