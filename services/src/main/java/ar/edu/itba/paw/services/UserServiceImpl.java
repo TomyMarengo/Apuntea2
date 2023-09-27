@@ -26,9 +26,9 @@ public class UserServiceImpl implements UserService {
     private	static	final Logger LOGGER	= LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEnconder) {
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
-        this.passwordEncoder = passwordEnconder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override

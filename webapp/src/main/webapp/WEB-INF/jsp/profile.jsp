@@ -3,6 +3,7 @@
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -35,8 +36,9 @@
 <fragment:navbar/>
 
 <!-- BOTTOM-NAVBAR -->
-<fragment:bottom-navbar title="profile:Perfil" extraLinks="settings:Ajustes">
-</fragment:bottom-navbar>
+<spring:message code="profile.title" var="title"/>
+<fragment:bottom-navbar title="./profile:${title}" extraLinks=""/>
+
 
 <!-- USER INFO & BUTTONS "VER" -->
 <div class="container">
@@ -106,6 +108,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 
 </body>
