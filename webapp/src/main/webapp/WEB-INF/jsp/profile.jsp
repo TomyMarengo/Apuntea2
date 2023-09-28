@@ -14,7 +14,7 @@
     <title>Apuntea | <spring:message code="profile.title"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
-    <link rel="stylesheet" href="<c:url value="/css/main.css"/>" />
+    <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>"/>
@@ -22,8 +22,10 @@
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
-    <link rel="stylesheet" href=<c:url value="/css/sections/navbar.css"/> />
-    <link rel="stylesheet" href=<c:url value="/css/sections/user/profile.css"/> />
+    <link rel="stylesheet" href=
+            <c:url value="/css/sections/navbar.css"/>/>
+    <link rel="stylesheet" href=
+            <c:url value="/css/sections/user/profile.css"/>/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,25 +43,14 @@
 
 
 <!-- USER INFO & BUTTONS "VER" -->
-<div class="container">
+<main class="container-fluid px-5 mt-5">
     <div class="row justify-content-around">
-        <!-- Profile picture column (hidden on small screens) -->
-        <div class="col-lg-2 d-none d-lg-block">
-            <div class="profile-picture">
-                <div class="outer-circle">
-                    <div class="inner-circle">
-                        <!-- Profile picture content -->
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- User info column -->
-        <div class="col-lg-4 col-12">
+        <div class="col-12 col-lg-4 col-xl-3 ">
             <div class="card user-card box">
                 <div class="card-body">
                     <!-- Profile picture (visible on small screens) -->
-                    <div class="d-lg-none profile-picture-small">
+                    <div class="profile-picture-small">
                         <div class="outer-circle">
                             <div class="inner-circle">
                                 <!-- Profile picture content -->
@@ -68,14 +59,28 @@
                     </div>
 
                     <!-- User info -->
-                    <h4 class="card-title fw-bold">Tomas Marengo</h4>
-                    <p class="card-text">Descripción</p>
+                    <div class="d-flex flex-column gap-2">
+                        <h4 class="card-title fw-bold">${user.get().email}</h4>
+                        <span class="card-text">${user.get().roles[0]}</span>
+                        <span class="card-text">Institución</span>
+                        <span class="card-text">Carrera</span>
+                    </div>
                     <!-- Social media links, etc. -->
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-auto d-flex justify-content-center gap-5 mt-4 mt-lg-0 ">
+        <div class="col-12 col-lg-7 col-xl-8 ">
+            <div class="card rounded-box w-100 h-100">
+            </div>
+        </div>
+
+
+    </div>
+</main>
+
+
+<%--<div class="col-lg-auto d-flex justify-content-center gap-5 mt-4 mt-lg-0 ">
             <div class="d-flex flex-column text-center align-items-center">
                 <span class="fw-bold">28</span>
                 <span>Apuntes</span>
@@ -91,10 +96,7 @@
                 <span>Favoritos</span>
                 <button class="btn button-primary rounded-box profile-button">Ver</button>
             </div>
-        </div>
-    </div>
-</div>
-
+        </div>--%>
 <!--
 <div class="d-flex">
     <img src="svg/bell.svg" alt="Level" class="icon-l fill-dark-primary" />
@@ -104,6 +106,7 @@
         <span>100/300 XP</span>
     </div>
 </div> -->
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
