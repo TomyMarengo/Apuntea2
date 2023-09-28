@@ -22,5 +22,7 @@ public interface NoteDao {
 
     boolean delete(UUID noteId, UUID currentUserId);
 
+    boolean deleteMany(UUID[] noteIds, UUID currentUserId);
+
     List<Review> getReviews(UUID noteId);
 }
