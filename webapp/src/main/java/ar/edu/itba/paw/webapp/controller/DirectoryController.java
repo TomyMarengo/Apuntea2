@@ -122,12 +122,15 @@ public class DirectoryController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ModelAndView deleteContent(@RequestParam String[] directoryIds,
-                                      @RequestParam String[] noteIds,
+    public ModelAndView deleteContent(@RequestParam(required = false) UUID[] directoryIds,
+                                      @RequestParam(required = false) UUID[] noteIds,
                                       @RequestParam String redirectUrl) {
 
-        System.out.println(directoryIds);
-        System.out.println(noteIds);
+
+        if (noteIds != null && noteIds.length > 0)
+            noteService.deleteMany(noteIds);
+        if (directoryIds != null && directoryIds.length > 0)
+            directoryService.deleteMany(directoryIds);
         return new ModelAndView("redirect:" + redirectUrl);
     }
 
