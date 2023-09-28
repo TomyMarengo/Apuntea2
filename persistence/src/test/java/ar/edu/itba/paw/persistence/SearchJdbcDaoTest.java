@@ -140,7 +140,7 @@ public class SearchJdbcDaoTest {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.DIRECTORY.toString()).sortBy("date").ascending(false);
         List<Searchable> directories = searchDao.search(sab.build());
         for (int i = 0; i < directories.size() - 2; i++) {
-            assertTrue(directories.get(i).getCreatedAt().isAfter(directories.get(i + 1).getCreatedAt()));
+            assertFalse(directories.get(i).getCreatedAt().isBefore(directories.get(i + 1).getCreatedAt()));
         }
     }
 
@@ -187,14 +187,14 @@ public class SearchJdbcDaoTest {
     @Test
     public void testNavigation() {
         List<Searchable> notes = searchDao.getNavigationResults(new SearchArgumentsBuilder().build(), EDA_DIRECTORY_ID);
-        assertEquals(2, notes.size());
+        assertEquals(4, notes.size());
     }
 
     @Test
     public void testNavigationByWord() {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder().word("guia");
         List<Searchable> notes = searchDao.getNavigationResults(sab.build(), EDA_DIRECTORY_ID);
-        assertEquals(1, notes.size());
+        assertEquals(2, notes.size());
     }
 
 

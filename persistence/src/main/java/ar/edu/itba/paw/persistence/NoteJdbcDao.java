@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -49,6 +48,7 @@ public class NoteJdbcDao implements NoteDao {
                     Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
                     rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                     rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
+                    rs.getBoolean(VISIBLE),
                     rs.getString(FILE_TYPE),
                     rs.getFloat(AVG_SCORE)
             );
@@ -94,59 +94,64 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     @Transactional
-    public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category, String file_type) {
+    public UUID create(String name, UUID subjectId, UUID userId, boolean visible, byte[] file, String category, String fileType) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(NOTE_NAME, name);
-        args.addValue(FILE, file);
         args.addValue(SUBJECT_ID, subjectId);
+        args.addValue(USER_ID, userId);
+        args.addValue(VISIBLE, visible);
+        args.addValue(FILE, file);
         args.addValue(CATEGORY, category.toLowerCase());
-        args.addValue(USER_ID, user_id);
-        args.addValue(FILE_TYPE, file_type);
+        args.addValue(FILE_TYPE, fileType);
 
         KeyHolder holder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, file, subject_id, category, user_id, parent_id, file_type) " +
-                " SELECT :note_name, :file, :subject_id, :category, :user_id, s.root_directory_id, :file_type FROM Subjects s WHERE s.subject_id = :subject_id"
+        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, subject_id, user_id, parent_id, visible, file,  category, file_type) " +
+                "SELECT :note_name, :subject_id, :user_id, s.root_directory_id, :visible, :file, :category, :file_type FROM Subjects s WHERE s.subject_id = :subject_id"
                 , args, holder, new String[]{NOTE_ID});
         return (UUID) holder.getKeys().get(NOTE_ID);
     }
 
+    //TODO: change to update insert, validate that the user is the owner of parent directory
     @Transactional
     @Override
-    public UUID create(byte[] file, String name, UUID user_id, UUID subjectId, String category, UUID parentId, String file_type) {
-        final Map<String, Object> args = new HashMap<>();
-        args.put(NOTE_NAME, name);
-        args.put(FILE, file);
-        args.put(SUBJECT_ID, subjectId);
-        args.put(CATEGORY, category.toLowerCase());
-        args.put(PARENT_ID, parentId);
-        args.put(USER_ID, user_id);
-        args.put(FILE_TYPE, file_type);
-
-        UUID noteId = (UUID) jdbcNoteInsert.executeAndReturnKeyHolder(args).getKeys().get(NOTE_ID);
-        return noteId;
+    public UUID create(String name, UUID subjectId, UUID userId, UUID parentId, boolean visible, byte[] file, String category, String fileType) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(NOTE_NAME, name);
+        args.addValue(SUBJECT_ID, subjectId);
+        args.addValue(USER_ID, userId);
+        args.addValue(PARENT_ID, parentId);
+        args.addValue(VISIBLE, visible);
+        args.addValue(FILE, file);
+        args.addValue(CATEGORY, category.toLowerCase());
+        args.addValue(FILE_TYPE, fileType);
+        KeyHolder holder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, subject_id, user_id, parent_id, file,  category, file_type)  " +
+                        "SELECT :note_name, :subject_id, :user_id, d.directory_id, :file, :category, :file_type FROM Directories d " +
+                        "WHERE d.directory_id = :parent_id AND (d.user_id = :user_id OR d.parent_id IS NULL)"
+                , args, holder, new String[]{NOTE_ID});
+        return (UUID) holder.getKeys().get(NOTE_ID);
     }
 
     @Override
-    public Optional<Note> getNoteById(UUID noteId) {
+    public Optional<Note> getNoteById(UUID noteId, UUID currentUserId) {
         return jdbcTemplate.query(
-                "SELECT DISTINCT n.note_id, n.note_name, n.parent_id, n.category, n.created_at, n.last_modified_at, COALESCE(AVG(r.score), 0) AS avg_score, n.file_type, " +
+                "SELECT DISTINCT n.note_id, n.note_name, n.parent_id, n.category, n.created_at, n.last_modified_at, n.visible, COALESCE(AVG(r.score), 0) AS avg_score, n.file_type, " +
                         "u.user_id, u.email, " +
                         "s.subject_id, s.subject_name, s.root_directory_id " +
                         "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id JOIN Users u ON n.user_id = u.user_id " +
-                        "WHERE n.note_id = ? GROUP BY n.note_id, u.user_id, s.subject_id",
+                        "WHERE n.note_id = ? AND ( n.visible OR n.user_id = ? ) GROUP BY n.note_id, u.user_id, s.subject_id",
                 ROW_MAPPER,
-                noteId
+                noteId, currentUserId
         ).stream().findFirst();
     }
 
     @Override
-    public byte[] getNoteFileById(UUID noteId){
-        final byte[] file = jdbcTemplate.queryForObject("SELECT file FROM Notes WHERE note_id = ?",
-                new Object[]{noteId}, (rs, rowNum) -> (byte[]) rs.getObject(FILE));
-        // TODO: Move mapper to a constant?
-        return file;
+    public Optional<byte[]> getNoteFileById(UUID noteId, UUID currentUserId){
+        return jdbcTemplate.query("SELECT file FROM Notes WHERE note_id = ?  AND ( visible OR user_id = ? )",
+                (rs, rowNum) -> (byte[]) rs.getObject(FILE), noteId, currentUserId).stream().findFirst();
     }
 
+    // TODO: Make transactional again
     //@Transactional
     @Override
     public Review createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
@@ -175,16 +180,24 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
-    public void delete(UUID noteId) {
-        jdbcTemplate.update("DELETE FROM Notes WHERE note_id = ?", noteId);
+    public boolean delete(UUID noteId, UUID currentUserId) {
+        return jdbcTemplate.update("DELETE FROM Notes WHERE note_id = ? AND user_id = ?", noteId, currentUserId) == 1;
+    }
+
+    @Override
+    public boolean update(Note note, UUID currentUserId) {
+        return jdbcTemplate.update("UPDATE Notes SET note_name = ?, category = ?, visible = ?, last_modified_at = now() WHERE note_id = ? AND user_id = ?",
+                    note.getName(), note.getCategory().toString().toLowerCase(), note.isVisible(), note.getId(), currentUserId) == 1;
     }
 
     @Override
     public List<Review> getReviews(UUID noteId) {
+        // Right now it's not necessary to validate that the current user has visibility enabled
         return jdbcTemplate.query(
                 "SELECT u.user_id, u.email, r.score, r.content FROM Reviews r INNER JOIN Users u ON r.user_id = u.user_id WHERE r.note_id = ?",
                     new Object[]{noteId},
                     REVIEW_ROW_MAPPER
         );
     }
+
 }

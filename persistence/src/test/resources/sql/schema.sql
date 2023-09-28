@@ -122,13 +122,15 @@ ALTER TABLE Directories ADD COLUMN IF NOT EXISTS visible boolean DEFAULT true NO
 ALTER TABLE Directories ADD COLUMN IF NOT EXISTS created_at timestamp DEFAULT now() NOT NULL;
 ALTER TABLE Directories ADD COLUMN IF NOT EXISTS last_modified_at timestamp DEFAULT now() NOT NULL;
 ALTER TABLE Directories ADD COLUMN IF NOT EXISTS icon_color character varying(7) DEFAULT '#BBBBBB' NOT NULL;
-
+-- For root directory validation
+ALTER TABLE Directories ADD CONSTRAINT IF NOT EXISTS "CK_root_directories" CHECK ((parent_id IS NULL AND user_id IS NULL) OR (parent_id IS NOT NULL AND user_id IS NOT NULL));
 
 ALTER TABLE Users ADD COLUMN IF NOT EXISTS profile_picture bytea;
 ALTER TABLE Users ADD COLUMN IF NOT EXISTS locale character varying(5) DEFAULT 'en' NOT NULL;
 ALTER TABLE Users ADD COLUMN IF NOT EXISTS career_id UUID REFERENCES Careers (career_id);
 
 --create view for notes and directories
+DROP VIEW IF EXISTS Navigation;
 CREATE VIEW Navigation AS (
     SELECT t.*, u.email
     FROM (
@@ -141,7 +143,7 @@ CREATE VIEW Navigation AS (
     INNER JOIN Users u ON t.user_id = u.user_id
 );
 
-
+DROP VIEW IF EXISTS Search;
 CREATE VIEW Search AS (
   SELECT t.*,
          i.institution_id, i.institution_name, c.career_id, c.career_name, s.subject_name, s.root_directory_id, u.email

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.InvalidNoteException;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
 import org.apache.commons.io.FilenameUtils;
@@ -31,30 +32,54 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public UUID createNote(MultipartFile file, String name, UUID subjectId, String category) throws IOException {
+    public UUID createNoteWithSubject(String name, UUID subjectId, boolean visible, MultipartFile file, String category) throws IOException {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-        return noteDao.create(file.getBytes(), name, userId, subjectId, category, FilenameUtils.getExtension(file.getOriginalFilename()));
+        return noteDao.create(name, subjectId, userId, visible, file.getBytes(), category, FilenameUtils.getExtension(file.getOriginalFilename()));
     }
 
     @Transactional
     @Override
-    public UUID createNote(MultipartFile file, String name, String category, UUID parentId) throws IOException {
+    public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) throws IOException {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
         UUID subjectId = directoryDao.getDirectoryPath(parentId)
                                         .getRootDirectory()
                                         .getSubject()
                                         .getSubjectId();
-        return noteDao.create(file.getBytes(), name, userId, subjectId, category, parentId, FilenameUtils.getExtension(file.getOriginalFilename()));
+        return noteDao.create(name, subjectId, userId, parentId, visible, file.getBytes(), category, FilenameUtils.getExtension(file.getOriginalFilename()));
     }
 
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
-        return noteDao.getNoteById(noteId);
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        return noteDao.getNoteById(noteId, currentUserId);
     }
 
     @Override
-    public byte[] getNoteFileById(UUID noteId) {
-        return noteDao.getNoteFileById(noteId);
+    public Optional<byte[]> getNoteFileById(UUID noteId) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        return noteDao.getNoteFileById(noteId, currentUserId);
+    }
+
+    @Transactional
+    @Override
+    public void update(Note note) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        boolean success = noteDao.update(note, currentUserId);
+        if (!success) throw new InvalidNoteException();
+    }
+
+
+    @Transactional
+    @Override
+    public void delete(UUID noteId) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        boolean success = noteDao.delete(noteId, currentUserId);
+        if (!success) throw new InvalidNoteException();
+    }
+
+    @Override
+    public List<Review> getReviews(UUID noteId) {
+        return noteDao.getReviews(noteId);
     }
 
     @Override
@@ -64,16 +89,4 @@ public class NoteServiceImpl implements NoteService {
         emailService.sendReviewEmail(review);
         return review.getScore();
     }
-
-    @Transactional
-    @Override
-    public void delete(UUID noteId) {
-        noteDao.delete(noteId);
-    }
-
-    @Override
-    public List<Review> getReviews(UUID noteId) {
-        return noteDao.getReviews(noteId);
-    }
-
 }

@@ -62,25 +62,30 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
     @Transactional
     @Override
-    public UUID create(String name, UUID parentId, UUID userId) {
+    public UUID create(String name, UUID parentId, UUID userId, boolean visible, String iconColor) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(DIRECTORY_NAME, name);
         args.addValue(PARENT_ID, parentId);
         args.addValue(USER_ID, userId);
+        args.addValue(VISIBLE, visible);
+        args.addValue(ICON_COLOR, iconColor);
 
         KeyHolder holder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Directories (directory_name, user_id, parent_id) VALUES (:directory_name, :user_id, :parent_id)",
+        namedParameterJdbcTemplate.update("INSERT INTO Directories (directory_name, user_id, parent_id, visible, icon_color) " +
+                        "SELECT :directory_name, :user_id, d.directory_id, :visible, :icon_color FROM Directories d " +
+                        "WHERE d.directory_id = :parent_id AND (d.user_id = :user_id OR d.parent_id IS NULL)",
                 args, holder, new String[]{DIRECTORY_ID});
         return (UUID) holder.getKeys().get(DIRECTORY_ID);
     }
 
     @Override
-    public Directory getDirectoryById(UUID directoryId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM Directories WHERE directory_id = ?", ROW_MAPPER, directoryId);
+    public Directory getDirectoryById(UUID directoryId, UUID currentUserId) {
+        return jdbcTemplate.queryForObject("SELECT * FROM Directories WHERE directory_id = ? AND (visible OR user_id = ?)", ROW_MAPPER, directoryId, currentUserId);
     }
 
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
+        // Right now no user validation is needed, might change later
         List<Directory> dirs = jdbcTemplate.query("WITH RECURSIVE Ancestors(directory_id, directory_name, parent_id, level) AS ( " +
                         "SELECT d.directory_id, d.directory_name, d.parent_id, 0 as level FROM Directories d WHERE d.directory_id = ? " +
                         "UNION " +
@@ -93,8 +98,15 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
-    public void delete(UUID directoryId) {
-        jdbcTemplate.update("DELETE FROM Directories WHERE directory_id = ?", directoryId);
+    public boolean update(Directory directory, UUID currentUserId) {
+        return jdbcTemplate.update("UPDATE Directories SET directory_name = ?, icon_color = ?, visible = ? WHERE directory_id = ? AND user_id = ?",
+                directory.getName(), directory.getIconColor(), directory.isVisible(), directory.getId(), currentUserId) == 1;
+    }
+
+
+    @Override
+    public boolean delete(UUID directoryId, UUID currentUserId) {
+        return jdbcTemplate.update("DELETE FROM Directories WHERE directory_id = ? AND user_id = ?", directoryId, currentUserId) == 1;
     }
 
 }

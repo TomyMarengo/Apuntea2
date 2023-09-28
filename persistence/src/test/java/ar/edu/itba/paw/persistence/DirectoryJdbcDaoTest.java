@@ -3,7 +3,6 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.models.Directory;
 import ar.edu.itba.paw.models.DirectoryPath;
 import ar.edu.itba.paw.models.RootDirectory;
-import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
 
 import javax.sql.DataSource;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -43,7 +41,7 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testDirectoryById() {
-        Directory directory = directoryDao.getDirectoryById(EDA_DIRECTORY_ID);
+        Directory directory = directoryDao.getDirectoryById(EDA_DIRECTORY_ID, PEPE_ID);
         assertEquals(EDA_DIRECTORY_ID, directory.getId());
         assertEquals("EDA", directory.getName());
         assertNull(directory.getParentId());
@@ -83,14 +81,14 @@ public class DirectoryJdbcDaoTest {
     @Test
     public void testDelete() {
         int qtyBasuraPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_name LIKE " + "'%Basura%'");
-        directoryDao.delete(BASURA_ID);
+        directoryDao.delete(BASURA_ID, PEPE_ID);
         assertEquals(2, qtyBasuraPrev);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_name LIKE " + "'%Basura%'"));
     }
 
     @Test
     public void testCreate() {
-        UUID directoryId = directoryDao.create("Nueva basura", EDA_DIRECTORY_ID, PEPE_ID);
+        UUID directoryId = directoryDao.create("Nueva basura", EDA_DIRECTORY_ID, PEPE_ID, true, "#BBBBBB");
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + directoryId + "' AND directory_name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "' AND user_id = '" + PEPE_ID + "'"));
         JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "Directories", "user_id = '" + PEPE_ID + "' AND directory_name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "'");
     }

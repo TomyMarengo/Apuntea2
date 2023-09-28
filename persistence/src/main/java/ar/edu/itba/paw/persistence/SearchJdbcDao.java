@@ -50,6 +50,7 @@ public class SearchJdbcDao implements SearchDao {
                 ),
                 rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                 rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
+                rs.getBoolean(VISIBLE),
                 rs.getString(ICON_COLOR)
             );
 
@@ -70,6 +71,7 @@ public class SearchJdbcDao implements SearchDao {
                 Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
                 rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                 rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
+                rs.getBoolean(VISIBLE),
                 rs.getString(FILE_TYPE),
                 rs.getFloat(AVG_SCORE)
             );
@@ -88,6 +90,7 @@ public class SearchJdbcDao implements SearchDao {
                     UUID.fromString(rs.getString(PARENT_ID)),
                     rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                     rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
+                    rs.getBoolean(VISIBLE),
                     rs.getString(ICON_COLOR)
             );
 
@@ -103,6 +106,7 @@ public class SearchJdbcDao implements SearchDao {
                 Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
                 rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                 rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
+                rs.getBoolean(VISIBLE),
                 rs.getString(FILE_TYPE),
                 rs.getFloat(AVG_SCORE)
         );
@@ -111,7 +115,7 @@ public class SearchJdbcDao implements SearchDao {
     @Override
     public List<Searchable> search(SearchArguments sa) {
         StringBuilder query = new StringBuilder(
-                "SELECT DISTINCT t.id, t.name, t.parent_id, t.category, t.created_at, t.last_modified_at, " +
+                "SELECT DISTINCT t.id, t.name, t.parent_id, t.category, t.created_at, t.last_modified_at, t.visible," +
                         "t.avg_score, t.file_type, " +
                         "t.icon_color, " +
                         "t.user_id, t.email, " +
@@ -141,7 +145,7 @@ public class SearchJdbcDao implements SearchDao {
     @Override
     public List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId){
         StringBuilder query = new StringBuilder(
-                "SELECT DISTINCT t.id, t.name, t.parent_id, t.category, t.created_at, t.last_modified_at, " +
+                "SELECT DISTINCT t.id, t.name, t.parent_id, t.category, t.created_at, t.last_modified_at, t.visible, " +
                         "t.avg_score, t.file_type, " +
                         "t.icon_color, " +
                         "t.user_id, t.email " +

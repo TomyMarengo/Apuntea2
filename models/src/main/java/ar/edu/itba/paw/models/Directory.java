@@ -16,6 +16,7 @@ public class Directory implements Searchable {
 
     private String iconColor;
 
+    private Boolean visible;
 
     public Directory(UUID directoryId, String name, UUID parentId) {
         this.directoryId = directoryId;
@@ -24,18 +25,19 @@ public class Directory implements Searchable {
     }
 
 
-    public Directory(UUID directoryId, String name, User user, UUID parentId, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String iconColor) {
+    public Directory(UUID directoryId, String name, User user, UUID parentId, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
         this.directoryId = directoryId;
         this.name = name;
         this.user = user;
         this.parentId = parentId;
         this.createdAt = createdAt;
         this.lastModifiedAt = lastModifiedAt;
+        this.visible = visible;
         this.iconColor = iconColor;
     }
 
-    public Directory(UUID directoryId, String name, User user, UUID parentId, Subject subject, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String iconColor) {
-        this(directoryId, name, user, parentId, createdAt, lastModifiedAt, iconColor);
+    public Directory(UUID directoryId, String name, User user, UUID parentId, Subject subject, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
+        this(directoryId, name, user, parentId, createdAt, lastModifiedAt, visible, iconColor);
         this.subject = subject;
     }
 
@@ -68,7 +70,7 @@ public class Directory implements Searchable {
     //TODO: change when visibility is implemented
     @Override
     public boolean isVisible() {
-        return true;
+        return visible;
     }
     @Override
     public Category getCategory() {

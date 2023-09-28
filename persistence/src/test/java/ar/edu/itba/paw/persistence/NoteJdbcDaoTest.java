@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,19 +52,34 @@ public class NoteJdbcDaoTest {
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 5"));
     }
 
+    // TODO: Create another test for note with parent
     @Test
     public void testCreateNote() {
-        UUID noteId = noteDao.create(new byte[]{1, 2, 3}, "RBT", PEPE_ID, EDA_ID, "practice", "jpg");
+        UUID noteId = noteDao.create("RBT", EDA_ID, PEPE_ID, true, new byte[]{1, 2, 3}, "practice", "jpg");
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'practice'"));
+        JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "'");
+    }
+
+    @Test
+    public void testCreateNoteInDirectory() {
+        UUID noteId = noteDao.create("RBT", EDA_ID, PEPE_ID, EDA_DIRECTORY_ID,true, new byte[]{1, 2, 3}, "practice", "jpg");
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'practice'"));
         JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "'");
     }
 
     @Test
     public void testDeleteNote() {
-        noteDao.delete(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID);
+        boolean deleted = noteDao.delete(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID, PEPE_ID);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
+        assertTrue(deleted);
     }
 
+    @Test
+    public void testCannotDeleteNote() {
+        boolean deleted = noteDao.delete(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID, SAIDMAN_ID);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
+        assertFalse(deleted);
+    }
 
     @Test
     public void testGetReviews() {

@@ -35,6 +35,7 @@ public class JdbcDaoUtils {
     static final String CONTENT = "content";
     static final String CREATED_AT = "created_at";
     static final String AVG_SCORE = "avg_score";
+    static final String VISIBLE = "visible";
     static final String FILE = "file";
     static final String PARENT_ID = "parent_id";
     static final String DIRECTORY_ID = "directory_id";

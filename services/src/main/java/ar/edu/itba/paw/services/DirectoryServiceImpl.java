@@ -2,18 +2,14 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Directory;
 import ar.edu.itba.paw.models.DirectoryPath;
-import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.exceptions.InvalidDirectoryException;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import static ar.edu.itba.paw.models.SearchArguments.SortBy.*;
 
 @Service
 public class DirectoryServiceImpl implements DirectoryService{
@@ -27,14 +23,19 @@ public class DirectoryServiceImpl implements DirectoryService{
 
     @Transactional
     @Override
-    public UUID create(String name, UUID parentId) {
+    public UUID create(String name, UUID parentId, boolean visible, String iconColor) {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-        return directoryDao.create(name, parentId, userId);
+        return directoryDao.create(name, parentId, userId, visible, iconColor);
     }
+
+    @Transactional
     @Override
     public Optional<Directory> getDirectoryById(UUID directoryId) {
-        return Optional.ofNullable(directoryDao.getDirectoryById(directoryId));
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        return Optional.ofNullable(directoryDao.getDirectoryById(directoryId, currentUserId));
     }
+
+    @Transactional
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
         return directoryDao.getDirectoryPath(directoryId);
@@ -42,7 +43,17 @@ public class DirectoryServiceImpl implements DirectoryService{
 
     @Transactional
     @Override
+    public void update(Directory directory) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        boolean success = directoryDao.update(directory, currentUserId);
+        if (!success) throw new InvalidDirectoryException();
+    }
+
+    @Transactional
+    @Override
     public void delete(UUID directoryId) {
-        directoryDao.delete(directoryId);
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        boolean success = directoryDao.delete(directoryId, currentUserId);
+        if (!success) throw new InvalidDirectoryException();
     }
 }

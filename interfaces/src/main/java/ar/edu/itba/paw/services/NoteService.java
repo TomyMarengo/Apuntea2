@@ -10,13 +10,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface NoteService {
-    UUID createNote(MultipartFile file, String name, UUID subjectId, String category) throws IOException;
-
-    UUID createNote(MultipartFile file, String name, String category, UUID parentId) throws IOException;
-
+    UUID createNoteWithSubject(String name, UUID subjectId, boolean visible, MultipartFile file, String category) throws IOException;
+    UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) throws IOException;
     Optional<Note> getNoteById(UUID noteId);
-    byte[] getNoteFileById(UUID noteId);
+    Optional<byte[]> getNoteFileById(UUID noteId);
     Integer createOrUpdateReview(UUID noteId, Integer score, String content);
+    void update(Note note);
     void delete(UUID noteId);
     List<Review> getReviews(UUID noteId);
 }

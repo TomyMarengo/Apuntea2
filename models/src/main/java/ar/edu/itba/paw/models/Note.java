@@ -15,8 +15,11 @@ public class Note implements Searchable {
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
 //    private byte[] file;
+
     private String fileType;
-    private Float avgScore; // Semantically, an empty avgScore
+    private Float avgScore;
+
+    private Boolean visible;
 
     // For Reviews
     public Note(UUID noteId, String name, User user) {
@@ -25,8 +28,16 @@ public class Note implements Searchable {
         this.user = user;
     }
 
+    // For update
+    public Note(UUID noteId, String name, Category category, boolean visible) {
+        this.noteId = noteId;
+        this.name = name;
+        this.category = category;
+        this.visible = visible;
+    }
+
     // For navigation
-    public Note(UUID noteId, String name, User user, UUID parentId,  Category category, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String file_type, float avgScore) {
+    public Note(UUID noteId, String name, User user, UUID parentId,  Category category, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String file_type, float avgScore) {
         this.noteId = noteId;
         this.name = name;
         this.user = user;
@@ -34,13 +45,14 @@ public class Note implements Searchable {
         this.category = category;
         this.createdAt = createdAt;
         this.lastModifiedAt = lastModifiedAt;
+        this.visible = visible;
         this.fileType = file_type;
         this.avgScore = avgScore;
     }
 
     // For Search
-    public Note(UUID noteId, String name, User user, UUID parentId, Subject subject,  Category category, LocalDateTime createdAt, LocalDateTime lastModifiedAt, String file_type, float avgScore) {
-        this(noteId, name, user, parentId, category, createdAt, lastModifiedAt, file_type, avgScore);
+    public Note(UUID noteId, String name, User user, UUID parentId, Subject subject,  Category category, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String file_type, float avgScore) {
+        this(noteId, name, user, parentId, category, createdAt, lastModifiedAt, visible, file_type, avgScore);
         this.subject = subject;
     }
 
@@ -72,11 +84,9 @@ public class Note implements Searchable {
     public LocalDateTime getLastModifiedAt() {
         return lastModifiedAt;
     }
-
-    //TODO: change when visibility is implemented
     @Override
     public boolean isVisible() {
-        return true;
+        return visible;
     }
     @Override
     public Category getCategory() {

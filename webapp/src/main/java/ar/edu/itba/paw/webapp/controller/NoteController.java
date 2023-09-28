@@ -3,11 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
 import ar.edu.itba.paw.services.NoteService;
-import ar.edu.itba.paw.webapp.forms.CreateNoteForm;
 import ar.edu.itba.paw.webapp.forms.EditNoteForm;
-import ar.edu.itba.paw.webapp.forms.NavigationForm;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
-import ar.edu.itba.paw.webapp.forms.EditNoteForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.UUID;
 
 
@@ -65,7 +61,7 @@ public class NoteController {
     @ResponseBody
     public byte[] getNoteFile(@PathVariable("noteId") String noteId) {
 //        return noteService.getNoteById(noteId).orElseThrow(NoteNotFoundException::new).getBytes();
-        return noteService.getNoteFileById(UUID.fromString(noteId));
+        return noteService.getNoteFileById(UUID.fromString(noteId)).orElseThrow(NoteNotFoundException::new);
     }
 
     @RequestMapping(value = "/{noteId}/", method = RequestMethod.DELETE)

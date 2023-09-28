@@ -5,10 +5,8 @@ import ar.edu.itba.paw.models.DirectoryPath;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.Searchable;
 import ar.edu.itba.paw.models.exceptions.DirectoryNotFoundException;
-import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
-import ar.edu.itba.paw.services.DataService;
 import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.webapp.forms.CreateDirectoryForm;
 import ar.edu.itba.paw.webapp.forms.CreateNoteForm;
@@ -21,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,12 +31,12 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.UUID;
 
+@Validated
 @Controller
 @RequestMapping("/directory")
 public class DirectoryController {
     private final DirectoryService directoryService;
     private final NoteService noteService;
-    private final DataService dataService;
     private final SearchService searchService;
 
     private static final String CREATE_NOTE_FORM_BINDING = "org.springframework.validation.BindingResult.createNoteForm";
@@ -46,10 +45,9 @@ public class DirectoryController {
     private	static	final Logger LOGGER	= LoggerFactory.getLogger(DirectoryController.class);
 
     @Autowired
-    public DirectoryController(DirectoryService directoryService, NoteService noteService, DataService dataService, SearchService searchService) {
+    public DirectoryController(DirectoryService directoryService, NoteService noteService, SearchService searchService) {
         this.directoryService = directoryService;
         this.noteService = noteService;
-        this.dataService = dataService;
         this.searchService = searchService;
     }
 
@@ -119,7 +117,7 @@ public class DirectoryController {
         }
 
         UUID dId = UUID.fromString(directoryId);
-        UUID childId = directoryService.create(createDirectoryForm.getName(), dId);
+        UUID childId = directoryService.create(createDirectoryForm.getName(), dId, true, "#BBBBBB");
         return new ModelAndView("redirect:/directory/" + dId);
     }
 
@@ -137,7 +135,8 @@ public class DirectoryController {
 
         UUID dId = UUID.fromString(directoryId);
         try {
-            UUID noteId = noteService.createNote(createNoteForm.getFile(), createNoteForm.getName(), createNoteForm.getCategory(), dId);
+            //TODO: add visible attribute
+            UUID noteId = noteService.createNote(createNoteForm.getName(), dId, true, createNoteForm.getFile(), createNoteForm.getCategory());
             return new ModelAndView("redirect:/notes/" + noteId);
         }
         catch (IOException e){
@@ -159,3 +158,4 @@ public class DirectoryController {
         return new ModelAndView("redirect:/");
     }
 }
+

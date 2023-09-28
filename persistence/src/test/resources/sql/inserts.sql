@@ -13,14 +13,14 @@ INSERT INTO Directories (directory_id, directory_name) VALUES ('d0000000-0000-00
 INSERT INTO Directories (directory_id, directory_name) VALUES ('d0000000-0000-0000-0000-000000000004', 'Java Beans 101');
 INSERT INTO Directories (directory_id, directory_name) VALUES ('d0000000-0000-0000-0000-00000000000b', 'Matematica I');
 
-INSERT INTO Directories (directory_id, directory_name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000005', 'Guias', 'd0000000-0000-0000-0000-000000000000');
-INSERT INTO Directories (directory_id, directory_name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000006', '1eros parciales', 'd0000000-0000-0000-0000-000000000000');
+INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-000000000005', 'Guias', 'd0000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
+INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-000000000006', '1eros parciales', 'd0000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000000');
 
-INSERT INTO Directories (directory_id, directory_name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000007', 'Teoria', 'd0000000-0000-0000-0000-000000000001');
-INSERT INTO Directories (directory_id, directory_name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000008', 'MVC', 'd0000000-0000-0000-0000-000000000007');
+INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-000000000007', 'Teoria', 'd0000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000');
+INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-000000000008', 'MVC', 'd0000000-0000-0000-0000-000000000007', '00000000-0000-0000-0000-000000000000');
 
-INSERT INTO Directories (directory_id, directory_name, parent_id) VALUES ('d0000000-0000-0000-0000-000000000009', 'Basura', 'd0000000-0000-0000-0000-000000000001');
-INSERT INTO Directories (directory_id, directory_name, parent_id) VALUES ('d0000000-0000-0000-0000-00000000000a', 'Basura 2', 'd0000000-0000-0000-0000-000000000009');
+INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-000000000009', 'Basura', 'd0000000-0000-0000-0000-000000000001', '00000000-0000-0000-0000-000000000000');
+INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-00000000000a', 'Basura 2', 'd0000000-0000-0000-0000-000000000009', '00000000-0000-0000-0000-000000000000');
 
 INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-00000000000c', '12 % 3 = 0', 'd0000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000000');
 INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-00000000000d', 'Gr_y', 'd0000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000000');
