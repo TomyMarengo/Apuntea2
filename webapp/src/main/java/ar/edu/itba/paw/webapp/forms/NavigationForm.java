@@ -12,14 +12,14 @@ public class NavigationForm {
     @Pattern(regexp = "directory|theory|practice|exam|other")
     private String category;
     @Pattern(regexp = "score|name|date")
-    private String sortBy;
+    private String sortBy = "score";
     @NotNull
-    private Boolean ascending = true;
+    private Boolean ascending = false;
     @NotNull
     @Min(1)
     private Integer pageNumber = 1;
     @NotNull
-    private Integer pageSize = 5;
+    private Integer pageSize = 6;
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
     @Size(max = 50)
     private String word;
