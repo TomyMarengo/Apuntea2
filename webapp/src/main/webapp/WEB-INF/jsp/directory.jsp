@@ -48,7 +48,7 @@
                action="${searchUrl}"
                method="get"
                id="searchForm"
-               cssClass="d-flex flex-column w-100 align-items-center">
+               cssClass="d-flex flex-column">
         <div class="row row-cols-1 row-cols-md-3">
 
             <div class="col">
@@ -104,7 +104,7 @@
 
         </div>
 
-        <div class="w-25">
+        <div class="w-25 align-self-center">
             <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
         </div>
 
