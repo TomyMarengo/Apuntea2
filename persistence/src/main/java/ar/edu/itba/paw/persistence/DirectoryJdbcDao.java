@@ -106,10 +106,10 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
     @Override
     public boolean deleteMany(UUID[] directoryIds, UUID currentUserId) {
-        StringBuilder directoryIdsBuilder = new StringBuilder();
-        Arrays.stream(directoryIds).forEach(directoryId -> directoryIdsBuilder.append(", '").append(directoryId.toString()).append("'"));
-        directoryIdsBuilder.replace(0, 2, "");
-        return jdbcTemplate.update("DELETE FROM Directories WHERE directory_id IN ("+directoryIdsBuilder.toString()+") AND user_id = ?", currentUserId) >= directoryIds.length;
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(DIRECTORY_ID, Arrays.asList(directoryIds));
+        args.addValue(USER_ID, currentUserId);
+        return namedParameterJdbcTemplate.update("DELETE FROM Directories WHERE directory_id IN (:directory_id) AND user_id = :user_id", args) >= directoryIds.length;
     }
 
     @Override

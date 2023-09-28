@@ -56,3 +56,26 @@ editButtons.forEach(button => {
         edit(id);
     });
 });
+
+/**************************/
+/***** DELETE BUTTONS *****/
+/*************************/
+const deleteButtons = document.querySelectorAll('.delete-button');
+deleteButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const deleteForm = document.getElementById('deleteForm');
+
+        const existingInputs = deleteForm.querySelectorAll('input[name^="directoryIds"], input[name^="noteIds"]');
+        existingInputs.forEach(input => {
+            deleteForm.removeChild(input);
+        });
+
+        const id = button.getAttribute('id').split('.', 1)[0];
+        const category = content.find(item => item.id === id).category;
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = category === 'directory' ? 'directoryIds' : 'noteIds';
+        input.value = id;
+        deleteForm.appendChild(input);
+    });
+});

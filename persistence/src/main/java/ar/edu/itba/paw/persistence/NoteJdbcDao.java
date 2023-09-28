@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
-//import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -21,7 +20,6 @@ import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
 import java.util.*;
-
 
 @Repository
 public class NoteJdbcDao implements NoteDao {
@@ -186,10 +184,10 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public boolean deleteMany(UUID[] noteIds, UUID currentUserId) {
-        StringBuilder noteIdsBuilder = new StringBuilder();
-        Arrays.stream(noteIds).forEach(noteId -> noteIdsBuilder.append(", '").append(noteId.toString()).append("'"));
-        noteIdsBuilder.replace(0, 2, "");
-        return jdbcTemplate.update("DELETE FROM Notes WHERE note_id IN ("+noteIdsBuilder.toString()+") AND user_id = ?", currentUserId) == noteIds.length;
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(NOTE_ID, Arrays.asList(noteIds));
+        args.addValue(USER_ID, currentUserId);
+        return namedParameterJdbcTemplate.update("DELETE FROM Notes WHERE note_id IN (:note_id) AND user_id = :user_id", args) == noteIds.length;
     }
 
     @Override
