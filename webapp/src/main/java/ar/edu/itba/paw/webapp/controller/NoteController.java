@@ -78,7 +78,7 @@ public class NoteController {
         return noteService.getNoteFileById(UUID.fromString(noteId)).orElseThrow(NoteNotFoundException::new);
     }
 
-    @RequestMapping(value = "/{noteId}/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{noteId}/delete", method = RequestMethod.POST)
     public ModelAndView deleteNote(@PathVariable("noteId") String noteId) {
         UUID nId = UUID.fromString(noteId);
         noteService.delete(nId);

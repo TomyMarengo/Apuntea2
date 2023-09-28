@@ -445,7 +445,7 @@
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
 <c:if test="${not empty results}">
     <script src="<c:url value="/js/note-list.js"/>"></script>
-    <script src="<c:url value="/js/buttons.js"/>"></script>
+    <script src="<c:url value="/js/search-buttons.js"/>"></script>
     <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
 <script src="<c:url value="/js/popups.js"/>"></script>

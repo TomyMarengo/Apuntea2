@@ -85,35 +85,3 @@ function deselectAll() {
     updateSelectedButtonsState();
 }
 deselectAllButton.addEventListener('click', deselectAll);
-
-
-/**************************/
-/****** EDIT BUTTONS ******/
-/*************************/
-const editButtons = document.querySelectorAll('.edit-button');
-const editNoteForm = document.getElementById('editNoteForm');
-const editDirectoryForm = document.getElementById('editDirectoryForm');
-
-function edit(id, error = false) {
-    const { category, name } = content.find(item => item.id === id);
-
-    if (category === 'directory') {
-        editDirectoryForm.action = `${baseUrl}/directory/${id}/`;
-        if(!error)
-            editDirectoryForm.querySelectorAll('#name')[0].value = name;
-    }
-    else {
-        editNoteForm.action = `${baseUrl}/notes/${id}/`;
-        if(!error) {
-            editNoteForm.querySelectorAll('#name')[0].value = name;
-            editNoteForm.querySelectorAll('#categorySelect')[0].value = category;
-        }
-    }
-}
-
-editButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const id = button.getAttribute('id').split('.', 1)[0];
-        edit(id);
-    });
-});

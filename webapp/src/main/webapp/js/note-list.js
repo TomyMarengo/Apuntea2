@@ -36,10 +36,8 @@ rows.forEach((row, index) => {
 
         const id = content[index].id;
         const category = content[index].category;
-        const url = `${baseUrl}/${category === 'directory' ? 'directory' : 'notes'}/${id}`;
-
         // Open the URL in a new tab
-        window.open(url, '_blank');
+        window.location.href = `${baseUrl}/${category === 'directory' ? 'directory' : 'notes'}/${id}`;
     });
 });
 

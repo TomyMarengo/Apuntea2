@@ -50,18 +50,31 @@
                 <div class="d-flex">
                     <span data-bs-toggle="tooltip" data-bs-placement="bottom"
                           data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                        <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#editNoteModal"
-                                id="editNoteModalButton" >
-                            <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>" class="icon-xs fill-text">
+                        <button id="editNoteModalButton" class="btn nav-icon-button" data-bs-toggle="modal"
+                                data-bs-target="#editNoteModal">
+                            <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>"
+                                 class="icon-s fill-text">
                         </button>
                     </span>
                     <a href="./${note.id}/download" download="${note.name}">
                         <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
                                 data-bs-trigger="hover">
-                            <img src="<c:url value="/svg/download.svg"/>" alt="<spring:message code="download"/>" class="icon-xs fill-text">
+                            <img src="<c:url value="/svg/download.svg"/>" alt="<spring:message code="download"/>"
+                                 class="icon-s fill-text">
                         </button>
                     </a>
+
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                          data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
+                        <button id="openDeleteNoteModalButton" class="btn nav-icon-button" data-bs-toggle="modal"
+                                data-bs-target="#deleteOneModal">
+                            <img src="<c:url value="/svg/trash.svg"/>"
+                                 alt="<spring:message code="delete"/>"
+                                 class="icon-s fill-text">
+                        </button>
+                    </span>
+
                 </div>
             </div>
 
@@ -142,6 +155,39 @@
     </div>
 </div>
 
+<!-- DELETE MODAL -->
+<c:url var="deleteUrl" value="./${noteId}/delete"/>
+
+<div class="modal fade" id="deleteOneModal" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content box bg-bg">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteLabel"><spring:message code="delete"/></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+            <form:form id="deleteForm" method="POST" action="${deleteUrl}">
+                <div class="modal-body pb-0">
+                    <spring:message code="DeleteForm.description"/>
+
+                    <!-- DYNAMICALLY ADDED INPUTS -->
+                </div>
+
+                <div class="modal-footer mt-4">
+                    <button type="button" class="btn rounded-box button-primary"
+                            data-bs-dismiss="modal">
+                        <spring:message code="close"/></button>
+                    <input id="deleteOneButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="delete"/>"/>
+                </div>
+
+            </form:form>
+        </div>
+    </div>
+</div>
+
 <!--UPDATE NOTE MODAL-->
 <c:url var="editUrl" value="./${noteId}"/>
 
@@ -157,7 +203,7 @@
                 </button>
             </div>
             <div class="modal-body pb-0">
-                <!-- CREATE NOTE FORM -->
+                <!-- EDIT NOTE FORM -->
                 <form:form modelAttribute="editNoteForm"
                            action="${editUrl}"
                            method="post"
@@ -184,27 +230,33 @@
                             <form:select path="category" class="form-select" id="categorySelect">
                                 <c:if test="${note.category.formattedName eq 'theory'}">
                                     <form:option value="theory" selected="true"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="practice"><spring:message
+                                            code="category.practice"/></form:option>
                                     <form:option value="exam"><spring:message code="category.exam"/></form:option>
                                     <form:option value="other"><spring:message code="category.other"/></form:option>
                                 </c:if>
                                 <c:if test="${note.category.formattedName eq 'practice'}">
                                     <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice" selected="true"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="practice" selected="true"><spring:message
+                                            code="category.practice"/></form:option>
                                     <form:option value="exam"><spring:message code="category.exam"/></form:option>
                                     <form:option value="other"><spring:message code="category.other"/></form:option>
                                 </c:if>
                                 <c:if test="${note.category.formattedName eq 'exam'}">
                                     <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
-                                    <form:option value="exam" selected="true"><spring:message code="category.exam"/></form:option>
+                                    <form:option value="practice"><spring:message
+                                            code="category.practice"/></form:option>
+                                    <form:option value="exam" selected="true"><spring:message
+                                            code="category.exam"/></form:option>
                                     <form:option value="other"><spring:message code="category.other"/></form:option>
                                 </c:if>
                                 <c:if test="${note.category.formattedName eq 'other'}">
                                     <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="practice"><spring:message
+                                            code="category.practice"/></form:option>
                                     <form:option value="exam"><spring:message code="category.exam"/></form:option>
-                                    <form:option value="other" selected="true"><spring:message code="category.other"/></form:option>
+                                    <form:option value="other" selected="true"><spring:message
+                                            code="category.other"/></form:option>
                                 </c:if>
                             </form:select>
                         </div>
@@ -232,7 +284,8 @@
 </script>
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>
-<script src="<c:url value="/js/buttons.js"/>"></script>
+<script src="<c:url value="/js/search-buttons.js"/>"></script>
+<script src="<c:url value="/js/crud-buttons.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
 
 <c:if test="${errorsEditNoteForm != null}">

@@ -190,6 +190,17 @@
                     <strong id="selectedCount" class="text-dark-primary"> 0 </strong>
                     <spring:message code="search.selected"/>
                 </span>
+
+                <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                     data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
+                    <button id="openDeleteSelectedModalButton" class="btn nav-icon-button"
+                            data-bs-toggle="modal" data-bs-target="#deleteManyModal">
+                        <img src="<c:url value="/svg/trash.svg"/>"
+                             alt="<spring:message code="delete"/>"
+                             class="icon-s fill-dark-primary">
+                    </button>
+                </div>
+
                 <button id="downloadSelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
                         data-bs-trigger="hover">
@@ -307,7 +318,8 @@
                                             data-bs-toggle="tooltip"
                                             data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
                                             data-bs-trigger="hover">
-                                        <img src="<c:url value="/svg/link.svg"/>" alt="<spring:message code="copyLink"/>"
+                                        <img src="<c:url value="/svg/link.svg"/>"
+                                             alt="<spring:message code="copyLink"/>"
                                              class="icon-xs fill-text">
                                     </button>
                                 </div>
@@ -315,8 +327,8 @@
                                 <!-- DELETE -->
                                 <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                      data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
-                                    <button class="btn nav-icon-button edit-button"
-                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    <button class="btn nav-icon-button delete-button"
+                                            data-bs-toggle="modal" data-bs-target="#deleteManyModal"
                                             id="<c:out value="${item.id}"/>.d1">
                                         <img src="<c:url value="/svg/trash.svg"/>"
                                              alt="<spring:message code="delete"/>"
@@ -387,8 +399,8 @@
                                 </c:if>
                                 <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                      data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
-                                    <button class="btn nav-icon-button edit-button"
-                                            data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    <button class="btn nav-icon-button delete-button"
+                                            data-bs-toggle="modal" data-bs-target="#deleteManyModal"
                                             id="<c:out value="${item.id}"/>.e2">
                                         <img src="<c:url value="/svg/trash.svg"/>"
                                              alt="<spring:message code="delete"/>"
@@ -746,7 +758,8 @@
 
 
 <!-- DELETE MODAL -->
-<div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false"
+<c:url var="deleteUrl" value="./delete"/>
+<div class="modal fade" id="deleteManyModal" data-bs-backdrop="static" data-bs-keyboard="false"
      tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
@@ -756,17 +769,24 @@
                         aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body pb-0">
-                Deseas eliminar el apunte?
-            </div>
+            <form:form id="deleteForm" method="POST" action="${deleteUrl}">
+                <div class="modal-body pb-0">
+                    <spring:message code="DeleteForm.description"/>
 
-            <div class="modal-footer mt-4">
-                <button type="button" class="btn rounded-box button-primary"
-                        data-bs-dismiss="modal">
-                    <spring:message code="close"/></button>
-                <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <!-- DYNAMICALLY ADDED INPUTS -->
+                </div>
+
+                <div class="modal-footer mt-4">
+                    <button type="button" class="btn rounded-box button-primary"
+                            data-bs-dismiss="modal">
+                        <spring:message code="close"/></button>
+                    <input id="deleteSelectedButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                             code="delete"/>"/>
-            </div>
+                </div>
+
+                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+
+            </form:form>
         </div>
     </div>
 </div>
@@ -782,7 +802,8 @@
 <script src="<c:url value="/js/popups.js"/>"></script>
 <c:if test="${not empty results}">
     <script src="<c:url value="/js/note-list.js"/>"></script>
-    <script src="<c:url value="/js/buttons.js"/>"></script>
+    <script src="<c:url value="/js/search-buttons.js"/>"></script>
+    <script src="<c:url value="/js/crud-buttons.js"/>"></script>
     <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
 

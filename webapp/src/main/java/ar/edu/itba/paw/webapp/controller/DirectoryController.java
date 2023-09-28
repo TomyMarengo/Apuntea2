@@ -5,11 +5,8 @@ import ar.edu.itba.paw.models.exceptions.DirectoryNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SearchService;
-import ar.edu.itba.paw.webapp.forms.CreateDirectoryForm;
-import ar.edu.itba.paw.webapp.forms.CreateNoteForm;
-import ar.edu.itba.paw.webapp.forms.NavigationForm;
-import ar.edu.itba.paw.webapp.forms.EditNoteForm;
-import ar.edu.itba.paw.webapp.forms.EditDirectoryForm;
+import ar.edu.itba.paw.webapp.forms.*;
+
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -127,11 +121,14 @@ public class DirectoryController {
         }
     }
 
-    @RequestMapping(value = "/{directoryId}/delete", method = RequestMethod.POST)
-    public ModelAndView deleteContent(@PathVariable("directoryId") String directoryId) {
-        UUID dId = UUID.fromString(directoryId);
-        directoryService.delete(dId); //TODO: deleteMany
-        return new ModelAndView("redirect:/");
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public ModelAndView deleteContent(@RequestParam String[] directoryIds,
+                                      @RequestParam String[] noteIds,
+                                      @RequestParam String redirectUrl) {
+
+        System.out.println(directoryIds);
+        System.out.println(noteIds);
+        return new ModelAndView("redirect:" + redirectUrl);
     }
 
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST)
