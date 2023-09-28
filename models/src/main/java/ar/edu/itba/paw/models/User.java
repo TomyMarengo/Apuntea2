@@ -8,6 +8,8 @@ public class User {
     private UUID userId;
     private String email;
     private String password;
+    private Institution institution;
+    private Career career;
 
     private Role[] roles;
 
@@ -16,11 +18,13 @@ public class User {
         this.email = email;
     }
 
-    public User(final UUID userId, final String email, final String password, final String[] roles) {
+    public User(final UUID userId, final String email, final String password, final String[] roles, final Institution institution, final Career career) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.roles = Arrays.stream(roles).map(Role::getRole).toArray(Role[]::new);
+        this.institution = institution;
+        this.career = career;
     }
 
     public String getEmail() {
@@ -34,5 +38,13 @@ public class User {
     }
     public Role[] getRoles() {
         return roles;
+    }
+
+    public Institution getInstitution() {
+        return institution;
+    }
+
+    public Career getCareer() {
+        return career;
     }
 }

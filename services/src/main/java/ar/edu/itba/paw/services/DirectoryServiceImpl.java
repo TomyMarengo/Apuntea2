@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -63,5 +64,11 @@ public class DirectoryServiceImpl implements DirectoryService{
         UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
         boolean success = directoryDao.deleteMany(directoryIds, currentUserId);
         if (!success) throw new InvalidDirectoryException();
+    }
+    
+    @Transactional
+    @Override
+    public List<Directory> getRootDirectoriesByCurrentUserCareer() {
+        return directoryDao.getRootDirectoriesByCareer(securityService.getCurrentUserOrThrow().getCareer().getCareerId());
     }
 }

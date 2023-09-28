@@ -60,22 +60,46 @@
 
                     <!-- User info -->
                     <div class="d-flex flex-column gap-2">
-                        <h4 class="card-title fw-bold">${user.get().email}</h4>
-                        <span class="card-text">${user.get().roles[0]}</span>
-                        <span class="card-text">Institución</span>
-                        <span class="card-text">Carrera</span>
+                        <h4 class="card-title fw-bold">${user.email}</h4>
+                        <c:forEach items="${user.roles}" var="r">
+                            <span class="card-text">
+                            <c:choose>
+                                <c:when test = "${r eq 'ROLE_STUDENT'}">
+                                        <spring:message code="profile.role.student"/>
+                                </c:when>
+                                <c:when test = "${r eq 'ROLE_MODERATOR'}">
+                                    <spring:message code="profile.role.moderator"/>
+                                </c:when>
+                                <c:when test = "${r eq 'ROLE_ADMIN'}">
+                                    <spring:message code="profile.role.admin"/>
+                                </c:when>
+                            </c:choose>
+                            </span>
+                        </c:forEach>
+                        <span class="card-text">${user.institution.name}</span>
+                        <span class="card-text">${user.career.name}</span>
                     </div>
                     <!-- Social media links, etc. -->
                 </div>
             </div>
         </div>
 
-        <div class="col-12 col-lg-7 col-xl-8 ">
-            <div class="card rounded-box w-100 h-100">
+
+        <div class="col-12 col-lg-7 col-xl-8">
+            <h2 class="text-center mb-3"><spring:message code="profile.directories.title"/></h2>
+            <div class="flex-row flex-wrap card rounded-box gap-2 p-4 justify-content-around">
+                <c:forEach items="${root_directories}" var="rd">
+                        <a href="<c:url value="./directory/${rd.id}"/>">
+                            <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
+                                <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-xxl fill-text">
+                                <span class="fw-bold">
+                                    <c:out value="${rd.name}"/>
+                                </span>
+                            </div>
+                        </a>
+                </c:forEach>
             </div>
         </div>
-
-
     </div>
 </main>
 

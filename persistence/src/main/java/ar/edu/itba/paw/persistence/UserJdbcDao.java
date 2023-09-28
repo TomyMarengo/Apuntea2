@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.Career;
+import ar.edu.itba.paw.models.Institution;
 import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Repository
 class UserJdbcDao implements UserDao{
@@ -33,7 +32,15 @@ class UserJdbcDao implements UserDao{
                     UUID.fromString(rs.getString(USER_ID)),
                     rs.getString(EMAIL),
                     rs.getString(PASSWORD),
-                    (String[]) rs.getArray(ROLES).getArray()
+                    (String[]) rs.getArray(ROLES).getArray(),
+                    new Institution(
+                            UUID.fromString(rs.getString(INSTITUTION_ID)),
+                            rs.getString(INSTITUTION_NAME)
+                    ),
+                    new Career(
+                            UUID.fromString(rs.getString(CAREER_ID)),
+                            rs.getString(CAREER_NAME)
+                    )
             );
 
     @Autowired
@@ -75,8 +82,12 @@ class UserJdbcDao implements UserDao{
 
     @Override
     public Optional<User> findByEmail(String email) {
-        Optional<User> optionalUser = jdbcTemplate.query("SELECT u.*, array_agg(r.role_name) as roles FROM users u INNER JOIN User_Roles r ON u.user_id = r.user_id WHERE email = ? " +
-                "GROUP BY u.user_id", ROW_MAPPER, email).stream().findFirst();
-        return optionalUser;
+            return jdbcTemplate.query("SELECT u.*, array_agg(r.role_name) as roles, i.institution_id, i.institution_name, c.career_id, c.career_name FROM users u " +
+                    "INNER JOIN User_Roles r ON u.user_id = r.user_id " +
+                    "INNER JOIN Careers c ON u.career_id = c.career_id " +
+                    "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
+                    "WHERE u.email = ? " +
+                    "GROUP BY u.user_id, c.career_id, i.institution_id", ROW_MAPPER, email).stream().findFirst();
+
     }
 }

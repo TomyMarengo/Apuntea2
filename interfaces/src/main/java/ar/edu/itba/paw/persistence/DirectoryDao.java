@@ -16,4 +16,5 @@ public interface DirectoryDao {
     boolean deleteMany(UUID[] directoryIds, UUID currentUserId);
 
     boolean delete(UUID directoryId, UUID currentUserId);
+    List<Directory> getRootDirectoriesByCareer(UUID careerId);
 }
