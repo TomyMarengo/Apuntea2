@@ -106,7 +106,6 @@ function edit(id, type) {
     }
 }
 
-// Agregar eventos de clic a los botones de copia
 editButtons.forEach(button => {
     button.addEventListener('click', () => {
         const noteId = button.getAttribute('id');

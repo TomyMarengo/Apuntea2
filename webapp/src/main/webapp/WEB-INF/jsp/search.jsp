@@ -276,25 +276,28 @@
                         </td>
 
                         <td class="search-actions">
-                            <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
-                                <a href="./notes/${item.id}/download" download="${item.name}">
-                                    <button type="button" class="btn button-expansion rounded-circle"
-                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                            data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
-                                        <img src="<c:url value="/svg/download.svg"/>" alt="${download}"
-                                             class="icon-xs fill-text">
-                                    </button>
-                                </a>
-                            </c:if>
+                            <div class="d-flex justify-content-end">
+                                <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
+                                    <a href="./notes/${item.id}/download" download="${item.name}">
+                                        <button type="button" class="btn button-expansion rounded-circle"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                data-bs-title="<spring:message code="download"/>"
+                                                data-bs-trigger="hover">
+                                            <img src="<c:url value="/svg/download.svg"/>" alt="${download}"
+                                                 class="icon-xs fill-text">
+                                        </button>
+                                    </a>
+                                </c:if>
 
-                            <!-- ALL CAN BE COPIED -->
-                            <button class="btn button-expansion rounded-circle copy-button"
-                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.c1"
-                                data-bs-toggle="tooltip"
-                                data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
-                                data-bs-trigger="hover">
-                                <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
-                            </button>
+                                <!-- ALL CAN BE COPIED -->
+                                <button class="btn button-expansion rounded-circle copy-button"
+                                        id="<c:out value="${item.id}.${item.category.formattedName}"/>.c1"
+                                        data-bs-toggle="tooltip"
+                                        data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
+                                        data-bs-trigger="hover">
+                                    <img src="<c:url value="/svg/link.svg"/>" alt="<spring:message code="copyLink"/>" class="icon-xs fill-text">
+                                </button>
+                            </div>
 
                             <input type="checkbox" class="select-checkbox d-none"/>
                         </td>
@@ -330,7 +333,8 @@
                                     </c:if>
                                 </c:if>
                                 <c:if test="${item.category.formattedName eq 'directory'}">
-                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-s fill-text">
+                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
+                                         class="icon-s fill-text">
                                 </c:if>
                                 <h4 class="card-title text-truncate mb-0">
                                     <c:out value="${item.name}"/>
@@ -342,21 +346,21 @@
                             </span>
 
                             <br>
-                            <%--<span class="card-text"><strong><spring:message code="category"/></strong>:
-                                <c:if test="${item.category.formattedName eq 'theory'}">
-                                    <spring:message code="search.category.theory"/>
-                                </c:if>
-                                <c:if test="${item.category.formattedName eq 'practice'}">
-                                    <spring:message code="search.category.practice"/>
-                                </c:if>
-                                <c:if test="${item.category.formattedName eq 'exam'}">
-                                    <spring:message code="search.category.exam"/>
-                                </c:if>
-                                <c:if test="${item.category.formattedName eq 'other'}">
-                                    <spring:message code="search.category.other"/>
-                                </c:if>
-                            </span>
-                            <br>--%>
+                                <%--<span class="card-text"><strong><spring:message code="category"/></strong>:
+                                    <c:if test="${item.category.formattedName eq 'theory'}">
+                                        <spring:message code="search.category.theory"/>
+                                    </c:if>
+                                    <c:if test="${item.category.formattedName eq 'practice'}">
+                                        <spring:message code="search.category.practice"/>
+                                    </c:if>
+                                    <c:if test="${item.category.formattedName eq 'exam'}">
+                                        <spring:message code="search.category.exam"/>
+                                    </c:if>
+                                    <c:if test="${item.category.formattedName eq 'other'}">
+                                        <spring:message code="search.category.other"/>
+                                    </c:if>
+                                </span>
+                                <br>--%>
                             <span class="card-text">
                             <strong><spring:message code="createdAt"/></strong>:
                             <spring:message code="date.format"

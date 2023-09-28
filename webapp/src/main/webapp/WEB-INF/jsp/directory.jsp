@@ -255,49 +255,58 @@
                             </c:if>
                         </td>
 
+
                         <td class="search-actions">
-                            <c:if test="${item.category.formattedName ne 'directory'}">
-                                <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
-                                   data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                                    <button class="btn button-expansion rounded-circle edit-button"
-                                            data-bs-toggle="modal" data-bs-target="#editNoteModal"
-                                            id="<c:out value="${item.id}.${item.category.formattedName}"/>.e1">
-                                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>"
-                                             class="icon-xs fill-text">
-                                    </button>
-                                </a>
-                            </c:if>
-                            <c:if test="${item.category.formattedName eq 'directory'}">
-                                <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
-                                   data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                                    <button class="btn button-expansion rounded-circle edit-button"
-                                            data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
-                                            id="<c:out value="${item.id}.${item.category.formattedName}"/>.e1">
-                                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>"
-                                             class="icon-xs fill-text">
-                                    </button>
-                                </a>
-                            </c:if>
+                            <div class="d-flex justify-content-end">
+                                <c:if test="${item.category.formattedName ne 'directory'}">
+                                    <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                         data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                                        <button class="btn nav-icon-button edit-button"
+                                                data-bs-toggle="modal" data-bs-target="#editNoteModal"
+                                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.e1">
+                                            <img src="<c:url value="/svg/pencil.svg"/>"
+                                                 alt="<spring:message code="edit"/>"
+                                                 class="icon-xs fill-text">
+                                        </button>
+                                    </div>
+                                </c:if>
+                                <c:if test="${item.category.formattedName eq 'directory'}">
+                                    <div href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                         data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                                        <button class="btn nav-icon-button edit-button"
+                                                data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
+                                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.e1">
+                                            <img src="<c:url value="/svg/pencil.svg"/>"
+                                                 alt="<spring:message code="edit"/>"
+                                                 class="icon-xs fill-text">
+                                        </button>
+                                    </div>
+                                </c:if>
 
-                            <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
-                                <a href="./notes/${item.id}/download" download="${item.name}">
-                                    <button type="button" class="btn button-expansion rounded-circle"
-                                            data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                            data-bs-title="<spring:message code="download"/>" data-bs-trigger="hover">
-                                        <img src="<c:url value="/svg/download.svg"/>" alt="${download}"
+                                <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
+                                    <div href="./notes/${item.id}/download" download="${item.name}">
+                                        <button type="button" class="btn button-expansion rounded-circle"
+                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                data-bs-title="<spring:message code="download"/>"
+                                                data-bs-trigger="hover">
+                                            <img src="<c:url value="/svg/download.svg"/>" alt="${download}"
+                                                 class="icon-xs fill-text">
+                                        </button>
+                                    </div>
+                                </c:if>
+
+                                <!-- ALL CAN BE COPIED -->
+                                <div>
+                                    <button class="btn button-expansion rounded-circle copy-button"
+                                            id="<c:out value="${item.id}.${item.category.formattedName}"/>.c1"
+                                            data-bs-toggle="tooltip"
+                                            data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
+                                            data-bs-trigger="hover">
+                                        <img src="<c:url value="/svg/link.svg"/>" alt="${copy}"
                                              class="icon-xs fill-text">
                                     </button>
-                                </a>
-                            </c:if>
-
-                            <!-- ALL CAN BE COPIED -->
-                            <button class="btn button-expansion rounded-circle copy-button"
-                                    id="<c:out value="${item.id}.${item.category.formattedName}"/>.c1"
-                                    data-bs-toggle="tooltip"
-                                    data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
-                                    data-bs-trigger="hover">
-                                <img src="<c:url value="/svg/link.svg"/>" alt="${copy}" class="icon-xs fill-text">
-                            </button>
+                                </div>
+                            </div>
                             <input type="checkbox" class="select-checkbox d-none"/>
                         </td>
                     </tr>
@@ -315,20 +324,52 @@
                     <div class="note-found card box search-note-box h-100"
                          id="<c:out value="${item.id}.${item.category.formattedName}"/>.2">
                         <div class="card-body no-select">
-                            <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
-                                <c:if test="${item.category.formattedName ne 'directory'}">
-                                    <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
-                                        <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-s">
+
+                            <!-- TITLE AND BUTTONS -->
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
+                                    <c:if test="${item.category.formattedName ne 'directory'}">
+                                        <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
+                                            <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-s">
+                                        </c:if>
                                     </c:if>
+                                    <c:if test="${item.category.formattedName eq 'directory'}">
+                                        <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
+                                             class="icon-s fill-text">
+                                    </c:if>
+                                    <h4 class="card-title text-truncate mb-0">
+                                        <c:out value="${item.name}"/>
+                                    </h4>
+                                </div>
+
+                                <c:if test="${item.category.formattedName ne 'directory'}">
+                                    <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
+                                       data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                                        <button class="btn button-expansion rounded-circle edit-button"
+                                                data-bs-toggle="modal" data-bs-target="#editNoteModal"
+                                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.e2">
+                                            <img src="<c:url value="/svg/pencil.svg"/>"
+                                                 alt="<spring:message code="edit"/>"
+                                                 class="icon-xs fill-text">
+                                        </button>
+                                    </a>
                                 </c:if>
                                 <c:if test="${item.category.formattedName eq 'directory'}">
-                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
-                                         class="icon-s fill-text">
+                                    <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
+                                       data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                                        <button class="btn button-expansion rounded-circle edit-button"
+                                                data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
+                                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.e2">
+                                            <img src="<c:url value="/svg/pencil.svg"/>"
+                                                 alt="<spring:message code="edit"/>"
+                                                 class="icon-xs fill-text">
+                                        </button>
+                                    </a>
                                 </c:if>
-                                <h4 class="card-title text-truncate mb-0">
-                                    <c:out value="${item.name}"/>
-                                </h4>
+
                             </div>
+
+
                             <span class="card-text">
                                 <strong><spring:message code="owner"/></strong>:
                                 <c:out value="${item.user.email}"/>
