@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.webapp.forms.EditNoteForm;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,7 +23,6 @@ import java.util.UUID;
 @RequestMapping("/notes")
 public class NoteController {
     private final NoteService noteService;
-    private static final String CREATE_REVIEW_FORM_BINDING = "org.springframework.validation.BindingResult.reviewForm";
 
     @Autowired
     public NoteController(NoteService noteService) {
@@ -29,18 +30,31 @@ public class NoteController {
     }
 
     @RequestMapping(value = "/{noteId}", method = RequestMethod.GET)
-    public ModelAndView getNote(@PathVariable("noteId") String noteId, @ModelAttribute("editNoteForm") EditNoteForm editNoteForm, final ModelMap model) {
+    public ModelAndView getNote(@PathVariable("noteId") String noteId, final ModelMap model) {
         final ModelAndView mav = new ModelAndView("note");
 
-        // TODO: eliminar el EditNoteForm y handlear errores
-        if(model.containsAttribute(CREATE_REVIEW_FORM_BINDING)) {
-            mav.addObject("errors", ((BindingResult) model.get(CREATE_REVIEW_FORM_BINDING)).getAllErrors());
-        } else {
-            mav.addObject("reviewForm", new ReviewForm());
-        }
+        addFormOrGetWithErrors(mav, model, CREATE_REVIEW_FORM_BINDING, "errorsReviewForm", "reviewForm", ReviewForm.class);
+        addFormOrGetWithErrors(mav, model, EDIT_NOTE_FORM_BINDING, "errorsEditNoteForm", "editNoteForm", EditNoteForm.class);
+
         Note note = noteService.getNoteById(UUID.fromString(noteId)).orElseThrow(NoteNotFoundException::new);
         mav.addObject("note", note);
         mav.addObject("reviews", noteService.getReviews(UUID.fromString(noteId)));
+        return mav;
+    }
+
+    //edit note with put method
+    @RequestMapping(value = "/{noteId}", method = RequestMethod.POST)
+    public ModelAndView editNote(@PathVariable("noteId") String noteId,
+                                 @Valid @ModelAttribute final EditNoteForm editNoteForm,
+                                 final BindingResult result, final RedirectAttributes redirectAttributes) {
+        final ModelAndView mav = new ModelAndView("redirect:" + editNoteForm.getRedirectUrl());
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute(EDIT_NOTE_FORM_BINDING, result);
+            redirectAttributes.addFlashAttribute(EDIT_NOTE_ID, noteId);
+        } else {
+            Note note = new Note(UUID.fromString(noteId), editNoteForm.getName(), Category.valueOf(editNoteForm.getCategory().toUpperCase()), true);
+            noteService.update(note);
+        }
         return mav;
     }
 

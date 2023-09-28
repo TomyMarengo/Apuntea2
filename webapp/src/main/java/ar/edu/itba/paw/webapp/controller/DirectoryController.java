@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Directory;
-import ar.edu.itba.paw.models.DirectoryPath;
-import ar.edu.itba.paw.models.Page;
-import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.DirectoryNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
@@ -13,6 +10,7 @@ import ar.edu.itba.paw.webapp.forms.CreateNoteForm;
 import ar.edu.itba.paw.webapp.forms.NavigationForm;
 import ar.edu.itba.paw.webapp.forms.EditNoteForm;
 import ar.edu.itba.paw.webapp.forms.EditDirectoryForm;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.UUID;
@@ -39,9 +38,6 @@ public class DirectoryController {
     private final NoteService noteService;
     private final SearchService searchService;
 
-    private static final String CREATE_NOTE_FORM_BINDING = "org.springframework.validation.BindingResult.createNoteForm";
-    private static final String CREATE_DIRECTORY_FORM_BINDING = "org.springframework.validation.BindingResult.createDirectoryForm";
-
     private	static	final Logger LOGGER	= LoggerFactory.getLogger(DirectoryController.class);
 
     @Autowired
@@ -51,33 +47,19 @@ public class DirectoryController {
         this.searchService = searchService;
     }
 
-    // TODO: Move to utils class
-    private void addFormOrGetWithErrors(ModelAndView mav, ModelMap model, String attribute, String errorName, String formName, Class<?> form) {
-        if(model.containsAttribute(attribute)) {
-            mav.addObject(errorName, ((BindingResult) model.get(attribute)).getAllErrors());
-        } else {
-            try {
-                mav.addObject(formName, form.newInstance());
-            } catch (InstantiationException ex) {
-                LOGGER.error("Instantiation exception creating form {}", formName);
-            } catch (IllegalAccessException ex) {
-                LOGGER.error("Illegal access exception creating form {}", formName);
-            }
-        }
-    }
-
     @RequestMapping(value = "/{directoryId}" ,method = RequestMethod.GET)
     public ModelAndView getDirectory(@PathVariable("directoryId") String directoryId,
                                      @ModelAttribute("navigationForm") NavigationForm navigationForm,
-                                     @ModelAttribute("editNoteForm") EditNoteForm editNoteForm,
-                                     @ModelAttribute("editDirectoryForm") EditDirectoryForm editDirectoryForm,
                                      final ModelMap model) {
 
         ModelAndView mav = new ModelAndView("directory");
 
-        // TODO: eliminar el EditNoteForm y EditDirectoryForm y handlear errores
         addFormOrGetWithErrors(mav, model, CREATE_NOTE_FORM_BINDING, "errorsCreateNoteForm", "createNoteForm", CreateNoteForm.class);
+        addFormOrGetWithErrors(mav, model, EDIT_NOTE_FORM_BINDING, "errorsEditNoteForm", "editNoteForm", EditNoteForm.class);
         addFormOrGetWithErrors(mav, model, CREATE_DIRECTORY_FORM_BINDING, "errorsCreateDirectoryForm", "createDirectoryForm", CreateDirectoryForm.class);
+        addFormOrGetWithErrors(mav, model, EDIT_DIRECTORY_FORM_BINDING, "errorsEditDirectoryForm", "editDirectoryForm", EditDirectoryForm.class);
+
+        mav.addObject("editNoteId", model.get(EDIT_NOTE_ID));
 
         UUID dId = UUID.fromString(directoryId);
         Directory directory = directoryService.getDirectoryById(dId).orElseThrow(DirectoryNotFoundException::new);
@@ -157,5 +139,20 @@ public class DirectoryController {
         directoryService.delete(dId);
         return new ModelAndView("redirect:/");
     }
+
+    @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST)
+    public ModelAndView editDirectory(@PathVariable("directoryId") String directoryId,
+                                 @Valid @ModelAttribute final EditDirectoryForm editDirectoryForm,
+                                 final BindingResult result, final RedirectAttributes redirectAttributes) {
+        final ModelAndView mav = new ModelAndView("redirect:/directory/" + directoryId);
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_FORM_BINDING, result);
+        } else {
+            Directory directory = new Directory(editDirectoryForm.getDirectoryId(), editDirectoryForm.getName(), true, "#BBBBBB");
+            directoryService.update(directory);
+        }
+        return mav;
+    }
+
 }
 

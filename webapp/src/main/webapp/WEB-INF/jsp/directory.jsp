@@ -263,7 +263,8 @@
                                          data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                                         <button class="btn nav-icon-button edit-button"
                                                 data-bs-toggle="modal" data-bs-target="#editNoteModal"
-                                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.e1">
+                                                data-category="${item.category.formattedName}"
+                                                id="<c:out value="${item.id}"/>.e1">
                                             <img src="<c:url value="/svg/pencil.svg"/>"
                                                  alt="<spring:message code="edit"/>"
                                                  class="icon-xs fill-text">
@@ -275,7 +276,8 @@
                                          data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                                         <button class="btn nav-icon-button edit-button"
                                                 data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
-                                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.e1">
+                                                data-category="${item.category.formattedName}"
+                                                id="<c:out value="${item.id}"/>.e1">
                                             <img src="<c:url value="/svg/pencil.svg"/>"
                                                  alt="<spring:message code="edit"/>"
                                                  class="icon-xs fill-text">
@@ -347,7 +349,9 @@
                                        data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                                         <button class="btn button-expansion rounded-circle edit-button"
                                                 data-bs-toggle="modal" data-bs-target="#editNoteModal"
-                                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.e2">
+                                                data-category="${item.category.formattedName}"
+                                                id="<c:out value="${item.id}.e2"/>">
+
                                             <img src="<c:url value="/svg/pencil.svg"/>"
                                                  alt="<spring:message code="edit"/>"
                                                  class="icon-xs fill-text">
@@ -359,7 +363,8 @@
                                        data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                                         <button class="btn button-expansion rounded-circle edit-button"
                                                 data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
-                                                id="<c:out value="${item.id}.${item.category.formattedName}"/>.e2">
+                                                data-category="${item.category.formattedName}"
+                                                id="<c:out value="${item.id}.e2"/>">
                                             <img src="<c:url value="/svg/pencil.svg"/>"
                                                  alt="<spring:message code="edit"/>"
                                                  class="icon-xs fill-text">
@@ -599,7 +604,7 @@
 
 
 <c:url value="../notes/" var="editNoteUrl"/>
-<c:url value="./" var="editDirectoryUrl"/>
+<c:url value="./${directoryId}" var="editDirectoryUrl"/>
 
 <!--  EDIT NOTE MODAL -->
 <div class="modal fade" id="editNoteModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -617,7 +622,7 @@
                 <!-- EDIT NOTE FORM -->
                 <form:form modelAttribute="editNoteForm"
                            action="${editNoteUrl}"
-                           method="put"
+                           method="post"
                            enctype="multipart/form-data"
                            autocomplete="off"
                            class="d-flex flex-column"
@@ -628,7 +633,7 @@
                             <label class="input-group-text" for="name"><spring:message
                                     code="name"/></label>
                             <!-- TODO: change value JS-->
-                            <form:input path="name" type="text" value="${directoryId}"
+                            <form:input path="name" type="text"
                                         aria-label="<spring:message code=\"form.upload.name\"/>"
                                         class="form-control" id="name"/>
                         </div>
@@ -656,6 +661,8 @@
                         <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                             code="update"/>"/>
                     </div>
+
+                    <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
                 </form:form>
             </div>
         </div>
@@ -678,7 +685,7 @@
                 <!-- EDIT DIRECTORY FORM -->
                 <form:form modelAttribute="editDirectoryForm"
                            action="${editDirectoryUrl}"
-                           method="put"
+                           method="post"
                            enctype="multipart/form-data"
                            autocomplete="off"
                            class="d-flex flex-column"
@@ -689,7 +696,7 @@
                             <label class="input-group-text" for="name"><spring:message
                                     code="name"/></label>
                             <!-- TODO: change value JS-->
-                            <form:input path="name" type="text" value="${directoryId}"
+                            <form:input path="name" type="text"
                                         aria-label="<spring:message code=\"form.upload.name\"/>"
                                         class="form-control" id="name"/>
                         </div>
@@ -703,6 +710,7 @@
                         <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                             code="update"/>"/>
                     </div>
+                    <input type="hidden" name="directoryId" id="directoryId"/>
                 </form:form>
             </div>
         </div>
@@ -717,23 +725,28 @@
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
+<script src="<c:url value="/js/popups.js"/>"></script>
 <c:if test="${not empty results}">
     <script src="<c:url value="/js/note-list.js"/>"></script>
     <script src="<c:url value="/js/buttons.js"/>"></script>
     <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
-<script src="<c:url value="/js/popups.js"/>"></script>
 
 <c:if test="${errorsEditNoteForm != null}">
     <script>
-        const editNoteModalButton = document.getElementById('editNoteModalButton');
-        editNoteModalButton.click()
+        const category = document.getElementById('editNoteForm').querySelectorAll('#categorySelect')[0].value;
+        const id = "<c:out value="${editNoteId}"/>";
+        const editNoteModalButton = document.getElementById(id+".e1");
+        editNoteModalButton.click();
+        edit(id, category);
     </script>
 </c:if>
 <c:if test="${errorsEditDirectoryForm != null}">
     <script>
-        const editDirectoryModalButton = document.getElementById('editDirectoryModalButton');
-        editDirectoryModalButton.click()
+        const id = "<c:out value="${editDirectoryForm.directoryId}"/>";
+        const editDirectoryModalButton = document.getElementById(id+".e1");
+        editDirectoryModalButton.click();
+        edit(id, "directory");
     </script>
 </c:if>
 
@@ -749,6 +762,7 @@
         createDirectoryModalButton.click()
     </script>
 </c:if>
+
 </body>
 
 </html>

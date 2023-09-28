@@ -96,8 +96,8 @@ const editDirectoryForm = document.getElementById('editDirectoryForm');
 
 function edit(id, type) {
     if (type === 'directory') {
-        editDirectoryForm.action = `${baseUrl}/directory/${id}/`;
         editDirectoryForm.querySelectorAll('#name')[0].value = names[ids.indexOf(`${id}.${type}`)];
+        editDirectoryForm.querySelectorAll('#directoryId')[0].value = id;
     }
     else {
         editNoteForm.action = `${baseUrl}/notes/${id}/`;
@@ -108,8 +108,8 @@ function edit(id, type) {
 
 editButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const noteId = button.getAttribute('id');
-        const [id, type] = noteId.split('.', 2);
-        edit(id, type)
+        const id = button.getAttribute('id').split('.', 1);
+        const category = button.getAttribute('data-category');
+        edit(id, category);
     });
 });

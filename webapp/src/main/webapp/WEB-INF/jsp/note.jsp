@@ -159,8 +159,8 @@
             <div class="modal-body pb-0">
                 <!-- CREATE NOTE FORM -->
                 <form:form modelAttribute="editNoteForm"
-                           action="${updateUrl}"
-                           method="put"
+                           action="${editUrl}"
+                           method="post"
                            enctype="multipart/form-data"
                            autocomplete="off"
                            class="d-flex flex-column"
@@ -218,6 +218,8 @@
                         <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                             code="update"/>"/>
                     </div>
+
+                    <input type="hidden" name="redirectUrl" value="/notes/${noteId}"/>
                 </form:form>
             </div>
         </div>

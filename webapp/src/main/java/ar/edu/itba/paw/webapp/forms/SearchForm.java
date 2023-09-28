@@ -18,9 +18,9 @@ public class SearchForm {
     @Pattern(regexp = "directory|theory|practice|exam|other")
     private String category;
     @Pattern(regexp = "score|name|date")
-    private String sortBy;
+    private String sortBy = "score";
     @NotNull
-    private Boolean ascending = true;
+    private Boolean ascending = false;
     @NotNull
     @Min(1)
     private Integer pageNumber = 1;
