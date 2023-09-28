@@ -120,7 +120,8 @@
         </div>
         <p class="text-muted"><spring:message code="directories.noContent.description"/></p>
         <div class="d-flex gap-2">
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="uploadNote"/>"
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+               data-bs-title="<spring:message code="uploadNote"/>"
                data-bs-trigger="hover">
                 <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
                         id="createNoteModalButton">
@@ -130,7 +131,8 @@
                 </button>
             </a>
 
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="createDirectory"/>"
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+               data-bs-title="<spring:message code="createDirectory"/>"
                data-bs-trigger="hover">
                 <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
                         id="createDirectoryModalButton">
@@ -155,7 +157,8 @@
     <!-- TOP BUTTONS -->
     <div class="d-flex container mt-4 justify-content-between p-0">
         <div class="d-flex">
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="uploadNote"/>"
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+               data-bs-title="<spring:message code="uploadNote"/>"
                data-bs-trigger="hover">
                 <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
                         id="createNoteModalButton">
@@ -164,7 +167,8 @@
                          class="icon-m fill-dark-primary"/>
                 </button>
             </a>
-            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="<spring:message code="createDirectory"/>"
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+               data-bs-title="<spring:message code="createDirectory"/>"
                data-bs-trigger="hover">
                 <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createDirectoryModal"
                         id="createDirectoryModalButton">
@@ -255,16 +259,22 @@
                             <c:if test="${item.category.formattedName ne 'directory'}">
                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
                                    data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                                    <button class="btn button-expansion rounded-circle" data-bs-toggle="modal" data-bs-target="#editNoteModal" id="editNoteModalButton" >
-                                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>" class="icon-xs fill-text">
+                                    <button class="btn button-expansion rounded-circle edit-button"
+                                            data-bs-toggle="modal" data-bs-target="#editNoteModal"
+                                            id="<c:out value="${item.id}.${item.category.formattedName}"/>.e1">
+                                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>"
+                                             class="icon-xs fill-text">
                                     </button>
                                 </a>
                             </c:if>
                             <c:if test="${item.category.formattedName eq 'directory'}">
                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
                                    data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                                    <button class="btn button-expansion rounded-circle" data-bs-toggle="modal" data-bs-target="#editDirectoryModal" id="editDirectoryModalButton" >
-                                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>" class="icon-xs fill-text">
+                                    <button class="btn button-expansion rounded-circle edit-button"
+                                            data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
+                                            id="<c:out value="${item.id}.${item.category.formattedName}"/>.e1">
+                                        <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>"
+                                             class="icon-xs fill-text">
                                     </button>
                                 </a>
                             </c:if>
@@ -589,31 +599,10 @@
                             <label class="input-group-text" for="categorySelect"><spring:message
                                     code="category"/></label>
                             <form:select path="category" class="form-select" id="categorySelect">
-                                <!-- TODO: change value JS-->
-                                <c:if test="${directoryId eq 'theory'}">
-                                    <form:option value="theory" selected="true"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
-                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
-                                    <form:option value="other"><spring:message code="category.other"/></form:option>
-                                </c:if>
-                                <c:if test="${directoryId eq 'practice'}">
-                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice" selected="true"><spring:message code="category.practice"/></form:option>
-                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
-                                    <form:option value="other"><spring:message code="category.other"/></form:option>
-                                </c:if>
-                                <c:if test="${directoryId eq 'exam'}">
-                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
-                                    <form:option value="exam" selected="true"><spring:message code="category.exam"/></form:option>
-                                    <form:option value="other"><spring:message code="category.other"/></form:option>
-                                </c:if>
-                                <c:if test="${directoryId eq 'other'}">
-                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
-                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
-                                    <form:option value="other" selected="true"><spring:message code="category.other"/></form:option>
-                                </c:if>
+                                <form:option value="theory"><spring:message code="category.theory"/></form:option>
+                                <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                <form:option value="exam"><spring:message code="category.exam"/></form:option>
+                                <form:option value="other"><spring:message code="category.other"/></form:option>
                             </form:select>
                         </div>
                         <form:errors path="category" cssClass="text-danger" element="p"/>

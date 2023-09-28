@@ -1,10 +1,8 @@
 /**************************/
-/* COPY DOWNLOAD BUTTONS */
+/***** COPY BUTTONS *******/
 /*************************/
 
-
 const copyButtons = document.querySelectorAll('.copy-button');
-
 // Función para copiar texto al portapapeles
 function copyToClipboard(text) {
     const el = document.createElement('textarea');
@@ -19,10 +17,14 @@ function copyToClipboard(text) {
 copyButtons.forEach(button => {
     button.addEventListener('click', () => {
         const noteId = button.getAttribute('id');
-        const [id, type] = noteId.slice(0, -1).split('.');
+        const [id, type] = noteId.split('.', 2);
         copyToClipboard(`${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}`);
     });
 });
+
+/**************************/
+/***** DOWNLOAD ALL *******/
+/*************************/
 
 const downloadSelectedButton = document.getElementById('downloadSelectedButton');
 
@@ -30,7 +32,7 @@ if (downloadSelectedButton)
     downloadSelectedButton.addEventListener('click', () => {
         selectedRowIds.forEach((itemId) => {
             const a = document.createElement('a')
-            const [id, type] = itemId.slice(0, -1).split('.');
+            const [id, type] = itemId.split('.', 2);
             a.href = `${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}/download`
             a.download = names[ids.indexOf(itemId)]
             document.body.appendChild(a)
@@ -39,10 +41,11 @@ if (downloadSelectedButton)
         });
     });
 
+/**************************/
+/******* SELECT ALL *******/
+/*************************/
 
 const selectAllButton = document.getElementById('selectAllButton');
-const deselectAllButton = document.getElementById('deselectAllButton');
-
 // Función para seleccionar todas las filas
 function selectAll() {
     for (let i = 0; i < rows.length / 2; i++) {
@@ -59,7 +62,13 @@ function selectAll() {
 
     updateSelectedButtonsState();
 }
+selectAllButton.addEventListener('click', selectAll);
 
+/**************************/
+/****** DESELECT ALL ******/
+/*************************/
+
+const deselectAllButton = document.getElementById('deselectAllButton');
 function deselectAll() {
     for (let i = 0; i < rows.length / 2; i++) {
         const checkbox = rows[i].querySelector('.select-checkbox');
@@ -75,6 +84,33 @@ function deselectAll() {
 
     updateSelectedButtonsState();
 }
-
-selectAllButton.addEventListener('click', selectAll);
 deselectAllButton.addEventListener('click', deselectAll);
+
+
+/**************************/
+/****** EDIT BUTTONS ******/
+/*************************/
+const editButtons = document.querySelectorAll('.edit-button');
+const editNoteForm = document.getElementById('editNoteForm');
+const editDirectoryForm = document.getElementById('editDirectoryForm');
+
+function edit(id, type) {
+    if (type === 'directory') {
+        editDirectoryForm.action = `${baseUrl}/directory/${id}/`;
+        editDirectoryForm.querySelectorAll('#name')[0].value = names[ids.indexOf(`${id}.${type}`)];
+    }
+    else {
+        editNoteForm.action = `${baseUrl}/notes/${id}/`;
+        editNoteForm.querySelectorAll('#name')[0].value = names[ids.indexOf(`${id}.${type}`)];
+        editNoteForm.querySelectorAll('#categorySelect')[0].value = type;
+    }
+}
+
+// Agregar eventos de clic a los botones de copia
+editButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const noteId = button.getAttribute('id');
+        const [id, type] = noteId.split('.', 2);
+        edit(id, type)
+    });
+});

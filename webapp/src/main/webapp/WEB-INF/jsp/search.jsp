@@ -230,7 +230,6 @@
                      class="icon-s fill-dark-primary"/>
             </button>
         </div>
-
     </div>
 
     <!-- HORIZONTAL LIST -->
