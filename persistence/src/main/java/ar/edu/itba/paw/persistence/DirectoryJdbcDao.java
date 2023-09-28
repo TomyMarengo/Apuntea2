@@ -105,6 +105,14 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
 
     @Override
+    public boolean deleteMany(UUID[] directoryIds, UUID currentUserId) {
+        StringBuilder directoryIdsBuilder = new StringBuilder();
+        Arrays.stream(directoryIds).forEach(directoryId -> directoryIdsBuilder.append(", '").append(directoryId.toString()).append("'"));
+        directoryIdsBuilder.replace(0, 2, "");
+        return jdbcTemplate.update("DELETE FROM Directories WHERE directory_id IN ("+directoryIdsBuilder.toString()+") AND user_id = ?", currentUserId) >= directoryIds.length;
+    }
+
+    @Override
     public boolean delete(UUID directoryId, UUID currentUserId) {
         return jdbcTemplate.update("DELETE FROM Directories WHERE directory_id = ? AND user_id = ?", directoryId, currentUserId) == 1;
     }

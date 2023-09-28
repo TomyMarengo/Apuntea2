@@ -77,6 +77,14 @@ public class NoteServiceImpl implements NoteService {
         if (!success) throw new InvalidNoteException();
     }
 
+    @Transactional
+    @Override
+    public void deleteMany(UUID[] noteIds) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        boolean success = noteDao.deleteMany(noteIds, currentUserId);
+        if (!success) throw new InvalidNoteException();
+    }
+
     @Override
     public List<Review> getReviews(UUID noteId) {
         return noteDao.getReviews(noteId);

@@ -13,4 +13,5 @@ public interface DirectoryService {
 
     void update(Directory directory);
     void delete(UUID directoryId);
+    void deleteMany(UUID[] directoryIds);
 }

@@ -9,15 +9,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -34,9 +37,14 @@ public class DirectoryJdbcDaoTest {
 
     private JdbcTemplate jdbcTemplate;
 
+    private SimpleJdbcInsert jdbcDirectoryInsert;
+
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
+        jdbcDirectoryInsert = new SimpleJdbcInsert(ds)
+                .withTableName(DIRECTORIES)
+                .usingColumns(DIRECTORY_ID, DIRECTORY_NAME, USER_ID, PARENT_ID);
     }
 
     @Test
@@ -91,6 +99,32 @@ public class DirectoryJdbcDaoTest {
         UUID directoryId = directoryDao.create("Nueva basura", EDA_DIRECTORY_ID, PEPE_ID, true, "#BBBBBB");
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + directoryId + "' AND directory_name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "' AND user_id = '" + PEPE_ID + "'"));
         JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "Directories", "user_id = '" + PEPE_ID + "' AND directory_name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "'");
+    }
+
+    @Test
+    public void testDeleteMany() {
+        UUID[] directoryIds = {TMP_DIR_ID_1, TMP_DIR_ID_2, TMP_DIR_ID_3, TMP_DIR_ID_4};
+        String[] names = {"tmp1", "tmp2", "tmp3", "tmp4"};
+        jdbcDirectoryInsert.execute(new HashMap<String, Object>(){{
+            put(DIRECTORY_ID, TMP_PARENT_DIR_ID);
+            put(DIRECTORY_NAME, "tmp");
+            put(USER_ID, PEPE_ID);
+            put(PARENT_ID, EDA_DIRECTORY_ID);
+        }});
+        HashMap<String, Object> args = new HashMap<String, Object>(){{
+            put(USER_ID, PEPE_ID);
+            put(PARENT_ID, TMP_PARENT_DIR_ID);
+        }};
+        for (int i = 0; i < directoryIds.length; i++) {
+            args.put(DIRECTORY_NAME, names[i]);
+            args.put(DIRECTORY_ID, directoryIds[i]);
+            jdbcDirectoryInsert.execute(args);
+        }
+        int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DIRECTORIES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + TMP_PARENT_DIR_ID + "'");
+        directoryDao.deleteMany(directoryIds, PEPE_ID);
+        int countPostDelete = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DIRECTORIES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + TMP_PARENT_DIR_ID + "'");
+        assertEquals(4, countInserted);
+        assertEquals(0, countPostDelete);
     }
 
 }

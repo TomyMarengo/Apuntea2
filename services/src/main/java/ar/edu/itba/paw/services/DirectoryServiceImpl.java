@@ -56,4 +56,12 @@ public class DirectoryServiceImpl implements DirectoryService{
         boolean success = directoryDao.delete(directoryId, currentUserId);
         if (!success) throw new InvalidDirectoryException();
     }
+
+    @Transactional
+    @Override
+    public void deleteMany(UUID[] directoryIds) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        boolean success = directoryDao.deleteMany(directoryIds, currentUserId);
+        if (!success) throw new InvalidDirectoryException();
+    }
 }

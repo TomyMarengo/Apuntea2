@@ -186,8 +186,10 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public boolean deleteMany(UUID[] noteIds, UUID currentUserId) {
-        String noteIdString = Arrays.stream(noteIds).map(UUID::toString).reduce((a, b) -> a + ", " + b).orElse("");
-        return jdbcTemplate.update("DELETE FROM Notes WHERE note_id IN (?) AND user_id = ?", noteIdString, currentUserId) == noteIds.length;
+        StringBuilder noteIdsBuilder = new StringBuilder();
+        Arrays.stream(noteIds).forEach(noteId -> noteIdsBuilder.append(", '").append(noteId.toString()).append("'"));
+        noteIdsBuilder.replace(0, 2, "");
+        return jdbcTemplate.update("DELETE FROM Notes WHERE note_id IN ("+noteIdsBuilder.toString()+") AND user_id = ?", currentUserId) == noteIds.length;
     }
 
     @Override

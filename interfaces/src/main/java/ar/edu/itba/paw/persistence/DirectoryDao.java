@@ -13,5 +13,7 @@ public interface DirectoryDao {
     boolean update(Directory directory, UUID currentUserId);
     Directory getDirectoryById(UUID directoryId, UUID currentUserId);
 
+    boolean deleteMany(UUID[] directoryIds, UUID currentUserId);
+
     boolean delete(UUID directoryId, UUID currentUserId);
 }
