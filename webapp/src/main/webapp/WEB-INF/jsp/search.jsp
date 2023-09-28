@@ -249,7 +249,9 @@
                 <tbody>
                 <c:forEach var="item" items="${results}">
                     <c:set var="date" value="${item.createdAt}"/>
-                    <tr class="note-found no-select" id="<c:out value="${item.id}.${item.category.formattedName}"/>.1">
+                    <tr class="note-found no-select"
+                        data-category="<c:out value="${item.category.formattedName}"/>"
+                        id="<c:out value="${item.id}"/>.1">
                         <td class="note-found-title">
                             <c:if test="${item.category.formattedName ne 'directory'}">
                                 <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
@@ -291,7 +293,7 @@
 
                                 <!-- ALL CAN BE COPIED -->
                                 <button class="btn button-expansion rounded-circle copy-button"
-                                        id="<c:out value="${item.id}.${item.category.formattedName}"/>.c1"
+                                        id="<c:out value="${item.id}"/>.c1"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
                                         data-bs-trigger="hover">
@@ -324,7 +326,8 @@
             <c:forEach items="${results}" var="item">
                 <div class="col-md-4 mb-4">
                     <div class="note-found card box search-note-box h-100"
-                         id="<c:out value="${item.id}.${item.category.formattedName}"/>.2">
+                         data-category="<c:out value="${item.category.formattedName}"/>"
+                         id="<c:out value="${item.id}"/>.2">
                         <div class="card-body no-select">
                             <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
                                 <c:if test="${item.category.formattedName ne 'directory'}">

@@ -60,6 +60,7 @@ public class DirectoryController {
         addFormOrGetWithErrors(mav, model, EDIT_DIRECTORY_FORM_BINDING, "errorsEditDirectoryForm", "editDirectoryForm", EditDirectoryForm.class);
 
         mav.addObject("editNoteId", model.get(EDIT_NOTE_ID));
+        mav.addObject("editDirectoryId", model.get(EDIT_DIRECTORY_ID));
 
         UUID dId = UUID.fromString(directoryId);
         Directory directory = directoryService.getDirectoryById(dId).orElseThrow(DirectoryNotFoundException::new);
@@ -141,14 +142,16 @@ public class DirectoryController {
     }
 
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST)
-    public ModelAndView editDirectory(@PathVariable("directoryId") String directoryId,
+    public ModelAndView editDirectory(@PathVariable("directoryId") UUID directoryId,
                                  @Valid @ModelAttribute final EditDirectoryForm editDirectoryForm,
                                  final BindingResult result, final RedirectAttributes redirectAttributes) {
-        final ModelAndView mav = new ModelAndView("redirect:/directory/" + directoryId);
+
+        final ModelAndView mav = new ModelAndView("redirect:" + editDirectoryForm.getRedirectUrl());
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_FORM_BINDING, result);
+            redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_ID, directoryId);
         } else {
-            Directory directory = new Directory(editDirectoryForm.getDirectoryId(), editDirectoryForm.getName(), true, "#BBBBBB");
+            Directory directory = new Directory(directoryId, editDirectoryForm.getName(), true, "#BBBBBB");
             directoryService.update(directory);
         }
         return mav;

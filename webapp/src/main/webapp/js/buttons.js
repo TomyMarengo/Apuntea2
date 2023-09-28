@@ -16,9 +16,9 @@ function copyToClipboard(text) {
 // Agregar eventos de clic a los botones de copia
 copyButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const noteId = button.getAttribute('id');
-        const [id, type] = noteId.split('.', 2);
-        copyToClipboard(`${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}`);
+        const id = button.getAttribute('id').split('.', 1)[0];
+        const category = content.find(item => item.id === id).category;
+        copyToClipboard(`${baseUrl}/${category === 'directory' ? 'directory' : 'notes'}/${id}`);
     });
 });
 
@@ -32,9 +32,9 @@ if (downloadSelectedButton)
     downloadSelectedButton.addEventListener('click', () => {
         selectedRowIds.forEach((itemId) => {
             const a = document.createElement('a')
-            const [id, type] = itemId.split('.', 2);
-            a.href = `${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}/download`
-            a.download = names[ids.indexOf(itemId)]
+            const {id, category, name } = content.find(item => item.id === itemId)
+            a.href = `${baseUrl}/${category === 'directory' ? 'directory' : 'notes'}/${id}/download`
+            a.download = name
             document.body.appendChild(a)
             a.click()
             document.body.removeChild(a)
@@ -57,7 +57,7 @@ function selectAll() {
         checkbox2.checked = true;
         rows[i + rows.length / 2].classList.add('active-note-found');
 
-        selectedRowIds.add(ids[i]);
+        selectedRowIds.add(content[i].id);
     }
 
     updateSelectedButtonsState();
@@ -79,7 +79,7 @@ function deselectAll() {
         checkbox2.checked = false;
         rows[i + rows.length / 2].classList.remove('active-note-found');
 
-        selectedRowIds.delete(ids[i]);
+        selectedRowIds.delete(content[i].id);
     }
 
     updateSelectedButtonsState();
@@ -94,22 +94,26 @@ const editButtons = document.querySelectorAll('.edit-button');
 const editNoteForm = document.getElementById('editNoteForm');
 const editDirectoryForm = document.getElementById('editDirectoryForm');
 
-function edit(id, type) {
-    if (type === 'directory') {
-        editDirectoryForm.querySelectorAll('#name')[0].value = names[ids.indexOf(`${id}.${type}`)];
-        editDirectoryForm.querySelectorAll('#directoryId')[0].value = id;
+function edit(id, error = false) {
+    const { category, name } = content.find(item => item.id === id);
+
+    if (category === 'directory') {
+        editDirectoryForm.action = `${baseUrl}/directory/${id}/`;
+        if(!error)
+            editDirectoryForm.querySelectorAll('#name')[0].value = name;
     }
     else {
         editNoteForm.action = `${baseUrl}/notes/${id}/`;
-        editNoteForm.querySelectorAll('#name')[0].value = names[ids.indexOf(`${id}.${type}`)];
-        editNoteForm.querySelectorAll('#categorySelect')[0].value = type;
+        if(!error) {
+            editNoteForm.querySelectorAll('#name')[0].value = name;
+            editNoteForm.querySelectorAll('#categorySelect')[0].value = category;
+        }
     }
 }
 
 editButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const id = button.getAttribute('id').split('.', 1);
-        const category = button.getAttribute('data-category');
-        edit(id, category);
+        const id = button.getAttribute('id').split('.', 1)[0];
+        edit(id);
     });
 });

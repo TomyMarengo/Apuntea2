@@ -229,7 +229,9 @@
                 <tbody>
                 <c:forEach var="item" items="${results}">
                     <c:set var="date" value="${item.createdAt}"/>
-                    <tr class="note-found no-select" id="<c:out value="${item.id}.${item.category.formattedName}"/>.1">
+                    <tr class="note-found no-select"
+                        data-category="${item.category.formattedName}"
+                        id="<c:out value="${item.id}"/>.1">
                         <td class="note-found-title">
                             <c:if test="${item.category.formattedName ne 'directory'}">
                                 <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
@@ -263,7 +265,6 @@
                                          data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                                         <button class="btn nav-icon-button edit-button"
                                                 data-bs-toggle="modal" data-bs-target="#editNoteModal"
-                                                data-category="${item.category.formattedName}"
                                                 id="<c:out value="${item.id}"/>.e1">
                                             <img src="<c:url value="/svg/pencil.svg"/>"
                                                  alt="<spring:message code="edit"/>"
@@ -276,7 +277,6 @@
                                          data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                                         <button class="btn nav-icon-button edit-button"
                                                 data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
-                                                data-category="${item.category.formattedName}"
                                                 id="<c:out value="${item.id}"/>.e1">
                                             <img src="<c:url value="/svg/pencil.svg"/>"
                                                  alt="<spring:message code="edit"/>"
@@ -286,7 +286,7 @@
                                 </c:if>
 
                                 <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
-                                    <div href="./notes/${item.id}/download" download="${item.name}">
+                                    <a href="../notes/${item.id}/download" download="${item.name}">
                                         <button type="button" class="btn button-expansion rounded-circle"
                                                 data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                 data-bs-title="<spring:message code="download"/>"
@@ -294,13 +294,14 @@
                                             <img src="<c:url value="/svg/download.svg"/>" alt="${download}"
                                                  class="icon-xs fill-text">
                                         </button>
-                                    </div>
+                                    </a>
                                 </c:if>
 
                                 <!-- ALL CAN BE COPIED -->
                                 <div>
                                     <button class="btn button-expansion rounded-circle copy-button"
-                                            id="<c:out value="${item.id}.${item.category.formattedName}"/>.c1"
+                                            id="<c:out value="${item.id}"/>.c1"
+                                            data-category=""
                                             data-bs-toggle="tooltip"
                                             data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
                                             data-bs-trigger="hover">
@@ -324,7 +325,8 @@
             <c:forEach items="${results}" var="item">
                 <div class="col-md-4 mb-4">
                     <div class="note-found card box search-note-box h-100"
-                         id="<c:out value="${item.id}.${item.category.formattedName}"/>.2">
+                         data-category="${item.category.formattedName}"
+                         id="<c:out value="${item.id}"/>.2">
                         <div class="card-body no-select">
 
                             <!-- TITLE AND BUTTONS -->
@@ -349,7 +351,6 @@
                                        data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                                         <button class="btn button-expansion rounded-circle edit-button"
                                                 data-bs-toggle="modal" data-bs-target="#editNoteModal"
-                                                data-category="${item.category.formattedName}"
                                                 id="<c:out value="${item.id}.e2"/>">
 
                                             <img src="<c:url value="/svg/pencil.svg"/>"
@@ -363,7 +364,6 @@
                                        data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                                         <button class="btn button-expansion rounded-circle edit-button"
                                                 data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
-                                                data-category="${item.category.formattedName}"
                                                 id="<c:out value="${item.id}.e2"/>">
                                             <img src="<c:url value="/svg/pencil.svg"/>"
                                                  alt="<spring:message code="edit"/>"
@@ -632,7 +632,6 @@
                         <div class="input-group">
                             <label class="input-group-text" for="name"><spring:message
                                     code="name"/></label>
-                            <!-- TODO: change value JS-->
                             <form:input path="name" type="text"
                                         aria-label="<spring:message code=\"form.upload.name\"/>"
                                         class="form-control" id="name"/>
@@ -683,13 +682,15 @@
             </div>
             <div class="modal-body pb-0">
                 <!-- EDIT DIRECTORY FORM -->
+
                 <form:form modelAttribute="editDirectoryForm"
-                           action="${editDirectoryUrl}"
+                           action=""
                            method="post"
                            enctype="multipart/form-data"
                            autocomplete="off"
                            class="d-flex flex-column"
                            id="editDirectoryForm">
+
 
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
@@ -710,13 +711,14 @@
                         <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                             code="update"/>"/>
                     </div>
-                    <input type="hidden" name="directoryId" id="directoryId"/>
+
+                    <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+
                 </form:form>
             </div>
         </div>
     </div>
 </div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -734,19 +736,19 @@
 
 <c:if test="${errorsEditNoteForm != null}">
     <script>
-        const category = document.getElementById('editNoteForm').querySelectorAll('#categorySelect')[0].value;
         const id = "<c:out value="${editNoteId}"/>";
-        const editNoteModalButton = document.getElementById(id+".e1");
-        editNoteModalButton.click();
-        edit(id, category);
+        edit(id, true);
+        let editNoteModal = new bootstrap.Modal(document.getElementById('editNoteModal'), {})
+        editNoteModal.show();
     </script>
 </c:if>
+
 <c:if test="${errorsEditDirectoryForm != null}">
     <script>
-        const id = "<c:out value="${editDirectoryForm.directoryId}"/>";
-        const editDirectoryModalButton = document.getElementById(id+".e1");
-        editDirectoryModalButton.click();
-        edit(id, "directory");
+        const id = "<c:out value="${editDirectoryId}"/>";
+        edit(id, true);
+        let editDirectoryModal = new bootstrap.Modal(document.getElementById('editDirectoryModal'), {})
+        editDirectoryModal.show();
     </script>
 </c:if>
 
@@ -756,6 +758,7 @@
         createNoteModalButton.click()
     </script>
 </c:if>
+
 <c:if test="${errorsCreateDirectoryForm != null}">
     <script>
         const createDirectoryModalButton = document.getElementById('createDirectoryModalButton');

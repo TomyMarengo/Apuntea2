@@ -15,23 +15,18 @@ if (!baseUrl) {
     const baseUrl = currentUrl + path
 }
 
+// Elements
 const rows = document.querySelectorAll('.note-found');
-// for each row, get the id with category, the id is id.category.number, get only id.category
-
-
-const ids = []
-const names = []
+// Content of the elements
+const content = []
 
 for (let i = 0; i < rows.length / 2; i++) {
-    const noteId = rows[i].getAttribute('id');
-    const id = noteId.split('.', 2).join('.');
-    ids.push(id)
-    const noteNameElement = rows[i].querySelector('.note-name');
-    let noteName = noteNameElement.textContent.trim(); // Elimina espacios en blanco al principio y al final
-    noteName = noteName.replace(/_/g, ''); // Elimina todos los guiones bajos ("_")
-    names.push(noteName);
+    const id = rows[i].getAttribute('id').split('.', 1)[0];
+    const category = rows[i].getAttribute('data-category');
+    let noteName = rows[i].querySelector('.note-name').textContent.trim();
+    noteName = noteName.replace(/_/g, '');
+    content.push({ id: id, category: category, name: noteName })
 }
-
 
 rows.forEach((row, index) => {
     row.addEventListener('dblclick', () => {
@@ -39,8 +34,9 @@ rows.forEach((row, index) => {
         if (index >= rows.length / 2)
             index -= rows.length / 2;
 
-        const [id, type] = ids[index].split('.');
-        const url = `${baseUrl}/${type === 'directory' ? 'directory' : 'notes'}/${id}`;
+        const id = content[index].id;
+        const category = content[index].category;
+        const url = `${baseUrl}/${category === 'directory' ? 'directory' : 'notes'}/${id}`;
 
         // Open the URL in a new tab
         window.open(url, '_blank');
@@ -60,10 +56,9 @@ function updateSelectedButtonsState() {
     } else {
         selectedButtons.style.display = 'none'; // Ocultar el botón si no hay filas seleccionadas
     }
+    let entries = Array.from(selectedRowIds);
     for (let i = 0; i < selectedRowIds.size; i++) {
-        let entries = Array.from(selectedRowIds);
-        const [id, type] = entries[i].split('.');
-        if (type === 'directory') {
+        if (content[content.findIndex(item => item.id === entries[i])].category === 'directory') {
             downloadSelectedButton.style.display = 'none';
             break;
         }
@@ -93,9 +88,10 @@ for (let i = 0; i < rows.length; i++) {
                 checkbox2.checked = true;
                 rows[j + rows.length / 2].classList.add('active-note-found');
 
-                selectedRowIds.add(ids[j]);
+                selectedRowIds.add(content[j].id);
             }
-        } else if (event.ctrlKey) {
+        }
+        else if (event.ctrlKey) {
             // Si se mantiene presionada la tecla Ctrl, alternar la selección de la fila
 
             rows[i].classList.toggle('active-note-found');
@@ -107,11 +103,12 @@ for (let i = 0; i < rows.length; i++) {
             checkbox2.checked = !checkbox2.checked;
 
             if (checkbox.checked) {
-                selectedRowIds.add(ids[i]);
+                selectedRowIds.add(content[i].id);
             } else {
-                selectedRowIds.delete(ids[i]);
+                selectedRowIds.delete(content[i].id);
             }
-        } else {
+        }
+        else {
             let toggle = false;
             rows.forEach((otherRow, index) => {
                 if (otherRow !== rows[i] && otherRow !== rows[i + rows.length / 2]) {
@@ -119,7 +116,7 @@ for (let i = 0; i < rows.length; i++) {
                     checkbox.checked = false;
                     otherRow.classList.remove('active-note-found');
 
-                    selectedRowIds.delete(ids[index]);
+                    selectedRowIds.delete(content[index % (rows.length / 2)].id);
                 } else {
                     if (!toggle) {
                         toggle = true
@@ -132,10 +129,10 @@ for (let i = 0; i < rows.length; i++) {
                         checkbox2.checked = !checkbox2.checked;
 
                         if (checkbox.checked) {
-                            selectedRowIds.add(ids[i]);
+                            selectedRowIds.add(content[i].id);
                             lastClickedRow = i;
                         } else {
-                            selectedRowIds.delete(ids[i]);
+                            selectedRowIds.delete(content[i].id);
                             lastClickedRow = -1;
                         }
                     }

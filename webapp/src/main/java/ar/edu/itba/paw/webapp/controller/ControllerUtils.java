@@ -11,6 +11,7 @@ public class ControllerUtils {
     static final String EDIT_NOTE_FORM_BINDING = "org.springframework.validation.BindingResult.editNoteForm";
     static final String EDIT_NOTE_ID = "editNoteId";
     static final String CREATE_DIRECTORY_FORM_BINDING = "org.springframework.validation.BindingResult.createDirectoryForm";
+    static final String EDIT_DIRECTORY_ID = "editDirectoryId";
     static final String EDIT_DIRECTORY_FORM_BINDING = "org.springframework.validation.BindingResult.editDirectoryForm";
     static final String CREATE_REVIEW_FORM_BINDING = "org.springframework.validation.BindingResult.reviewForm";
     private	static final Logger LOGGER	= LoggerFactory.getLogger(ControllerUtils.class);
