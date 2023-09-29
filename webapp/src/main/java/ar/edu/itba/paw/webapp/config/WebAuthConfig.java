@@ -43,6 +43,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                                 "/search",
                                 "/notes/{noteId}",
                                 "/notes/{noteId}/download",
+                                "/directory/{directoryId}",
                                 "/errors/**").permitAll()
                     .anyRequest().authenticated()
 

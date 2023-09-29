@@ -162,6 +162,7 @@
         crossorigin="anonymous"></script>
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
+<script src="<c:url value="/js/global-search.js"/>"></script>
 
 </body>
 

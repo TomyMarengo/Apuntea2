@@ -123,7 +123,7 @@ ALTER TABLE Directories
     ADD COLUMN IF NOT EXISTS visible boolean DEFAULT true NOT NULL,
     ADD COLUMN IF NOT EXISTS created_at timestamp DEFAULT now() NOT NULL,
     ADD COLUMN IF NOT EXISTS last_modified_at timestamp DEFAULT now() NOT NULL,
-    ADD COLUMN IF NOT EXISTS icon_color character varying(7) DEFAULT '#BBBBBB' NOT NULL,
+    ADD COLUMN IF NOT EXISTS icon_color character varying(7) DEFAULT 'BBBBBB' NOT NULL,
     -- For root directory validation
     DROP CONSTRAINT IF EXISTS "CK_root_directories",
     ADD CONSTRAINT "CK_root_directories" CHECK ((parent_id IS NULL AND user_id IS NULL) OR (parent_id IS NOT NULL AND user_id IS NOT NULL));

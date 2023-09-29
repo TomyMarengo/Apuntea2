@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/autocomplete.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/color-picker.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
@@ -251,6 +252,7 @@
                     <c:set var="date" value="${item.createdAt}"/>
                     <tr class="note-found no-select"
                         data-category="<c:out value="${item.category.formattedName}"/>"
+                        data-visible="${item.visible}"
                         id="<c:out value="${item.id}"/>.1">
                         <td class="note-found-title">
                             <c:if test="${item.category.formattedName ne 'directory'}">
@@ -259,7 +261,9 @@
                                 </c:if>
                             </c:if>
                             <c:if test="${item.category.formattedName eq 'directory'}">
-                                <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-m fill-text">
+                                <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
+                                     data-color="${item.iconColor}"
+                                     class="icon-m fill-${item.iconColor} folder-icon">
                             </c:if>
                             <span class="card-title align-middle mx-2 note-name">
                                 <c:out value="${item.name}"/>
@@ -337,7 +341,7 @@
                                 </c:if>
                                 <c:if test="${item.category.formattedName eq 'directory'}">
                                     <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
-                                         class="icon-s fill-text">
+                                         class="icon-s fill-${item.iconColor}">
                                 </c:if>
                                 <h4 class="card-title text-truncate mb-0">
                                     <c:out value="${item.name}"/>
@@ -449,6 +453,7 @@
     <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
 <script src="<c:url value="/js/popups.js"/>"></script>
+<script src="<c:url value="/js/global-search.js"/>"></script>
 
 </body>
 

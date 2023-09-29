@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.forms;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -18,6 +19,8 @@ public class EditNoteForm {
 
     @Pattern(regexp = "/|/notes/.*|/directory/.*")
     private String redirectUrl = "/";
+
+    private boolean visible = true;
 
     public String getName() {
         return name;
@@ -39,5 +42,13 @@ public class EditNoteForm {
 
     public void setRedirectUrl(String redirectUrl) {
         this.redirectUrl = redirectUrl;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 }

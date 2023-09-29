@@ -24,6 +24,12 @@
   --filter-dark-text: invert(14%) sepia(7%) saturate(1409%) hue-rotate(349deg) brightness(94%) contrast(89%);
   --filter-bg: invert(100%) sepia(97%) saturate(0%) hue-rotate(59deg) brightness(103%) contrast(99%);
 
+
+  --filter-CD35A6: invert(41%) sepia(93%) saturate(4343%) hue-rotate(293deg) brightness(84%) contrast(88%);
+  --filter-4986E7: invert(47%) sepia(62%) saturate(635%) hue-rotate(179deg) brightness(95%) contrast(89%);
+  --filter-16A765: invert(73%) sepia(53%) saturate(6181%) hue-rotate(114deg) brightness(85%) contrast(83%);
+  --filter-BBBBBB: invert(77%) sepia(7%) saturate(0%) hue-rotate(187deg) brightness(94%) contrast(99%);
+
   --gradient-top: #FFFCFC;
   --gradient-mid: #F5F1E7;
   --gradient-bot: #F8EBCA;

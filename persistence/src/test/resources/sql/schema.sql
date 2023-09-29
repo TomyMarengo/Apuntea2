@@ -121,7 +121,7 @@ ALTER TABLE Notes ALTER COLUMN user_id SET NOT NULL;
 ALTER TABLE Directories ADD COLUMN IF NOT EXISTS visible boolean DEFAULT true NOT NULL;
 ALTER TABLE Directories ADD COLUMN IF NOT EXISTS created_at timestamp DEFAULT now() NOT NULL;
 ALTER TABLE Directories ADD COLUMN IF NOT EXISTS last_modified_at timestamp DEFAULT now() NOT NULL;
-ALTER TABLE Directories ADD COLUMN IF NOT EXISTS icon_color character varying(7) DEFAULT '#BBBBBB' NOT NULL;
+ALTER TABLE Directories ADD COLUMN IF NOT EXISTS icon_color character varying(7) DEFAULT 'BBBBBB' NOT NULL;
 -- For root directory validation
 ALTER TABLE Directories ADD CONSTRAINT IF NOT EXISTS "CK_root_directories" CHECK ((parent_id IS NULL AND user_id IS NULL) OR (parent_id IS NOT NULL AND user_id IS NOT NULL));
 

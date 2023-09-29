@@ -2,13 +2,10 @@ package ar.edu.itba.paw.webapp.forms;
 
 import ar.edu.itba.paw.webapp.validation.MaxFileSize;
 import ar.edu.itba.paw.webapp.validation.ValidFileName;
-import ar.edu.itba.paw.webapp.validation.ValidUuid;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
-import java.util.UUID;
 
 public class CreateNoteForm {
     @NotEmpty
@@ -21,6 +18,8 @@ public class CreateNoteForm {
     @NotEmpty
     @Pattern(regexp = "theory|practice|exam|other")
     private String category;
+
+    private boolean visible = true;
 
     public String getName() {
         return name;
@@ -45,5 +44,13 @@ public class CreateNoteForm {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 }

@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/color-picker.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href=
@@ -91,7 +92,8 @@
                 <c:forEach items="${root_directories}" var="rd">
                         <a href="<c:url value="./directory/${rd.id}"/>">
                             <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
-                                <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-xxl fill-text">
+                                <!-- TODO: REVISAR COLOR RD -->
+                                <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>" class="icon-xxl fill-${rd.iconColor}">
                                 <span class="fw-bold">
                                     <c:out value="${rd.name}"/>
                                 </span>
@@ -137,6 +139,8 @@
         crossorigin="anonymous"></script>
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>
+<script src="<c:url value="/js/color-picker.js"/>"></script>
+<script src="<c:url value="/js/global-search.js"/>"></script>
 
 </body>
 

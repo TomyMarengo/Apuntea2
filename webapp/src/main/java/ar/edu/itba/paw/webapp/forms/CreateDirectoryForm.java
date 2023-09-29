@@ -1,16 +1,20 @@
 package ar.edu.itba.paw.webapp.forms;
 
-import ar.edu.itba.paw.webapp.validation.ValidUuid;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
 public class CreateDirectoryForm {
     @NotEmpty
     @Size(min = 2, max = 50)
     private String name;
+
+    private boolean visible = true;
+
+    @Pattern(regexp = "(BBBBBB|16A765|4986E7|CD35A6)")
+    private String color;
 
     public String getName() {
         return name;
@@ -18,5 +22,21 @@ public class CreateDirectoryForm {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

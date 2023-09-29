@@ -188,7 +188,7 @@
     </div>
 </div>
 
-<!--UPDATE NOTE MODAL-->
+<!-- EDIT NOTE MODAL -->
 <c:url var="editUrl" value="./${noteId}"/>
 
 <div class="modal fade" id="editNoteModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -202,15 +202,15 @@
                         aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body pb-0">
-                <!-- EDIT NOTE FORM -->
-                <form:form modelAttribute="editNoteForm"
-                           action="${editUrl}"
-                           method="post"
-                           enctype="multipart/form-data"
-                           autocomplete="off"
-                           class="d-flex flex-column"
-                           id="editNoteForm">
+            <!-- EDIT NOTE FORM -->
+            <form:form modelAttribute="editNoteForm"
+                       action="${editUrl}"
+                       method="post"
+                       enctype="multipart/form-data"
+                       autocomplete="off"
+                       class="d-flex flex-column"
+                       id="editNoteForm">
+                <div class="modal-body pb-0">
 
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
@@ -263,17 +263,39 @@
                         <form:errors path="category" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <div class="modal-footer mt-4">
-                        <button type="button" class="btn rounded-box button-primary"
-                                data-bs-dismiss="modal">
-                            <spring:message code="close"/></button>
-                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="update"/>"/>
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="visible"><spring:message
+                                    code="privacy"/></label>
+                            <form:select path="visible" class="form-select" id="visible">
+                                <c:if test="${note.visible}">
+                                    <form:option value="true" selected="true"><spring:message
+                                            code="public"/></form:option>
+                                    <form:option value="false"><spring:message
+                                            code="private"/></form:option>
+                                </c:if>
+                                <c:if test="${!note.visible}">
+                                    <form:option value="true"><spring:message
+                                            code="public"/></form:option>
+                                    <form:option value="false" selected="true"><spring:message
+                                            code="private"/></form:option>
+                                </c:if>
+                            </form:select>
+                        </div>
+                        <form:errors path="visible" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <input type="hidden" name="redirectUrl" value="/notes/${noteId}"/>
-                </form:form>
-            </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button type="button" class="btn rounded-box button-primary"
+                            data-bs-dismiss="modal">
+                        <spring:message code="close"/></button>
+                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="update"/>"/>
+                </div>
+
+                <input type="hidden" name="redirectUrl" value="/notes/${noteId}"/>
+            </form:form>
         </div>
     </div>
 </div>
@@ -287,6 +309,7 @@
 <script src="<c:url value="/js/search-buttons.js"/>"></script>
 <script src="<c:url value="/js/crud-buttons.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
+<script src="<c:url value="/js/global-search.js"/>"></script>
 
 <c:if test="${errorsEditNoteForm != null}">
     <script>

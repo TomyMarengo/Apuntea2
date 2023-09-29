@@ -22,6 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Validated
@@ -73,6 +76,14 @@ public class DirectoryController {
         mav.addObject("results", pageResult.getContent());
         mav.addObject("directory", directory);
 
+
+        List<String> colors = new ArrayList<String>(); //TODO: Move this to a service/dao
+        colors.add("BBBBBB");
+        colors.add("16A765");
+        colors.add("4986E7");
+        colors.add("CD35A6");
+        mav.addObject("colors", colors);
+
         return mav;
     }
 
@@ -94,7 +105,7 @@ public class DirectoryController {
         }
 
         UUID dId = UUID.fromString(directoryId);
-        UUID childId = directoryService.create(createDirectoryForm.getName(), dId, true, "#BBBBBB");
+        UUID childId = directoryService.create(createDirectoryForm.getName(), dId, createDirectoryForm.getVisible(), createDirectoryForm.getColor());
         return new ModelAndView("redirect:/directory/" + dId);
     }
 
@@ -112,8 +123,7 @@ public class DirectoryController {
 
         UUID dId = UUID.fromString(directoryId);
         try {
-            //TODO: add visible attribute
-            UUID noteId = noteService.createNote(createNoteForm.getName(), dId, true, createNoteForm.getFile(), createNoteForm.getCategory());
+            UUID noteId = noteService.createNote(createNoteForm.getName(), dId, createNoteForm.getVisible(), createNoteForm.getFile(), createNoteForm.getCategory());
             return new ModelAndView("redirect:/notes/" + noteId);
         }
         catch (IOException e){
@@ -144,7 +154,7 @@ public class DirectoryController {
             redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_FORM_BINDING, result);
             redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_ID, directoryId);
         } else {
-            Directory directory = new Directory(directoryId, editDirectoryForm.getName(), true, "#BBBBBB");
+            Directory directory = new Directory(directoryId, editDirectoryForm.getName(), editDirectoryForm.getVisible(), editDirectoryForm.getColor());
             directoryService.update(directory);
         }
         return mav;

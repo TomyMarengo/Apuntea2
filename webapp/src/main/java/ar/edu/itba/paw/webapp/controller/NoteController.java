@@ -42,7 +42,6 @@ public class NoteController {
         return mav;
     }
 
-    //edit note with put method
     @RequestMapping(value = "/{noteId}", method = RequestMethod.POST)
     public ModelAndView editNote(@PathVariable("noteId") String noteId,
                                  @Valid @ModelAttribute final EditNoteForm editNoteForm,
@@ -52,7 +51,7 @@ public class NoteController {
             redirectAttributes.addFlashAttribute(EDIT_NOTE_FORM_BINDING, result);
             redirectAttributes.addFlashAttribute(EDIT_NOTE_ID, noteId);
         } else {
-            Note note = new Note(UUID.fromString(noteId), editNoteForm.getName(), Category.valueOf(editNoteForm.getCategory().toUpperCase()), true);
+            Note note = new Note(UUID.fromString(noteId), editNoteForm.getName(), Category.valueOf(editNoteForm.getCategory().toUpperCase()), editNoteForm.getVisible());
             noteService.update(note);
         }
         return mav;

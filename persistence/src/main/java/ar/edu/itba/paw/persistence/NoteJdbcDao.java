@@ -123,8 +123,8 @@ public class NoteJdbcDao implements NoteDao {
         args.addValue(CATEGORY, category.toLowerCase());
         args.addValue(FILE_TYPE, fileType);
         KeyHolder holder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, subject_id, user_id, parent_id, file,  category, file_type)  " +
-                        "SELECT :note_name, :subject_id, :user_id, d.directory_id, :file, :category, :file_type FROM Directories d " +
+        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, subject_id, user_id, parent_id, visible, file, category, file_type)  " +
+                        "SELECT :note_name, :subject_id, :user_id, d.directory_id, :visible, :file, :category, :file_type FROM Directories d " +
                         "WHERE d.directory_id = :parent_id AND (d.user_id = :user_id OR d.parent_id IS NULL)"
                 , args, holder, new String[]{NOTE_ID});
         return (UUID) holder.getKeys().get(NOTE_ID);

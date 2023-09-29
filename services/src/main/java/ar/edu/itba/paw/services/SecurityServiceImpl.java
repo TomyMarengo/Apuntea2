@@ -30,7 +30,7 @@ public class SecurityServiceImpl implements SecurityService{
     }
 
     // TODO: Clean cache when user logs out
-    @Cacheable(value = "currentUser",  unless = "#result == null || !#result.isPresent()")
+//    @Cacheable(value = "currentUser",  unless = "#result == null || !#result.isPresent()")
     @Override
     public Optional<User> getCurrentUser() {
         final Optional<String> mayBeEmail = getCurrentUserEmail();

@@ -34,18 +34,22 @@ const editNoteForm = document.getElementById('editNoteForm');
 const editDirectoryForm = document.getElementById('editDirectoryForm');
 
 function edit(id, error = false) {
-    const { category, name } = content.find(item => item.id === id);
+    const { category, name, visible, iconColor } = content.find(item => item.id === id);
 
     if (category === 'directory') {
         editDirectoryForm.action = `${baseUrl}/directory/${id}/`;
-        if(!error)
+        if(!error) {
             editDirectoryForm.querySelectorAll('#name')[0].value = name;
+            editDirectoryForm.querySelectorAll(`#color${iconColor}`)[0].checked = true;
+            editDirectoryForm.querySelectorAll('#visible')[0].value = visible;
+        }
     }
     else {
         editNoteForm.action = `${baseUrl}/notes/${id}/`;
         if(!error) {
             editNoteForm.querySelectorAll('#name')[0].value = name;
             editNoteForm.querySelectorAll('#categorySelect')[0].value = category;
+            editNoteForm.querySelectorAll('#visible')[0].value = visible;
         }
     }
 }

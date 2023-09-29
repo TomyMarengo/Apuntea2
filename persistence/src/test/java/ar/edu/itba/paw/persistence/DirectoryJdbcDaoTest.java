@@ -96,7 +96,7 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testCreate() {
-        UUID directoryId = directoryDao.create("Nueva basura", EDA_DIRECTORY_ID, PEPE_ID, true, "#BBBBBB");
+        UUID directoryId = directoryDao.create("Nueva basura", EDA_DIRECTORY_ID, PEPE_ID, true, "BBBBBB");
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + directoryId + "' AND directory_name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "' AND user_id = '" + PEPE_ID + "'"));
         JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "Directories", "user_id = '" + PEPE_ID + "' AND directory_name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "'");
     }

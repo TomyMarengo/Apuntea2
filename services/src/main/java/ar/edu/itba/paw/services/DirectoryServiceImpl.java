@@ -32,7 +32,7 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Transactional
     @Override
     public Optional<Directory> getDirectoryById(UUID directoryId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId(); // TODO: Allow not logged in users to see public directories
         return Optional.ofNullable(directoryDao.getDirectoryById(directoryId, currentUserId));
     }
 

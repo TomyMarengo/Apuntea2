@@ -25,7 +25,12 @@ for (let i = 0; i < rows.length / 2; i++) {
     const category = rows[i].getAttribute('data-category');
     let noteName = rows[i].querySelector('.note-name').textContent.trim();
     noteName = noteName.replace(/_/g, '');
-    content.push({ id: id, category: category, name: noteName })
+    const visible = rows[i].getAttribute('data-visible');
+    let item = { id: id, category: category, name: noteName, visible: visible };
+    if (category === 'directory') {
+        item = {...item, iconColor: rows[i].querySelector('.folder-icon').getAttribute('data-color')};
+    }
+    content.push(item);
 }
 
 rows.forEach((row, index) => {

@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/autocomplete.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/color-picker.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
@@ -241,7 +242,8 @@
                 <c:forEach var="item" items="${results}">
                     <c:set var="date" value="${item.createdAt}"/>
                     <tr class="note-found no-select"
-                        data-category="${item.category.formattedName}"
+                        data-category="<c:out value="${item.category.formattedName}"/>"
+                        data-visible="${item.visible}"
                         id="<c:out value="${item.id}"/>.1">
                         <td class="note-found-title">
                             <c:if test="${item.category.formattedName ne 'directory'}">
@@ -250,7 +252,9 @@
                                 </c:if>
                             </c:if>
                             <c:if test="${item.category.formattedName eq 'directory'}">
-                                <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}" class="icon-m fill-text">
+                                <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
+                                     data-color="${item.iconColor}"
+                                     class="icon-m fill-${item.iconColor} folder-icon">
                             </c:if>
                             <span class="card-title align-middle mx-2 note-name">
                                 <c:out value="${item.name}"/>
@@ -365,7 +369,7 @@
                                     </c:if>
                                     <c:if test="${item.category.formattedName eq 'directory'}">
                                         <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
-                                             class="icon-s fill-text">
+                                             class="icon-s fill-${item.iconColor}">
                                     </c:if>
                                     <h4 class="card-title text-truncate mb-0">
                                         <c:out value="${item.name}"/>
@@ -526,15 +530,16 @@
                         aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body pb-0">
-                <!-- CREATE NOTE FORM -->
-                <form:form modelAttribute="createNoteForm"
-                           action="${createUrl}"
-                           method="post"
-                           enctype="multipart/form-data"
-                           autocomplete="off"
-                           class="d-flex flex-column"
-                           id="createNoteForm">
+            <form:form modelAttribute="createNoteForm"
+                       action="${createUrl}"
+                       method="post"
+                       enctype="multipart/form-data"
+                       autocomplete="off"
+                       class="d-flex flex-column"
+                       id="createNoteForm">
+                <div class="modal-body pb-0">
+                    <!-- CREATE NOTE FORM -->
+
 
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
@@ -574,20 +579,34 @@
                         <form:errors path="category" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <input type="hidden" name="createNote" value="createNote"/> <!-- createNote -->
-
-                    <div class="modal-footer mt-4">
-                        <button type="button" class="btn rounded-box button-primary"
-                                data-bs-dismiss="modal">
-                            <spring:message code="close"/></button>
-                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="upload"/>"/>
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="visible"><spring:message
+                                    code="privacy"/></label>
+                            <form:select path="visible" class="form-select" id="visible">
+                                <form:option value="true"><spring:message
+                                        code="public"/></form:option>
+                                <form:option value="false"><spring:message
+                                        code="private"/></form:option>
+                            </form:select>
+                        </div>
+                        <form:errors path="visible" cssClass="text-danger" element="p"/>
                     </div>
-                </form:form>
-            </div>
+
+                    <input type="hidden" name="createNote" value="createNote"/> <!-- createNote -->
+                </div>
+                <div class="modal-footer mt-4">
+                    <button type="button" class="btn rounded-box button-primary"
+                            data-bs-dismiss="modal">
+                        <spring:message code="close"/></button>
+                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="upload"/>"/>
+                </div>
+            </form:form>
         </div>
     </div>
 </div>
+
 
 <!-- CREATE DIRECTORY MODAL -->
 <div class="modal fade" id="createDirectoryModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -601,15 +620,14 @@
                         aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body pb-0">
-                <!-- CREATE NOTE FORM -->
-                <form:form modelAttribute="createDirectoryForm"
-                           action="${createUrl}"
-                           method="post"
-                           enctype="multipart/form-data"
-                           autocomplete="off"
-                           class="d-flex flex-column"
-                           id="createDirectoryForm">
+            <form:form modelAttribute="createDirectoryForm"
+                       action="${createUrl}"
+                       method="post"
+                       enctype="multipart/form-data"
+                       autocomplete="off"
+                       class="d-flex flex-column"
+                       id="createDirectoryForm">
+                <div class="modal-body pb-0">
 
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
@@ -622,18 +640,47 @@
                         <form:errors path="name" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <input type="hidden" name="createDirectory" value="createDirectory"/> <!-- createNote -->
-
-                    <div class="modal-footer mt-4">
-                        <button type="button" class="btn rounded-box button-primary"
-                                data-bs-dismiss="modal">
-                            <spring:message code="close"/>
-                        </button>
-                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="upload"/>"/>
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="visible"><spring:message
+                                    code="privacy"/></label>
+                            <form:select path="visible" class="form-select" id="visible">
+                                <form:option value="true"><spring:message
+                                        code="public"/></form:option>
+                                <form:option value="false"><spring:message
+                                        code="private"/></form:option>
+                            </form:select>
+                        </div>
+                        <form:errors path="visible" cssClass="text-danger" element="p"/>
                     </div>
-                </form:form>
-            </div>
+
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <div class="input-group gap-3 d-flex align-items-center">
+                            <label class="input-group-text"><spring:message
+                                    code="color"/></label>
+                            <c:forEach var="color" items="${colors}">
+                                <div>
+                                    <form:radiobutton path="color" value="${color}" id="color${color}"
+                                                      cssClass="d-none color-radio"/>
+                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
+                                         class="color-option icon-m fill-${color} >"/>
+                                </div>
+                            </c:forEach>
+                            <form:errors path="color" cssClass="text-danger" element="p"/>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="createDirectory" value="createDirectory"/> <!-- createNote -->
+                </div>
+                <div class="modal-footer mt-4">
+                    <button type="button" class="btn rounded-box button-primary"
+                            data-bs-dismiss="modal">
+                        <spring:message code="close"/>
+                    </button>
+                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="upload"/>"/>
+                </div>
+            </form:form>
         </div>
     </div>
 </div>
@@ -654,15 +701,16 @@
                         aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body pb-0">
-                <!-- EDIT NOTE FORM -->
-                <form:form modelAttribute="editNoteForm"
-                           action="${editNoteUrl}"
-                           method="post"
-                           enctype="multipart/form-data"
-                           autocomplete="off"
-                           class="d-flex flex-column"
-                           id="editNoteForm">
+            <form:form modelAttribute="editNoteForm"
+                       action="${editNoteUrl}"
+                       method="post"
+                       enctype="multipart/form-data"
+                       autocomplete="off"
+                       class="d-flex flex-column"
+                       id="editNoteForm">
+                <div class="modal-body pb-0">
+                    <!-- EDIT NOTE FORM -->
+
 
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
@@ -681,7 +729,8 @@
                                     code="category"/></label>
                             <form:select path="category" class="form-select" id="categorySelect">
                                 <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                <form:option value="practice"><spring:message
+                                        code="category.practice"/></form:option>
                                 <form:option value="exam"><spring:message code="category.exam"/></form:option>
                                 <form:option value="other"><spring:message code="category.other"/></form:option>
                             </form:select>
@@ -689,20 +738,34 @@
                         <form:errors path="category" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <div class="modal-footer mt-4">
-                        <button type="button" class="btn rounded-box button-primary"
-                                data-bs-dismiss="modal">
-                            <spring:message code="close"/></button>
-                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="update"/>"/>
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="visible"><spring:message
+                                    code="privacy"/></label>
+                            <form:select path="visible" class="form-select" id="visible">
+                                <form:option value="true"><spring:message
+                                        code="public"/></form:option>
+                                <form:option value="false"><spring:message
+                                        code="private"/></form:option>
+                            </form:select>
+                        </div>
+                        <form:errors path="visible" cssClass="text-danger" element="p"/>
                     </div>
+                </div>
+                <div class="modal-footer mt-4">
+                    <button type="button" class="btn rounded-box button-primary"
+                            data-bs-dismiss="modal">
+                        <spring:message code="close"/></button>
+                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="update"/>"/>
+                </div>
 
-                    <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
-                </form:form>
-            </div>
+                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+            </form:form>
         </div>
     </div>
 </div>
+
 
 <!-- EDIT DIRECTORY MODAL-->
 <div class="modal fade" id="editDirectoryModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -716,16 +779,15 @@
                         aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body pb-0">
-                <!-- EDIT DIRECTORY FORM -->
-
-                <form:form modelAttribute="editDirectoryForm"
-                           action=""
-                           method="post"
-                           enctype="multipart/form-data"
-                           autocomplete="off"
-                           class="d-flex flex-column"
-                           id="editDirectoryForm">
+            <form:form modelAttribute="editDirectoryForm"
+                       action=""
+                       method="post"
+                       enctype="multipart/form-data"
+                       autocomplete="off"
+                       class="d-flex flex-column"
+                       id="editDirectoryForm">
+                <div class="modal-body pb-0">
+                    <!-- EDIT DIRECTORY FORM -->
 
 
                     <div class="d-flex flex-column gap-2">
@@ -740,18 +802,49 @@
                         <form:errors path="name" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <div class="modal-footer mt-4">
-                        <button type="button" class="btn rounded-box button-primary"
-                                data-bs-dismiss="modal">
-                            <spring:message code="close"/></button>
-                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="update"/>"/>
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <div class="input-group">
+                            <label class="input-group-text" for="visible"><spring:message
+                                    code="privacy"/></label>
+                            <form:select path="visible" class="form-select" id="visible">
+                                <form:option value="true"><spring:message
+                                        code="public"/></form:option>
+                                <form:option value="false"><spring:message
+                                        code="private"/></form:option>
+                            </form:select>
+                        </div>
+                        <form:errors path="visible" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+                    <div class="d-flex flex-column gap-2 mt-4">
+                        <div class="input-group gap-3 d-flex align-items-center">
+                            <label class="input-group-text"><spring:message
+                                    code="color"/></label>
+                            <c:forEach var="color" items="${colors}">
+                                <div>
+                                    <form:radiobutton path="color" value="${color}" id="color${color}"
+                                                      cssClass="d-none color-radio"/>
+                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
+                                         class="color-option icon-m fill-${color}"/>
+                                </div>
+                            </c:forEach>
+                            <form:errors path="color" cssClass="text-danger" element="p"/>
+                        </div>
+                    </div>
+                </div>
 
-                </form:form>
-            </div>
+                <div class="modal-footer mt-4">
+                    <button type="button" class="btn rounded-box button-primary"
+                            data-bs-dismiss="modal">
+                        <spring:message code="close"/></button>
+                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                            code="update"/>"/>
+                </div>
+
+                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+
+            </form:form>
+
         </div>
     </div>
 </div>
@@ -772,7 +865,6 @@
             <form:form id="deleteForm" method="POST" action="${deleteUrl}">
                 <div class="modal-body pb-0">
                     <spring:message code="DeleteForm.description"/>
-
                     <!-- DYNAMICALLY ADDED INPUTS -->
                 </div>
 
@@ -800,12 +892,14 @@
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
+<script src="<c:url value="/js/color-picker.js"/>"></script>
 <c:if test="${not empty results}">
     <script src="<c:url value="/js/note-list.js"/>"></script>
     <script src="<c:url value="/js/search-buttons.js"/>"></script>
     <script src="<c:url value="/js/crud-buttons.js"/>"></script>
     <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
+<script src="<c:url value="/js/global-search.js"/>"></script>
 
 <c:if test="${errorsEditNoteForm != null}">
     <script>
