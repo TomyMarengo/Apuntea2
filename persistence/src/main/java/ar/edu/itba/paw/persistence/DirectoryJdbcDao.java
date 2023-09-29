@@ -80,7 +80,14 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
     @Override
     public Directory getDirectoryById(UUID directoryId, UUID currentUserId) {
-        return jdbcTemplate.queryForObject("SELECT * FROM Directories WHERE directory_id = ? AND (visible OR user_id = ?)", ROW_MAPPER, directoryId, currentUserId);
+        MapSqlParameterSource args = new MapSqlParameterSource(DIRECTORY_ID, directoryId);
+        return namedParameterJdbcTemplate.queryForObject("SELECT * FROM Directories WHERE directory_id = :directory_id AND (visible " + getVisibilityCondition(currentUserId, args) + ")",
+                args, ROW_MAPPER);
+    }
+
+    private String getVisibilityCondition(UUID currentUserId, MapSqlParameterSource args) {
+        if (currentUserId != null) args.addValue(USER_ID, currentUserId);
+        return currentUserId != null? "OR user_id = :user_id" : "";
     }
 
     @Override

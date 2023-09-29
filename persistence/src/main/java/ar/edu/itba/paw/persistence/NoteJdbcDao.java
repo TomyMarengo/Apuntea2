@@ -132,21 +132,25 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public Optional<Note> getNoteById(UUID noteId, UUID currentUserId) {
-        return jdbcTemplate.query(
-                "SELECT DISTINCT n.note_id, n.note_name, n.parent_id, n.category, n.created_at, n.last_modified_at, n.visible, COALESCE(AVG(r.score), 0) AS avg_score, n.file_type, " +
+        MapSqlParameterSource args = new MapSqlParameterSource(NOTE_ID, noteId);
+        String query = "SELECT DISTINCT n.note_id, n.note_name, n.parent_id, n.category, n.created_at, n.last_modified_at, n.visible, COALESCE(AVG(r.score), 0) AS avg_score, n.file_type, " +
                         "u.user_id, u.email, " +
                         "s.subject_id, s.subject_name, s.root_directory_id " +
                         "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id JOIN Users u ON n.user_id = u.user_id " +
-                        "WHERE n.note_id = ? AND ( n.visible OR n.user_id = ? ) GROUP BY n.note_id, u.user_id, s.subject_id",
-                ROW_MAPPER,
-                noteId, currentUserId
-        ).stream().findFirst();
+                        "WHERE n.note_id = :note_id AND ( n.visible " + getVisibilityCondition(currentUserId, args) + ") GROUP BY n.note_id, u.user_id, s.subject_id";
+        return namedParameterJdbcTemplate.query(query, args, ROW_MAPPER).stream().findFirst();
     }
 
     @Override
     public Optional<byte[]> getNoteFileById(UUID noteId, UUID currentUserId){
-        return jdbcTemplate.query("SELECT file FROM Notes WHERE note_id = ?  AND ( visible OR user_id = ? )",
-                (rs, rowNum) -> (byte[]) rs.getObject(FILE), noteId, currentUserId).stream().findFirst();
+        MapSqlParameterSource args = new MapSqlParameterSource(NOTE_ID, noteId);
+        return namedParameterJdbcTemplate.query("SELECT file FROM Notes WHERE note_id = :note_id AND ( visible " + getVisibilityCondition(currentUserId, args) + ")",
+                args, (rs, rowNum) -> (byte[]) rs.getObject(FILE)).stream().findFirst();
+    }
+
+    private String getVisibilityCondition(UUID currentUserId, MapSqlParameterSource args) {
+        if (currentUserId != null) args.addValue(USER_ID, currentUserId);
+        return currentUserId != null? "OR user_id = :user_id" : "";
     }
 
     // TODO: Make transactional again

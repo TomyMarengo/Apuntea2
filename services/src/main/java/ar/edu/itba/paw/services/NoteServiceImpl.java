@@ -50,14 +50,14 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        return noteDao.getNoteById(noteId, currentUserId);
+        final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
+        return noteDao.getNoteById(noteId, userId);
     }
 
     @Override
     public Optional<byte[]> getNoteFileById(UUID noteId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        return noteDao.getNoteFileById(noteId, currentUserId);
+        final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
+        return noteDao.getNoteFileById(noteId, userId);
     }
 
     @Transactional

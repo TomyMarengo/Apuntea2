@@ -73,7 +73,6 @@ public class NoteController {
     @RequestMapping( value = "/{noteId}/download", method = {RequestMethod.GET}, produces = {"application/pdf"} ) // TODO: change
     @ResponseBody
     public byte[] getNoteFile(@PathVariable("noteId") String noteId) {
-//        return noteService.getNoteById(noteId).orElseThrow(NoteNotFoundException::new).getBytes();
         return noteService.getNoteFileById(UUID.fromString(noteId)).orElseThrow(NoteNotFoundException::new);
     }
 
