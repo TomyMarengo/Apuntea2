@@ -2,9 +2,11 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Note;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
+import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.forms.EditNoteForm;
 import ar.edu.itba.paw.webapp.forms.ReviewForm;
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
@@ -25,11 +27,13 @@ import java.util.UUID;
 public class NoteController {
     private final NoteService noteService;
     private final DirectoryService directoryService;
+    private final SecurityService securityService;
 
     @Autowired
-    public NoteController(NoteService noteService, DirectoryService directoryService) {
+    public NoteController(NoteService noteService, DirectoryService directoryService, SecurityService securityService) {
         this.noteService = noteService;
         this.directoryService = directoryService;
+        this.securityService = securityService;
     }
 
     @RequestMapping(value = "/{noteId}", method = RequestMethod.GET)
@@ -44,6 +48,9 @@ public class NoteController {
         mav.addObject("reviews", noteService.getReviews(UUID.fromString(noteId)));
 
         mav.addObject("hierarchy", directoryService.getDirectoryPath(note.getParentId()));
+
+        User user = securityService.getCurrentUser().orElse(null);
+        mav.addObject("user", user);
         return mav;
     }
 

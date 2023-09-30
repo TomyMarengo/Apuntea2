@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Directory;
 import ar.edu.itba.paw.models.DirectoryPath;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface DirectoryDao {
@@ -11,7 +12,7 @@ public interface DirectoryDao {
     DirectoryPath getDirectoryPath(UUID directoryId);
 
     boolean update(Directory directory, UUID currentUserId);
-    Directory getDirectoryById(UUID directoryId, UUID currentUserId);
+    Optional<Directory> getDirectoryById(UUID directoryId, UUID currentUserId);
 
     boolean deleteMany(UUID[] directoryIds, UUID currentUserId);
 

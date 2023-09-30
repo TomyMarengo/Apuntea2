@@ -6,23 +6,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class CreateDirectoryForm {
-    @NotEmpty
-    @Size(min = 2, max = 50)
-    private String name;
+public class CreateDirectoryForm extends CreateSearchableForm {
 
     private boolean visible = true;
 
     @Pattern(regexp = "(BBBBBB|16A765|4986E7|CD35A6)")
-    private String color;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    private String color = "BBBBBB";
 
     public Boolean getVisible() {
         return visible;

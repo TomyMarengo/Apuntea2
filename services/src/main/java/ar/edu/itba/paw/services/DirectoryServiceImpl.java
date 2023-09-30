@@ -34,7 +34,7 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Override
     public Optional<Directory> getDirectoryById(UUID directoryId) {
         UUID currentUserId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
-        return Optional.ofNullable(directoryDao.getDirectoryById(directoryId, currentUserId));
+        return directoryDao.getDirectoryById(directoryId, currentUserId);
     }
 
     @Transactional

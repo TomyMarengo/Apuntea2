@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.exceptions.DirectoryNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SearchService;
+import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.forms.*;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
@@ -22,9 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 @Validated
@@ -34,14 +32,16 @@ public class DirectoryController {
     private final DirectoryService directoryService;
     private final NoteService noteService;
     private final SearchService searchService;
+    private final SecurityService securityService;
 
     private	static	final Logger LOGGER	= LoggerFactory.getLogger(DirectoryController.class);
 
     @Autowired
-    public DirectoryController(DirectoryService directoryService, NoteService noteService, SearchService searchService) {
+    public DirectoryController(DirectoryService directoryService, NoteService noteService, SearchService searchService, SecurityService securityService) {
         this.directoryService = directoryService;
         this.noteService = noteService;
         this.searchService = searchService;
+        this.securityService = securityService;
     }
 
     @RequestMapping(value = "/{directoryId}" ,method = RequestMethod.GET)
@@ -76,15 +76,10 @@ public class DirectoryController {
         mav.addObject("results", pageResult.getContent());
         mav.addObject("directory", directory);
 
-
-        List<String> colors = new ArrayList<String>(); //TODO: Move this to a service/dao
-        colors.add("BBBBBB");
-        colors.add("16A765");
-        colors.add("4986E7");
-        colors.add("CD35A6");
-        mav.addObject("colors", colors);
-
         mav.addObject("hierarchy", directoryService.getDirectoryPath(dId));
+
+        User user = securityService.getCurrentUser().orElse(null);
+        mav.addObject("user", user);
 
         return mav;
     }

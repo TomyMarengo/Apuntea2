@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -65,6 +65,13 @@ public class SearchServiceImpl implements SearchService {
                 sa.getPageSize(),
                 searchDao.countNavigationResults(sa, parentId)
         );
+    }
+
+    @Transactional
+    @Override
+    public Optional<UUID> findByName(UUID parentId, String name) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        return searchDao.findByName(parentId, name, currentUserId);
     }
 
 }

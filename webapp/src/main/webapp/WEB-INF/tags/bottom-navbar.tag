@@ -42,9 +42,11 @@
                 </div>
             </a>
         </c:if>
-        <div class="bottom-navbar-separator overflow-hidden">
-            <spring:message code="navbar.bottom.separator"/>
-        </div>
+        <c:if test="${title != null}">
+            <div class="bottom-navbar-separator overflow-hidden">
+                <spring:message code="navbar.bottom.separator"/>
+            </div>
+        </c:if>
     </c:if>
 
     <c:if test="${title != null}">

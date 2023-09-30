@@ -7,23 +7,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 
-public class CreateNoteForm {
-    @NotEmpty
-    @Size(min = 2, max = 50)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
-    private String name;
+
+public class CreateNoteForm extends CreateSearchableForm {
+
     @ValidFileName(allowedExtensions = {".pdf"}) // TODO: Add more extensions
     @MaxFileSize(megabytes = 500)
     private MultipartFile file;
     @NotEmpty
     @Pattern(regexp = "theory|practice|exam|other")
     private String category;
-
     private boolean visible = true;
-
-    public String getName() {
-        return name;
-    }
 
     public MultipartFile getFile() {
         return file;
@@ -31,11 +24,6 @@ public class CreateNoteForm {
 
     public String getCategory() {
         return category;
-    }
-
-    // All setters
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setFile(MultipartFile file) {
@@ -53,4 +41,5 @@ public class CreateNoteForm {
     public void setVisible(Boolean visible) {
         this.visible = visible;
     }
+
 }

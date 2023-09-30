@@ -12,4 +12,5 @@ public interface SearchDao {
     List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId);
     int countSearchResults(SearchArguments sa);
     int countNavigationResults(SearchArguments sa, UUID parentId);
+    Optional<UUID> findByName(UUID parentId, String name, UUID currentUserId);
 }

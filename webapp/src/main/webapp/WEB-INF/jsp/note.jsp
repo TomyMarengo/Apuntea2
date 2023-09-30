@@ -48,14 +48,16 @@
             <div class="d-flex justify-content-between">
                 <h1 class="overflow-hidden">${note.name}</h1>
                 <div class="d-flex">
-                    <span data-bs-toggle="tooltip" data-bs-placement="bottom"
-                          data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                        <button id="editNoteModalButton" class="btn nav-icon-button" data-bs-toggle="modal"
-                                data-bs-target="#editNoteModal">
-                            <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>"
-                                 class="icon-s fill-text">
-                        </button>
-                    </span>
+                    <c:if test="${user ne null and note.user.userId eq user.userId}">
+                        <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                              data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                            <button id="editNoteModalButton" class="btn nav-icon-button" data-bs-toggle="modal"
+                                    data-bs-target="#editNoteModal">
+                                <img src="<c:url value="/svg/pencil.svg"/>" alt="<spring:message code="edit"/>"
+                                     class="icon-s fill-text">
+                            </button>
+                        </span>
+                    </c:if>
                     <a href="./${note.id}/download" download="${note.name}">
                         <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
@@ -189,116 +191,86 @@
 </div>
 
 <!-- EDIT NOTE MODAL -->
-<c:url var="editUrl" value="./${noteId}"/>
+<c:if test="${user eq null or note.user.userId eq user.userId}">
+    <c:url var="editUrl" value="./${noteId}"/>
 
-<div class="modal fade" id="editNoteModal" data-bs-backdrop="static" data-bs-keyboard="false"
-     tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content box bg-bg">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editLabel"><spring:message
-                        code="editNote"/></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                </button>
-            </div>
-            <!-- EDIT NOTE FORM -->
-            <form:form modelAttribute="editNoteForm"
-                       action="${editUrl}"
-                       method="post"
-                       enctype="multipart/form-data"
-                       autocomplete="off"
-                       class="d-flex flex-column"
-                       id="editNoteForm">
-                <div class="modal-body pb-0">
+    <div class="modal fade" id="editNoteModal" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content box bg-bg">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editLabel"><spring:message
+                            code="editNote"/></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
+                <!-- EDIT NOTE FORM -->
+                <form:form modelAttribute="editNoteForm"
+                           action="${editUrl}"
+                           method="post"
+                           enctype="multipart/form-data"
+                           autocomplete="off"
+                           class="d-flex flex-column"
+                           id="editNoteForm">
+                    <div class="modal-body pb-0">
 
-                    <div class="d-flex flex-column gap-2">
-                        <div class="input-group">
-                            <label class="input-group-text" for="name"><spring:message
-                                    code="name"/></label>
-                            <form:input path="name" type="text" value="${note.name}"
-                                        aria-label="<spring:message code=\"form.upload.name\"/>"
-                                        class="form-control" id="name"/>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="input-group">
+                                <label class="input-group-text" for="name"><spring:message
+                                        code="name"/></label>
+                                <form:input path="name" type="text"
+                                            aria-label="<spring:message code=\"form.upload.name\"/>"
+                                            class="form-control" id="name"/>
+                            </div>
+                            <form:errors path="name" cssClass="text-danger" element="p"/>
+                            <form:errors cssClass="text-danger" element="p"/> <!-- Global errors -->
                         </div>
-                        <form:errors path="name" cssClass="text-danger" element="p"/>
-                    </div>
 
-                    <div class="d-flex flex-column gap-2 mt-4">
-                        <div class="input-group">
-                            <label class="input-group-text" for="categorySelect"><spring:message
-                                    code="category"/></label>
-                            <form:select path="category" class="form-select" id="categorySelect">
-                                <c:if test="${note.category.formattedName eq 'theory'}">
-                                    <form:option value="theory" selected="true"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message
-                                            code="category.practice"/></form:option>
+                        <div class="d-flex flex-column gap-2 mt-4">
+                            <div class="input-group">
+                                <label class="input-group-text" for="categorySelect"><spring:message
+                                        code="category"/></label>
+                                <form:select path="category" class="form-select" id="categorySelect">
+                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
+                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
                                     <form:option value="exam"><spring:message code="category.exam"/></form:option>
                                     <form:option value="other"><spring:message code="category.other"/></form:option>
-                                </c:if>
-                                <c:if test="${note.category.formattedName eq 'practice'}">
-                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice" selected="true"><spring:message
-                                            code="category.practice"/></form:option>
-                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
-                                    <form:option value="other"><spring:message code="category.other"/></form:option>
-                                </c:if>
-                                <c:if test="${note.category.formattedName eq 'exam'}">
-                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message
-                                            code="category.practice"/></form:option>
-                                    <form:option value="exam" selected="true"><spring:message
-                                            code="category.exam"/></form:option>
-                                    <form:option value="other"><spring:message code="category.other"/></form:option>
-                                </c:if>
-                                <c:if test="${note.category.formattedName eq 'other'}">
-                                    <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message
-                                            code="category.practice"/></form:option>
-                                    <form:option value="exam"><spring:message code="category.exam"/></form:option>
-                                    <form:option value="other" selected="true"><spring:message
-                                            code="category.other"/></form:option>
-                                </c:if>
-                            </form:select>
+                                </form:select>
+                            </div>
+                            <form:errors path="category" cssClass="text-danger" element="p"/>
                         </div>
-                        <form:errors path="category" cssClass="text-danger" element="p"/>
-                    </div>
 
-                    <div class="d-flex flex-column gap-2 mt-4">
-                        <div class="input-group">
-                            <label class="input-group-text" for="visible"><spring:message
-                                    code="privacy"/></label>
-                            <form:select path="visible" class="form-select" id="visible">
-                                <c:if test="${note.visible}">
-                                    <form:option value="true" selected="true"><spring:message
+                        <div class="d-flex flex-column gap-2 mt-4">
+                            <div class="input-group">
+                                <label class="input-group-text" for="visible"><spring:message
+                                        code="privacy"/></label>
+                                <form:select path="visible" class="form-select" id="visible">
+                                    <form:option value="true"><spring:message
                                             code="public"/></form:option>
                                     <form:option value="false"><spring:message
                                             code="private"/></form:option>
-                                </c:if>
-                                <c:if test="${!note.visible}">
-                                    <form:option value="true"><spring:message
-                                            code="public"/></form:option>
-                                    <form:option value="false" selected="true"><spring:message
-                                            code="private"/></form:option>
-                                </c:if>
-                            </form:select>
+                                </form:select>
+                            </div>
+                            <form:errors path="visible" cssClass="text-danger" element="p"/>
                         </div>
-                        <form:errors path="visible" cssClass="text-danger" element="p"/>
+
                     </div>
-
-                </div>
-                <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
-                            data-bs-dismiss="modal">
-                        <spring:message code="close"/></button>
-                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="update"/>"/>
-                </div>
-
-                <input type="hidden" name="redirectUrl" value="/notes/${noteId}"/>
-            </form:form>
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn rounded-box button-primary"
+                                data-bs-dismiss="modal">
+                            <spring:message code="close"/></button>
+                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                                code="update"/>"/>
+                    </div>
+                    <input type="hidden" name="id" value="${note.id}"/>
+                    <input type="hidden" name="parentId" value="${note.parentId}"/>
+                    <input type="hidden" name="redirectUrl" value="/notes/${noteId}"/>
+                </form:form>
+            </div>
         </div>
     </div>
-</div>
+</c:if>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -311,11 +283,20 @@
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>
 
-<c:if test="${errorsEditNoteForm != null}">
-    <script>
-        const editNoteModalButton = document.getElementById('editNoteModalButton');
-        editNoteModalButton.click()
-    </script>
+<c:if test="${user eq null or note.user.userId eq user.userId}">
+    <c:if test="${errorsEditNoteForm != null}">
+        <script>
+            const editNoteModalButton = document.getElementById('editNoteModalButton');
+            editNoteModalButton.click()
+        </script>
+    </c:if>
+    <c:if test="${errorsEditNoteForm == null}">
+        <script>
+            editNoteForm.querySelectorAll('#name')[0].value = "<c:out value="${note.name}"/>";
+            editNoteForm.querySelectorAll('#categorySelect')[0].value =  "<c:out value="${note.category}"/>";
+            editNoteForm.querySelectorAll('#visible')[0].value =  "<c:out value="${note.visible}"/>";
+        </script>
+    </c:if>
 </c:if>
 
 </body>

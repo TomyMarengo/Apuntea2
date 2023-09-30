@@ -24,12 +24,30 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
     private final SimpleJdbcInsert jdbcInsert;
 
-    private static final RowMapper<Directory> ROW_MAPPER = (rs, rowNum)  ->
-        new Directory(
+    private static final RowMapper<Directory> LIMITED_ROW_MAPPER = (rs, rowNum)  ->
+            new Directory(
+                    UUID.fromString(rs.getString(DIRECTORY_ID)),
+                    rs.getString(DIRECTORY_NAME),
+                    rs.getString(PARENT_ID) != null?  UUID.fromString(rs.getString(PARENT_ID)) : null
+            );
+
+    private static final RowMapper<Directory> ROW_MAPPER = (rs, rowNum) -> {
+        String userId = rs.getString(USER_ID);
+        String parentId = rs.getString(PARENT_ID);
+        return new Directory(
                 UUID.fromString(rs.getString(DIRECTORY_ID)),
                 rs.getString(DIRECTORY_NAME),
-                rs.getString(PARENT_ID) != null?  UUID.fromString(rs.getString(PARENT_ID)) : null
+                userId != null ? new User(
+                        UUID.fromString(userId),
+                        rs.getString(EMAIL)
+                ) : null,
+                parentId != null ?  UUID.fromString(parentId) : null,
+                rs.getTimestamp(CREATED_AT).toLocalDateTime(),
+                rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
+                rs.getBoolean(VISIBLE),
+                rs.getString(ICON_COLOR)
         );
+    };
 
     private static final RowMapper<Directory> ROW_MAPPER_WITH_SUBJECT = (rs, rowNum)  -> {
         String subjectId = rs.getString(SUBJECT_ID);
@@ -79,15 +97,15 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
-    public Directory getDirectoryById(UUID directoryId, UUID currentUserId) {
+    public Optional<Directory> getDirectoryById(UUID directoryId, UUID currentUserId) {
         MapSqlParameterSource args = new MapSqlParameterSource(DIRECTORY_ID, directoryId);
-        return namedParameterJdbcTemplate.queryForObject("SELECT * FROM Directories WHERE directory_id = :directory_id AND (visible " + getVisibilityCondition(currentUserId, args) + ")",
-                args, ROW_MAPPER);
+        return namedParameterJdbcTemplate.query("SELECT d.*, u.user_id, u.email FROM Directories d LEFT JOIN Users u ON d.user_id = u.user_id WHERE directory_id = :directory_id AND (visible " + getVisibilityCondition(currentUserId, args) + ")",
+                args, ROW_MAPPER).stream().findFirst();
     }
 
     private String getVisibilityCondition(UUID currentUserId, MapSqlParameterSource args) {
         if (currentUserId != null) args.addValue(USER_ID, currentUserId);
-        return currentUserId != null? "OR user_id = :user_id" : "";
+        return currentUserId != null? "OR d.user_id = :user_id" : "";
     }
 
     @Override
@@ -131,7 +149,7 @@ public class DirectoryJdbcDao implements DirectoryDao {
                 "INNER JOIN Subjects_Careers sc ON sc.subject_id = s.subject_id " +
                 "INNER JOIN Careers c ON c.career_id = sc.career_id " +
                 "WHERE c.career_id = ? " +
-                "GROUP BY d.directory_id", ROW_MAPPER, careerId);
+                "GROUP BY d.directory_id", LIMITED_ROW_MAPPER, careerId);
     }
 
 }

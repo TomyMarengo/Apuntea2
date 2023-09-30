@@ -2,28 +2,36 @@
 /******* DELETE ALL *******/
 /*************************/
 
-document.getElementById('openDeleteSelectedModalButton').addEventListener('click', function () {
-    const deleteForm = document.getElementById('deleteForm');
+const openDeleteSelectedModalButton = document.getElementById('openDeleteSelectedModalButton');
 
-    const existingInputs = deleteForm.querySelectorAll('input[name^="directoryIds"], input[name^="noteIds"]');
-    existingInputs.forEach(input => {
-        deleteForm.removeChild(input);
+if (openDeleteSelectedModalButton) {
+    openDeleteSelectedModalButton.addEventListener('click', function () {
+        const deleteForm = document.getElementById('deleteForm');
+
+        const existingInputs = deleteForm.querySelectorAll('input[name^="directoryIds"], input[name^="noteIds"]');
+        existingInputs.forEach(input => {
+            deleteForm.removeChild(input);
+        });
+
+        selectedRowIds.forEach(itemId => {
+            const {id, category} = content.find(item => item.id === itemId);
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = category === 'directory' ? 'directoryIds' : 'noteIds';
+            input.value = id;
+            deleteForm.appendChild(input);
+        });
     });
+}
 
-    selectedRowIds.forEach(itemId => {
-        const {id, category} = content.find(item => item.id === itemId);
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = category === 'directory' ? 'directoryIds' : 'noteIds';
-        input.value = id;
-        deleteForm.appendChild(input);
+const deleteSelectedButton = document.getElementById('deleteSelectedButton');
+
+if (deleteSelectedButton) {
+    deleteSelectedButton.addEventListener('click', function () {
+        // Submit the form when the "Delete" button in the modal is clicked
+        document.getElementById('deleteForm').submit();
     });
-});
-
-document.getElementById('deleteSelectedButton').addEventListener('click', function () {
-    // Submit the form when the "Delete" button in the modal is clicked
-    document.getElementById('deleteForm').submit();
-});
+}
 
 
 /**************************/
@@ -39,6 +47,7 @@ function edit(id, error = false) {
     if (category === 'directory') {
         editDirectoryForm.action = `${baseUrl}/directory/${id}/`;
         if(!error) {
+            editDirectoryForm.querySelectorAll('#directoryId')[0].value = id;
             editDirectoryForm.querySelectorAll('#name')[0].value = name;
             editDirectoryForm.querySelectorAll(`#color${iconColor}`)[0].checked = true;
             editDirectoryForm.querySelectorAll('#visible')[0].value = visible;
@@ -47,6 +56,7 @@ function edit(id, error = false) {
     else {
         editNoteForm.action = `${baseUrl}/notes/${id}/`;
         if(!error) {
+            editNoteForm.querySelectorAll('#noteId')[0].value = id;
             editNoteForm.querySelectorAll('#name')[0].value = name;
             editNoteForm.querySelectorAll('#categorySelect')[0].value = category;
             editNoteForm.querySelectorAll('#visible')[0].value = visible;

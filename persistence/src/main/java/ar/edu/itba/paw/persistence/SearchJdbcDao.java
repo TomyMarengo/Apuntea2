@@ -170,6 +170,14 @@ public class SearchJdbcDao implements SearchDao {
         return jdbcTemplate.queryForObject(query.toString(), args.toArray(), Integer.class);
     }
 
+    @Override
+    public Optional<UUID> findByName(UUID parentId, String name, UUID currentUserId) {
+       return jdbcTemplate.query("SELECT id FROM Navigation WHERE name = ? AND parent_id = ? AND user_id = ?",
+                new Object[]{name, parentId, currentUserId}, (rs, rowNum) -> UUID.fromString(rs.getString(ID)))
+                .stream()
+                .findFirst();
+    }
+
     private void applyInstitutionFilters(StringBuilder query, List<Object> args, SearchArguments sa) {
         addIfPresent(query, args,  INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
         addIfPresent(query, args,  CAREER_ID, "=", "AND", sa.getCareerId());
