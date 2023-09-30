@@ -144,13 +144,13 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     public Optional<byte[]> getNoteFileById(UUID noteId, UUID currentUserId){
         MapSqlParameterSource args = new MapSqlParameterSource(NOTE_ID, noteId);
-        return namedParameterJdbcTemplate.query("SELECT file FROM Notes WHERE note_id = :note_id AND ( visible " + getVisibilityCondition(currentUserId, args) + ")",
+        return namedParameterJdbcTemplate.query("SELECT file FROM Notes n WHERE note_id = :note_id AND ( visible " + getVisibilityCondition(currentUserId, args) + ")",
                 args, (rs, rowNum) -> (byte[]) rs.getObject(FILE)).stream().findFirst();
     }
 
     private String getVisibilityCondition(UUID currentUserId, MapSqlParameterSource args) {
         if (currentUserId != null) args.addValue(USER_ID, currentUserId);
-        return currentUserId != null? "OR user_id = :user_id" : "";
+        return currentUserId != null? "OR n.user_id = :user_id" : "";
     }
 
     // TODO: Make transactional again

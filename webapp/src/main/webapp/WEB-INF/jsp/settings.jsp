@@ -37,7 +37,7 @@
 
 <!-- BOTTOM-NAVBAR -->
 <spring:message code="settings.title" var="title"/>
-<fragment:bottom-navbar title="./settings:${title}" extraLinks=""/>
+<fragment:bottom-navbar title="./settings:${title}"/>
 
 
 <!-- CONFIGURATION -->

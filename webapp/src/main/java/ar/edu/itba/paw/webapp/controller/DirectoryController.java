@@ -84,6 +84,8 @@ public class DirectoryController {
         colors.add("CD35A6");
         mav.addObject("colors", colors);
 
+        mav.addObject("hierarchy", directoryService.getDirectoryPath(dId));
+
         return mav;
     }
 

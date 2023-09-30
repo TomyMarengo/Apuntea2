@@ -38,7 +38,7 @@
 
 <fragment:navbar/>
 
-<fragment:bottom-navbar title="./${directoryId}:${directory.name}" extraLinks=""/>
+<fragment:bottom-navbar hierarchy="${hierarchy}"/>
 
 <c:url var="createUrl" value="./${directoryId}"/>
 

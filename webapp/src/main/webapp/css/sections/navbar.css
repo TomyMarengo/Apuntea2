@@ -43,7 +43,6 @@
 .bottom-navbar {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
 	background-color: var(--primary);
 	border-top-right-radius: 15px;
 	border-bottom-right-radius: 15px;
@@ -53,6 +52,14 @@
 	padding: 0 30px;
 	margin-top: 1rem;
 	margin-bottom: 1rem;
+}
+
+.bottom-navbar-separator {
+	font-size: large;
+	font-weight: bold;
+	color: var(--dark-bg);
+	padding: 0 15px;
+	cursor: default;
 }
 
 .bottom-navbar-item {

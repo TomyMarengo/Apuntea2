@@ -40,7 +40,7 @@
 
 <!-- BOTTOM-NAVBAR -->
 <spring:message code="profile.title" var="title"/>
-<fragment:bottom-navbar title="./profile:${title}" extraLinks=""/>
+<fragment:bottom-navbar title="./profile:${title}"/>
 
 
 <!-- USER INFO & BUTTONS "VER" -->

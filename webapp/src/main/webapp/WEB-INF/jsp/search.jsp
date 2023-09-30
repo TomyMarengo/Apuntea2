@@ -41,7 +41,7 @@
 
 <!-- BOTTOM-NAVBAR -->
 <spring:message code="search.title" var="title"/>
-<fragment:bottom-navbar title="./search:${title}" extraLinks="">
+<fragment:bottom-navbar title="./search:${title}">
 </fragment:bottom-navbar>
 
 

@@ -37,7 +37,7 @@
 <!-- NAVBAR -->
 <fragment:navbar/>
 
-<fragment:bottom-navbar title="./${noteId}:${note.name}" extraLinks=""/>
+<fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}"/>
 
 <div class="container-fluid">
     <div class="row">
