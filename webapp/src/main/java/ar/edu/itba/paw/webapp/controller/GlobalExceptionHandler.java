@@ -14,7 +14,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({UserNotFoundException.class, NoteNotFoundException.class, DirectoryNotFoundException.class})
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
-    public ModelAndView noSuchUser() {
+    public ModelAndView notFound() {
         return new ModelAndView("/errors/404");
     }
 }

@@ -9,6 +9,8 @@ import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.forms.*;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
+
+import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ public class DirectoryController {
     }
 
     @RequestMapping(value = "/{directoryId}" ,method = RequestMethod.GET)
-    public ModelAndView getDirectory(@PathVariable("directoryId") String directoryId,
+    public ModelAndView getDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                      @ModelAttribute("navigationForm") NavigationForm navigationForm,
                                      final ModelMap model) {
 
@@ -59,11 +61,10 @@ public class DirectoryController {
         mav.addObject("editNoteId", model.get(EDIT_NOTE_ID));
         mav.addObject("editDirectoryId", model.get(EDIT_DIRECTORY_ID));
 
-        UUID dId = UUID.fromString(directoryId);
-        Directory directory = directoryService.getDirectoryById(dId).orElseThrow(DirectoryNotFoundException::new);
+        Directory directory = directoryService.getDirectoryById(directoryId).orElseThrow(DirectoryNotFoundException::new);
 
         Page<Searchable> pageResult = searchService.getNavigationResults(
-                dId,
+                directoryId,
                 navigationForm.getCategory(),
                 navigationForm.getWord(),
                 navigationForm.getSortBy(),
@@ -76,7 +77,7 @@ public class DirectoryController {
         mav.addObject("results", pageResult.getContent());
         mav.addObject("directory", directory);
 
-        mav.addObject("hierarchy", directoryService.getDirectoryPath(dId));
+        mav.addObject("hierarchy", directoryService.getDirectoryPath(directoryId));
 
         User user = securityService.getCurrentUser().orElse(null);
         mav.addObject("user", user);
@@ -91,7 +92,7 @@ public class DirectoryController {
     // If there is an error, redirect to /{directoryId} with the error
     // If there is no error, redirect to /notes/{noteId} or /directory/{directoryId} depending on which form was filled
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createDirectory")
-    public ModelAndView addDirectory(@PathVariable("directoryId") String directoryId,
+    public ModelAndView addDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                      @Valid @ModelAttribute final CreateDirectoryForm createDirectoryForm,
                                      final BindingResult result,
                                      final RedirectAttributes redirectAttributes)
@@ -101,13 +102,12 @@ public class DirectoryController {
             return new ModelAndView("redirect:/directory/" + directoryId);
         }
 
-        UUID dId = UUID.fromString(directoryId);
-        UUID childId = directoryService.create(createDirectoryForm.getName(), dId, createDirectoryForm.getVisible(), createDirectoryForm.getColor());
-        return new ModelAndView("redirect:/directory/" + dId);
+        UUID childId = directoryService.create(createDirectoryForm.getName(), directoryId, createDirectoryForm.getVisible(), createDirectoryForm.getColor());
+        return new ModelAndView("redirect:/directory/" + directoryId);
     }
 
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createNote")
-    public ModelAndView addNote(@PathVariable("directoryId") String directoryId,
+    public ModelAndView addNote(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                 @Valid @ModelAttribute final CreateNoteForm createNoteForm,
                                 final BindingResult result,
                                 final RedirectAttributes redirectAttributes)
@@ -118,13 +118,12 @@ public class DirectoryController {
             return new ModelAndView("redirect:/directory/" + directoryId);
         }
 
-        UUID dId = UUID.fromString(directoryId);
         try {
-            UUID noteId = noteService.createNote(createNoteForm.getName(), dId, createNoteForm.getVisible(), createNoteForm.getFile(), createNoteForm.getCategory());
+            UUID noteId = noteService.createNote(createNoteForm.getName(), directoryId, createNoteForm.getVisible(), createNoteForm.getFile(), createNoteForm.getCategory());
             return new ModelAndView("redirect:/notes/" + noteId);
         }
         catch (IOException e){
-            return new ModelAndView("redirect:/directory/" + directoryId); // TODO: Handle errors
+            return new ModelAndView("redirect:/errors/500");
         }
     }
 
@@ -133,7 +132,7 @@ public class DirectoryController {
                                       @RequestParam(required = false) UUID[] noteIds,
                                       @RequestParam String redirectUrl) {
 
-
+        // TODO: Validate redirectUrl?
         if (noteIds != null && noteIds.length > 0)
             noteService.deleteMany(noteIds);
         if (directoryIds != null && directoryIds.length > 0)
@@ -142,7 +141,7 @@ public class DirectoryController {
     }
 
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST)
-    public ModelAndView editDirectory(@PathVariable("directoryId") UUID directoryId,
+    public ModelAndView editDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                  @Valid @ModelAttribute final EditDirectoryForm editDirectoryForm,
                                  final BindingResult result, final RedirectAttributes redirectAttributes) {
 
