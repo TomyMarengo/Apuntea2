@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.InstitutionData;
 import ar.edu.itba.paw.models.Role;
+import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.services.DataService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Controller
 public class HomeController {
@@ -35,7 +37,9 @@ public class HomeController {
     @RequestMapping(value = "/")
     public ModelAndView index(@ModelAttribute("searchForm") final SearchForm searchForm) {
         // TODO: Remove index?
-        return new ModelAndView("redirect:search");
+        Optional<User> user = securityService.getCurrentUser();
+        return user.map(value -> new ModelAndView("redirect:search?institutionId=" + value.getInstitution().getInstitutionId() + "&careerId=" + value.getCareer().getCareerId()))
+                .orElseGet(() -> new ModelAndView("redirect:search"));
 
 //        ModelAndView mav = new ModelAndView("index");
 //
@@ -68,7 +72,7 @@ public class HomeController {
         if (errors.hasErrors()) {
             return registerForm(userForm);
         }
-        userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getInstitutionId(), userForm.getCareerId(), Role.ROLE_STUDENT);
+        userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getCareerId(), Role.ROLE_STUDENT);
         return new ModelAndView("redirect:/login");
     }
 }

@@ -7,6 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserDao {
-    void create(String email, String password, UUID institutionId, UUID careerId, String lang, Role role);
+    void create(String email, String password, UUID careerId, String lang, Role role);
     Optional<User> findByEmail(String email);
 }

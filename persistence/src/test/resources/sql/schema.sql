@@ -128,6 +128,9 @@ ALTER TABLE Directories ADD CONSTRAINT IF NOT EXISTS "CK_root_directories" CHECK
 ALTER TABLE Users ADD COLUMN IF NOT EXISTS profile_picture bytea;
 ALTER TABLE Users ADD COLUMN IF NOT EXISTS locale character varying(5) DEFAULT 'en' NOT NULL;
 ALTER TABLE Users ADD COLUMN IF NOT EXISTS career_id UUID REFERENCES Careers (career_id);
+ALTER TABLE Users DROP CONSTRAINT "FK_users_institutions";
+ALTER TABLE Users DROP COLUMN institution_id;
+
 
 --create view for notes and directories
 DROP VIEW IF EXISTS Navigation;

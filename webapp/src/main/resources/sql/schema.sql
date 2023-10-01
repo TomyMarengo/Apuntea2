@@ -132,7 +132,9 @@ ALTER TABLE Directories
 ALTER TABLE Users
     ADD COLUMN IF NOT EXISTS profile_picture bytea,
     ADD COLUMN IF NOT EXISTS locale character varying(5) DEFAULT 'en' NOT NULL,
-    ADD COLUMN IF NOT EXISTS career_id UUID REFERENCES Careers (career_id);
+    ADD COLUMN IF NOT EXISTS career_id UUID REFERENCES Careers (career_id),
+    DROP CONSTRAINT IF EXISTS "FK_users_institutions",
+    DROP COLUMN IF EXISTS institution_id;
 
 --create view for notes and directories
 CREATE OR REPLACE VIEW Navigation AS (

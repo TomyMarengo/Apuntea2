@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
 
 //    @Transactional
     @Override
-    public void create(String email, String password, UUID institutionId, UUID careerId, Role role) {
+    public void create(String email, String password, UUID careerId, Role role) {
         final String lang = LocaleContextHolder.getLocale().getLanguage();
-        userDao.create(email, passwordEncoder.encode(password), institutionId, careerId, lang, role);
+        userDao.create(email, passwordEncoder.encode(password), careerId, lang, role);
     }
 }

@@ -55,11 +55,10 @@ class UserJdbcDao implements UserDao{
     // TODO: Make transactional in 3rd sprint
 //    @Transactional
     @Override
-    public void create(final String email, final String password, final UUID institutionId, final UUID careerId, final String lang, final Role role){
+    public void create(final String email, final String password, final UUID careerId, final String lang, final Role role){
         final MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(EMAIL, email);
         args.addValue(PASSWORD, password);
-        args.addValue(INSTITUTION_ID, institutionId);
         args.addValue(CAREER_ID, careerId);
         args.addValue(LOCALE, lang);
 
@@ -67,10 +66,10 @@ class UserJdbcDao implements UserDao{
 
         // TODO: See if we can remove the try catch for the last sprint
         try {
-            namedParameterJdbcTemplate.update("INSERT INTO users (email, password, institution_id, career_id, locale) VALUES (:email, :password, :institution_id, :career_id, :locale)",
+            namedParameterJdbcTemplate.update("INSERT INTO users (email, password, career_id, locale) VALUES (:email, :password, :career_id, :locale)",
                     args, holder, new String[]{USER_ID} );
         } catch (DuplicateKeyException e) {
-            int rows = namedParameterJdbcTemplate.update("UPDATE users SET password = :password, institution_id = :institution_id, career_id = :career_id, locale = :locale WHERE email = :email AND password IS NULL",
+            int rows = namedParameterJdbcTemplate.update("UPDATE users SET password = :password, career_id = :career_id, locale = :locale WHERE email = :email AND password IS NULL",
                     args, holder, new String[]{USER_ID} );
             if (rows == 0) throw e;
         }

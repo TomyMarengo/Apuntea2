@@ -9,6 +9,6 @@ import java.util.UUID;
 public interface UserService {
     Optional<User> findByEmail(String email);
 
-    void create(String email, String password, UUID institutionId, UUID careerId, Role role);
+    void create(String email, String password, UUID careerId, Role role);
 
 }
