@@ -37,7 +37,7 @@
 <body>
 
 <!-- NAVBAR -->
-<fragment:navbar/>
+<fragment:navbar loggedin="${user != null}"/>
 
 <!-- BOTTOM-NAVBAR -->
 <spring:message code="search.title" var="title"/>
@@ -57,9 +57,9 @@
             <div class="col">
                 <select id="institutionSelect" style="display: none;">
                     <option disabled selected value></option>
-                    <c:forEach items="${institutions}" var="inst">
-                        <option value="<c:out value="${inst.institutionId}"/>"><c:out value="${inst.name}"/></option>
-                    </c:forEach>
+<%--                    <c:forEach items="${institutions}" var="inst">--%>
+<%--                        <option value="<c:out value="${inst.institutionId}"/>"><c:out value="${inst.name}"/></option>--%>
+<%--                    </c:forEach>--%>
                 </select>
 
                 <form:input path="institutionId" id="institutionId" style="display: none;"/>
@@ -76,9 +76,9 @@
             <div class="col">
                 <select id="careerSelect" style="display: none;">
                     <option disabled selected value></option>
-                    <c:forEach items="${careers}" var="career">
-                        <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>
-                    </c:forEach>
+<%--                    <c:forEach items="${careers}" var="career">--%>
+<%--                        <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>--%>
+<%--                    </c:forEach>--%>
                 </select>
 
                 <form:input path="careerId" id="careerId" style="display: none;"/>
@@ -95,9 +95,9 @@
             <div class="col">
                 <select id="subjectSelect" style="display: none;">
                     <option disabled selected value></option>
-                    <c:forEach items="${subjects}" var="subject">
-                        <option value="<c:out value="${subject.subjectId}"/>"><c:out value="${subject.name}"/></option>
-                    </c:forEach>
+<%--                    <c:forEach items="${subjects}" var="subject">--%>
+<%--                        <option value="<c:out value="${subject.subjectId}"/>"><c:out value="${subject.name}"/></option>--%>
+<%--                    </c:forEach>--%>
                 </select>
 
                 <form:input path="subjectId" id="subjectId" style="display: none;"/>
@@ -444,6 +444,12 @@
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
 
+<script>
+    //TODO c:out institution data
+    var { institutions, careers, subjects, careerMap, subjectMap } = JSON.parse('${institutionData}');
+    console.log(subjects)
+</script>
+
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
@@ -454,6 +460,7 @@
 </c:if>
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>
+
 
 </body>
 

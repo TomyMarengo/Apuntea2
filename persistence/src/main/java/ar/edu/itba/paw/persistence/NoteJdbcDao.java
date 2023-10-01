@@ -59,6 +59,7 @@ public class NoteJdbcDao implements NoteDao {
                     rs.getString(CONTENT),
                     rs.getInt(SCORE)
             );
+
     private final static RowMapper<Review> COMPLETE_REVIEW_ROW_MAPPER = (rs, rowNum) ->
             new Review(
                     new User(
@@ -72,7 +73,8 @@ public class NoteJdbcDao implements NoteDao {
                             rs.getString(NOTE_NAME),
                             new User(
                                     UUID.fromString(rs.getString(OWNER_ID)),
-                                    rs.getString(OWNER_EMAIL)
+                                    rs.getString(OWNER_EMAIL),
+                                    rs.getString(OWNER_LOCALE)
                             )
                     )
             );
@@ -171,7 +173,7 @@ public class NoteJdbcDao implements NoteDao {
             throw e;
         }
         return jdbcTemplate.queryForObject(
-                "SELECT u.user_id, u.email, r.score, r.content, n.note_id, n.note_name, o.user_id AS owner_id, o.email AS owner_email FROM Reviews r " +
+                "SELECT u.user_id, u.email, r.score, r.content, n.note_id, n.note_name, o.user_id AS owner_id, o.email AS owner_email, o.locale as owner_locale FROM Reviews r " +
                         "INNER JOIN Users u ON r.user_id = u.user_id " +
                         "INNER JOIN Notes n ON r.note_id = n.note_id " +
                         "INNER JOIN Users o ON n.user_id = o.user_id " +

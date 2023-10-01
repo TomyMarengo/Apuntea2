@@ -1,24 +1,8 @@
 .profile-picture {
-    position: relative;
-}
-
-.outer-circle {
-    width: 150px;
-    height: 150px;
-    background-color: var(--dark-primary);
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
     border-radius: 50%;
-    margin: 0 auto;
-}
-
-.inner-circle {
-    position: relative;
-    width: 130px;
-    height: 130px;
-    background-image: url('/image/user-image.jpg'); /* Replace with actual image */
-    background-size: cover;
-    border-radius: 50%;
-    top: 10px;
-    left: 10px;
 }
 
 .profile-picture-small {

@@ -156,5 +156,10 @@ public class DirectoryController {
         return mav;
     }
 
+    @ModelAttribute("user")
+    public User getCurrentUser() {
+        return this.securityService.getCurrentUser().orElse(null);
+    }
+
 }
 

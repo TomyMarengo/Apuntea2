@@ -18,4 +18,17 @@ public class Career {
         return name;
     }
 
+    @Override
+    public int hashCode() {
+        return careerId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Career)) return false;
+        Career c = (Career) o;
+        return c.careerId.equals(careerId);
+    }
+
 }

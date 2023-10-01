@@ -35,7 +35,7 @@
 <body>
 
 <!-- NAVBAR -->
-<fragment:navbar/>
+<fragment:navbar loggedin="${user != null}"/>
 
 <!-- "¿SABÍAS QUÉ?" SECTION -->
 <div class="container mt-5 mw-500">

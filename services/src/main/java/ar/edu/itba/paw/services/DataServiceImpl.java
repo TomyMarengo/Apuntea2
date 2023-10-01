@@ -2,12 +2,12 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Career;
 import ar.edu.itba.paw.models.Institution;
+import ar.edu.itba.paw.models.InstitutionData;
 import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
 
 @Service
 public class DataServiceImpl implements DataService {
@@ -45,5 +45,10 @@ public class DataServiceImpl implements DataService {
     @Override
     public List<Subject> getSubjects() {
         return subjectService.getSubjects();
+    }
+
+    @Override
+    public InstitutionData getInstitutionData() {
+        return institutionService.getInstitutionData();
     }
 }

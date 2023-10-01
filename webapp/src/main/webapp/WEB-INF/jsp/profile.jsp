@@ -36,7 +36,7 @@
 <body>
 
 <!-- NAVBAR -->
-<fragment:navbar/>
+<fragment:navbar loggedin="${user != null}"/>
 
 <!-- BOTTOM-NAVBAR -->
 <spring:message code="profile.title" var="title"/>
@@ -52,12 +52,10 @@
                 <div class="card-body">
                     <!-- Profile picture (visible on small screens) -->
                     <div class="profile-picture-small">
-                        <div class="outer-circle">
-                            <div class="inner-circle">
-                                <!-- Profile picture content -->
-                            </div>
+                        <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
+                            <img src="<c:url value="/image/profile-picture.jpeg"/>" alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
                         </div>
-                    </div>
+                   </div>
 
                     <!-- User info -->
                     <div class="d-flex flex-column gap-2">

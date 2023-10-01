@@ -160,3 +160,12 @@ CREATE VIEW Search AS (
      INNER JOIN Institutions i ON c.institution_id = i.institution_id
      INNER JOIN Users u ON t.user_id = u.user_id
 );
+
+DROP VIEW IF EXISTS InstitutionData;
+CREATE VIEW InstitutionData AS (
+    SELECT i.institution_id, i.institution_name, c.career_id, c.career_name, s.subject_id, s.subject_name
+    FROM Institutions i
+    INNER JOIN Careers c ON i.institution_id = c.institution_id
+    INNER JOIN Subjects_Careers sc ON c.career_id = sc.career_id
+    INNER JOIN Subjects s ON sc.subject_id = s.subject_id
+);

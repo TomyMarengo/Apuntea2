@@ -27,4 +27,17 @@ public class Subject {
     public UUID getRootDirectoryId() {
         return rootDirectoryId;
     }
+
+    @Override
+    public int hashCode() {
+        return subjectId.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Subject)) return false;
+        Subject s = (Subject) o;
+        return s.subjectId.equals(subjectId);
+    }
 }

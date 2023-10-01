@@ -32,15 +32,18 @@ public class HomeController {
 
     @RequestMapping(value = "/")
     public ModelAndView index(@ModelAttribute("searchForm") final SearchForm searchForm) {
-        ModelAndView mav = new ModelAndView("index");
+        // TODO: Remove index?
+        return new ModelAndView("redirect:search");
 
-        securityService.getCurrentUserEmail().ifPresent(email -> mav.addObject("username", email));
-
-        mav.addObject("institutions", dataService.getInstitutions());
-        mav.addObject("careers", dataService.getCareers());
-        mav.addObject("subjects", dataService.getSubjects());
-
-        return mav;
+//        ModelAndView mav = new ModelAndView("index");
+//
+//        securityService.getCurrentUserEmail().ifPresent(email -> mav.addObject("username", email));
+//
+//        mav.addObject("institutions", dataService.getInstitutions());
+//        mav.addObject("careers", dataService.getCareers());
+//        mav.addObject("subjects", dataService.getSubjects());
+//
+//        return mav;
     }
 
     @RequestMapping("/login")

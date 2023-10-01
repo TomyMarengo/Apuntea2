@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Career;
 import ar.edu.itba.paw.models.Institution;
 import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.models.User;
+import com.sun.org.apache.bcel.internal.generic.LAND;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,13 +27,13 @@ class UserJdbcDao implements UserDao{
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert jdbcRoleInsert;
 
-
     private static final RowMapper<User> ROW_MAPPER = (rs, rowNum)  ->
             new User(
                     UUID.fromString(rs.getString(USER_ID)),
                     rs.getString(EMAIL),
                     rs.getString(PASSWORD),
                     (String[]) rs.getArray(ROLES).getArray(),
+                    rs.getString(LOCALE),
                     new Institution(
                             UUID.fromString(rs.getString(INSTITUTION_ID)),
                             rs.getString(INSTITUTION_NAME)

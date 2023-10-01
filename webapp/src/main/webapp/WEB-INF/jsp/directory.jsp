@@ -38,7 +38,7 @@
 </head>
 <body>
 
-<fragment:navbar/>
+<fragment:navbar loggedin="${user != null}"/>
 
 <fragment:bottom-navbar hierarchy="${hierarchy}"/>
 

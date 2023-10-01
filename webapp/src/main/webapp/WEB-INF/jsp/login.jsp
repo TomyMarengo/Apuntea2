@@ -33,7 +33,7 @@
 <body>
 
 <!-- NAVBAR -->
-<fragment:navbar/>
+<fragment:navbar loggedin="${user != null}"/>
 
 <c:url var="loginUrl" value="/login"/>
 <spring:message var="logotype" code="logotype"/>

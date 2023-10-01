@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title> Apuntea | <spring:message code="errors.500.title"/></title>
+    <title> Apuntea | <spring:message code="errors.400.title"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
@@ -38,9 +38,9 @@
         <div class="row h-100 justify-content-center align-items-center">
             <div class="col-md-6">
                 <div class="text-center">
-                    <img src="${baseUrl}/image/internal_server_error.png" alt="<spring:message code="errors.500.title"/>" class="img-fluid mt-5 mb-4">
-                    <h1 class="text-primary"><spring:message code="errors.500.title"/></h1>
-                    <p class="text-primary"><spring:message code="errors.500.message"/></p>
+                    <img src="${baseUrl}/image/internal_server_error.png" alt="<spring:message code="errors.400.title"/>" class="img-fluid mt-5 mb-4">
+                    <h1 class="text-primary"><spring:message code="errors.400.title"/></h1>
+                    <p class="text-primary"><spring:message code="errors.400.message"/></p>
                 </div>
             </div>
         </div>

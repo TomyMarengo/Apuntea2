@@ -95,4 +95,8 @@ public class NoteController {
         return new ModelAndView("redirect:/");
     }
 
+    @ModelAttribute("user")
+    public User getCurrentUser() {
+        return this.securityService.getCurrentUser().orElse(null);
+    }
 }

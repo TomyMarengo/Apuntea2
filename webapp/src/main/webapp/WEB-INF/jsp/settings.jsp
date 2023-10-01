@@ -33,7 +33,7 @@
 <body>
 
 <!-- NAVBAR -->
-<fragment:navbar/>
+<fragment:navbar loggedin="${user != null}"/>
 
 <!-- BOTTOM-NAVBAR -->
 <spring:message code="settings.title" var="title"/>

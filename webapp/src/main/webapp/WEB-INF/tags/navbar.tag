@@ -8,6 +8,7 @@
 <spring:message var="search" code="search.title"/>
 <spring:message var="notifications" code="notifications"/>
 <spring:message var="darkMode" code="darkMode"/>
+<%@ attribute name="loggedin" required="true"%>
 
 <nav class="navbar navbar-expand-lg">
     <div class="container-fluid d-flex align-items-center">
@@ -33,12 +34,19 @@
                     <img src="<c:url value="/svg/user.svg"/>" alt="${profile}" class="icon-s fill-bg"/>
                 </button>
 
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message code="profile.title"/></a>
-                    </li>
-                    <!--<li><a class="dropdown-item" href="${baseUrl}/settings"><spring:message code="settings.title"/></a></li>-->
-                    <li><a class="dropdown-item" href="${baseUrl}/logout"><spring:message code="logout"/></a></li>
-                </ul>
+                <c:if test="${loggedin}">
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message code="profile.title"/></a></li>
+                        <!--<li><a class="dropdown-item" href="${baseUrl}/settings"><spring:message code="settings.title"/></a></li>-->
+                        <li><a class="dropdown-item" href="${baseUrl}/logout"><spring:message code="logout"/></a></li>
+                    </ul>
+                </c:if>
+                <c:if test="${!loggedin}">
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="${baseUrl}/login"><spring:message code="login"/></a></li>
+                        <li><a class="dropdown-item" href="${baseUrl}/register"><spring:message code="register"/></a></li>
+                    </ul>
+                </c:if>
             </div>
         </div>
     </div>
