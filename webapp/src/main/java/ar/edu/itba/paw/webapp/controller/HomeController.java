@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.models.InstitutionData;
 import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.services.DataService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.forms.*;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -54,9 +56,10 @@ public class HomeController {
     @RequestMapping(value = "/register")
     public ModelAndView registerForm(@ModelAttribute("userForm") final UserForm userForm) {
         ModelAndView mav = new ModelAndView("register");
-        mav.addObject("institutions", dataService.getInstitutions());
-        mav.addObject("careers", dataService.getCareers());
-        mav.addObject("subjects", dataService.getSubjects());
+
+        // TODO: Ask if this should go in the service
+        InstitutionData institutionData = dataService.getInstitutionData();
+        mav.addObject("institutionData", new Gson().toJson(institutionData));
         return mav;
     }
 
@@ -65,7 +68,7 @@ public class HomeController {
         if (errors.hasErrors()) {
             return registerForm(userForm);
         }
-        userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getInstitutionId(), userForm.getCareerId(), Role.ROLE_STUDENT); //TODO: handle errors
+        userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getInstitutionId(), userForm.getCareerId(), Role.ROLE_STUDENT);
         return new ModelAndView("redirect:/login");
     }
 }

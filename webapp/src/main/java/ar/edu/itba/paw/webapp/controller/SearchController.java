@@ -6,7 +6,6 @@ import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.forms.SearchForm;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+
 
 @Controller
 @RequestMapping("/search")

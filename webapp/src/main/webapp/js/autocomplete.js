@@ -121,13 +121,14 @@ function autocomplete(inp, sel, getArr) {
 function clearInstitution() {
     document.getElementById("institutionAutocomplete").value = "";
     document.getElementById('institutionId').value = "";
+
     clearCareer();
 }
 
 function clearCareer() {
     document.getElementById("careerAutocomplete").value = "";
     document.getElementById('careerId').value = "";
-    clearSubject();
+    if (document.getElementById('subjectId')) clearSubject();
 }
 
 function clearSubject() {

@@ -453,7 +453,6 @@
 <script>
     //TODO c:out institution data
     var { institutions, careers, subjects, careerMap, subjectMap } = JSON.parse('${institutionData}');
-    console.log(subjects)
 </script>
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>

@@ -82,19 +82,23 @@
                                 <label for="institutionSelect"></label>
                                 <select id="institutionSelect" style="display: none;">
                                     <option disabled selected value></option>
-                                    <c:forEach items="${institutions}" var="institution">
-                                        <option value="<c:out value="${institution.institutionId}"/>"><c:out value="${institution.name}"/></option>
-                                    </c:forEach>
                                 </select>
 
                                 <form:input path="institutionId" id="institutionId" style="display: none;"/>
 
-                                <div class="">
+                                <div class="input-group">
                                     <div class="autocomplete">
                                         <spring:message code="search.institution.placeholder" var="placeholderInstitution"/>
                                         <input type="text" id="institutionAutocomplete" class="form-control bg-bg"
                                                placeholder="${placeholderInstitution}" autocomplete="off"/>
+
                                     </div>
+                                    <span class="input-group-text input-group-icon clickable" id="eraseInstitutionButton">
+                                        <img src="<c:url value="/svg/cross.svg"/>"
+                                             alt="<spring:message code="search.sort.image"/>"
+                                             class="icon-s fill-dark-primary"/>
+                                    </span>
+
                                 </div>
 
                                 <form:errors path="institutionId" cssClass="text-danger" element="p"/>
@@ -104,18 +108,22 @@
                                 <label for="careerSelect"></label>
                                 <select id="careerSelect" style="display: none;">
                                     <option disabled selected value></option>
-                                    <c:forEach items="${careers}" var="career">
-                                        <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>
-                                    </c:forEach>
                                 </select>
 
                                 <form:input path="careerId" id="careerId" style="display: none;"/>
 
 
-                                <div class="autocomplete">
-                                    <spring:message code="search.career.placeholder" var="placeholderCareer"/>
-                                    <input type="text" id="careerAutocomplete" class="form-control bg-bg"
-                                           placeholder="${placeholderCareer}" autocomplete="off"/>
+                                <div class="input-group">
+                                    <div class="autocomplete">
+                                        <spring:message code="search.career.placeholder" var="placeholderCareer"/>
+                                        <input type="text" id="careerAutocomplete" class="form-control bg-bg"
+                                               placeholder="${placeholderCareer}" autocomplete="off"/>
+                                    </div>
+                                    <span class="input-group-text input-group-icon clickable" id="eraseCareerButton">
+                                        <img src="<c:url value="/svg/cross.svg"/>"
+                                             alt="<spring:message code="search.sort.image"/>"
+                                             class="icon-s fill-dark-primary"/>
+                                    </span>
                                 </div>
 
                                 <form:errors path="careerId" cssClass="text-danger" element="p"/>
@@ -156,6 +164,11 @@
     </div>
 
 </section>
+
+<script>
+    //TODO c:out institution data
+    var { institutions, careers, subjects, careerMap, subjectMap } = JSON.parse('${institutionData}');
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
