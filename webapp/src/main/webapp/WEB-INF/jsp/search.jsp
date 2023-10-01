@@ -57,9 +57,6 @@
             <div class="col">
                 <select id="institutionSelect" style="display: none;">
                     <option disabled selected value></option>
-<%--                    <c:forEach items="${institutions}" var="inst">--%>
-<%--                        <option value="<c:out value="${inst.institutionId}"/>"><c:out value="${inst.name}"/></option>--%>
-<%--                    </c:forEach>--%>
                 </select>
 
                 <form:input path="institutionId" id="institutionId" style="display: none;"/>
@@ -70,15 +67,17 @@
                         <input type="text" id="institutionAutocomplete" class="form-control bg-bg"
                                placeholder="${placeholderInstitution}" autocomplete="off"/>
                     </div>
+                    <span class="input-group-text input-group-icon clickable" id="eraseInstitutionButton">
+                        <img src="<c:url value="/svg/cross.svg"/>"
+                             alt="<spring:message code="search.sort.image"/>"
+                             class="icon-s fill-dark-primary"/>
+                    </span>
                 </div>
             </div>
 
             <div class="col">
                 <select id="careerSelect" style="display: none;">
                     <option disabled selected value></option>
-<%--                    <c:forEach items="${careers}" var="career">--%>
-<%--                        <option value="<c:out value="${career.careerId}"/>"><c:out value="${career.name}"/></option>--%>
-<%--                    </c:forEach>--%>
                 </select>
 
                 <form:input path="careerId" id="careerId" style="display: none;"/>
@@ -89,15 +88,17 @@
                         <input type="text" id="careerAutocomplete" class="form-control bg-bg"
                                placeholder="${placeholderCareer}" autocomplete="off"/>
                     </div>
+                    <span class="input-group-text input-group-icon clickable" id="eraseCareerButton">
+                        <img src="<c:url value="/svg/cross.svg"/>"
+                             alt="<spring:message code="search.sort.image"/>"
+                             class="icon-s fill-dark-primary"/>
+                    </span>
                 </div>
             </div>
 
             <div class="col">
                 <select id="subjectSelect" style="display: none;">
                     <option disabled selected value></option>
-<%--                    <c:forEach items="${subjects}" var="subject">--%>
-<%--                        <option value="<c:out value="${subject.subjectId}"/>"><c:out value="${subject.name}"/></option>--%>
-<%--                    </c:forEach>--%>
                 </select>
 
                 <form:input path="subjectId" id="subjectId" style="display: none;"/>
@@ -108,6 +109,11 @@
                         <input type="text" id="subjectAutocomplete" class="form-control bg-bg"
                                placeholder="${placeholderSubject}" autocomplete="off"/>
                     </div>
+                    <span class="input-group-text input-group-icon clickable" id="eraseSubjectButton">
+                        <img src="<c:url value="/svg/cross.svg"/>"
+                             alt="<spring:message code="search.sort.image"/>"
+                             class="icon-s fill-dark-primary"/>
+                    </span>
                 </div>
             </div>
 
