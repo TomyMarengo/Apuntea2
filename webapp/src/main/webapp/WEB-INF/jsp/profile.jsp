@@ -92,7 +92,8 @@
                             <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
                                 <!-- TODO: REVISAR COLOR RD -->
                                 <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>" class="icon-xxl fill-${rd.iconColor}">
-                                <span class="fw-bold">
+                                <!-- max 2 lines-->
+                                <span class="fw-bold flex-wrap justify-content-center folder-name">
                                     <c:out value="${rd.name}"/>
                                 </span>
                             </div>
