@@ -70,7 +70,7 @@
                     <span class="input-group-text input-group-icon clickable" id="eraseInstitutionButton">
                         <img src="<c:url value="/svg/cross.svg"/>"
                              alt="<spring:message code="search.sort.image"/>"
-                             class="icon-s fill-dark-primary"/>
+                             class="icon-xs fill-dark-primary"/>
                     </span>
                 </div>
             </div>
@@ -91,7 +91,7 @@
                     <span class="input-group-text input-group-icon clickable" id="eraseCareerButton">
                         <img src="<c:url value="/svg/cross.svg"/>"
                              alt="<spring:message code="search.sort.image"/>"
-                             class="icon-s fill-dark-primary"/>
+                             class="icon-xs fill-dark-primary"/>
                     </span>
                 </div>
             </div>
@@ -112,7 +112,7 @@
                     <span class="input-group-text input-group-icon clickable" id="eraseSubjectButton">
                         <img src="<c:url value="/svg/cross.svg"/>"
                              alt="<spring:message code="search.sort.image"/>"
-                             class="icon-s fill-dark-primary"/>
+                             class="icon-xs fill-dark-primary"/>
                     </span>
                 </div>
             </div>
