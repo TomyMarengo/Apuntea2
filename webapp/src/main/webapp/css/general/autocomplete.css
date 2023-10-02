@@ -37,3 +37,7 @@
   background-color: var(--dark-primary) !important;
   color: var(--bg);
 }
+
+.special-radius{
+  border-radius: var(--bs-border-radius) 0 0 var(--bs-border-radius) !important;
+}

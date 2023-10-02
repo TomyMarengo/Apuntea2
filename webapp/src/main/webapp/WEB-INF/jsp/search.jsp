@@ -64,7 +64,7 @@
                 <div class="input-group mb-3">
                     <div class="autocomplete">
                         <spring:message code="search.institution.placeholder" var="placeholderInstitution"/>
-                        <input type="text" id="institutionAutocomplete" class="form-control bg-bg"
+                        <input type="text" id="institutionAutocomplete" class="form-control bg-bg special-radius"
                                placeholder="${placeholderInstitution}" autocomplete="off"/>
                     </div>
                     <span class="input-group-text input-group-icon clickable" id="eraseInstitutionButton">
@@ -85,7 +85,7 @@
                 <div class="input-group mb-3">
                     <div class="autocomplete">
                         <spring:message code="search.career.placeholder" var="placeholderCareer"/>
-                        <input type="text" id="careerAutocomplete" class="form-control bg-bg"
+                        <input type="text" id="careerAutocomplete" class="form-control bg-bg special-radius"
                                placeholder="${placeholderCareer}" autocomplete="off"/>
                     </div>
                     <span class="input-group-text input-group-icon clickable" id="eraseCareerButton">
@@ -106,7 +106,7 @@
                 <div class="input-group mb-3">
                     <div class="autocomplete">
                         <spring:message code="search.subject.placeholder" var="placeholderSubject"/>
-                        <input type="text" id="subjectAutocomplete" class="form-control bg-bg"
+                        <input type="text" id="subjectAutocomplete" class="form-control bg-bg special-radius"
                                placeholder="${placeholderSubject}" autocomplete="off"/>
                     </div>
                     <span class="input-group-text input-group-icon clickable" id="eraseSubjectButton">
