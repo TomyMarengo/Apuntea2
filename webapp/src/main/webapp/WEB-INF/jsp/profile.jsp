@@ -86,7 +86,7 @@
 
         <div class="col-12 col-lg-7 col-xl-8">
             <h2 class="text-center mb-3"><spring:message code="profile.directories.title"/></h2>
-            <div class="flex-row flex-wrap card rounded-box gap-2 p-4 justify-content-around">
+            <div class="flex-row flex-wrap card rounded-box gap-2 p-4 justify-content-between">
                 <c:forEach items="${root_directories}" var="rd">
                         <a href="<c:url value="./directory/${rd.id}"/>">
                             <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
