@@ -174,3 +174,42 @@ CREATE OR REPLACE VIEW InstitutionData AS (
     INNER JOIN Subjects s ON sc.subject_id = s.subject_id
 );
 
+-----------------------------------------------------------------------------------------------------------
+--SPRINT 3
+CREATE TABLE IF NOT EXISTS Images
+(
+  image_id uuid NOT NULL DEFAULT gen_random_uuid(),
+  image bytea NOT NULL,
+  CONSTRAINT "PK_images" PRIMARY KEY (image_id)
+);
+
+ALTER TABLE Users
+    ADD COLUMN IF NOT EXISTS profile_picture_id uuid REFERENCES Images (image_id),
+    DROP COLUMN IF EXISTS profile_picture;
+
+CREATE TABLE IF NOT EXISTS Favorites
+(
+  user_id uuid NOT NULL,
+  directory_id uuid NOT NULL,
+  CONSTRAINT "PK_favorites" PRIMARY KEY (user_id, directory_id),
+  CONSTRAINT "FK_favorites_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE,
+  CONSTRAINT "FK_favorites_directories" FOREIGN KEY (directory_id) REFERENCES Directories (directory_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Bans
+(
+  user_id uuid NOT NULL,
+  admin_id uuid NOT NULL,
+  start_date timestamp NOT NULL,
+  end_date timestamp NOT NULL,
+  reason text,
+  CONSTRAINT "PK_bans" PRIMARY KEY (user_id, admin_id, start_date),
+  CONSTRAINT "FK_bans_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE,
+  CONSTRAINT "FK_bans_admins" FOREIGN KEY (admin_id) REFERENCES Users (user_id) ON DELETE CASCADE
+);
+
+ALTER TABLE Subjects_Careers ADD COLUMN IF NOT EXISTS year smallint NOT NULL DEFAULT 1;
+
+
+
+

@@ -16,6 +16,7 @@
   --secondary-rgb: 253, 194, 134;
   --dark-secondary: #FCAA6F;
 
+  --danger: #fa3a4e;
   --filter-primary: invert(56%) sepia(8%) saturate(3900%) hue-rotate(319deg) brightness(104%) contrast(88%);
   --filter-dark-primary: invert(75%) sepia(37%) saturate(5470%) hue-rotate(318deg) brightness(80%) contrast(99%);
   --filter-secondary: invert(67%) sepia(99%) saturate(207%) hue-rotate(340deg) brightness(102%) contrast(98%);
