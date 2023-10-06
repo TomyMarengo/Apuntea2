@@ -16,8 +16,8 @@ import javax.sql.DataSource;
 import java.util.List;
 
 import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
-import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
-import static ar.edu.itba.paw.persistence.JdbcTestConstants.EDA_ID;
+import static ar.edu.itba.paw.persistence.JdbcTestUtils.*;
+import static ar.edu.itba.paw.persistence.JdbcTestUtils.EDA_ID;
 import static org.junit.Assert.*;
 
 @Transactional

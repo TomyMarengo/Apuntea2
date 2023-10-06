@@ -13,6 +13,7 @@ public class JdbcDaoUtils {
     static final String CAREERS = "Careers";
     static final String SUBJECTS = "Subjects";
     static final String DIRECTORIES = "Directories";
+    static final String FAVORITES = "Favorites";
     static final String USERS = "Users";
     static final String USER_ROLES = "User_Roles";
 

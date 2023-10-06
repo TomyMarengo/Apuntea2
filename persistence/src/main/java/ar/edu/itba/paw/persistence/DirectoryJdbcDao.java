@@ -22,7 +22,7 @@ public class DirectoryJdbcDao implements DirectoryDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final SimpleJdbcInsert jdbcInsert;
+    private final SimpleJdbcInsert jdbcFavoritesInsert;
 
     private static final RowMapper<Directory> LIMITED_ROW_MAPPER = (rs, rowNum)  ->
             new Directory(
@@ -73,9 +73,8 @@ public class DirectoryJdbcDao implements DirectoryDao {
     public DirectoryJdbcDao(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
-        this.jdbcInsert = new SimpleJdbcInsert(ds)
-                .withTableName("Directories")
-                .usingGeneratedKeyColumns(DIRECTORY_ID);
+        this.jdbcFavoritesInsert = new SimpleJdbcInsert(ds)
+                .withTableName(FAVORITES);
     }
 
     @Transactional
@@ -164,10 +163,10 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
     @Override
     public void addFavorite(UUID userId, UUID directoryId) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(USER_ID, userId);
-        args.addValue(DIRECTORY_ID, directoryId);
-        namedParameterJdbcTemplate.update("INSERT INTO Favorites (user_id, directory_id) VALUES (:user_id, :directory_id)", args);
+        HashMap<String, Object> args = new HashMap<>();
+        args.put(USER_ID, userId);
+        args.put(DIRECTORY_ID, directoryId);
+        jdbcFavoritesInsert.execute(args);
     }
 
     @Override

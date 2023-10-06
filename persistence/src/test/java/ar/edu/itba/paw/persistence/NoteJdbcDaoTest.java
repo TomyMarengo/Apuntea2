@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
+import static ar.edu.itba.paw.persistence.JdbcTestUtils.*;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;

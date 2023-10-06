@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,10 +19,11 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcTestConstants.*;
+import static ar.edu.itba.paw.persistence.JdbcTestUtils.*;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -37,15 +39,20 @@ public class DirectoryJdbcDaoTest {
     private DirectoryDao directoryDao;
 
     private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private SimpleJdbcInsert jdbcDirectoryInsert;
+    private SimpleJdbcInsert jdbcFavoriteInsert;
 
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
+        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
         jdbcDirectoryInsert = new SimpleJdbcInsert(ds)
                 .withTableName(DIRECTORIES)
                 .usingColumns(DIRECTORY_ID, DIRECTORY_NAME, USER_ID, PARENT_ID);
+        jdbcFavoriteInsert = new SimpleJdbcInsert(ds)
+                    .withTableName(FAVORITES);
     }
 
     @Test
@@ -102,6 +109,7 @@ public class DirectoryJdbcDaoTest {
         JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "Directories", "user_id = '" + PEPE_ID + "' AND directory_name = 'Nueva basura' AND parent_id = '" + EDA_DIRECTORY_ID + "'");
     }
 
+   // TODO: Change test to use JdbcTestUtils methods
     @Test
     public void testDeleteMany() {
         UUID[] directoryIds = {TMP_DIR_ID_1, TMP_DIR_ID_2, TMP_DIR_ID_3, TMP_DIR_ID_4};
@@ -127,5 +135,38 @@ public class DirectoryJdbcDaoTest {
         assertEquals(4, countInserted);
         assertEquals(0, countPostDelete);
     }
+
+    @Test
+    public void testAddFavorite() {
+        directoryDao.addFavorite(PEPE_ID, EDA_DIRECTORY_ID);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Favorites", "user_id = '" + PEPE_ID + "' AND directory_id = '" + EDA_DIRECTORY_ID + "'"));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Favorites", "user_id = '" + SAIDMAN_ID + "' AND directory_id = '" + EDA_DIRECTORY_ID + "'"));
+    }
+
+    @Test
+    public void testRemoveFavorite() {
+        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
+        insertFavorite(jdbcFavoriteInsert, newDirId, PEPE_ID);
+        insertFavorite(jdbcFavoriteInsert, newDirId, SAIDMAN_ID);
+        directoryDao.removeFavorite(PEPE_ID, newDirId);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Favorites", "user_id = '" + PEPE_ID + "' AND directory_id = '" + newDirId + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Favorites", "user_id = '" + SAIDMAN_ID + "' AND directory_id = '" + newDirId + "'"));
+    }
+
+    @Test
+    public void testGetFavorites() {
+        UUID newDir1 = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDir2 = insertDirectory(namedParameterJdbcTemplate, "temp2", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDir3 = insertDirectory(namedParameterJdbcTemplate, "temp3", PEPE_ID, EDA_DIRECTORY_ID);
+        insertFavorite(jdbcFavoriteInsert, newDir1, PEPE_ID);
+        insertFavorite(jdbcFavoriteInsert, newDir2, SAIDMAN_ID);
+        insertFavorite(jdbcFavoriteInsert, newDir3, PEPE_ID);
+
+        List<Directory> favorites = directoryDao.getFavorites(PEPE_ID);
+        assertEquals(2, favorites.size());
+        favorites.stream().filter(d -> d.getId().equals(newDir1)).findAny().orElseThrow(AssertionError::new);
+        favorites.stream().filter(d -> d.getId().equals(newDir3)).findAny().orElseThrow(AssertionError::new);
+    }
+
 
 }
