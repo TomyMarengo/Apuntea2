@@ -105,6 +105,12 @@ public class Note implements Searchable {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public boolean getFavorite() {
+        // TODO: Implement note favorites
+        return false;
+    }
+
 
     @Override
     public String toString() {

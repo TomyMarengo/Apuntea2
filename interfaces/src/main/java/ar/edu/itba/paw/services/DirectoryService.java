@@ -15,6 +15,8 @@ public interface DirectoryService {
     void delete(UUID directoryId);
     void deleteMany(UUID[] directoryIds);
     List<Directory> getRootDirectoriesByCurrentUserCareer();
-
+    List<Directory> getFavorites();
+    void addFavorite(UUID directoryId);
+    boolean removeFavorite(UUID directoryId);
 }
 

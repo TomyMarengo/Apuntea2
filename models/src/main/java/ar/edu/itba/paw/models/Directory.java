@@ -17,6 +17,7 @@ public class Directory implements Searchable {
     private String iconColor;
 
     private Boolean visible;
+    private Boolean favorite;
 
     public Directory(UUID directoryId, String name, UUID parentId) {
         this.directoryId = directoryId;
@@ -41,6 +42,12 @@ public class Directory implements Searchable {
         this.visible = visible;
         this.iconColor = iconColor;
     }
+
+    public Directory(UUID directoryId, String name, User user, UUID parentId, boolean favorite, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
+        this(directoryId, name, user, parentId, createdAt, lastModifiedAt, visible, iconColor);
+        this.favorite = favorite;
+    }
+
 
     public Directory(UUID directoryId, String name, User user, UUID parentId, Subject subject, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
         this(directoryId, name, user, parentId, createdAt, lastModifiedAt, visible, iconColor);
@@ -93,5 +100,10 @@ public class Directory implements Searchable {
     @Override
     public String getIconColor() {
         return iconColor;
+    }
+
+    @Override
+    public boolean getFavorite() {
+        return favorite;
     }
 }

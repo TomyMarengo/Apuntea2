@@ -28,4 +28,5 @@ public interface Searchable {
 
     String getIconColor();
 
+    boolean getFavorite();
 }

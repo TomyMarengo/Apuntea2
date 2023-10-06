@@ -152,4 +152,30 @@ public class DirectoryJdbcDao implements DirectoryDao {
                 "GROUP BY d.directory_id", LIMITED_ROW_MAPPER, careerId);
     }
 
+    @Override
+    public List<Directory> getFavorites(UUID userId) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(USER_ID, userId);
+        return namedParameterJdbcTemplate.query("SELECT d.*, u.user_id, u.email FROM Favorites f " +
+                "INNER JOIN Directories d ON d.directory_id = f.directory_id " +
+                "INNER JOIN Users u ON u.user_id = d.user_id " +
+                "WHERE f.user_id = :user_id", args, ROW_MAPPER);
+    }
+
+    @Override
+    public void addFavorite(UUID userId, UUID directoryId) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(USER_ID, userId);
+        args.addValue(DIRECTORY_ID, directoryId);
+        namedParameterJdbcTemplate.update("INSERT INTO Favorites (user_id, directory_id) VALUES (:user_id, :directory_id)", args);
+    }
+
+    @Override
+    public boolean removeFavorite(UUID userId, UUID directoryId) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(USER_ID, userId);
+        args.addValue(DIRECTORY_ID, directoryId);
+        return namedParameterJdbcTemplate.update("DELETE FROM Favorites WHERE user_id = :user_id AND directory_id = :directory_id", args) == 1;
+    }
+
 }

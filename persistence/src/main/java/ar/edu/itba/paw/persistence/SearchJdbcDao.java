@@ -88,6 +88,7 @@ public class SearchJdbcDao implements SearchDao {
                             rs.getString(EMAIL)
                     ),
                     UUID.fromString(rs.getString(PARENT_ID)),
+                    rs.getBoolean(FAVORITE),
                     rs.getTimestamp(CREATED_AT).toLocalDateTime(),
                     rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
                     rs.getBoolean(VISIBLE),
@@ -143,16 +144,20 @@ public class SearchJdbcDao implements SearchDao {
     }
 
     @Override
-    public List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId){
+    public List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId) {
+        List<Object> args = new ArrayList<>();
+
         StringBuilder query = new StringBuilder(
                 "SELECT DISTINCT t.id, t.name, t.parent_id, t.category, t.created_at, t.last_modified_at, t.visible, " +
                         "t.avg_score, t.file_type, " +
                         "t.icon_color, " +
-                        "t.user_id, t.email " +
+                        "t.user_id, t.email, " +
+                        " ( f.directory_id IS NOT NULL ) AS favorite " +
                         "FROM Navigation t " +
-                        "WHERE t.parent_id = ? "
-        );
-        List<Object> args = new ArrayList<>();
+                        "LEFT JOIN Favorites f ON t.category = 'directory' AND t.id = f.directory_id AND f.user_id = ? " +
+                        "WHERE t.parent_id = ? ");
+
+        args.add(sa.getCurrentUserId().orElse(null));
         args.add(parentId);
 
         applyGeneralFilters(query, args, sa, NAVIGATION_WORD_CONDITIONS, NAVIGATION_WORD_ARGS);
@@ -182,6 +187,11 @@ public class SearchJdbcDao implements SearchDao {
         addIfPresent(query, args,  INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
         addIfPresent(query, args,  CAREER_ID, "=", "AND", sa.getCareerId());
         addIfPresent(query, args,  SUBJECT_ID, "=", "AND", sa.getSubjectId());
+
+    }
+
+    private void favoritesJoin(StringBuilder query, List<Object> args, SearchArguments sa) {
+
 
     }
 

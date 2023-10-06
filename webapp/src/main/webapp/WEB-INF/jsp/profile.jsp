@@ -85,7 +85,23 @@
 
 
         <div class="col-12 col-lg-7 col-xl-8">
-            <h2 class="text-center mb-3"><spring:message code="profile.directories.title"/></h2>
+            <h2 class="text-center mb-3"><spring:message code="profile.directories.favorites"/></h2>
+            <div class="flex-row flex-wrap card rounded-box gap-2 p-4 justify-content-between">
+                <c:forEach items="${favorites}" var="rd">
+                    <a href="<c:url value="./directory/${rd.id}"/>">
+                        <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
+                            <!-- TODO: REVISAR COLOR RD -->
+                            <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>" class="icon-xxl fill-${rd.iconColor}">
+                            <!-- max 2 lines-->
+                            <span class="fw-bold flex-wrap justify-content-center folder-name">
+                                    <c:out value="${rd.name}"/>
+                                </span>
+                        </div>
+                    </a>
+                </c:forEach>
+            </div>
+
+            <h2 class="text-center mt-5 mb-3"><spring:message code="profile.directories.title"/></h2>
             <div class="flex-row flex-wrap card rounded-box gap-2 p-4 justify-content-between">
                 <c:forEach items="${root_directories}" var="rd">
                         <a href="<c:url value="./directory/${rd.id}"/>">

@@ -156,6 +156,23 @@ public class DirectoryController {
         return mav;
     }
 
+    @RequestMapping(value = "/{directoryId}/addfavorite", method = RequestMethod.POST)
+    public ModelAndView addFavoriteDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
+                                          @RequestParam @ValidUuid UUID parentId) {
+        directoryService.addFavorite(directoryId);
+        // TODO: display a message saying that the directory was added to favorites
+        return new ModelAndView("redirect:/directory/" + parentId);
+    }
+
+    @RequestMapping(value = "/{directoryId}/removefavorite", method = RequestMethod.POST)
+    public ModelAndView removeFavoriteDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
+                                          @RequestParam @ValidUuid UUID parentId) {
+        directoryService.removeFavorite(directoryId);
+        // TODO: display a message saying that the directory was removed from favorites
+        // If removeFavorite returns something different than 1, handle the error
+        return new ModelAndView("redirect:/directory/" + parentId);
+    }
+
     @ModelAttribute("user")
     public User getCurrentUser() {
         return this.securityService.getCurrentUser().orElse(null);

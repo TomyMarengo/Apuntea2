@@ -283,6 +283,29 @@
 
                         <td class="search-actions">
                             <div class="d-flex justify-content-end">
+                                <!-- Favorite -->
+                                <c:if test="${user ne null and item.category.formattedName eq 'directory'}">
+                                    <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
+                                    <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
+
+                                    <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                         data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
+                                        <form:form action="${item.favorite ? removeFavorite : addFavorite}" method="post">
+                                            <input name="parentId" value="${item.parentId}" type="hidden"/>
+                                            <button type="submit"
+                                                    class="btn nav-icon-button favorite-button"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom"
+                                                    data-bs-title="<spring:message code="favorite"/>"
+                                                    id="<c:out value="${item.id}"/>.f1">
+                                                <img src="<c:url value="${ item.favorite ?  '/svg/star-solid.svg' : '/svg/star-regular.svg'}"/>"
+                                                     alt="<spring:message code="favorite"/>"
+                                                     class="icon-xs fill-text">
+                                            </button>
+                                        </form:form>
+                                    </div>
+                                </c:if>
+
                                 <c:if test="${user ne null and item.user.userId eq user.userId}">
                                     <c:if test="${item.category.formattedName ne 'directory'}">
                                         <!-- EDIT -->

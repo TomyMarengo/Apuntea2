@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Directory;
 import ar.edu.itba.paw.models.DirectoryPath;
+import ar.edu.itba.paw.models.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +19,10 @@ public interface DirectoryDao {
 
     boolean delete(UUID directoryId, UUID currentUserId);
     List<Directory> getRootDirectoriesByCareer(UUID careerId);
+
+    List<Directory> getFavorites(UUID userId);
+
+    void addFavorite(UUID userId, UUID directoryId);
+
+    boolean removeFavorite(UUID userId, UUID directoryId);
 }

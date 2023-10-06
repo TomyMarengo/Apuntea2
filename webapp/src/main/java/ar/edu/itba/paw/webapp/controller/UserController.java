@@ -48,6 +48,7 @@ public class UserController {
         mav.addObject("user", user);
         // TODO: Should this be moved to the service???
         mav.addObject("root_directories", directoryService.getRootDirectoriesByCurrentUserCareer());
+        mav.addObject("favorites", directoryService.getFavorites());
         return mav;
     }
 
