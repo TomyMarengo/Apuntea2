@@ -107,6 +107,19 @@ public class DirectoryJdbcDao implements DirectoryDao {
         return (UUID) holder.getKeys().get(DIRECTORY_ID);
     }
 
+    @Transactional
+    @Override
+    public UUID createRootDirectory(String name) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(DIRECTORY_NAME, name);
+
+        KeyHolder holder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Directories (directory_name, visible) " +
+                        "VALUES (:directory_name, true)",
+                args, holder, new String[]{DIRECTORY_ID});
+        return (UUID) holder.getKeys().get(DIRECTORY_ID);
+    }
+
     @Override
     public Optional<Directory> getDirectoryById(UUID directoryId, UUID currentUserId) {
         MapSqlParameterSource args = new MapSqlParameterSource(DIRECTORY_ID, directoryId);

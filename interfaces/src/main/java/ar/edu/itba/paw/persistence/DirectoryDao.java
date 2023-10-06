@@ -10,6 +10,8 @@ import java.util.UUID;
 
 public interface DirectoryDao {
     UUID create(String name, UUID parentId, UUID userId, boolean visible, String iconColor);
+
+    UUID createRootDirectory(String name);
     DirectoryPath getDirectoryPath(UUID directoryId);
 
     boolean update(Directory directory, UUID currentUserId);

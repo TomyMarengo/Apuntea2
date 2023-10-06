@@ -12,6 +12,8 @@ public class JdbcDaoUtils {
     static final String INSTITUTIONS = "Institutions";
     static final String CAREERS = "Careers";
     static final String SUBJECTS = "Subjects";
+
+    static final String SUBJECTS_CAREERS = "Subjects_Careers";
     static final String DIRECTORIES = "Directories";
     static final String FAVORITES = "Favorites";
     static final String USERS = "Users";
@@ -59,6 +61,8 @@ public class JdbcDaoUtils {
     static final String LOCALE = "locale";
     static final String FILE_TYPE = "file_type";
     static final String ROLES = "roles";
+
+    static final String YEAR = "year";
 
     static{
         SORTBY.put(SortBy.SCORE, AVG_SCORE);

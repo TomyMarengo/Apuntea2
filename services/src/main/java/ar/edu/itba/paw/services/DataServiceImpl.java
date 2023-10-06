@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.InstitutionData;
 import ar.edu.itba.paw.models.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -48,7 +49,46 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
+    public List<Subject> getSubjectsByCareer(UUID careerId) {
+        return subjectService.getSubjectsByCareer(careerId);
+    }
+
+    @Override
+    public List<Subject> getSubjectsByInstitution(UUID institutionId) {
+        return subjectService.getSubjectsByInstitution(institutionId);
+    }
+
+    @Override
     public InstitutionData getInstitutionData() {
         return institutionService.getInstitutionData();
+    }
+
+    @Override
+    @Transactional
+    public UUID createSubject(String name, UUID careerId, int year) {
+        return subjectService.createSubject(name, careerId, year);
+    }
+
+    @Override
+    @Transactional
+    public void addSubjectToCareer(UUID subjectId, UUID careerId, int year) {
+        subjectService.addSubjectToCareer(subjectId, careerId, year);
+    }
+
+    @Override
+    @Transactional
+    public void updateSubject(UUID subjectId, String name) {
+        subjectService.updateSubject(subjectId, name);
+    }
+
+    @Override
+    public void updateSubjectCareer(UUID subjectId, UUID careerId, int year) {
+        subjectService.updateSubjectCareer(subjectId, careerId, year);
+    }
+
+    @Override
+    @Transactional
+    public void removeSubjectFromCareer(UUID subjectId, UUID careerId) {
+        subjectService.removeSubjectFromCareer(subjectId, careerId);
     }
 }

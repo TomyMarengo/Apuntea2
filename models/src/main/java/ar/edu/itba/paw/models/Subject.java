@@ -8,6 +8,7 @@ public class Subject {
 
     private UUID rootDirectoryId;
 
+    Integer year;
     public Subject(UUID subjectId, String name) {
         this.subjectId = subjectId;
         this.name = name;
@@ -17,6 +18,13 @@ public class Subject {
         this(subjectId, name);
         this.rootDirectoryId = rootDirectoryId;
     }
+
+    //for subject-career relation
+    public Subject(UUID subjectId, String name, Integer year) {
+        this(subjectId, name);
+        this.year = year;
+    }
+
     public UUID getSubjectId() {
         return subjectId;
     }
@@ -26,6 +34,10 @@ public class Subject {
 
     public UUID getRootDirectoryId() {
         return rootDirectoryId;
+    }
+
+    public Integer getYear() {
+        return year;
     }
 
     @Override
