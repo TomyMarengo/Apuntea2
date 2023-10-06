@@ -32,6 +32,9 @@ public class JdbcDaoUtils {
     static final String USER_ID = "user_id";
     static final String PASSWORD = "password";
     static final String EMAIL = "email";
+    static final String USERNAME = "username";
+    static final String FIRST_NAME = "first_name";
+    static final String LAST_NAME = "last_name";
     static final String CONTENT = "content";
     static final String CREATED_AT = "created_at";
     static final String AVG_SCORE = "avg_score";

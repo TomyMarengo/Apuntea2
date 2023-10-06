@@ -5,14 +5,17 @@ import java.util.List;
 import java.util.UUID;
 
 public class User {
-    private final UUID userId;
-    private final String email;
+    private UUID userId;
+    private String firstName;
+    private String lastName;
+    private String username;
+    private String email;
     private String password;
     private Institution institution;
     private Career career;
     private Role[] roles;
-
     private String locale;
+    private byte[] profilePicture;
 
     public User(final UUID userId, final String email) {
         this.userId = userId;
@@ -24,14 +27,23 @@ public class User {
         this.locale = locale;
     }
 
-    public User(final UUID userId, final String email, final String password, final String[] roles, final String locale, final Institution institution, final Career career) {
+    public User(final UUID userId, final String firstName, final String lastName, final String username, final String email, final String password, final String[] roles, final String locale, final Institution institution, final Career career) {
         this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.roles = Arrays.stream(roles).map(Role::getRole).toArray(Role[]::new);
         this.locale = locale;
         this.institution = institution;
         this.career = career;
+    }
+
+    public User (final String firstName, final String lastName, final String username) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
     }
 
     public String getEmail() {
@@ -56,5 +68,25 @@ public class User {
 
     public Career getCareer() {
         return career;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 }

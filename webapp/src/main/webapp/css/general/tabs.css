@@ -1,0 +1,37 @@
+/* Custom CSS to change the background color of active tab */
+ .nav-tabs .nav-link.active {
+     background-color: var(--primary);
+     color: var(--dark-bg);
+ }
+
+ .nav-link{
+     color: var(--text);
+ }
+
+.nav-link:hover, .nav-link:focus {
+    color: var(--text);
+}
+
+.tab-content {
+/*    borders with shadow*/
+    border-top: none;
+    border-bottom-left-radius: var(--bs-border-radius);
+    border-bottom-right-radius: var(--bs-border-radius);
+    padding: 1rem;
+    background-color: var(--bg);
+}
+
+/*border to non active tab*/
+.nav-tabs .nav-link:not(.active) {
+    border: 1px solid var(--bg);
+    border-bottom: none;
+}
+
+/*container width */
+.container {
+    max-width: 80%;
+}
+
+.tab-content {
+    /*height: 60vh;*/
+}

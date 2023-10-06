@@ -1,10 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Career;
-import ar.edu.itba.paw.models.Institution;
-import ar.edu.itba.paw.models.Role;
-import ar.edu.itba.paw.models.User;
-import com.sun.org.apache.bcel.internal.generic.LAND;
+import ar.edu.itba.paw.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,7 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
@@ -30,6 +26,9 @@ class UserJdbcDao implements UserDao{
     private static final RowMapper<User> ROW_MAPPER = (rs, rowNum)  ->
             new User(
                     UUID.fromString(rs.getString(USER_ID)),
+                    rs.getString(FIRST_NAME),
+                    rs.getString(LAST_NAME),
+                    rs.getString(USERNAME),
                     rs.getString(EMAIL),
                     rs.getString(PASSWORD),
                     (String[]) rs.getArray(ROLES).getArray(),
@@ -88,6 +87,22 @@ class UserJdbcDao implements UserDao{
                     "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
                     "WHERE u.email = ? " +
                     "GROUP BY u.user_id, c.career_id, i.institution_id", ROW_MAPPER, email).stream().findFirst();
-
     }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return jdbcTemplate.query("SELECT u.*, array_agg(r.role_name) as roles, i.institution_id, i.institution_name, c.career_id, c.career_name FROM users u " +
+                "INNER JOIN User_Roles r ON u.user_id = r.user_id " +
+                "INNER JOIN Careers c ON u.career_id = c.career_id " +
+                "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
+                "WHERE u.username = ? " +
+                "GROUP BY u.user_id, c.career_id, i.institution_id", ROW_MAPPER, username).stream().findFirst();
+    }
+
+    @Override
+    public boolean update(User user) {
+        return jdbcTemplate.update("UPDATE Users SET first_name = ?, last_name = ?, username = ? WHERE user_id = ?",
+                user.getFirstName(), user.getLastName(), user.getUsername(), user.getUserId()) == 1;
+    }
+
 }

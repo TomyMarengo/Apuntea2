@@ -11,13 +11,14 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-public class UnusedEmailValidator implements ConstraintValidator<UnusedEmail, String> {
+public class UnusedUsernameValidator implements ConstraintValidator<UnusedUsername, String> {
     @Autowired
     private UserService userService;
     private Pattern pattern;
 
+
     @Override
-    public void initialize(UnusedEmail constraintAnnotation) {
+    public void initialize(UnusedUsername constraintAnnotation) {
         pattern = Pattern.compile(constraintAnnotation.regex());
     }
 
@@ -25,7 +26,7 @@ public class UnusedEmailValidator implements ConstraintValidator<UnusedEmail, St
     public boolean isValid(String value, ConstraintValidatorContext context) {
         return value != null && (value.isEmpty() ||
                 (pattern.matcher(value).matches() &&
-                        !userService.findByEmail(value).isPresent())); // Hack to only prompt error when email is being used
+                        !userService.findByUsername(value).isPresent())); // Hack to only prompt error when username is being used
     }
 }
 
