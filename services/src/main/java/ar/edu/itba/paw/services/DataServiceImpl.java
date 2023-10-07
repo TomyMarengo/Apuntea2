@@ -54,6 +54,11 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
+    public List<Subject> getSubjectsByCareerComplemented(UUID careerId) {
+        return subjectService.getSubjectsByCareerComplemented(careerId);
+    }
+
+    @Override
     public List<Subject> getSubjectsByInstitution(UUID institutionId) {
         return subjectService.getSubjectsByInstitution(institutionId);
     }

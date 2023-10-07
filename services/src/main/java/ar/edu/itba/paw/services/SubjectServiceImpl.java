@@ -36,6 +36,12 @@ public class SubjectServiceImpl implements SubjectService{
 
     @Override
     @Transactional
+    public List<Subject> getSubjectsByCareerComplemented(UUID careerId) {
+        return subjectDao.getSubjectsByCareerIdComplemented(careerId);
+    }
+
+    @Override
+    @Transactional
     public List<Subject> getSubjectsByInstitution(UUID institutionId) {
         return subjectDao.getSubjectsByInstitutionId(institutionId);
     }

@@ -22,6 +22,13 @@ public class CareerJdbcDao implements CareerDao{
                 rs.getString(CAREER_NAME)
         );
 
+    private static final RowMapper<Career> INDIVIDUAL_ROW_MAPPER = (rs, rowNum)  ->
+            new Career(
+                    UUID.fromString(rs.getString(CAREER_ID)),
+                    rs.getString(CAREER_NAME),
+                    UUID.fromString(rs.getString(INSTITUTION_ID))
+            );
+
     @Autowired
     public CareerJdbcDao(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -34,7 +41,8 @@ public class CareerJdbcDao implements CareerDao{
 
     @Override
     public Optional<Career> findCareerById(UUID careerId) {
-        return jdbcTemplate.query("SELECT * FROM Careers WHERE career_id = ? ", new Object[]{careerId}, ROW_MAPPER).stream().findFirst();
+        return jdbcTemplate.query("SELECT c.career_id, c.career_name, c.institution_id FROM Careers c WHERE c.career_id = ? "
+        , new Object[]{careerId}, INDIVIDUAL_ROW_MAPPER).stream().findFirst();
     }
 
     public List<Career> getCareersByInstitutionId(UUID institutionId) {

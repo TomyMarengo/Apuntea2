@@ -4,10 +4,19 @@ import java.util.UUID;
 
 public class Career {
     private final UUID careerId;
-    private String name;
+    private final String name;
+
+    private UUID institutionId;
+
     public Career(UUID careerId, String name) {
         this.careerId = careerId;
         this.name = name;
+    }
+
+    public Career(UUID careerId, String name, UUID institutionId) {
+        this.careerId = careerId;
+        this.name = name;
+        this.institutionId = institutionId;
     }
 
     public UUID getCareerId() {
@@ -16,6 +25,10 @@ public class Career {
 
     public String getName() {
         return name;
+    }
+
+    public UUID getInstitutionId() {
+        return institutionId;
     }
 
     @Override

@@ -56,6 +56,20 @@ public class SubjectJdbcDao implements SubjectDao {
     }
 
     @Override
+    public List<Subject> getSubjectsByCareerIdComplemented(UUID careerId) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(CAREER_ID, careerId);
+        return namedParameterJdbcTemplate.query("SELECT DISTINCT s.subject_id, s.subject_name FROM Subjects s " +
+                "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id " +
+                "JOIN Careers c on sc.career_id = c.career_id " +
+                "WHERE c.institution_id IN (" +
+                "   SELECT target_c.institution_id FROM Careers target_c WHERE target_c.career_id = :career_id "+
+                ") AND s.subject_id NOT IN (" +
+                "   SELECT target_sc.subject_id FROM Subjects_Careers target_sc WHERE target_sc.career_id = :career_id" +
+                ")", args, ROW_MAPPER);
+    }
+
+    @Override
     public List<Subject> getSubjectsByInstitutionId(UUID institutionId) {
         return jdbcTemplate.query("SELECT DISTINCT s.subject_id, s.subject_name FROM Subjects s " +
                 "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id JOIN Careers c on sc.career_id = c.career_id WHERE c.institution_id = ?", ROW_MAPPER, institutionId);

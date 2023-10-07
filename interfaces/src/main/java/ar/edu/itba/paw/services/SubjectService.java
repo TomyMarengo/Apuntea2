@@ -8,6 +8,7 @@ import java.util.UUID;
 public interface SubjectService {
     List<Subject> getSubjects();
     List<Subject> getSubjectsByCareer(UUID careerId);
+    List<Subject> getSubjectsByCareerComplemented(UUID careerId);
     List<Subject> getSubjectsByInstitution(UUID institutionId);
 
     UUID createSubject(String name, UUID careerId, int year);
