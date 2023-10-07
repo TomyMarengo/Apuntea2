@@ -7,6 +7,6 @@ import java.util.Optional;
 public interface SecurityService {
     Optional<User> getCurrentUser();
     Optional<String> getCurrentUserEmail();
-
+    boolean currentUserPasswordMatches(String password);
     User getCurrentUserOrThrow();
 }

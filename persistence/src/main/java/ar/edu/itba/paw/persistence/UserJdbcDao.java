@@ -126,4 +126,9 @@ class UserJdbcDao implements UserDao{
         namedParameterJdbcTemplate.update("INSERT INTO Images (image) VALUES (:image)", args, holder, new String[]{IMAGE_ID});
         jdbcTemplate.update("UPDATE Users SET profile_picture_id = ? WHERE user_id = ?", holder.getKeys().get(IMAGE_ID), userId);
     }
+
+    @Override
+    public void updatePassword(UUID userId, String password) {
+        jdbcTemplate.update("UPDATE Users SET password = ? WHERE user_id = ?", password, userId);
+    }
 }

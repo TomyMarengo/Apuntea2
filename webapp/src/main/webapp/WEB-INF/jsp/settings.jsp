@@ -136,11 +136,11 @@
         <div class="container mt-5">
             <ul class="nav nav-tabs">
                 <li class="nav-item flex-fill">
-                    <a class="nav-link active text-center" data-toggle="tab"
-                       href="#" role="tab" aria-selected="true"><spring:message code="settings.account.personalData"/></a>
+                    <a class="nav-link ${errorsChangePasswordForm == null ? 'active' : '' } text-center" data-toggle="tab"
+                       href="#" role="tab" aria-selected="true" id="personalDataTab"><spring:message code="settings.account.personalData"/></a>
                 </li>
                 <li class="nav-item flex-fill">
-                    <a class="nav-link text-center" data-toggle="tab" href="#" role="tab" aria-selected="false">
+                    <a class="nav-link ${errorsChangePasswordForm != null ? 'active' : '' }  text-center" data-toggle="tab" href="#" role="tab" aria-selected="false" id="changePasswordTab">
                         <spring:message code="settings.account.changePassword"/></a>
                 </li>
 
@@ -148,9 +148,9 @@
 
             <c:url var="editUserUrl" value="/settings"/>
             <c:url var="userProfilePicture" value="${baseUrl}/${user.userId}/profile/picture"/>
-
+            <c:url var="changePasswordUrl" value="/change-password"/>
             <div class="tab-content">
-                <div class="tab-pane fade show active" id="dataTab" role="tab-panel">
+                <div class="tab-pane fade ${errorsChangePasswordForm == null ? 'show active' : '' }" id="dataTab" role="tab-panel">
                     <div class="container mt-3">
                         <form:form modelAttribute="editUserForm"
                                    action="${editUserUrl}"
@@ -198,24 +198,32 @@
                         </form:form>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="passwordTab" role="tab-panel">
-
+                <div class="tab-pane fade ${errorsChangePasswordForm != null ? 'show active' : '' }" id="passwordTab" role="tab-panel">
                     <div class="container mt-3">
-                        <form:form action="${loginUrl}" method="post">
+                        <form:form action="${changePasswordUrl}"
+                                   method="post"
+                                   modelAttribute="changePasswordForm"
+                                   id="changePasswordForm"
+
+                        >
                             <div>
                                 <spring:message var="settingsOldPassword" code="settings.account.oldPassword"/>
                                 <label for="oldPassword"></label>
                                 <p><strong><spring:message code="settings.account.oldPassword"/></strong></p>
-                                <input type="password" name="oldPassword" id="oldPassword" class="form-control bg-bg"
-                                       placeholder="${settingsOldPassword}"/>
+                                <form:input type="password" name="oldPassword" id="oldPassword" class="form-control bg-bg"
+                                            placeholder="${settingsOldPassword}" path="oldPassword" value=""/>
+                                <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
                             </div>
+
                             <div>
-                                <spring:message var="settingsPassword" code="settings.account.newPassword"/>
+                                <spring:message var="settingsNewPassword" code="settings.account.newPassword"/>
                                 <label for="newPassword"></label>
                                 <p><strong><spring:message code="settings.account.newPassword"/></strong></p>
-                                <input type="password" name="newPassword" id="newPassword" class="form-control bg-bg"
-                                       placeholder="${settingsPassword}"/>
+                                <form:input type="password" name="newPassword" id="newPassword" class="form-control bg-bg"
+                                            placeholder="${settingsNewPassword}" path="newPassword" value=""/>
+                                <form:errors path="newPassword" cssClass="text-danger" element="p"/>
                             </div>
+
                             <div class="mt-5 d-flex justify-content-center">
                                 <spring:message var="update" code="update"/>
                                 <input class="btn rounded-box button-primary" type="submit" value="${update}">

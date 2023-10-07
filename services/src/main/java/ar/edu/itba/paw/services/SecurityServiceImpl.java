@@ -4,11 +4,10 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +16,9 @@ import java.util.Optional;
 public class SecurityServiceImpl implements SecurityService{
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<String> getCurrentUserEmail() {
@@ -43,5 +45,10 @@ public class SecurityServiceImpl implements SecurityService{
     @Override
     public User getCurrentUserOrThrow() {
         return getCurrentUser().orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public boolean currentUserPasswordMatches(String password) {
+        return passwordEncoder.matches(password, getCurrentUser().map(User::getPassword).orElse(""));
     }
 }

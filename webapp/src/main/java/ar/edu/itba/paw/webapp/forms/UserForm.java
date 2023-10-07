@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public class UserForm {
@@ -15,6 +17,8 @@ public class UserForm {
 
     @NotNull
     @NotBlank
+    @Size(min = 4, max = 50)
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$)$")
     private String password;
 
     @ValidUuid

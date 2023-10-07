@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.SecurityService;
+import ar.edu.itba.paw.webapp.forms.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.forms.EditUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.apache.commons.io.IOUtils;
@@ -51,7 +52,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public ModelAndView settings(@ModelAttribute final EditUserForm editUserForm) {
+    public ModelAndView settings(@ModelAttribute final EditUserForm editUserForm,
+                                 @ModelAttribute final ChangePasswordForm changePasswordForm) {
         ModelAndView mav = new ModelAndView("settings");
         mav.addObject("user", this.securityService.getCurrentUserOrThrow());
         return new ModelAndView("settings");
@@ -59,6 +61,7 @@ public class UserController {
 
     @RequestMapping(value = "/settings", method = RequestMethod.POST)
     public ModelAndView updateSettings(@ModelAttribute("user") User user,
+            @ModelAttribute final ChangePasswordForm changePasswordForm,
             @Valid @ModelAttribute final EditUserForm editUserForm,
             final BindingResult result) {
         ModelAndView mav = new ModelAndView("settings");
@@ -74,6 +77,21 @@ public class UserController {
         mav.addObject("user", this.securityService.getCurrentUserOrThrow());
         return mav;
     }
+
+    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
+    public ModelAndView changePassword(@ModelAttribute final EditUserForm editUserForm,
+                                        @Valid @ModelAttribute final ChangePasswordForm changePasswordForm,
+                                       final BindingResult result) {
+        ModelAndView mav = new ModelAndView("settings");
+        if(!result.hasErrors()) {
+            if (!changePasswordForm.getOldPassword().equals(changePasswordForm.getNewPassword()))
+                userService.updateCurrentUserPassword(changePasswordForm.getNewPassword());
+        }
+        else
+            mav.addObject("errorsChangePasswordForm", result.getAllErrors());
+        return mav;
+    }
+
 
     @RequestMapping(value = "/{userId}/profile/picture", method = RequestMethod.GET, produces = {"image/jpeg", "image/png"})
     @ResponseBody

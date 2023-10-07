@@ -15,4 +15,6 @@ public interface UserService {
     void update(User user, MultipartFile multipartFile);
 
     Optional<byte[]> getProfilePicture(UUID userId);
+
+    void updateCurrentUserPassword(String password);
 }

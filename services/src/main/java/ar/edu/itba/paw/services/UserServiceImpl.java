@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private	static	final Logger LOGGER	= LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, SecurityService securityService) {
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, final SecurityService securityService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.securityService = securityService;
@@ -76,6 +76,12 @@ public class UserServiceImpl implements UserService {
     public Optional<byte[]> getProfilePicture(UUID userId) {
         Optional<ProfilePicture> picture = userDao.getProfilePicture(userId);
         return picture.map(ProfilePicture::getPicture);
+    }
+
+    @Transactional
+    @Override
+    public void updateCurrentUserPassword(String password) {
+        userDao.updatePassword(securityService.getCurrentUserOrThrow().getUserId(), passwordEncoder.encode(password));
     }
 
 }
