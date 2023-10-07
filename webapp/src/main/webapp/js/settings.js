@@ -25,3 +25,26 @@ tabLinks.forEach(function(tabLink, index) {
         tabLink.classList.add('active');
     });
 });
+
+var profilePic = document.getElementById('profilePic');
+var fileInput = document.getElementById('profile-picture');
+
+profilePic.addEventListener('click', function() {
+    fileInput.click();
+});
+
+fileInput.addEventListener('change', function(event) {
+    previewImage(event);
+});
+
+function previewImage(event) {
+    var input = event.target;
+    var reader = new FileReader();
+    reader.onload = function () {
+        profilePic.src = reader.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+}
+
+
+

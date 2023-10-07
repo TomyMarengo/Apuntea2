@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href=<c:url value="/css/sections/navbar.css"/>/>
-    <link rel="stylesheet" href=<c:url value="/css/general/tabs.css"/>/>
+    <link rel="stylesheet" href=<c:url value="/css/general/settings.css"/>/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -147,6 +147,7 @@
             </ul>
 
             <c:url var="editUserUrl" value="/settings"/>
+            <c:url var="userProfilePicture" value="${baseUrl}/${user.userId}/profile/picture"/>
 
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="dataTab" role="tab-panel">
@@ -158,9 +159,15 @@
                                    class="d-flex flex-column"
                                    id="editUserForm">
 
+                            <div class="profile-pic-container align-self-center" id="profilePicContainer">
+                                <img src="${userProfilePicture}" alt="Profile Picture" class="profile-pic" id="profilePic">
+                            </div>
+                            <input type="file" name="profilePicture" id="profile-picture" accept="image/*" onchange="previewImage(event)">
+
                             <div>
                                 <spring:message var="settingsFirstName" code="name"/>
                                 <label for="firstName"></label>
+                                <p><strong><spring:message code="name"/></strong></p>
                                 <form:input type="text" name="firstName" id="firstName" class="form-control bg-bg"
                                             placeholder="${settingsFirstName}" path="firstName" value="${user.firstName}"/>
                                 <form:errors path="firstName" cssClass="text-danger" element="p"/>
@@ -169,6 +176,7 @@
                             <div>
                                 <spring:message var="settingsLastName" code="lastName"/>
                                 <label for="lastName"></label>
+                                <p><strong><spring:message code="lastName"/></strong></p>
                                 <form:input type="text" name="lastName" id="lastName" class="form-control bg-bg"
                                        placeholder="${settingsLastName}" path="lastName" value="${user.lastName}"/>
                                 <form:errors path="lastName" cssClass="text-danger" element="p"/>
@@ -177,6 +185,7 @@
                             <div>
                                 <spring:message var="settingsUsername" code="username"/>
                                 <label for="username"></label>
+                                <p><strong><spring:message code="username"/></strong></p>
                                 <form:input type="text" name="username" id="username" class="form-control bg-bg"
                                        placeholder="${settingsUsername}" path="username" value="${user.username}"/>
                                 <form:errors path="username" cssClass="text-danger" element="p"/>
@@ -192,24 +201,26 @@
                 <div class="tab-pane fade" id="passwordTab" role="tab-panel">
 
                     <div class="container mt-3">
-<%--                        <form:form action="${loginUrl}" method="post">--%>
-<%--                            <div>--%>
-<%--                                <spring:message var="settingsOldPassword" code="settings.account.oldPassword"/>--%>
-<%--                                <label for="oldPassword"></label>--%>
-<%--                                <input type="password" name="oldPassword" id="oldPassword" class="form-control bg-bg"--%>
-<%--                                       placeholder="${settingsOldPassword}"/>--%>
-<%--                            </div>--%>
-<%--                            <div>--%>
-<%--                                <spring:message var="settingsPassword" code="settings.account.newPassword"/>--%>
-<%--                                <label for="newPassword"></label>--%>
-<%--                                <input type="password" name="newPassword" id="newPassword" class="form-control bg-bg"--%>
-<%--                                       placeholder="${settingsPassword}"/>--%>
-<%--                            </div>--%>
-<%--                            <div class="mt-5 d-flex justify-content-center">--%>
-<%--                                <spring:message var="update" code="update"/>--%>
-<%--                                <input class="btn rounded-box button-primary" type="submit" value="${update}">--%>
-<%--                            </div>--%>
-<%--                        </form:form>--%>
+                        <form:form action="${loginUrl}" method="post">
+                            <div>
+                                <spring:message var="settingsOldPassword" code="settings.account.oldPassword"/>
+                                <label for="oldPassword"></label>
+                                <p><strong><spring:message code="settings.account.oldPassword"/></strong></p>
+                                <input type="password" name="oldPassword" id="oldPassword" class="form-control bg-bg"
+                                       placeholder="${settingsOldPassword}"/>
+                            </div>
+                            <div>
+                                <spring:message var="settingsPassword" code="settings.account.newPassword"/>
+                                <label for="newPassword"></label>
+                                <p><strong><spring:message code="settings.account.newPassword"/></strong></p>
+                                <input type="password" name="newPassword" id="newPassword" class="form-control bg-bg"
+                                       placeholder="${settingsPassword}"/>
+                            </div>
+                            <div class="mt-5 d-flex justify-content-center">
+                                <spring:message var="update" code="update"/>
+                                <input class="btn rounded-box button-primary" type="submit" value="${update}">
+                            </div>
+                        </form:form>
                     </div>
                 </div>
             </div>

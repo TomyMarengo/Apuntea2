@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.InvalidNoteException;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
@@ -39,13 +40,19 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) throws IOException {
+    public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
         UUID subjectId = directoryDao.getDirectoryPath(parentId)
                                         .getRootDirectory()
                                         .getSubject()
                                         .getSubjectId();
-        return noteDao.create(name, subjectId, userId, parentId, visible, file.getBytes(), category, FilenameUtils.getExtension(file.getOriginalFilename()));
+        byte[] fileBytes;
+        try {
+            fileBytes = file.getBytes();
+        } catch (IOException e) {
+            throw new InvalidFileException();
+        }
+        return noteDao.create(name, subjectId, userId, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()));
     }
 
     @Override

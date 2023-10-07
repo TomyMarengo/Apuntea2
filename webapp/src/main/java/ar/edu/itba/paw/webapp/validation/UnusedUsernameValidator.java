@@ -1,19 +1,19 @@
 package ar.edu.itba.paw.webapp.validation;
 
-import ar.edu.itba.paw.models.Institution;
-import ar.edu.itba.paw.services.DataService;
+import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class UnusedUsernameValidator implements ConstraintValidator<UnusedUsername, String> {
     @Autowired
     private UserService userService;
+    @Autowired
+    private SecurityService securityService;
     private Pattern pattern;
 
 
@@ -24,9 +24,12 @@ public class UnusedUsernameValidator implements ConstraintValidator<UnusedUserna
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
+        String currentUsername = this.securityService.getCurrentUser().map(User::getUsername).orElse("");
         return value != null && (value.isEmpty() ||
                 (pattern.matcher(value).matches() &&
-                        !userService.findByUsername(value).isPresent())); // Hack to only prompt error when username is being used
+                        !userService.findByUsername(value)
+                                .filter(u -> !u.getUsername().equals(currentUsername))
+                                .isPresent())); // Hack to only prompt error when valid username is being used
     }
 }
 

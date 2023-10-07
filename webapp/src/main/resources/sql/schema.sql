@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS Images
 );
 
 ALTER TABLE Users
-    ADD COLUMN IF NOT EXISTS profile_picture_id uuid REFERENCES Images (image_id),
+    ADD COLUMN IF NOT EXISTS profile_picture_id uuid REFERENCES Images (image_id) ON DELETE SET NULL,
     DROP COLUMN IF EXISTS profile_picture;
 
 CREATE TABLE IF NOT EXISTS Favorites

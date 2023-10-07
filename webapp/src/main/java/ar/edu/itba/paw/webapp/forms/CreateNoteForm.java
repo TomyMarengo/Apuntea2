@@ -9,10 +9,10 @@ import javax.validation.constraints.*;
 
 
 public class CreateNoteForm extends CreateSearchableForm {
-
     @ValidFileName(allowedExtensions = {".pdf"}) // TODO: Add more extensions
-    @MaxFileSize(megabytes = 500)
+    @MaxFileSize(megabytes = 500, allowEmptyFiles = false)
     private MultipartFile file;
+
     @NotEmpty
     @Pattern(regexp = "theory|practice|exam|other")
     private String category;

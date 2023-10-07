@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.ProfilePicture;
 import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.models.User;
 
@@ -11,4 +12,6 @@ public interface UserDao {
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
     boolean update(User user);
+    Optional<ProfilePicture> getProfilePicture(UUID userId);
+    void updateProfilePicture(UUID userId, byte[] profilePicture);
 }

@@ -1,10 +1,8 @@
 package ar.edu.itba.paw.webapp.forms;
 
 import ar.edu.itba.paw.webapp.validation.MaxFileSize;
-import ar.edu.itba.paw.webapp.validation.UnusedEmail;
 import ar.edu.itba.paw.webapp.validation.UnusedUsername;
 import ar.edu.itba.paw.webapp.validation.ValidFileName;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Pattern;
@@ -15,6 +13,7 @@ public class EditUserForm {
     @Pattern(regexp = "([a-zA-Z]+[ ]?)*")
     @Size(max = 20)
     private String firstName;
+
     @Pattern(regexp = "([a-zA-Z]+[ ]?)*")
     @Size(max = 20)
     private String lastName;
@@ -25,9 +24,9 @@ public class EditUserForm {
     //TODO add more restrictions
     private String username;
 
-//    @ValidFileName(allowedExtensions = {".jpeg", ".png", ".jpg"}) // TODO: Add more extensions
-//    @MaxFileSize(megabytes = 500)
-//    private MultipartFile file;
+    @ValidFileName(allowedExtensions = {".jpeg", ".png", ".jpg"})
+    @MaxFileSize(megabytes = 500, allowEmptyFiles = true)
+    private MultipartFile profilePicture;
 
     public String getFirstName() {
         return firstName;
@@ -42,9 +41,9 @@ public class EditUserForm {
         return username;
     }
 
-//    public MultipartFile getFile() {
-//        return file;
-//    }
+    public MultipartFile getProfilePicture() {
+        return profilePicture;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -58,7 +57,7 @@ public class EditUserForm {
         this.username = username;
     }
 
-//    public void setFile(MultipartFile file) {
-//        this.file = file;
-//    }
+    public void setProfilePicture(MultipartFile profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }

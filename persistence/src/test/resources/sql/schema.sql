@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS Images
     CONSTRAINT "PK_images" PRIMARY KEY (image_id)
 );
 
-ALTER TABLE Users ADD COLUMN IF NOT EXISTS profile_picture_id uuid REFERENCES Images (image_id);
+ALTER TABLE Users ADD COLUMN IF NOT EXISTS profile_picture_id uuid REFERENCES Images (image_id) ON DELETE SET NULL;
 ALTER TABLE Users DROP COLUMN profile_picture;
 
 CREATE TABLE IF NOT EXISTS Favorites

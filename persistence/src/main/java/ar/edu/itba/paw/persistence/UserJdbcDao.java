@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
@@ -42,6 +43,9 @@ class UserJdbcDao implements UserDao{
                             rs.getString(CAREER_NAME)
                     )
             );
+
+    private static final RowMapper<ProfilePicture> PROFILE_IMAGE_ROW_MAPPER = (rs, rowNum) -> new ProfilePicture(rs.getString(USER_ID), rs.getObject(IMAGE));
+
 
     @Autowired
     public UserJdbcDao(final DataSource ds){
@@ -105,4 +109,21 @@ class UserJdbcDao implements UserDao{
                 user.getFirstName(), user.getLastName(), user.getUsername(), user.getUserId()) == 1;
     }
 
+    @Override
+    public Optional<ProfilePicture> getProfilePicture(UUID userId){
+        return jdbcTemplate.query("SELECT user_id, image FROM Users u LEFT JOIN Images i ON u.profile_picture_id = i.image_id WHERE user_id = ?",
+                    PROFILE_IMAGE_ROW_MAPPER, userId).stream().findFirst();
+    }
+
+    @Transactional
+    @Override
+    public void updateProfilePicture(UUID userId, byte[] profilePicture) {
+        final MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(USER_ID, userId);
+        args.addValue(IMAGE, profilePicture);
+        KeyHolder holder = new GeneratedKeyHolder();
+        jdbcTemplate.update("DELETE FROM Images WHERE image_id = (SELECT profile_picture_id FROM Users WHERE user_id = ?)", userId);
+        namedParameterJdbcTemplate.update("INSERT INTO Images (image) VALUES (:image)", args, holder, new String[]{IMAGE_ID});
+        jdbcTemplate.update("UPDATE Users SET profile_picture_id = ? WHERE user_id = ?", holder.getKeys().get(IMAGE_ID), userId);
+    }
 }
