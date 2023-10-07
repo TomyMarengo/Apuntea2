@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.NoteFile;
 import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.Review;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,7 +14,7 @@ public interface NoteService {
     UUID createNoteWithSubject(String name, UUID subjectId, boolean visible, MultipartFile file, String category) throws IOException;
     UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) throws IOException;
     Optional<Note> getNoteById(UUID noteId);
-    Optional<byte[]> getNoteFileById(UUID noteId);
+    Optional<NoteFile> getNoteFileById(UUID noteId);
     Integer createOrUpdateReview(UUID noteId, Integer score, String content);
     void update(Note note);
     void delete(UUID noteId);

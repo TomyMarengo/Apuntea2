@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
@@ -19,10 +20,17 @@ public class GlobalExceptionHandler {
     private SecurityService securityService;
 
     @ExceptionHandler({UserNotFoundException.class, NoteNotFoundException.class, DirectoryNotFoundException.class})
-
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView notFound() {
         return new ModelAndView("/errors/404");
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ModelAndView maxUploadSizeExceeded() {
+        ModelAndView mav = new ModelAndView("/errors/400");
+        mav.addObject("maxUploadSizeExceeded", true);
+        return mav;
     }
 
     @ModelAttribute("user")

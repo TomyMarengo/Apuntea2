@@ -81,15 +81,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        // Configura el resolvedor de multipartes si es necesario
-        multipartResolver.setMaxUploadSize(10 * 1024 * 1024); // Por ejemplo, establece el tamaño máximo a 10MB
+        multipartResolver.setMaxUploadSize(env.getProperty("file.upload.maxSize", Long.class));
         return multipartResolver;
     }
 
     @Bean
-    public DataSource dataSource(
-
-    ) {
+    public DataSource dataSource() {
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
         ds.setUrl(env.getProperty("datasource.url"));

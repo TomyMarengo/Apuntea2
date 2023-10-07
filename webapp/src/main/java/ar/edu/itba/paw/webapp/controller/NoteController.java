@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Note;
+import ar.edu.itba.paw.models.NoteFile;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
@@ -13,6 +14,8 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -83,10 +86,14 @@ public class NoteController {
         return mav;
     }
 
-    @RequestMapping( value = "/{noteId}/download", method = {RequestMethod.GET}, produces = {"application/pdf"} ) // TODO: change
+    @RequestMapping( value = "/{noteId}/download", method = {RequestMethod.GET})
     @ResponseBody
-    public byte[] getNoteFile(@PathVariable("noteId") @ValidUuid UUID noteId) {
-        return noteService.getNoteFileById(noteId).orElseThrow(NoteNotFoundException::new);
+    public ResponseEntity<byte[]> getNoteFile(@PathVariable("noteId") @ValidUuid UUID noteId) {
+        NoteFile file = noteService.getNoteFileById(noteId).orElseThrow(NoteNotFoundException::new);
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(file.getMimeType()))
+                .body(file.getContent());
+
     }
 
     @RequestMapping(value = "/{noteId}/delete", method = RequestMethod.POST)

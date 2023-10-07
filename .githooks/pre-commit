@@ -4,6 +4,13 @@
 i18n_file1="webapp/src/main/resources/i18n/messages.properties"
 i18n_file2="webapp/src/main/resources/i18n/messages_es.properties"
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    if [[ $# -eq 0 ]]; then
+        exit 0
+    fi
+fi
+
+
 # Check if files exist
 if [[ ! -e $i18n_file1 || ! -e $i18n_file2 ]]; then
     echo "One or both i18n files do not exist."

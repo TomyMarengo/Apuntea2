@@ -62,7 +62,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Optional<byte[]> getNoteFileById(UUID noteId) {
+    public Optional<NoteFile> getNoteFileById(UUID noteId) {
         final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
         return noteDao.getNoteFileById(noteId, userId);
     }

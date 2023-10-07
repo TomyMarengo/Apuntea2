@@ -79,6 +79,12 @@ public class NoteJdbcDao implements NoteDao {
                     )
             );
 
+    private final static RowMapper<NoteFile> NOTE_FILE_ROW_MAPPER = (rs, rowNum) ->
+            new NoteFile(
+                    rs.getString(FILE_TYPE),
+                    rs.getBytes(FILE)
+            );
+
     @Autowired
     public NoteJdbcDao(final DataSource ds){
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -144,10 +150,10 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
-    public Optional<byte[]> getNoteFileById(UUID noteId, UUID currentUserId){
+    public Optional<NoteFile> getNoteFileById(UUID noteId, UUID currentUserId){
         MapSqlParameterSource args = new MapSqlParameterSource(NOTE_ID, noteId);
-        return namedParameterJdbcTemplate.query("SELECT file FROM Notes n WHERE note_id = :note_id AND ( visible " + getVisibilityCondition(currentUserId, args) + ")",
-                args, (rs, rowNum) -> (byte[]) rs.getObject(FILE)).stream().findFirst();
+        return namedParameterJdbcTemplate.query("SELECT file, file_type FROM Notes n WHERE note_id = :note_id AND ( visible " + getVisibilityCondition(currentUserId, args) + ")",
+                args, NOTE_FILE_ROW_MAPPER).stream().findFirst();
     }
 
     private String getVisibilityCondition(UUID currentUserId, MapSqlParameterSource args) {

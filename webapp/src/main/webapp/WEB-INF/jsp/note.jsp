@@ -44,7 +44,23 @@
     <div class="row">
         <section class="col-8 h-100-navs">
 
-            <iframe class=" w-100" style="height: 90%" src="${baseUrl}/notes/${noteId}/download"></iframe>
+            <c:url var="noteFileUrl" value="${baseUrl}/notes/${noteId}/download"/>
+            <c:choose>
+
+                <c:when test ="${note.fileType eq 'jpeg' or note.fileType eq 'jpg' or note.fileType eq 'png'}">
+                    <img class="w-100" src="${noteFileUrl}" alt="<c:out value="${note.name}"/>"/>
+                </c:when>
+
+                <c:when test = "${note.fileType eq 'audio'}">
+                    <audio controls class="w-100">
+                        <source src="${noteFileUrl}" type="audio/mp3">
+                    </audio>
+                </c:when>
+
+                <c:otherwise>
+                    <iframe class="w-100" style="height: 90%" src="${noteFileUrl}"></iframe>
+                </c:otherwise>
+            </c:choose>
 
             <div class="d-flex justify-content-between">
                 <h1 class="overflow-hidden">${note.name}</h1>

@@ -38,7 +38,7 @@
         <div class="row h-100 justify-content-center align-items-center">
             <div class="col-md-6">
                 <div class="text-center">
-                    <img src="${baseUrl}/image/internal_server_error.png" alt="<spring:message code="errors.500.title"/>" class="img-fluid mt-5 mb-4">
+                    <img src="${baseUrl}/image/internal-server.png" alt="<spring:message code="errors.500.title"/>" class="img-fluid mt-5 mb-4">
                     <h1 class="text-primary"><spring:message code="errors.500.title"/></h1>
                     <p class="text-primary"><spring:message code="errors.500.message"/></p>
                 </div>

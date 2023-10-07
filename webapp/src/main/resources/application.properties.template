@@ -5,3 +5,5 @@ base.url:
 
 mail.address:
 mail.password:
+
+file.upload.maxSize: 524288000
