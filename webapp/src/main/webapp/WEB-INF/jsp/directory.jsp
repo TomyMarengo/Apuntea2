@@ -229,15 +229,20 @@
                      class="icon-s fill-dark-primary"/>
             </button>
 
-            <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button" data-bs-toggle="tooltip"
+            <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button"
+                    data-bs-toggle="tooltip"
                     data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
-                    data-bs-trigger="hover" onclick="changePageSize(${navigationForm.pageSize})">
+                    data-bs-trigger="hover"
+                    onclick="changePageSize(${navigationForm.pageSize}, ${navigationForm.pageNumber})">
                 <c:out value="${navigationForm.pageSize}"/>
 
             </button>
         </div>
 
     </div>
+
+    <c:set var="folders" value=""/>
+    <c:set var="files" value=""/>
 
     <!-- HORIZONTAL LIST -->
     <section class="container mt-4 p-0" id="horizontalList">
@@ -255,6 +260,15 @@
                 </thead>
                 <tbody>
                 <c:forEach var="item" items="${results}">
+
+                    <!-- SAVE FOR BOX LIST -->
+                    <c:if test="${item.category.formattedName eq 'directory'}">
+                        <c:set var="folders" value="${folders}${item.id},"/>
+                    </c:if>
+                    <c:if test="${item.category.formattedName ne 'directory'}">
+                        <c:set var="files" value="${files}${item.id},"/>
+                    </c:if>
+
                     <c:set var="date" value="${item.createdAt}"/>
                     <tr class="note-found no-select"
                         data-category="<c:out value="${item.category.formattedName}"/>"
@@ -407,163 +421,207 @@
         </div>
     </section>
 
+
     <!-- BOX LIST -->
     <section class="container mt-4 p-0" id="boxList">
-        <div class="row">
-            <c:forEach items="${results}" var="item">
-                <div class="col-md-4 mb-4">
-                    <div class="note-found card box search-note-box h-100"
-                         data-category="${item.category.formattedName}"
-                         id="<c:out value="${item.id}"/>.2">
-                        <div class="card-body no-select">
 
-                            <!-- TITLE AND BUTTONS -->
-                            <div class="d-flex justify-content-between">
-                                <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
-                                    <c:if test="${item.category.formattedName ne 'directory'}">
-                                        <c:if test="${item.fileType eq 'pdf'}">
-                                            <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-m">
-                                        </c:if>
-                                        <c:if test="${item.fileType eq 'jpeg'}">
-                                            <img src="<c:url value="/image/jpeg.png"/>" alt="jpeg" class="icon-m">
-                                        </c:if>
-                                        <c:if test="${item.fileType eq 'jpg'}">
-                                            <img src="<c:url value="/image/jpg.png"/>" alt="jpg" class="icon-m">
-                                        </c:if>
-                                        <c:if test="${item.fileType eq 'png'}">
-                                            <img src="<c:url value="/image/png.png"/>" alt="png" class="icon-m">
-                                        </c:if>
-                                        <c:if test="${item.fileType eq 'mp3'}">
-                                            <img src="<c:url value="/image/mp3.png"/>" alt="mp3" class="icon-m">
-                                        </c:if>
-                                        <c:if test="${item.fileType eq 'mp4'}">
-                                            <img src="<c:url value="/image/mp4.png"/>" alt="mp4" class="icon-m">
-                                        </c:if>
-                                    </c:if>
-                                    <c:if test="${item.category.formattedName eq 'directory'}">
-                                        <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
-                                             class="icon-s fill-${item.iconColor}">
-                                    </c:if>
-                                    <h4 class="card-title text-truncate mb-0">
-                                        <c:out value="${item.name}"/>
-                                    </h4>
-                                </div>
+        <!-- FOLDERS -->
+        <c:if test="${folders ne ''}">
+            <h5 class="mx-1 mb-3"><strong><spring:message code="folders"/></strong></h5>
+            <div class="row">
+                <c:forEach items="${results}" var="item">
+                    <c:if test="${item.category.formattedName eq 'directory'}">
+                        <div class="col-md-4 mb-4">
+                            <div class="note-found card box search-note-box h-100"
+                                 data-category="${item.category.formattedName}"
+                                 id="<c:out value="${item.id}"/>.2">
+                                <div class="card-body no-select">
 
-
-                                <div class="d-flex">
-
-                                    <!-- FAVORITE -->
-                                    <c:if test="${user ne null and item.category.formattedName eq 'directory'}"> <!-- TODO: Por ahora es directory nomas -->
-                                        <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
-                                        <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
-
-                                        <div data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                             data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
-                                            <form:form action="${item.favorite ? removeFavorite : addFavorite}"
-                                                       method="post">
-                                                <input name="parentId" value="${item.parentId}" type="hidden"/>
-                                                <button type="submit"
-                                                        class="btn nav-icon-button favorite-button"
-                                                        data-bs-toggle="tooltip"
-                                                        data-bs-placement="bottom"
-                                                        data-bs-title="<spring:message code="favorite"/>"
-                                                        id="<c:out value="${item.id}"/>.f1">
-                                                    <img src="<c:url value="${ item.favorite ?  '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
-                                                         alt="<spring:message code="favorite"/>"
-                                                         class="icon-xs fill-text">
-                                                </button>
-                                            </form:form>
+                                    <!-- TITLE AND BUTTONS -->
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
+                                            <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
+                                                 class="icon-s fill-${item.iconColor}">
+                                            <h4 class="card-title text-truncate mb-0">
+                                                <c:out value="${item.name}"/>
+                                            </h4>
                                         </div>
-                                    </c:if>
 
-                                    <c:if test="${user ne null and (item.user.userId eq user.userId)}">
-                                        <c:if test="${item.category.formattedName ne 'directory'}">
-                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
-                                               data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                                                <button class="btn button-expansion rounded-circle edit-button"
-                                                        data-bs-toggle="modal" data-bs-target="#editNoteModal"
-                                                        id="<c:out value="${item.id}.e2"/>">
+                                        <div class="d-flex">
+                                            <!-- FAVORITE -->
+                                            <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
+                                            <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
 
-                                                    <img src="<c:url value="/svg/pencil.svg"/>"
-                                                         alt="<spring:message code="edit"/>"
-                                                         class="icon-xs fill-text">
-                                                </button>
-                                            </a>
-                                        </c:if>
-                                        <c:if test="${item.category.formattedName eq 'directory'}">
-                                            <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
-                                               data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
-                                                <button class="btn button-expansion rounded-circle edit-button"
-                                                        data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
-                                                        id="<c:out value="${item.id}.e2"/>">
-                                                    <img src="<c:url value="/svg/pencil.svg"/>"
-                                                         alt="<spring:message code="edit"/>"
-                                                         class="icon-xs fill-text">
-                                                </button>
-                                            </a>
-                                        </c:if>
-                                    </c:if>
-                                    <c:if test="${user ne null and (item.user.userId eq user.userId or user.isAdmin) }">
-                                        <div data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                             data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
-                                            <button class="btn nav-icon-button delete-button"
-                                                    data-bs-toggle="modal" data-bs-target="#deleteManyModal"
-                                                    id="<c:out value="${item.id}"/>.e2">
-                                                <img src="<c:url value="/svg/trash.svg"/>"
-                                                     alt="<spring:message code="delete"/>"
-                                                     class="icon-xs fill-text">
-                                            </button>
+                                            <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                 data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
+                                                <form:form action="${item.favorite ? removeFavorite : addFavorite}"
+                                                           method="post">
+                                                    <input name="parentId" value="${item.parentId}" type="hidden"/>
+                                                    <button type="submit"
+                                                            class="btn nav-icon-button favorite-button"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            data-bs-title="<spring:message code="favorite"/>"
+                                                            id="<c:out value="${item.id}"/>.f1">
+                                                        <img src="<c:url value="${ item.favorite ?  '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
+                                                             alt="<spring:message code="favorite"/>"
+                                                             class="icon-xs fill-text">
+                                                    </button>
+                                                </form:form>
+                                            </div>
+
+                                            <c:if test="${user ne null and (item.user.userId eq user.userId)}">
+                                                <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
+                                                   data-bs-title="<spring:message code="edit"/>"
+                                                   data-bs-trigger="hover">
+                                                    <button class="btn button-expansion rounded-circle edit-button"
+                                                            data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
+                                                            id="<c:out value="${item.id}.e2"/>">
+                                                        <img src="<c:url value="/svg/pencil.svg"/>"
+                                                             alt="<spring:message code="edit"/>"
+                                                             class="icon-xs fill-text">
+                                                    </button>
+                                                </a>
+
+                                                <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                     data-bs-title="<spring:message code="delete"/>"
+                                                     data-bs-trigger="hover">
+                                                    <button class="btn nav-icon-button delete-button"
+                                                            data-bs-toggle="modal" data-bs-target="#deleteManyModal"
+                                                            id="<c:out value="${item.id}"/>.e2">
+                                                        <img src="<c:url value="/svg/trash.svg"/>"
+                                                             alt="<spring:message code="delete"/>"
+                                                             class="icon-xs fill-text">
+                                                    </button>
+                                                </div>
+                                            </c:if>
                                         </div>
-                                    </c:if>
+                                    </div>
+
+
+                                    <span class="card-text">
+                                        <strong><spring:message code="owner"/></strong>:
+                                        <c:out value="${item.user.email}"/>
+                                    </span>
+
+                                    <br>
+
+                                    <span class="card-text">
+                                        <strong><spring:message code="createdAt"/></strong>:
+                                        <spring:message code="date.format"
+                                                        arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                                    </span>
+
+                                    <input type="checkbox" class="select-checkbox d-none"/>
+
                                 </div>
                             </div>
-
-
-                            <span class="card-text">
-                                <strong><spring:message code="owner"/></strong>:
-                                <c:out value="${item.user.email}"/>
-                            </span>
-
-                            <br>
-                                <%--<span class="card-text"><strong><spring:message code="category"/></strong>:
-                                    <c:if test="${item.category.formattedName eq 'theory'}">
-                                        <spring:message code="search.category.theory"/>
-                                    </c:if>
-                                    <c:if test="${item.category.formattedName eq 'practice'}">
-                                        <spring:message code="search.category.practice"/>
-                                    </c:if>
-                                    <c:if test="${item.category.formattedName eq 'exam'}">
-                                        <spring:message code="search.category.exam"/>
-                                    </c:if>
-                                    <c:if test="${item.category.formattedName eq 'other'}">
-                                        <spring:message code="search.category.other"/>
-                                    </c:if>
-                                </span>
-                                <br>--%>
-                            <span class="card-text">
-                                <strong><spring:message code="createdAt"/></strong>:
-                                <spring:message code="date.format"
-                                                arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
-                            </span>
-
-                            <br>
-
-                            <span class="card-text">
-                                <c:if test="${item.avgScore eq 0}">
-                                    <strong><spring:message code="notes.noScore"/></strong>
-                                </c:if>
-                                <c:if test="${item.avgScore ne 0}">
-                                    <strong><spring:message code="score"/></strong>:
-                                    <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
-                                </c:if>
-                            </span>
-                            <input type="checkbox" class="select-checkbox d-none"/>
-
                         </div>
-                    </div>
-                </div>
-            </c:forEach>
-        </div>
+                    </c:if>
+                </c:forEach>
+            </div>
+        </c:if>
+
+        <!-- FILES -->
+        <c:if test="${files ne ''}">
+            <h5 class="mx-1 mb-3"><strong><spring:message code="files"/></strong></h5>
+            <div class="row">
+                <c:forEach items="${results}" var="item">
+                    <c:if test="${item.category.formattedName ne 'directory'}">
+                        <div class="col-md-4 mb-4">
+                            <div class="note-found card box search-note-box h-100"
+                                 data-category="${item.category.formattedName}"
+                                 id="<c:out value="${item.id}"/>.2">
+                                <div class="card-body no-select">
+
+                                    <!-- TITLE AND BUTTONS -->
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
+                                            <c:if test="${item.fileType eq 'pdf'}">
+                                                <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-m">
+                                            </c:if>
+                                            <c:if test="${item.fileType eq 'jpeg'}">
+                                                <img src="<c:url value="/image/jpeg.png"/>" alt="jpeg" class="icon-m">
+                                            </c:if>
+                                            <c:if test="${item.fileType eq 'jpg'}">
+                                                <img src="<c:url value="/image/jpg.png"/>" alt="jpg" class="icon-m">
+                                            </c:if>
+                                            <c:if test="${item.fileType eq 'png'}">
+                                                <img src="<c:url value="/image/png.png"/>" alt="png" class="icon-m">
+                                            </c:if>
+                                            <c:if test="${item.fileType eq 'mp3'}">
+                                                <img src="<c:url value="/image/mp3.png"/>" alt="mp3" class="icon-m">
+                                            </c:if>
+                                            <c:if test="${item.fileType eq 'mp4'}">
+                                                <img src="<c:url value="/image/mp4.png"/>" alt="mp4" class="icon-m">
+                                            </c:if>
+                                            <h4 class="card-title text-truncate mb-0">
+                                                <c:out value="${item.name}"/>
+                                            </h4>
+                                        </div>
+
+                                        <div class="d-flex">
+                                            <c:if test="${user ne null and (item.user.userId eq user.userId)}">
+                                                <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
+                                                   data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                                                    <button class="btn button-expansion rounded-circle edit-button"
+                                                            data-bs-toggle="modal" data-bs-target="#editNoteModal"
+                                                            id="<c:out value="${item.id}.e2"/>">
+
+                                                        <img src="<c:url value="/svg/pencil.svg"/>"
+                                                             alt="<spring:message code="edit"/>"
+                                                             class="icon-xs fill-text">
+                                                    </button>
+                                                </a>
+                                                <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                     data-bs-title="<spring:message code="delete"/>"
+                                                     data-bs-trigger="hover">
+                                                    <button class="btn nav-icon-button delete-button"
+                                                            data-bs-toggle="modal" data-bs-target="#deleteManyModal"
+                                                            id="<c:out value="${item.id}"/>.e2">
+                                                        <img src="<c:url value="/svg/trash.svg"/>"
+                                                             alt="<spring:message code="delete"/>"
+                                                             class="icon-xs fill-text">
+                                                    </button>
+                                                </div>
+                                            </c:if>
+                                        </div>
+                                    </div>
+
+
+                                    <span class="card-text">
+                                        <strong><spring:message code="owner"/></strong>:
+                                        <c:out value="${item.user.email}"/>
+                                    </span>
+
+                                    <br>
+
+                                    <span class="card-text">
+                                        <strong><spring:message code="createdAt"/></strong>:
+                                        <spring:message code="date.format"
+                                                        arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                                    </span>
+
+                                    <br>
+
+                                    <span class="card-text">
+                                        <c:if test="${item.avgScore eq 0}">
+                                            <strong><spring:message code="notes.noScore"/></strong>
+                                        </c:if>
+                                        <c:if test="${item.avgScore ne 0}">
+                                            <strong><spring:message code="score"/></strong>:
+                                            <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
+                                        </c:if>
+                                    </span>
+                                    <input type="checkbox" class="select-checkbox d-none"/>
+
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
+                </c:forEach>
+            </div>
+        </c:if>
     </section>
 
     <!-- PAGINATION -->
@@ -597,17 +655,20 @@
 
                 <c:if test="${navigationForm.pageNumber gt 1}">
                     <li class="page-item">
-                        <a class="page-link" data-page="${navigationForm.pageNumber - 1}"><c:out value="${navigationForm.pageNumber - 1}"/></a>
+                        <a class="page-link" data-page="${navigationForm.pageNumber - 1}"><c:out
+                                value="${navigationForm.pageNumber - 1}"/></a>
                     </li>
                 </c:if>
 
                 <li class="page-item active" aria-current="page">
-                    <a class="page-link" data-page="${navigationForm.pageNumber}"><c:out value="${navigationForm.pageNumber}"/></a>
+                    <a class="page-link" data-page="${navigationForm.pageNumber}"><c:out
+                            value="${navigationForm.pageNumber}"/></a>
                 </li>
 
                 <c:if test="${navigationForm.pageNumber lt maxPage}">
                     <li class="page-item">
-                        <a class="page-link" data-page="${navigationForm.pageNumber + 1}"><c:out value="${navigationForm.pageNumber + 1}"/></a>
+                        <a class="page-link" data-page="${navigationForm.pageNumber + 1}"><c:out
+                                value="${navigationForm.pageNumber + 1}"/></a>
                     </li>
                 </c:if>
 
