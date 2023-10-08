@@ -93,7 +93,7 @@ public class SubjectJdbcDao implements SubjectDao {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(SUBJECT_ID, subjectId);
         args.addValue(CAREER_ID, careerId);
-        Integer count = namedParameterJdbcTemplate.queryForObject("SELECT COUNT(*) as n FROM Subjects_Careers sc" +
+        Integer count = namedParameterJdbcTemplate.queryForObject("SELECT COUNT(*) as n FROM Subjects_Careers  " +
                         "INNER JOIN Subjects s ON sc.subject_id = s.subject_id " +
                         "INNER JOIN Careers c ON sc.career_id = c.career_id " +
                         "WHERE sc.subject_id = :subject_id " +

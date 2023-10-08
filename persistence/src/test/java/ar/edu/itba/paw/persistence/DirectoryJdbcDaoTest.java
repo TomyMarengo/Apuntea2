@@ -19,7 +19,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcTestUtils.*;
+import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
 
 import javax.sql.DataSource;
 import java.util.HashMap;

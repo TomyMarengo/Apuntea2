@@ -13,8 +13,10 @@ import java.util.UUID;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
-public class JdbcTestUtils {
+public class JdbcDaoTestUtils {
     static UUID ITBA_ID = UUID.fromString("10000000-0000-0000-0000-000000000000");
+
+    static UUID UTN_ID = UUID.fromString("10000000-0000-0000-0000-000000000001");
     static UUID ING_INF = UUID.fromString("c0000000-0000-0000-0000-000000000000");
     static UUID ING_MEC = UUID.fromString("c0000000-0000-0000-0000-000000000001");
     static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
@@ -45,7 +47,7 @@ public class JdbcTestUtils {
     static UUID TMP_DIR_ID_2 = UUID.fromString("dF000000-0000-0000-0000-000000000002");
     static UUID TMP_DIR_ID_3 = UUID.fromString("dF000000-0000-0000-0000-000000000003");
     static UUID TMP_DIR_ID_4 = UUID.fromString("dF000000-0000-0000-0000-000000000004");
-    private JdbcTestUtils() {}
+    private JdbcDaoTestUtils() {}
 
     static UUID insertStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
         MapSqlParameterSource args = new MapSqlParameterSource();
@@ -126,4 +128,44 @@ public class JdbcTestUtils {
                         .addValue("code", verificationCode.getCode())
                         .addValue("expires_at", verificationCode.getExpirationDate()));
     }
+    static UUID insertSubject(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String subjectName, UUID rootDirectoryId) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(SUBJECT_NAME, subjectName);
+        args.addValue(ROOT_DIRECTORY_ID, rootDirectoryId);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Subjects (subject_name, root_directory_id) VALUES (:subject_name, :root_directory_id)",
+                args, keyHolder, new String[]{SUBJECT_ID});
+        return (UUID) keyHolder.getKeys().get(SUBJECT_ID);
+    }
+
+    static UUID insertCareer(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String careerName, UUID institutionId) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(CAREER_NAME, careerName);
+        args.addValue(INSTITUTION_ID, institutionId);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Careers (career_name, institution_id) VALUES (:career_name, :institution_id)",
+                args, keyHolder, new String[]{CAREER_ID});
+        return (UUID) keyHolder.getKeys().get(CAREER_ID);
+    }
+
+    static UUID insertInstitution(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String institutionName) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(INSTITUTION_NAME, institutionName);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Institutions (institution_name) VALUES (:institution_name)",
+                args, keyHolder, new String[]{INSTITUTION_ID});
+        return (UUID) keyHolder.getKeys().get(INSTITUTION_ID);
+    }
+
+    static void insertSubjectCareer(SimpleJdbcInsert jdbcSubjectsCareersInsert, UUID subjectId, UUID careerId, int year) {
+        jdbcSubjectsCareersInsert.execute(new HashMap<String, Object>(){{
+            put(SUBJECT_ID, subjectId);
+            put(CAREER_ID, careerId);
+            put(YEAR, year);
+        }});
+    }
+
 }
