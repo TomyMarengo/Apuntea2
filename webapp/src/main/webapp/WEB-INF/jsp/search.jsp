@@ -268,6 +268,9 @@
                                 <c:if test="${item.fileType eq 'jpeg'}">
                                     <img src="<c:url value="/image/jpeg.png"/>" alt="jpeg" class="icon-m">
                                 </c:if>
+                                <c:if test="${item.fileType eq 'jpg'}">
+                                    <img src="<c:url value="/image/jpg.png"/>" alt="jpg" class="icon-m">
+                                </c:if>
                                 <c:if test="${item.fileType eq 'png'}">
                                     <img src="<c:url value="/image/png.png"/>" alt="png" class="icon-m">
                                 </c:if>
@@ -387,6 +390,9 @@
                                         </c:if>
                                         <c:if test="${item.fileType eq 'jpeg'}">
                                             <img src="<c:url value="/image/jpeg.png"/>" alt="jpeg" class="icon-m">
+                                        </c:if>
+                                        <c:if test="${item.fileType eq 'jpg'}">
+                                            <img src="<c:url value="/image/jpg.png"/>" alt="jpg" class="icon-m">
                                         </c:if>
                                         <c:if test="${item.fileType eq 'png'}">
                                             <img src="<c:url value="/image/png.png"/>" alt="png" class="icon-m">
