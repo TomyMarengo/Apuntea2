@@ -43,3 +43,12 @@
 /*    show also the last word of the name*/
     overflow: hidden;
 }
+
+.file-list {
+    /* grid repeat fit, all the columns with the same width, align left, same space around*/
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    justify-items: left;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}

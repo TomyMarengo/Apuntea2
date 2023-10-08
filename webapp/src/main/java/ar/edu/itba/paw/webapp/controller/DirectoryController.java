@@ -48,8 +48,11 @@ public class DirectoryController {
 
     @RequestMapping(value = "/{directoryId}" ,method = RequestMethod.GET)
     public ModelAndView getDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
-                                     @ModelAttribute("navigationForm") NavigationForm navigationForm,
+                                     @Valid @ModelAttribute("navigationForm") NavigationForm navigationForm, final BindingResult result,
                                      final ModelMap model) {
+        if (result.hasErrors()) {
+            return new ModelAndView("/errors/400");
+        }
 
         ModelAndView mav = new ModelAndView("directory");
 

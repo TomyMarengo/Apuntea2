@@ -33,6 +33,10 @@ public class SearchController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView search(@Valid @ModelAttribute("searchForm") final SearchForm searchForm, final BindingResult result){
+        if (result.hasErrors()) {
+            return new ModelAndView("/errors/400");
+        }
+
         final ModelAndView mav = new ModelAndView("search");
 
         Page<Searchable> pageResult = searchService.search(
