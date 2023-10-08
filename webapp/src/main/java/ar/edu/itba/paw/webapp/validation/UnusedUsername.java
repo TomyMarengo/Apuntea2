@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = {UnusedUsernameValidator.class})
 public @interface UnusedUsername {
-    String message() default "The username is already being used";
+    String message() default "{ar.edu.itba.paw.webapp.validation.UnusedUsername.message}";
 
     String regex() default "([a-zA-Z]+[ ]?)*";
 

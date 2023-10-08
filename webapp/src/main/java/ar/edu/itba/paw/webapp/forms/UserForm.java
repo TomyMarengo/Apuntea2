@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.forms;
 
 import ar.edu.itba.paw.webapp.validation.UnusedEmail;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -11,14 +12,16 @@ import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public class UserForm {
+
     @NotEmpty
+    @Email
     @UnusedEmail
     private String email;
 
     @NotNull
     @NotBlank
     @Size(min = 4, max = 50)
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$)$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$")
     private String password;
 
     @ValidUuid

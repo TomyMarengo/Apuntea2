@@ -9,8 +9,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidFileName {
-    String message() default
-            "{ar.edu.itba.paw.webapp.validation.ValidFileName.message}";
+    String message() default "{ar.edu.itba.paw.webapp.validation.ValidFileName.message}";
     String[] allowedExtensions() default {};
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

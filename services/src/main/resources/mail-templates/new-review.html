@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+
+<head>
+    <meta name="x-apple-disable-message-reformatting">
+    <meta charset="UTF-8">
+    <title>New follower</title>
+    <title>
+        <span th:text="#{email.review.title}"/>
+    </title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .bg{
+            background: linear-gradient(180deg, #FFFCFC 0%, #F5F1E7 42.19%, #F8EBCA 99.99%);
+        }
+        h1{
+            color: #EF7765;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        p{
+            font-size: 16px;
+            color: #5A5044;
+        }
+
+
+        button {
+            background-color: #EF7765; /* Green background */
+            border: none; /* Remove border */
+            color: white; /* White text */
+            padding: 15px 32px; /* Padding inside the button */
+            text-align: center; /* Center-align text */
+            text-decoration: none; /* Remove underline from text */
+            display: inline-block; /* Display as inline block element */
+            font-size: 16px; /* Font size */
+            margin: 4px 2px; /* Margin between buttons */
+            cursor: pointer; /* Cursor on hover */
+            border-radius: 8px; /* Optional: Rounded corners */
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 10px;
+            text-align: center;
+            background-color: #FFA292;
+        }
+
+    </style>
+</head>
+
+<body class="bg">
+    <div style="padding: 1em 3em">
+        <a th:href="${url}" style="text-decoration: none"><h1>Apuntea</h1></a>
+        <p th:text="${reviewer} + ' ' + #{email.review.createdReview} + ' ' + ${name} + '.'"/>
+        <div class="card">
+            <p th:text="${content}" style="font-size: 18px"/>
+            <div style="margin-top: 10px;">
+                <th:block th:each="i : ${#numbers.sequence(1, score, 1)}">⭐</th:block>
+            </div>
+        </div>
+        <a th:href="${urlNote}"><button th:text="#{email.review.goToNote}"/></a>
+        <p th:text="#{email.review.thanks}"/>
+    </div>
+</body>
+
+</html>
+

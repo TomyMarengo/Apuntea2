@@ -53,7 +53,7 @@
                     <!-- Profile picture (visible on small screens) -->
                     <div class="profile-picture-small">
                         <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
-                            <img src="<c:url value="/image/profile-picture.jpeg"/>" alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
+                            <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>" alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
                         </div>
                    </div>
 

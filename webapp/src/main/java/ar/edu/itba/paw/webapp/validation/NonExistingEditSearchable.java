@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NonExistingEditSearchable {
 
-    String message() default "The file name is already being used";
+    String message() default "{ar.edu.itba.paw.webapp.validation.NonExistingEditSearchable.message}";
 
     Class<?>[] groups() default {};
 

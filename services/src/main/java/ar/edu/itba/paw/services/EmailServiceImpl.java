@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -32,6 +33,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private Environment env;
+
     private	static	final Logger LOGGER	= LoggerFactory.getLogger(EmailServiceImpl.class);
 
     @Async
@@ -41,9 +45,13 @@ public class EmailServiceImpl implements EmailService {
         final String to = review.getNote().getUser().getEmail();
         final String subject = messageSource.getMessage("email.review.new", null, ownerLocale) + " " + review.getNote().getName();
         final Map<String, Object> data = new HashMap<>();
+        data.put("name", review.getNote().getName());
         data.put("score", review.getScore());
         data.put("content", review.getContent());
         data.put("reviewer", review.getUser().getEmail());
+        data.put("url", env.getProperty("base.url"));
+        data.put("urlNote", env.getProperty("base.url") + "/notes/" + review.getNote().getId());
+
         try {
             LOGGER.info("Sending review email to {}", review.getNote().getUser().getEmail());
             sendMessageUsingThymeleafTemplate(to,subject,"new-review.html", data, ownerLocale);

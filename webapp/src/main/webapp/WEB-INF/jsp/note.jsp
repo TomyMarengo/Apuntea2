@@ -47,15 +47,16 @@
             <c:url var="noteFileUrl" value="${baseUrl}/notes/${noteId}/download"/>
             <c:choose>
 
-                <c:when test ="${note.fileType eq 'jpeg' or note.fileType eq 'jpg' or note.fileType eq 'png'}">
-                    <img class="w-100" src="${noteFileUrl}" alt="<c:out value="${note.name}"/>"/>
-                </c:when>
+                    <c:when test ="${note.fileType eq 'jpeg' or note.fileType eq 'jpg' or note.fileType eq 'png'}">
+                        <img class="w-100" src="${noteFileUrl}" alt="<c:out value="${note.name}"/>"/>
+                    </c:when>
 
-                <c:when test = "${note.fileType eq 'audio'}">
-                    <audio controls class="w-100">
-                        <source src="${noteFileUrl}" type="audio/mp3">
-                    </audio>
-                </c:when>
+                    <c:when test = "${note.fileType eq 'mp3'}">
+                        <audio controls class="w-100">
+                            <source src="${noteFileUrl}" type="audio/mp3">
+                        </audio>
+                    </c:when>
+
 
                 <c:otherwise>
                     <iframe class="w-100" style="height: 90%" src="${noteFileUrl}"></iframe>
@@ -130,7 +131,7 @@
                                             <c:out value="${review.user.email}"/>
                                         </h4>
                                         <span class="card-header-pills">
-                                    <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
+                                            <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
                                         </span>
                                     </div>
 

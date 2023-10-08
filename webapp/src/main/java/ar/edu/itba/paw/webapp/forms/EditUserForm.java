@@ -20,7 +20,7 @@ public class EditUserForm {
 
     @UnusedUsername
     @Size(max = 30)
-    @Pattern(regexp = "[a-zA-Z0-9]*")
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     //TODO add more restrictions
     private String username;
 
