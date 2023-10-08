@@ -1,56 +1,57 @@
 /*noinspection CssReplaceWithShorthandSafely*/
 body {
-	background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%);
-	background-repeat: no-repeat;
-	/* Evita la repetición del fondo */
-	background-size: cover;
-	background-blend-mode: lighten;
-	background-attachment: fixed;
+    background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%);
+    background-repeat: no-repeat;
+    /* Evita la repetición del fondo */
+    background-size: cover;
+    background-blend-mode: lighten;
+    background-attachment: fixed;
 }
 
 * {
-	font-family: 'Lato', sans-serif !important;
-	color: var(--text);
+    font-family: 'Lato', sans-serif !important;
+    color: var(--text);
 }
 
 button {
-	font-weight: 700 !important;
+    font-weight: 700 !important;
 }
 
 input::placeholder {
-	color: var(--text) !important;
+    color: var(--text) !important;
 }
 
 p {
-	margin: 0;
+    margin: 0;
 }
 
 h5 {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 h6 {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 h3 {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 a {
-	text-decoration: none;
-	/* Quitar subrayado */
+    text-decoration: none;
+    /* Quitar subrayado */
 }
 
 textarea.form-control {
-	resize: none !important;
+    resize: none !important;
 }
 
 textarea::placeholder {
-	color: var(--text) !important;
-	opacity: 1;
+    color: var(--text) !important;
+    opacity: 1;
 }
 
 h1 {
-	font-size: 2rem !important;
+    font-size: 2rem !important;
 }
+

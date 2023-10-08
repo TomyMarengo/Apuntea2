@@ -66,6 +66,10 @@
 	font-size: large;
 	font-weight: bold;
 	color: var(--bg);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
 }
 
 .bottom-navbar-item:hover {

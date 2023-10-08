@@ -3231,7 +3231,7 @@ textarea.form-control-lg {
 .dropdown-item:active {
   color: var(--bs-dropdown-link-active-color);
   text-decoration: none;
-  background-color: var(--bs-dropdown-link-active-bg);
+  background-color: var(--dark-primary);
 }
 
 .dropdown-item.disabled,

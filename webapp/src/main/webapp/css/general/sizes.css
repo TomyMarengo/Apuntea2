@@ -13,3 +13,7 @@
 .h-100-navs {
 	height: calc(100vh - 148px);
 }
+
+.mh-100-navs {
+	max-height: calc(100vh - 148px);
+}

@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/notes/reviews-comments.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/notes/note.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,25 +41,30 @@
 <fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}"/>
 
 <div class="container-fluid">
-    <div class="row">
-        <section class="col-8 h-100-navs">
+    <div class="row row-cols-1 row-cols-lg-2">
+        <section class="col col-lg-8">
 
             <c:url var="noteFileUrl" value="${baseUrl}/notes/${noteId}/download"/>
             <c:choose>
 
-                    <c:when test ="${note.fileType eq 'jpeg' or note.fileType eq 'jpg' or note.fileType eq 'png'}">
-                        <img class="w-100" src="${noteFileUrl}" alt="<c:out value="${note.name}"/>"/>
-                    </c:when>
+                <c:when test="${note.fileType eq 'jpeg' or note.fileType eq 'jpg' or note.fileType eq 'png'}">
+                    <div class="container-img-note mh-100-navs">
+                        <img src="${noteFileUrl}" alt="<c:out value="${note.name}"/>"/>
+                    </div>
 
-                    <c:when test = "${note.fileType eq 'mp3'}">
-                        <audio controls class="w-100">
-                            <source src="${noteFileUrl}" type="audio/mp3">
-                        </audio>
-                    </c:when>
+                </c:when>
+
+                <c:when test="${note.fileType eq 'mp3'}">
+                    <audio controls class="w-100">
+                        <source src="${noteFileUrl}" type="audio/mp3">
+                    </audio>
+                </c:when>
 
 
                 <c:otherwise>
-                    <iframe class="w-100" style="height: 90%" src="${noteFileUrl}"></iframe>
+                    <div class="h-100-navs">
+                        <iframe class="h-100 w-100" src="${noteFileUrl}"></iframe>
+                    </div>
                 </c:otherwise>
             </c:choose>
 
@@ -110,7 +115,7 @@
             </span>
         </section>
 
-        <section class="col-4">
+        <section class="col col-lg-4">
             <div class="h-100 d-flex flex-column">
 
                 <div class="container-fluid pb-3">
@@ -252,7 +257,8 @@
                                         code="category"/></label>
                                 <form:select path="category" class="form-select" id="categorySelect">
                                     <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
+                                    <form:option value="practice"><spring:message
+                                            code="category.practice"/></form:option>
                                     <form:option value="exam"><spring:message code="category.exam"/></form:option>
                                     <form:option value="other"><spring:message code="category.other"/></form:option>
                                 </form:select>
@@ -312,8 +318,8 @@
     <c:if test="${errorsEditNoteForm == null}">
         <script>
             editNoteForm.querySelectorAll('#name')[0].value = "<c:out value="${note.name}"/>";
-            editNoteForm.querySelectorAll('#categorySelect')[0].value =  "<c:out value="${note.category}"/>";
-            editNoteForm.querySelectorAll('#visible')[0].value =  "<c:out value="${note.visible}"/>";
+            editNoteForm.querySelectorAll('#categorySelect')[0].value = "<c:out value="${note.category}"/>";
+            editNoteForm.querySelectorAll('#visible')[0].value = "<c:out value="${note.visible}"/>";
         </script>
     </c:if>
 </c:if>

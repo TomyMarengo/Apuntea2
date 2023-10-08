@@ -26,8 +26,8 @@ public class SearchForm {
     @Min(1)
     private Integer pageNumber = 1;
     @NotNull
-    @Range(min = 6, max = 24)
-    private Integer pageSize = 6;
+    @Range(min = 12, max = 36)
+    private Integer pageSize = 12;
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
     @Size(max = 50)
     private String word;

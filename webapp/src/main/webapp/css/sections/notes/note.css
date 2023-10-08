@@ -26,3 +26,19 @@
 #noteViewer {
     transition: margin-left .5s;
 }
+
+.container-img-note {
+    max-width: 100%;
+    background-color: var(--dark-text);
+    display: flex;
+    justify-content: center;
+}
+
+
+.container-img-note img {
+    display: block;
+    height: 100%; /* Ajusta la altura de la imagen al 100% del contenedor */
+    width: auto; /* Ajusta automáticamente el ancho para evitar deformaciones */
+    max-width: 100%;
+    max-height: calc(100vh - 148px);
+}

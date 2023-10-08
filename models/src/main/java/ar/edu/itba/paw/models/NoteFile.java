@@ -11,6 +11,7 @@ public class NoteFile {
         put("pdf", "application/pdf");
         put("png", "image/png");
         put("jpeg", "image/jpeg");
+        put("jpg", "image/jpeg");
         put("mp3", "audio/mp3");
         put("mp4",  "video/mp4");
     }};
