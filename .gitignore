@@ -53,3 +53,5 @@ files/
 #Application properties
 webapp/src/main/resources/application.properties
 webapp/src/main/resources/rememberme.key
+
+qodana.yaml

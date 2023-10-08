@@ -289,6 +289,31 @@
 
                         <td class="search-actions">
                             <div class="d-flex justify-content-end">
+
+                                <!-- Favorite -->
+                                <c:if test="${user ne null and item.category.formattedName eq 'directory'}"> <!-- TODO: Por ahora es directory nomas -->
+                                    <c:set var="addFavorite" value="../directory/${item.id}/addfavorite"/>
+                                    <c:set var="removeFavorite" value="../directory/${item.id}/removefavorite"/>
+
+                                    <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                         data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
+                                        <form:form action="${item.favorite ? removeFavorite : addFavorite}"
+                                                   method="post">
+                                            <input name="parentId" value="${item.parentId}" type="hidden"/>
+                                            <button type="submit"
+                                                    class="btn nav-icon-button favorite-button"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom"
+                                                    data-bs-title="<spring:message code="favorite"/>"
+                                                    id="<c:out value="${item.id}"/>.f1">
+                                                <img src="<c:url value="${ item.favorite ?  '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
+                                                     alt="<spring:message code="favorite"/>"
+                                                     class="icon-xs fill-text">
+                                            </button>
+                                        </form:form>
+                                    </div>
+                                </c:if>
+
                                 <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
                                     <a href="./notes/${item.id}/download" download="${item.name}">
                                         <button type="button" class="btn button-expansion rounded-circle"
@@ -307,7 +332,8 @@
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
                                         data-bs-trigger="hover">
-                                    <img src="<c:url value="/svg/link.svg"/>" alt="<spring:message code="copyLink"/>" class="icon-xs fill-text">
+                                    <img src="<c:url value="/svg/link.svg"/>" alt="<spring:message code="copyLink"/>"
+                                         class="icon-xs fill-text">
                                 </button>
                             </div>
 
@@ -339,20 +365,54 @@
                          data-category="<c:out value="${item.category.formattedName}"/>"
                          id="<c:out value="${item.id}"/>.2">
                         <div class="card-body no-select">
-                            <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
-                                <c:if test="${item.category.formattedName ne 'directory'}">
-                                    <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
-                                        <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-s">
+
+                            <!-- TITLE AND BUTTONS -->
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
+                                    <c:if test="${item.category.formattedName ne 'directory'}">
+                                        <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
+                                            <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-s">
+                                        </c:if>
                                     </c:if>
-                                </c:if>
-                                <c:if test="${item.category.formattedName eq 'directory'}">
-                                    <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
-                                         class="icon-s fill-${item.iconColor}">
-                                </c:if>
-                                <h4 class="card-title text-truncate mb-0">
-                                    <c:out value="${item.name}"/>
-                                </h4>
+                                    <c:if test="${item.category.formattedName eq 'directory'}">
+                                        <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
+                                             class="icon-s fill-${item.iconColor}">
+                                    </c:if>
+                                    <h4 class="card-title text-truncate mb-0">
+                                        <c:out value="${item.name}"/>
+                                    </h4>
+                                </div>
+
+                                <div class="d-flex">
+
+                                    <!-- FAVORITE -->
+                                    <c:if test="${user ne null and item.category.formattedName eq 'directory'}"> <!-- TODO: Por ahora es directory nomas -->
+                                        <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
+                                        <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
+
+                                        <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                             data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
+                                            <form:form action="${item.favorite ? removeFavorite : addFavorite}"
+                                                       method="post">
+                                                <input name="parentId" value="${item.parentId}" type="hidden"/>
+                                                <button type="submit"
+                                                        class="btn nav-icon-button favorite-button"
+                                                        data-bs-toggle="tooltip"
+                                                        data-bs-placement="bottom"
+                                                        data-bs-title="<spring:message code="favorite"/>"
+                                                        id="<c:out value="${item.id}"/>.f1">
+                                                    <img src="<c:url value="${ item.favorite ?  '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
+                                                         alt="<spring:message code="favorite"/>"
+                                                         class="icon-xs fill-text">
+                                                </button>
+                                            </form:form>
+                                        </div>
+                                    </c:if>
+
+                                </div>
+
                             </div>
+
                             <span class="card-text">
                                 <strong><spring:message code="owner"/></strong>:
                                 <c:out value="${item.user.email}"/>
@@ -375,20 +435,21 @@
                                 </span>
                                 <br>--%>
                             <span class="card-text">
-                            <strong><spring:message code="createdAt"/></strong>:
-                            <spring:message code="date.format"
-                                            arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
-                        </span>
+                                <strong><spring:message code="createdAt"/></strong>:
+                                <spring:message code="date.format"
+                                                arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                            </span>
+
                             <br>
                             <span class="card-text">
-                            <c:if test="${item.avgScore eq 0}">
-                                <strong><spring:message code="notes.noScore"/></strong>
-                            </c:if>
-                            <c:if test="${item.avgScore ne 0}">
-                                <strong><spring:message code="score"/></strong>:
-                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
-                            </c:if>
-                        </span>
+                                <c:if test="${item.avgScore eq 0}">
+                                    <strong><spring:message code="notes.noScore"/></strong>
+                                </c:if>
+                                <c:if test="${item.avgScore ne 0}">
+                                    <strong><spring:message code="score"/></strong>:
+                                    <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
+                                </c:if>
+                            </span>
                             <input type="checkbox" class="select-checkbox d-none"/>
 
                         </div>
@@ -415,18 +476,45 @@
                     </li>
                 </c:if>
 
-                <c:forEach begin="1" end="${maxPage}" var="page">
-                    <c:if test="${page eq searchForm.pageNumber}">
-                        <li class="page-item active" aria-current="page">
-                            <a class="page-link" data-page="${page}">${page}</a>
-                        </li>
-                    </c:if>
-                    <c:if test="${page ne searchForm.pageNumber}">
-                        <li class="page-item">
-                            <a class="page-link" data-page="${page}">${page}</a>
-                        </li>
-                    </c:if>
-                </c:forEach>
+                <c:if test="${searchForm.pageNumber gt 2}">
+                    <li class="page-item">
+                        <a class="page-link" data-page="1"><c:out value="1"/></a>
+                    </li>
+                </c:if>
+
+                <c:if test="${searchForm.pageNumber gt 3}">
+                    <li class="page-item disabled">
+                        <a class="page-link">...</a>
+                    </li>
+                </c:if>
+
+                <c:if test="${searchForm.pageNumber gt 1}">
+                    <li class="page-item">
+                        <a class="page-link" data-page="${searchForm.pageNumber - 1}"><c:out value="${searchForm.pageNumber - 1}"/></a>
+                    </li>
+                </c:if>
+
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" data-page="${searchForm.pageNumber}"><c:out value="${searchForm.pageNumber}"/></a>
+                </li>
+
+                <c:if test="${searchForm.pageNumber lt maxPage}">
+                    <li class="page-item">
+                        <a class="page-link" data-page="${searchForm.pageNumber + 1}"><c:out value="${searchForm.pageNumber + 1}"/></a>
+                    </li>
+                </c:if>
+
+                <c:if test="${searchForm.pageNumber lt maxPage - 2}">
+                    <li class="page-item disabled">
+                        <a class="page-link">...</a>
+                    </li>
+                </c:if>
+
+                <c:if test="${searchForm.pageNumber lt maxPage - 1}">
+                    <li class="page-item">
+                        <a class="page-link" data-page="${maxPage}"><c:out value="${maxPage}"/></a>
+                    </li>
+                </c:if>
 
                 <c:if test="${searchForm.pageNumber lt maxPage}">
                     <li class="page-item">
@@ -452,7 +540,7 @@
 
 <script>
     //TODO c:out institution data
-    var { institutions, careers, subjects, careerMap, subjectMap } = JSON.parse('${institutionData}');
+    const {institutions, careers, subjects, careerMap, subjectMap} = JSON.parse('${institutionData}');
 </script>
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>
