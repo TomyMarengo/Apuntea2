@@ -101,12 +101,29 @@
 
 </section>
 
+<div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
+    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body justify-content-between d-flex">
+            <span><spring:message code="toast.registerSucceeded"/></span>
+            <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>
+
+<c:if test="${success eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToast'));
+        toastBootstrap.show();
+    </script>
+</c:if>
 
 </body>
 

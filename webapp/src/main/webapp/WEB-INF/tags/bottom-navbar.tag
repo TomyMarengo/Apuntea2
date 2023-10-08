@@ -12,7 +12,7 @@
         <div class="d-none d-lg-flex">
 
             <a href="<c:url value="${baseUrl}/directory/${hierarchy.rootDirectory.id}"/>">
-                <div class="bottom-navbar-item">
+                <div class="bottom-navbar-item bn-title">
                     <c:out value="${hierarchy.rootDirectory.name}"/>
                 </div>
             </a>
@@ -103,7 +103,7 @@
     <c:if test="${title != null}">
         <c:set var="titleData" value="${fn:split(title, ':')}"/>
         <a href="<c:url value="${titleData[0]}"/>">
-            <div class="bottom-navbar-item overflow-hidden active">
+            <div class="bottom-navbar-item bn-title active">
                 <c:out value="${titleData[1]}"/>
             </div>
         </a>

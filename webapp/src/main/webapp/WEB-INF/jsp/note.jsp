@@ -300,6 +300,16 @@
     </div>
 </c:if>
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToastCreation" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body justify-content-between d-flex">
+            <span class="text-dark-primary"><spring:message code="toast.reviewUploaded"/></span>
+            <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous">
@@ -331,6 +341,12 @@
         const reviewForm = document.getElementById('reviewForm');
         reviewForm.querySelectorAll('#content')[0].value = "<c:out value="${reviewContent}"/>";
         reviewForm.querySelectorAll('#scoreSelect')[0].value = "<c:out value="${reviewScore}"/>";
+    </script>
+</c:if>
+<c:if test="${reviewUploaded eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastCreation'));
+        toastBootstrap.show();
     </script>
 </c:if>
 

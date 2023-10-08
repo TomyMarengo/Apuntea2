@@ -14,6 +14,8 @@ public class ControllerUtils {
     static final String EDIT_DIRECTORY_ID = "editDirectoryId";
     static final String EDIT_DIRECTORY_FORM_BINDING = "org.springframework.validation.BindingResult.editDirectoryForm";
     static final String CREATE_REVIEW_FORM_BINDING = "org.springframework.validation.BindingResult.reviewForm";
+    static final String UPLOAD_REVIEW_FORM = "reviewCreated";
+
     private	static final Logger LOGGER	= LoggerFactory.getLogger(ControllerUtils.class);
 
     private ControllerUtils(){}

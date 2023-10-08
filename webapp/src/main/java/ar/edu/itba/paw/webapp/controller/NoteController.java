@@ -81,6 +81,7 @@ public class NoteController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute(CREATE_REVIEW_FORM_BINDING, result);
         } else {
+            redirectAttributes.addFlashAttribute(UPLOAD_REVIEW_FORM, true);
             noteService.createOrUpdateReview(noteId, reviewForm.getScore(), reviewForm.getContent());
         }
         return mav;

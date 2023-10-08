@@ -11,9 +11,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -47,8 +45,10 @@ public class HomeController {
     }
 
     @RequestMapping("/login")
-    public ModelAndView login() {
-        return new ModelAndView("login");
+    public ModelAndView login(@RequestParam(value = "success", required = false) final boolean success) {
+        ModelAndView mav = new ModelAndView("login");
+        mav.addObject("success", success);
+        return mav;
     }
 
     @RequestMapping(value = "/register")
@@ -67,6 +67,6 @@ public class HomeController {
             return registerForm(userForm);
         }
         userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getCareerId(), Role.ROLE_STUDENT);
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("redirect:/login?success=true");
     }
 }

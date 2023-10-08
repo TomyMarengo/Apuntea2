@@ -23,9 +23,7 @@ public class UnusedEmailValidator implements ConstraintValidator<UnusedEmail, St
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value != null && (value.isEmpty() ||
-                (pattern.matcher(value).matches() &&
-                        !userService.findByEmail(value).isPresent())); // Hack to only prompt error when email is being used
+        return value == null || value.isEmpty() || !pattern.matcher(value).matches() || !userService.findByEmail(value).isPresent();
     }
 }
 

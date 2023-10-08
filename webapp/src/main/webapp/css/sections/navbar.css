@@ -72,6 +72,10 @@
 	max-width: 100px;
 }
 
+.bottom-navbar-item.bn-title{
+	max-width: 200px !important;
+}
+
 .bottom-navbar-item:hover {
 	color: var(--dark-bg);
 }
