@@ -43,6 +43,7 @@ public class SearchJdbcDao implements SearchDao {
                         rs.getString(EMAIL)
                 ),
                 UUID.fromString(rs.getString(PARENT_ID)),
+                rs.getBoolean(FAVORITE),
                 new Subject(
                         UUID.fromString(rs.getString(SUBJECT_ID)),
                         rs.getString(SUBJECT_NAME),
@@ -120,11 +121,14 @@ public class SearchJdbcDao implements SearchDao {
                         "t.avg_score, t.file_type, " +
                         "t.icon_color, " +
                         "t.user_id, t.email, " +
+                        " ( f.directory_id IS NOT NULL ) AS favorite, " +
                         "t.subject_id, t.subject_name, t.root_directory_id " +
                         "FROM Search t " +
+                        "LEFT JOIN Favorites f ON t.category = 'directory' AND t.id = f.directory_id AND f.user_id = ? " +
                         "WHERE TRUE "
         );
         List<Object> args = new ArrayList<>();
+        args.add(sa.getCurrentUserId().orElse(null));
 
         applyInstitutionFilters(query, args, sa);
 

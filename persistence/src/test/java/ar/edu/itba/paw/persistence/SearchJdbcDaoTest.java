@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -14,8 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.UUID;
 
 import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
+
+import static ar.edu.itba.paw.persistence.JdbcDaoUtils.FAVORITES;
 import static ar.edu.itba.paw.persistence.JdbcTestUtils.*;
 import static ar.edu.itba.paw.persistence.JdbcTestUtils.EDA_ID;
 import static org.junit.Assert.*;
@@ -31,10 +36,15 @@ public class SearchJdbcDaoTest {
     private SearchDao searchDao;
 
     private JdbcTemplate jdbcTemplate;
+    private SimpleJdbcInsert jdbcFavoriteInsert;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
+        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
+        jdbcFavoriteInsert = new SimpleJdbcInsert(ds)
+                .withTableName(FAVORITES);
     }
 
     /* Note tests */
@@ -197,5 +207,23 @@ public class SearchJdbcDaoTest {
         assertEquals(2, notes.size());
     }
 
+    @Test
+    public void testSearchListWithFavorites() {
+        UUID newDir1 = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDir2 = insertDirectory(namedParameterJdbcTemplate, "temp2", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDir3 = insertDirectory(namedParameterJdbcTemplate, "temp3", PEPE_ID, EDA_DIRECTORY_ID);
+        insertFavorite(jdbcFavoriteInsert, newDir1, PEPE_ID);
+        insertFavorite(jdbcFavoriteInsert, newDir2, SAIDMAN_ID);
+        insertFavorite(jdbcFavoriteInsert, newDir3, PEPE_ID);
 
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.DIRECTORY.toString()).currentUserId(PEPE_ID);
+        List<Searchable> directories = searchDao.search(sab.build());
+        Searchable d1 = directories.stream().filter(d -> d.getId().equals(newDir1)).findAny().orElseThrow(AssertionError::new);
+        Searchable d2 = directories.stream().filter(d -> d.getId().equals(newDir2)).findAny().orElseThrow(AssertionError::new);
+        Searchable d3 = directories.stream().filter(d -> d.getId().equals(newDir3)).findAny().orElseThrow(AssertionError::new);
+        assertEquals(newDir1, d1.getId());
+        assertTrue(d1.getFavorite());
+        assertTrue(d3.getFavorite());
+        assertFalse(d2.getFavorite());
+    }
 }

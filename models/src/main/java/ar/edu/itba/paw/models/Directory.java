@@ -49,8 +49,8 @@ public class Directory implements Searchable {
     }
 
 
-    public Directory(UUID directoryId, String name, User user, UUID parentId, Subject subject, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
-        this(directoryId, name, user, parentId, createdAt, lastModifiedAt, visible, iconColor);
+    public Directory(UUID directoryId, String name, User user, UUID parentId, boolean favorite, Subject subject, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
+        this(directoryId, name, user, parentId, favorite, createdAt, lastModifiedAt, visible, iconColor);
         this.subject = subject;
     }
 
