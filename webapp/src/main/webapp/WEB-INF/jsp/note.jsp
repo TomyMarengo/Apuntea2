@@ -38,10 +38,10 @@
 <!-- NAVBAR -->
 <fragment:navbar loggedin="${user != null}"/>
 
-<fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}"/>
+<fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}" category="note"/>
 
-<div class="container-fluid">
-    <div class="row row-cols-1 row-cols-lg-2">
+<div class="h-100-navs container-fluid">
+    <div class="h-100 row row-cols-1 row-cols-lg-2">
         <section class="col col-lg-8">
 
             <c:url var="noteFileUrl" value="${baseUrl}/notes/${noteId}/download"/>
@@ -51,7 +51,6 @@
                     <div class="container-img-note mh-100-navs">
                         <img src="${noteFileUrl}" alt="<c:out value="${note.name}"/>"/>
                     </div>
-
                 </c:when>
 
                 <c:when test="${note.fileType eq 'mp3'}">
@@ -68,7 +67,7 @@
                 </c:otherwise>
             </c:choose>
 
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between mt-2">
                 <h1 class="overflow-hidden">${note.name}</h1>
                 <div class="d-flex">
                     <c:if test="${user ne null and note.user.userId eq user.userId}">
@@ -115,68 +114,66 @@
             </span>
         </section>
 
-        <section class="col col-lg-4">
+        <section class="h-100 col col-lg-4 mt-5 mt-lg-0">
             <div class="h-100 d-flex flex-column">
-
-                <div class="container-fluid pb-3">
-                    <input type="submit" class="btn reviews-comments-button mb-3"
-                           value="<spring:message code="notes.reviews.button"/>"/>
+                <input type="submit" class="btn reviews-comments-button mb-3"
+                       value="<spring:message code="notes.reviews.button"/>"/>
 
 
-                    <c:if test="${not empty reviews}">
+                <c:if test="${not empty reviews}">
                         <span><spring:message code="score"/>: <fmt:formatNumber type="number" maxFractionDigits="1"
                                                                                 value="${note.avgScore}"/> ⭐</span>
 
-                        <div class="reviews-comments">
-                            <c:forEach items="${reviews}" var="review">
-                                <div class="card box review-card mb-3 p-3">
+                    <div class="h-100 reviews-comments">
+                        <c:forEach items="${reviews}" var="review">
+                            <div class="card box review-card mb-3 p-3">
 
-                                    <div class="d-flex flex-wrap justify-content-between">
-                                        <h4 class="card-title overflow-hidden">
-                                            <c:out value="${review.user.email}"/>
-                                        </h4>
-                                        <span class="card-header-pills">
+                                <div class="d-flex flex-wrap justify-content-between">
+                                    <h4 class="card-title overflow-hidden">
+                                        <c:out value="${review.user.email}"/>
+                                    </h4>
+                                    <span class="card-header-pills">
                                             <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
                                         </span>
-                                    </div>
+                                </div>
 
-                                    <span class="card-text reviews-comment">
+                                <span class="card-text reviews-comment">
                                 <c:out value="${review.content}"/>
                                     </span>
-                                </div>
-                            </c:forEach>
-                        </div>
-                    </c:if>
-
-                    <c:if test="${empty reviews}">
-                        <p class="mb-2"><spring:message code="notes.reviews.noReviews"/></p>
-                    </c:if>
-
-                    <div class="card box p-3">
-                        <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
-                            <div>
-                                <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
-                                <form:textarea path="content" class="form-control" placeholder='${placeholderText}'/>
                             </div>
-                            <form:errors path="content" cssClass="text-danger" element="p"/>
-
-                            <div class="d-flex justify-content-between mt-3">
-                                <div class="input-group w-75">
-                                    <form:select path="score" class="form-select bg-bg" id="scoreSelect">
-                                        <form:option value="5">⭐⭐⭐⭐⭐</form:option>
-                                        <form:option value="4">⭐⭐⭐⭐</form:option>
-                                        <form:option value="3">⭐⭐⭐</form:option>
-                                        <form:option value="2">⭐⭐</form:option>
-                                        <form:option value="1">⭐</form:option>
-                                    </form:select>
-                                </div>
-                                <input type="submit" class="btn rounded-box button-primary "
-                                       value="<spring:message code="notes.send.button"/>"/>
-                            </div>
-                        </form:form>
+                        </c:forEach>
                     </div>
+                </c:if>
+
+                <c:if test="${empty reviews}">
+                    <p class="mb-2"><spring:message code="notes.reviews.noReviews"/></p>
+                </c:if>
+
+                <div class="card box p-3">
+                    <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
+                        <div>
+                            <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
+                            <form:textarea path="content" class="form-control" placeholder='${placeholderText}'/>
+                        </div>
+                        <form:errors path="content" cssClass="text-danger" element="p"/>
+
+                        <div class="d-flex justify-content-between mt-3">
+                            <div class="input-group w-75">
+                                <form:select path="score" class="form-select bg-bg" id="scoreSelect">
+                                    <form:option value="5">⭐⭐⭐⭐⭐</form:option>
+                                    <form:option value="4">⭐⭐⭐⭐</form:option>
+                                    <form:option value="3">⭐⭐⭐</form:option>
+                                    <form:option value="2">⭐⭐</form:option>
+                                    <form:option value="1">⭐</form:option>
+                                </form:select>
+                            </div>
+                            <input type="submit" class="btn rounded-box button-primary "
+                                   value="<spring:message code="notes.send.button"/>"/>
+                        </div>
+                    </form:form>
                 </div>
             </div>
+
         </section>
     </div>
 </div>
@@ -189,7 +186,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteLabel"><spring:message code="delete"/></h1>
+                <h3 class="modal-title fs-5" id="deleteLabel"><spring:message code="delete"/></h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                 </button>
@@ -223,8 +220,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content box bg-bg">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="editLabel"><spring:message
-                            code="editNote"/></h1>
+                    <h3 class="modal-title fs-5" id="editLabel"><spring:message
+                            code="editNote"/></h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close">
                     </button>

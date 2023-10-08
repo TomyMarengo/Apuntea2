@@ -4,6 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ attribute name="title" required="false" %>
 <%@ attribute name="hierarchy" required="false" type="ar.edu.itba.paw.models.DirectoryPath" %>
+<%@ attribute name="category" required="false" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <div class="bottom-navbar">
@@ -33,7 +34,8 @@
                     </div>
                 </a>
             </c:if>
-            <c:if test="${hierarchy.length gt 1}">
+
+            <c:if test="${category ne 'directory' and hierarchy.length gt 1}">
                 <div class="bottom-navbar-separator overflow-hidden">
                     <spring:message code="navbar.bottom.separator"/>
                 </div>
@@ -43,6 +45,7 @@
                     </div>
                 </a>
             </c:if>
+
             <c:if test="${title != null}">
                 <div class="bottom-navbar-separator overflow-hidden">
                     <spring:message code="navbar.bottom.separator"/>
@@ -80,7 +83,7 @@
                         </li>
                     </c:if>
 
-                    <c:if test="${hierarchy.length gt 1}">
+                    <c:if test="${category ne 'directory' and hierarchy.length gt 1}">
                         <li>
                             <a class="dropdown-item" href="<c:url value="${baseUrl}/directory/${hierarchy.currentDirectory.id}"/>">
                                     <c:out value="${hierarchy.currentDirectory.name}"/>
