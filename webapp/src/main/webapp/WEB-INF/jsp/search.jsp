@@ -262,8 +262,20 @@
                         id="<c:out value="${item.id}"/>.1">
                         <td class="note-found-title">
                             <c:if test="${item.category.formattedName ne 'directory'}">
-                                <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
+                                <c:if test="${item.fileType eq 'pdf'}">
                                     <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-m">
+                                </c:if>
+                                <c:if test="${item.fileType eq 'jpeg'}">
+                                    <img src="<c:url value="/image/jpeg.png"/>" alt="jpeg" class="icon-m">
+                                </c:if>
+                                <c:if test="${item.fileType eq 'png'}">
+                                    <img src="<c:url value="/image/png.png"/>" alt="png" class="icon-m">
+                                </c:if>
+                                <c:if test="${item.fileType eq 'mp3'}">
+                                    <img src="<c:url value="/image/mp3.png"/>" alt="mp3" class="icon-m">
+                                </c:if>
+                                <c:if test="${item.fileType eq 'mp4'}">
+                                    <img src="<c:url value="/image/mp4.png"/>" alt="mp4" class="icon-m">
                                 </c:if>
                             </c:if>
                             <c:if test="${item.category.formattedName eq 'directory'}">
@@ -370,8 +382,20 @@
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
                                     <c:if test="${item.category.formattedName ne 'directory'}">
-                                        <c:if test="${item.fileType eq 'pdf'}"> <!-- TODO: ADD MORE TYPES -->
-                                            <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-s">
+                                        <c:if test="${item.fileType eq 'pdf'}">
+                                            <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-m">
+                                        </c:if>
+                                        <c:if test="${item.fileType eq 'jpeg'}">
+                                            <img src="<c:url value="/image/jpeg.png"/>" alt="jpeg" class="icon-m">
+                                        </c:if>
+                                        <c:if test="${item.fileType eq 'png'}">
+                                            <img src="<c:url value="/image/png.png"/>" alt="png" class="icon-m">
+                                        </c:if>
+                                        <c:if test="${item.fileType eq 'mp3'}">
+                                            <img src="<c:url value="/image/mp3.png"/>" alt="mp3" class="icon-m">
+                                        </c:if>
+                                        <c:if test="${item.fileType eq 'mp4'}">
+                                            <img src="<c:url value="/image/mp4.png"/>" alt="mp4" class="icon-m">
                                         </c:if>
                                     </c:if>
                                     <c:if test="${item.category.formattedName eq 'directory'}">
