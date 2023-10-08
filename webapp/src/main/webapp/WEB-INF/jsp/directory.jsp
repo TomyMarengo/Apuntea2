@@ -228,6 +228,13 @@
                 <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
                      class="icon-s fill-dark-primary"/>
             </button>
+
+            <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
+                    data-bs-trigger="hover" onclick="changePageSize(${navigationForm.pageSize})">
+                <c:out value="${navigationForm.pageSize}"/>
+
+            </button>
         </div>
 
     </div>

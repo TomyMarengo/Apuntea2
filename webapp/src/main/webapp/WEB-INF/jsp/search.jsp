@@ -208,6 +208,7 @@
     <div class="d-flex container mt-4 justify-content-between p-0">
         <div class="d-flex"></div>
         <div class="d-flex">
+
             <div id="selectedButtons" class="align-items-center" style="display: none;">
                 <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.deselectAll"/>"
@@ -224,11 +225,13 @@
                     <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
                 </button>
             </div>
+
             <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
                     data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
                     data-bs-trigger="hover">
                 <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary"/>
             </button>
+
             <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
                     data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
                     data-horizontal="<spring:message code="search.button.listView"/>"
@@ -236,6 +239,13 @@
                 <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
                      class="icon-s fill-dark-primary"/>
             </button>
+
+            <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
+                    data-bs-trigger="hover" onclick="changePageSize(${searchForm.pageSize})">
+                    <c:out value="${searchForm.pageSize}"/>
+            </button>
+
         </div>
     </div>
 

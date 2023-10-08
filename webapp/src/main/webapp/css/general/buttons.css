@@ -74,3 +74,7 @@
 	transform: translate(-50%, -50%) scale(50);
 	background-color: rgba(0, 0, 0, 0);
 }
+
+.page-size-button {
+	color: var(--dark-primary);
+}
