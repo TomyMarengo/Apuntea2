@@ -12,7 +12,7 @@
         <div class="d-none d-lg-flex">
 
             <a href="<c:url value="${baseUrl}/directory/${hierarchy.rootDirectory.id}"/>">
-                <div class="bottom-navbar-item overflow-hidden">
+                <div class="bottom-navbar-item">
                     <c:out value="${hierarchy.rootDirectory.name}"/>
                 </div>
             </a>
