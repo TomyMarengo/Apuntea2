@@ -292,8 +292,8 @@
 
                                 <!-- Favorite -->
                                 <c:if test="${user ne null and item.category.formattedName eq 'directory'}"> <!-- TODO: Por ahora es directory nomas -->
-                                    <c:set var="addFavorite" value="../directory/${item.id}/addfavorite"/>
-                                    <c:set var="removeFavorite" value="../directory/${item.id}/removefavorite"/>
+                                    <c:set var="addFavorite" value="./directory/${item.id}/addfavorite"/>
+                                    <c:set var="removeFavorite" value="./directory/${item.id}/removefavorite"/>
 
                                     <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                          data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
@@ -387,8 +387,8 @@
 
                                     <!-- FAVORITE -->
                                     <c:if test="${user ne null and item.category.formattedName eq 'directory'}"> <!-- TODO: Por ahora es directory nomas -->
-                                        <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
-                                        <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
+                                        <c:set var="addFavorite" value="./directory/${item.id}/addfavorite"/>
+                                        <c:set var="removeFavorite" value="./directory/${item.id}/removefavorite"/>
 
                                         <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                              data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
