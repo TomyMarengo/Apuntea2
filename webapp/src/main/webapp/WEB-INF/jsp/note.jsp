@@ -127,7 +127,7 @@
                         <span><spring:message code="score"/>: <fmt:formatNumber type="number" maxFractionDigits="1"
                                                                                 value="${note.avgScore}"/> ⭐</span>
 
-                    <div class="h-100 reviews-comments">
+                    <div class="reviews-comments">
                         <c:forEach items="${reviews}" var="review">
                             <div class="card box review-card mb-3 p-3">
                                 <div class="d-flex flex-wrap justify-content-between">

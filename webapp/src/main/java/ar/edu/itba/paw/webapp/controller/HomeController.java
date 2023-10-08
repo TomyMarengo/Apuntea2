@@ -36,20 +36,14 @@ public class HomeController {
 
     @RequestMapping(value = "/")
     public ModelAndView index(@ModelAttribute("searchForm") final SearchForm searchForm) {
-        // TODO: Remove index?
-        Optional<User> user = securityService.getCurrentUser();
-        return user.map(value -> new ModelAndView("redirect:search?institutionId=" + value.getInstitution().getInstitutionId() + "&careerId=" + value.getCareer().getCareerId()))
-                .orElseGet(() -> new ModelAndView("redirect:search"));
+//        Optional<User> user = securityService.getCurrentUser();
+//        return user.map(value -> new ModelAndView("redirect:search?institutionId=" + value.getInstitution().getInstitutionId() + "&careerId=" + value.getCareer().getCareerId()))
+//                .orElseGet(() -> new ModelAndView("redirect:search"));
 
-//        ModelAndView mav = new ModelAndView("index");
-//
-//        securityService.getCurrentUserEmail().ifPresent(email -> mav.addObject("username", email));
-//
-//        mav.addObject("institutions", dataService.getInstitutions());
-//        mav.addObject("careers", dataService.getCareers());
-//        mav.addObject("subjects", dataService.getSubjects());
-//
-//        return mav;
+        ModelAndView mav = new ModelAndView("index");
+
+        securityService.getCurrentUserEmail().ifPresent(email -> mav.addObject("username", email));
+        return mav;
     }
 
     @RequestMapping("/login")
