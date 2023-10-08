@@ -97,7 +97,7 @@ public class DirectoryJdbcDaoTest {
     @Test
     public void testDelete() {
         int qtyBasuraPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_name LIKE " + "'%Basura%'");
-        directoryDao.delete(BASURA_ID, PEPE_ID);
+        directoryDao.delete(new UUID[]{BASURA_ID}, PEPE_ID);
         assertEquals(2, qtyBasuraPrev);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_name LIKE " + "'%Basura%'"));
     }
@@ -130,7 +130,7 @@ public class DirectoryJdbcDaoTest {
             jdbcDirectoryInsert.execute(args);
         }
         int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DIRECTORIES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + TMP_PARENT_DIR_ID + "'");
-        directoryDao.deleteMany(directoryIds, PEPE_ID);
+        directoryDao.delete(directoryIds, PEPE_ID);
         int countPostDelete = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, DIRECTORIES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + TMP_PARENT_DIR_ID + "'");
         assertEquals(4, countInserted);
         assertEquals(0, countPostDelete);
@@ -168,5 +168,27 @@ public class DirectoryJdbcDaoTest {
         favorites.stream().filter(d -> d.getId().equals(newDir3)).findAny().orElseThrow(AssertionError::new);
     }
 
+    @Test
+    public void testUserTriesToDeleteDirectory() {
+        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
+        int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId + "'");
+        boolean success = directoryDao.delete(new UUID[]{newDirId}, SAIDMAN_ID);
+        assertFalse(success);
+        assertEquals(1, countInserted);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId + "'"));
+    }
 
+    @Test
+    public void testAdminDeletesDirectory() {
+        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDirId2 = insertDirectory(namedParameterJdbcTemplate, "temp2", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDirId3 = insertDirectory(namedParameterJdbcTemplate, "temp3", PEPE_ID, EDA_DIRECTORY_ID);
+        int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId + "' OR directory_id = '" + newDirId2 + "' OR directory_id = '" + newDirId3 + "'");
+        List<Directory> dirs = directoryDao.delete(new UUID[]{newDirId, newDirId2, newDirId3});
+        assertEquals(3, dirs.size());
+        assertEquals(3, countInserted);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId + "'"));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId2 + "'"));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId3 + "'"));
+    }
 }

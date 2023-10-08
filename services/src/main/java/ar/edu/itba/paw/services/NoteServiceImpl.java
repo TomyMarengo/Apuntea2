@@ -78,18 +78,16 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public void delete(UUID noteId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = noteDao.delete(noteId, currentUserId);
-        if (!success) throw new InvalidNoteException();
-    }
-
-    @Transactional
-    @Override
-    public void deleteMany(UUID[] noteIds) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = noteDao.deleteMany(noteIds, currentUserId);
-        if (!success) throw new InvalidNoteException();
+    public void delete(UUID[] noteId) {
+        User currentUser = securityService.getCurrentUserOrThrow();
+        if (!currentUser.getIsAdmin()) {
+            if (!noteDao.delete(noteId, currentUser.getUserId()))
+                throw new InvalidNoteException();
+        } else {
+            List<Note> note = noteDao.delete(noteId);
+            if (note.isEmpty()) throw new InvalidNoteException();
+            note.forEach(emailService::sendDeleteNoteEmail);
+        }
     }
 
     @Override

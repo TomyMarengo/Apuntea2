@@ -17,8 +17,6 @@ public interface NoteService {
     Optional<NoteFile> getNoteFileById(UUID noteId);
     Integer createOrUpdateReview(UUID noteId, Integer score, String content);
     void update(Note note);
-    void delete(UUID noteId);
-
-    void deleteMany(UUID[] noteIds);
+    void delete(UUID[] noteIds);
     List<Review> getReviews(UUID noteId);
 }

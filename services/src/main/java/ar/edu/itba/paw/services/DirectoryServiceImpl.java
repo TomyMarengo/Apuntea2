@@ -17,10 +17,13 @@ import java.util.UUID;
 public class DirectoryServiceImpl implements DirectoryService{
     private final DirectoryDao directoryDao;
     private final SecurityService securityService;
+    private final EmailService emailService;
+
     @Autowired
-    public DirectoryServiceImpl(DirectoryDao directoryDao, SecurityService securityService) {
+    public DirectoryServiceImpl(DirectoryDao directoryDao, SecurityService securityService, EmailService emailService) {
         this.directoryDao = directoryDao;
         this.securityService = securityService;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -53,20 +56,20 @@ public class DirectoryServiceImpl implements DirectoryService{
 
     @Transactional
     @Override
-    public void delete(UUID directoryId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = directoryDao.delete(directoryId, currentUserId);
-        if (!success) throw new InvalidDirectoryException();
+    public void delete(UUID[] directoryIds) {
+        if (directoryIds.length == 0) return;
+
+        User currentUser = securityService.getCurrentUserOrThrow();
+        if (!currentUser.getIsAdmin()) {
+            if (!directoryDao.delete(directoryIds, currentUser.getUserId()))
+                throw new InvalidDirectoryException();
+        } else {
+            List<Directory> dir = directoryDao.delete(directoryIds);
+            if (dir.isEmpty()) throw new InvalidDirectoryException();
+            dir.forEach(emailService::sendDeleteDirectoryEmail);
+        }
     }
 
-    @Transactional
-    @Override
-    public void deleteMany(UUID[] directoryIds) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = directoryDao.deleteMany(directoryIds, currentUserId);
-        if (!success) throw new InvalidDirectoryException();
-    }
-    
     @Transactional
     @Override
     public List<Directory> getRootDirectoriesByCurrentUserCareer() {

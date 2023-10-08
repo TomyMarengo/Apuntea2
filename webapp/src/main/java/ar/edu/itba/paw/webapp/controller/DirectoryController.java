@@ -137,9 +137,9 @@ public class DirectoryController {
 
         // TODO: Validate redirectUrl?
         if (noteIds != null && noteIds.length > 0)
-            noteService.deleteMany(noteIds);
+            noteService.delete(noteIds);
         if (directoryIds != null && directoryIds.length > 0)
-            directoryService.deleteMany(directoryIds);
+            directoryService.delete(directoryIds);
         return new ModelAndView("redirect:" + redirectUrl);
     }
 

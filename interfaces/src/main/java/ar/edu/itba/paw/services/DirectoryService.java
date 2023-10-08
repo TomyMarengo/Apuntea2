@@ -12,8 +12,7 @@ public interface DirectoryService {
     UUID create(String name, UUID parentId, boolean visible, String iconColor);
     DirectoryPath getDirectoryPath(UUID directoryId);
     void update(Directory directory);
-    void delete(UUID directoryId);
-    void deleteMany(UUID[] directoryIds);
+    void delete(UUID[] directoryIds);
     List<Directory> getRootDirectoriesByCurrentUserCareer();
     List<Directory> getFavorites();
     void addFavorite(UUID directoryId);

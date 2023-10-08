@@ -79,14 +79,14 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testDeleteNote() {
-        boolean deleted = noteDao.delete(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID, PEPE_ID);
+        boolean deleted = noteDao.delete(new UUID[]{PARCIAL_DINAMICA_FLUIDOS_NOTE_ID}, PEPE_ID);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
         assertTrue(deleted);
     }
 
     @Test
     public void testCannotDeleteNote() {
-        boolean deleted = noteDao.delete(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID, SAIDMAN_ID);
+        boolean deleted = noteDao.delete(new UUID[]{PARCIAL_DINAMICA_FLUIDOS_NOTE_ID}, SAIDMAN_ID);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
         assertFalse(deleted);
     }
@@ -122,7 +122,7 @@ public class NoteJdbcDaoTest {
             jdbcNoteInsert.execute(args);
         }
         int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + TMP_PARENT_DIR_ID + "'");
-        noteDao.deleteMany(noteIds, PEPE_ID);
+        noteDao.delete(noteIds, PEPE_ID);
         int countPostDelete = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + TMP_PARENT_DIR_ID + "'");
         assertEquals(4, countInserted);
         assertEquals(0, countPostDelete);

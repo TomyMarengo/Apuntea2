@@ -15,9 +15,8 @@ public interface DirectoryDao {
     boolean update(Directory directory, UUID currentUserId);
     Optional<Directory> getDirectoryById(UUID directoryId, UUID currentUserId);
 
-    boolean deleteMany(UUID[] directoryIds, UUID currentUserId);
-
-    boolean delete(UUID directoryId, UUID currentUserId);
+    boolean delete(UUID[] directoryIds, UUID currentUserId);
+    List<Directory> delete(UUID[] directoryId); // Strong delete
     List<Directory> getRootDirectoriesByCareer(UUID careerId);
 
     List<Directory> getFavorites(UUID userId);

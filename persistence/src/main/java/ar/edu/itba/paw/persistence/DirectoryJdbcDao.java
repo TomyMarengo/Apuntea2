@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
@@ -48,6 +49,17 @@ public class DirectoryJdbcDao implements DirectoryDao {
                 rs.getString(ICON_COLOR)
         );
     };
+
+    private static final RowMapper<Directory> USER_ROW_MAPPER = (rs, rowNum) -> new Directory(
+            UUID.fromString(rs.getString(DIRECTORY_ID)),
+            rs.getString(DIRECTORY_NAME),
+            new User(
+                    UUID.fromString(rs.getString(USER_ID)),
+                    rs.getString(EMAIL),
+                    rs.getString(LOCALE)
+            ),
+            rs.getString(ICON_COLOR)
+    );
 
     private static final RowMapper<Directory> ROW_MAPPER_WITH_SUBJECT = (rs, rowNum)  -> {
         String subjectId = rs.getString(SUBJECT_ID);
@@ -129,7 +141,7 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
 
     @Override
-    public boolean deleteMany(UUID[] directoryIds, UUID currentUserId) {
+    public boolean delete(UUID[] directoryIds, UUID currentUserId) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(DIRECTORY_ID, Arrays.asList(directoryIds));
         args.addValue(USER_ID, currentUserId);
@@ -137,8 +149,17 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
-    public boolean delete(UUID directoryId, UUID currentUserId) {
-        return jdbcTemplate.update("DELETE FROM Directories WHERE directory_id = ? AND user_id = ?", directoryId, currentUserId) == 1;
+    @Transactional
+    public List<Directory> delete(UUID[] directoryIds) {
+        MapSqlParameterSource args = new MapSqlParameterSource(DIRECTORY_ID, Arrays.asList(directoryIds));
+        List<Directory> dir = new ArrayList<>(
+                namedParameterJdbcTemplate.query("SELECT d.directory_id, d.directory_name, d.icon_color, " +
+                                "u.user_id, u.email, u.locale FROM Directories d INNER JOIN Users u ON d.user_id = u.user_id WHERE directory_id IN (:directory_id)",
+                args, USER_ROW_MAPPER)
+        );
+        int rowsDeleted = namedParameterJdbcTemplate.update("DELETE FROM Directories WHERE directory_id IN (:directory_id)", args);
+        if (rowsDeleted != dir.size()) return new ArrayList<>(); // TODO: Check if this makes sense
+        return dir;
     }
 
     @Override

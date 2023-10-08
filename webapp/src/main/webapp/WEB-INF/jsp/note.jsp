@@ -89,16 +89,16 @@
                                  class="icon-s fill-text">
                         </button>
                     </a>
-                    <c:if test="${user ne null and note.user.userId eq user.userId}">
-                    <span data-bs-toggle="tooltip" data-bs-placement="bottom"
-                          data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
-                        <button id="openDeleteNoteModalButton" class="btn nav-icon-button" data-bs-toggle="modal"
-                                data-bs-target="#deleteOneModal">
-                            <img src="<c:url value="/svg/trash.svg"/>"
-                                 alt="<spring:message code="delete"/>"
-                                 class="icon-s fill-text">
-                        </button>
-                    </span>
+                    <c:if test="${user ne null and (note.user.userId eq user.userId or user.isAdmin)}">
+                        <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                            data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
+                            <button id="openDeleteNoteModalButton" class="btn nav-icon-button" data-bs-toggle="modal"
+                                    data-bs-target="#deleteOneModal">
+                                <img src="<c:url value="/svg/trash.svg"/>"
+                                    alt="<spring:message code="delete"/>"
+                                    class="icon-s fill-text">
+                            </button>
+                        </span>
                     </c:if>
                 </div>
             </div>

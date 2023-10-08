@@ -89,4 +89,8 @@ public class User {
     public void setUserId(UUID userId) {
         this.userId = userId;
     }
+
+    public boolean getIsAdmin() {
+        return roles != null && Arrays.stream(roles).anyMatch(role -> role == Role.ROLE_ADMIN);
+    }
 }

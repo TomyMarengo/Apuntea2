@@ -198,7 +198,7 @@
                     <spring:message code="search.selected"/>
                 </span>
 
-                <c:if test="${user ne null and directory.user ne null and directory.user.userId eq user.userId}">
+                <c:if test="${user ne null and directory.user ne null and (directory.user.userId eq user.userId or directory.user.isAdmin)}">
                     <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                          data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
                         <button id="openDeleteSelectedModalButton" class="btn nav-icon-button"
@@ -385,7 +385,7 @@
                                 </div>
 
                                 <!-- DELETE -->
-                                <c:if test="${user ne null and item.user.userId eq user.userId}">
+                                <c:if test="${user ne null and (item.user.userId eq user.userId or user.isAdmin)}">
                                     <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                          data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
                                         <button class="btn nav-icon-button delete-button"
@@ -502,6 +502,8 @@
                                                 </button>
                                             </a>
                                         </c:if>
+                                    </c:if>
+                                    <c:if test="${user ne null and (item.user.userId eq user.userId or user.isAdmin) }">
                                         <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                              data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
                                             <button class="btn nav-icon-button delete-button"

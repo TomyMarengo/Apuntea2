@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Directory;
+import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.Review;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +18,6 @@ import org.thymeleaf.spring4.ISpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -60,6 +61,20 @@ public class EmailServiceImpl implements EmailService {
             LOGGER.warn("Review email could not be sent to {}",review.getNote().getUser().getEmail());
         }
 
+    }
+
+    @Async
+    @Override
+    public void sendDeleteNoteEmail(Note note) {
+        // TODO: Send email
+        LOGGER.info("Sending delete note email to {} for note {}", note.getUser().getEmail(), note.getName());
+    }
+
+    @Async
+    @Override
+    public void sendDeleteDirectoryEmail(Directory dir) {
+        // TODO: Send email
+        LOGGER.info("Sending delete directory email to {} for directory {}", dir.getUser().getEmail(), dir.getName());
     }
 
     /* https://www.baeldung.com/spring-email-templates */

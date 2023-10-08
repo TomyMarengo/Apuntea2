@@ -32,6 +32,13 @@ public class Directory implements Searchable {
         this.iconColor = iconColor;
     }
 
+    public Directory(UUID directoryId, String name, User user, String iconColor) {
+        this.directoryId = directoryId;
+        this.name = name;
+        this.user = user;
+        this.iconColor = iconColor;
+    }
+
     public Directory(UUID directoryId, String name, User user, UUID parentId, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
         this.directoryId = directoryId;
         this.name = name;

@@ -56,6 +56,15 @@ public class Note implements Searchable {
         this.subject = subject;
     }
 
+    // For admin delete
+    public Note(UUID noteId, String name, User user, Category category, String file_type) {
+        this.noteId = noteId;
+        this.name = name;
+        this.user = user;
+        this.category = category;
+        this.fileType = file_type;
+    }
+
     @Override
     public UUID getId() {
         return noteId;

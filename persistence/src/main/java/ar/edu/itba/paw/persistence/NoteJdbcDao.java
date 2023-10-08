@@ -50,6 +50,20 @@ public class NoteJdbcDao implements NoteDao {
                     rs.getString(FILE_TYPE),
                     rs.getFloat(AVG_SCORE)
             );
+
+    private final static RowMapper<Note> USER_ROW_MAPPER = (rs, rowNum) ->
+        new Note(
+                UUID.fromString(rs.getString(NOTE_ID)),
+                rs.getString(NOTE_NAME),
+                new User(
+                        UUID.fromString(rs.getString(USER_ID)),
+                        rs.getString(EMAIL),
+                        rs.getString(LOCALE)
+                ),
+                Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
+                rs.getString(FILE_TYPE)
+        );
+
     private final static RowMapper<Review> REVIEW_ROW_MAPPER = (rs, rowNum) ->
             new Review(
                     new User(
@@ -190,16 +204,26 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
-    public boolean delete(UUID noteId, UUID currentUserId) {
-        return jdbcTemplate.update("DELETE FROM Notes WHERE note_id = ? AND user_id = ?", noteId, currentUserId) == 1;
+    public List<Note> delete(UUID[] noteIds) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(NOTE_ID, Arrays.asList(noteIds));
+        List<Note> notes = new ArrayList<>(
+                namedParameterJdbcTemplate.query("SELECT n.note_id, n.note_name, n.category, n.file_type, " +
+                                "u.user_id, u.email, u.locale FROM Notes n INNER JOIN Users u ON n.user_id = u.user_id WHERE note_id IN (:note_id)",
+                        args, USER_ROW_MAPPER)
+        );
+        int rowsDeleted = namedParameterJdbcTemplate.update("DELETE FROM Notes WHERE note_id IN (:note_id)", args);
+        if (rowsDeleted == 0) return new ArrayList<>();
+        return notes;
     }
 
     @Override
-    public boolean deleteMany(UUID[] noteIds, UUID currentUserId) {
+    public boolean delete(UUID[] noteIds, UUID currentUserId) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(NOTE_ID, Arrays.asList(noteIds));
         args.addValue(USER_ID, currentUserId);
-        return namedParameterJdbcTemplate.update("DELETE FROM Notes WHERE note_id IN (:note_id) AND user_id = :user_id", args) == noteIds.length;
+        int deleted = namedParameterJdbcTemplate.update("DELETE FROM Notes WHERE note_id IN (:note_id) AND user_id = :user_id", args);
+        return deleted == noteIds.length;
     }
 
     @Override
