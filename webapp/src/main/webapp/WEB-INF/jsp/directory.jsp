@@ -40,7 +40,7 @@
 
 <fragment:navbar loggedin="${user != null}"/>
 
-<fragment:bottom-navbar hierarchy="${hierarchy}"/>
+<fragment:bottom-navbar title="./${directoryId}:${directory.name}" hierarchy="${hierarchy}"/>
 
 <c:url var="createUrl" value="./${directoryId}"/>
 
