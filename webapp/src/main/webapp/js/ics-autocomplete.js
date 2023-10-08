@@ -1,3 +1,6 @@
+// function defined in other file that uses ics-autocomplete.js
+var extendedOnCompletion = null;
+
 function clearInstitution() {
     document.getElementById("institutionAutocomplete").value = "";
     document.getElementById('institutionId').value = "";
@@ -23,7 +26,7 @@ let selectElement = document.getElementById('institutionSelect');
 if (selectElement && institutions) {
     document.getElementById("eraseInstitutionButton").addEventListener("click", _ => {
         clearInstitution();
-        loadFields();
+        loadFields(false);
     });
     // Initialize an empty array to store the option values
     autocomplete(document.getElementById("institutionAutocomplete"), document.getElementById("institutionId"),
@@ -39,7 +42,7 @@ selectElement = document.getElementById('careerSelect');
 if (selectElement && careers) {
     document.getElementById("eraseCareerButton").addEventListener("click", _ => {
         clearCareer();
-        loadFields();
+        loadFields(false);
     });
     autocomplete(document.getElementById("careerAutocomplete"), document.getElementById("careerId"), _ => {
         const institutionId = document.getElementById('institutionId').value;
@@ -54,7 +57,7 @@ selectElement = document.getElementById('subjectSelect');
 if (selectElement && subjects) {
     document.getElementById("eraseSubjectButton").addEventListener("click", _ => {
         clearSubject();
-        loadFields();
+        loadFields(false);
     });
     autocomplete(document.getElementById("subjectAutocomplete"), document.getElementById("subjectId"), _ => {
         const careerId = document.getElementById('careerId').value;
@@ -62,31 +65,38 @@ if (selectElement && subjects) {
         , loadFields);
 }
 
-function loadFields() {
-    const institutionValue = document.getElementById('institutionId')?.value;
-    const careerValue = document.getElementById('careerId')?.value;
-    const subjectValue = document.getElementById('subjectId')?.value;
+function loadFields(autocompleting = true) {
+    const institutionHidden = document.getElementById('institutionId');
+    const careerHidden = document.getElementById('careerId');
+    const subjectHidden = document.getElementById('subjectId');
 
     // Los valores no están vacíos, ahora actualiza los elementos select correspondientes
     let institutionAutocomplete = document.getElementById('institutionAutocomplete');
     let careerAutocomplete = document.getElementById('careerAutocomplete');
     let subjectAutocomplete = document.getElementById('subjectAutocomplete');
 
-    let ins = institutions.find(x => x.institutionId === institutionValue);
-    let career = careers.find(x => x.careerId === careerValue);
-    let subject = subjects.find(x => x.subjectId === subjectValue);
+    let ins = institutions.find(x => x.institutionId === institutionHidden?.value);
+    let career = careers.find(x => x.careerId === careerHidden?.value);
+    let subject = subjects.find(x => x.subjectId === subjectHidden?.value);
     // Establece el valor de los elementos select según los valores de id
     if (institutionAutocomplete) {
         institutionAutocomplete.value = ins ? ins.name : '';
+        institutionHidden.value = ins ? ins.institutionId : '';
         if (careerAutocomplete) {
             careerAutocomplete.disabled = !institutionAutocomplete.value;
             careerAutocomplete.value = career ? career.name : '';
+            careerHidden.value = career ? career.careerId : '';
             if (subjectAutocomplete) {
                 subjectAutocomplete.disabled = !careerAutocomplete.value;
                 subjectAutocomplete.value = subject ? subject.name : '';
+                subjectHidden.value = subject ? subject.subjectId : '';
             }
         }
     }
+
+    if (extendedOnCompletion != null) {
+        extendedOnCompletion(autocompleting);
+    }
 }
 
-document.addEventListener('DOMContentLoaded', loadFields);
+document.addEventListener('DOMContentLoaded', () => loadFields(false));

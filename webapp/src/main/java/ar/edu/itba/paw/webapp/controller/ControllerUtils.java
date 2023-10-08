@@ -16,6 +16,10 @@ public class ControllerUtils {
     static final String CREATE_REVIEW_FORM_BINDING = "org.springframework.validation.BindingResult.reviewForm";
     static final String UPLOAD_REVIEW_FORM = "reviewCreated";
 
+
+    static final String ADD_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.addSubjectForm";
+
+    static final String EDIT_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.editSubjectForm";
     private	static final Logger LOGGER	= LoggerFactory.getLogger(ControllerUtils.class);
 
     private ControllerUtils(){}

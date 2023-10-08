@@ -52,7 +52,8 @@ public class SubjectJdbcDao implements SubjectDao {
     @Override
     public List<Subject> getSubjectsByCareerId(UUID careerId) {
         return jdbcTemplate.query("SELECT DISTINCT s.subject_id, s.subject_name, sc.year FROM Subjects s " +
-                "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id WHERE sc.career_id = ?", ROW_MAPPER_CAREER, careerId);
+                "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id WHERE sc.career_id = ? " +
+                "ORDER BY sc.year", ROW_MAPPER_CAREER, careerId);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class SubjectJdbcDao implements SubjectDao {
                 "   SELECT target_c.institution_id FROM Careers target_c WHERE target_c.career_id = :career_id "+
                 ") AND s.subject_id NOT IN (" +
                 "   SELECT target_sc.subject_id FROM Subjects_Careers target_sc WHERE target_sc.career_id = :career_id" +
-                ")", args, ROW_MAPPER);
+                ") ORDER BY s.subject_name", args, ROW_MAPPER);
     }
 
     @Override

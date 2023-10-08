@@ -250,7 +250,6 @@
                                 <label class="input-group-text" for="name"><spring:message
                                         code="name"/></label>
                                 <form:input path="name" type="text"
-                                            aria-label="<spring:message code=\"form.upload.name\"/>"
                                             class="form-control" id="name"/>
                             </div>
                             <form:errors path="name" cssClass="text-danger" element="p"/>

@@ -53,7 +53,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                                 "/notes/{noteId}",
                                 "/notes/{noteId}/download",
                                 "/directory/{directoryId}",
-                                "/errors/**").permitAll()
+                                "/errors/**",
+                                "/careers/**").permitAll() //TODO restrict permission
                     .anyRequest().authenticated()
 
                 .and().formLogin()

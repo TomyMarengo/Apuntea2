@@ -52,4 +52,12 @@ public class Subject {
         Subject s = (Subject) o;
         return s.subjectId.equals(subjectId);
     }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "subjectId:" + subjectId +
+                ", name:'" + name + '\'' +
+                '}';
+    }
 }

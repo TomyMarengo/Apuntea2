@@ -118,5 +118,4 @@ function autocomplete(inp, sel, getArr, onCompletion) {
         }
     }
 
-    /*execute a function when someone clicks in the document:*/
 }

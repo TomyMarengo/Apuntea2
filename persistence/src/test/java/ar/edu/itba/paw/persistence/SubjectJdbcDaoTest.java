@@ -124,6 +124,15 @@ public class SubjectJdbcDaoTest {
         assertTrue(c3sList.stream().noneMatch(s -> c2sIds.contains(s.getSubjectId())));
     }
 
+    @Test
+    public void testOrderGetSubjectsByCareerId() {
+        List<Subject> subjects = subjectDao.getSubjectsByCareerId(ING_INF);
+
+        for (int i = 0; i < subjects.size() - 2; i++) {
+            assertTrue(subjects.get(i).getYear() <= subjects.get(i + 1).getYear());
+        }
+
+    }
 
     @Test
     public void testGetSubjectsByCareerIdComplemented() {
