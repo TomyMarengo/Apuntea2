@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.persistence.JdbcTestUtils.*;
+import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 

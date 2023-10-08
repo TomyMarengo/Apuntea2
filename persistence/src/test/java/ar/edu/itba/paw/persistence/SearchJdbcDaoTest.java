@@ -21,8 +21,8 @@ import java.util.UUID;
 import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.FAVORITES;
-import static ar.edu.itba.paw.persistence.JdbcTestUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcTestUtils.EDA_ID;
+import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
+import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.EDA_ID;
 import static org.junit.Assert.*;
 
 @Transactional

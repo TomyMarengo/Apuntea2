@@ -12,11 +12,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 
-import static ar.edu.itba.paw.persistence.JdbcTestUtils.*;
+import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
 import static org.junit.Assert.*;
 
 import org.springframework.test.jdbc.JdbcTestUtils;
@@ -24,6 +25,10 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.Assert.*;
+
+import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)

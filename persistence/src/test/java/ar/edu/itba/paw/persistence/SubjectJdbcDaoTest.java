@@ -275,18 +275,18 @@ public class SubjectJdbcDaoTest {
     }
 
     @Test
-    public void addSubjectToCareer(){
+    public void testAddSubjectToCareer(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-
-        boolean result = subjectDao.addSubjectToCareer(subjectId, EDA_ID, 4);
+        UUID careedId = ING_INF;
+        boolean result = subjectDao.addSubjectToCareer(subjectId, careedId, 4);
 
         assertTrue(result);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + EDA_ID + "' AND year = 4"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careedId + "' AND year = 4"));
     }
 
     @Test
-    public void updateSubject(){
+    public void testUpdateSubject(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
 
@@ -297,7 +297,7 @@ public class SubjectJdbcDaoTest {
     }
 
     @Test
-    public void updateSubjectCareer(){
+    public void testUpdateSubjectCareer(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
         UUID careerId = ING_INF;
@@ -315,7 +315,7 @@ public class SubjectJdbcDaoTest {
     }
 
     @Test
-    public void removeSubjectFromCareer(){
+    public void testRemoveSubjectFromCareer(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "trash", dirId);
         UUID careerId = ING_INF;
