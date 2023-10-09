@@ -2,7 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Subject;
 import ar.edu.itba.paw.models.exceptions.InvalidSubjectException;
-import ar.edu.itba.paw.models.exceptions.InvalidSubjecteCareerException;
+import ar.edu.itba.paw.models.exceptions.InvalidSubjectCareerException;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.SubjectDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class SubjectServiceImpl implements SubjectService {
     public void linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
         boolean result = subjectDao.linkSubjectToCareer(subjectId, careerId, year);
         if (!result) {
-            throw new InvalidSubjecteCareerException();
+            throw new InvalidSubjectCareerException();
         }
     }
 
@@ -79,7 +79,7 @@ public class SubjectServiceImpl implements SubjectService {
         updateSubject(subjectId, subjectName);
         boolean result = subjectDao.updateSubjectCareer(subjectId, careerId, year);
         if (!result) {
-            throw new InvalidSubjecteCareerException();
+            throw new InvalidSubjectCareerException();
         }
     }
 
@@ -88,7 +88,7 @@ public class SubjectServiceImpl implements SubjectService {
     public void unlinkSubjectFromCareer(UUID subjectId, UUID careerId) {
         boolean result = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
         if (!result) {
-            throw new InvalidSubjecteCareerException();
+            throw new InvalidSubjectCareerException();
         }
     }
 }

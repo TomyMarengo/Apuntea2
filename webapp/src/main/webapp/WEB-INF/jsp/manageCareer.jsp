@@ -228,7 +228,7 @@
                                 <label class="input-group-text" for="year"><spring:message
                                         code="year"/></label>
                                 <spring:message code="search.year" var="placeholderYear"/>
-                                <form:input type="number" id="yearInput" class="form-control" min="1" max="10"
+                                <form:input type="number" id="yearInput" class="form-control" min="1" max="10" required="true"
                                             placeholder="${placeholderYear}" autocomplete="off" path="year"/>
                             </div>
                             <form:errors path="year" cssClass="text-danger" element="p"/>
@@ -281,7 +281,7 @@
                                 <label class="input-group-text" for="year"><spring:message
                                         code="year"/></label>
                                 <spring:message code="search.year" var="placeholderYear"/>
-                                <form:input path="year" type="number" min="1" max="10"
+                                <form:input path="year" type="number" min="1" max="10" required="true"
                                             class="form-control" id="createYear"/>
                             </div>
                             <form:errors path="year" cssClass="text-danger" element="p"/>
@@ -333,7 +333,7 @@
                             <div class="input-group">
                                 <label class="input-group-text" for="year"><spring:message
                                         code="year"/></label>
-                                <form:input path="year" type="number" min="1" max="10"
+                                <form:input path="year" type="number" min="1" max="10" required="true"
                                             class="form-control" id="editSubjectYear"/>
                             </div>
                             <form:errors path="year" cssClass="text-danger" element="p"/>

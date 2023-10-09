@@ -9,19 +9,18 @@ import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 public class CreateSubjectForm {
-    @NotNull
     @Range(min = 1, max = 10)
-    private Integer year;
+    private int year;
 
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z0-9 _-]+$")
     private String name;
 
-    public Integer getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(Integer year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
