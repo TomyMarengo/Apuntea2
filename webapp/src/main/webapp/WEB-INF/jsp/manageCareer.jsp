@@ -97,14 +97,14 @@
     <div class="d-flex container mt-4 justify-content-between p-0">
         <div class="d-flex">
             <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
-               data-bs-title="<spring:message code="addSubject"/>"
+               data-bs-title="<spring:message code="linkSubject"/>"
                data-bs-trigger="hover">
-                <button class="btn" data-bs-toggle="modal" data-bs-target="#addSubjectModal"
+                <button class="btn" data-bs-toggle="modal" data-bs-target="#linkSubjectModal"
                         id="newSubjectModalButton">
                     <img src="<c:url value="/svg/add-document.svg"/>"
-                         alt="<spring:message code="addSubject"/>"
+                         alt="<spring:message code="linkSubject"/>"
                          class="icon-m fill-dark-primary"/>
-                    <spring:message code="addSubject"/>
+                    <spring:message code="linkSubject"/>
                 </button>
             </a>
             <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -173,38 +173,38 @@
         </div>
     </section>
 
-    <!-- ADD SUBJECT MODAL -->
-    <div class="modal fade" id="addSubjectModal" data-bs-backdrop="static" data-bs-keyboard="false"
-         tabindex="-1" aria-labelledby="addLabel" aria-hidden="true">
+    <!-- LINK SUBJECT MODAL -->
+    <div class="modal fade" id="linkSubjectModal" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="linkLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content box bg-bg">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addLabel"><spring:message
-                            code="addSubject"/></h1>
+                    <h1 class="modal-title fs-5" id="linkLabel"><spring:message
+                            code="linkSubject"/></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close">
                     </button>
                 </div>
-                <!-- ADD SUBJECT  FORM -->
-                <c:url var="addSubjectUrl" value="./${careerId}/addSubject"/>
-                <form:form modelAttribute="addSubjectForm"
-                           action="${addSubjectUrl}"
+                <!-- LINK SUBJECT  FORM -->
+                <c:url var="linkSubjectUrl" value="./${careerId}/linkSubject"/>
+                <form:form modelAttribute="linkSubjectForm"
+                           action="${linkSubjectUrl}"
                            method="post"
-                           id="addSubjectForm"
+                           id="linkSubjectForm"
                            cssClass="d-flex flex-column w-100 align-items-center">
                     <div class="modal-body pb-0">
                         <div class="d-flex flex-column gap-2">
-                            <select id="addSubjectSelect" style="display: none;">
+                            <select id="linkSubjectSelect" style="display: none;">
                                 <option disabled selected value></option>
                             </select>
-                            <form:input path="subjectId" id="addSubjectId" style="display: none;"/>
+                            <form:input path="subjectId" id="linkSubjectId" style="display: none;"/>
                             <div class="input-group mb-3">
                                 <div class="autocomplete">
                                     <spring:message code="search.subject.placeholder" var="placeholderSubject"/>
-                                    <input type="text" id="addSubjectAutocomplete" class="form-control special-radius"
+                                    <input type="text" id="linkSubjectAutocomplete" class="form-control special-radius"
                                            placeholder="${placeholderSubject}" autocomplete="off"/>
                                 </div>
-                                <span class="input-group-text input-group-icon clickable" id="eraseAddSubjectButton">
+                                <span class="input-group-text input-group-icon clickable" id="eraseLinkSubjectButton">
                                 <img src="<c:url value="/svg/cross.svg"/>"
                                      alt="<spring:message code="search.sort.image"/>"
                                      class="icon-xs fill-dark-primary"/>
@@ -228,7 +228,7 @@
                                 data-bs-dismiss="modal">
                             <spring:message code="close"/></button>
                         <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
-                                            code="add"/>"/>
+                                            code="link"/>"/>
                     </div>
                 </form:form>
             </div>
@@ -354,9 +354,9 @@
         var careerId = '${career.careerId}';
         var unownedSubjects = JSON.parse('${unownedSubjects}');
     </c:if>
-    <c:if test="${errorsAddSubjectForm ne null}">
-    let addSubjectModal = new bootstrap.Modal(document.getElementById('addSubjectModal'), {})
-    addSubjectModal.show();
+    <c:if test="${errorsLinkSubjectForm ne null}">
+    let linkSubjectModal = new bootstrap.Modal(document.getElementById('linkSubjectModal'), {})
+    linkSubjectModal.show();
     </c:if>
     <c:if test="${errorsCreateSubjectForm ne null}">
         let createSubjectModal = new bootstrap.Modal(document.getElementById('createSubjectModal'), {})

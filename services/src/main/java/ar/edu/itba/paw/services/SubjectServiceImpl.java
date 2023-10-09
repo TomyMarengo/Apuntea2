@@ -51,14 +51,14 @@ public class SubjectServiceImpl implements SubjectService {
     public UUID createSubject(String name, UUID careerId, int year) {
         UUID rootDirectoryId = directoryDao.createRootDirectory(name);
         UUID subjectId = subjectDao.create(name, rootDirectoryId);
-        subjectDao.addSubjectToCareer(subjectId, careerId, year);
+        subjectDao.linkSubjectToCareer(subjectId, careerId, year);
         return subjectId;
     }
 
     @Override
     @Transactional
-    public void addSubjectToCareer(UUID subjectId, UUID careerId, int year) {
-        boolean result = subjectDao.addSubjectToCareer(subjectId, careerId, year);
+    public void linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
+        boolean result = subjectDao.linkSubjectToCareer(subjectId, careerId, year);
         if (!result) {
             throw new InvalidSubjecteCareerException();
         }

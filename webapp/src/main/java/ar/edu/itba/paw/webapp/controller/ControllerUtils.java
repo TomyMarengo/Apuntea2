@@ -17,7 +17,7 @@ public class ControllerUtils {
     static final String UPLOAD_REVIEW_FORM = "reviewCreated";
 
 
-    static final String ADD_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.addSubjectForm";
+    static final String LINK_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.linkSubjectForm";
 
     static final String CREATE_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.createSubjectForm";
     static final String EDIT_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.editSubjectForm";

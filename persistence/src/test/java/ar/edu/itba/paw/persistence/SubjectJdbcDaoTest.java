@@ -284,11 +284,11 @@ public class SubjectJdbcDaoTest {
     }
 
     @Test
-    public void testAddSubjectToCareer(){
+    public void testLinkSubjectToCareer(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
         UUID careedId = ING_INF;
-        boolean result = subjectDao.addSubjectToCareer(subjectId, careedId, 4);
+        boolean result = subjectDao.linkSubjectToCareer(subjectId, careedId, 4);
 
         assertTrue(result);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careedId + "' AND year = 4"));

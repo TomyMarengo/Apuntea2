@@ -90,7 +90,7 @@ public class SubjectJdbcDao implements SubjectDao {
     }
 
     @Override
-    public boolean addSubjectToCareer(UUID subjectId, UUID careerId, int year) {
+    public boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(SUBJECT_ID, subjectId);
         args.addValue(CAREER_ID, careerId);

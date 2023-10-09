@@ -4,19 +4,19 @@ if (institutionId != null) {
 if (careerId != null) {
     document.getElementById("careerId").value = careerId;
 }
-let addSubjectSelect = document.getElementById('addSubjectSelect');
+let linkSubjectSelect = document.getElementById('linkSubjectSelect');
 // Initialize an empty array to store the option values
-if (addSubjectSelect && unownedSubjects) {
-    document.getElementById("eraseAddSubjectButton").addEventListener("click", _ => {
-        document.getElementById("addSubjectAutocomplete").value = "";
-        document.getElementById('addSubjectId').value = "";
-        setupAddSubject();
+if (linkSubjectSelect && unownedSubjects) {
+    document.getElementById("eraseLinkSubjectButton").addEventListener("click", _ => {
+        document.getElementById("linkSubjectAutocomplete").value = "";
+        document.getElementById('linkSubjectId').value = "";
+        setupLinkSubject();
     });
-    autocomplete(document.getElementById("addSubjectAutocomplete"), document.getElementById("addSubjectId"),
-            _ => unownedSubjects.map(s => ({value: s.subjectId , text: s.name})), setupAddSubject);
+    autocomplete(document.getElementById("linkSubjectAutocomplete"), document.getElementById("linkSubjectId"),
+            _ => unownedSubjects.map(s => ({value: s.subjectId , text: s.name})), setupLinkSubject);
 }
 
-function setupAddSubject() {
+function setupLinkSubject() {
 
 }
 

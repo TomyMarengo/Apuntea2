@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-public class AddSubjectForm {
+public class LinkSubjectForm {
     @ValidUuid
     @NotNull
     private UUID subjectId;

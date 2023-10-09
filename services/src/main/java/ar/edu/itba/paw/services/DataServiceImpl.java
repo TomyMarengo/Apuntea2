@@ -76,8 +76,8 @@ public class DataServiceImpl implements DataService {
 
     @Override
     @Transactional
-    public void addSubjectToCareer(UUID subjectId, UUID careerId, int year) {
-        subjectService.addSubjectToCareer(subjectId, careerId, year);
+    public void linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
+        subjectService.linkSubjectToCareer(subjectId, careerId, year);
     }
 
     @Override

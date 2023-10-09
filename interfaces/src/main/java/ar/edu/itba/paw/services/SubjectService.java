@@ -12,7 +12,7 @@ public interface SubjectService {
     List<Subject> getSubjectsByInstitution(UUID institutionId);
 
     UUID createSubject(String name, UUID careerId, int year);
-    void addSubjectToCareer(UUID subjectId, UUID careerId, int year);
+    void linkSubjectToCareer(UUID subjectId, UUID careerId, int year);
 
     void updateSubject(UUID subjectId, String name);
     void updateSubjectCareer(UUID subjectId, String subjectName, UUID careerId, int year);

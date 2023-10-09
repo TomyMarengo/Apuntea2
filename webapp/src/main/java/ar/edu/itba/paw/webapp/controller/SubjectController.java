@@ -7,7 +7,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.CareerNotFoundException;
 import ar.edu.itba.paw.services.DataService;
 import ar.edu.itba.paw.services.SecurityService;
-import ar.edu.itba.paw.webapp.forms.AddSubjectForm;
+import ar.edu.itba.paw.webapp.forms.LinkSubjectForm;
 import ar.edu.itba.paw.webapp.forms.CreateSubjectForm;
 import ar.edu.itba.paw.webapp.forms.EditSubjectForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
@@ -54,7 +54,7 @@ public class SubjectController {
     public ModelAndView manageCareer(@PathVariable("careerId") @ValidUuid UUID careerId, final ModelMap model){
         final ModelAndView mav = new ModelAndView("manageCareer");
 
-        addFormOrGetWithErrors(mav, model, ADD_SUBJECT_FORM_BINDING, "errorsAddSubjectForm", "addSubjectForm", AddSubjectForm.class);
+        addFormOrGetWithErrors(mav, model, LINK_SUBJECT_FORM_BINDING, "errorsLinkSubjectForm", "linkSubjectForm", LinkSubjectForm.class);
         addFormOrGetWithErrors(mav, model, CREATE_SUBJECT_FORM_BINDING, "errorsCreateSubjectForm", "createSubjectForm", CreateSubjectForm.class);
         addFormOrGetWithErrors(mav, model, EDIT_SUBJECT_FORM_BINDING, "errorsEditSubjectForm", "editSubjectForm", EditSubjectForm.class);
         
@@ -74,18 +74,18 @@ public class SubjectController {
     }
 
 
-    @RequestMapping(value = "/{careerId}/addSubject", method = RequestMethod.POST)
-    public ModelAndView addSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
-                                   @Valid @ModelAttribute final AddSubjectForm addSubjectForm,
+    @RequestMapping(value = "/{careerId}/linkSubject", method = RequestMethod.POST)
+    public ModelAndView linkSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
+                                   @Valid @ModelAttribute final LinkSubjectForm linkSubjectForm,
                                    final BindingResult result,
                                    final RedirectAttributes redirectAttributes
     ){
         if(result.hasErrors()) {
-            redirectAttributes.addFlashAttribute(ADD_SUBJECT_FORM_BINDING, result);
+            redirectAttributes.addFlashAttribute(LINK_SUBJECT_FORM_BINDING, result);
             return new ModelAndView("redirect:/careers/"+careerId);
         }
         final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
-        dataService.addSubjectToCareer(addSubjectForm.getSubjectId(), careerId, addSubjectForm.getYear());
+        dataService.linkSubjectToCareer(linkSubjectForm.getSubjectId(), careerId, linkSubjectForm.getYear());
         return mav;
     }
 
