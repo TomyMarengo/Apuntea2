@@ -19,6 +19,7 @@ public class ControllerUtils {
 
     static final String ADD_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.addSubjectForm";
 
+    static final String CREATE_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.createSubjectForm";
     static final String EDIT_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.editSubjectForm";
     private	static final Logger LOGGER	= LoggerFactory.getLogger(ControllerUtils.class);
 
