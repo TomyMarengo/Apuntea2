@@ -55,12 +55,19 @@
                                 <input type="text" name="email" id="email" class="form-control bg-bg" placeholder="${loginEmail}"/>
                             </div>
 
+
                             <div class="">
                                 <spring:message var="loginPassword" code="password"/>
                                 <label for="password"></label>
                                 <input type="password" name="password" id="password" class="form-control bg-bg"
                                        placeholder="${loginPassword}"/>
                             </div>
+
+                            <c:if test="${param.error}">
+                                <div class="text-danger mt-3" role="alert">
+                                    <spring:message code="login.error"/>
+                                </div>
+                            </c:if>
 
                             <div class="mt-4 d-flex align-items-center">
                                 <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"/>

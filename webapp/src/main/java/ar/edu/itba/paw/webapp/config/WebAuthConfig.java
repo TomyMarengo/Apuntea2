@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.CustomUserDetailsService;
+import ar.edu.itba.paw.webapp.auth.LoginFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -30,6 +32,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private LoginFailureHandler loginFailureHandler;
 
     @Override
     public void configure(final HttpSecurity http) throws Exception {
@@ -51,9 +56,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
                 .and().formLogin()
                     .loginPage("/login")
-                    .usernameParameter("email").passwordParameter("password")
+                    .usernameParameter("email")
+                    .passwordParameter("password")
                     .defaultSuccessUrl("/", false)
-
+                    .failureHandler(loginFailureHandler)
                 .and().rememberMe()
                     .rememberMeParameter("rememberMe")
                     .userDetailsService(userDetailsService)
