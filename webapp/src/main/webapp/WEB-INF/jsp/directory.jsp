@@ -441,8 +441,9 @@
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
                                             <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
-                                                 class="icon-s fill-${item.iconColor}">
-                                            <h4 class="card-title text-truncate mb-0">
+                                                 data-color="${item.iconColor}"
+                                                 class="icon-s fill-${item.iconColor} folder-icon">
+                                            <h4 class="card-title text-truncate mb-0 note-name">
                                                 <c:out value="${item.name}"/>
                                             </h4>
                                         </div>
@@ -470,10 +471,9 @@
                                                 </form:form>
                                             </div>
 
-                                            <c:if test="${user ne null and (item.user.userId eq user.userId)}">
+                                            <c:if test="${user ne null and (item.user.userId eq user.userId or user.isAdmin) }">
                                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
-                                                   data-bs-title="<spring:message code="edit"/>"
-                                                   data-bs-trigger="hover">
+                                                   data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                                                     <button class="btn button-expansion rounded-circle edit-button"
                                                             data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
                                                             id="<c:out value="${item.id}.e2"/>">
@@ -484,8 +484,7 @@
                                                 </a>
 
                                                 <div data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                     data-bs-title="<spring:message code="delete"/>"
-                                                     data-bs-trigger="hover">
+                                                     data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
                                                     <button class="btn nav-icon-button delete-button"
                                                             data-bs-toggle="modal" data-bs-target="#deleteManyModal"
                                                             id="<c:out value="${item.id}"/>.e2">
@@ -497,7 +496,6 @@
                                             </c:if>
                                         </div>
                                     </div>
-
 
                                     <span class="card-text">
                                         <strong><spring:message code="owner"/></strong>:
@@ -555,7 +553,7 @@
                                             <c:if test="${item.fileType eq 'mp4'}">
                                                 <img src="<c:url value="/image/mp4.png"/>" alt="mp4" class="icon-m">
                                             </c:if>
-                                            <h4 class="card-title text-truncate mb-0">
+                                            <h4 class="card-title text-truncate mb-0 note-name">
                                                 <c:out value="${item.name}"/>
                                             </h4>
                                         </div>

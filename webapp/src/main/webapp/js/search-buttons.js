@@ -60,7 +60,7 @@ function selectAll() {
         selectedRowIds.add(content[i].id);
     }
 
-    updateSelectedButtonsState();
+    updateSelectedState();
 }
 selectAllButton.addEventListener('click', selectAll);
 
@@ -82,6 +82,6 @@ function deselectAll() {
         selectedRowIds.delete(content[i].id);
     }
 
-    updateSelectedButtonsState();
+    updateSelectedState();
 }
 deselectAllButton.addEventListener('click', deselectAll);

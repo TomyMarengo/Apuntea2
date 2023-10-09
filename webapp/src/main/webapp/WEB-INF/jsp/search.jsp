@@ -413,8 +413,9 @@
                                     <div class="d-flex justify-content-between">
                                         <div class="d-flex gap-2 overflow-hidden align-items-center mb-2">
                                             <img src="<c:url value="/svg/folder.svg"/>" alt="${folder}"
-                                                 class="icon-s fill-${item.iconColor}">
-                                            <h4 class="card-title text-truncate mb-0">
+                                                 data-color="${item.iconColor}"
+                                                 class="icon-m fill-${item.iconColor} folder-icon">
+                                            <h4 class="card-title text-truncate mb-0 note-name">
                                                 <c:out value="${item.name}"/>
                                             </h4>
                                         </div>
@@ -501,7 +502,7 @@
                                             <c:if test="${item.fileType eq 'mp4'}">
                                                 <img src="<c:url value="/image/mp4.png"/>" alt="mp4" class="icon-m">
                                             </c:if>
-                                            <h4 class="card-title text-truncate mb-0">
+                                            <h4 class="card-title text-truncate mb-0 note-name">
                                                 <c:out value="${item.name}"/>
                                             </h4>
                                         </div>

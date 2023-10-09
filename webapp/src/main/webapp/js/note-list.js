@@ -20,28 +20,24 @@ const rows = document.querySelectorAll('.note-found');
 // Content of the elements
 const content = []
 
-for (let i = 0; i < rows.length / 2; i++) {
+for (let i = 0; i < rows.length ; i++) {
     const id = rows[i].getAttribute('id').split('.', 1)[0];
     const category = rows[i].getAttribute('data-category');
     let noteName = rows[i].querySelector('.note-name').textContent.trim();
     noteName = noteName.replace(/_/g, '');
     const visible = rows[i].getAttribute('data-visible');
     let item = { id: id, category: category, name: noteName, visible: visible };
+
     if (category === 'directory') {
         item = {...item, iconColor: rows[i].querySelector('.folder-icon').getAttribute('data-color')};
     }
+
     content.push(item);
 }
 
 rows.forEach((row, index) => {
     row.addEventListener('dblclick', () => {
-        // Acción de doble clic aquí (por ejemplo, redirigir a /notes/{noteId})
-        if (index >= rows.length / 2)
-            index -= rows.length / 2;
-
-        const id = content[index].id;
-        const category = content[index].category;
-        // Open the URL in a new tab
+        const {id, category } = content[content.findIndex(item => item.id === row.getAttribute('id').split('.', 1)[0])];
         window.location.href = `${baseUrl}/${category === 'directory' ? 'directory' : 'notes'}/${id}`;
     });
 });
@@ -51,7 +47,7 @@ const selectedRowIds = new Set();
 const selectedButtons = document.getElementById('selectedButtons');
 const selectedCount = document.getElementById('selectedCount');
 
-function updateSelectedButtonsState() {
+function updateSelectedState() {
     if (selectedRowIds.size > 0) {
         selectedButtons.style.display = 'flex'; // Mostrar el botón si hay filas seleccionadas
         downloadSelectedButton.style.display = 'flex';
@@ -59,90 +55,86 @@ function updateSelectedButtonsState() {
     } else {
         selectedButtons.style.display = 'none'; // Ocultar el botón si no hay filas seleccionadas
     }
+
     let entries = Array.from(selectedRowIds);
-    for (let i = 0; i < selectedRowIds.size; i++) {
-        if (content[content.findIndex(item => item.id === entries[i])].category === 'directory') {
-            downloadSelectedButton.style.display = 'none';
-            break;
+    for (let i = 0; i < rows.length; i++) {
+
+        const index = entries.findIndex(itemId => itemId === content[i].id);
+
+        if (index >= 0) {
+            const noteHorizontal = document.getElementById(`${entries[index]}.1`);
+            const noteBox = document.getElementById(`${entries[index]}.2`);
+
+            const checkbox = noteHorizontal.querySelector('.select-checkbox');
+            checkbox.checked = true;
+            noteHorizontal.classList.add('active-note-found');
+
+            const checkbox2 = noteBox.querySelector('.select-checkbox');
+            checkbox2.checked = true;
+            noteBox.classList.add('active-note-found');
+
+            if (noteHorizontal.getAttribute('data-category') === 'directory') {
+                downloadSelectedButton.style.display = 'none';
+            }
+        } else {
+            const noteHorizontal = document.getElementById(`${content[i].id}.1`);
+            const noteBox = document.getElementById(`${content[i].id}.2`);
+
+            const checkbox = noteHorizontal.querySelector('.select-checkbox');
+            checkbox.checked = false;
+            noteHorizontal.classList.remove('active-note-found');
+
+            const checkbox2 = noteBox.querySelector('.select-checkbox');
+            checkbox2.checked = false;
+            noteBox.classList.remove('active-note-found');
         }
+
     }
 }
 
 for (let i = 0; i < rows.length; i++) {
     rows[i].addEventListener('click', (event) => {
-        if (i >= rows.length / 2)
-            i -= rows.length / 2;
+
+        const id = content[i].id;
 
         if (event.shiftKey && lastClickedRow >= 0) {
             let startIndex = lastClickedRow;
             let endIndex = i;
 
-            if (startIndex >= rows.length / 2)
-                startIndex -= rows.length / 2;
-
             const [minIndex, maxIndex] = [startIndex, endIndex].sort((a, b) => a - b);
 
             for (let j = minIndex; j <= maxIndex; j++) {
-                const checkbox = rows[j].querySelector('.select-checkbox');
-                checkbox.checked = true;
-                rows[j].classList.add('active-note-found');
-
-                const checkbox2 = rows[j * 2].querySelector('.select-checkbox');
-                checkbox2.checked = true;
-                rows[j + rows.length / 2].classList.add('active-note-found');
-
                 selectedRowIds.add(content[j].id);
             }
         }
         else if (event.ctrlKey) {
-            // Si se mantiene presionada la tecla Ctrl, alternar la selección de la fila
-
-            rows[i].classList.toggle('active-note-found');
-            const checkbox = rows[i].querySelector('.select-checkbox');
-            checkbox.checked = !checkbox.checked;
-
-            rows[i + rows.length / 2].classList.toggle('active-note-found');
-            const checkbox2 = rows[i + rows.length / 2].querySelector('.select-checkbox');
-            checkbox2.checked = !checkbox2.checked;
-
-            if (checkbox.checked) {
-                selectedRowIds.add(content[i].id);
+            if (selectedRowIds.has(id)) {
+                selectedRowIds.delete(id);
             } else {
-                selectedRowIds.delete(content[i].id);
+                selectedRowIds.add(id);
             }
         }
         else {
             let toggle = false;
-            rows.forEach((otherRow, index) => {
-                if (otherRow !== rows[i] && otherRow !== rows[i + rows.length / 2]) {
-                    const checkbox = otherRow.querySelector('.select-checkbox');
-                    checkbox.checked = false;
-                    otherRow.classList.remove('active-note-found');
-
-                    selectedRowIds.delete(content[index % (rows.length / 2)].id);
+            rows.forEach((otherRow, j) => {
+                if (content[j].id !== id) {
+                    selectedRowIds.delete(content[j].id);
                 } else {
                     if (!toggle) {
                         toggle = true
-                        rows[i].classList.toggle('active-note-found');
-                        const checkbox = rows[i].querySelector('.select-checkbox');
-                        checkbox.checked = !checkbox.checked;
 
-                        rows[i + rows.length / 2].classList.toggle('active-note-found');
-                        const checkbox2 = rows[i + rows.length / 2].querySelector('.select-checkbox');
-                        checkbox2.checked = !checkbox2.checked;
-
-                        if (checkbox.checked) {
-                            selectedRowIds.add(content[i].id);
+                        if (!selectedRowIds.has(id)) {
+                            selectedRowIds.add(id);
                             lastClickedRow = i;
                         } else {
-                            selectedRowIds.delete(content[i].id);
+                            selectedRowIds.delete(id);
                             lastClickedRow = -1;
                         }
                     }
                 }
             });
         }
-        updateSelectedButtonsState();
+        updateSelectedState();
     });
 }
 

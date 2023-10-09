@@ -71,7 +71,7 @@
                 <h1 class="overflow-hidden">${note.name}</h1>
 
                 <div class="d-flex">
-                    <c:if test="${user ne null and note.user.userId eq user.userId}">
+                    <c:if test="${user ne null and (note.user.userId eq user.userId or user.isAdmin)}">
                         <span data-bs-toggle="tooltip" data-bs-placement="bottom"
                               data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
                             <button id="editNoteModalButton" class="btn nav-icon-button" data-bs-toggle="modal"
