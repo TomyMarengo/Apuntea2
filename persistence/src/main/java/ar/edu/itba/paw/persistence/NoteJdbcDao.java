@@ -29,6 +29,8 @@ public class NoteJdbcDao implements NoteDao {
     private final SimpleJdbcInsert jdbcNoteInsert;
     private final SimpleJdbcInsert jdbcReviewInsert;
 
+    private static final int REVIEW_LIMIT = 10;
+
     private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
             new Note(
                     UUID.fromString(rs.getString(NOTE_ID)),
@@ -187,7 +189,7 @@ public class NoteJdbcDao implements NoteDao {
                 put(CONTENT, content);
             }});
         } catch (DuplicateKeyException e) {
-            jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ? WHERE note_id = ? AND user_id = ?", score, content, noteId, userId);
+            jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ?, created_at = now() WHERE note_id = ? AND user_id = ?", score, content, noteId, userId);
         } catch (DataIntegrityViolationException e) {
             //TODO: create custom exception
             throw e;
@@ -236,7 +238,7 @@ public class NoteJdbcDao implements NoteDao {
     public List<Review> getReviews(UUID noteId) {
         // Right now it's not necessary to validate that the current user has visibility enabled
         return jdbcTemplate.query(
-                "SELECT u.user_id, u.email, r.score, r.content FROM Reviews r INNER JOIN Users u ON r.user_id = u.user_id WHERE r.note_id = ?",
+                "SELECT u.user_id, u.email, r.score, r.content FROM Reviews r INNER JOIN Users u ON r.user_id = u.user_id WHERE r.note_id = ? ORDER BY r.created_at DESC LIMIT " + REVIEW_LIMIT,
                     new Object[]{noteId},
                     REVIEW_ROW_MAPPER
         );

@@ -218,3 +218,5 @@ CREATE TABLE IF NOT EXISTS Verification_Codes
   CONSTRAINT "PK_verification_codes" PRIMARY KEY (user_id, code, expires_at),
   CONSTRAINT "FK_verification_codes_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE
 );
+
+ALTER TABLE Reviews ADD COLUMN IF NOT EXISTS created_at timestamp DEFAULT now() NOT NULL;

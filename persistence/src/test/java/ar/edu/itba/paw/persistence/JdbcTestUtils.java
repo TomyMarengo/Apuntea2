@@ -98,6 +98,17 @@ public class JdbcTestUtils {
         return (UUID) keyHolder.getKeys().get(DIRECTORY_ID);
     }
 
+    static void insertReview(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID noteId, UUID userId, int score, String content) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(NOTE_ID, noteId);
+        args.addValue(USER_ID, userId);
+        args.addValue(SCORE, score);
+        args.addValue(CONTENT, content);
+
+        namedParameterJdbcTemplate.update("INSERT INTO Reviews (note_id, user_id, score, content) VALUES (:note_id, :user_id, :score, :content)",
+                args);
+    }
+
     static void insertFavorite(SimpleJdbcInsert jdbcFavoriteInsert, UUID directoryId, UUID userId) {
         jdbcFavoriteInsert.execute(new HashMap<String, Object>(){{
             put(DIRECTORY_ID, directoryId);

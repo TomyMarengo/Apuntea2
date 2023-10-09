@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -35,11 +37,13 @@ public class NoteJdbcDaoTest {
     @Autowired
     private NoteDao noteDao;
     private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private SimpleJdbcInsert jdbcNoteInsert;
     private SimpleJdbcInsert jdbcDirectoryInsert;
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
+        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
         jdbcNoteInsert = new SimpleJdbcInsert(ds)
                 .withTableName(NOTES)
                 .usingColumns(NOTE_ID, NOTE_NAME, USER_ID, SUBJECT_ID, PARENT_ID, VISIBLE, CATEGORY, FILE_TYPE);
@@ -96,6 +100,22 @@ public class NoteJdbcDaoTest {
         List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
         assertEquals(2, reviews.size());
         assertEquals(PEPE_ID, reviews.get(0).getUser().getUserId());
+    }
+
+    @Test
+    public void testLimitReviews() {
+        UUID[] userIds = new UUID[20];
+        for (int i = 0; i < 20; i++)  {
+            userIds[i] = insertStudent(namedParameterJdbcTemplate, "pepe" + i + "@itba.edu.ar", "", ING_INF, "es");
+            insertReview(namedParameterJdbcTemplate, GUIA1EDA_NOTE_ID, userIds[i], (i % 5) + 1, "review " + i);
+        }
+        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
+        assertEquals(10, reviews.size());
+        for (int i = 10; i < 20; i++) {
+            assertEquals("review " + i, reviews.get(19 - i).getContent());
+            assertEquals((i % 5) + 1, (int) reviews.get(19 - i).getScore());
+            assertEquals(userIds[i], reviews.get(19 - i).getUser().getUserId());
+        }
     }
 
     @Test
