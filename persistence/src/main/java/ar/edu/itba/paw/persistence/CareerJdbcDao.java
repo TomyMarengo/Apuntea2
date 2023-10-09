@@ -48,4 +48,10 @@ public class CareerJdbcDao implements CareerDao{
     public List<Career> getCareersByInstitutionId(UUID institutionId) {
         return jdbcTemplate.query("SELECT * FROM Careers WHERE institution_id = ?", ROW_MAPPER, institutionId);
     }
+
+    @Override
+    public int countCareersBySubjectId(UUID subjectId) {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Subjects_Careers WHERE subject_id = ?", new Object[]{subjectId}, Integer.class);
+    }
+
 }

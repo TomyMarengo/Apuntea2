@@ -12,4 +12,6 @@ public interface CareerDao {
 
     Optional<Career> findCareerById(UUID careerId);
 
+    int countCareersBySubjectId(UUID subjectId);
+
 }

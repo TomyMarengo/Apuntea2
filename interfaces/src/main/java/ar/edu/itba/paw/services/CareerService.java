@@ -11,4 +11,5 @@ public interface CareerService {
 
     Optional<Career> findCareerById(UUID careerId);
 
+    int countCareersBySubjectId(UUID subjectId);
 }
