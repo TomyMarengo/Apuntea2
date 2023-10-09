@@ -49,7 +49,7 @@
                     <div class="card-body p-3 p-md-5 mx-4">
                         <form:form modelAttribute="challengeForm" action="${challengeUrl}" method="post">
                             <div class="mb-2">
-                                <h3><spring:message code="forgotPassword.title"/></h3>
+                                <h3 class="mb-2"><spring:message code="forgotPassword.title"/></h3>
                                 <p class="text-sm text-muted mb-0"><spring:message code="forgotPassword.challenge.title"/></p>
                             </div>
 
