@@ -44,7 +44,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendReviewEmail(Review review) {
         final Locale ownerLocale = new Locale(review.getNote().getUser().getLocale());
         final String to = review.getNote().getUser().getEmail();
-        final String subject = messageSource.getMessage("email.review.new", null, ownerLocale) + " " + review.getNote().getName();
+        final String subject = messageSource.getMessage("email.review.new", new Object[]{review.getNote().getName()}, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
         data.put("name", review.getNote().getName());
         data.put("score", review.getScore());
@@ -68,9 +68,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendDeleteNoteEmail(Note note) {
         final Locale ownerLocale = new Locale(note.getUser().getLocale());
         final String to = note.getUser().getEmail();
-        final String subject = messageSource.getMessage("email.note.yourNote", null, ownerLocale)
-                                + " " + note.getName() + " "
-                                + messageSource.getMessage("email.note.hasBeenDeleted", null, ownerLocale);
+        final String subject = messageSource.getMessage("email.note.hasBeenDeleted", new Object[]{note.getName()}, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
         data.put("name", note.getName());
         data.put("url", env.getProperty("base.url"));
@@ -88,9 +86,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendDeleteDirectoryEmail(Directory directory) {
         final Locale ownerLocale = new Locale(directory.getUser().getLocale());
         final String to = directory.getUser().getEmail();
-        final String subject = messageSource.getMessage("email.directory.yourDirectory", null, ownerLocale)
-                + " " + directory.getName() + " "
-                + messageSource.getMessage("email.directory.hasBeenDeleted", null, ownerLocale);
+        final String subject = messageSource.getMessage("email.directory.hasBeenDeleted", new Object[]{directory.getName()}, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
         data.put("name", directory.getName());
         data.put("url", env.getProperty("base.url"));

@@ -5,9 +5,7 @@
 <head>
     <meta name="x-apple-disable-message-reformatting">
     <meta charset="UTF-8">
-    <title>
-        <span th:text="#{email.review.title}"/>
-    </title>
+    <title th:text="#{email.note.deleted}"></title>
     <style>
         *{
             margin: 0;
@@ -26,25 +24,13 @@
             color: #5A5044;
         }
 
-        span{
-            font-size: 16px;
-            color: #5A5044;
-        }
-
-        strong{
-            font-size: 16px;
-            color: #5A5044;
-        }
-
     </style>
 </head>
 
 <body class="bg">
 <div style="padding: 1em 3em">
     <a th:href="${url}" style="text-decoration: none"><h1>Apuntea</h1></a>
-    <span th:text="#{email.note.yourNote}"/>
-    <strong th:text="${name}" />
-    <span th:text="#{email.note.hasBeenDeletedAdmin}"/>
+    <p th:text="#{email.note.hasBeenDeletedAdmin(${name})}"/>
     <p th:text="#{email.thanks}"/>
     <p th:text="#{email.signature}"/>
 </div>
