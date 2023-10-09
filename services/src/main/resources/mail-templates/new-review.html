@@ -5,7 +5,6 @@
 <head>
     <meta name="x-apple-disable-message-reformatting">
     <meta charset="UTF-8">
-    <title>New follower</title>
     <title>
         <span th:text="#{email.review.title}"/>
     </title>
@@ -27,6 +26,15 @@
             color: #5A5044;
         }
 
+        span{
+            font-size: 16px;
+            color: #5A5044;
+        }
+
+        strong{
+            font-size: 16px;
+            color: #5A5044;
+        }
 
         button {
             background-color: #EF7765; /* Green background */
@@ -56,7 +64,10 @@
 <body class="bg">
     <div style="padding: 1em 3em">
         <a th:href="${url}" style="text-decoration: none"><h1>Apuntea</h1></a>
-        <p th:text="${reviewer} + ' ' + #{email.review.createdReview} + ' ' + ${name} + '.'"/>
+        <strong th:text="${reviewer}"/>
+        <span th:text="#{email.review.createdReview}"/>
+        <strong th:text="${name}"/>
+        <span th:text="."/>
         <div class="card">
             <p th:text="${content}" style="font-size: 18px"/>
             <div style="margin-top: 10px;">
@@ -64,7 +75,8 @@
             </div>
         </div>
         <a th:href="${urlNote}"><button th:text="#{email.review.goToNote}"/></a>
-        <p th:text="#{email.review.thanks}"/>
+        <p th:text="#{email.thanks}"/>
+        <p th:text="#{email.signature}"/>
     </div>
 </body>
 

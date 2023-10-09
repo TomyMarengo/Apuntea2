@@ -66,15 +66,42 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendDeleteNoteEmail(Note note) {
-        // TODO: Send email
-        LOGGER.info("Sending delete note email to {} for note {}", note.getUser().getEmail(), note.getName());
+        final Locale ownerLocale = new Locale(note.getUser().getLocale());
+        final String to = note.getUser().getEmail();
+        final String subject = messageSource.getMessage("email.note.yourNote", null, ownerLocale)
+                                + " " + note.getName() + " "
+                                + messageSource.getMessage("email.note.hasBeenDeleted", null, ownerLocale);
+        final Map<String, Object> data = new HashMap<>();
+        data.put("name", note.getName());
+        data.put("url", env.getProperty("base.url"));
+        try {
+            LOGGER.info("Sending delete note email to {} for note {}", note.getUser().getEmail(), note.getName());
+            sendMessageUsingThymeleafTemplate(to,subject,"deleted-note.html", data, ownerLocale);
+            LOGGER.info("Delete note email sent to {}", note.getUser().getEmail());
+        } catch (MessagingException e) {
+            LOGGER.warn("Delete note email could not be sent to {}",note.getUser().getEmail());
+        }
     }
 
     @Async
     @Override
-    public void sendDeleteDirectoryEmail(Directory dir) {
+    public void sendDeleteDirectoryEmail(Directory directory) {
+        final Locale ownerLocale = new Locale(directory.getUser().getLocale());
+        final String to = directory.getUser().getEmail();
+        final String subject = messageSource.getMessage("email.directory.yourDirectory", null, ownerLocale)
+                + " " + directory.getName() + " "
+                + messageSource.getMessage("email.directory.hasBeenDeleted", null, ownerLocale);
+        final Map<String, Object> data = new HashMap<>();
+        data.put("name", directory.getName());
+        data.put("url", env.getProperty("base.url"));
+        try {
+            LOGGER.info("Sending delete directory email to {} for directory {}", directory.getUser().getEmail(), directory.getName());
+            sendMessageUsingThymeleafTemplate(to,subject,"deleted-directory.html", data, ownerLocale);
+            LOGGER.info("Delete directory email sent to {}", directory.getUser().getEmail());
+        } catch (MessagingException e) {
+            LOGGER.warn("Delete directory email could not be sent to {}",directory.getUser().getEmail());
+        }
         // TODO: Send email
-        LOGGER.info("Sending delete directory email to {} for directory {}", dir.getUser().getEmail(), dir.getName());
     }
 
     /* https://www.baeldung.com/spring-email-templates */
