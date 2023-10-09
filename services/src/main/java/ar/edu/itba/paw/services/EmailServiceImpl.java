@@ -3,11 +3,11 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Directory;
 import ar.edu.itba.paw.models.Note;
 import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.VerificationCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -102,6 +102,21 @@ public class EmailServiceImpl implements EmailService {
             LOGGER.warn("Delete directory email could not be sent to {}",directory.getUser().getEmail());
         }
         // TODO: Send email
+    }
+
+    @Async
+    @Override
+    public void sendForgotPasswordEmail(VerificationCode verificationCode, Locale locale) {
+        final String subject = messageSource.getMessage("email.forgotPassword.title", null, locale);
+        final Map<String, Object> data = new HashMap<>();
+        data.put("code", verificationCode.getCode());
+        try {
+            LOGGER.info("Sending forgot password email to {}", verificationCode.getEmail());
+            sendMessageUsingThymeleafTemplate(verificationCode.getEmail(), subject,"forgot-password.html", data, locale);
+            LOGGER.info("Forgot password email sent to {}", verificationCode.getEmail());
+        } catch (MessagingException e) {
+            LOGGER.warn("Forgot password email could not be sent to {}", verificationCode.getEmail());
+        }
     }
 
     /* https://www.baeldung.com/spring-email-templates */

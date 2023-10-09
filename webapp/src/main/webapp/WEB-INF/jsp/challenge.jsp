@@ -10,13 +10,14 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Apuntea | <spring:message code="login.title"/> </title>
+    <title>Apuntea | <spring:message code="forgotPassword.title"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/autocomplete.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
@@ -35,8 +36,9 @@
 <!-- NAVBAR -->
 <fragment:navbar loggedin="${user != null}"/>
 
-<c:url var="loginUrl" value="/login"/>
+<c:url var="challengeUrl" value="/challenge"/>
 <spring:message var="logotype" code="logotype"/>
+
 
 <section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
 
@@ -45,55 +47,43 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="card-body p-3 p-md-5 mx-4">
-
-                        <form action="${loginUrl}" method="post">
-                            <h1><spring:message code="login.title"/></h1>
-
-                            <div class="">
-                                <spring:message var="loginEmail" code="email"/>
-                                <label for="email"></label>
-                                <input type="text" name="email" id="email" class="form-control bg-bg" placeholder="${loginEmail}"/>
+                        <form:form modelAttribute="challengeForm" action="${challengeUrl}" method="post">
+                            <div class="mb-2">
+                                <h3><spring:message code="forgotPassword.title"/></h3>
+                                <p class="text-sm text-muted mb-0"><spring:message code="forgotPassword.challenge.title"/></p>
                             </div>
 
+                            <div class="">
+                                <spring:message var="codePlaceholder" code="forgotPassword.code"/>
+                                <label for="code"></label>
+                                <form:input path="code" type="text" class="form-control bg-bg" id="code"
+                                            placeholder="${codePlaceholder}" required="required" autofocus="autofocus"/>
+                                <form:errors path="code" cssClass="text-danger" element="p"/>
+                                <c:if test="${invalidCode}">
+                                    <p class="text-danger"><spring:message code="Pattern.challengeForm.code"/></p>
+                                </c:if>
+                            </div>
 
                             <div class="">
-                                <spring:message var="loginPassword" code="password"/>
+                                <spring:message var="passwordPlaceholder" code="forgotPassword.newPassword"/>
                                 <label for="password"></label>
-                                <input type="password" name="password" id="password" class="form-control bg-bg"
-                                       placeholder="${loginPassword}"/>
+                                <form:input path="newPassword" type="password" class="form-control bg-bg" id="password"
+                                            placeholder="${passwordPlaceholder}" required="required"/>
+                                <form:errors path="newPassword" cssClass="text-danger" element="p"/>
                             </div>
 
-                            <c:if test="${param.error}">
-                                <div class="text-danger mt-3" role="alert">
-                                    <spring:message code="login.error"/>
-                                </div>
-                            </c:if>
-
-                            <div class="mt-4 d-flex align-items-center">
-                                <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"/>
-                                <label class="form-check-label mx-1" for="rememberMe"> <spring:message code="login.rememberMe"/> </label>
-                            </div>
+                            <input type="hidden" value="${email}" name="email"/>
 
                             <div class="mt-3 d-flex justify-content-center">
-                                <spring:message var="login" code="login.title"/>
-                                <input class="btn rounded-box button-primary" type="submit" value="${login}">
+                                <spring:message var="forgotPassword" code="forgotPassword.title"/>
+                                <input class="btn rounded-box button-primary" type="submit" value="${forgotPassword}">
                             </div>
 
-                        </form>
-
-                        <div class="d-flex align-items-center justify-content-center mt-4">
-                            <p class="mb-0 me-2"> <spring:message code="login.dontHave"/> </p>
-                            <a href="./register">
-                                <button type="button" class="btn login-register-button box"> <spring:message code="login.createNew"/> </button>
-                            </a>
-                        </div>
-
-                        <div class="d-flex align-items-center justify-content-center mt-4">
-                            <a href="./forgot-password">
-                                <p class="mb-0 me-2 link-info"> <spring:message code="login.forgotPassword"/> </p>
-                            </a>
-                        </div>
-
+                            <%--                            <div class="mb-4">--%>
+                            <%--                                <p class="text-sm text-muted mb-0"><spring:message code="forgotPassword.back"/> <a--%>
+                            <%--                                            href="<c:url value="/login"/>"><spring:message code="forgotPassword.login"/></a></p>--%>
+                            <%--                            </div>--%>
+                        </form:form>
                     </div>
                 </div>
 
@@ -104,8 +94,8 @@
                                  style="width: 40px; height: 40px;">
                             <h3 class="mt-1 text-bg"><spring:message code="login.weAre"/></h3>
                         </div>
-                        <h4 class="mb-4"> <spring:message code="login.weAreMore.title"/> </h4>
-                        <p> <spring:message code="login.weAreMore.subtitle"/> </p>
+                        <h4 class="mb-4"><spring:message code="login.weAreMore.title"/></h4>
+                        <p><spring:message code="login.weAreMore.subtitle"/></p>
                     </div>
                 </div>
             </div>
@@ -114,30 +104,17 @@
 
 </section>
 
-<div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body justify-content-between d-flex">
-            <span><spring:message code="toast.registerSucceeded"/></span>
-            <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
-        </div>
-    </div>
-</div>
+<script>
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
-
 <script src="<c:url value="/js/darkmode.js"/>"></script>
+<script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>
-
-<c:if test="${success eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToast'));
-        toastBootstrap.show();
-    </script>
-</c:if>
 
 </body>
 
 </html>
+

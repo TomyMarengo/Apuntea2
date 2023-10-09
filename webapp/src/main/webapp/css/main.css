@@ -6275,14 +6275,14 @@ textarea.form-control-lg {
 }
 
 .link-info {
-  color: RGBA(var(--bs-info-rgb), var(--bs-link-opacity, 1)) !important;
-  text-decoration-color: RGBA(var(--bs-info-rgb), var(--bs-link-underline-opacity, 1)) !important;
+  color: var(--dark-primary);
+  text-decoration-color: var(--dark-primary);
 }
 
 .link-info:hover,
 .link-info:focus {
-  color: RGBA(61, 213, 243, var(--bs-link-opacity, 1)) !important;
-  text-decoration-color: RGBA(61, 213, 243, var(--bs-link-underline-opacity, 1)) !important;
+  color: var(--primary);
+  text-decoration-color: var(--primary);
 }
 
 .link-warning {

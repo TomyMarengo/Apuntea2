@@ -210,6 +210,11 @@ CREATE TABLE IF NOT EXISTS Bans
 
 ALTER TABLE Subjects_Careers ADD COLUMN IF NOT EXISTS year smallint NOT NULL DEFAULT 1;
 
-
-
-
+CREATE TABLE IF NOT EXISTS Verification_Codes
+(
+  user_id uuid NOT NULL,
+  code character varying(6) NOT NULL,
+  expires_at timestamp NOT NULL,
+  CONSTRAINT "PK_verification_codes" PRIMARY KEY (user_id, code, expires_at),
+  CONSTRAINT "FK_verification_codes_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE
+);

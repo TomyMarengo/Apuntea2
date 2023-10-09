@@ -131,4 +131,9 @@ class UserJdbcDao implements UserDao{
     public void updatePassword(UUID userId, String password) {
         jdbcTemplate.update("UPDATE Users SET password = ? WHERE user_id = ?", password, userId);
     }
+
+    @Override
+    public boolean updatePasswordForUserWithEmail(String email, String password) {
+        return jdbcTemplate.update("UPDATE Users SET password = ? WHERE email = ?", password, email) == 1;
+    }
 }

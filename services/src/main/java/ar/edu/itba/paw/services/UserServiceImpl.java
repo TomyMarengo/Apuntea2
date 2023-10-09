@@ -27,13 +27,16 @@ public class UserServiceImpl implements UserService {
 
     private final SecurityService securityService;
 
-    private	static	final Logger LOGGER	= LoggerFactory.getLogger(UserServiceImpl.class);
+    private final VerificationCodesService verificationCodesService;
+
+    private	static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, final SecurityService securityService) {
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, final SecurityService securityService, final VerificationCodesService verificationCodesService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.securityService = securityService;
+        this.verificationCodesService = verificationCodesService;
     }
 
     @Transactional
@@ -82,6 +85,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateCurrentUserPassword(String password) {
         userDao.updatePassword(securityService.getCurrentUserOrThrow().getUserId(), passwordEncoder.encode(password));
+    }
+
+    @Transactional
+    @Override
+    public boolean updateUserPasswordWithCode(String email, String code, String password) {
+        LOGGER.info("Attempting to update forgotten password for user {}", email);
+        return verificationCodesService.verifyForgotPasswordCode(email, code) && userDao.updatePasswordForUserWithEmail(email, passwordEncoder.encode(password));
     }
 
 }

@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public interface UserService {
     Optional<User> findByEmail(String email);
-
     Optional<User> findByUsername(String username);
     void create(String email, String password, UUID careerId, Role role);
     void update(User user, MultipartFile multipartFile);
@@ -17,4 +16,5 @@ public interface UserService {
     Optional<byte[]> getProfilePicture(UUID userId);
 
     void updateCurrentUserPassword(String password);
+    boolean updateUserPasswordWithCode(String email, String code, String password);
 }

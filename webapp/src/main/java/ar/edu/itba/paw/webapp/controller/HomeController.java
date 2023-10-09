@@ -2,10 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.InstitutionData;
 import ar.edu.itba.paw.models.Role;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.services.DataService;
-import ar.edu.itba.paw.services.SecurityService;
-import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.*;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 public class HomeController {
@@ -23,13 +19,15 @@ public class HomeController {
     private final DataService dataService;
     private final UserService userService;
     private final SecurityService securityService;
+    private final VerificationCodesService verificationCodesService;
 
 
     @Autowired
-    public HomeController(final DataService dataService, final UserService userService, final SecurityService securityService) {
+    public HomeController(final DataService dataService, final UserService userService, final SecurityService securityService, final VerificationCodesService verificationCodesService) {
         this.dataService = dataService;
         this.userService = userService;
         this.securityService = securityService;
+        this.verificationCodesService = verificationCodesService;
     }
 
     @RequestMapping(value = "/")
@@ -69,4 +67,34 @@ public class HomeController {
         userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getCareerId(), Role.ROLE_STUDENT);
         return new ModelAndView("redirect:/login?success=true");
     }
+
+    @RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
+    public ModelAndView forgotPassword(@ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm) {
+        return new ModelAndView("forgotpassword");
+    }
+
+    @RequestMapping(value = "/forgot-password", method = RequestMethod.POST)
+    public ModelAndView forgotPassword(@ModelAttribute("challengeForm") final ChallengeForm challengeForm,
+            @Valid @ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm, final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return forgotPassword(forgotPasswordForm);
+        }
+        verificationCodesService.sendForgotPasswordCode(forgotPasswordForm.getEmail());
+        ModelAndView mav = new ModelAndView("challenge");
+        mav.addObject("email", forgotPasswordForm.getEmail());
+        return mav;
+    }
+
+    @RequestMapping(value = "/challenge", method = RequestMethod.POST)
+    public ModelAndView challenge(@Valid @ModelAttribute("challengeForm") final ChallengeForm challengeForm, final BindingResult errors) {
+        if (errors.hasErrors()) {
+            return new ModelAndView("challenge").addObject("email", challengeForm.getEmail());
+        }
+        if (userService.updateUserPasswordWithCode(challengeForm.getEmail(), challengeForm.getCode(), challengeForm.getNewPassword())) {
+            return new ModelAndView("redirect:/login?email=" + challengeForm.getEmail());
+        }
+        return new ModelAndView("challenge").addObject("invalidCode", true)
+                .addObject("email", challengeForm.getEmail());
+    }
+
 }

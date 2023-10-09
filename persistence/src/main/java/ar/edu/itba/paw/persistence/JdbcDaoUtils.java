@@ -16,6 +16,7 @@ public class JdbcDaoUtils {
     static final String FAVORITES = "Favorites";
     static final String USERS = "Users";
     static final String USER_ROLES = "User_Roles";
+    static final String VERIFICATION_CODES = "Verification_Codes";
 
     static final String INSTITUTION_ID = "institution_id";
     static final String ID = "id";
