@@ -59,13 +59,17 @@
                                 <form:errors path="email" cssClass="text-danger" element="p"/>
                             </div>
 
-                            <div class="">
+                            <label for="password"></label>
+                            <div class="input-group">
                                 <spring:message var="registerPassword" code="password"/>
-                                <label for="password"></label>
                                 <form:input path="password" type="password" id="password" class="form-control bg-bg"
                                             placeholder="${registerPassword}"/>
-                                <form:errors path="password" cssClass="text-danger" element="p"/>
+                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye" class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye" class="d-none icon-xs fill-dark-primary"/>
+                                </span>
                             </div>
+                            <form:errors path="password" cssClass="text-danger" element="p"/>
 
 
 
@@ -175,6 +179,8 @@
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>
+<script src="<c:url value="/js/password.js"/>"></script>
+
 
 </body>
 

@@ -53,11 +53,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public ModelAndView settings(@ModelAttribute final EditUserForm editUserForm,
+    public ModelAndView settings(@RequestParam(value = "password-changed", required = false) final boolean passwordChanged,
+                                 @ModelAttribute final EditUserForm editUserForm,
                                  @ModelAttribute final ChangePasswordForm changePasswordForm) {
         ModelAndView mav = new ModelAndView("settings");
         mav.addObject("user", this.securityService.getCurrentUserOrThrow());
-        return new ModelAndView("settings");
+        mav.addObject("passwordChanged", passwordChanged);
+        return mav;
     }
 
     @RequestMapping(value = "/settings", method = RequestMethod.POST)
@@ -83,14 +85,12 @@ public class UserController {
     public ModelAndView changePassword(@ModelAttribute final EditUserForm editUserForm,
                                         @Valid @ModelAttribute final ChangePasswordForm changePasswordForm,
                                        final BindingResult result) {
-        ModelAndView mav = new ModelAndView("settings");
         if(!result.hasErrors()) {
             if (!changePasswordForm.getOldPassword().equals(changePasswordForm.getNewPassword()))
                 userService.updateCurrentUserPassword(changePasswordForm.getNewPassword());
+            return new ModelAndView("redirect:settings?password-changed=true");
         }
-        else
-            mav.addObject("errorsChangePasswordForm", result.getAllErrors());
-        return mav;
+        return new ModelAndView("settings").addObject("errorsChangePasswordForm", result.getAllErrors());
     }
 
 

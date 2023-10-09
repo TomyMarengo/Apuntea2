@@ -55,16 +55,19 @@
                                 <input type="text" name="email" id="email" class="form-control bg-bg" placeholder="${loginEmail}"/>
                             </div>
 
-
-                            <div class="">
+                            <label for="password"></label>
+                            <div class="input-group">
                                 <spring:message var="loginPassword" code="password"/>
-                                <label for="password"></label>
                                 <input type="password" name="password" id="password" class="form-control bg-bg"
                                        placeholder="${loginPassword}"/>
+                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye" class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye" class="d-none icon-xs fill-dark-primary"/>
+                                </span>
                             </div>
 
                             <c:if test="${param.error}">
-                                <div class="text-danger mt-3" role="alert">
+                                <div class="text-danger mt-2" role="alert">
                                     <spring:message code="login.error"/>
                                 </div>
                             </c:if>
@@ -114,11 +117,21 @@
 
 </section>
 
-<div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToastRegister" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-body justify-content-between d-flex">
             <span><spring:message code="toast.registerSucceeded"/></span>
             <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToastForgotPassword" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body justify-content-between d-flex">
+            <span><spring:message code="toast.forgotPasswordSucceeded"/></span>
+            <button type="button" class="btn-close btn-close-white align-content-center" data-bs-dismiss="toast"
                     aria-label="Close"></button>
         </div>
     </div>
@@ -130,10 +143,18 @@
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>
+<script src="<c:url value="/js/password.js"/>"></script>
 
 <c:if test="${success eq true}">
     <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToast'));
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastRegister'));
+        toastBootstrap.show();
+    </script>
+</c:if>
+
+<c:if test="${not empty email }">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastForgotPassword'));
         toastBootstrap.show();
     </script>
 </c:if>

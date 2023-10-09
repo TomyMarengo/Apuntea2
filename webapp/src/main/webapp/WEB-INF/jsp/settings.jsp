@@ -206,23 +206,31 @@
                                    id="changePasswordForm"
 
                         >
-                            <div>
+                            <label for="oldPassword"></label>
+                            <p><strong><spring:message code="settings.account.oldPassword"/></strong></p>
+                            <div class="input-group">
                                 <spring:message var="settingsOldPassword" code="settings.account.oldPassword"/>
-                                <label for="oldPassword"></label>
-                                <p><strong><spring:message code="settings.account.oldPassword"/></strong></p>
-                                <form:input type="password" name="oldPassword" id="oldPassword" class="form-control bg-bg"
+                                <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
                                             placeholder="${settingsOldPassword}" path="oldPassword" value=""/>
-                                <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
+                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye" class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye" class="d-none icon-xs fill-dark-primary"/>
+                                </span>
                             </div>
+                            <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
 
-                            <div>
+                            <label for="newPassword"></label>
+                            <p><strong><spring:message code="settings.account.newPassword"/></strong></p>
+                            <div class="input-group">
                                 <spring:message var="settingsNewPassword" code="settings.account.newPassword"/>
-                                <label for="newPassword"></label>
-                                <p><strong><spring:message code="settings.account.newPassword"/></strong></p>
-                                <form:input type="password" name="newPassword" id="newPassword" class="form-control bg-bg"
+                                <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
                                             placeholder="${settingsNewPassword}" path="newPassword" value=""/>
-                                <form:errors path="newPassword" cssClass="text-danger" element="p"/>
+                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide('2');">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2" class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2" class="d-none icon-xs fill-dark-primary"/>
+                                </span>
                             </div>
+                            <form:errors path="newPassword" cssClass="text-danger" element="p"/>
 
                             <div class="mt-5 d-flex justify-content-center">
                                 <spring:message var="update" code="update"/>
@@ -249,6 +257,15 @@
 <%--    </div>--%>
 </div>
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToastChangePasswordSucceeded" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body justify-content-between d-flex">
+            <span><spring:message code="toast.changePasswordSucceeded"/></span>
+            <button type="button" class="btn-close btn-close-white align-content-center" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -260,6 +277,13 @@
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>
 <script src="<c:url value="/js/settings.js"/>"></script>
+<script src="<c:url value="/js/password.js"/>"></script>
 
+<c:if test="${passwordChanged eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastChangePasswordSucceeded'));
+        toastBootstrap.show();
+    </script>
+</c:if>
 </body>
 </html>

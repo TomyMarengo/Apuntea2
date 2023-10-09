@@ -43,9 +43,10 @@ public class HomeController {
     }
 
     @RequestMapping("/login")
-    public ModelAndView login(@RequestParam(value = "success", required = false) final boolean success) {
+    public ModelAndView login(@RequestParam(value = "success", required = false) final boolean success, @RequestParam(value = "email", required = false) final String email) {
         ModelAndView mav = new ModelAndView("login");
         mav.addObject("success", success);
+        mav.addObject("email", email);
         return mav;
     }
 

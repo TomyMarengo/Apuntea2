@@ -64,13 +64,17 @@
                                 </c:if>
                             </div>
 
-                            <div class="">
+                            <label for="password"></label>
+                            <div class="input-group">
                                 <spring:message var="passwordPlaceholder" code="forgotPassword.newPassword"/>
-                                <label for="password"></label>
-                                <form:input path="newPassword" type="password" class="form-control bg-bg" id="password"
+                                <form:input path="newPassword" type="password" id="password" class="form-control bg-bg"
                                             placeholder="${passwordPlaceholder}" required="required"/>
-                                <form:errors path="newPassword" cssClass="text-danger" element="p"/>
+                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye" class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye" class="d-none icon-xs fill-dark-primary"/>
+                                </span>
                             </div>
+                            <form:errors path="newPassword" cssClass="text-danger" element="p"/>
 
                             <input type="hidden" value="${email}" name="email"/>
 
