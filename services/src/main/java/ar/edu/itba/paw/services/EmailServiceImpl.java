@@ -65,13 +65,14 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendDeleteNoteEmail(Note note) {
+    public void sendDeleteNoteEmail(Note note, String reason) {
         final Locale ownerLocale = new Locale(note.getUser().getLocale());
         final String to = note.getUser().getEmail();
         final String subject = messageSource.getMessage("email.note.hasBeenDeleted", new Object[]{note.getName()}, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
         data.put("name", note.getName());
         data.put("url", env.getProperty("base.url"));
+        data.put("reason", reason);
         try {
             LOGGER.info("Sending delete note email to {} for note {}", note.getUser().getEmail(), note.getName());
             sendMessageUsingThymeleafTemplate(to,subject,"deleted-note.html", data, ownerLocale);
@@ -83,13 +84,14 @@ public class EmailServiceImpl implements EmailService {
 
     @Async
     @Override
-    public void sendDeleteDirectoryEmail(Directory directory) {
+    public void sendDeleteDirectoryEmail(Directory directory, String reason) {
         final Locale ownerLocale = new Locale(directory.getUser().getLocale());
         final String to = directory.getUser().getEmail();
         final String subject = messageSource.getMessage("email.directory.hasBeenDeleted", new Object[]{directory.getName()}, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
         data.put("name", directory.getName());
         data.put("url", env.getProperty("base.url"));
+        data.put("reason", reason);
         try {
             LOGGER.info("Sending delete directory email to {} for directory {}", directory.getUser().getEmail(), directory.getName());
             sendMessageUsingThymeleafTemplate(to,subject,"deleted-directory.html", data, ownerLocale);

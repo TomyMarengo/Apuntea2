@@ -31,6 +31,7 @@
 <div style="padding: 1em 3em">
     <a th:href="${url}" style="text-decoration: none"><h1>Apuntea</h1></a>
     <p th:text="#{email.note.hasBeenDeletedAdmin(${name})}"/>
+    <p th:if="${not #strings.isEmpty(reason)}" th:text="#{email.reason(${reason})}"></p>
     <p th:text="#{email.thanks}"/>
     <p th:text="#{email.signature}"/>
 </div>

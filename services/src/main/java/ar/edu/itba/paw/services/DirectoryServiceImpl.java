@@ -56,7 +56,7 @@ public class DirectoryServiceImpl implements DirectoryService{
 
     @Transactional
     @Override
-    public void delete(UUID[] directoryIds) {
+    public void delete(UUID[] directoryIds, String reason) {
         if (directoryIds.length == 0) return;
 
         User currentUser = securityService.getCurrentUserOrThrow();
@@ -66,7 +66,7 @@ public class DirectoryServiceImpl implements DirectoryService{
         } else {
             List<Directory> dir = directoryDao.delete(directoryIds);
             if (dir.isEmpty()) throw new InvalidDirectoryException();
-            dir.forEach(emailService::sendDeleteDirectoryEmail);
+            dir.forEach(d -> emailService.sendDeleteDirectoryEmail(d, reason));
         }
     }
 

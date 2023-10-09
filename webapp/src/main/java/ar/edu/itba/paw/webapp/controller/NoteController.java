@@ -99,7 +99,7 @@ public class NoteController {
 
     @RequestMapping(value = "/{noteId}/delete", method = RequestMethod.POST)
     public ModelAndView deleteNote(@PathVariable("noteId") @ValidUuid UUID noteId) {
-        noteService.delete(new UUID[]{noteId});
+        noteService.delete(new UUID[]{noteId}, null);
         return new ModelAndView("redirect:/");
     }
 

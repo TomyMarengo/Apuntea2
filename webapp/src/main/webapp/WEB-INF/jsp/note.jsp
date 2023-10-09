@@ -198,10 +198,13 @@
                 </button>
             </div>
             <form:form id="deleteForm" method="POST" action="${deleteUrl}">
-                <div class="modal-body pb-0">
+                <div class="modal-body pb-0 d-flex flex-column">
                     <spring:message code="DeleteForm.description"/>
-
-                    <!-- DYNAMICALLY ADDED INPUTS -->
+                    <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
+                    <c:if test="${user ne null and user.isAdmin}">
+                        <label for="reason"></label>
+                        <textarea name="reason" class="form-control mt-3" id="reason" placeholder="${deleteMessagePlaceholder}"></textarea>
+                    </c:if>
                 </div>
 
                 <div class="modal-footer mt-4">

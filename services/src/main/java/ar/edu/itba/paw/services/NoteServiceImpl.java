@@ -78,7 +78,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public void delete(UUID[] noteId) {
+    public void delete(UUID[] noteId, String reason) {
         User currentUser = securityService.getCurrentUserOrThrow();
         if (!currentUser.getIsAdmin()) {
             if (!noteDao.delete(noteId, currentUser.getUserId()))
@@ -86,7 +86,7 @@ public class NoteServiceImpl implements NoteService {
         } else {
             List<Note> note = noteDao.delete(noteId);
             if (note.isEmpty()) throw new InvalidNoteException();
-            note.forEach(emailService::sendDeleteNoteEmail);
+            note.forEach(n -> emailService.sendDeleteNoteEmail(n, reason));
         }
     }
 

@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -88,12 +89,6 @@ public class DirectoryController {
         return mav;
     }
 
-
-    // Create a POST function with createDirectoryForm and createNoteForm, only one of them will be filled
-    // If createDirectoryForm is filled, create a directory with the name and parent directory
-    // If createNoteForm is filled, create a note with the file, name, subjectId, category and parent directory
-    // If there is an error, redirect to /{directoryId} with the error
-    // If there is no error, redirect to /notes/{noteId} or /directory/{directoryId} depending on which form was filled
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createDirectory")
     public ModelAndView addDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                      @Valid @ModelAttribute final CreateDirectoryForm createDirectoryForm,
@@ -133,13 +128,14 @@ public class DirectoryController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ModelAndView deleteContent(@RequestParam(required = false) UUID[] directoryIds,
                                       @RequestParam(required = false) UUID[] noteIds,
+                                      @RequestParam(required = false) @Size(max = 300) String reason,
                                       @RequestParam String redirectUrl) {
 
         // TODO: Validate redirectUrl?
         if (noteIds != null && noteIds.length > 0)
-            noteService.delete(noteIds);
+            noteService.delete(noteIds, reason);
         if (directoryIds != null && directoryIds.length > 0)
-            directoryService.delete(directoryIds);
+            directoryService.delete(directoryIds, reason);
         return new ModelAndView("redirect:" + redirectUrl);
     }
 

@@ -9,7 +9,7 @@ import java.util.Locale;
 
 public interface EmailService {
     void sendReviewEmail(Review review);
-    void sendDeleteNoteEmail(Note note);
-    void sendDeleteDirectoryEmail(Directory directory);
+    void sendDeleteNoteEmail(Note note, String reason);
+    void sendDeleteDirectoryEmail(Directory directory, String reason);
     void sendForgotPasswordEmail(VerificationCode verificationCode, Locale locale);
 }

@@ -33,7 +33,7 @@ public class DirectoryServiceImplTest {
     public void testDeleteAdminInvalidIds() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
         Mockito.when(directoryDao.delete(Mockito.any())).thenReturn(new ArrayList<>()); // The deletion failed
-        directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID});
+        directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID}, "lol");
         Assert.fail("Should have thrown InvalidDirectoryException");
     }
 
@@ -41,14 +41,14 @@ public class DirectoryServiceImplTest {
     public void testDeleteAdminValidIds() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
         Mockito.when(directoryDao.delete(Mockito.any())).thenReturn(Arrays.asList(mockDirectory("theory"), mockDirectory("MVC")));
-        directoryService.delete(new UUID[]{THEORY_DIRECTORY_ID, MVC_DIRECTORY_ID});
+        directoryService.delete(new UUID[]{THEORY_DIRECTORY_ID, MVC_DIRECTORY_ID}, "lmao");
     }
 
     @Test(expected = InvalidDirectoryException.class)
     public void testDeleteNotAdminInvalidIds() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(directoryDao.delete(Mockito.any(), Mockito.any())).thenReturn(false); // The deletion failed
-        directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID});
+        directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID}, null);
         Assert.fail("Should have thrown InvalidDirectoryException");
     }
 
@@ -56,6 +56,6 @@ public class DirectoryServiceImplTest {
     public void testDeleteNotAdminValidIds() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(directoryDao.delete(Mockito.any(), Mockito.any())).thenReturn(true);
-        directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID});
+        directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID}, null);
     }
 }
