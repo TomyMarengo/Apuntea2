@@ -24,25 +24,28 @@ class UserJdbcDao implements UserDao{
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert jdbcRoleInsert;
 
-    private static final RowMapper<User> ROW_MAPPER = (rs, rowNum)  ->
-            new User(
-                    UUID.fromString(rs.getString(USER_ID)),
-                    rs.getString(FIRST_NAME),
-                    rs.getString(LAST_NAME),
-                    rs.getString(USERNAME),
-                    rs.getString(EMAIL),
-                    rs.getString(PASSWORD),
-                    (String[]) rs.getArray(ROLES).getArray(),
-                    rs.getString(LOCALE),
-                    new Institution(
-                            UUID.fromString(rs.getString(INSTITUTION_ID)),
-                            rs.getString(INSTITUTION_NAME)
-                    ),
-                    new Career(
-                            UUID.fromString(rs.getString(CAREER_ID)),
-                            rs.getString(CAREER_NAME)
-                    )
-            );
+    private static final RowMapper<User> ROW_MAPPER = (rs, rowNum)  -> {
+        Object[] roles = (Object[]) rs.getArray(ROLES).getArray();
+        String[] rolesString = Arrays.copyOf(roles, roles.length, String[].class);
+        return new User(
+                UUID.fromString(rs.getString(USER_ID)),
+                rs.getString(FIRST_NAME),
+                rs.getString(LAST_NAME),
+                rs.getString(USERNAME),
+                rs.getString(EMAIL),
+                rs.getString(PASSWORD),
+                rolesString,
+                rs.getString(LOCALE),
+                new Institution(
+                        UUID.fromString(rs.getString(INSTITUTION_ID)),
+                        rs.getString(INSTITUTION_NAME)
+                ),
+                new Career(
+                        UUID.fromString(rs.getString(CAREER_ID)),
+                        rs.getString(CAREER_NAME)
+                )
+        );
+    };
 
     private static final RowMapper<ProfilePicture> PROFILE_IMAGE_ROW_MAPPER = (rs, rowNum) -> new ProfilePicture(rs.getString(USER_ID), rs.getObject(IMAGE));
 

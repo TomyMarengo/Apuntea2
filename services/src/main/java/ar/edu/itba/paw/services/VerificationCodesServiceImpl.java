@@ -31,8 +31,7 @@ public class VerificationCodesServiceImpl implements VerificationCodesService  {
         int number = rnd.nextInt(999999);
 
         VerificationCode verificationCode = new VerificationCode(String.format("%06d", number), email, LocalDateTime.now().plusMinutes(10));
-        if (!verificationCodeDao.saveVerificationCode(verificationCode))
-            throw new InvalidVerificationCodeException();
+        verificationCodeDao.saveVerificationCode(verificationCode);
 
         final Locale lang = LocaleContextHolder.getLocale();
         emailService.sendForgotPasswordEmail(verificationCode, lang);

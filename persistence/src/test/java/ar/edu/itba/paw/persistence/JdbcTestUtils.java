@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import ar.edu.itba.paw.models.Role;
+import ar.edu.itba.paw.models.VerificationCode;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -46,6 +47,45 @@ public class JdbcTestUtils {
     static UUID TMP_DIR_ID_4 = UUID.fromString("dF000000-0000-0000-0000-000000000004");
     private JdbcTestUtils() {}
 
+    static UUID insertStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(EMAIL, email);
+        args.addValue(PASSWORD, password);
+        args.addValue(CAREER_ID, careerId);
+        args.addValue(LOCALE, locale);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Users (email, password, career_id, locale) VALUES (:email, :password, :career_id, :locale)",
+                args, keyHolder, new String[]{USER_ID});
+        UUID newUserId = (UUID) keyHolder.getKeys().get(USER_ID);
+
+        args = new MapSqlParameterSource().addValue(USER_ID, newUserId).addValue(ROLE_NAME, Role.ROLE_STUDENT.getRole());
+        namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
+        return (UUID) keyHolder.getKeys().get(USER_ID);
+    }
+
+
+    static UUID insertCompleteStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale,
+                                      String username, String firstName, String lastName) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(EMAIL, email);
+        args.addValue(PASSWORD, password);
+        args.addValue(CAREER_ID, careerId);
+        args.addValue(LOCALE, locale);
+        args.addValue(USERNAME, username);
+        args.addValue(FIRST_NAME, firstName);
+        args.addValue(LAST_NAME, lastName);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Users (email, password, career_id, locale, username, first_name, last_name) VALUES (:email, :password, :career_id, :locale, :username, :first_name, :last_name)",
+                args, keyHolder, new String[]{USER_ID});
+        UUID newUserId = (UUID) keyHolder.getKeys().get(USER_ID);
+
+        args = new MapSqlParameterSource().addValue(USER_ID, newUserId).addValue(ROLE_NAME, Role.ROLE_STUDENT.getRole());
+        namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
+        return (UUID) keyHolder.getKeys().get(USER_ID);
+    }
+
     static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(DIRECTORY_NAME, directoryName);
@@ -63,5 +103,16 @@ public class JdbcTestUtils {
             put(DIRECTORY_ID, directoryId);
             put(USER_ID, userId);
         }});
+    }
+
+    static void insertVerificationCode(NamedParameterJdbcTemplate namedParameterJdbcTemplate, VerificationCode verificationCode) {
+        namedParameterJdbcTemplate.update(
+                "INSERT INTO Verification_Codes(user_id, code, expires_at) values(" +
+                        "(SELECT user_id FROM Users WHERE email = :email), " +
+                        ":code, :expires_at)",
+                new MapSqlParameterSource()
+                        .addValue("email", verificationCode.getEmail())
+                        .addValue("code", verificationCode.getCode())
+                        .addValue("expires_at", verificationCode.getExpirationDate()));
     }
 }

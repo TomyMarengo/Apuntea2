@@ -1,8 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.VerificationCode;
+import ar.edu.itba.paw.models.exceptions.UserNotFoundException;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -15,7 +18,7 @@ public class VerificationCodeJdbcDao implements VerificationCodeDao {
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(VerificationCodeJdbcDao.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(VerificationCodeJdbcDao.class);
 
     @Autowired
     public VerificationCodeJdbcDao(final DataSource ds) {
@@ -24,16 +27,22 @@ public class VerificationCodeJdbcDao implements VerificationCodeDao {
     }
 
     @Override
-    public boolean saveVerificationCode(VerificationCode verificationCode) {
-        return this.namedParameterJdbcTemplate.update(
-                "INSERT INTO Verification_Codes(user_id, code, expires_at) values(" +
-                        "(SELECT user_id FROM Users WHERE email = :email), " +
-                        ":code, :expires_at)",
-                new MapSqlParameterSource()
-                        .addValue("email", verificationCode.getEmail())
-                        .addValue("code", verificationCode.getCode())
-                        .addValue("expires_at", verificationCode.getExpirationDate())
-        ) == 1;
+    public void saveVerificationCode(VerificationCode verificationCode) {
+        try  {
+            // TODO: Remove last verification code for user (if exists)
+            this.namedParameterJdbcTemplate.update(
+                    "INSERT INTO Verification_Codes(user_id, code, expires_at) values(" +
+                            "(SELECT user_id FROM Users WHERE email = :email), " +
+                            ":code, :expires_at)",
+                    new MapSqlParameterSource()
+                            .addValue("email", verificationCode.getEmail())
+                            .addValue("code", verificationCode.getCode())
+                            .addValue("expires_at", verificationCode.getExpirationDate())
+            );
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.debug("Invalid verification code: email does not exist {}", verificationCode.getEmail());
+            throw new UserNotFoundException();
+        }
     }
 
     @Override
