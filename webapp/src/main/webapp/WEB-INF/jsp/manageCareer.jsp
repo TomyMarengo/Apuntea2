@@ -164,6 +164,17 @@
                                              class="icon-xs fill-text">
                                     </button>
                                 </div>
+
+                                <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                     data-bs-title="<spring:message code="unlink"/>" data-bs-trigger="hover">
+                                    <button class="btn nav-icon-button delete-button"
+                                            data-bs-toggle="modal" data-bs-target="#unlinkSubjectModal"
+                                            id="<c:out value="unlink-${item.subjectId}"/>">
+                                        <img src="<c:url value="/svg/trash.svg"/>"
+                                             alt="<spring:message code="unlink"/>"
+                                             class="icon-xs fill-text">
+                                    </button>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -191,7 +202,7 @@
                            action="${linkSubjectUrl}"
                            method="post"
                            id="linkSubjectForm"
-                           cssClass="d-flex flex-column w-100 align-items-center">
+                           class="d-flex flex-column">
                     <div class="modal-body pb-0">
                         <div class="d-flex flex-column gap-2">
                             <select id="linkSubjectSelect" style="display: none;">
@@ -314,7 +325,7 @@
                                 <label class="input-group-text" for="name"><spring:message
                                         code="name"/></label>
                                 <form:input path="name" type="text"
-                                            class="form-control" id="editName"/>
+                                            class="form-control" id="editSubjectName"/>
                             </div>
                             <form:errors path="name" cssClass="text-danger" element="p"/>
                         </div>
@@ -323,7 +334,7 @@
                                 <label class="input-group-text" for="year"><spring:message
                                         code="year"/></label>
                                 <form:input path="year" type="number" min="1" max="10"
-                                            class="form-control" id="editYear"/>
+                                            class="form-control" id="editSubjectYear"/>
                             </div>
                             <form:errors path="year" cssClass="text-danger" element="p"/>
                         </div>
@@ -336,6 +347,39 @@
                                             code="update"/>"/>
                     </div>
                     <input type="hidden" name="subjectId" id="editSubjectId"/>
+                </form:form>
+            </div>
+        </div>
+    </div>
+
+    <!-- UNLINK MODAL -->
+    <c:url var="unlinkSubjectUrl" value="./${careerId}/unlinkSubject"/>
+    <div class="modal fade" id="unlinkSubjectModal" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="unlinkLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content box bg-bg">
+                <form:form id="unlinkSubjectForm" method="POST" action="${unlinkSubjectUrl}" modelAttribute="unlinkSubjectForm">
+                    <div class="modal-header">
+                        <h3 class="modal-title fs-5" id="unlinkLabel"><spring:message code="unlinkForm.description"/> : <span id="unlinkSubjectName"></span></h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body pb-0">
+                        <spring:message code="unlinkForm.confirm" arguments="${career.name}"/>
+                        <form:errors cssClass="text-danger" element="p"/>
+                    </div>
+
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn rounded-box button-primary"
+                                data-bs-dismiss="modal">
+                            <spring:message code="close"/></button>
+                        <input id="unlinkSelectedButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                                                code="unlink"/>"/>
+                    </div>
+
+                    <form:input type="hidden" path="subjectId" id="unlinkSubjectId" value=""/>
+
                 </form:form>
             </div>
         </div>
@@ -355,8 +399,17 @@
         var unownedSubjects = JSON.parse('${unownedSubjects}');
     </c:if>
     <c:if test="${errorsLinkSubjectForm ne null}">
-    let linkSubjectModal = new bootstrap.Modal(document.getElementById('linkSubjectModal'), {})
-    linkSubjectModal.show();
+        let linkSubjectModal = new bootstrap.Modal(document.getElementById('linkSubjectModal'), {})
+        linkSubjectModal.show();
+    </c:if>
+    <c:if test="${errorsUnlinkSubjectForm ne null}">
+        let unlinkSubjectIdNode = document.getElementById('unlinkSubjectId');
+        if (unlinkSubjectIdNode.value != null) {
+            let unlinkSubjectNameNode = document.getElementById('unlinkSubjectName');
+            unlinkSubjectNameNode.innerText = subjects.find(subject => subject.subjectId === unlinkSubjectIdNode.value).name;
+        }
+        let unlinkSubjectModal = new bootstrap.Modal(document.getElementById('unlinkSubjectModal'), {})
+        unlinkSubjectModal.show();
     </c:if>
     <c:if test="${errorsCreateSubjectForm ne null}">
         let createSubjectModal = new bootstrap.Modal(document.getElementById('createSubjectModal'), {})

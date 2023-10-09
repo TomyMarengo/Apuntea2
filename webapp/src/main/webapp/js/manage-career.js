@@ -30,8 +30,14 @@ rows.forEach((row) => {
     editButton.addEventListener('click', () => {
         const editSubjectForm = document.getElementById('editSubjectForm');
         editSubjectForm.querySelector('#editSubjectId').value = subjectId;
-        editSubjectForm.querySelector('#editName').value = name;
-        editSubjectForm.querySelector('#editYear').value = year;
+        editSubjectForm.querySelector('#editSubjectName').value = name;
+        editSubjectForm.querySelector('#editSubjectYear').value = year;
+    });
+    const unlinkButton = row.querySelector(`#unlink-${subjectId}`);
+    unlinkButton.addEventListener('click', () => {
+        const unlinkSubjectForm = document.getElementById('unlinkSubjectForm');
+        unlinkSubjectForm.querySelector('#unlinkSubjectId').value = subjectId;
+        unlinkSubjectForm.querySelector('#unlinkSubjectName').textContent = name;
     });
 });
 //variable declared in ics-autocomplete.js

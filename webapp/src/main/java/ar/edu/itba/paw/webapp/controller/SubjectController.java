@@ -10,16 +10,14 @@ import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.forms.LinkSubjectForm;
 import ar.edu.itba.paw.webapp.forms.CreateSubjectForm;
 import ar.edu.itba.paw.webapp.forms.EditSubjectForm;
+import ar.edu.itba.paw.webapp.forms.UnlinkSubjectForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -55,6 +53,7 @@ public class SubjectController {
         final ModelAndView mav = new ModelAndView("manageCareer");
 
         addFormOrGetWithErrors(mav, model, LINK_SUBJECT_FORM_BINDING, "errorsLinkSubjectForm", "linkSubjectForm", LinkSubjectForm.class);
+        addFormOrGetWithErrors(mav, model, UNLINK_SUBJECT_FORM_BINDING, "errorsUnlinkSubjectForm", "unlinkSubjectForm", UnlinkSubjectForm.class);
         addFormOrGetWithErrors(mav, model, CREATE_SUBJECT_FORM_BINDING, "errorsCreateSubjectForm", "createSubjectForm", CreateSubjectForm.class);
         addFormOrGetWithErrors(mav, model, EDIT_SUBJECT_FORM_BINDING, "errorsEditSubjectForm", "editSubjectForm", EditSubjectForm.class);
         
@@ -89,6 +88,22 @@ public class SubjectController {
         return mav;
     }
 
+    @RequestMapping(value = "/{careerId}/unlinkSubject", method = RequestMethod.POST)
+    public ModelAndView unlinkSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
+                                      @Valid @ModelAttribute final UnlinkSubjectForm unlinkSubjectForm,
+                                     final BindingResult result,
+                                     final RedirectAttributes redirectAttributes
+    ){
+        if(result.hasErrors()) {
+            redirectAttributes.addFlashAttribute(UNLINK_SUBJECT_FORM_BINDING, result);
+            return new ModelAndView("redirect:/careers/"+careerId);
+        }
+        final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
+        dataService.unlinkSubjectFromCareer(unlinkSubjectForm.getSubjectId(), careerId);
+        return mav;
+    }
+
+
     @RequestMapping(value = "/{careerId}/createSubject", method = RequestMethod.POST)
     public ModelAndView createSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
                                     @Valid @ModelAttribute final CreateSubjectForm createSubjectForm,
@@ -118,6 +133,7 @@ public class SubjectController {
         dataService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
         return mav;
     }
+
 
 
 
