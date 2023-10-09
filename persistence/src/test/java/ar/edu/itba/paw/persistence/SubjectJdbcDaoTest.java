@@ -324,14 +324,14 @@ public class SubjectJdbcDaoTest {
     }
 
     @Test
-    public void testRemoveSubjectFromCareer(){
+    public void testUnlinkSubjectFromCareer(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "trash", dirId);
         UUID careerId = ING_INF;
         insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, 3);
         boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = 3") == 1;
 
-        boolean result = subjectDao.removeSubjectFromCareer(subjectId, careerId);
+        boolean result = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
 
         assertTrue(result);
         assertTrue(inserted);

@@ -85,8 +85,8 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional
-    public void removeSubjectFromCareer(UUID subjectId, UUID careerId) {
-        boolean result = subjectDao.removeSubjectFromCareer(subjectId, careerId);
+    public void unlinkSubjectFromCareer(UUID subjectId, UUID careerId) {
+        boolean result = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
         if (!result) {
             throw new InvalidSubjecteCareerException();
         }

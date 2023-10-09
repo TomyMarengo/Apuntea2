@@ -17,6 +17,6 @@ public interface SubjectService {
     void updateSubject(UUID subjectId, String name);
     void updateSubjectCareer(UUID subjectId, String subjectName, UUID careerId, int year);
 
-    void removeSubjectFromCareer(UUID subjectId, UUID careerId);
+    void unlinkSubjectFromCareer(UUID subjectId, UUID careerId);
 
 }

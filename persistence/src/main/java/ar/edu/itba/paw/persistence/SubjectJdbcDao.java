@@ -130,7 +130,7 @@ public class SubjectJdbcDao implements SubjectDao {
     }
 
     @Override
-    public boolean removeSubjectFromCareer(UUID subjectId, UUID careerId) {
+    public boolean unlinkSubjectFromCareer(UUID subjectId, UUID careerId) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(SUBJECT_ID, subjectId);
         args.addValue(CAREER_ID, careerId);

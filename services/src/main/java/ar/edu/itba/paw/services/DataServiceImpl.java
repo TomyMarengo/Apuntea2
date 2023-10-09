@@ -93,7 +93,7 @@ public class DataServiceImpl implements DataService {
 
     @Override
     @Transactional
-    public void removeSubjectFromCareer(UUID subjectId, UUID careerId) {
-        subjectService.removeSubjectFromCareer(subjectId, careerId);
+    public void unlinkSubjectFromCareer(UUID subjectId, UUID careerId) {
+        subjectService.unlinkSubjectFromCareer(subjectId, careerId);
     }
 }

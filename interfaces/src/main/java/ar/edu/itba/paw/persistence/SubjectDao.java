@@ -16,5 +16,5 @@ public interface SubjectDao {
     boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year);
     boolean updateSubject(UUID subjectId, String name);
     boolean updateSubjectCareer(UUID subjectId, UUID careerId, int year);
-    boolean removeSubjectFromCareer(UUID subjectId, UUID careerId);
+    boolean unlinkSubjectFromCareer(UUID subjectId, UUID careerId);
 }
