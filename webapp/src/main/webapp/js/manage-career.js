@@ -4,31 +4,33 @@ if (institutionId != null) {
 if (careerId != null) {
     document.getElementById("careerId").value = careerId;
 }
-let newSubjectSelect = document.getElementById('newSubjectSelect');
+let addSubjectSelect = document.getElementById('addSubjectSelect');
 // Initialize an empty array to store the option values
-if (newSubjectSelect && unownedSubjects) {
-    document.getElementById("eraseNewSubjectButton").addEventListener("click", _ => {
-        document.getElementById("newSubjectAutocomplete").value = "";
-        document.getElementById('newSubjectId').value = "";
-        setupNewSubject();
+if (addSubjectSelect && unownedSubjects) {
+    document.getElementById("eraseAddSubjectButton").addEventListener("click", _ => {
+        document.getElementById("addSubjectAutocomplete").value = "";
+        document.getElementById('addSubjectId').value = "";
+        setupAddSubject();
     });
-    autocomplete(document.getElementById("newSubjectAutocomplete"), document.getElementById("newSubjectId"),
-            _ => unownedSubjects.map(s => ({value: s.subjectId , text: s.name})), setupNewSubject);
+    autocomplete(document.getElementById("addSubjectAutocomplete"), document.getElementById("addSubjectId"),
+            _ => unownedSubjects.map(s => ({value: s.subjectId , text: s.name})), setupAddSubject);
 }
 
-function setupNewSubject() {
+function setupAddSubject() {
 
 }
 
 const rows = document.querySelectorAll('.note-found');
 
-rows.forEach((row, index) => {
+rows.forEach((row) => {
     const subjectId = row.getAttribute('data-subject-id');
     const year = row.getAttribute('data-year');
+    const name = row.getAttribute('data-name');
     const editButton = row.querySelector(`#edit-${subjectId}`);
     editButton.addEventListener('click', () => {
         const editSubjectForm = document.getElementById('editSubjectForm');
         editSubjectForm.querySelector('#editSubjectId').value = subjectId;
+        editSubjectForm.querySelector('#editName').value = name;
         editSubjectForm.querySelector('#editYear').value = year;
     });
 });

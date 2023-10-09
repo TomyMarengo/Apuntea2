@@ -15,7 +15,7 @@ public interface SubjectService {
     void addSubjectToCareer(UUID subjectId, UUID careerId, int year);
 
     void updateSubject(UUID subjectId, String name);
-    void updateSubjectCareer(UUID subjectId, UUID careerId, int year);
+    void updateSubjectCareer(UUID subjectId, String subjectName, UUID careerId, int year);
 
     void removeSubjectFromCareer(UUID subjectId, UUID careerId);
 

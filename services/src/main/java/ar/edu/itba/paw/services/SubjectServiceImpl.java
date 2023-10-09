@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class SubjectServiceImpl implements SubjectService{
+public class SubjectServiceImpl implements SubjectService {
     private final SubjectDao subjectDao;
     private final DirectoryDao directoryDao;
 
@@ -75,7 +75,8 @@ public class SubjectServiceImpl implements SubjectService{
 
     @Override
     @Transactional
-    public void updateSubjectCareer(UUID subjectId, UUID careerId, int year) {
+    public void updateSubjectCareer(UUID subjectId, String subjectName, UUID careerId, int year) {
+        updateSubject(subjectId, subjectName);
         boolean result = subjectDao.updateSubjectCareer(subjectId, careerId, year);
         if (!result) {
             throw new InvalidSubjecteCareerException();

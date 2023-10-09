@@ -87,8 +87,8 @@ public class DataServiceImpl implements DataService {
     }
 
     @Override
-    public void updateSubjectCareer(UUID subjectId, UUID careerId, int year) {
-        subjectService.updateSubjectCareer(subjectId, careerId, year);
+    public void updateSubjectCareer(UUID subjectId, String subjectName, UUID careerId, int year) {
+        subjectService.updateSubjectCareer(subjectId, subjectName, careerId, year);
     }
 
     @Override

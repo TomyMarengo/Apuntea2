@@ -7,7 +7,8 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.CareerNotFoundException;
 import ar.edu.itba.paw.services.DataService;
 import ar.edu.itba.paw.services.SecurityService;
-import ar.edu.itba.paw.webapp.forms.SubjectForm;
+import ar.edu.itba.paw.webapp.forms.AddSubjectForm;
+import ar.edu.itba.paw.webapp.forms.UpsertSubjectForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,8 @@ public class SubjectController {
     public ModelAndView manageCareer(@PathVariable("careerId") @ValidUuid UUID careerId, final ModelMap model){
         final ModelAndView mav = new ModelAndView("manageCareer");
 
-        addFormOrGetWithErrors(mav, model, ADD_SUBJECT_FORM_BINDING, "errorsAddSubjectForm", "addSubjectForm", SubjectForm.class);
-        addFormOrGetWithErrors(mav, model, EDIT_SUBJECT_FORM_BINDING, "errorsEditSubjectForm", "editSubjectForm", SubjectForm.class);
+        addFormOrGetWithErrors(mav, model, ADD_SUBJECT_FORM_BINDING, "errorsAddSubjectForm", "addSubjectForm", AddSubjectForm.class);
+        addFormOrGetWithErrors(mav, model, EDIT_SUBJECT_FORM_BINDING, "errorsEditSubjectForm", "editSubjectForm", UpsertSubjectForm.class);
         
 
         InstitutionData institutionData = dataService.getInstitutionData();
@@ -73,7 +74,7 @@ public class SubjectController {
 
     @RequestMapping(value = "/{careerId}/addSubject", method = RequestMethod.POST)
     public ModelAndView addSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
-                                   @Valid @ModelAttribute final SubjectForm editSubjectForm,
+                                   @Valid @ModelAttribute final AddSubjectForm addSubjectForm,
                                    final BindingResult result,
                                    final RedirectAttributes redirectAttributes
     ){
@@ -82,13 +83,13 @@ public class SubjectController {
             return new ModelAndView("redirect:/careers/"+careerId);
         }
         final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
-        dataService.addSubjectToCareer(editSubjectForm.getSubjectId(), careerId, editSubjectForm.getYear());
+        dataService.addSubjectToCareer(addSubjectForm.getSubjectId(), careerId, addSubjectForm.getYear());
         return mav;
     }
 
     @RequestMapping(value = "/{careerId}/editSubject", method = RequestMethod.POST)
     public ModelAndView editSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
-                                    @Valid @ModelAttribute final SubjectForm editSubjectForm,
+                                    @Valid @ModelAttribute final UpsertSubjectForm editSubjectForm,
                                     final BindingResult result,
                                     final RedirectAttributes redirectAttributes
     ){
@@ -97,7 +98,7 @@ public class SubjectController {
             return new ModelAndView("redirect:/careers/"+careerId);
         }
         final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
-        dataService.updateSubjectCareer(editSubjectForm.getSubjectId(), careerId, editSubjectForm.getYear());
+        dataService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
         return mav;
     }
 
