@@ -8,7 +8,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <div class="bottom-navbar">
-    <c:if test="${hierarchy ne null and hierarchy.length > 1}">
+    <c:if test="${hierarchy ne null and (hierarchy.length > 1 or category ne 'directory')}">
         <div class="d-none d-lg-flex">
 
             <a href="<c:url value="${baseUrl}/directory/${hierarchy.rootDirectory.id}"/>">

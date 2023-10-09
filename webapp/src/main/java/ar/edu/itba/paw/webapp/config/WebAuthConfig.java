@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.webapp.auth.CustomUserDetailsService;
 import ar.edu.itba.paw.webapp.auth.LoginFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +54,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                                 "/notes/{noteId}",
                                 "/notes/{noteId}/download",
                                 "/directory/{directoryId}",
-                                "/errors/**",
-                                "/careers/**").permitAll() //TODO restrict permission
+                                "/errors/**").permitAll() //TODO restrict permission
+                    .antMatchers("/careers/**").hasRole(Role.ROLE_ADMIN.getShortName())
                     .anyRequest().authenticated()
 
                 .and().formLogin()
