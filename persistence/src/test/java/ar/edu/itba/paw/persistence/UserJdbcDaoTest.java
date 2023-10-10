@@ -20,15 +20,10 @@ import javax.sql.DataSource;
 import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
 import static org.junit.Assert.*;
 
-import org.springframework.test.jdbc.JdbcTestUtils;
-
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
-
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -110,6 +105,34 @@ public class UserJdbcDaoTest {
         user.setUserId(UUID.fromString("d0000000-0000-0000-0000-000000000000"));
         boolean success = userDao.update(user);
         assertFalse(success);
+    }
+
+    @Test
+    public void testBanUser() {
+        UUID studentId = insertStudent(namedParameterJdbcTemplate, "student@mail.com", "", ING_INF, "es");
+        UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail.com", "", ING_INF, "es");
+        userDao.banUser(studentId, adminId, LocalDateTime.now().plusDays(10));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentId + "' AND status = 'BANNED'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "bans", "user_id = '" + studentId + "' AND admin_id = '" + adminId + "'"));
+    }
+
+    @Test
+    public void testUnbanUsers() {
+        UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail.com", "", ING_INF, "es");
+        UUID[] studentIds = new UUID[6];
+        for (int i = 0; i < 5; i++) {
+            studentIds[i] = insertStudent(namedParameterJdbcTemplate, "student" + i + "@mail.com", "", ING_INF, "es");
+            banUser(namedParameterJdbcTemplate, studentIds[i], adminId, LocalDateTime.now().minusDays(10));
+        }
+        studentIds[5] = insertStudent(namedParameterJdbcTemplate, "student5@mail.com", "", ING_INF, "es");
+        banUser(namedParameterJdbcTemplate, studentIds[5], adminId, LocalDateTime.now().plusDays(10));
+        int oldQtyBanned = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED'");
+        userDao.unbanUsers();
+        assertEquals(6, oldQtyBanned);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentIds[5] + "' AND status = 'BANNED'"));
+        for (int i = 0; i < 5; i++)
+            assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentIds[i] + "' AND status = 'ACTIVE'"));
     }
 
     // TODO: Test profile picture methods?

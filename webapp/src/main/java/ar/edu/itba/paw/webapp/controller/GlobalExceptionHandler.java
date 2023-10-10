@@ -3,9 +3,12 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.DirectoryNotFoundException;
 import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
+import ar.edu.itba.paw.models.exceptions.UserBannedException;
 import ar.edu.itba.paw.models.exceptions.UserNotFoundException;
 import ar.edu.itba.paw.services.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,6 +18,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalExceptionHandler {
     @Autowired
     private SecurityService securityService;
@@ -23,6 +27,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ModelAndView notFound() {
         return new ModelAndView("/errors/404");
+    }
+
+    @ExceptionHandler({UserBannedException.class}) //TODO: Que el manejador maneje esta excepcion
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    public ModelAndView disabled() {
+        return new ModelAndView("/errors/403");
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)

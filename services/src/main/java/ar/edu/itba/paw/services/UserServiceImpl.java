@@ -13,15 +13,16 @@ import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.models.User;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.scheduling.annotation.Scheduled;
 
 @Service
 public class UserServiceImpl implements UserService {
-
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
 
@@ -94,4 +95,11 @@ public class UserServiceImpl implements UserService {
         return verificationCodesService.verifyForgotPasswordCode(email, code) && userDao.updatePasswordForUserWithEmail(email, passwordEncoder.encode(password));
     }
 
+
+    @Scheduled(cron = "0 0 0 * * ?") // Every day at midnight
+    // @Scheduled(cron = "0 * * * * *") // Every minute
+    public void unbanUsers() {
+        LOGGER.info("Unbanning users at {}", LocalDateTime.now());
+        userDao.unbanUsers();
+    }
 }

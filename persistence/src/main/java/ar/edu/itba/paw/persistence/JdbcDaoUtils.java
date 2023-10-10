@@ -34,6 +34,7 @@ public class JdbcDaoUtils {
     static final String CATEGORY = "category";
     static final String NOTE_ID = "note_id";
     static final String USER_ID = "user_id";
+    static final String ADMIN_ID = "admin_id";
     static final String PASSWORD = "password";
     static final String EMAIL = "email";
     static final String USERNAME = "username";
@@ -61,8 +62,10 @@ public class JdbcDaoUtils {
     static final String LOCALE = "locale";
     static final String FILE_TYPE = "file_type";
     static final String ROLES = "roles";
+    static final String STATUS = "status";
 
     static final String YEAR = "year";
+    static final String END_DATE = "end_date";
 
     static{
         SORTBY.put(SortBy.SCORE, AVG_SCORE);

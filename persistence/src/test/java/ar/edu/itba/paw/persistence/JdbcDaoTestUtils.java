@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -64,6 +65,36 @@ public class JdbcDaoTestUtils {
         args = new MapSqlParameterSource().addValue(USER_ID, newUserId).addValue(ROLE_NAME, Role.ROLE_STUDENT.getRole());
         namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
         return (UUID) keyHolder.getKeys().get(USER_ID);
+    }
+
+    // TODO: Modularize?
+    static UUID insertAdmin(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(EMAIL, email);
+        args.addValue(PASSWORD, password);
+        args.addValue(CAREER_ID, careerId);
+        args.addValue(LOCALE, locale);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Users (email, password, career_id, locale) VALUES (:email, :password, :career_id, :locale)",
+                args, keyHolder, new String[]{USER_ID});
+        UUID newUserId = (UUID) keyHolder.getKeys().get(USER_ID);
+
+        args = new MapSqlParameterSource().addValue(USER_ID, newUserId).addValue(ROLE_NAME, Role.ROLE_ADMIN.getRole());
+        namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
+        return (UUID) keyHolder.getKeys().get(USER_ID);
+    }
+
+    static void banUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID userId, UUID adminId, LocalDateTime endDate) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(USER_ID, userId);
+        args.addValue(ADMIN_ID, adminId);
+        args.addValue(END_DATE, endDate);
+        namedParameterJdbcTemplate.update("INSERT INTO Bans (user_id, admin_id, end_date) VALUES (:user_id, :admin_id, :end_date)", args);
+
+        args = new MapSqlParameterSource();
+        args.addValue(USER_ID, userId);
+        namedParameterJdbcTemplate.update("UPDATE Users SET status = 'BANNED' WHERE user_id = :user_id", args);
     }
 
 

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.exceptions.UserBannedException;
 import ar.edu.itba.paw.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +24,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final User user = us.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("No user for email " + username)); // TODO: Change exception
+
+        if (user.getIsBanned()) { // TODO: Handle bans properly
+            throw new UserBannedException();
+        }
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         for (Role role : user.getRoles()) {

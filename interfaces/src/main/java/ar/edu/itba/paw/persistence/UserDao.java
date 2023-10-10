@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.ProfilePicture;
 import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.models.User;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,4 +17,6 @@ public interface UserDao {
     void updateProfilePicture(UUID userId, byte[] profilePicture);
     void updatePassword(UUID userId, String password);
     boolean updatePasswordForUserWithEmail(String email, String password);
+    void unbanUsers();
+    boolean banUser(UUID userId, UUID adminId, LocalDateTime endDate);
 }

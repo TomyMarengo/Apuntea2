@@ -185,6 +185,7 @@ CREATE TABLE IF NOT EXISTS Images
 
 ALTER TABLE Users
     ADD COLUMN IF NOT EXISTS profile_picture_id uuid REFERENCES Images (image_id) ON DELETE SET NULL,
+    ADD COLUMN IF NOT EXISTS status character varying(10) DEFAULT 'ACTIVE' NOT NULL CHECK (status IN ('ACTIVE', 'BANNED', 'DELETED')),
     DROP COLUMN IF EXISTS profile_picture;
 
 CREATE TABLE IF NOT EXISTS Favorites
@@ -200,7 +201,7 @@ CREATE TABLE IF NOT EXISTS Bans
 (
   user_id uuid NOT NULL,
   admin_id uuid NOT NULL,
-  start_date timestamp NOT NULL,
+  start_date timestamp NOT NULL DEFAULT now(),
   end_date timestamp NOT NULL,
   reason text,
   CONSTRAINT "PK_bans" PRIMARY KEY (user_id, admin_id, start_date),

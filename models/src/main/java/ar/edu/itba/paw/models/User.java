@@ -16,6 +16,7 @@ public class User {
     private Role[] roles;
     private String locale;
     private byte[] profilePicture;
+    private UserStatus status;
 
     public User(final UUID userId, final String email) {
         this.userId = userId;
@@ -27,7 +28,7 @@ public class User {
         this.locale = locale;
     }
 
-    public User(final UUID userId, final String firstName, final String lastName, final String username, final String email, final String password, final String[] roles, final String locale, final Institution institution, final Career career) {
+    public User(final UUID userId, final String firstName, final String lastName, final String username, final String email, final String password, final UserStatus status, final String[] roles, final String locale, final Institution institution, final Career career) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,6 +36,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.roles = Arrays.stream(roles).map(Role::getRole).toArray(Role[]::new);
+        this.status = status;
         this.locale = locale;
         this.institution = institution;
         this.career = career;
@@ -92,5 +94,9 @@ public class User {
 
     public boolean getIsAdmin() {
         return roles != null && Arrays.stream(roles).anyMatch(role -> role == Role.ROLE_ADMIN);
+    }
+
+    public boolean getIsBanned() {
+        return status == UserStatus.BANNED;
     }
 }

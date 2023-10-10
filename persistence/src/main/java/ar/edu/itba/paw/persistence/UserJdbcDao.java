@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
@@ -34,6 +36,7 @@ class UserJdbcDao implements UserDao{
                 rs.getString(USERNAME),
                 rs.getString(EMAIL),
                 rs.getString(PASSWORD),
+                UserStatus.valueOf(rs.getString(STATUS)),
                 rolesString,
                 rs.getString(LOCALE),
                 new Institution(
@@ -138,5 +141,18 @@ class UserJdbcDao implements UserDao{
     @Override
     public boolean updatePasswordForUserWithEmail(String email, String password) {
         return jdbcTemplate.update("UPDATE Users SET password = ? WHERE email = ?", password, email) == 1;
+    }
+
+    @Override
+    public void unbanUsers() {
+        jdbcTemplate.update("UPDATE Users u SET status = 'ACTIVE' WHERE status = 'BANNED' AND NOT EXISTS (SELECT * FROM Bans WHERE user_id = u.user_id AND end_date > now())");
+    }
+
+    @Transactional
+    @Override
+    public boolean banUser(UUID userId, UUID adminId, LocalDateTime endDate) {
+        boolean userFound = jdbcTemplate.update("UPDATE Users SET status = 'BANNED' WHERE user_id = ? AND status = 'ACTIVE'", userId) == 1;
+        if (!userFound) throw new UserNotFoundException();
+        return jdbcTemplate.update("INSERT INTO Bans (user_id, admin_id, end_date) VALUES (?, ?, ?)", userId, adminId, endDate) == 1;
     }
 }
