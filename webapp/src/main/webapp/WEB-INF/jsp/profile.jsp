@@ -50,42 +50,72 @@
         <div class="col-12 col-lg-4 col-xl-3 ">
             <div class="card user-card box">
                 <div class="card-body">
-                    <!-- Profile picture (visible on small screens) -->
-                    <div class="profile-picture-small">
-                        <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
-                            <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>" alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
-                        </div>
-                   </div>
+                    <!-- Profile picture (visible on large screens) -->
+                    <div class="d-none d-lg-flex flex-column">
+                        <div class="profile-picture-small mb-3">
+                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
+                                <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>" alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
+                            </div>
+                       </div>
 
-                    <!-- User info -->
-                    <div class="d-flex flex-column gap-2">
-                        <h4 class="card-title fw-bold">${user.email}</h4>
-                        <c:forEach items="${user.roles}" var="r">
-                            <span class="card-text">
-                            <c:choose>
-                                <c:when test = "${r eq 'ROLE_STUDENT'}">
-                                        <spring:message code="profile.role.student"/>
-                                </c:when>
-                                <c:when test = "${r eq 'ROLE_MODERATOR'}">
-                                    <spring:message code="profile.role.moderator"/>
-                                </c:when>
-                                <c:when test = "${r eq 'ROLE_ADMIN'}">
-                                    <spring:message code="profile.role.admin"/>
-                                </c:when>
-                            </c:choose>
-                            </span>
-                        </c:forEach>
-                        <span class="card-text">${user.institution.name}</span>
-                        <span class="card-text">${user.career.name}</span>
+                        <!-- User info -->
+                        <div class="d-flex flex-column gap-2">
+                            <h4 class="card-title fw-bold">${user.email}</h4>
+                            <c:forEach items="${user.roles}" var="r">
+                                <span class="card-text">
+                                <c:choose>
+                                    <c:when test = "${r eq 'ROLE_STUDENT'}">
+                                            <spring:message code="profile.role.student"/>
+                                    </c:when>
+                                    <c:when test = "${r eq 'ROLE_MODERATOR'}">
+                                        <spring:message code="profile.role.moderator"/>
+                                    </c:when>
+                                    <c:when test = "${r eq 'ROLE_ADMIN'}">
+                                        <spring:message code="profile.role.admin"/>
+                                    </c:when>
+                                </c:choose>
+                                </span>
+                            </c:forEach>
+                            <span class="card-text">${user.institution.name}</span>
+                            <span class="card-text">${user.career.name}</span>
+                        </div>
                     </div>
-                    <!-- Social media links, etc. -->
+                    <!-- Profile picture (visible on small screens) -->
+                    <div class="d-flex d-lg-none justify-content-around align-items-center flex-wrap ">
+                        <div class="mb-3 mb-md-0">
+                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
+                                <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>" alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
+                            </div>
+                        </div>
+
+                        <!-- User info -->
+                        <div class="d-flex flex-column gap-2">
+                            <h4 class="card-title fw-bold">${user.email}</h4>
+                            <c:forEach items="${user.roles}" var="r">
+                                <span class="card-text">
+                                <c:choose>
+                                    <c:when test = "${r eq 'ROLE_STUDENT'}">
+                                        <spring:message code="profile.role.student"/>
+                                    </c:when>
+                                    <c:when test = "${r eq 'ROLE_MODERATOR'}">
+                                        <spring:message code="profile.role.moderator"/>
+                                    </c:when>
+                                    <c:when test = "${r eq 'ROLE_ADMIN'}">
+                                        <spring:message code="profile.role.admin"/>
+                                    </c:when>
+                                </c:choose>
+                                </span>
+                            </c:forEach>
+                            <span class="card-text">${user.institution.name}</span>
+                            <span class="card-text">${user.career.name}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
 
         <div class="col-12 col-lg-7 col-xl-8">
-
             <c:if test="${not empty favorites}">
                 <h2 class="text-center mb-3"><spring:message code="profile.directories.favorites"/></h2>
                 <div class="card rounded-box file-list mb-5">
@@ -104,7 +134,7 @@
                 </div>
             </c:if>
 
-            <h2 class="text-center mb-3"><spring:message code="profile.directories.title"/></h2>
+            <h2 class="text-center mt-5 mt-lg-0 mb-3"><spring:message code="profile.directories.title"/></h2>
             <div class="card rounded-box file-list">
                 <c:forEach items="${root_directories}" var="rd">
                         <a class="w-100" href="<c:url value="./directory/${rd.id}"/>">
