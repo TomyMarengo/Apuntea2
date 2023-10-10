@@ -243,7 +243,7 @@
             <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button"
                     data-bs-toggle="tooltip"
                     data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
-                    data-bs-trigger="hover" onclick="changePageSize(${searchForm.pageSize}, ${searchForm.pageNumber})">
+                    data-bs-trigger="hover" onclick="changePageSize(${searchForm.pageSize})">
                 <c:out value="${searchForm.pageSize}"/>
             </button>
 

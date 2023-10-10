@@ -214,13 +214,11 @@ searchViewToggle.addEventListener('click', toggleView);
 /*************/
 
 const pageSizes = [12, 18, 24];
-function changePageSize(pageSize, pageNumber) {
+function changePageSize(pageSize) {
     /* Get searchForm, change pageSize to next element of the array and submit the form */
     const searchForm = document.getElementById('searchForm');
     const index = pageSizes.indexOf(pageSize);
     const newPageSize = pageSizes[(index + 1) % pageSizes.length];
     searchForm.querySelector('input[name="pageSize"]').value = newPageSize;
-    const newPageNumber = (( pageSize / newPageSize) * pageNumber) | 0;
-    searchForm.querySelector('input[name="pageNumber"]').value = newPageNumber > 0 ? newPageNumber : 1;
     searchForm.submit();
 }

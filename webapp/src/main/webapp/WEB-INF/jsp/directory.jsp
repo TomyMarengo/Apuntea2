@@ -233,7 +233,7 @@
                     data-bs-toggle="tooltip"
                     data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
                     data-bs-trigger="hover"
-                    onclick="changePageSize(${navigationForm.pageSize}, ${navigationForm.pageNumber})">
+                    onclick="changePageSize(${navigationForm.pageSize})">
                 <c:out value="${navigationForm.pageSize}"/>
 
             </button>
