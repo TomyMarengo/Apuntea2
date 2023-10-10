@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.models;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -96,7 +95,7 @@ public class User {
         return roles != null && Arrays.stream(roles).anyMatch(role -> role == Role.ROLE_ADMIN);
     }
 
-    public boolean getIsBanned() {
+    public boolean isBanned() {
         return status == UserStatus.BANNED;
     }
 }

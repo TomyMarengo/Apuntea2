@@ -71,6 +71,11 @@
                                     <spring:message code="login.error"/>
                                 </div>
                             </c:if>
+                            <c:if test="${param.banned}">
+                                <div class="text-danger mt-2" role="alert">
+                                    <spring:message code="login.banned"/>
+                                </div>
+                            </c:if>
 
                             <div class="mt-4 d-flex align-items-center">
                                 <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"/>
