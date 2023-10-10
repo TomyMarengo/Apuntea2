@@ -3392,11 +3392,15 @@ textarea.form-control-lg {
 .nav-link {
   display: block;
   padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
-  color: var(--bs-nav-link-color);
+  color: var(--bg);
   text-decoration: none;
-  background: none;
   border: 0;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  background-color: var(--primary);
+}
+
+.nav-link:not(.active) {
+  opacity: 80%;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3443,14 +3447,15 @@ textarea.form-control-lg {
 .nav-tabs .nav-link:hover,
 .nav-tabs .nav-link:focus {
   isolation: isolate;
-  border-color: var(--bs-nav-tabs-link-hover-border-color);
+  border-color: var(--primary);
+  background-color: var(--bg);
+  color: var(--primary);
 }
 
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
-  color: var(--bs-nav-tabs-link-active-color);
-  background-color: var(--bs-nav-tabs-link-active-bg);
-  border-color: var(--bs-nav-tabs-link-active-border-color);
+  color: var(--bg);
+  background-color: var(--primary);
 }
 
 .nav-tabs .dropdown-menu {

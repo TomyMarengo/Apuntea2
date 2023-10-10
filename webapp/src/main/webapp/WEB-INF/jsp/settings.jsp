@@ -151,7 +151,7 @@
             <c:url var="changePasswordUrl" value="/change-password"/>
             <div class="tab-content">
                 <div class="tab-pane fade ${errorsChangePasswordForm == null ? 'show active' : '' }" id="dataTab" role="tab-panel">
-                    <div class="container mt-3">
+                    <div class="container my-3">
                         <form:form modelAttribute="editUserForm"
                                    action="${editUserUrl}"
                                    method="post"
@@ -201,7 +201,7 @@
                     </div>
                 </div>
                 <div class="tab-pane fade ${errorsChangePasswordForm != null ? 'show active' : '' }" id="passwordTab" role="tab-panel">
-                    <div class="container mt-3">
+                    <div class="container my-3">
                         <form:form action="${changePasswordUrl}"
                                    method="post"
                                    modelAttribute="changePasswordForm"
