@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
         user.setUserId(securityService.getCurrentUserOrThrow().getUserId());
         boolean success = userDao.update(user);
         if (!success) throw new InvalidUserException();
-        if (!profilePicture.isEmpty()) {
+        if (profilePicture != null && !profilePicture.isEmpty()) {
             try {
                 userDao.updateProfilePicture(user.getUserId(), profilePicture.getBytes());
             } catch (IOException e) {

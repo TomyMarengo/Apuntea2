@@ -26,7 +26,7 @@ tabLinks.forEach(function(tabLink, index) {
     });
 });
 
-var profilePic = document.getElementById('profilePic');
+var profilePic = document.getElementById('preview-image');
 var fileInput = document.getElementById('profile-picture');
 
 profilePic.addEventListener('click', function() {
