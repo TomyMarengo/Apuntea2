@@ -103,6 +103,7 @@ public class NoteJdbcDaoTest {
         assertEquals(PEPE_ID, reviews.get(0).getUser().getUserId());
     }
 
+    // TODO: Fix urgently, this test has RACE CONDITIONS!!!
     @Test
     public void testLimitReviews() {
         UUID[] userIds = new UUID[20];
