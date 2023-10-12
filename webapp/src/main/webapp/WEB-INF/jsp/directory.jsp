@@ -706,17 +706,6 @@
     </section>
 </c:if>
 
-<!-- TOAST -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body justify-content-between d-flex">
-            <span class="text-dark-primary"><spring:message code="toast.linkCopied"/></span>
-            <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
-        </div>
-    </div>
-</div>
-
 <!-- CREATE NOTE MODAL -->
 <div class="modal fade" id="createNoteModal" data-bs-backdrop="static" data-bs-keyboard="false"
      tabindex="-1" aria-labelledby="uploadLabel" aria-hidden="true">
@@ -1091,6 +1080,7 @@
     </div>
 </div>
 
+<fragment:customToast message="toast.linkCopied" id="liveToastLinkCopied"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -1115,7 +1105,7 @@
     </script>
 </c:if>
 
-<c:if test="${errorsEditDirectoryForm != null}">
+<c:if test="${errorsEditDirectoryForm ne null}">
     <script>
         const id = "<c:out value="${editDirectoryId}"/>";
         edit(id, true);
@@ -1124,19 +1114,30 @@
     </script>
 </c:if>
 
-<c:if test="${errorsCreateNoteForm != null}">
+<c:if test="${errorsCreateNoteForm ne null}">
     <script>
         const createNoteModalButton = document.getElementById('createNoteModalButton');
         createNoteModalButton.click()
     </script>
 </c:if>
 
-<c:if test="${errorsCreateDirectoryForm != null}">
+<c:if test="${errorsCreateDirectoryForm ne null}">
     <script>
         const createDirectoryModalButton = document.getElementById('createDirectoryModalButton');
         createDirectoryModalButton.click()
     </script>
 </c:if>
+
+<script>
+    const liveToast = document.getElementById('liveToastLinkCopied');
+
+    for (let copyButton of document.getElementsByClassName('copy-button')) {
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToast)
+        copyButton.addEventListener('click', () => {
+            toastBootstrap.show()
+        })
+    }
+</script>
 
 </body>
 

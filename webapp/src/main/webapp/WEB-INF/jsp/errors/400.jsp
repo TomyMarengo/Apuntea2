@@ -47,15 +47,8 @@
     </div>
 </main>
 
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body justify-content-between d-flex">
-            <span class="text-danger"><spring:message code="toast.maxSizeExceeded"/></span>
-            <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
-        </div>
-    </div>
-</div>
+
+<fragment:customToast message="toast.maxSizeExceeded" id="liveToastMaxSize"/>
 
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -64,7 +57,7 @@
 
 <c:if test="${maxUploadSizeExceeded != null}">
     <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToast'));
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastMaxSize'));
         toastBootstrap.show();
     </script>
 </c:if>

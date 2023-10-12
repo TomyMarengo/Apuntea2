@@ -386,15 +386,7 @@
         </div>
     </section>
 
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-body justify-content-between d-flex">
-                <span class="text-dark-primary"><spring:message code="toast.linkCopied"/></span>
-                <button type="button" class="btn-close align-content-center" data-bs-dismiss="toast"
-                        aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
+    <fragment:customToast message="toast.linkCopied" id="liveToastLinkCopied"/>
 
     <!-- BOX LIST -->
     <section class="container mt-4 p-0" id="boxList">
@@ -631,6 +623,18 @@
     const {institutions, careers, subjects, careerMap, subjectMap} = JSON.parse('${institutionData}');
 </script>
 
+<script>
+    const liveToast = document.getElementById('liveToastLinkCopied');
+
+    for (let copyButton of document.getElementsByClassName('copy-button')) {
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToast)
+        copyButton.addEventListener('click', () => {
+            toastBootstrap.show()
+        })
+    }
+</script>
+
+<script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ics-autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
