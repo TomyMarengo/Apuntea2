@@ -39,24 +39,18 @@
     box-sizing: border-box;
 }
 
-#preview-image:hover {
-    transition: all 0.2s ease-in;
-    transform: scale(1.1);
-}
-
 img {
     overflow-clip-margin: content-box;
     overflow: clip;
 }
 
 .selected-image{
-    max-width: 30%;
+    width: 30%;
     position: relative;
     overflow: hidden;
     border-radius: 50%;
     margin: 0 auto;
     text-align: center;
-
 }
 
 .hidden-pencil {

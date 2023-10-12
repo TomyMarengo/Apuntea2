@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="<c:url value="/css/general/color-picker.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/user/profile.css"/>"/>
+
     <link rel="stylesheet" href=
             <c:url value="/css/sections/navbar.css"/>/>
     <link rel="stylesheet" href=
@@ -122,7 +124,7 @@
         <div class="col-12 col-lg-7 col-xl-8">
             <c:if test="${not empty favorites}">
                 <h2 class="text-center mb-3"><spring:message code="profile.directories.favorites"/></h2>
-                <div class="card rounded-box file-list mb-5">
+                <div class="card box file-list mb-5">
                     <c:forEach items="${favorites}" var="rd">
                         <a class="w-100" href="<c:url value="./directory/${rd.id}"/>">
                             <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
@@ -138,25 +140,39 @@
                     </c:forEach>
                 </div>
             </c:if>
-            <c:forEach items="${root_directories}" var="subjects">
-                <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
-                <h2 class="text-center mt-5 mt-lg-0 mb-3"><spring:message code="profile.directories.title"
-                                                                          arguments="${ordinal}"/></h2>
-                <div class="card rounded-box file-list mb-5">
-                    <c:forEach items="${subjects.value}" var="rd">
-                        <a class="w-100" href="<c:url value="./directory/${rd.rootDirectoryId}"/>">
-                            <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
-                                <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>"
-                                     class="icon-xxl fill-4986E7">
-                                <!-- max 2 lines-->
-                                <span class="fw-bold flex-wrap justify-content-center folder-name">
-                                    <c:out value="${rd.name}"/>
-                                </span>
+
+            <div class="mt-5">
+                <ul class="nav nav-tabs">
+                    <c:forEach items="${root_directories}" var="subjects">
+                        <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
+                        <!--TAB-->
+                        <li class="nav-item">
+                            <a class="nav-link text-center ${subjects.key == 1 ? 'active' : ''}" data-toggle="tab" role="tab" aria-selected="true">
+                                <spring:message code="profile.directories.year" arguments="${ordinal}"/>
+                            </a>
+                        </li>
+                    </c:forEach>
+                </ul>
+                <div class="tab-content bg-bg">
+                    <c:forEach items="${root_directories}" var="subjects">
+                        <div class="tab-pane fade ${subjects.key == 1 ? 'active' : ''}" role="tabpanel">
+                            <div class="file-list">
+                                <c:forEach items="${subjects.value}" var="rd">
+                                    <a class="w-100" href="<c:url value="./directory/${rd.rootDirectoryId}"/>">
+                                        <div class="d-flex flex-column gap-2 align-items-center px-3 py-4">
+                                            <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
+                                            <!-- max 2 lines-->
+                                            <span class="fw-bold flex-wrap justify-content-center folder-name">
+                                                <c:out value="${rd.name}"/>
+                                            </span>
+                                        </div>
+                                    </a>
+                                </c:forEach>
                             </div>
-                        </a>
+                        </div>
                     </c:forEach>
                 </div>
-            </c:forEach>
+            </div>
         </div>
     </div>
 </main>
@@ -197,7 +213,7 @@
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/color-picker.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>
-
+<script src="<c:url value="/js/profile.js"/>"></script>
 </body>
 
 </html>

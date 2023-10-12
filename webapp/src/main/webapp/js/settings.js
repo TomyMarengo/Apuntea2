@@ -29,22 +29,15 @@ tabLinks.forEach(function(tabLink, index) {
 var profilePic = document.getElementById('preview-image');
 var fileInput = document.getElementById('profile-picture');
 
-profilePic.addEventListener('click', function() {
-    fileInput.click();
-});
-
-fileInput.addEventListener('change', function(event) {
-    previewImage(event);
-});
-
-function previewImage(event) {
-    var input = event.target;
+fileInput.addEventListener('change', function() {
     var reader = new FileReader();
-    reader.onload = function () {
-        profilePic.src = reader.result;
-    };
-    reader.readAsDataURL(input.files[0]);
-}
+
+    reader.addEventListener('load', function() {
+        profilePic.setAttribute('src', reader.result);
+    });
+
+    reader.readAsDataURL(this.files[0]);
+});
 
 
 

@@ -35,3 +35,18 @@
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
+
+.tab-content {
+    /*    borders with shadow*/
+    border-top: none;
+    border-bottom-left-radius: var(--bs-border-radius);
+    border-bottom-right-radius: var(--bs-border-radius);
+    border-top-right-radius: var(--bs-border-radius);
+
+    padding: 1rem;
+    background-color: var(--bg);
+}
+
+.nav-tabs {
+    border-bottom: none;
+}
