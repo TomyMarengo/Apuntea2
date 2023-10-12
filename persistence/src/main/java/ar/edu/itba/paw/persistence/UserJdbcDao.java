@@ -84,7 +84,7 @@ class UserJdbcDao implements UserDao{
 
         return jdbcTemplate.query("SELECT u.user_id, u.username, u.email, u.first_name, u.last_name, u.locale, u.status, array_agg(r.role_name) as roles FROM users u " +
                 "INNER JOIN User_Roles r ON u.user_id = r.user_id " +
-                "WHERE NOT EXISTS (SELECT * FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ADMIN') AND (lower(u.username) LIKE lower(?) ESCAPE '!' OR lower(u.email) LIKE lower(?) ESCAPE '!')" +
+                "WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') AND (lower(u.username) LIKE lower(?) ESCAPE '!' OR lower(u.email) LIKE lower(?) ESCAPE '!')" +
                 "GROUP BY u.user_id LIMIT ? OFFSET ?", INFO_ROW_MAPPER, searchWord, searchWord, pageSize, (pageNum - 1) * pageSize);
     }
 
@@ -98,7 +98,7 @@ class UserJdbcDao implements UserDao{
         args.add(searchWord);
 
         try {
-            return jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT u.user_id) FROM users u WHERE NOT EXISTS (SELECT * FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
+            return jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT u.user_id) FROM users u WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
                     "AND (lower(u.username) LIKE lower(?) ESCAPE '!' OR lower(u.email) LIKE lower(?) ESCAPE '!')",
                      args.toArray(), Integer.class);
         } catch (EmptyResultDataAccessException e) {

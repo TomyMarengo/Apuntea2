@@ -287,8 +287,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 </body>
 
-<script src="<c:url value="/js/darkmode.js"/>"></script>
-<script src="<c:url value="/js/global-search.js"/>"></script>
 <script src="<c:url value="/js/settings.js"/>"></script>
 <script src="<c:url value="/js/password.js"/>"></script>
 

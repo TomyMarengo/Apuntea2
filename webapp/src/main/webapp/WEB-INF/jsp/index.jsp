@@ -246,9 +246,6 @@
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
 
-<script src="<c:url value="/js/darkmode.js"/>"></script>
-<script src="<c:url value="/js/global-search.js"/>"></script>
-
 </body>
 
 </html>

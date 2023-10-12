@@ -62,7 +62,8 @@ function selectAll() {
 
     updateSelectedState();
 }
-selectAllButton.addEventListener('click', selectAll);
+if (selectAllButton)
+    selectAllButton.addEventListener('click', selectAll);
 
 /**************************/
 /****** DESELECT ALL ******/
@@ -84,4 +85,6 @@ function deselectAll() {
 
     updateSelectedState();
 }
-deselectAllButton.addEventListener('click', deselectAll);
+
+if (deselectAllButton)
+    deselectAllButton.addEventListener('click', deselectAll);

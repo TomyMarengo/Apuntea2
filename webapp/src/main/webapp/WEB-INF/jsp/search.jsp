@@ -631,7 +631,6 @@
     const {institutions, careers, subjects, careerMap, subjectMap} = JSON.parse('${institutionData}');
 </script>
 
-<script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ics-autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
@@ -641,7 +640,6 @@
     <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
 <script src="<c:url value="/js/popups.js"/>"></script>
-<script src="<c:url value="/js/global-search.js"/>"></script>
 
 
 </body>

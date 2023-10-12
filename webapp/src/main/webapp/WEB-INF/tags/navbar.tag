@@ -62,3 +62,4 @@
 </nav>
 
 <script src="<c:url value="/js/global-search.js"/>"></script>
+<script src="<c:url value="/js/darkmode.js"/>"></script>

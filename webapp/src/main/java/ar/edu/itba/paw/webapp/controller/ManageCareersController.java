@@ -83,9 +83,9 @@ public class ManageCareersController {
     ){
         if(result.hasErrors()) {
             redirectAttributes.addFlashAttribute(LINK_SUBJECT_FORM_BINDING, result);
-            return new ModelAndView("redirect:/careers/"+careerId);
+            return new ModelAndView("redirect:/manage/careers/"+careerId);
         }
-        final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
+        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
         subjectService.linkSubjectToCareer(linkSubjectForm.getSubjectId(), careerId, linkSubjectForm.getYear());
         return mav;
     }
@@ -98,9 +98,9 @@ public class ManageCareersController {
     ){
         if(result.hasErrors()) {
             redirectAttributes.addFlashAttribute(UNLINK_SUBJECT_FORM_BINDING, result);
-            return new ModelAndView("redirect:/careers/"+careerId);
+            return new ModelAndView("redirect:/manage/careers/"+careerId);
         }
-        final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
+        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
         subjectService.unlinkSubjectFromCareer(unlinkSubjectForm.getSubjectId(), careerId);
         return mav;
     }
@@ -114,9 +114,9 @@ public class ManageCareersController {
     ){
         if(result.hasErrors()) {
             redirectAttributes.addFlashAttribute(CREATE_SUBJECT_FORM_BINDING, result);
-            return new ModelAndView("redirect:/careers/"+careerId);
+            return new ModelAndView("redirect:/manage/careers/"+careerId);
         }
-        final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
+        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
         subjectService.createSubject(createSubjectForm.getName(), careerId, createSubjectForm.getYear());
         return mav;
     }
@@ -129,9 +129,9 @@ public class ManageCareersController {
     ){
         if(result.hasErrors()) {
             redirectAttributes.addFlashAttribute(EDIT_SUBJECT_FORM_BINDING, result);
-            return new ModelAndView("redirect:/careers/"+careerId);
+            return new ModelAndView("redirect:/manage/areers/"+careerId);
         }
-        final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
+        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
         subjectService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
         return mav;
     }

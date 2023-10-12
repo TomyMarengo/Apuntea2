@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public int getStudentPages(String query) {
         if (query == null) query = "";
-        return userDao.getStudentsQuantity(query) / PAGE_SIZE + 1;
+        return (int) Math.ceil(userDao.getStudentsQuantity(query) / PAGE_SIZE);
     }
 
     //    @Transactional

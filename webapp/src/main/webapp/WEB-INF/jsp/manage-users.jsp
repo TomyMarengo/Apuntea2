@@ -76,9 +76,29 @@
                                 code="search.button"/></button>
                     </div>
                 </div>
-
             </div>
+
+            <form:hidden path="pageNumber" id="pageNumber"/>
+
         </form:form>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <a class="btn nav-icon-button" href="${baseUrl}/manage/careers" data-bs-toggle="tooltip" data-bs-placement="right"
+           data-bs-title="<spring:message code="manageCareers.title"/>" data-bs-trigger="hover">
+            <img src="<c:url value="/svg/books.svg"/>"
+                 alt="<spring:message code="manageUsers.title"/>"
+                 class="icon-m fill-dark-primary"/>
+        </a>
+
+        <a class="btn nav-icon-button" href="${baseUrl}/manage/users" data-bs-toggle="tooltip" data-bs-placement="right"
+           data-bs-title="<spring:message code="manageUsers.title"/>" data-bs-trigger="hover">
+            <img src="<c:url value="/svg/user-slash.svg"/>"
+                 alt="<spring:message code="manageUsers.title"/>"
+                 class="icon-m fill-dark-primary"/>
+        </a>
+
     </div>
 
     <!-- HORIZONTAL LIST -->
@@ -247,23 +267,6 @@
         </nav>
     </section>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <a class="btn nav-icon-button" href="${baseUrl}/manage/careers" data-bs-toggle="tooltip" data-bs-placement="right"
-           data-bs-title="<spring:message code="manageCareers.title"/>" data-bs-trigger="hover">
-            <img src="<c:url value="/svg/books.svg"/>"
-                 alt="<spring:message code="manageUsers.title"/>"
-                 class="icon-m fill-dark-primary"/>
-        </a>
-
-        <a class="btn nav-icon-button" href="${baseUrl}/manage/users" data-bs-toggle="tooltip" data-bs-placement="right"
-           data-bs-title="<spring:message code="manageUsers.title"/>" data-bs-trigger="hover">
-            <img src="<c:url value="/svg/user-slash.svg"/>"
-                 alt="<spring:message code="manageUsers.title"/>"
-                 class="icon-m fill-dark-primary"/>
-        </a>
-    </div>
-
 </main>
 
 <!-- BAN USER MODAL -->
@@ -332,7 +335,7 @@
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
 
-<script src="<c:url value="/js/darkmode.js"/>"></script>
+<script src="<c:url value="/js/popups.js"/>"></script>
 <c:if test="${not empty users}">
     <script src="<c:url value="/js/pagination.js"/>"></script>
     <script src="<c:url value="/js/ban-unban.js"/>"></script>

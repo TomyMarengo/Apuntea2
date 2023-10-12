@@ -372,11 +372,9 @@
     const noteId = "${noteId}";
 </script>
 
-<script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/search-buttons.js"/>"></script>
 <script src="<c:url value="/js/crud-buttons.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
-<script src="<c:url value="/js/global-search.js"/>"></script>
 <script src="<c:url value="/js/notes.js"/>"></script>
 
 <c:if test="${user eq null or note.user.userId eq user.userId}">
