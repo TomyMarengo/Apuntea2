@@ -39,18 +39,34 @@
 .tab-content {
     /*    borders with shadow*/
     border-top: none;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-top-right-radius: 25px;
+    border-radius: 0 25px 25px 25px;
     padding: 1rem;
     background-color: var(--bg);
 
 }
 
-.nav-tabs {
-    border-bottom: none;
+.nav-rd-years{
+    border-bottom: 0;
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-.nav-item{
-    cursor: pointer;
+.rd-year{
+    background-color: var(--primary);
+    color: var(--bg);
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 7px 20px;
+}
+
+.rd-year:not(.active){
+    opacity: 80%;
+}
+
+.rd-year:not(.active):hover{
+    color: var(--primary);
+    background-color: var(--bg);
+    border: var(--primary) 1px solid;
 }

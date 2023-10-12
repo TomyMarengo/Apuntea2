@@ -52,7 +52,7 @@
     <div class="row justify-content-around">
         <!-- User info column -->
         <div class="col-12 col-lg-4 col-xl-3 ">
-            <div class="card user-card box">
+            <div class="card user-card box mb-5 mb-lg-0">
                 <div class="card-body">
                     <!-- Profile picture (visible on large screens) -->
                     <div class="d-none d-lg-flex flex-column">
@@ -144,20 +144,20 @@
         
 
             <div>
-                <ul class="nav nav-tabs">
+                <ul class="nav-rd-years">
                     <c:forEach items="${root_directories}" var="subjects">
                         <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
                         <!--TAB-->
-                        <li class="nav-item">
-                            <a class="nav-link text-center ${subjects.key == 1 ? 'active' : ''}" data-toggle="tab" role="tab" aria-selected="true">
+                        <li class="nav-rd-year-item">
+                            <button class="btn rd-year text-center ${subjects.key == 1 ? 'active' : ''}" data-toggle="tab" role="tab" aria-selected="true">
                                 <spring:message code="profile.directories.year" arguments="${ordinal}"/>
-                            </a>
+                            </button>
                         </li>
                     </c:forEach>
                 </ul>
                 <div class="tab-content bg-bg">
                     <c:forEach items="${root_directories}" var="subjects">
-                        <div class="tab-pane fade ${subjects.key == 1 ? 'active' : ''}" role="tabpanel">
+                        <div class="tab-pane rd-subject-list fade ${subjects.key == 1 ? 'active' : ''}" role="tabpanel">
                             <div class="file-list">
                                 <c:forEach items="${subjects.value}" var="rd">
                                     <a class="w-100" href="<c:url value="./directory/${rd.rootDirectoryId}"/>">

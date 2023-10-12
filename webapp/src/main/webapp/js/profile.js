@@ -1,21 +1,21 @@
 //on click on another tab, set the current tab active
-var tabLinks = document.querySelectorAll('.nav-link');
-var tabContents = document.querySelectorAll('.tab-pane');
+var rdYears = document.querySelectorAll('.rd-year');
+var rdSubjectList = document.querySelectorAll('.rd-subject-list');
 
-tabLinks.forEach(function(tabLink, index) {
+rdYears.forEach(function(tabLink, index) {
     tabLink.addEventListener('click', function(event) {
         event.preventDefault();
 
-        tabContents.forEach(function (tabContent) {
+        rdSubjectList.forEach(function (tabContent) {
             tabContent.classList.remove('show', 'active');
         });
 
-        tabContents[index].classList.add('show', 'active');
+        rdSubjectList[index].classList.add('show', 'active');
 
-        tabLinks.forEach(function (link) {
+        rdYears.forEach(function (link) {
             link.classList.remove('active');
         });
 
-        tabLinks[index].classList.add('active');
+        rdYears[index].classList.add('active');
     });
 });
