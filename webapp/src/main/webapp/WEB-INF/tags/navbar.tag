@@ -8,9 +8,11 @@
 <spring:message var="search" code="search.title"/>
 <spring:message var="notifications" code="notifications"/>
 <spring:message var="darkMode" code="darkMode"/>
-<%@ attribute name="loggedin" required="true"%>
+<spring:message var="manage" code="manage"/>
+<%@ attribute name="loggedIn" required="true"%>
+<%@ attribute name="isAdmin" required="true"%>
 
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar ">
     <div class="container-fluid d-flex align-items-center">
         <a class="navbar-brand text-dark-primary" href="${baseUrl}">Apuntea</a>
         <div class="d-flex justify-content-center align-items-center mx-1">
@@ -27,6 +29,13 @@
                      class="icon-s fill-dark-primary"/>
             </button>
 
+            <c:if test="${isAdmin eq true}">
+                <a href="${baseUrl}/manage/careers" class="btn nav-icon-button">
+                    <img src="<c:url value="/svg/gears.svg"/>" alt="${manage}"
+                         class="icon-s fill-dark-primary"/>
+                </a>
+            </c:if>
+
             <div class="btn-group mx-2">
                 <button type="button"
                         class="btn button-primary nav-user-circle d-flex align-items-center justify-content-center"
@@ -34,14 +43,14 @@
                     <img src="<c:url value="/svg/user.svg"/>" alt="${profile}" class="icon-s fill-bg"/>
                 </button>
 
-                <c:if test="${loggedin}">
+                <c:if test="${loggedIn}">
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message code="profile.title"/></a></li>
                         <li><a class="dropdown-item" href="${baseUrl}/settings"><spring:message code="settings.title"/></a></li>
                         <li><a class="dropdown-item" href="${baseUrl}/logout"><spring:message code="logout"/></a></li>
                     </ul>
                 </c:if>
-                <c:if test="${!loggedin}">
+                <c:if test="${!loggedIn}">
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="${baseUrl}/login"><spring:message code="login"/></a></li>
                         <li><a class="dropdown-item" href="${baseUrl}/register"><spring:message code="register"/></a></li>

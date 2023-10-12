@@ -35,10 +35,12 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <!-- NAVBAR -->
+    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
 
-<fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}" category="note"/>
+    <fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}" category="note"/>
+</header>
 
 <div class="h-100-navs container-fluid">
     <div class="h-100 row row-cols-1 row-cols-lg-2">
@@ -91,12 +93,12 @@
                     </a>
                     <c:if test="${user ne null and (note.user.userId eq user.userId or user.isAdmin)}">
                         <span data-bs-toggle="tooltip" data-bs-placement="bottom"
-                            data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
+                              data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
                             <button id="openDeleteNoteModalButton" class="btn nav-icon-button" data-bs-toggle="modal"
                                     data-bs-target="#deleteOneModal">
                                 <img src="<c:url value="/svg/trash.svg"/>"
-                                    alt="<spring:message code="delete"/>"
-                                    class="icon-s fill-text">
+                                     alt="<spring:message code="delete"/>"
+                                     class="icon-s fill-text">
                             </button>
                         </span>
                     </c:if>
@@ -203,7 +205,8 @@
                     <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
                     <c:if test="${user ne null and user.isAdmin}">
                         <label for="reason"></label>
-                        <textarea name="reason" class="form-control mt-3" id="reason" placeholder="${deleteMessagePlaceholder}"></textarea>
+                        <textarea name="reason" class="form-control mt-3" id="reason"
+                                  placeholder="${deleteMessagePlaceholder}"></textarea>
                     </c:if>
                 </div>
 

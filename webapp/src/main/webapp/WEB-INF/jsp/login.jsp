@@ -10,7 +10,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Apuntea | <spring:message code="login.title"/> </title>
+    <title>Apuntea | <spring:message code="login.title"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
@@ -32,11 +32,14 @@
 
 <body>
 
-<!-- NAVBAR -->
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <!-- NAVBAR -->
+    <fragment:navbar loggedIn="${false}" isAdmin="${false}"/>
 
-<c:url var="loginUrl" value="/login"/>
-<spring:message var="logotype" code="logotype"/>
+    <c:url var="loginUrl" value="/login"/>
+    <spring:message var="logotype" code="logotype"/>
+
+</header>
 
 <section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
 
@@ -52,7 +55,8 @@
                             <div class="">
                                 <spring:message var="loginEmail" code="email"/>
                                 <label for="email"></label>
-                                <input type="text" name="email" id="email" class="form-control bg-bg" placeholder="${loginEmail}"/>
+                                <input type="text" name="email" id="email" class="form-control bg-bg"
+                                       placeholder="${loginEmail}"/>
                             </div>
 
                             <label for="password"></label>
@@ -60,9 +64,12 @@
                                 <spring:message var="loginPassword" code="password"/>
                                 <input type="password" name="password" id="password" class="form-control bg-bg"
                                        placeholder="${loginPassword}"/>
-                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
-                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye" class="icon-xs fill-dark-primary"/>
-                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye" class="d-none icon-xs fill-dark-primary"/>
+                                <span class="input-group-text input-group-icon clickable"
+                                      onclick="password_show_hide();">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
+                                         class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
+                                         class="d-none icon-xs fill-dark-primary"/>
                                 </span>
                             </div>
 
@@ -79,7 +86,8 @@
 
                             <div class="mt-4 d-flex align-items-center">
                                 <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"/>
-                                <label class="form-check-label mx-1" for="rememberMe"> <spring:message code="login.rememberMe"/> </label>
+                                <label class="form-check-label mx-1" for="rememberMe"> <spring:message
+                                        code="login.rememberMe"/> </label>
                             </div>
 
                             <div class="mt-3 d-flex justify-content-center">
@@ -90,15 +98,16 @@
                         </form>
 
                         <div class="d-flex align-items-center justify-content-center mt-4">
-                            <p class="mb-0 me-2"> <spring:message code="login.dontHave"/> </p>
+                            <p class="mb-0 me-2"><spring:message code="login.dontHave"/></p>
                             <a href="./register">
-                                <button type="button" class="btn login-register-button box"> <spring:message code="login.createNew"/> </button>
+                                <button type="button" class="btn login-register-button box"><spring:message
+                                        code="login.createNew"/></button>
                             </a>
                         </div>
 
                         <div class="d-flex align-items-center justify-content-center mt-4">
                             <a href="./forgot-password">
-                                <p class="mb-0 me-2 link-info"> <spring:message code="login.forgotPassword"/> </p>
+                                <p class="mb-0 me-2 link-info"><spring:message code="login.forgotPassword"/></p>
                             </a>
                         </div>
 
@@ -112,8 +121,8 @@
                                  style="width: 40px; height: 40px;">
                             <h3 class="mt-1 text-bg"><spring:message code="login.weAre"/></h3>
                         </div>
-                        <h4 class="mb-4"> <spring:message code="login.weAreMore.title"/> </h4>
-                        <p> <spring:message code="login.weAreMore.subtitle"/> </p>
+                        <h4 class="mb-4"><spring:message code="login.weAreMore.title"/></h4>
+                        <p><spring:message code="login.weAreMore.subtitle"/></p>
                     </div>
                 </div>
             </div>

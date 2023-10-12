@@ -36,13 +36,15 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <!-- NAVBAR -->
+    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
 
-<!-- BOTTOM-NAVBAR -->
-<spring:message code="search.title" var="title"/>
-<fragment:bottom-navbar title="./search:${title}">
-</fragment:bottom-navbar>
+    <!-- BOTTOM-NAVBAR -->
+    <spring:message code="search.title" var="title"/>
+    <fragment:bottom-navbar title="./search:${title}">
+    </fragment:bottom-navbar>
+</header>
 
 
 <!-- SEARCH -->
@@ -528,7 +530,8 @@
                                         </c:if>
                                         <c:if test="${item.avgScore ne 0}">
                                             <strong><spring:message code="score"/></strong>:
-                                            <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
+                                            <fmt:formatNumber type="number" maxFractionDigits="1"
+                                                              value="${item.avgScore}"/>
                                         </c:if>
                                     </span>
                                     <input type="checkbox" class="select-checkbox d-none"/>

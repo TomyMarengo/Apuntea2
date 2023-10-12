@@ -26,8 +26,8 @@ import java.util.UUID;
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 
 @Controller
-@RequestMapping("/careers")
-public class SubjectController {
+@RequestMapping("/manage/careers")
+public class ManageCareersController {
 
     private final InstitutionService institutionService;
     private final CareerService careerService;
@@ -35,7 +35,7 @@ public class SubjectController {
     private final SecurityService securityService;
 
     @Autowired
-    public SubjectController(final InstitutionService institutionService, final CareerService careerService, final SubjectService subjectService, SecurityService securityService) {
+    public ManageCareersController(final InstitutionService institutionService, final CareerService careerService, final SubjectService subjectService, SecurityService securityService) {
         this.securityService = securityService;
         this.institutionService = institutionService;
         this.subjectService = subjectService;
@@ -43,16 +43,16 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView selectCareer(){
-        final ModelAndView mav = new ModelAndView("manageCareer");
+    public ModelAndView manageCareers (){
+        final ModelAndView mav = new ModelAndView("manage-careers");
         InstitutionData institutionData = institutionService.getInstitutionData();
         mav.addObject("institutionData", toSafeJson(institutionData));
         return mav;
     }
 
-    @RequestMapping(value = "/{careerId}", method = RequestMethod.GET)
-    public ModelAndView manageCareer(@PathVariable("careerId") @ValidUuid UUID careerId, final ModelMap model){
-        final ModelAndView mav = new ModelAndView("manageCareer");
+    @RequestMapping(value = "{careerId}", method = RequestMethod.GET)
+    public ModelAndView listCareer(@PathVariable("careerId") @ValidUuid UUID careerId, final ModelMap model){
+        final ModelAndView mav = new ModelAndView("manage-careers");
 
         addFormOrGetWithErrors(mav, model, LINK_SUBJECT_FORM_BINDING, "errorsLinkSubjectForm", "linkSubjectForm", LinkSubjectForm.class);
         addFormOrGetWithErrors(mav, model, UNLINK_SUBJECT_FORM_BINDING, "errorsUnlinkSubjectForm", "unlinkSubjectForm", UnlinkSubjectForm.class);
@@ -135,9 +135,6 @@ public class SubjectController {
         subjectService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
         return mav;
     }
-
-
-
 
     @ModelAttribute("user")
     public User getCurrentUser() {

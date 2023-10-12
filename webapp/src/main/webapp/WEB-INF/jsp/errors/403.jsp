@@ -31,7 +31,7 @@
 
 <body>
 
-<fragment:navbar loggedin="${user != null}"/>
+<fragment:navbar loggedIn="${user != null}"/>
 
 <main>
     <div class="container h-100">

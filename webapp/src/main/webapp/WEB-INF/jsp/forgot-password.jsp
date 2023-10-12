@@ -33,11 +33,14 @@
 
 <body>
 
-<!-- NAVBAR -->
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <!-- NAVBAR -->
+    <fragment:navbar loggedIn="${false}" isAdmin="${false}"/>
 
-<c:url var="forgotUrl" value="/forgot-password"/>
-<spring:message var="logotype" code="logotype"/>
+    <c:url var="forgotUrl" value="/forgot-password"/>
+    <spring:message var="logotype" code="logotype"/>
+
+</header>
 
 
 <section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
@@ -50,30 +53,33 @@
                         <form:form modelAttribute="forgotPasswordForm" action="${forgotUrl}" method="post">
                             <h3><spring:message code="forgotPassword.title"/></h3>
 
-                                <div>
-                                    <spring:message var="emailPlaceholder" code="forgotPassword.email"/>
-                                    <label for="email"></label>
-                                    <p class="text-sm text-muted mb-2"><spring:message code="forgotPassword.subtitle"/></p>
-                                    <form:input path="email" type="email" class="form-control bg-bg mb-2" id="email"
-                                                placeholder="${emailPlaceholder}" required="required" autofocus="autofocus"/>
-                                    <form:errors path="email" cssClass="text-danger" element="p"/>
+                            <div>
+                                <spring:message var="emailPlaceholder" code="forgotPassword.email"/>
+                                <label for="email"></label>
+                                <p class="text-sm text-muted mb-2"><spring:message code="forgotPassword.subtitle"/></p>
+                                <form:input path="email" type="email" class="form-control bg-bg mb-2" id="email"
+                                            placeholder="${emailPlaceholder}" required="required"
+                                            autofocus="autofocus"/>
+                                <form:errors path="email" cssClass="text-danger" element="p"/>
+                            </div>
+                            <div class="d-flex flex-row mt-4 justify-content-end">
+                                <div class="d-flex align-items-center justify-content-center"
+                                     style="margin-right: 1em;">
+                                    <a href="./login">
+                                        <button type="button" class="btn login-register-button box"><spring:message
+                                                code="cancel"/></button>
+                                    </a>
                                 </div>
-                                <div class="d-flex flex-row mt-4 justify-content-end">
-                                    <div class="d-flex align-items-center justify-content-center" style="margin-right: 1em;">
-                                        <a href="./login">
-                                            <button type="button" class="btn login-register-button box"><spring:message
-                                                    code="cancel"/></button>
-                                        </a>
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <spring:message var="forgotPassword" code="forgotPassword.title"/>
-                                        <input class="btn rounded-box button-primary" type="submit" value="${forgotPassword}">
-                                    </div>
+                                <div class="d-flex justify-content-center">
+                                    <spring:message var="forgotPassword" code="forgotPassword.title"/>
+                                    <input class="btn rounded-box button-primary" type="submit"
+                                           value="${forgotPassword}">
                                 </div>
-<%--                            <div class="mb-4">--%>
-<%--                                <p class="text-sm text-muted mb-0"><spring:message code="forgotPassword.back"/> <a--%>
-<%--                                            href="<c:url value="/login"/>"><spring:message code="forgotPassword.login"/></a></p>--%>
-<%--                            </div>--%>
+                            </div>
+                            <%--                            <div class="mb-4">--%>
+                            <%--                                <p class="text-sm text-muted mb-0"><spring:message code="forgotPassword.back"/> <a--%>
+                            <%--                                            href="<c:url value="/login"/>"><spring:message code="forgotPassword.login"/></a></p>--%>
+                            <%--                            </div>--%>
                         </form:form>
                     </div>
                 </div>

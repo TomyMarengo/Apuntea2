@@ -1,0 +1,13 @@
+.sidebar {
+    position: fixed;
+    top: calc(var(--header-height));
+    left: 0;
+    height: 100%;
+    width: 50px;
+    background-color: var(--dark-bg);
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center ;
+    gap: 1rem;
+}

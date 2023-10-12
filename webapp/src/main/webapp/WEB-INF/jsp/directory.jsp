@@ -38,9 +38,11 @@
 </head>
 <body>
 
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
 
-<fragment:bottom-navbar title="./${directoryId}:${directory.name}" hierarchy="${hierarchy}" category="directory"/>
+    <fragment:bottom-navbar title="./${directoryId}:${directory.name}" hierarchy="${hierarchy}" category="directory"/>
+</header>
 
 <c:url var="createUrl" value="./${directoryId}"/>
 
@@ -454,7 +456,8 @@
                                             <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
 
                                             <div data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                 data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
+                                                 data-bs-title="<spring:message code="favorite"/>"
+                                                 data-bs-trigger="hover">
                                                 <form:form action="${item.favorite ? removeFavorite : addFavorite}"
                                                            method="post">
                                                     <input name="redirectUrl" value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}" type="hidden"/>
@@ -473,7 +476,8 @@
 
                                             <c:if test="${user ne null and (item.user.userId eq user.userId or user.isAdmin) }">
                                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
-                                                   data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                                                   data-bs-title="<spring:message code="edit"/>"
+                                                   data-bs-trigger="hover">
                                                     <button class="btn button-expansion rounded-circle edit-button"
                                                             data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
                                                             id="<c:out value="${item.id}.e2"/>">
@@ -484,7 +488,8 @@
                                                 </a>
 
                                                 <div data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                     data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
+                                                     data-bs-title="<spring:message code="delete"/>"
+                                                     data-bs-trigger="hover">
                                                     <button class="btn nav-icon-button delete-button"
                                                             data-bs-toggle="modal" data-bs-target="#deleteManyModal"
                                                             id="<c:out value="${item.id}"/>.e2">
@@ -561,7 +566,8 @@
                                         <div class="d-flex">
                                             <c:if test="${user ne null and (item.user.userId eq user.userId)}">
                                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
-                                                   data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
+                                                   data-bs-title="<spring:message code="edit"/>"
+                                                   data-bs-trigger="hover">
                                                     <button class="btn button-expansion rounded-circle edit-button"
                                                             data-bs-toggle="modal" data-bs-target="#editNoteModal"
                                                             id="<c:out value="${item.id}.e2"/>">
@@ -608,7 +614,8 @@
                                         </c:if>
                                         <c:if test="${item.avgScore ne 0}">
                                             <strong><spring:message code="score"/></strong>:
-                                            <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
+                                            <fmt:formatNumber type="number" maxFractionDigits="1"
+                                                              value="${item.avgScore}"/>
                                         </c:if>
                                     </span>
                                     <input type="checkbox" class="select-checkbox d-none"/>
@@ -1064,7 +1071,8 @@
                     <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
                     <c:if test="${user ne null and user.isAdmin}">
                         <label for="reason"></label>
-                        <textarea name="reason" class="form-control mt-3" id="reason" placeholder="${deleteMessagePlaceholder}"></textarea>
+                        <textarea name="reason" class="form-control mt-3" id="reason"
+                                  placeholder="${deleteMessagePlaceholder}"></textarea>
                     </c:if>
                 </div>
 

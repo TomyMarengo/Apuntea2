@@ -33,15 +33,17 @@
 
 <body>
 
-<!-- NAVBAR -->
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <!-- NAVBAR -->
+    <fragment:navbar loggedIn="${false}" isAdmin="${false}"/>
 
-<c:url var="challengeUrl" value="/challenge"/>
-<spring:message var="logotype" code="logotype"/>
+    <c:url var="challengeUrl" value="/challenge"/>
+    <spring:message var="logotype" code="logotype"/>
+
+</header>
 
 
 <section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
-
     <div class="row">
         <div class="card box">
             <div class="row">
@@ -50,7 +52,8 @@
                         <form:form modelAttribute="challengeForm" action="${challengeUrl}" method="post">
                             <div class="mb-2">
                                 <h3 class="mb-2"><spring:message code="forgotPassword.title"/></h3>
-                                <p class="text-sm text-muted mb-0"><spring:message code="forgotPassword.challenge.title"/></p>
+                                <p class="text-sm text-muted mb-0"><spring:message
+                                        code="forgotPassword.challenge.title"/></p>
                             </div>
 
                             <div class="">
@@ -69,9 +72,12 @@
                                 <spring:message var="passwordPlaceholder" code="forgotPassword.newPassword"/>
                                 <form:input path="newPassword" type="password" id="password" class="form-control bg-bg"
                                             placeholder="${passwordPlaceholder}" required="required"/>
-                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
-                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye" class="icon-xs fill-dark-primary"/>
-                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye" class="d-none icon-xs fill-dark-primary"/>
+                                <span class="input-group-text input-group-icon clickable"
+                                      onclick="password_show_hide();">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
+                                         class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
+                                         class="d-none icon-xs fill-dark-primary"/>
                                 </span>
                             </div>
                             <form:errors path="newPassword" cssClass="text-danger" element="p"/>

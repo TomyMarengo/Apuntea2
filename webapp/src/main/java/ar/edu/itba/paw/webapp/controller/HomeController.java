@@ -33,13 +33,9 @@ public class HomeController {
 
     @RequestMapping(value = "/")
     public ModelAndView index(@ModelAttribute("searchForm") final SearchForm searchForm) {
-//        Optional<User> user = securityService.getCurrentUser();
-//        return user.map(value -> new ModelAndView("redirect:search?institutionId=" + value.getInstitution().getInstitutionId() + "&careerId=" + value.getCareer().getCareerId()))
-//                .orElseGet(() -> new ModelAndView("redirect:search"));
 
         ModelAndView mav = new ModelAndView("index");
-
-        securityService.getCurrentUserEmail().ifPresent(email -> mav.addObject("username", email));
+        mav.addObject("user", this.securityService.getCurrentUser().orElse(null));
         return mav;
     }
 
@@ -72,7 +68,7 @@ public class HomeController {
 
     @RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
     public ModelAndView forgotPassword(@ModelAttribute("forgotPasswordForm") final ForgotPasswordForm forgotPasswordForm) {
-        return new ModelAndView("forgotpassword");
+        return new ModelAndView("forgot-password");
     }
 
     @RequestMapping(value = "/forgot-password", method = RequestMethod.POST)

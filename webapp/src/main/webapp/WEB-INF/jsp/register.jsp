@@ -33,11 +33,13 @@
 
 <body>
 
-<!-- NAVBAR -->
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <!-- NAVBAR -->
+    <fragment:navbar loggedIn="${false}" isAdmin="${false}"/>
 
-<c:url var="registerUrl" value="/register"/>
-<spring:message var="logotype" code="logotype"/>
+    <c:url var="registerUrl" value="/register"/>
+    <spring:message var="logotype" code="logotype"/>
+</header>
 
 
 <section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
@@ -64,23 +66,25 @@
                                 <spring:message var="registerPassword" code="password"/>
                                 <form:input path="password" type="password" id="password" class="form-control bg-bg"
                                             placeholder="${registerPassword}"/>
-                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
-                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye" class="icon-xs fill-dark-primary"/>
-                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye" class="d-none icon-xs fill-dark-primary"/>
+                                <span class="input-group-text input-group-icon clickable"
+                                      onclick="password_show_hide();">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
+                                         class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
+                                         class="d-none icon-xs fill-dark-primary"/>
                                 </span>
                             </div>
                             <form:errors path="password" cssClass="text-danger" element="p"/>
 
 
-
-<%--                            <div class="">--%>
-<%--                                <spring:message var="registerRepeatPassword" code="repeatPassword"/>--%>
-<%--                                <label for="password"></label>--%>
-<%--                                <form:input path="repeatPassword" type="password" id="password"--%>
-<%--                                            class="form-control bg-bg"--%>
-<%--                                            placeholder="${registerRepeatPassword}"/>--%>
-<%--                                <form:errors path="repeatPassword" cssClass="text-danger" element="p"/>--%>
-<%--                            </div>--%>
+                            <%--                            <div class="">--%>
+                            <%--                                <spring:message var="registerRepeatPassword" code="repeatPassword"/>--%>
+                            <%--                                <label for="password"></label>--%>
+                            <%--                                <form:input path="repeatPassword" type="password" id="password"--%>
+                            <%--                                            class="form-control bg-bg"--%>
+                            <%--                                            placeholder="${registerRepeatPassword}"/>--%>
+                            <%--                                <form:errors path="repeatPassword" cssClass="text-danger" element="p"/>--%>
+                            <%--                            </div>--%>
 
                             <div class="">
                                 <label for="institutionSelect"></label>
@@ -92,12 +96,15 @@
 
                                 <div class="input-group">
                                     <div class="autocomplete ">
-                                        <spring:message code="search.institution.placeholder" var="placeholderInstitution"/>
-                                        <input type="text" id="institutionAutocomplete" class="form-control bg-bg special-radius"
+                                        <spring:message code="search.institution.placeholder"
+                                                        var="placeholderInstitution"/>
+                                        <input type="text" id="institutionAutocomplete"
+                                               class="form-control bg-bg special-radius"
                                                placeholder="${placeholderInstitution}" autocomplete="off"/>
 
                                     </div>
-                                    <span class="input-group-text input-group-icon clickable" id="eraseInstitutionButton">
+                                    <span class="input-group-text input-group-icon clickable"
+                                          id="eraseInstitutionButton">
                                         <img src="<c:url value="/svg/cross.svg"/>"
                                              alt="<spring:message code="search.sort.image"/>"
                                              class="icon-xs fill-dark-primary"/>
@@ -119,7 +126,8 @@
                                 <div class="input-group">
                                     <div class="autocomplete">
                                         <spring:message code="search.career.placeholder" var="placeholderCareer"/>
-                                        <input type="text" id="careerAutocomplete" class="form-control bg-bg special-radius"
+                                        <input type="text" id="careerAutocomplete"
+                                               class="form-control bg-bg special-radius"
                                                placeholder="${placeholderCareer}" autocomplete="off"/>
                                     </div>
                                     <span class="input-group-text input-group-icon clickable" id="eraseCareerButton">
@@ -170,7 +178,7 @@
 
 <script>
     //TODO c:out institution data
-    var { institutions, careers, subjects, careerMap, subjectMap } = JSON.parse('${institutionData}');
+    var {institutions, careers, subjects, careerMap, subjectMap} = JSON.parse('${institutionData}');
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"

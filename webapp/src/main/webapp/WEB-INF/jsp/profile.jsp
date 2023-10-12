@@ -35,12 +35,14 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <!-- NAVBAR -->
+    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
 
-<!-- BOTTOM-NAVBAR -->
-<spring:message code="profile.title" var="title"/>
-<fragment:bottom-navbar title="./profile:${title}"/>
+    <!-- BOTTOM-NAVBAR -->
+    <spring:message code="profile.title" var="title"/>
+    <fragment:bottom-navbar title="./profile:${title}"/>
+</header>
 
 
 <!-- USER INFO & BUTTONS "VER" -->
@@ -54,9 +56,10 @@
                     <div class="d-none d-lg-flex flex-column">
                         <div class="profile-picture-small mb-3">
                             <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
-                                <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>" alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
+                                <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>"
+                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
                             </div>
-                       </div>
+                        </div>
 
                         <!-- User info -->
                         <div class="d-flex flex-column gap-2">
@@ -64,13 +67,13 @@
                             <c:forEach items="${user.roles}" var="r">
                                 <span class="card-text">
                                 <c:choose>
-                                    <c:when test = "${r eq 'ROLE_STUDENT'}">
-                                            <spring:message code="profile.role.student"/>
+                                    <c:when test="${r eq 'ROLE_STUDENT'}">
+                                        <spring:message code="profile.role.student"/>
                                     </c:when>
-                                    <c:when test = "${r eq 'ROLE_MODERATOR'}">
+                                    <c:when test="${r eq 'ROLE_MODERATOR'}">
                                         <spring:message code="profile.role.moderator"/>
                                     </c:when>
-                                    <c:when test = "${r eq 'ROLE_ADMIN'}">
+                                    <c:when test="${r eq 'ROLE_ADMIN'}">
                                         <spring:message code="profile.role.admin"/>
                                     </c:when>
                                 </c:choose>
@@ -84,7 +87,8 @@
                     <div class="d-flex d-lg-none justify-content-around align-items-center flex-wrap ">
                         <div class="mb-3 mb-md-0">
                             <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
-                                <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>" alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
+                                <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>"
+                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
                             </div>
                         </div>
 
@@ -94,13 +98,13 @@
                             <c:forEach items="${user.roles}" var="r">
                                 <span class="card-text">
                                 <c:choose>
-                                    <c:when test = "${r eq 'ROLE_STUDENT'}">
+                                    <c:when test="${r eq 'ROLE_STUDENT'}">
                                         <spring:message code="profile.role.student"/>
                                     </c:when>
-                                    <c:when test = "${r eq 'ROLE_MODERATOR'}">
+                                    <c:when test="${r eq 'ROLE_MODERATOR'}">
                                         <spring:message code="profile.role.moderator"/>
                                     </c:when>
-                                    <c:when test = "${r eq 'ROLE_ADMIN'}">
+                                    <c:when test="${r eq 'ROLE_ADMIN'}">
                                         <spring:message code="profile.role.admin"/>
                                     </c:when>
                                 </c:choose>
@@ -123,7 +127,8 @@
                         <a class="w-100" href="<c:url value="./directory/${rd.id}"/>">
                             <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
                                 <!-- TODO: REVISAR COLOR RD -->
-                                <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>" class="icon-xxl fill-${rd.iconColor}">
+                                <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>"
+                                     class="icon-xxl fill-${rd.iconColor}">
                                 <!-- max 2 lines-->
                                 <span class="fw-bold flex-wrap justify-content-center folder-name">
                                         <c:out value="${rd.name}"/>
@@ -135,12 +140,14 @@
             </c:if>
             <c:forEach items="${root_directories}" var="subjects">
                 <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
-                <h2 class="text-center mt-5 mt-lg-0 mb-3"><spring:message code="profile.directories.title" arguments="${ordinal}"/></h2>
+                <h2 class="text-center mt-5 mt-lg-0 mb-3"><spring:message code="profile.directories.title"
+                                                                          arguments="${ordinal}"/></h2>
                 <div class="card rounded-box file-list mb-5">
                     <c:forEach items="${subjects.value}" var="rd">
                         <a class="w-100" href="<c:url value="./directory/${rd.rootDirectoryId}"/>">
                             <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
-                                <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
+                                <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>"
+                                     class="icon-xxl fill-4986E7">
                                 <!-- max 2 lines-->
                                 <span class="fw-bold flex-wrap justify-content-center folder-name">
                                     <c:out value="${rd.name}"/>

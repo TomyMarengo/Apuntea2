@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.models.InstitutionData;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.services.DirectoryService;
@@ -8,6 +9,7 @@ import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.forms.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.forms.EditUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
+import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

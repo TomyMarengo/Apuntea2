@@ -44,6 +44,6 @@ rows.forEach((row) => {
 extendedOnCompletion = (autocompleting) => {
     let careerId = document.getElementById('careerId').value;
     if (autocompleting && careerId != null && careerId !== "") {
-        window.location.href = `${baseUrl}/careers/${careerId}`;
+        window.location.href = `${baseUrl}/manage/careers/${careerId}`;
     }
 }

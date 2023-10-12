@@ -34,15 +34,18 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <!-- NAVBAR -->
+    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
+</header>
 
 <!-- "¿SABÍAS QUÉ?" SECTION -->
 <div class="container mt-5 mw-500">
     <div class="card bg-transparent border-0">
         <div class="card-body">
-            <c:if test="${username != null}">
-                <h3 class="card-title fw-bold"><spring:message code="index.dyk.greetings" arguments="${username}"/></h3>
+            <c:if test="${user != null}">
+                <h3 class="card-title fw-bold"><spring:message code="index.dyk.greetings"
+                                                               arguments="${user.email}"/></h3>
             </c:if>
             <h5 class="card-title fw-bold"><spring:message code="index.dyk.title"/></h5>
             <div class="d-flex align-items-center mb-3">
@@ -55,10 +58,11 @@
                        method="get"
                        class="d-flex align-items-center mb-3"
                        id="searchWordForm">
-                <spring:message code="index.search.placeholder" var="placeholderSearch" />
+                <spring:message code="index.search.placeholder" var="placeholderSearch"/>
                 <form:input path="word" type="text" class="form-control custom-input me-2 rounded-box bg-bg"
                             placeholder='${placeholderSearch}'/>
-                <input type="submit" class="btn rounded-box button-white" value="<spring:message code="index.search.button"/>"/>
+                <input type="submit" class="btn rounded-box button-white"
+                       value="<spring:message code="index.search.button"/>"/>
                 <form:errors path="word" cssClass="text-danger" element="p"/>
             </form:form>
         </div>

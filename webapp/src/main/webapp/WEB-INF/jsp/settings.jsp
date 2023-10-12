@@ -33,12 +33,14 @@
 
 <body>
 
-<!-- NAVBAR -->
-<fragment:navbar loggedin="${user != null}"/>
+<header>
+    <!-- NAVBAR -->
+    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
 
-<!-- BOTTOM-NAVBAR -->
-<spring:message code="settings.title" var="title"/>
-<fragment:bottom-navbar title="./settings:${title}"/>
+    <!-- BOTTOM-NAVBAR -->
+    <spring:message code="settings.title" var="title"/>
+    <fragment:bottom-navbar title="./settings:${title}"/>
+</header>
 
 
 <!-- CONFIGURATION -->
@@ -133,130 +135,139 @@
     <%--                        </div>--%>
     <%--                    </div>--%>
     <%--                </div>--%>
-        <div class="container mt-5">
-            <ul class="nav nav-tabs">
-                <li class="nav-item flex-fill">
-                    <a class="nav-link ${errorsChangePasswordForm == null ? 'active' : '' } text-center" data-toggle="tab"
-                       href="#" role="tab" aria-selected="true" id="personalDataTab"><spring:message code="settings.account.personalData"/></a>
-                </li>
-                <li class="nav-item flex-fill">
-                    <a class="nav-link ${errorsChangePasswordForm != null ? 'active' : '' }  text-center" data-toggle="tab" href="#" role="tab" aria-selected="false" id="changePasswordTab">
-                        <spring:message code="settings.account.changePassword"/></a>
-                </li>
+    <div class="container mt-5">
+        <ul class="nav nav-tabs">
+            <li class="nav-item flex-fill">
+                <a class="nav-link ${errorsChangePasswordForm == null ? 'active' : '' } text-center" data-toggle="tab"
+                   href="#" role="tab" aria-selected="true" id="personalDataTab"><spring:message
+                        code="settings.account.personalData"/></a>
+            </li>
+            <li class="nav-item flex-fill">
+                <a class="nav-link ${errorsChangePasswordForm != null ? 'active' : '' }  text-center" data-toggle="tab"
+                   href="#" role="tab" aria-selected="false" id="changePasswordTab">
+                    <spring:message code="settings.account.changePassword"/></a>
+            </li>
 
-            </ul>
+        </ul>
 
-            <c:url var="editUserUrl" value="/settings"/>
-            <c:url var="userProfilePicture" value="${baseUrl}/${user.userId}/profile/picture"/>
-            <c:url var="changePasswordUrl" value="/change-password"/>
-            <div class="tab-content">
-                <div class="tab-pane fade ${errorsChangePasswordForm == null ? 'show active' : '' }" id="dataTab" role="tab-panel">
-                    <div class="container my-3">
-                        <form:form modelAttribute="editUserForm"
-                                   action="${editUserUrl}"
-                                   method="post"
-                                   enctype="multipart/form-data"
-                                   class="d-flex flex-column"
-                                   id="editUserForm">
+        <c:url var="editUserUrl" value="/settings"/>
+        <c:url var="userProfilePicture" value="${baseUrl}/${user.userId}/profile/picture"/>
+        <c:url var="changePasswordUrl" value="/change-password"/>
+        <div class="tab-content">
+            <div class="tab-pane fade ${errorsChangePasswordForm == null ? 'show active' : '' }" id="dataTab"
+                 role="tab-panel">
+                <div class="container my-3">
+                    <form:form modelAttribute="editUserForm"
+                               action="${editUserUrl}"
+                               method="post"
+                               enctype="multipart/form-data"
+                               class="d-flex flex-column"
+                               id="editUserForm">
 
-                            <label for="profile-picture" class="selected-image">
-                                <img src="${userProfilePicture}" alt="Profile Picture" id="preview-image">
-                                <span><img src="<c:url value="/svg/pencil.svg"/>" class="hidden-pencil" alt="${edit}"></span>
+                        <label for="profile-picture" class="selected-image">
+                            <img src="${userProfilePicture}" alt="Profile Picture" id="preview-image">
+                            <span><img src="<c:url value="/svg/pencil.svg"/>" class="hidden-pencil"
+                                       alt="${edit}"></span>
 
-                            </label>
-                            <input type="file" name="profilePicture" style="display: none" id="profile-picture" accept="image/*" onchange="previewImage(event)">
+                        </label>
+                        <input type="file" name="profilePicture" style="display: none" id="profile-picture"
+                               accept="image/*" onchange="previewImage(event)">
 
-                            <div>
-                                <spring:message var="settingsFirstName" code="name"/>
-                                <label for="firstName"></label>
-                                <p><strong><spring:message code="name"/></strong></p>
-                                <form:input type="text" name="firstName" id="firstName" class="form-control bg-bg"
-                                            placeholder="${settingsFirstName}" path="firstName" value="${user.firstName}"/>
-                                <form:errors path="firstName" cssClass="text-danger" element="p"/>
-                            </div>
+                        <div>
+                            <spring:message var="settingsFirstName" code="name"/>
+                            <label for="firstName"></label>
+                            <p><strong><spring:message code="name"/></strong></p>
+                            <form:input type="text" name="firstName" id="firstName" class="form-control bg-bg"
+                                        placeholder="${settingsFirstName}" path="firstName" value="${user.firstName}"/>
+                            <form:errors path="firstName" cssClass="text-danger" element="p"/>
+                        </div>
 
-                            <div>
-                                <spring:message var="settingsLastName" code="lastName"/>
-                                <label for="lastName"></label>
-                                <p><strong><spring:message code="lastName"/></strong></p>
-                                <form:input type="text" name="lastName" id="lastName" class="form-control bg-bg"
-                                       placeholder="${settingsLastName}" path="lastName" value="${user.lastName}"/>
-                                <form:errors path="lastName" cssClass="text-danger" element="p"/>
-                            </div>
+                        <div>
+                            <spring:message var="settingsLastName" code="lastName"/>
+                            <label for="lastName"></label>
+                            <p><strong><spring:message code="lastName"/></strong></p>
+                            <form:input type="text" name="lastName" id="lastName" class="form-control bg-bg"
+                                        placeholder="${settingsLastName}" path="lastName" value="${user.lastName}"/>
+                            <form:errors path="lastName" cssClass="text-danger" element="p"/>
+                        </div>
 
-                            <div>
-                                <spring:message var="settingsUsername" code="username"/>
-                                <label for="username"></label>
-                                <p><strong><spring:message code="username"/></strong></p>
-                                <form:input type="text" name="username" id="username" class="form-control bg-bg"
-                                       placeholder="${settingsUsername}" path="username" value="${user.username}"/>
-                                <form:errors path="username" cssClass="text-danger" element="p"/>
-                            </div>
+                        <div>
+                            <spring:message var="settingsUsername" code="username"/>
+                            <label for="username"></label>
+                            <p><strong><spring:message code="username"/></strong></p>
+                            <form:input type="text" name="username" id="username" class="form-control bg-bg"
+                                        placeholder="${settingsUsername}" path="username" value="${user.username}"/>
+                            <form:errors path="username" cssClass="text-danger" element="p"/>
+                        </div>
 
-                            <div class="mt-5 d-flex justify-content-center">
-                                <spring:message var="update" code="update"/>
-                                <input class="btn rounded-box button-primary" type="submit" value="${update}">
-                            </div>
-                        </form:form>
-                    </div>
+                        <div class="mt-5 d-flex justify-content-center">
+                            <spring:message var="update" code="update"/>
+                            <input class="btn rounded-box button-primary" type="submit" value="${update}">
+                        </div>
+                    </form:form>
                 </div>
-                <div class="tab-pane fade ${errorsChangePasswordForm != null ? 'show active' : '' }" id="passwordTab" role="tab-panel">
-                    <div class="container my-3">
-                        <form:form action="${changePasswordUrl}"
-                                   method="post"
-                                   modelAttribute="changePasswordForm"
-                                   id="changePasswordForm"
+            </div>
+            <div class="tab-pane fade ${errorsChangePasswordForm != null ? 'show active' : '' }" id="passwordTab"
+                 role="tab-panel">
+                <div class="container my-3">
+                    <form:form action="${changePasswordUrl}"
+                               method="post"
+                               modelAttribute="changePasswordForm"
+                               id="changePasswordForm"
 
-                        >
-                            <label for="oldPassword"></label>
-                            <p><strong><spring:message code="settings.account.oldPassword"/></strong></p>
-                            <div class="input-group">
-                                <spring:message var="settingsOldPassword" code="settings.account.oldPassword"/>
-                                <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
-                                            placeholder="${settingsOldPassword}" path="oldPassword" value=""/>
-                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
-                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye" class="icon-xs fill-dark-primary"/>
-                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye" class="d-none icon-xs fill-dark-primary"/>
+                    >
+                        <label for="oldPassword"></label>
+                        <p><strong><spring:message code="settings.account.oldPassword"/></strong></p>
+                        <div class="input-group">
+                            <spring:message var="settingsOldPassword" code="settings.account.oldPassword"/>
+                            <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
+                                        placeholder="${settingsOldPassword}" path="oldPassword" value=""/>
+                            <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
+                                         class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
+                                         class="d-none icon-xs fill-dark-primary"/>
                                 </span>
-                            </div>
-                            <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
+                        </div>
+                        <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
 
-                            <label for="newPassword"></label>
-                            <p><strong><spring:message code="settings.account.newPassword"/></strong></p>
-                            <div class="input-group">
-                                <spring:message var="settingsNewPassword" code="settings.account.newPassword"/>
-                                <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
-                                            placeholder="${settingsNewPassword}" path="newPassword" value=""/>
-                                <span class="input-group-text input-group-icon clickable" onclick="password_show_hide('2');">
-                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2" class="icon-xs fill-dark-primary"/>
-                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2" class="d-none icon-xs fill-dark-primary"/>
+                        <label for="newPassword"></label>
+                        <p><strong><spring:message code="settings.account.newPassword"/></strong></p>
+                        <div class="input-group">
+                            <spring:message var="settingsNewPassword" code="settings.account.newPassword"/>
+                            <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
+                                        placeholder="${settingsNewPassword}" path="newPassword" value=""/>
+                            <span class="input-group-text input-group-icon clickable"
+                                  onclick="password_show_hide('2');">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"
+                                         class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2"
+                                         class="d-none icon-xs fill-dark-primary"/>
                                 </span>
-                            </div>
-                            <form:errors path="newPassword" cssClass="text-danger" element="p"/>
+                        </div>
+                        <form:errors path="newPassword" cssClass="text-danger" element="p"/>
 
-                            <div class="mt-5 d-flex justify-content-center">
-                                <spring:message var="update" code="update"/>
-                                <input class="btn rounded-box button-primary" type="submit" value="${update}">
-                            </div>
-                        </form:form>
-                    </div>
+                        <div class="mt-5 d-flex justify-content-center">
+                            <spring:message var="update" code="update"/>
+                            <input class="btn rounded-box button-primary" type="submit" value="${update}">
+                        </div>
+                    </form:form>
                 </div>
             </div>
         </div>
+    </div>
 
 
-
-
-        <!-- PROFILE AND ACCOUNT -->
-<%--    <div class="col col-3">--%>
-<%--        <div class="card box">--%>
-<%--            <div class="card-body d-flex flex-column gap-3">--%>
-<%--                <h5 class="card-title fw-bold"><spring:message code="settings.account.title"/></h5>--%>
-<%--                <a href="#" class="card-link"><spring:message code="settings.account.personalData"/></a>--%>
-<%--                <a href="#" class="card-link"><spring:message code="settings.account.changePassword"/></a>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-<%--    </div>--%>
+    <!-- PROFILE AND ACCOUNT -->
+    <%--    <div class="col col-3">--%>
+    <%--        <div class="card box">--%>
+    <%--            <div class="card-body d-flex flex-column gap-3">--%>
+    <%--                <h5 class="card-title fw-bold"><spring:message code="settings.account.title"/></h5>--%>
+    <%--                <a href="#" class="card-link"><spring:message code="settings.account.personalData"/></a>--%>
+    <%--                <a href="#" class="card-link"><spring:message code="settings.account.changePassword"/></a>--%>
+    <%--            </div>--%>
+    <%--        </div>--%>
+    <%--    </div>--%>
 </div>
 
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
