@@ -337,7 +337,7 @@
                                          data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
                                         <form:form action="${item.favorite ? removeFavorite : addFavorite}"
                                                    method="post">
-                                            <input name="parentId" value="${item.parentId}" type="hidden"/>
+                                            <input name="redirectUrl" value="/search?${requestScope['javax.servlet.forward.query_string']}" type="hidden"/>
                                             <button type="submit"
                                                     class="btn nav-icon-button favorite-button"
                                                     data-bs-toggle="tooltip"
@@ -430,7 +430,7 @@
                                                  data-bs-trigger="hover">
                                                 <form:form action="${item.favorite ? removeFavorite : addFavorite}"
                                                            method="post">
-                                                    <input name="parentId" value="${item.parentId}" type="hidden"/>
+                                                    <input name="redirectUrl" value="/search?${requestScope['javax.servlet.forward.query_string']}" type="hidden"/>
                                                     <button type="submit"
                                                             class="btn nav-icon-button favorite-button"
                                                             data-bs-toggle="tooltip"

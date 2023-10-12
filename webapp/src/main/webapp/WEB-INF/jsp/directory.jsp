@@ -328,7 +328,7 @@
                                          data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
                                         <form:form action="${item.favorite ? removeFavorite : addFavorite}"
                                                    method="post">
-                                            <input name="parentId" value="${item.parentId}" type="hidden"/>
+                                            <input name="redirectUrl" value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}" type="hidden"/>
                                             <button type="submit"
                                                     class="btn nav-icon-button favorite-button"
                                                     data-bs-toggle="tooltip"
@@ -457,7 +457,7 @@
                                                  data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
                                                 <form:form action="${item.favorite ? removeFavorite : addFavorite}"
                                                            method="post">
-                                                    <input name="parentId" value="${item.parentId}" type="hidden"/>
+                                                    <input name="redirectUrl" value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}" type="hidden"/>
                                                     <button type="submit"
                                                             class="btn nav-icon-button favorite-button"
                                                             data-bs-toggle="tooltip"
@@ -862,9 +862,9 @@
                             <form:errors path="color" cssClass="text-danger" element="p"/>
                         </div>
                     </div>
-
                     <input type="hidden" name="parentId" value="${directory.id}"/>
                     <input type="hidden" name="createDirectory" value="createDirectory"/>
+                    <input type="hidden" name="queryParams" value="${requestScope['javax.servlet.forward.query_string']}"/>
                 </div>
                 <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-primary"
@@ -956,7 +956,7 @@
                 </div>
                 <input type="hidden" id="noteId" name="id" value=""/>
                 <input type="hidden" name="parentId" value="${directory.id}"/>
-                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}?${requestScope['javax.servlet.forward.query_string']}"/>
             </form:form>
         </div>
     </div>
@@ -1038,7 +1038,7 @@
                 </div>
                 <input type="hidden" id="directoryId" name="id" value=""/>
                 <input type="hidden" name="parentId" value="${directory.id}"/>
-                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}?${requestScope['javax.servlet.forward.query_string']}"/>
             </form:form>
 
         </div>
@@ -1076,7 +1076,7 @@
                                                 code="delete"/>"/>
                 </div>
 
-                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}?${requestScope['javax.servlet.forward.query_string']}"/>
 
             </form:form>
         </div>

@@ -92,6 +92,7 @@ public class DirectoryController {
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createDirectory")
     public ModelAndView addDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                      @Valid @ModelAttribute final CreateDirectoryForm createDirectoryForm,
+                                     @RequestParam(required = false) String queryParams,
                                      final BindingResult result,
                                      final RedirectAttributes redirectAttributes)
     {
@@ -101,7 +102,7 @@ public class DirectoryController {
         }
 
         UUID childId = directoryService.create(createDirectoryForm.getName(), directoryId, createDirectoryForm.getVisible(), createDirectoryForm.getColor());
-        return new ModelAndView("redirect:/directory/" + directoryId);
+        return new ModelAndView("redirect:/directory/" + directoryId + "?" + queryParams);
     }
 
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createNote")
@@ -157,19 +158,21 @@ public class DirectoryController {
 
     @RequestMapping(value = "/{directoryId}/addfavorite", method = RequestMethod.POST)
     public ModelAndView addFavoriteDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
-                                          @RequestParam @ValidUuid UUID parentId) {
+                                          @RequestParam String redirectUrl) {
+        // TODO: Validate redirectUrl?
         directoryService.addFavorite(directoryId);
         // TODO: display a message saying that the directory was added to favorites
-        return new ModelAndView("redirect:/directory/" + parentId);
+        return new ModelAndView("redirect:" + redirectUrl);
     }
 
     @RequestMapping(value = "/{directoryId}/removefavorite", method = RequestMethod.POST)
     public ModelAndView removeFavoriteDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
-                                          @RequestParam @ValidUuid UUID parentId) {
+                                          @RequestParam String redirectUrl) {
+        // TODO: Validate redirectUrl?
         directoryService.removeFavorite(directoryId);
         // TODO: display a message saying that the directory was removed from favorites
         // If removeFavorite returns something different than 1, handle the error
-        return new ModelAndView("redirect:/directory/" + parentId);
+        return new ModelAndView("redirect:" + redirectUrl);
     }
 
     @ModelAttribute("user")
