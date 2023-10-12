@@ -121,7 +121,7 @@
         </div>
 
 
-        <div class="col-12 col-lg-7 col-xl-8">
+        <div class="col-12 col-lg-7 col-xl-8 mb-5">
             <c:if test="${not empty favorites}">
                 <h2 class="text-center mb-3"><spring:message code="profile.directories.favorites"/></h2>
                 <div class="card box file-list mb-5">
@@ -141,7 +141,9 @@
                 </div>
             </c:if>
 
-            <div class="mt-5">
+        
+
+            <div>
                 <ul class="nav nav-tabs">
                     <c:forEach items="${root_directories}" var="subjects">
                         <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
