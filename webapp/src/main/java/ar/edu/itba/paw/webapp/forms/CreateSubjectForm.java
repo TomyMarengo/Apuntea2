@@ -13,7 +13,7 @@ public class CreateSubjectForm {
     private int year;
 
     @NotBlank
-    @Pattern(regexp = "^[a-zA-Z0-9 _-]+$")
+    @Pattern(regexp = "^(?!([ ,\\-_]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ \\-_,]+$")
     private String name;
 
     public int getYear() {

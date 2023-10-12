@@ -12,23 +12,31 @@ import java.util.UUID;
 public class SearchForm {
     @ValidUuid
     private UUID institutionId;
+
     @ValidUuid
     private UUID careerId;
+
     @ValidUuid
     private UUID subjectId;
+
     @Pattern(regexp = "directory|theory|practice|exam|other|")
     private String category = "";
+
     @Pattern(regexp = "score|name|date")
     private String sortBy = "score";
+
     @NotNull
     private Boolean ascending = false;
+
     @NotNull
     @Min(1)
     private Integer pageNumber = 1;
+
     @NotNull
     @Range(min = 12, max = 36)
     private Integer pageSize = 12;
-    @Pattern(regexp = "[a-zA-Z0-9 ]*")
+
+//    @Pattern(regexp = "[a-zA-Z0-9 áéíóúÁÉÍÓÚñÑüÜ]*")
     @Size(max = 50)
     private String word;
 

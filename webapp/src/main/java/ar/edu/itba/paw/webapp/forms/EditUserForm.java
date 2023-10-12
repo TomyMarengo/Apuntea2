@@ -10,11 +10,12 @@ import javax.validation.constraints.Size;
 
 public class EditUserForm {
 
-    @Pattern(regexp = "([a-zA-Z]+[ ]?)*")
+
+    @Pattern(regexp = "([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*")
     @Size(max = 20)
     private String firstName;
 
-    @Pattern(regexp = "([a-zA-Z]+[ ]?)*")
+    @Pattern(regexp = "([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*")
     @Size(max = 20)
     private String lastName;
 

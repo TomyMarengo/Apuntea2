@@ -13,7 +13,7 @@ import java.util.UUID;
 public abstract class EditSearchableForm {
     @NotEmpty
     @Size(min = 2, max = 50)
-    @Pattern(regexp = "^[a-zA-Z0-9 -]+$")
+    @Pattern(regexp = "^(?! *$)(?!,*$)(?!_*$)(?!-*$)[a-zA-Z0-9 -_,áéíóúÁÉÍÓÚñÑüÜ]+$")
     private String name;
 
     @ValidUuid

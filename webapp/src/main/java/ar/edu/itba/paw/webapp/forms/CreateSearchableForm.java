@@ -12,12 +12,11 @@ import java.util.UUID;
 public abstract class CreateSearchableForm {
     @NotEmpty
     @Size(min = 2, max = 50)
-    @Pattern(regexp = "^[a-zA-Z0-9 -]+$")
+    @Pattern(regexp = "^(?!([ \\-]+)$)[a-zA-Z0-9 -áéíóúÁÉÍÓÚñÑüÜ]+$")
     private String name;
 
     @ValidUuid
     private UUID parentId;
-
     public String getName() {
         return name;
     }

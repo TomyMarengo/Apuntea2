@@ -209,7 +209,7 @@
                                 <option disabled selected value></option>
                             </select>
                             <form:input path="subjectId" id="linkSubjectId" style="display: none;"/>
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <div class="autocomplete">
                                     <spring:message code="search.subject.placeholder" var="placeholderSubject"/>
                                     <input type="text" id="linkSubjectAutocomplete" class="form-control special-radius"
@@ -282,7 +282,7 @@
                                         code="year"/></label>
                                 <spring:message code="search.year" var="placeholderYear"/>
                                 <form:input path="year" type="number" min="1" max="10" required="true"
-                                            class="form-control" id="createYear"/>
+                                            class="form-control" id="createYear" value="1"/>
                             </div>
                             <form:errors path="year" cssClass="text-danger" element="p"/>
                         </div>
