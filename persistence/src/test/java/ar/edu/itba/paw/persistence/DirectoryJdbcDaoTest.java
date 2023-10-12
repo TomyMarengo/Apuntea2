@@ -191,4 +191,42 @@ public class DirectoryJdbcDaoTest {
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId2 + "'"));
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId3 + "'"));
     }
+
+    @Test
+    public void testDeleteRootDirectorySuccess() {
+        UUID rootDirectoryId = insertDirectory(namedParameterJdbcTemplate, "root", null, null);
+        UUID root2DirectoryId = insertDirectory(namedParameterJdbcTemplate, "root2", null, null);
+        int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + rootDirectoryId + "'");
+        boolean success = directoryDao.deleteRootDirectory(rootDirectoryId);
+        assertTrue(success);
+        assertEquals(1, countInserted);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + rootDirectoryId + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + root2DirectoryId + "'"));
+    }
+
+    @Test
+    public void testDeleteRootDirectoryNonRoot() {
+        UUID rootDirectoryId = insertDirectory(namedParameterJdbcTemplate, "root", null, null);
+        UUID root2DirectoryId = insertDirectory(namedParameterJdbcTemplate, "root2", null, null);
+        UUID ruthId = insertStudent(namedParameterJdbcTemplate, "ruthy@itba.edu.ar", "7777777", ING_INF, "es");
+        UUID ruthDirectoryId = insertDirectory(namedParameterJdbcTemplate, "Apuntes ruthy", ruthId, rootDirectoryId);
+        int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + ruthDirectoryId + "'");
+
+        boolean success = directoryDao.deleteRootDirectory(ruthDirectoryId);
+
+        assertFalse(success);
+        assertEquals(1, countInserted);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + rootDirectoryId + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + root2DirectoryId + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + ruthDirectoryId + "'"));
+    }
+
+    @Test
+    public void testDeleteRootDirectoryNonExistent() {
+        UUID rootDirectoryId = UUID.randomUUID();
+        boolean success = directoryDao.deleteRootDirectory(rootDirectoryId);
+        assertFalse(success);
+    }
+
+
 }

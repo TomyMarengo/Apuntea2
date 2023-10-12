@@ -351,4 +351,22 @@ public class SubjectJdbcDaoTest {
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'"));
     }
 
+
+    @Test
+    public void testDelete() {
+        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject", dirId);
+        UUID subject2Id = insertSubject(namedParameterJdbcTemplate, "subject2", dirId);
+        boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'") == 1;
+        boolean inserted2 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject2Id + "'") == 1;
+
+        boolean result = subjectDao.delete(subjectId);
+
+        assertTrue(result);
+        assertTrue(inserted);
+        assertTrue(inserted2);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject2Id + "'"));
+    }
+
 }

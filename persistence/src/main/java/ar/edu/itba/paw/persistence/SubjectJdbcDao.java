@@ -105,6 +105,13 @@ public class SubjectJdbcDao implements SubjectDao {
         return (UUID) holder.getKeys().get(SUBJECT_ID);
     }
 
+    @Override
+    public boolean delete(UUID subjectId) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(SUBJECT_ID, subjectId);
+        return namedParameterJdbcTemplate.update("DELETE FROM Subjects WHERE subject_id = :subject_id", args) == 1;
+    }
+
     @Transactional
     @Override
     public boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {

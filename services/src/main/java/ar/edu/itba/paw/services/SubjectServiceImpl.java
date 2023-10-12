@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Subject;
 import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.exceptions.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.InvalidSubjectException;
 import ar.edu.itba.paw.models.exceptions.InvalidSubjectCareerException;
 import ar.edu.itba.paw.persistence.CareerDao;
@@ -84,8 +85,8 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public void linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
-        boolean result = subjectDao.linkSubjectToCareer(subjectId, careerId, year);
-        if (!result) {
+        boolean success = subjectDao.linkSubjectToCareer(subjectId, careerId, year);
+        if (!success) {
             throw new InvalidSubjectCareerException();
         }
     }
@@ -93,8 +94,8 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public void updateSubject(UUID subjectId, String name) {
-        boolean result = subjectDao.updateSubject(subjectId, name);
-        if (!result) {
+        boolean success = subjectDao.updateSubject(subjectId, name);
+        if (!success) {
             throw new InvalidSubjectException();
         }
     }
@@ -103,8 +104,8 @@ public class SubjectServiceImpl implements SubjectService {
     @Transactional
     public void updateSubjectCareer(UUID subjectId, String subjectName, UUID careerId, int year) {
         updateSubject(subjectId, subjectName);
-        boolean result = subjectDao.updateSubjectCareer(subjectId, careerId, year);
-        if (!result) {
+        boolean success = subjectDao.updateSubjectCareer(subjectId, careerId, year);
+        if (!success) {
             throw new InvalidSubjectCareerException();
         }
     }
@@ -112,9 +113,17 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public void unlinkSubjectFromCareer(UUID subjectId, UUID careerId) {
-        boolean result = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
-        if (!result) {
+        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
+        boolean success = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
+        if (!success) {
             throw new InvalidSubjectCareerException();
+        } else if (careerDao.countCareersBySubjectId(subjectId) == 0 && searchDao.countChildren(subject.getRootDirectoryId()) == 0) {
+            success = subjectDao.delete(subjectId);
+            if (!success)
+                throw new InvalidSubjectException();
+            success = directoryDao.deleteRootDirectory(subject.getRootDirectoryId());
+            if (!success)
+                throw new InvalidDirectoryException();
         }
     }
 
@@ -122,7 +131,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public boolean isSubjectDetachable(UUID subjectId) {
         Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
-        return careerDao.countCareersBySubjectId(subjectId) > 1;// || searchDao.countChildren(subject.getRootDirectoryId()) > 0;
+        return careerDao.countCareersBySubjectId(subjectId) > 1 || searchDao.countChildren(subject.getRootDirectoryId()) == 0;
     }
 
 }

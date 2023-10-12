@@ -176,6 +176,12 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
+    @Transactional
+    public boolean deleteRootDirectory(UUID directoryId) {
+        return jdbcTemplate.update("DELETE FROM Directories d WHERE d.directory_id = ? AND d.parent_id IS NULL AND d.user_id IS NULL", directoryId) == 1;
+    }
+
+    @Override
     public List<Directory> getRootDirectoriesByCareer(UUID careerId) {
         return jdbcTemplate.query("SELECT DISTINCT d.directory_id, d.directory_name, d.parent_id FROM Directories d " +
                 "INNER JOIN Subjects s ON s.root_directory_id = d.directory_id " +
