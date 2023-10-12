@@ -199,11 +199,6 @@ public class SearchJdbcDao implements SearchDao {
 
     }
 
-    private void favoritesJoin(StringBuilder query, List<Object> args, SearchArguments sa) {
-
-
-    }
-
     private void applyGeneralFilters(StringBuilder query, List<Object> args, SearchArguments sa, String wordCondition, int conditionCount) {
         sa.getCategory().ifPresent(c -> {
             if (c == Category.NOTE) {
@@ -216,12 +211,7 @@ public class SearchJdbcDao implements SearchDao {
         addIfPresent(query, args, USER_ID, "=", "AND", sa.getUserId());
 
         sa.getWord().ifPresent(w -> {
-                    String searchWord = "%" + w
-                            .replace("!", "!!") // Use ! as escape character
-                            .replace("%", "!%")
-                            .replace("_", "!_")
-                            .replace("[", "![")
-                            + "%";
+                    String searchWord = escapeLikeString(w);
                     query.append(wordCondition);
                     for (int i = 0; i < conditionCount; i++)
                         args.add(searchWord);

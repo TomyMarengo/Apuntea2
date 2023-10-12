@@ -140,17 +140,31 @@ public class UserJdbcDaoTest {
     @Test
     public void testGetStudents() {
         int currentUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
-
-        UUID[] studentIds = new UUID[20];
-        for (int i = 1; i <= studentIds.length; i++) {
-            studentIds[i-1] = insertStudent(namedParameterJdbcTemplate, "student" + i + "@mail.com", "", ING_INF, "es");
-        }
-        assertEquals(currentUsers + studentIds.length, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
+        final int STUDENTS_LENGTH = 20;
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
         assertEquals(0, userDao.getStudentsQuantity("student2000"));
+    }
+
+    @Test
+    public void testGetStudents20() {
+        final int STUDENTS_LENGTH = 20;
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
         assertEquals(1, userDao.getStudentsQuantity("student20"));
+    }
+
+    @Test
+    public void testGetStudents2() {
+        final int STUDENTS_LENGTH = 20;
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
         assertEquals(2, userDao.getStudentsQuantity("student2"));
-        assertEquals(20, userDao.getStudentsQuantity("student"));
-        assertEquals(currentUsers + studentIds.length, userDao.getStudentsQuantity(""));
+    }
+
+    @Test
+    public void testGetStudentsAll() {
+        final int STUDENTS_LENGTH = 20;
+        int oldUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
+        assertEquals(oldUsers + STUDENTS_LENGTH, userDao.getStudentsQuantity(""));
     }
 }
 

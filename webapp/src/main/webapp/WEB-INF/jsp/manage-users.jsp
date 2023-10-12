@@ -52,7 +52,7 @@
 
     <!-- SEARCH -->
     <div class="container my-5">
-        <c:url var="searchUrl" value="./"/>
+        <c:url var="searchUrl" value="./users"/>
         <form:form modelAttribute="searchForm"
                    action="${searchUrl}"
                    method="get"
@@ -104,18 +104,39 @@
                         </td>
                         <td><c:out value="${item.email}"/></td>
                         <td>
-                            <c:out value="${item.roles[0].shortName}"/>
-                            <c:forEach var="role" items="${item.roles}" begin="1">- <c:out value="${role.shortName}"/>
+                            <c:choose>
+                                <c:when test="${item.roles[0] eq 'ROLE_STUDENT'}">
+                                    <spring:message code="role.student"/>
+                                </c:when>
+                                <c:when test="${item.roles[0] eq 'ROLE_MODERATOR'}">
+                                    <spring:message code="role.moderator"/>
+                                </c:when>
+                                <c:when test="${item.roles[0] eq 'ROLE_ADMIN'}">
+                                    <spring:message code="role.admin"/>
+                                </c:when>
+                            </c:choose>
+                            <c:forEach var="role" items="${item.roles}" begin="1">
+                                - <c:choose>
+                                    <c:when test="${role eq 'ROLE_STUDENT'}">
+                                        <spring:message code="role.student"/>
+                                    </c:when>
+                                    <c:when test="${role eq 'ROLE_MODERATOR'}">
+                                        <spring:message code="role.moderator"/>
+                                    </c:when>
+                                    <c:when test="${role eq 'ROLE_ADMIN'}">
+                                        <spring:message code="role.admin"/>
+                                    </c:when>
+                                </c:choose>
                             </c:forEach>
                         </td>
                         <td>
-                            <c:out value="${item.status.status}"/>
+                            <spring:message code="user.status.${item.status.status}"/>
                         </td>
 
                         <td class="search-actions">
                             <div class="d-flex justify-content-end">
 
-                                <c:if test="${item.status.status eq 'Active'}">
+                                <c:if test="${item.status.status eq 'active'}">
                                     <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                          data-bs-title="<spring:message code="banUser"/>" data-bs-trigger="hover">
                                         <button class="btn nav-icon-button ban-button"
@@ -127,7 +148,7 @@
                                         </button>
                                     </div>
                                 </c:if>
-                                <c:if test="${item.status.status eq 'Banned'}">
+                                <c:if test="${item.status.status eq 'banned'}">
                                     <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                          data-bs-title="<spring:message code="unbanUser"/>" data-bs-trigger="hover">
                                         <button class="btn nav-icon-button unban-button"
@@ -246,7 +267,7 @@
 </main>
 
 <!-- BAN USER MODAL -->
-<c:url var="banUrl" value="${baseUrl}/users/ban"/>
+<c:url var="banUrl" value="./users/ban"/>
 <div class="modal fade" id="banUserModal" data-bs-backdrop="static" data-bs-keyboard="false"
      tabindex="-1" aria-labelledby="banUserLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -277,7 +298,7 @@
 </div>
 
 <!-- UNBAN USER MODAL -->
-<c:url var="unbanUrl" value="${baseUrl}/users/unban"/>
+<c:url var="unbanUrl" value="./users/unban"/>
 <div class="modal fade" id="unbanUserModal" data-bs-backdrop="static" data-bs-keyboard="false"
      tabindex="-1" aria-labelledby="unbanUserLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

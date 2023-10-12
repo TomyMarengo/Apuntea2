@@ -7,14 +7,14 @@ import ar.edu.itba.paw.webapp.forms.BanUnbanUserForm;
 import ar.edu.itba.paw.webapp.forms.SearchUserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/manage/users")
@@ -29,18 +29,41 @@ public class ManageUsersController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView manageUsers (@ModelAttribute("searchForm") final SearchUserForm searchUserForm,
+    public ModelAndView manageUsers (@Valid @ModelAttribute("searchForm") final SearchUserForm searchUserForm,
                                      @ModelAttribute("banUserForm") final BanUnbanUserForm banUserForm,
-                                     @ModelAttribute("unbanUserForm") final BanUnbanUserForm unbanUserForm
-                                     ) {
+                                     @ModelAttribute("unbanUserForm") final BanUnbanUserForm unbanUserForm,
+                                     BindingResult result) {
+        if (result.hasErrors()) {
+            return new ModelAndView("/errors/400");
+        }
+
         final ModelAndView mav = new ModelAndView("manage-users");
 
         List<User> users = userService.getStudents(searchUserForm.getQuery(), searchUserForm.getPageNumber());
-
-        mav.addObject("maxPage", userService.getStudentsQuantity(searchUserForm.getQuery()));
+        mav.addObject("maxPage", userService.getStudentPages(searchUserForm.getQuery()));
         mav.addObject("users", users);
 
         return mav;
+    }
+
+    @RequestMapping(value = "/ban", method = RequestMethod.POST)
+    public ModelAndView banUser(@ModelAttribute("banUserForm") final BanUnbanUserForm banUserForm,
+                                BindingResult result) {
+        if (result.hasErrors()) {
+            return new ModelAndView("/errors/400");
+        }
+        userService.banUser(banUserForm.getUserId());
+        return new ModelAndView("redirect:/manage/users");
+    }
+
+    @RequestMapping(value = "/unban", method = RequestMethod.POST)
+    public ModelAndView unbanUser(@ModelAttribute("unbanUserForm") final BanUnbanUserForm unbanUserForm,
+                                  BindingResult result) {
+        if (result.hasErrors()) {
+            return new ModelAndView("/errors/400");
+        }
+        userService.unbanUser(unbanUserForm.getUserId());
+        return new ModelAndView("redirect:/manage/users");
     }
 
     @ModelAttribute("user")

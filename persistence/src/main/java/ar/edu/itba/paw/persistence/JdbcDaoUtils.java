@@ -79,5 +79,14 @@ public class JdbcDaoUtils {
         });
     }
 
+    static String escapeLikeString(String str) {
+        return "%" + str
+                .replace("!", "!!") // Use ! as escape character
+                .replace("%", "!%")
+                .replace("_", "!_")
+                .replace("[", "![")
+                + "%";
+    }
+
     private JdbcDaoUtils() {} // Make class non-instantiable
 }

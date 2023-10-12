@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -25,8 +26,6 @@ class UserJdbcDao implements UserDao{
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert jdbcRoleInsert;
-
-    private static final int STUDENTS_PAGE_SIZE = 20;
 
     private static final RowMapper<User> ROW_MAPPER = (rs, rowNum)  -> {
         Object[] roles = (Object[]) rs.getArray(ROLES).getArray();
@@ -80,37 +79,31 @@ class UserJdbcDao implements UserDao{
 
     @Transactional
     @Override
-    public List<User> getStudents(String query, int pageNum) {
-        String searchWord = "%" + query
-                .replace("!", "!!") // Use ! as escape character
-                .replace("%", "!%")
-                .replace("_", "!_")
-                .replace("[", "![")
-                + "%";
+    public List<User> getStudents(String query, int pageNum, int pageSize) {
+        String searchWord = escapeLikeString(query);
 
         return jdbcTemplate.query("SELECT u.user_id, u.username, u.email, u.first_name, u.last_name, u.locale, u.status, array_agg(r.role_name) as roles FROM users u " +
                 "INNER JOIN User_Roles r ON u.user_id = r.user_id " +
-                "WHERE NOT EXISTS (SELECT * FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ADMIN') AND (lower(u.username) LIKE lower(?) OR lower(u.email) LIKE lower(?))" +
-                "GROUP BY u.user_id LIMIT ? OFFSET ?", INFO_ROW_MAPPER, searchWord, searchWord, STUDENTS_PAGE_SIZE, (pageNum - 1) * STUDENTS_PAGE_SIZE);
+                "WHERE NOT EXISTS (SELECT * FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ADMIN') AND (lower(u.username) LIKE lower(?) ESCAPE '!' OR lower(u.email) LIKE lower(?) ESCAPE '!')" +
+                "GROUP BY u.user_id LIMIT ? OFFSET ?", INFO_ROW_MAPPER, searchWord, searchWord, pageSize, (pageNum - 1) * pageSize);
     }
 
     @Transactional
     @Override
     public int getStudentsQuantity(String query) {
-        // TODO: Create utils
-        String searchWord = "%" + query
-                .replace("!", "!!") // Use ! as escape character
-                .replace("%", "!%")
-                .replace("_", "!_")
-                .replace("[", "![")
-                + "%";
+        String searchWord = escapeLikeString(query);
 
-        int quantity = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users u WHERE NOT EXISTS (SELECT * FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ADMIN') " +
-                        "AND (lower(u.username) LIKE lower(?) OR lower(u.email) LIKE lower(?))" +
-                        "GROUP BY u.user_id", (rs, rowNum) -> rs.getInt(0),
-                searchWord, searchWord);
+        List<Object> args = new ArrayList<>();
+        args.add(searchWord);
+        args.add(searchWord);
 
-        return quantity;
+        try {
+            return jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT u.user_id) FROM users u WHERE NOT EXISTS (SELECT * FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
+                    "AND (lower(u.username) LIKE lower(?) ESCAPE '!' OR lower(u.email) LIKE lower(?) ESCAPE '!')",
+                     args.toArray(), Integer.class);
+        } catch (EmptyResultDataAccessException e) {
+            return 0;
+        }
     }
 
  // TODO: Make transactional in 3rd sprint

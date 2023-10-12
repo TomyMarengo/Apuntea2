@@ -21,6 +21,6 @@ public interface UserDao {
     void unbanUsers();
     boolean banUser(UUID userId, UUID adminId, LocalDateTime endDate);
     boolean unbanUser(UUID userId);
-    List<User> getStudents(String query, int pageNum);
+    List<User> getStudents(String query, int pageNum, int pageSize);
     int getStudentsQuantity(String query);
 }

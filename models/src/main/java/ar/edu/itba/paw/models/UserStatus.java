@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.models;
 
 public enum UserStatus {
-    ACTIVE("Active"), BANNED("Banned"), DELETED("Deleted");
+    ACTIVE("active"), BANNED("banned"), DELETED("deleted");
 
     private final String status;
 

@@ -32,6 +32,8 @@ public class UserServiceImpl implements UserService {
     private final VerificationCodesService verificationCodesService;
 
     private	static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final int BAN_DURATION = 3;
+    private static final int PAGE_SIZE = 10;
 
     @Autowired
     public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, final SecurityService securityService, final VerificationCodesService verificationCodesService) {
@@ -56,21 +58,15 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public List<User> getStudents(String query, int pageNum) {
-        if (query == null) {
-            query = "";
-        }
-
-        return userDao.getStudents(query, pageNum);
+        if (query == null) query = "";
+        return userDao.getStudents(query, pageNum, PAGE_SIZE);
     }
 
     @Transactional
     @Override
-    public int getStudentsQuantity(String query) {
-        if (query == null) {
-            query = "";
-        }
-
-        return userDao.getStudentsQuantity(query);
+    public int getStudentPages(String query) {
+        if (query == null) query = "";
+        return userDao.getStudentsQuantity(query) / PAGE_SIZE + 1;
     }
 
     //    @Transactional
@@ -125,10 +121,20 @@ public class UserServiceImpl implements UserService {
         userDao.unbanUsers();
     }
 
+    @Transactional
     @Override
     public void unbanUser(UUID userId) {
         if (!userDao.unbanUser(userId))
             throw new InvalidUserException();
+    }
+
+    @Transactional
+    @Override
+   public void banUser(UUID userId) {
+        User admin = securityService.getCurrentUserOrThrow();
+        if (!userDao.banUser(userId, admin.getUserId(), LocalDateTime.now().plusDays(BAN_DURATION)))
+            throw new InvalidUserException();
+        // TODO: Send mail to banned user
     }
 
 

@@ -18,6 +18,7 @@ public interface UserService {
     boolean updateUserPasswordWithCode(String email, String code, String password);
     void unbanUsers();
     void unbanUser(UUID userId);
+    void banUser(UUID userId);
     List<User> getStudents(String query, int pageNum);
-    int getStudentsQuantity(String query);
+    int getStudentPages(String query);
 }

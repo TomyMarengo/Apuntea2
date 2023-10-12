@@ -70,13 +70,13 @@
                                 <span class="card-text">
                                 <c:choose>
                                     <c:when test="${r eq 'ROLE_STUDENT'}">
-                                        <spring:message code="profile.role.student"/>
+                                        <spring:message code="role.student"/>
                                     </c:when>
                                     <c:when test="${r eq 'ROLE_MODERATOR'}">
-                                        <spring:message code="profile.role.moderator"/>
+                                        <spring:message code="role.moderator"/>
                                     </c:when>
                                     <c:when test="${r eq 'ROLE_ADMIN'}">
-                                        <spring:message code="profile.role.admin"/>
+                                        <spring:message code="role.admin"/>
                                     </c:when>
                                 </c:choose>
                                 </span>
@@ -101,13 +101,13 @@
                                 <span class="card-text">
                                 <c:choose>
                                     <c:when test="${r eq 'ROLE_STUDENT'}">
-                                        <spring:message code="profile.role.student"/>
+                                        <spring:message code="role.student"/>
                                     </c:when>
                                     <c:when test="${r eq 'ROLE_MODERATOR'}">
-                                        <spring:message code="profile.role.moderator"/>
+                                        <spring:message code="role.moderator"/>
                                     </c:when>
                                     <c:when test="${r eq 'ROLE_ADMIN'}">
-                                        <spring:message code="profile.role.admin"/>
+                                        <spring:message code="role.admin"/>
                                     </c:when>
                                 </c:choose>
                                 </span>
@@ -128,7 +128,6 @@
                     <c:forEach items="${favorites}" var="rd">
                         <a class="w-100" href="<c:url value="./directory/${rd.id}"/>">
                             <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
-                                <!-- TODO: REVISAR COLOR RD -->
                                 <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>"
                                      class="icon-xxl fill-${rd.iconColor}">
                                 <!-- max 2 lines-->

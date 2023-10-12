@@ -8,18 +8,12 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class SearchUserForm {
-
     @Size(max = 30)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9]*") // TODO: Move regex to utils
     private String query;
 
-    @NotNull
     @Min(1)
-    private Integer pageNumber = 1;
-
-    @NotNull
-    @Range(min = 12, max = 36)
-    private Integer pageSize = 12;
+    private int pageNumber = 1;
 
     public String getQuery() {
         return query;
@@ -29,20 +23,11 @@ public class SearchUserForm {
         this.query = query;
     }
 
-    public Integer getPageNumber() {
+    public int getPageNumber() {
         return pageNumber;
     }
 
-    public void setPageNumber(Integer pageNumber) {
+    public void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
     }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
 }
