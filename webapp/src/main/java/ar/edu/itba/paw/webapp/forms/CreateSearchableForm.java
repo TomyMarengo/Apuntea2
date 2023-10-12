@@ -12,7 +12,7 @@ import java.util.UUID;
 public abstract class CreateSearchableForm {
     @NotEmpty
     @Size(min = 2, max = 50)
-    @Pattern(regexp = "^(?!([ \\-]+)$)[a-zA-Z0-9 -áéíóúÁÉÍÓÚñÑüÜ]+$")
+    @Pattern(regexp = RegexUtils.FILE_REGEX)
     private String name;
 
     @ValidUuid

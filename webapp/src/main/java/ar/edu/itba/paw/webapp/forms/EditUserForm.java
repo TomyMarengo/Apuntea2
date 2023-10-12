@@ -11,17 +11,17 @@ import javax.validation.constraints.Size;
 public class EditUserForm {
 
 
-    @Pattern(regexp = "([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*")
+    @Pattern(regexp = RegexUtils.NAME_REGEX)
     @Size(max = 20)
     private String firstName;
 
-    @Pattern(regexp = "([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*")
+    @Pattern(regexp = RegexUtils.NAME_REGEX)
     @Size(max = 20)
     private String lastName;
 
     @UnusedUsername
     @Size(max = 30)
-    @Pattern(regexp = "^(?![-._]+$)(?!^\\d+$)[a-zA-Z0-9.\\-_]+$")
+    @Pattern(regexp = RegexUtils.USERNAME_REGEX)
     private String username;
 
     @ValidFileName(allowedExtensions = {".jpeg", ".png", ".jpg"})

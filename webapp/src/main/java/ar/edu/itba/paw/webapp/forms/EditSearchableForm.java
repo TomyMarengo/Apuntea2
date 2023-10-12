@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.forms;
 
-import ar.edu.itba.paw.webapp.validation.NonExistingCreateSearchable;
 import ar.edu.itba.paw.webapp.validation.NonExistingEditSearchable;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -13,7 +12,7 @@ import java.util.UUID;
 public abstract class EditSearchableForm {
     @NotEmpty
     @Size(min = 2, max = 50)
-    @Pattern(regexp = "^(?! *$)(?!,*$)(?!_*$)(?!-*$)[a-zA-Z0-9 -_,áéíóúÁÉÍÓÚñÑüÜ]+$")
+    @Pattern(regexp = RegexUtils.FILE_REGEX)
     private String name;
 
     @ValidUuid

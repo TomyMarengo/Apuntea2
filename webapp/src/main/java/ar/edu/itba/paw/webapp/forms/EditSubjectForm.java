@@ -18,7 +18,7 @@ public class EditSubjectForm {
     private int year;
 
     @NotBlank
-    @Pattern(regexp = "^(?!([ ,\\-_]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ \\-_,]+$")
+    @Pattern(regexp = RegexUtils.FILE_REGEX)
     private String name;
 
     public UUID getSubjectId() {

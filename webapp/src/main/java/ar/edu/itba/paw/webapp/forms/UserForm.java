@@ -21,7 +21,7 @@ public class UserForm {
     @NotNull
     @NotBlank
     @Size(min = 4, max = 50)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$")
+    @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
     private String password;
 
     @ValidUuid

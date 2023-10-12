@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.validation;
 
+import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import org.hibernate.validator.internal.constraintvalidators.EmailValidator;
 
 import javax.validation.Constraint;
@@ -17,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface UnusedEmail {
     String message() default "{ar.edu.itba.paw.webapp.validation.UnusedEmail.message}";
 
-    String regex() default "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";
+    String regex() default RegexUtils.EMAIL_REGEX;
 
     Class<?>[] groups() default {};
 

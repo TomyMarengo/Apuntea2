@@ -12,12 +12,12 @@ public class ChallengeForm {
     private String email;
 
     @NotNull
-    @Pattern(regexp = "^[0-9]{6}$")
+    @Pattern(regexp = RegexUtils.CHALLENGE_CODE_REGEX)
     private String code;
 
     @NotNull
     @Size(min = 4, max = 50)
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$")
+    @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
     private String newPassword;
 
     public String getEmail() {
