@@ -39,6 +39,7 @@ public class User {
         this.locale = locale;
     }
 
+
     public User(final UUID userId, final String firstName, final String lastName, final String username, final String email, final String password, final UserStatus status, final String[] roles, final String locale, final Institution institution, final Career career) {
         this.userId = userId;
         this.firstName = firstName;
@@ -57,6 +58,13 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
+    }
+
+    public User(final UUID userId, final String email, final String locale, final String username, final String firstName, final String lastName) {
+        this(userId, email, locale);
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -117,5 +125,14 @@ public class User {
 
     public void setStatus(UserStatus status) {
         this.status = status;
+    }
+
+    public String getDisplayName() {
+        if (username != null) {
+            return username;
+        } else if (firstName != null && lastName != null) {
+            return firstName + " " + lastName;
+        }
+        return email;
     }
 }

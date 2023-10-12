@@ -45,13 +45,7 @@ public class EmailServiceImpl implements EmailService {
         final Locale ownerLocale = new Locale(review.getNote().getUser().getLocale());
         final String to = review.getNote().getUser().getEmail();
         final String subject = messageSource.getMessage("email.review.new", new Object[]{review.getNote().getName()}, ownerLocale);
-        final Map<String, Object> data = new HashMap<>();
-        data.put("name", review.getNote().getName());
-        data.put("score", review.getScore());
-        data.put("content", review.getContent());
-        data.put("reviewer", review.getUser().getEmail());
-        data.put("url", env.getProperty("base.url"));
-        data.put("urlNote", env.getProperty("base.url") + "/notes/" + review.getNote().getId());
+        HashMap<String, Object> data = createReviewEmailMap(review);
 
         try {
             LOGGER.info("Sending review email to {}", review.getNote().getUser().getEmail());
@@ -61,6 +55,34 @@ public class EmailServiceImpl implements EmailService {
             LOGGER.warn("Review email could not be sent to {}",review.getNote().getUser().getEmail());
         }
 
+    }
+
+    private HashMap<String, Object> createReviewEmailMap(Review review) {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("name", review.getNote().getName());
+        data.put("score", review.getScore());
+        data.put("content", review.getContent());
+        data.put("url", env.getProperty("base.url"));
+        data.put("urlNote", env.getProperty("base.url") + "/notes/" + review.getNote().getId());
+        data.put("reviewer", review.getUser().getDisplayName());
+        return data;
+    }
+
+    @Override
+    public void sendDeleteReviewEmail(Review review, String reason) {
+        final Locale ownerLocale = new Locale(review.getUser().getLocale());
+        final String to = review.getUser().getEmail();
+        final String subject = messageSource.getMessage("email.review.delete", new Object[]{review.getNote().getName()}, ownerLocale);
+        HashMap<String, Object> data = createReviewEmailMap(review);
+        data.put("reason", reason);
+
+        try {
+            LOGGER.info("Sending delete review email to {}", review.getUser().getEmail());
+            sendMessageUsingThymeleafTemplate(to,subject,"delete-review.html", data, ownerLocale);
+            LOGGER.info("Delete review email sent to {}", review.getUser().getEmail());
+        } catch (MessagingException e) {
+            LOGGER.warn("Delete review email could not be sent to {}",review.getUser().getEmail());
+        }
     }
 
     @Async

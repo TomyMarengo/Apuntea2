@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.InvalidNoteException;
+import ar.edu.itba.paw.models.exceptions.InvalidReviewException;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
 import org.apache.commons.io.FilenameUtils;
@@ -55,12 +56,14 @@ public class NoteServiceImpl implements NoteService {
         return noteDao.create(name, subjectId, userId, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()));
     }
 
+    @Transactional
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
         final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
         return noteDao.getNoteById(noteId, userId);
     }
 
+    @Transactional
     @Override
     public Optional<NoteFile> getNoteFileById(UUID noteId) {
         final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
@@ -90,16 +93,26 @@ public class NoteServiceImpl implements NoteService {
         }
     }
 
+    @Transactional
     @Override
     public List<Review> getReviews(UUID noteId) {
         return noteDao.getReviews(noteId);
     }
 
+    @Transactional
     @Override
-    public Integer createOrUpdateReview(UUID noteId, Integer score, String content) {
+    public void createOrUpdateReview(UUID noteId, int score, String content) {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-        Review review = noteDao.createOrUpdateReview(noteId, userId, score, content);
+        noteDao.createOrUpdateReview(noteId, userId, score, content);
+        Review review = noteDao.getReview(noteId, userId);
         emailService.sendReviewEmail(review);
-        return review.getScore();
+    }
+
+    @Transactional
+    @Override
+    public void deleteReview(UUID noteId, UUID userId, String reason) {
+        Review review = noteDao.getReview(noteId, userId);
+        if (!noteDao.deleteReview(noteId, userId)) throw new InvalidReviewException();
+        emailService.sendDeleteReviewEmail(review, reason);
     }
 }

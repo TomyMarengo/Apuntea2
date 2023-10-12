@@ -15,7 +15,6 @@ public interface NoteDao {
 
     Optional<NoteFile> getNoteFileById(UUID noteId, UUID currentUserId);
 
-    Review createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content);
 
     Optional<Note> getNoteById(UUID noteId, UUID currentUserId);
 
@@ -25,4 +24,7 @@ public interface NoteDao {
     boolean delete(UUID[] noteIds, UUID currentUserId);
 
     List<Review> getReviews(UUID noteId);
+    boolean deleteReview(UUID noteId, UUID userId);
+    Review getReview(UUID noteId, UUID userId);
+    void createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content);
 }

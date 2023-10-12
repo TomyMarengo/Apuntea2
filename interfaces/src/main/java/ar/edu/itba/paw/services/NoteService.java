@@ -15,8 +15,9 @@ public interface NoteService {
     UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) throws IOException;
     Optional<Note> getNoteById(UUID noteId);
     Optional<NoteFile> getNoteFileById(UUID noteId);
-    Integer createOrUpdateReview(UUID noteId, Integer score, String content);
+    void createOrUpdateReview(UUID noteId, int score, String content);
     void update(Note note);
     void delete(UUID[] noteIds, String reason);
     List<Review> getReviews(UUID noteId);
+    void deleteReview(UUID noteId, UUID userId, String reason);
 }

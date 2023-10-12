@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.exceptions.InvalidReviewException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -81,7 +82,8 @@ public class NoteJdbcDao implements NoteDao {
             new Review(
                     new User(
                             UUID.fromString(rs.getString(USER_ID)),
-                            rs.getString(EMAIL)
+                            rs.getString(EMAIL),
+                            rs.getString(LOCALE)
                     ),
                     rs.getString(CONTENT),
                     rs.getInt(SCORE),
@@ -176,10 +178,27 @@ public class NoteJdbcDao implements NoteDao {
         return currentUserId != null? "OR n.user_id = :user_id" : "";
     }
 
-    // TODO: Make transactional again
-    //@Transactional
     @Override
-    public Review createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
+    public boolean deleteReview(UUID noteId, UUID userId) {
+        return jdbcTemplate.update("DELETE FROM Reviews WHERE note_id = ? AND user_id = ?", noteId, userId) == 1;
+    }
+
+    @Override
+    public Review getReview(UUID noteId, UUID userId)  {
+        return jdbcTemplate.queryForObject(
+                "SELECT u.user_id, u.email, u.locale, r.score, r.content, n.note_id, n.note_name, o.user_id AS owner_id, o.email AS owner_email, o.locale as owner_locale FROM Reviews r " +
+                        "INNER JOIN Users u ON r.user_id = u.user_id " +
+                        "INNER JOIN Notes n ON r.note_id = n.note_id " +
+                        "INNER JOIN Users o ON n.user_id = o.user_id " +
+                        "WHERE r.note_id = ? AND r.user_id = ?",
+                new Object[]{noteId, userId},
+                COMPLETE_REVIEW_ROW_MAPPER
+        );
+    }
+
+    @Transactional
+    @Override
+    public void createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
         try {
             jdbcReviewInsert.execute(new HashMap<String, Object>(){{
                 put(NOTE_ID, noteId);
@@ -190,18 +209,8 @@ public class NoteJdbcDao implements NoteDao {
         } catch (DuplicateKeyException e) {
             jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ?, created_at = now() WHERE note_id = ? AND user_id = ?", score, content, noteId, userId);
         } catch (DataIntegrityViolationException e) {
-            //TODO: create custom exception
-            throw e;
+            throw new InvalidReviewException();
         }
-        return jdbcTemplate.queryForObject(
-                "SELECT u.user_id, u.email, r.score, r.content, n.note_id, n.note_name, o.user_id AS owner_id, o.email AS owner_email, o.locale as owner_locale FROM Reviews r " +
-                        "INNER JOIN Users u ON r.user_id = u.user_id " +
-                        "INNER JOIN Notes n ON r.note_id = n.note_id " +
-                        "INNER JOIN Users o ON n.user_id = o.user_id " +
-                        "WHERE r.note_id = ? AND r.user_id = ?",
-                new Object[]{noteId, userId},
-                COMPLETE_REVIEW_ROW_MAPPER
-        );
     }
 
     @Override
