@@ -23,14 +23,17 @@ function autocomplete(inp, sel, getArr, onCompletion) {
         /*for each item in the array...*/
         for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
-            if (arr[i].text.substring(0, val.length).toUpperCase() === val.toUpperCase()) {
+            let position = textNormalize(arr[i].text.toUpperCase()).search(textNormalize(val.toUpperCase()));
+            if(position > -1) {
                 /*create a DIV element for each matching element:*/
                 b = document.createElement("DIV");
                 /*make the matching letters bold:*/
                 b.setAttribute("uuid", arr[i].value);
                 b.setAttribute("str", arr[i].text);
-                b.innerHTML = "<strong>" + arr[i].text.substring(0, val.length) + "</strong>";
-                b.innerHTML += arr[i].text.substring(val.length);
+
+                b.innerHTML = arr[i].text.substring(0, position);
+                b.innerHTML += "<strong>" + arr[i].text.substring(position, position + val.length) + "</strong>";
+                b.innerHTML += arr[i].text.substring(position + val.length);
                 if (arr[i].text.length === val.length) {
                     sel.value = arr[i].value;
                 }
@@ -118,4 +121,10 @@ function autocomplete(inp, sel, getArr, onCompletion) {
         }
     }
 
+}
+
+function textNormalize(text) {
+    return text.normalize('NFD')
+        .replace(/([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+/gi,"$1")
+        .normalize();
 }
