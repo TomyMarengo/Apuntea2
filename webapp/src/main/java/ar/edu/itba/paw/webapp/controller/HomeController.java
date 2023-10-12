@@ -4,7 +4,6 @@ import ar.edu.itba.paw.models.InstitutionData;
 import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.*;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.toSafeJson;
 
 @Controller
 public class HomeController {
@@ -56,7 +57,7 @@ public class HomeController {
 
         // TODO: Ask if this should go in the service
         InstitutionData institutionData = institutionService.getInstitutionData();
-        mav.addObject("institutionData", new Gson().toJson(institutionData));
+        mav.addObject("institutionData", toSafeJson(institutionData));
         return mav;
     }
 

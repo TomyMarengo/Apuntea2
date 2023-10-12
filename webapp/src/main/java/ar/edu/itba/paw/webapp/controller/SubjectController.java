@@ -11,7 +11,6 @@ import ar.edu.itba.paw.webapp.forms.CreateSubjectForm;
 import ar.edu.itba.paw.webapp.forms.EditSubjectForm;
 import ar.edu.itba.paw.webapp.forms.UnlinkSubjectForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -47,7 +46,7 @@ public class SubjectController {
     public ModelAndView selectCareer(){
         final ModelAndView mav = new ModelAndView("manageCareer");
         InstitutionData institutionData = institutionService.getInstitutionData();
-        mav.addObject("institutionData", new Gson().toJson(institutionData));
+        mav.addObject("institutionData", toSafeJson(institutionData));
         return mav;
     }
 
@@ -62,7 +61,7 @@ public class SubjectController {
         
 
         InstitutionData institutionData = institutionService.getInstitutionData();
-        mav.addObject("institutionData", new Gson().toJson(institutionData));
+        mav.addObject("institutionData", toSafeJson(institutionData));
 
         Career career = careerService.findCareerById(careerId).orElseThrow(CareerNotFoundException::new);
         mav.addObject("career", career);
@@ -71,7 +70,7 @@ public class SubjectController {
         mav.addObject("ownedSubjects", ownedSubjects);
 
         List<Subject> unownedSubjects = subjectService.getSubjectsByCareerComplemented(careerId);
-        mav.addObject("unownedSubjects", new  Gson().toJson(unownedSubjects));
+        mav.addObject("unownedSubjects", toSafeJson(unownedSubjects));
         return mav;
     }
 

@@ -5,7 +5,6 @@ import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.forms.SearchForm;
-import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.toSafeJson;
 
 
 @Controller
@@ -55,7 +56,8 @@ public class SearchController {
         mav.addObject("results", pageResult.getContent());
 
         InstitutionData institutionData = institutionService.getInstitutionData();
-        mav.addObject("institutionData", new Gson().toJson(institutionData));
+
+        mav.addObject("institutionData", toSafeJson(institutionData));
         return mav;
     }
 

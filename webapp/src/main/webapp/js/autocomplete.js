@@ -23,17 +23,22 @@ function autocomplete(inp, sel, getArr, onCompletion) {
         /*for each item in the array...*/
         for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
-            let position = textNormalize(arr[i].text.toUpperCase()).search(textNormalize(val.toUpperCase()));
+            let position = textNormalize(arr[i].text.toUpperCase()).indexOf(textNormalize(val.toUpperCase()));
             if(position > -1) {
                 /*create a DIV element for each matching element:*/
                 b = document.createElement("DIV");
+                let prefix = document.createElement("SPAN");
+                let middle = document.createElement("STRONG");
+                let sufix = document.createElement("SPAN");
+                b.append(prefix, middle, sufix);
                 /*make the matching letters bold:*/
                 b.setAttribute("uuid", arr[i].value);
                 b.setAttribute("str", arr[i].text);
 
-                b.innerHTML = arr[i].text.substring(0, position);
-                b.innerHTML += "<strong>" + arr[i].text.substring(position, position + val.length) + "</strong>";
-                b.innerHTML += arr[i].text.substring(position + val.length);
+                prefix.textContent = arr[i].text.substring(0, position);
+                middle.textContent += arr[i].text.substring(position, position + val.length);
+                sufix.textContent += arr[i].text.substring(position + val.length);
+
                 if (arr[i].text.length === val.length) {
                     sel.value = arr[i].value;
                 }
