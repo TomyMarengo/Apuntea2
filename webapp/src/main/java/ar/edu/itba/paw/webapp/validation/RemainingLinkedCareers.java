@@ -13,7 +13,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RemainingLinkedCareers {
-    String message() default "The file name is already being used";
+    String message() default "{ar.edu.itba.paw.webapp.validation.RemainingLinkedCareers.message}";
 
     Class<?>[] groups() default {};
 

@@ -25,11 +25,9 @@ public class UnusedUsernameValidator implements ConstraintValidator<UnusedUserna
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         String currentUsername = this.securityService.getCurrentUser().map(User::getUsername).orElse("");
-        return value != null && (value.isEmpty() ||
-                (pattern.matcher(value).matches() &&
-                        !userService.findByUsername(value)
-                                .filter(u -> !u.getUsername().equals(currentUsername))
-                                .isPresent())); // Hack to only prompt error when valid username is being used
+        return value == null || value.isEmpty() || !pattern.matcher(value).matches() || !userService.findByUsername(value)
+                                                                                            .filter(u -> !u.getUsername().equals(currentUsername))
+                                                                                            .isPresent();
     }
 }
 

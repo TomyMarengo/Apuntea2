@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = {ExistingEmailValidator.class})
 public @interface ExistingEmail {
-    String message() default "The email is not being used";
+    String message() default "{ar.edu.itba.paw.webapp.validation.ExistingEmail.message}";
 
     String regex() default "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";
 

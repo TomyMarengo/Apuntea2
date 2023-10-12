@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface UnusedUsername {
     String message() default "{ar.edu.itba.paw.webapp.validation.UnusedUsername.message}";
 
-    String regex() default "([a-zA-Z]+[ ]?)*";
+    String regex() default "^(?![-._]+$)(?!^\\d+$)[a-zA-Z0-9.\\-_]+$";
 
     Class<?>[] groups() default {};
 

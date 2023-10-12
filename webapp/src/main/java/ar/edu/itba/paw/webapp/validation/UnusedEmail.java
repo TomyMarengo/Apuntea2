@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = {EmailValidator.class, UnusedEmailValidator.class})
 public @interface UnusedEmail {
-    String message() default "The email is already being used";
+    String message() default "{ar.edu.itba.paw.webapp.validation.UnusedEmail.message}";
 
     String regex() default "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";
 

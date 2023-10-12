@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.util.UUID;
 
 
@@ -98,8 +99,8 @@ public class NoteController {
     }
 
     @RequestMapping(value = "/{noteId}/delete", method = RequestMethod.POST)
-    public ModelAndView deleteNote(@PathVariable("noteId") @ValidUuid UUID noteId) {
-        noteService.delete(new UUID[]{noteId}, null);
+    public ModelAndView deleteNote(@PathVariable("noteId") @ValidUuid UUID noteId, @RequestParam(required = false) @Size(max = 300) String reason) {
+        noteService.delete(new UUID[]{noteId}, reason);
         return new ModelAndView("redirect:/");
     }
 
