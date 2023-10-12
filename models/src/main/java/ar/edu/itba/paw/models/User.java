@@ -21,6 +21,18 @@ public class User {
         this.userId = userId;
         this.email = email;
     }
+
+    //TODO: Quitar esto si no te gusta David, es para hardcodear el listado de usuarios en el manage-users
+    public User(final UUID userID, final String username, final String email, final String[] roles, final boolean status) {
+        this.userId = userID;
+        this.username = username;
+        this.email = email;
+        this.roles = Arrays.stream(roles).map(Role::getRole).toArray(Role[]::new);
+        this.status = status ? UserStatus.BANNED : UserStatus.ACTIVE;
+    }
+
+
+
     public User(final UUID userId, final String email, final String locale) {
         this.userId = userId;
         this.email = email;
@@ -97,5 +109,13 @@ public class User {
 
     public boolean isBanned() {
         return status == UserStatus.BANNED;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 }

@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.models;
 
 public enum Role {
-    ROLE_STUDENT("ROLE_STUDENT", "STUDENT"),
-    ROLE_MODERATOR("ROLE_MODERATOR", "MODERATOR"),
-    ROLE_ADMIN("ROLE_ADMIN", "ADMIN");
+    ROLE_STUDENT("ROLE_STUDENT", "Student"),
+    ROLE_MODERATOR("ROLE_MODERATOR", "Moderator"),
+    ROLE_ADMIN("ROLE_ADMIN", "Admin");
 
     private final String role;
     private final String shortName;

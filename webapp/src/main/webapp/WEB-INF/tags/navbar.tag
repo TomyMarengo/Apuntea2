@@ -10,7 +10,7 @@
 <spring:message var="darkMode" code="darkMode"/>
 <spring:message var="manage" code="manage"/>
 <%@ attribute name="loggedIn" required="true"%>
-<%@ attribute name="isAdmin" required="true"%>
+<%@ attribute name="isAdmin" required="false"%>
 
 <nav class="navbar ">
     <div class="container-fluid d-flex align-items-center">
