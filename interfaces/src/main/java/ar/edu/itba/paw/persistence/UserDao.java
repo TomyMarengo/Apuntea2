@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.Role;
 import ar.edu.itba.paw.models.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,4 +20,7 @@ public interface UserDao {
     boolean updatePasswordForUserWithEmail(String email, String password);
     void unbanUsers();
     boolean banUser(UUID userId, UUID adminId, LocalDateTime endDate);
+    boolean unbanUser(UUID userId);
+    List<User> getStudents(String query, int pageNum);
+    int getStudentsQuantity(String query);
 }

@@ -22,16 +22,16 @@ public class User {
         this.email = email;
     }
 
-    //TODO: Quitar esto si no te gusta David, es para hardcodear el listado de usuarios en el manage-users
-    public User(final UUID userID, final String username, final String email, final String[] roles, final boolean status) {
+    public User(final UUID userID, final String firstName, final String lastName, final String username, final String email, final String[] roles, final UserStatus status, final String locale) {
         this.userId = userID;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.username = username;
         this.email = email;
         this.roles = Arrays.stream(roles).map(Role::getRole).toArray(Role[]::new);
-        this.status = status ? UserStatus.BANNED : UserStatus.ACTIVE;
+        this.status = status;
+        this.locale = locale;
     }
-
-
 
     public User(final UUID userId, final String email, final String locale) {
         this.userId = userId;

@@ -11,8 +11,7 @@ public class SearchUserForm {
 
     @Size(max = 30)
     @Pattern(regexp = "[a-zA-Z0-9]+")
-    //TODO add more restrictions
-    private String username;
+    private String query;
 
     @NotNull
     @Min(1)
@@ -22,12 +21,12 @@ public class SearchUserForm {
     @Range(min = 12, max = 36)
     private Integer pageSize = 12;
 
-    public String getUsername() {
-        return username;
+    public String getQuery() {
+        return query;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setQuery(String query) {
+        this.query = query;
     }
 
     public Integer getPageNumber() {

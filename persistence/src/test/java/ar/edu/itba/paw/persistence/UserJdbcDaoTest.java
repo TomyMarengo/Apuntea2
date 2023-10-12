@@ -136,5 +136,21 @@ public class UserJdbcDaoTest {
     }
 
     // TODO: Test profile picture methods?
+
+    @Test
+    public void testGetStudents() {
+        int currentUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
+
+        UUID[] studentIds = new UUID[20];
+        for (int i = 1; i <= studentIds.length; i++) {
+            studentIds[i-1] = insertStudent(namedParameterJdbcTemplate, "student" + i + "@mail.com", "", ING_INF, "es");
+        }
+        assertEquals(currentUsers + studentIds.length, JdbcTestUtils.countRowsInTable(jdbcTemplate, "users"));
+        assertEquals(0, userDao.getStudentsQuantity("student2000"));
+        assertEquals(1, userDao.getStudentsQuantity("student20"));
+        assertEquals(2, userDao.getStudentsQuantity("student2"));
+        assertEquals(20, userDao.getStudentsQuantity("student"));
+        assertEquals(currentUsers + studentIds.length, userDao.getStudentsQuantity(""));
+    }
 }
 

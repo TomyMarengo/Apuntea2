@@ -26,6 +26,8 @@ class UserJdbcDao implements UserDao{
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert jdbcRoleInsert;
 
+    private static final int STUDENTS_PAGE_SIZE = 20;
+
     private static final RowMapper<User> ROW_MAPPER = (rs, rowNum)  -> {
         Object[] roles = (Object[]) rs.getArray(ROLES).getArray();
         String[] rolesString = Arrays.copyOf(roles, roles.length, String[].class);
@@ -50,6 +52,21 @@ class UserJdbcDao implements UserDao{
         );
     };
 
+    private static final RowMapper<User> INFO_ROW_MAPPER = (rs, rowNum)  -> {
+        Object[] roles = (Object[]) rs.getArray(ROLES).getArray();
+        String[] rolesString = Arrays.copyOf(roles, roles.length, String[].class);
+        return new User(
+                UUID.fromString(rs.getString(USER_ID)),
+                rs.getString(FIRST_NAME),
+                rs.getString(LAST_NAME),
+                rs.getString(USERNAME),
+                rs.getString(EMAIL),
+                rolesString,
+                UserStatus.valueOf(rs.getString(STATUS)),
+                rs.getString(LOCALE)
+        );
+    };
+
     private static final RowMapper<ProfilePicture> PROFILE_IMAGE_ROW_MAPPER = (rs, rowNum) -> new ProfilePicture(rs.getString(USER_ID), rs.getObject(IMAGE));
 
 
@@ -61,7 +78,42 @@ class UserJdbcDao implements UserDao{
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
     }
 
-    // TODO: Make transactional in 3rd sprint
+    @Transactional
+    @Override
+    public List<User> getStudents(String query, int pageNum) {
+        String searchWord = "%" + query
+                .replace("!", "!!") // Use ! as escape character
+                .replace("%", "!%")
+                .replace("_", "!_")
+                .replace("[", "![")
+                + "%";
+
+        return jdbcTemplate.query("SELECT u.user_id, u.username, u.email, u.first_name, u.last_name, u.locale, u.status, array_agg(r.role_name) as roles FROM users u " +
+                "INNER JOIN User_Roles r ON u.user_id = r.user_id " +
+                "WHERE NOT EXISTS (SELECT * FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ADMIN') AND (lower(u.username) LIKE lower(?) OR lower(u.email) LIKE lower(?))" +
+                "GROUP BY u.user_id LIMIT ? OFFSET ?", INFO_ROW_MAPPER, searchWord, searchWord, STUDENTS_PAGE_SIZE, (pageNum - 1) * STUDENTS_PAGE_SIZE);
+    }
+
+    @Transactional
+    @Override
+    public int getStudentsQuantity(String query) {
+        // TODO: Create utils
+        String searchWord = "%" + query
+                .replace("!", "!!") // Use ! as escape character
+                .replace("%", "!%")
+                .replace("_", "!_")
+                .replace("[", "![")
+                + "%";
+
+        int quantity = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users u WHERE NOT EXISTS (SELECT * FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ADMIN') " +
+                        "AND (lower(u.username) LIKE lower(?) OR lower(u.email) LIKE lower(?))" +
+                        "GROUP BY u.user_id", (rs, rowNum) -> rs.getInt(0),
+                searchWord, searchWord);
+
+        return quantity;
+    }
+
+ // TODO: Make transactional in 3rd sprint
 //    @Transactional
     @Override
     public void create(final String email, final String password, final UUID careerId, final String lang, final Role role){
@@ -146,6 +198,11 @@ class UserJdbcDao implements UserDao{
     @Override
     public void unbanUsers() {
         jdbcTemplate.update("UPDATE Users u SET status = 'ACTIVE' WHERE status = 'BANNED' AND NOT EXISTS (SELECT * FROM Bans WHERE user_id = u.user_id AND end_date > now())");
+    }
+
+    @Override
+    public boolean unbanUser(UUID userId) {
+        return jdbcTemplate.update("UPDATE Users u SET status = 'ACTIVE' WHERE status = 'BANNED' AND user_id = ?", userId) == 1;
     }
 
     @Transactional

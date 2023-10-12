@@ -14,6 +14,7 @@ import ar.edu.itba.paw.models.User;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -50,6 +51,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    @Transactional
+    @Override
+    public List<User> getStudents(String query, int pageNum) {
+        if (query == null) {
+            query = "";
+        }
+
+        return userDao.getStudents(query, pageNum);
+    }
+
+    @Transactional
+    @Override
+    public int getStudentsQuantity(String query) {
+        if (query == null) {
+            query = "";
+        }
+
+        return userDao.getStudentsQuantity(query);
     }
 
     //    @Transactional
@@ -95,11 +116,20 @@ public class UserServiceImpl implements UserService {
         return verificationCodesService.verifyForgotPasswordCode(email, code) && userDao.updatePasswordForUserWithEmail(email, passwordEncoder.encode(password));
     }
 
-
     @Scheduled(cron = "0 0 0 * * ?") // Every day at midnight
     // @Scheduled(cron = "0 * * * * *") // Every minute
+    @Transactional
+    @Override
     public void unbanUsers() {
         LOGGER.info("Unbanning users at {}", LocalDateTime.now());
         userDao.unbanUsers();
     }
+
+    @Override
+    public void unbanUser(UUID userId) {
+        if (!userDao.unbanUser(userId))
+            throw new InvalidUserException();
+    }
+
+
 }
