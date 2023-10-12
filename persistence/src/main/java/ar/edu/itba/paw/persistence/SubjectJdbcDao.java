@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
@@ -29,6 +30,13 @@ public class SubjectJdbcDao implements SubjectDao {
                 UUID.fromString(rs.getString(SUBJECT_ID)),
                 rs.getString(SUBJECT_NAME)
         );
+
+    private static final RowMapper<Subject> ROW_MAPPER_WITH_ROOT_DIR = (rs, rowNum)  ->
+            new Subject(
+                    UUID.fromString(rs.getString(SUBJECT_ID)),
+                    rs.getString(SUBJECT_NAME),
+                    UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
+            );
 
     private static final RowMapper<Subject> ROW_MAPPER_CAREER = (rs, rowNum)  ->
             new Subject(
@@ -45,6 +53,11 @@ public class SubjectJdbcDao implements SubjectDao {
         this.jdbcSubjectsCareersInsert = new SimpleJdbcInsert(ds)
                 .withTableName(SUBJECTS_CAREERS)
                 .usingColumns(SUBJECT_ID, CAREER_ID, YEAR);
+    }
+
+    @Override
+    public Optional<Subject> getSubjectById(UUID subjectId) {
+        return jdbcTemplate.query("SELECT s.subject_id, s.subject_name, s.root_directory_id FROM Subjects s WHERE s.subject_id = ?", ROW_MAPPER_WITH_ROOT_DIR, subjectId).stream().findFirst();
     }
 
     @Override

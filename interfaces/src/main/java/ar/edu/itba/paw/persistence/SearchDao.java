@@ -13,4 +13,5 @@ public interface SearchDao {
     int countSearchResults(SearchArguments sa);
     int countNavigationResults(SearchArguments sa, UUID parentId);
     Optional<UUID> findByName(UUID parentId, String name, UUID currentUserId);
+    int countChildren(UUID parentId);
 }

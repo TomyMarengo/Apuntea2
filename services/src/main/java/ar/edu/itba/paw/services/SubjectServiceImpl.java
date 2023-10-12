@@ -4,7 +4,9 @@ import ar.edu.itba.paw.models.Subject;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.InvalidSubjectException;
 import ar.edu.itba.paw.models.exceptions.InvalidSubjectCareerException;
+import ar.edu.itba.paw.persistence.CareerDao;
 import ar.edu.itba.paw.persistence.DirectoryDao;
+import ar.edu.itba.paw.persistence.SearchDao;
 import ar.edu.itba.paw.persistence.SubjectDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,12 +21,17 @@ import java.util.stream.Collectors;
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectDao subjectDao;
     private final DirectoryDao directoryDao;
+    private final CareerDao careerDao;
+    private final SearchDao searchDao;
     private final SecurityService securityService;
 
+
     @Autowired
-    public SubjectServiceImpl(SubjectDao subjectDao, DirectoryDao directoryDao, SecurityService securityService) {
+    public SubjectServiceImpl(SubjectDao subjectDao, DirectoryDao directoryDao, CareerDao careerDao, SearchDao searchDao, SecurityService securityService) {
         this.subjectDao = subjectDao;
         this.directoryDao = directoryDao;
+        this.careerDao = careerDao;
+        this.searchDao = searchDao;
         this.securityService = securityService;
     }
 
@@ -110,4 +117,12 @@ public class SubjectServiceImpl implements SubjectService {
             throw new InvalidSubjectCareerException();
         }
     }
+
+    @Transactional
+    @Override
+    public boolean isSubjectDetachable(UUID subjectId) {
+        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
+        return careerDao.countCareersBySubjectId(subjectId) > 1;// || searchDao.countChildren(subject.getRootDirectoryId()) > 0;
+    }
+
 }

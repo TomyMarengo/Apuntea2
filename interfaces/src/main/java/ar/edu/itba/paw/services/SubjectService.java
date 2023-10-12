@@ -21,4 +21,6 @@ public interface SubjectService {
 
     void unlinkSubjectFromCareer(UUID subjectId, UUID careerId);
 
+    boolean isSubjectDetachable(UUID subjectId);
+
 }

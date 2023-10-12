@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
@@ -46,10 +45,10 @@ public class CareerJdbcDaoTest {
     }
 
     @Test
-    public void testFindCareerById() {
+    public void testGetCareerById() {
         UUID careerId = insertCareer(namedParameterJdbcTemplate, "career1", ITBA_ID);
 
-        Optional<Career> maybeCareer = careerDao.findCareerById(careerId);
+        Optional<Career> maybeCareer = careerDao.getCareerById(careerId);
 
         assertTrue(maybeCareer.isPresent());
         assertEquals(careerId, maybeCareer.get().getCareerId());

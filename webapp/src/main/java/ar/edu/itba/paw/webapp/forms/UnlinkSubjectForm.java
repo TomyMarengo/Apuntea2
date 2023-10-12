@@ -1,12 +1,12 @@
 package ar.edu.itba.paw.webapp.forms;
 
-import ar.edu.itba.paw.webapp.validation.RemainingLinkedCareers;
+import ar.edu.itba.paw.webapp.validation.DetachableSubject;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
-@RemainingLinkedCareers
+@DetachableSubject
 public class UnlinkSubjectForm {
 
     @ValidUuid

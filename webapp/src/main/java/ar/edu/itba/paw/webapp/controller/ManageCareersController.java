@@ -63,7 +63,7 @@ public class ManageCareersController {
         InstitutionData institutionData = institutionService.getInstitutionData();
         mav.addObject("institutionData", toSafeJson(institutionData));
 
-        Career career = careerService.findCareerById(careerId).orElseThrow(CareerNotFoundException::new);
+        Career career = careerService.getCareerById(careerId).orElseThrow(CareerNotFoundException::new);
         mav.addObject("career", career);
 
         List<Subject> ownedSubjects = subjectService.getSubjectsByCareer(careerId);

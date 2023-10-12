@@ -187,6 +187,11 @@ public class SearchJdbcDao implements SearchDao {
                 .findFirst();
     }
 
+    @Override
+    public int countChildren(UUID parentId) {
+        return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Navigation WHERE parent_id = ?", new Object[]{parentId}, Integer.class);
+    }
+
     private void applyInstitutionFilters(StringBuilder query, List<Object> args, SearchArguments sa) {
         addIfPresent(query, args,  INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
         addIfPresent(query, args,  CAREER_ID, "=", "AND", sa.getCareerId());

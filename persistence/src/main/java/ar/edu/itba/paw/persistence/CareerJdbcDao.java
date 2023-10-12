@@ -40,7 +40,7 @@ public class CareerJdbcDao implements CareerDao{
     }
 
     @Override
-    public Optional<Career> findCareerById(UUID careerId) {
+    public Optional<Career> getCareerById(UUID careerId) {
         return jdbcTemplate.query("SELECT c.career_id, c.career_name, c.institution_id FROM Careers c WHERE c.career_id = ? "
         , new Object[]{careerId}, INDIVIDUAL_ROW_MAPPER).stream().findFirst();
     }

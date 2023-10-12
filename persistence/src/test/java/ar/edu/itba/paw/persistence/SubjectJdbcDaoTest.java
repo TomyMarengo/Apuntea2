@@ -50,6 +50,18 @@ public class SubjectJdbcDaoTest {
                 .usingColumns(SUBJECT_ID, CAREER_ID, YEAR);
     }
 
+    @Test
+    public void testGetSubjectById(){
+        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+
+        Subject subject = subjectDao.getSubjectById(subjectId).orElse(null);
+
+        assertNotNull(subject);
+        assertEquals(subjectId, subject.getSubjectId());
+        assertEquals("subject1", subject.getName());
+        assertEquals(dirId, subject.getRootDirectoryId());
+    }
 
     @Test
     public void testGetSubjectsByCareerId(){

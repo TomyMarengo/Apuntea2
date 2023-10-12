@@ -131,6 +131,25 @@ public class JdbcDaoTestUtils {
         return (UUID) keyHolder.getKeys().get(DIRECTORY_ID);
     }
 
+    static UUID insertNote(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID parentId, String name, UUID subjectId, UUID userId, boolean visible, byte[] file, String category, String fileType) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(NOTE_NAME, name);
+        args.addValue(SUBJECT_ID, subjectId);
+        args.addValue(USER_ID, userId);
+        args.addValue(PARENT_ID, parentId);
+        args.addValue(VISIBLE, visible);
+        args.addValue(FILE, file);
+        args.addValue(CATEGORY, category.toLowerCase());
+        args.addValue(FILE_TYPE, fileType);
+        KeyHolder holder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, subject_id, user_id, parent_id, visible, file, category, file_type)  " +
+                        "SELECT :note_name, :subject_id, :user_id, d.directory_id, :visible, :file, :category, :file_type FROM Directories d " +
+                        "WHERE d.directory_id = :parent_id AND (d.user_id = :user_id OR d.parent_id IS NULL)"
+                , args, holder, new String[]{NOTE_ID});
+        return (UUID) holder.getKeys().get(NOTE_ID);
+    }
+
+
     static void insertReview(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID noteId, UUID userId, int score, String content) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(NOTE_ID, noteId);

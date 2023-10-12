@@ -9,11 +9,11 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Documented
-@Constraint(validatedBy = RemainingLinkedCareersValidator.class)
+@Constraint(validatedBy = DetachableSubjectValidator.class)
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RemainingLinkedCareers {
-    String message() default "{ar.edu.itba.paw.webapp.validation.RemainingLinkedCareers.message}";
+public @interface DetachableSubject {
+    String message() default "{ar.edu.itba.paw.webapp.validation.DetachableSubject.message}";
 
     Class<?>[] groups() default {};
 
@@ -23,6 +23,6 @@ public @interface RemainingLinkedCareers {
     @Retention(RUNTIME)
     @Documented
     @interface List {
-        RemainingLinkedCareers[] remainingLinkedCareers();
+        DetachableSubject[] detachableSubjects();
     }
 }

@@ -25,12 +25,8 @@ public class CareerServiceImpl implements CareerService {
     }
 
     @Override
-    public Optional<Career> findCareerById(UUID careerId) {
-        return careerDao.findCareerById(careerId);
+    public Optional<Career> getCareerById(UUID careerId) {
+        return careerDao.getCareerById(careerId);
     }
 
-    @Override
-    public int countCareersBySubjectId(UUID subjectId) {
-        return careerDao.countCareersBySubjectId(subjectId);
-    }
 }

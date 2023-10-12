@@ -226,4 +226,67 @@ public class SearchJdbcDaoTest {
         assertTrue(d3.getFavorite());
         assertFalse(d2.getFavorite());
     }
+
+
+    private static class TestCountChildrenObject {
+        private UUID rootDirId;
+        private UUID child1Id, child2Id, child3Id, child4Id;
+        private UUID grandchild11Id,grandchild12Id;
+        private UUID grandchild21Id, grandchild22Id;
+        private UUID ggchild111Id;
+        private TestCountChildrenObject(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+            rootDirId = insertDirectory(namedParameterJdbcTemplate, "root", null, null);
+            child1Id = insertDirectory(namedParameterJdbcTemplate, "child1", PEPE_ID, rootDirId);
+            child2Id = insertDirectory(namedParameterJdbcTemplate, "child2", PEPE_ID, rootDirId);
+            child3Id = insertDirectory(namedParameterJdbcTemplate, "child3", PEPE_ID, rootDirId);
+            child4Id = insertNote(namedParameterJdbcTemplate, rootDirId,"child4", EDA_ID,PEPE_ID, true, new byte[]{0}, "other", "pdf");
+
+            grandchild11Id = insertDirectory(namedParameterJdbcTemplate, "grandchild11", PEPE_ID, child1Id);
+            grandchild12Id = insertDirectory(namedParameterJdbcTemplate, "grandchild12", PEPE_ID, child1Id);
+
+            grandchild21Id = insertNote(namedParameterJdbcTemplate, child2Id,"grandchild21", EDA_ID,PEPE_ID, true, new byte[]{0}, "other", "pdf");
+            grandchild22Id = insertNote(namedParameterJdbcTemplate, child2Id, "grandchild22", EDA_ID,PEPE_ID, true, new byte[]{0}, "other", "pdf");
+
+            ggchild111Id = insertDirectory(namedParameterJdbcTemplate, "ggchild111", PEPE_ID, grandchild11Id);
+        }
+    }
+
+
+    @Test
+    public void testCountChildrenMixed() {
+        TestCountChildrenObject test = new TestCountChildrenObject(namedParameterJdbcTemplate);
+        assertEquals(4, searchDao.countChildren(test.rootDirId));
+    }
+
+    @Test
+    public void testCountChildrenAllDirectories() {
+        TestCountChildrenObject test = new TestCountChildrenObject(namedParameterJdbcTemplate);
+        assertEquals(2, searchDao.countChildren(test.child1Id));
+    }
+
+    @Test
+    public void testCountChildrenAllNotes() {
+        TestCountChildrenObject test = new TestCountChildrenObject(namedParameterJdbcTemplate);
+        assertEquals(2, searchDao.countChildren(test.child2Id));
+    }
+
+    @Test
+    public void testCountChildrenEmpty() {
+        TestCountChildrenObject test = new TestCountChildrenObject(namedParameterJdbcTemplate);
+        assertEquals(0, searchDao.countChildren(test.child3Id));
+    }
+
+    @Test
+    public void testCountChildrenGrandChildren() {
+        TestCountChildrenObject test = new TestCountChildrenObject(namedParameterJdbcTemplate);
+        assertEquals(1, searchDao.countChildren(test.grandchild11Id));
+    }
+
+    @Test
+    public void testCountChildrenNotADirectory() {
+        TestCountChildrenObject test = new TestCountChildrenObject(namedParameterJdbcTemplate);
+        assertEquals(0, searchDao.countChildren(test.child4Id));
+    }
+
+
 }

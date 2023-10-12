@@ -3,12 +3,13 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.models.Subject;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface SubjectDao {
+    Optional<Subject> getSubjectById(UUID subjectId);
     List<Subject> getSubjects();
     List<Subject> getSubjectsByCareerId(UUID careerId);
-
     List<Subject> getSubjectsByCareerIdComplemented(UUID careerId);
 
     List<Subject> getSubjectsByInstitutionId(UUID institutionId);

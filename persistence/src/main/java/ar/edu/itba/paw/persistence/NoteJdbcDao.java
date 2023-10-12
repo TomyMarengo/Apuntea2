@@ -133,8 +133,6 @@ public class NoteJdbcDao implements NoteDao {
                 , args, holder, new String[]{NOTE_ID});
         return (UUID) holder.getKeys().get(NOTE_ID);
     }
-
-    //TODO: change to update insert, validate that the user is the owner of parent directory
     @Transactional
     @Override
     public UUID create(String name, UUID subjectId, UUID userId, UUID parentId, boolean visible, byte[] file, String category, String fileType) {
