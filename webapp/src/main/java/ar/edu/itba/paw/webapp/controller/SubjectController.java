@@ -5,8 +5,7 @@ import ar.edu.itba.paw.models.InstitutionData;
 import ar.edu.itba.paw.models.Subject;
 import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.CareerNotFoundException;
-import ar.edu.itba.paw.services.DataService;
-import ar.edu.itba.paw.services.SecurityService;
+import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.LinkSubjectForm;
 import ar.edu.itba.paw.webapp.forms.CreateSubjectForm;
 import ar.edu.itba.paw.webapp.forms.EditSubjectForm;
@@ -31,19 +30,23 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 @RequestMapping("/careers")
 public class SubjectController {
 
-    private final DataService dataService;
+    private final InstitutionService institutionService;
+    private final CareerService careerService;
+    private final SubjectService subjectService;
     private final SecurityService securityService;
 
     @Autowired
-    public SubjectController(final DataService dataService, final SecurityService securityService) {
-        this.dataService = dataService;
+    public SubjectController(final InstitutionService institutionService, final CareerService careerService, final SubjectService subjectService, SecurityService securityService) {
         this.securityService = securityService;
+        this.institutionService = institutionService;
+        this.subjectService = subjectService;
+        this.careerService = careerService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView selectCareer(){
         final ModelAndView mav = new ModelAndView("manageCareer");
-        InstitutionData institutionData = dataService.getInstitutionData();
+        InstitutionData institutionData = institutionService.getInstitutionData();
         mav.addObject("institutionData", new Gson().toJson(institutionData));
         return mav;
     }
@@ -58,16 +61,16 @@ public class SubjectController {
         addFormOrGetWithErrors(mav, model, EDIT_SUBJECT_FORM_BINDING, "errorsEditSubjectForm", "editSubjectForm", EditSubjectForm.class);
         
 
-        InstitutionData institutionData = dataService.getInstitutionData();
+        InstitutionData institutionData = institutionService.getInstitutionData();
         mav.addObject("institutionData", new Gson().toJson(institutionData));
 
-        Career career = dataService.findCareerById(careerId).orElseThrow(CareerNotFoundException::new);
+        Career career = careerService.findCareerById(careerId).orElseThrow(CareerNotFoundException::new);
         mav.addObject("career", career);
 
-        List<Subject> ownedSubjects = dataService.getSubjectsByCareer(careerId);
+        List<Subject> ownedSubjects = subjectService.getSubjectsByCareer(careerId);
         mav.addObject("ownedSubjects", ownedSubjects);
 
-        List<Subject> unownedSubjects = dataService.getSubjectsByCareerComplemented(careerId);
+        List<Subject> unownedSubjects = subjectService.getSubjectsByCareerComplemented(careerId);
         mav.addObject("unownedSubjects", new  Gson().toJson(unownedSubjects));
         return mav;
     }
@@ -84,7 +87,7 @@ public class SubjectController {
             return new ModelAndView("redirect:/careers/"+careerId);
         }
         final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
-        dataService.linkSubjectToCareer(linkSubjectForm.getSubjectId(), careerId, linkSubjectForm.getYear());
+        subjectService.linkSubjectToCareer(linkSubjectForm.getSubjectId(), careerId, linkSubjectForm.getYear());
         return mav;
     }
 
@@ -99,7 +102,7 @@ public class SubjectController {
             return new ModelAndView("redirect:/careers/"+careerId);
         }
         final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
-        dataService.unlinkSubjectFromCareer(unlinkSubjectForm.getSubjectId(), careerId);
+        subjectService.unlinkSubjectFromCareer(unlinkSubjectForm.getSubjectId(), careerId);
         return mav;
     }
 
@@ -115,7 +118,7 @@ public class SubjectController {
             return new ModelAndView("redirect:/careers/"+careerId);
         }
         final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
-        dataService.createSubject(createSubjectForm.getName(), careerId, createSubjectForm.getYear());
+        subjectService.createSubject(createSubjectForm.getName(), careerId, createSubjectForm.getYear());
         return mav;
     }
 
@@ -130,7 +133,7 @@ public class SubjectController {
             return new ModelAndView("redirect:/careers/"+careerId);
         }
         final ModelAndView mav = new ModelAndView("redirect:/careers/"+careerId);
-        dataService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
+        subjectService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
         return mav;
     }
 

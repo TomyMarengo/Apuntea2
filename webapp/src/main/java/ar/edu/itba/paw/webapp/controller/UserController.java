@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.User;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.SecurityService;
+import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.forms.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.forms.EditUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
@@ -26,6 +27,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final SubjectService subjectService;
     private final DirectoryService directoryService;
     private final SecurityService securityService;
 
@@ -35,10 +37,11 @@ public class UserController {
     private ServletContext context;
 
     @Autowired
-    public UserController(final UserService userService, final SecurityService securityService, final DirectoryService directoryService) {
+    public UserController(final SubjectService subjectService, final UserService userService, final SecurityService securityService, final DirectoryService directoryService) {
         this.userService = userService;
         this.securityService = securityService;
         this.directoryService = directoryService;
+        this.subjectService = subjectService;
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
@@ -46,8 +49,7 @@ public class UserController {
         ModelAndView mav = new ModelAndView("profile");
         User user = securityService.getCurrentUserOrThrow();
         mav.addObject("user", user);
-        // TODO: Should this be moved to the service???
-        mav.addObject("root_directories", directoryService.getRootDirectoriesByCurrentUserCareer());
+        mav.addObject("root_directories", subjectService.getSubjectsByCareerGroupByYear());
         mav.addObject("favorites", directoryService.getFavorites());
         return mav;
     }

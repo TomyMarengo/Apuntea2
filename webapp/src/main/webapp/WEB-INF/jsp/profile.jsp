@@ -133,22 +133,23 @@
                     </c:forEach>
                 </div>
             </c:if>
-
-            <h2 class="text-center mt-5 mt-lg-0 mb-3"><spring:message code="profile.directories.title"/></h2>
-            <div class="card rounded-box file-list">
-                <c:forEach items="${root_directories}" var="rd">
-                        <a class="w-100" href="<c:url value="./directory/${rd.id}"/>">
+            <c:forEach items="${root_directories}" var="subjects">
+                <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
+                <h2 class="text-center mt-5 mt-lg-0 mb-3"><spring:message code="profile.directories.title" arguments="${ordinal}"/></h2>
+                <div class="card rounded-box file-list mb-5">
+                    <c:forEach items="${subjects.value}" var="rd">
+                        <a class="w-100" href="<c:url value="./directory/${rd.rootDirectoryId}"/>">
                             <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
-                                <!-- TODO: REVISAR COLOR RD -->
-                                <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>" class="icon-xxl fill-${rd.iconColor}">
+                                <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
                                 <!-- max 2 lines-->
                                 <span class="fw-bold flex-wrap justify-content-center folder-name">
                                     <c:out value="${rd.name}"/>
                                 </span>
                             </div>
                         </a>
-                </c:forEach>
-            </div>
+                    </c:forEach>
+                </div>
+            </c:forEach>
         </div>
     </div>
 </main>

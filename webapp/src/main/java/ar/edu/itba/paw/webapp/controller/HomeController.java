@@ -16,15 +16,15 @@ import javax.validation.Valid;
 @Controller
 public class HomeController {
 
-    private final DataService dataService;
+    private final InstitutionService institutionService;
     private final UserService userService;
     private final SecurityService securityService;
     private final VerificationCodesService verificationCodesService;
 
 
     @Autowired
-    public HomeController(final DataService dataService, final UserService userService, final SecurityService securityService, final VerificationCodesService verificationCodesService) {
-        this.dataService = dataService;
+    public HomeController(final InstitutionService institutionService, final UserService userService, final SecurityService securityService, final VerificationCodesService verificationCodesService) {
+        this.institutionService = institutionService;
         this.userService = userService;
         this.securityService = securityService;
         this.verificationCodesService = verificationCodesService;
@@ -55,7 +55,7 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("register");
 
         // TODO: Ask if this should go in the service
-        InstitutionData institutionData = dataService.getInstitutionData();
+        InstitutionData institutionData = institutionService.getInstitutionData();
         mav.addObject("institutionData", new Gson().toJson(institutionData));
         return mav;
     }

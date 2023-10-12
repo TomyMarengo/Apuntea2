@@ -73,7 +73,8 @@ public class NoteJdbcDao implements NoteDao {
                             rs.getString(EMAIL)
                     ),
                     rs.getString(CONTENT),
-                    rs.getInt(SCORE)
+                    rs.getInt(SCORE),
+                    rs.getTimestamp(CREATED_AT).toLocalDateTime()
             );
 
     private final static RowMapper<Review> COMPLETE_REVIEW_ROW_MAPPER = (rs, rowNum) ->
@@ -238,7 +239,7 @@ public class NoteJdbcDao implements NoteDao {
     public List<Review> getReviews(UUID noteId) {
         // Right now it's not necessary to validate that the current user has visibility enabled
         return jdbcTemplate.query(
-                "SELECT u.user_id, u.email, r.score, r.content FROM Reviews r INNER JOIN Users u ON r.user_id = u.user_id WHERE r.note_id = ? ORDER BY r.created_at DESC LIMIT " + REVIEW_LIMIT,
+                "SELECT u.user_id, u.email, r.score, r.content, r.created_at FROM Reviews r INNER JOIN Users u ON r.user_id = u.user_id WHERE r.note_id = ? ORDER BY r.created_at DESC LIMIT " + REVIEW_LIMIT,
                     new Object[]{noteId},
                     REVIEW_ROW_MAPPER
         );

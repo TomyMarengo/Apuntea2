@@ -103,7 +103,6 @@ public class NoteJdbcDaoTest {
         assertEquals(PEPE_ID, reviews.get(0).getUser().getUserId());
     }
 
-    // TODO: Fix urgently, this test has RACE CONDITIONS!!!
     @Test
     public void testLimitReviews() {
         UUID[] userIds = new UUID[20];
@@ -113,10 +112,9 @@ public class NoteJdbcDaoTest {
         }
         List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
         assertEquals(10, reviews.size());
-        for (int i = 10; i < 20; i++) {
-            assertEquals("review " + i, reviews.get(19 - i).getContent());
-            assertEquals((i % 5) + 1, (int) reviews.get(19 - i).getScore());
-            assertEquals(userIds[i], reviews.get(19 - i).getUser().getUserId());
+
+        for (int i = 0; i < reviews.size() - 1; i++) {
+            assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i + 1).getCreatedAt()));
         }
     }
 

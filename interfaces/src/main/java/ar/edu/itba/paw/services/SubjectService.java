@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Subject;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface SubjectService {
@@ -10,7 +11,8 @@ public interface SubjectService {
     List<Subject> getSubjectsByCareer(UUID careerId);
     List<Subject> getSubjectsByCareerComplemented(UUID careerId);
     List<Subject> getSubjectsByInstitution(UUID institutionId);
-
+    Map<Integer, List<Subject>> getSubjectsByCareerGroupByYear();
+    Map<Integer, List<Subject>> getSubjectsByCareerGroupByYear(UUID careerId);
     UUID createSubject(String name, UUID careerId, int year);
     void linkSubjectToCareer(UUID subjectId, UUID careerId, int year);
 

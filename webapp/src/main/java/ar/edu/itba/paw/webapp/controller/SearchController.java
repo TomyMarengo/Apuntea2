@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.services.DataService;
+import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.forms.SearchForm;
@@ -20,13 +20,13 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/search")
 public class SearchController {
-    private final DataService dataService;
+    private final InstitutionService institutionService;
     private final SearchService searchService;
     private final SecurityService securityService;
 
     @Autowired
-    public SearchController(final DataService dataService, SearchService searchService, SecurityService securityService) {
-        this.dataService = dataService;
+    public SearchController(final InstitutionService institutionService, final SearchService searchService, final SecurityService securityService) {
+        this.institutionService = institutionService;
         this.searchService = searchService;
         this.securityService = securityService;
     }
@@ -54,8 +54,7 @@ public class SearchController {
         mav.addObject("maxPage", pageResult.getTotalPages());
         mav.addObject("results", pageResult.getContent());
 
-        // TODO: Ask if this should go in the service
-        InstitutionData institutionData = dataService.getInstitutionData();
+        InstitutionData institutionData = institutionService.getInstitutionData();
         mav.addObject("institutionData", new Gson().toJson(institutionData));
         return mav;
     }

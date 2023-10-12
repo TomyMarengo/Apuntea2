@@ -1,19 +1,25 @@
 package ar.edu.itba.paw.models;
 
+import java.time.LocalDateTime;
+
 public class Review {
     private final User user;
     private final String content;
     private final Integer score;
     private Note note;
+    private LocalDateTime createdAt;
 
-    public Review(User user, String comment, Integer score) {
+    public Review(User user, String content, Integer score, LocalDateTime createdAt) {
         this.user = user;
-        this.content = comment;
+        this.content = content;
         this.score = score;
+        this.createdAt = createdAt;
     }
 
     public Review(User user, String content, Integer score, Note note) {
-        this(user, content, score);
+        this.user = user;
+        this.content = content;
+        this.score = score;
         this.note = note;
     }
 
@@ -31,5 +37,9 @@ public class Review {
 
     public Note getNote() {
         return note;
+    }
+
+    public LocalDateTime getCreatedAt(){
+        return createdAt;
     }
 }

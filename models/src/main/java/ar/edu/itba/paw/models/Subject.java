@@ -5,10 +5,14 @@ import java.util.UUID;
 public class Subject {
     private final UUID subjectId;
     private final String name;
-
     private UUID rootDirectoryId;
 
+    private static final int MIN_YEAR = 1;
+    private static final int MAX_YEAR = 10;
+
+    //only has meaning in the context of subject-career relation
     Integer year;
+
     public Subject(UUID subjectId, String name) {
         this.subjectId = subjectId;
         this.name = name;
@@ -20,9 +24,16 @@ public class Subject {
     }
 
     //for subject-career relation
-    public Subject(UUID subjectId, String name, Integer year) {
+    public Subject(UUID subjectId, String name, int year) {
         this(subjectId, name);
+        if (year > MAX_YEAR || year < MIN_YEAR)
+            throw new IllegalArgumentException();
         this.year = year;
+    }
+
+    public Subject(UUID subjectId, String name, UUID rootDirectoryId, int year) {
+        this(subjectId, name, year);
+        this.rootDirectoryId = rootDirectoryId;
     }
 
     public UUID getSubjectId() {

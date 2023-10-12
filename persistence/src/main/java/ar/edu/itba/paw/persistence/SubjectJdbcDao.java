@@ -34,6 +34,7 @@ public class SubjectJdbcDao implements SubjectDao {
             new Subject(
                     UUID.fromString(rs.getString(SUBJECT_ID)),
                     rs.getString(SUBJECT_NAME),
+                    UUID.fromString(rs.getString(ROOT_DIRECTORY_ID)),
                     rs.getInt(YEAR)
             );
 
@@ -53,7 +54,7 @@ public class SubjectJdbcDao implements SubjectDao {
 
     @Override
     public List<Subject> getSubjectsByCareerId(UUID careerId) {
-        return jdbcTemplate.query("SELECT DISTINCT s.subject_id, s.subject_name, sc.year FROM Subjects s " +
+        return jdbcTemplate.query("SELECT DISTINCT s.subject_id, s.subject_name, sc.year, s.root_directory_id FROM Subjects s " +
                 "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id WHERE sc.career_id = ? " +
                 "ORDER BY sc.year", ROW_MAPPER_CAREER, careerId);
     }
@@ -111,8 +112,6 @@ public class SubjectJdbcDao implements SubjectDao {
             }});
         }
         return count == 0;
-
-
     }
 
     @Override
