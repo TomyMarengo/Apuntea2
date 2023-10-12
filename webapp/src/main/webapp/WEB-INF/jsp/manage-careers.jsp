@@ -47,10 +47,10 @@
     </fragment:bottom-navbar>
 </header>
 
-<main>
+<main style="margin-left: 50px !important;">
     <!-- CAREER SELECT -->
     <div class="container my-5">
-        <div class="row row-cols-1 row-cols-lg-2 justify-content-center" style="margin-left: 50px !important;">
+        <div class="row row-cols-1 row-cols-lg-2 justify-content-center">
 
             <div class="col col-lg-5">
                 <select id="institutionSelect" style="display: none;">
