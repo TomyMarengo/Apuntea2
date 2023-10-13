@@ -160,6 +160,7 @@
                                     <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                          data-bs-title="<spring:message code="banUser"/>" data-bs-trigger="hover">
                                         <button class="btn nav-icon-button ban-button"
+                                                data-email="<c:out value="${item.email}"/>"
                                                 data-bs-toggle="modal" data-bs-target="#banUserModal"
                                                 id="<c:out value="${item.userId}"/>.b1">
                                             <img src="<c:url value="/svg/user-slash.svg"/>"
@@ -168,10 +169,13 @@
                                         </button>
                                     </div>
                                 </c:if>
+                                <!-- TODO: Change data-email for data-username or the method to handle all names -->
+                                <!-- TODO: (Change the modal too) -->
                                 <c:if test="${item.status.status eq 'banned'}">
                                     <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                          data-bs-title="<spring:message code="unbanUser"/>" data-bs-trigger="hover">
                                         <button class="btn nav-icon-button unban-button"
+                                                data-email="<c:out value="${item.email}"/>"
                                                 data-bs-toggle="modal" data-bs-target="#unbanUserModal"
                                                 id="<c:out value="${item.userId}"/>.u1">
                                             <img src="<c:url value="/svg/user-check.svg"/>"
@@ -285,7 +289,12 @@
                     </button>
                 </div>
 
-                <div class="modal-footer">
+                <div class="modal-body pb-0">
+                    <spring:message code="ban.confirm"/>
+                    <form:errors cssClass="text-danger" element="p"/>
+                </div>
+
+                <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-primary"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
@@ -316,7 +325,12 @@
                     </button>
                 </div>
 
-                <div class="modal-footer">
+                <div class="modal-body pb-0">
+                    <spring:message code="unban.confirm"/>
+                    <form:errors cssClass="text-danger" element="p"/>
+                </div>
+
+                <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-primary"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
@@ -336,6 +350,7 @@
         crossorigin="anonymous"></script>
 
 <script src="<c:url value="/js/popups.js"/>"></script>
+<script src="<c:url value="/js/sidebar.js"/>"></script>
 <c:if test="${not empty users}">
     <script src="<c:url value="/js/pagination.js"/>"></script>
     <script src="<c:url value="/js/ban-unban.js"/>"></script>

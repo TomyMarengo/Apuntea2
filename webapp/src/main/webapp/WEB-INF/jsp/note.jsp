@@ -131,13 +131,18 @@
 
                     <div class="reviews-comments">
                         <c:forEach items="${reviews}" var="review" varStatus="count">
-                            <div class="card box review-card mb-3 p-3">
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="d-flex flex-row">
-                                        <c:if test="${user.isAdmin}">
+                            <div class="card box review-card mb-3 p-3 gap-2">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title overflow-hidden p-0 m-0">
+                                        <c:out value="${review.user.email}"/>
+                                    </h5>
+                                    <c:if test="${user.isAdmin}">
                                             <span data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                  data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
-                                                <button class="btn nav-icon-button deleteReviewModalButton d-flex align-items-baseline" data-bs-toggle="modal" id="deleteReviewModalButton.${count.index}"
+                                                  data-bs-title="<spring:message code="delete"/>"
+                                                  data-bs-trigger="hover">
+                                                <button class="btn nav-icon-button deleteReviewModalButton d-flex align-items-center justify-content-center"
+                                                        data-bs-toggle="modal"
+                                                        id="deleteReviewModalButton.${count.index}"
                                                         value="${review.user.userId}"
                                                         data-bs-target="#deleteReviewModal">
                                                     <img src="<c:url value="/svg/trash.svg"/>"
@@ -145,15 +150,11 @@
                                                          class="icon-s fill-text">
                                                 </button>
                                             </span>
-                                        </c:if>
-                                        <h4 class="card-title overflow-hidden p-0 m-0">
-                                            <c:out value="${review.user.email}"/>
-                                        </h4>
-                                    </div>
-                                    <span class="card-header-pills">
-                                        <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
-                                    </span>
+                                    </c:if>
                                 </div>
+                                <span>
+                                    <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
+                                </span>
                                 <span class="card-text reviews-comment">
                                         <c:out value="${review.content}"/>
                                     </span>
@@ -254,15 +255,17 @@
                     <div class="modal-body pb-0 d-flex flex-column">
                         <spring:message code="DeleteForm.description"/>
                         <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
-                            <label for="reason"></label>
-                            <textarea name="reason" class="form-control mt-3" id="reason" placeholder="${deleteMessagePlaceholder}"></textarea>
+                        <label for="reason"></label>
+                        <textarea name="reason" class="form-control mt-3" id="reason"
+                                  placeholder="${deleteMessagePlaceholder}"></textarea>
                     </div>
 
                     <div class="modal-footer mt-4">
                         <button type="button" class="btn rounded-box button-primary"
                                 data-bs-dismiss="modal">
                             <spring:message code="close"/></button>
-                        <input id="deleteReviewButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message code="delete"/>"/>
+                        <input id="deleteReviewButton" type="submit" class="btn rounded-box button-secondary"
+                               value="<spring:message code="delete"/>"/>
                     </div>
 
                 </form:form>

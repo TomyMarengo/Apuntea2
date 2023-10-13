@@ -1,6 +1,6 @@
 .sidebar {
     position: fixed;
-    top: calc(var(--header-height));
+    top: var(--header-height);
     left: 0;
     height: 100%;
     width: 50px;
@@ -10,4 +10,10 @@
     flex-direction: column;
     align-items: center ;
     gap: 1rem;
+}
+
+.sidebar.fixed {
+    position: fixed;
+    top: var(--header-height); /* Alinea la barra al borde inferior de la barra de navegación */
+    bottom: 0;
 }

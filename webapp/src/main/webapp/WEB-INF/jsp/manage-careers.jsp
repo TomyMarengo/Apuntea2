@@ -141,7 +141,7 @@
         </div>
     </div>
     <!-- HORIZONTAL LIST -->
-    <section class="container mt-4 p-0">
+    <section class="container mt-4 p-0" style="max-height: 500px; overflow-y: scroll">
         <div class="table-responsive">
             <table class="table table-hover table-search">
                 <thead>
@@ -450,6 +450,7 @@
 <script src="<c:url value="/js/ics-autocomplete.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/manage-career.js"/>"></script>
+<script src="<c:url value="/js/sidebar.js"/>"></script>
 
 </body>
 
