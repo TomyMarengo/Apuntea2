@@ -9,10 +9,10 @@
 <spring:message var="notifications" code="notifications"/>
 <spring:message var="darkMode" code="darkMode"/>
 <spring:message var="manage" code="manage"/>
-<%@ attribute name="loggedIn" required="true"%>
-<%@ attribute name="isAdmin" required="false"%>
+<%@ attribute name="loggedIn" required="true" %>
+<%@ attribute name="isAdmin" required="false" %>
 
-<nav class="navbar ">
+<nav class="navbar">
     <div class="container-fluid d-flex align-items-center">
         <a class="navbar-brand text-dark-primary" href="${baseUrl}">Apuntea</a>
         <div class="d-flex justify-content-center align-items-center mx-1">
@@ -21,7 +21,8 @@
                 <button class="btn nav-icon-button search-icon" type="button" id="searchNavButton">
                     <img src="<c:url value="/svg/search.svg"/>" alt="${search}" class="icon-s fill-dark-primary"/>
                 </button>
-                <input id="searchNavInput" type="text" class="search-input" placeholder="<spring:message code="search.word.placeholder"/>" />
+                <input id="searchNavInput" type="text" class="search-input"
+                       placeholder="<spring:message code="search.word.placeholder"/>"/>
             </div>
 
             <button id="darkModeToggle" class="btn nav-icon-button" type="button">
@@ -36,27 +37,32 @@
                 </a>
             </c:if>
 
-            <div class="btn-group mx-2">
-                <button type="button"
-                        class="btn button-primary nav-user-circle d-flex align-items-center justify-content-center"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="<c:url value="/svg/user.svg"/>" alt="${profile}" class="icon-s fill-bg"/>
-                </button>
+            <c:if test="${loggedIn}">
+                <div class="btn-group mx-2">
+                    <button type="button"
+                            class="btn button-primary nav-user-circle d-flex align-items-center justify-content-center"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="<c:url value="/svg/user.svg"/>" alt="${profile}" class="icon-s fill-bg"/>
+                    </button>
 
-                <c:if test="${loggedIn}">
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message code="profile.title"/></a></li>
-                        <li><a class="dropdown-item" href="${baseUrl}/settings"><spring:message code="settings.title"/></a></li>
-                        <li><a class="dropdown-item" href="${baseUrl}/logout"><spring:message code="logout"/></a></li>
-                    </ul>
-                </c:if>
-                <c:if test="${!loggedIn}">
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="${baseUrl}/login"><spring:message code="login"/></a></li>
-                        <li><a class="dropdown-item" href="${baseUrl}/register"><spring:message code="register"/></a></li>
-                    </ul>
-                </c:if>
-            </div>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message
+                                    code="profile.title"/></a></li>
+                            <li><a class="dropdown-item" href="${baseUrl}/settings"><spring:message
+                                    code="settings.title"/></a></li>
+                            <li><a class="dropdown-item" href="${baseUrl}/logout"><spring:message code="logout"/></a></li>
+                        </ul>
+                </div>
+            </c:if>
+            <c:if test="${!loggedIn}">
+                <a href="${baseUrl}/login" class="btn rounded-box button-primary mx-2">
+                    <spring:message code="login"/>
+                </a>
+                <a href="${baseUrl}/register" class="btn login-register-button box">
+                    <spring:message code="register"/>
+                </a>
+            </c:if>
         </div>
     </div>
 </nav>

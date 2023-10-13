@@ -43,7 +43,6 @@
     border-radius: 0 25px 25px 25px;
     padding: 1rem;
     background-color: var(--bg);
-
 }
 
 .mini-nav{
@@ -55,8 +54,6 @@
 }
 
 .mini-nav-button{
-    background-color: var(--primary);
-    color: var(--bg);
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
     padding: 7px 20px;
@@ -66,8 +63,24 @@
     opacity: 80%;
 }
 
-.mini-nav-button:not(.active):hover{
+.root-dir {
+    background-color: var(--primary);
+    color: var(--bg);
+}
+
+.root-dir:not(.active):hover{
     color: var(--primary);
     background-color: var(--bg);
     border: var(--primary) 1px solid;
+}
+
+.favorite-dir {
+    background-color: #ff5e6d;
+    color: var(--bg);
+}
+
+.favorite-dir:not(.active):hover{
+    color: #ff5e6d;
+    background-color: var(--text);
+    border: #ff5e6d 1px solid;
 }

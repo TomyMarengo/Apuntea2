@@ -1,0 +1,68 @@
+h2 {
+    font-size: 5em;
+}
+
+h4 {
+    font-size: 2em;
+}
+
+.index-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 5rem;
+    padding: 0 5rem;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.call-to-action-card {
+    height: 300px;
+    padding: 1rem 3rem;
+    border-radius: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    box-shadow: 0 20px 30px 0 rgba(48, 42, 36, 0.10);
+    /* transformation scale */
+    transition: transform 0.5s ease;
+    cursor: pointer;
+}
+
+.call-to-action-card:hover {
+    transform: scale(1.05);
+    border: var(--bg) solid 2px;
+}
+
+.call-to-action-card.section1{
+
+    background: linear-gradient(270deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat;
+}
+
+.call-to-action-card.section2{
+    background: linear-gradient(0deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat;
+}
+
+.call-to-action-card.section3{
+    background: linear-gradient(90deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat;
+}
+
+.call-to-action-card img {
+    width: 5rem;
+    height: 5rem;
+}
+
+.call-to-action-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    text-align: center;
+}
+
+.call-to-action-card-title {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--dark-text);
+}

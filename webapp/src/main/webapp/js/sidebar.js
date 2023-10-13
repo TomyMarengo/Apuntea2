@@ -7,5 +7,5 @@ window.addEventListener("scroll", function() {
     const scrollPosition = window.scrollY;
 
     sidebar.style.top = `calc(${headerHeight} - ${scrollPosition}px)`;
-
+    sidebar.style.height = `calc(100vh - ${headerHeight} + ${scrollPosition}px)`;
 });

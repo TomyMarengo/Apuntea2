@@ -48,7 +48,7 @@
 
 </header>
 
-<main>
+<main style="margin-left: 50px !important;">
 
     <!-- SEARCH -->
     <div class="container my-5">
@@ -57,7 +57,7 @@
                    action="${searchUrl}"
                    method="get"
                    id="searchForm">
-            <div class="row row-cols-1 row-cols-lg-2 justify-content-center" style="margin-left: 50px !important;">
+            <div class="row row-cols-1 row-cols-lg-2 justify-content-center" >
 
 
                 <div class="col col-lg-5">

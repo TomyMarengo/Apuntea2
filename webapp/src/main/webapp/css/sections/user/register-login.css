@@ -10,32 +10,3 @@ html, body {
     background: #fccb90;
     background: linear-gradient(0deg, var(--gradient-primary-top) 0%, var(--gradient-primary-mid) 50%, var(--gradient-primary-bot) 99.99%);
 }
-
-.login-register-button {
-    border: 1px solid var(--primary);
-    background-color: transparent;
-    color: var(--primary);
-}
-
-.login-register-button:hover {
-    border: 1px solid var(--primary);
-    background-color: var(--primary);
-    color: var(--bg);
-}
-
-.login-register-button.active {
-    border: 1px solid var(--primary);
-    background-color: var(--primary);
-    color: var(--bg);
-    cursor: default;
-}
-
-.login-register-button.register {
-    border-bottom-left-radius: 0;
-    border-top-left-radius: 0;
-}
-
-.login-register-button.login {
-    border-bottom-right-radius: 0;
-    border-top-right-radius: 0;
-}

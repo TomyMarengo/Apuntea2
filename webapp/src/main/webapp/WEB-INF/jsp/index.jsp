@@ -3,6 +3,7 @@
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
@@ -15,17 +16,14 @@
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/general/autocomplete.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/landing/graph.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/landing/carousel.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/landing/comments.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/landing/landing.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,211 +33,67 @@
 <body>
 
 <header>
-    <!-- NAVBAR -->
     <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
 </header>
 
-<!-- "¿SABÍAS QUÉ?" SECTION -->
-<div class="container mt-5 mw-500">
-    <div class="card bg-transparent border-0">
-        <div class="card-body">
-            <c:if test="${user != null}">
-                <h3 class="card-title fw-bold"><spring:message code="index.dyk.greetings"
-                                                               arguments="${user.email}"/></h3>
-            </c:if>
-            <h5 class="card-title fw-bold"><spring:message code="index.dyk.title"/></h5>
-            <div class="d-flex align-items-center mb-3">
-                <img src="image/teacher.png" alt="Teacher" class="me-2" style="width: 40px; height: 40px;">
-                <p class="mb-0"><spring:message code="index.dyk.subtitle"/></p>
-            </div>
-            <c:url var="searchUrl" value="./search"/>
-            <form:form modelAttribute="searchForm"
-                       action="${searchUrl}"
-                       method="get"
-                       class="d-flex align-items-center mb-3"
-                       id="searchWordForm">
-                <spring:message code="index.search.placeholder" var="placeholderSearch"/>
-                <form:input path="word" type="text" class="form-control custom-input me-2 rounded-box bg-bg"
-                            placeholder='${placeholderSearch}'/>
-                <input type="submit" class="btn rounded-box button-white"
-                       value="<spring:message code="index.search.button"/>"/>
-                <form:errors path="word" cssClass="text-danger" element="p"/>
-            </form:form>
-        </div>
-    </div>
-</div>
+<main class="h-100-nav container-fluid mt-5">
+    <div class="h-100 d-flex flex-column align-items-center gap-3 text-center">
+        <h2><spring:message code="index.title"/></h2>
+        <h4><spring:message code="index.subtitle"/></h4>
 
-<!-- "EXPLORA NUESTRAS OPCIONES" SECTION -->
-<div class="container mw-500">
-    <div class="card bg-transparent border-0">
-        <div class="card-body d-flex flex-column align-items-center">
-            <div class="d-flex align-items-center mb-3">
-                <img src="<c:url value="/svg/rocket.svg"/>" alt="Rocket" class="me-2 icon-s fill-text">
-                <h5 class="fw-bold"><spring:message code="index.explore.title"/></h5>
-            </div>
-            <div class="d-flex w-75 justify-content-around">
-                <!-- REGISTER BUTTON -->
-                <a href="./register">
-                    <button class="btn rounded-box button-primary">
-                        <spring:message code="index.explore.register"/></button>
-                </a>
+        <div class="index-cards">
+            <a href="${baseUrl}/settings" class="call-to-action-card section1">
 
-                <!-- DISCOVER BUTTON -->
-                <a href="./search">
-                    <button class="btn rounded-box button-secondary">
-                        <spring:message code="index.explore.discover"/></button>
-                </a>
+                <img src="<c:url value="/svg/gears.svg"/>" alt="<spring:message code="search.title"/>"
+                     class="fill-dark-text"/>
 
-            </div>
-        </div>
-    </div>
-</div>
+                <div class="call-to-action-card-body">
 
-<!-- TODO: UNCOMMENT
-<div class="row mt-5 m-0 ">
-    # CARROUSEL LAST NOTES
-    <div class="d-flex flex-column col-xl-6">
-        <div class="d-flex justify-content-center" style="padding-left: 40px;">
-            <h5 class="fw-bold" style="margin-left: 120px; margin-right: 75px"><spring:message
-                    code="index.notes.title"/></h5>
-            <div>
-                <button class="carousel-button" type="button" data-bs-target="#carouselUniversity" data-bs-slide="prev">
-                    <img src="<c:url value="/svg/arrow-left.svg"/>" alt="Previous" class="icon-l fill-dark-primary">
-                </button>
-                <button class="carousel-button" type="button" data-bs-target="#carouselUniversity" data-bs-slide="next">
-                    <img src="<c:url value="/svg/arrow-right.svg"/>" alt="Next" class="icon-l fill-dark-primary">
-                </button>
-            </div>
-
-        </div>
-
-        <div id="carouselUniversity" class="carousel slide mt-3">
-            <div class="carousel-inner">
-                # First "page" of carrousel
-                <div class="carousel-item mb-5 active">
-                    # University name and graph
-                    <div class="container mw-600">
-                        <div class="card box h-100 bg-bg">
-                            <div class="card-body d-flex align-items-center h-100 justify-content-around flex-wrap">
-                                # University Icon and Name (in the right)
-                                <div class="d-flex align-items-center university-title ">
-                                    <img src="<c:url value="/svg/graduation-cap.svg"/>" alt="University Icon"
-                                         class="icon-s fill-text">
-                                    <h5 class=" mx-2 w-100"><strong>PLACEHOLDER</strong></h5>
-                                </div>
-                                # Graph with circles and lines
-                                <div class="graph h-100">
-                                    <div class="circle circle1"></div>
-                                    <div class="line line1"></div>
-                                    <div class="circle circle2"></div>
-                                    <div class="line line2"></div>
-                                    <div class="circle circle3"></div>
-                                    <div class="line line3"></div>
-                                    <div class="circle circle4"></div>
-                                    <div class="line line4"></div>
-                                    <div class="circle circle5"></div>
-                                    <div class="info1 d-flex flex-column fw-bold text-center w-25">
-                                        <p>NUMBER</p>
-                                        <p><spring:message code="index.notes.students"/></p>
-                                    </div>
-                                    <div class="info2 d-flex flex-column fw-bold text-center w-25">
-                                        <p>NUMBER</p>
-                                        <p><spring:message code="index.notes.notes"/></p>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
+                    <div class="call-to-action-card-title">
+                        <h3><spring:message code="index.card1.title"/></h3>
                     </div>
-                    # Example notes
-                    <div class="container mw-600">
-                        <div class="card box h-100 py-1 bg-dark-bg">
-                            <div class="card-body d-flex flex-column gap-2">
-                                <a href="https://www.google.com" class="bar-link">
-                                    <button class="btn rounded-pill button-white button-expansion
-                          w-100 d-flex align-items-center text-s">
-                                        <span class="col-4 text-start">PLACEHOLDER</span>
-                                        <span class="col-6">PLACEHOLDER</span>
-                                        <span class="col-2 text-end">PLACEHOLDER</span>
-                                    </button>
-                                </a>
-                                <a href="https://www.google.com" class="bar-link">
-                                    <button class="btn rounded-pill button-white button-expansion
-                          w-100 d-flex justify-content-between align-items-center text-s">
-                                        <span class="col-4 text-start">PLACEHOLDER</span>
-                                        <span class="col-6">PLACEHOLDER</span>
-                                        <span class="col-2 text-end">PLACEHOLDER</span>
-                                    </button>
-                                </a>
-                                <a href="https://www.google.com" class="bar-link">
-                                    <button class="btn rounded-pill button-white button-expansion
-                          w-100 d-flex justify-content-between align-items-center text-s">
-                                        <span class="col-4 text-start">PLACEHOLDER</span>
-                                        <span class="col-6">PLACEHOLDER</span>
-                                        <span class="col-2 text-end">PLACEHOLDER</span>
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
+                    <div class="call-to-action-card-text">
+                        <p><spring:message code="index.card1.body"/></p>
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </div>
+            </a>
 
-    # LIST LAST COMMENTS
-    <div id="last-comments" class="d-flex flex-column col-xl-6">
-        <h5 class="text-center fw-bold"><spring:message code="index.comments.title"/></h5>
-        <div class="container mt-3">
-            <div class="row justify-content-center">
-                # A COMMENT
-                <div class="col-lg-12 col-xl-6 mb-4 mw-500">
-                    <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
-                        <div class="card-body">
-                            <h5 class="card-title fb-">
-                                <img src="<c:url value="/svg/arrow-trend-up.svg"/>" alt="University Icon"
-                                     class="icon-s fill-dark-primary mx-2">
-                                <strong>Matemática Discreta</strong>
-                            </h5>
-                            <p class="card-text"><strong>Jonathan ha comentado</strong></p>
-                            <p class="card-text mt-2">Buen apunte, pero el de Apuntes Britu es mejor.</p>
-                        </div>
-                    </a>
-                </div>
-                # A COMMENT
-                <div class="col-lg-12 col-xl-6 mb-4 mw-500">
-                    <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
-                        <div class="card-body">
-                            <h5 class="card-title fb-">
-                                <img src="<c:url value="/svg/arrow-trend-up.svg"/>" alt="University Icon"
-                                     class="icon-s fill-dark-primary mx-2">
-                                <strong>Teoría de Lenguajes y Autómatas</strong>
-                            </h5>
-                            <p class="card-text"><strong>David ha comentado</strong></p>
-                            <p class="card-text mt-2">El de Apuntes Abru le pasa el trapo, aunque pesa 100MB más...</p>
-                        </div>
-                    </a>
-                </div>
-                # A COMMENT
-                <div class="col-lg-12 col-xl-6 mb-4 mw-500">
-                    <a href="https://www.google.com" class="card box h-100 text-decoration-none button-shadow">
-                        <div class="card-body">
-                            <h5 class="card-title fb-">
-                                <img src="<c:url value="/svg/arrow-trend-up.svg"/>" alt="University Icon"
-                                     class="icon-s fill-dark-primary mx-2">
-                                <strong>Matemática III</strong>
-                            </h5>
-                            <p class="card-text"><strong>Tomás ha comentado</strong></p>
-                            <p class="card-text mt-2">Muy bueno!</p>
-                        </div>
-                    </a>
+            <a href="${baseUrl}/profile" class="call-to-action-card section2">
+
+                <img src="<c:url value="/svg/add-document.svg"/>" alt="<spring:message code="search.title"/>"
+                     class="fill-dark-text"/>
+
+                <div class="call-to-action-card-body">
+                    <div class="call-to-action-card-title">
+                        <h3><spring:message code="index.card2.title"/></h3>
+                    </div>
+                    <div class="call-to-action-card-text">
+                        <p><spring:message code="index.card2.body"/></p>
+                    </div>
                 </div>
 
-            </div>
+            </a>
+
+            <a href="${baseUrl}/search" class="call-to-action-card section3">
+
+                <img src="<c:url value="/svg/search-alt.svg"/>" alt="<spring:message code="search.title"/>"
+                     class="fill-dark-text"/>
+
+                <div class="call-to-action-card-body">
+                    <div class="call-to-action-card-title">
+                        <h3><spring:message code="index.card3.title"/></h3>
+                    </div>
+                    <div class="call-to-action-card-text">
+                        <p><spring:message code="index.card3.body"/></p>
+                    </div>
+                </div>
+
+            </a>
+
         </div>
     </div>
-</div> -->
+</main>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"

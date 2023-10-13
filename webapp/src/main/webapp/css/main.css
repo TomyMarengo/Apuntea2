@@ -300,7 +300,7 @@ h1,
   margin-bottom: 0.5rem;
   font-weight: 500;
   line-height: 1.2;
-  color: var(--bs-heading-color);
+  color: var(--dark-text);
 }
 
 h1,

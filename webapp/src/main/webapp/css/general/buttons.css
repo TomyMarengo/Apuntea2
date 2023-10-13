@@ -32,6 +32,18 @@
 	color: var(--bg);
 }
 
+.button-outlined-secondary {
+	border: 1px solid var(--secondary);
+	background-color: transparent;
+	color: var(--secondary);
+}
+
+.button-outlined-secondary:hover {
+	border: 1px solid var(--secondary);
+	background-color: var(--secondary);
+	color: var(--bg);
+}
+
 .button-secondary {
 	border: 0;
 	background-color: var(--secondary);
