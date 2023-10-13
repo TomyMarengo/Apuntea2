@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.institutional.InstitutionData;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.services.SecurityService;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import javax.xml.ws.http.HTTPException;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 
@@ -35,9 +38,8 @@ public class SearchController {
 
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView search(@Valid @ModelAttribute("searchForm") final SearchForm searchForm, final BindingResult result, final ModelMap model){
-        if (result.hasErrors()) {
-            return new ModelAndView("/errors/400");
-        }
+        if (result.hasErrors())
+            throw new HTTPException(400);
 
         final ModelAndView mav = new ModelAndView("search");
 

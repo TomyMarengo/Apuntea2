@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Career;
+import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.persistence.CareerDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

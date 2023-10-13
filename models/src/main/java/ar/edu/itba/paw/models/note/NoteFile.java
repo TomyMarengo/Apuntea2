@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.note;
 
 import java.util.HashMap;
 import java.util.Map;

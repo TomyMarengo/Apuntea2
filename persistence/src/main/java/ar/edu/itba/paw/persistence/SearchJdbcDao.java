@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

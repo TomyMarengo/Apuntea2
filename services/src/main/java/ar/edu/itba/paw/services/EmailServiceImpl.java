@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Directory;
-import ar.edu.itba.paw.models.Note;
-import ar.edu.itba.paw.models.Review;
-import ar.edu.itba.paw.models.VerificationCode;
+import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.user.VerificationCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

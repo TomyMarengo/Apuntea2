@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Directory;
-import ar.edu.itba.paw.models.DirectoryPath;
-import ar.edu.itba.paw.models.RootDirectory;
-import ar.edu.itba.paw.models.exceptions.DirectoryNotFoundException;
+import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.directory.RootDirectory;
+import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;

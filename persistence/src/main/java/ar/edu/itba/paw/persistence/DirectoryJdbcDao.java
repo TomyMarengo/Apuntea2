@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.directory.RootDirectory;
+import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 

@@ -1,4 +1,9 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.directory;
+
+import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.user.User;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

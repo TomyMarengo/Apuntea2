@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.exceptions.InvalidDirectoryException;
+import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import org.junit.Assert;
 import org.junit.Test;

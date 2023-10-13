@@ -1,4 +1,6 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.directory;
+
+import ar.edu.itba.paw.models.institutional.Subject;
 
 import java.util.UUID;
 

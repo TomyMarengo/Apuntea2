@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.VerificationCode;
-import ar.edu.itba.paw.models.exceptions.InvalidVerificationCodeException;
-import ar.edu.itba.paw.models.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.models.user.VerificationCode;
 import ar.edu.itba.paw.persistence.VerificationCodeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;

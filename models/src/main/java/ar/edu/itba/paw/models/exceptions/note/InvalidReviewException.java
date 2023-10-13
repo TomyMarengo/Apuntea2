@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.models.exceptions;
+package ar.edu.itba.paw.models.exceptions.note;
 
 public class InvalidReviewException extends RuntimeException {
     public InvalidReviewException() {

@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.institutional.Subject;
 
 import java.util.List;
 import java.util.Map;

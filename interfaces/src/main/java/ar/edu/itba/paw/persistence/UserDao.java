@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.ProfilePicture;
-import ar.edu.itba.paw.models.Role;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.user.ProfilePicture;
+import ar.edu.itba.paw.models.user.Role;
+import ar.edu.itba.paw.models.user.User;
 
 import java.time.LocalDateTime;
 import java.util.List;

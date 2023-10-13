@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.services;import ar.edu.itba.paw.models.Career;
+package ar.edu.itba.paw.services;import ar.edu.itba.paw.models.institutional.Career;
 
 
 import java.util.List;

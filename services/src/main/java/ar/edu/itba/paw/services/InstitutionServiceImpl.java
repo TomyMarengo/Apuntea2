@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Career;
-import ar.edu.itba.paw.models.Institution;
-import ar.edu.itba.paw.models.InstitutionData;
-import ar.edu.itba.paw.models.Subject;
+import ar.edu.itba.paw.models.institutional.Institution;
+import ar.edu.itba.paw.models.institutional.InstitutionData;
 import ar.edu.itba.paw.persistence.InstitutionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

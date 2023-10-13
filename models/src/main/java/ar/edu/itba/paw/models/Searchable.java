@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.models;
 
+import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.user.User;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 

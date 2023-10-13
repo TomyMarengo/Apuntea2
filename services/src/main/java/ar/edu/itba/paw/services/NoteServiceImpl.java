@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
-import ar.edu.itba.paw.models.exceptions.InvalidNoteException;
-import ar.edu.itba.paw.models.exceptions.InvalidReviewException;
+import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
+import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
+import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.NoteFile;
+import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
 import org.apache.commons.io.FilenameUtils;

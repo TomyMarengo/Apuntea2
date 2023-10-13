@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.InstitutionData;
-import ar.edu.itba.paw.models.Role;
+import ar.edu.itba.paw.models.institutional.InstitutionData;
+import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.*;
 import org.springframework.beans.factory.annotation.Autowired;

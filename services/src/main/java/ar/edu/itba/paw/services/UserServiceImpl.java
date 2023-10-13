@@ -1,16 +1,16 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.ProfilePicture;
-import ar.edu.itba.paw.models.Role;
+import ar.edu.itba.paw.models.user.ProfilePicture;
+import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
-import ar.edu.itba.paw.models.exceptions.InvalidUserException;
+import ar.edu.itba.paw.models.exceptions.user.InvalidUserException;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.user.User;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

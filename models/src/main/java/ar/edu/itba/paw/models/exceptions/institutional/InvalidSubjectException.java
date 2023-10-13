@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.models.exceptions;
+package ar.edu.itba.paw.models.exceptions.institutional;
 
 public class InvalidSubjectException extends RuntimeException{
 

@@ -1,6 +1,6 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.user;
 
-import ar.edu.itba.paw.models.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 
 import java.util.UUID;
 

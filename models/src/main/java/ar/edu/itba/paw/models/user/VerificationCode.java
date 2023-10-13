@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.user;
 
 import java.time.LocalDateTime;
 

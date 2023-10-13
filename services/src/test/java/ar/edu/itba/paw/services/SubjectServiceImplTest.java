@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Subject;
-import ar.edu.itba.paw.models.exceptions.InvalidDirectoryException;
-import ar.edu.itba.paw.models.exceptions.InvalidSubjectCareerException;
-import ar.edu.itba.paw.models.exceptions.InvalidSubjectException;
+import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
+import ar.edu.itba.paw.models.exceptions.institutional.InvalidSubjectCareerException;
+import ar.edu.itba.paw.models.exceptions.institutional.InvalidSubjectException;
 import ar.edu.itba.paw.persistence.CareerDao;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.SearchDao;

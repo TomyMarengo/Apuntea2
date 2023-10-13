@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Role;
-import ar.edu.itba.paw.models.VerificationCode;
+import ar.edu.itba.paw.models.user.Role;
+import ar.edu.itba.paw.models.user.VerificationCode;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;

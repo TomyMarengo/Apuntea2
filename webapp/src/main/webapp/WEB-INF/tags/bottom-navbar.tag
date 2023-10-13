@@ -3,7 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ attribute name="title" required="false" %>
-<%@ attribute name="hierarchy" required="false" type="ar.edu.itba.paw.models.DirectoryPath" %>
+<%@ attribute name="hierarchy" required="false" type="ar.edu.itba.paw.models.directory.DirectoryPath" %>
 <%@ attribute name="category" required="false" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 

@@ -1,7 +1,12 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.exceptions.UserNotFoundException;
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
+import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.institutional.Institution;
+import ar.edu.itba.paw.models.user.ProfilePicture;
+import ar.edu.itba.paw.models.user.Role;
+import ar.edu.itba.paw.models.user.User;
+import ar.edu.itba.paw.models.user.UserStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;

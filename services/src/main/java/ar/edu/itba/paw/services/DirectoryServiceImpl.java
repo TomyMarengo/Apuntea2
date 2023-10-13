@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.Directory;
-import ar.edu.itba.paw.models.DirectoryPath;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.exceptions.InvalidDirectoryException;
+import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.user.User;
+import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

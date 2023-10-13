@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.models.Role;
-import ar.edu.itba.paw.webapp.auth.CustomUserDetailsService;
+import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.webapp.auth.LoginFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +17,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.StandardCharsets;

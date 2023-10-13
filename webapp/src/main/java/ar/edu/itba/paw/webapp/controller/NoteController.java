@@ -1,10 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Category;
-import ar.edu.itba.paw.models.Note;
-import ar.edu.itba.paw.models.NoteFile;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.exceptions.NoteNotFoundException;
+import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.NoteFile;
+import ar.edu.itba.paw.models.user.User;
+import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SecurityService;

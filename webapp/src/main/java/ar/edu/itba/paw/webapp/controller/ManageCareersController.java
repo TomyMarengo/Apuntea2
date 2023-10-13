@@ -1,10 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Career;
-import ar.edu.itba.paw.models.InstitutionData;
-import ar.edu.itba.paw.models.Subject;
-import ar.edu.itba.paw.models.User;
-import ar.edu.itba.paw.models.exceptions.CareerNotFoundException;
+import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.institutional.InstitutionData;
+import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.user.User;
+import ar.edu.itba.paw.models.exceptions.institutional.CareerNotFoundException;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.LinkSubjectForm;
 import ar.edu.itba.paw.webapp.forms.CreateSubjectForm;

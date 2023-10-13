@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.InstitutionData;
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.SecurityService;
@@ -9,14 +8,12 @@ import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.forms.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.forms.EditUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
-import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ar.edu.itba.paw.services.UserService;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,7 +25,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.EDIT_USER_FORM;
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.addFormOrGetWithErrors;
 
 @Controller
 public class UserController {

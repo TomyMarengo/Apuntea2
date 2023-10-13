@@ -1,4 +1,7 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.user;
+
+import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.institutional.Institution;
 
 import java.util.Arrays;
 import java.util.UUID;

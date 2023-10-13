@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Institution;
-import ar.edu.itba.paw.models.InstitutionData;
+import ar.edu.itba.paw.models.institutional.Institution;
+import ar.edu.itba.paw.models.institutional.InstitutionData;
 
 import java.util.*;
 

@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Directory;
-import ar.edu.itba.paw.models.DirectoryPath;
+import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.directory.DirectoryPath;
 
 import java.util.List;
 import java.util.Optional;

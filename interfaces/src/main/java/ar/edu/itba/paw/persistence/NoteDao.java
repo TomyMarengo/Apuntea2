@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Note;
-import ar.edu.itba.paw.models.NoteFile;
-import ar.edu.itba.paw.models.Review;
+import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.NoteFile;
+import ar.edu.itba.paw.models.note.Review;
 
 import java.util.List;
 import java.util.Optional;

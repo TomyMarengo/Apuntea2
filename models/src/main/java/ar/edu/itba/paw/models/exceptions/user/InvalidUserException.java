@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.models.exceptions;
+package ar.edu.itba.paw.models.exceptions.user;
 
 public class InvalidUserException extends RuntimeException {
     public InvalidUserException() {

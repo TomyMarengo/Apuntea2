@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.user;
 
 public enum Role {
     ROLE_STUDENT("ROLE_STUDENT", "STUDENT"),

@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.User;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.forms.BanUnbanUserForm;
@@ -47,21 +47,13 @@ public class ManageUsersController {
     }
 
     @RequestMapping(value = "/ban", method = RequestMethod.POST)
-    public ModelAndView banUser(@ModelAttribute("banUserForm") final BanUnbanUserForm banUserForm,
-                                BindingResult result) {
-        if (result.hasErrors()) {
-            return new ModelAndView("/errors/400");
-        }
+    public ModelAndView banUser(@ModelAttribute("banUserForm") final BanUnbanUserForm banUserForm) {
         userService.banUser(banUserForm.getUserId());
         return new ModelAndView("redirect:/manage/users");
     }
 
     @RequestMapping(value = "/unban", method = RequestMethod.POST)
-    public ModelAndView unbanUser(@ModelAttribute("unbanUserForm") final BanUnbanUserForm unbanUserForm,
-                                  BindingResult result) {
-        if (result.hasErrors()) {
-            return new ModelAndView("/errors/400");
-        }
+    public ModelAndView unbanUser(@ModelAttribute("unbanUserForm") final BanUnbanUserForm unbanUserForm) {
         userService.unbanUser(unbanUserForm.getUserId());
         return new ModelAndView("redirect:/manage/users");
     }

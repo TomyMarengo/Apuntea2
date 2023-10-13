@@ -646,7 +646,6 @@
     <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
 <script src="<c:url value="/js/popups.js"/>"></script>
-<script src="<c:url value="/js/global-search.js"/>"></script>
 <c:if test="${favoriteAdded eq true}">
     <script>
         const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastAddFavorite'));

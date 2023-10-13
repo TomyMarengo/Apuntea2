@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.exceptions.DirectoryNotFoundException;
+import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SearchService;
@@ -25,7 +27,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-import java.io.IOException;
+import javax.xml.ws.http.HTTPException;
 import java.util.UUID;
 
 @Validated
@@ -51,9 +53,8 @@ public class DirectoryController {
     public ModelAndView getDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                      @Valid @ModelAttribute("navigationForm") NavigationForm navigationForm, final BindingResult result,
                                      final ModelMap model) {
-        if (result.hasErrors()) {
-            return new ModelAndView("/errors/400");
-        }
+        if (result.hasErrors())
+            throw new HTTPException(400);
 
         ModelAndView mav = new ModelAndView("directory");
 
@@ -116,13 +117,8 @@ public class DirectoryController {
             return new ModelAndView("redirect:/directory/" + directoryId);
         }
 
-        try {
-            UUID noteId = noteService.createNote(createNoteForm.getName(), directoryId, createNoteForm.getVisible(), createNoteForm.getFile(), createNoteForm.getCategory());
-            return new ModelAndView("redirect:/notes/" + noteId);
-        }
-        catch (IOException e){
-            return new ModelAndView("redirect:/errors/500");
-        }
+        UUID noteId = noteService.createNote(createNoteForm.getName(), directoryId, createNoteForm.getVisible(), createNoteForm.getFile(), createNoteForm.getCategory());
+        return new ModelAndView("redirect:/notes/" + noteId);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
