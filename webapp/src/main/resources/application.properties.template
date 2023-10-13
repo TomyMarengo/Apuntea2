@@ -1,6 +1,7 @@
 datasource.url:
 datasource.username:
 datasource.password:
+base.root:
 base.url:
 
 mail.address:
