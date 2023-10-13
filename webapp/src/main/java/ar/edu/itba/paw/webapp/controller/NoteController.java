@@ -53,6 +53,7 @@ public class NoteController {
         mav.addObject("note", note);
         mav.addObject("reviews", noteService.getReviews(noteId));
         mav.addObject("hierarchy", directoryService.getDirectoryPath(note.getParentId()));
+        mav.addObject(EDIT_NOTE_FORM, model.get(EDIT_NOTE_FORM));
 
         return mav;
     }
@@ -67,6 +68,7 @@ public class NoteController {
             redirectAttributes.addFlashAttribute(EDIT_NOTE_ID, noteId);
         } else {
             Note note = new Note(noteId, editNoteForm.getName(), Category.valueOf(editNoteForm.getCategory().toUpperCase()), editNoteForm.getVisible());
+            redirectAttributes.addFlashAttribute(EDIT_NOTE_FORM, true);
             noteService.update(note);
         }
         return mav;
@@ -105,7 +107,7 @@ public class NoteController {
     }
 
     @RequestMapping(value = "/{noteId}/delete", method = RequestMethod.POST)
-    public ModelAndView deleteNote(@PathVariable("noteId") @ValidUuid UUID noteId, @RequestParam(required = false) @Size(max = 300) String reason) {
+    public ModelAndView deleteNote(@PathVariable("noteId") @ValidUuid UUID noteId, @RequestParam(required = false) @Size(max = 300) String reason, final RedirectAttributes redirectAttributes) {
         noteService.delete(new UUID[]{noteId}, reason);
         return new ModelAndView("redirect:/");
     }

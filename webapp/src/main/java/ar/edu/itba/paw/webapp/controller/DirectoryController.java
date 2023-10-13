@@ -64,6 +64,9 @@ public class DirectoryController {
 
         mav.addObject("editNoteId", model.get(EDIT_NOTE_ID));
         mav.addObject("editDirectoryId", model.get(EDIT_DIRECTORY_ID));
+        mav.addObject(CREATE_DIRECTORY_FORM, model.getOrDefault(CREATE_DIRECTORY_FORM, false));
+        mav.addObject(DELETE_DIRECTORY_FORM, model.getOrDefault(DELETE_DIRECTORY_FORM, false));
+        mav.addObject(EDIT_DIRECTORY_FORM, model.getOrDefault(EDIT_DIRECTORY_FORM, false));
 
         Directory directory = directoryService.getDirectoryById(directoryId).orElseThrow(DirectoryNotFoundException::new);
 
@@ -92,7 +95,7 @@ public class DirectoryController {
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createDirectory")
     public ModelAndView addDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                      @Valid @ModelAttribute final CreateDirectoryForm createDirectoryForm,
-                                     @RequestParam(required = false) String queryParams,
+                                     @RequestParam(required = false, defaultValue = "") String queryParams,
                                      final BindingResult result,
                                      final RedirectAttributes redirectAttributes)
     {
@@ -102,6 +105,7 @@ public class DirectoryController {
         }
 
         UUID childId = directoryService.create(createDirectoryForm.getName(), directoryId, createDirectoryForm.getVisible(), createDirectoryForm.getColor());
+        redirectAttributes.addFlashAttribute(CREATE_DIRECTORY_FORM, true);
         return new ModelAndView("redirect:/directory/" + directoryId + "?" + queryParams);
     }
 
@@ -130,13 +134,16 @@ public class DirectoryController {
     public ModelAndView deleteContent(@RequestParam(required = false) UUID[] directoryIds,
                                       @RequestParam(required = false) UUID[] noteIds,
                                       @RequestParam(required = false) @Size(max = 300) String reason,
-                                      @RequestParam String redirectUrl) {
+                                      @RequestParam String redirectUrl,
+                                      final RedirectAttributes redirectAttributes) {
 
         // TODO: Validate redirectUrl?
         if (noteIds != null && noteIds.length > 0)
             noteService.delete(noteIds, reason);
         if (directoryIds != null && directoryIds.length > 0)
             directoryService.delete(directoryIds, reason);
+
+        redirectAttributes.addFlashAttribute(DELETE_DIRECTORY_FORM, true);
         return new ModelAndView("redirect:" + redirectUrl);
     }
 
@@ -152,6 +159,7 @@ public class DirectoryController {
         } else {
             Directory directory = new Directory(directoryId, editDirectoryForm.getName(), editDirectoryForm.getVisible(), editDirectoryForm.getColor());
             directoryService.update(directory);
+            redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_FORM, true);
         }
         return mav;
     }

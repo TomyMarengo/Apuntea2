@@ -354,6 +354,7 @@
 </c:if>
 
 <fragment:customToast message="toast.reviewUploaded" id="liveToastCreation"/>
+<fragment:customToast message="toast.noteEditSucceeded" id="liveToastNoteEdit"/>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -384,6 +385,13 @@
             editNoteForm.querySelectorAll('#visible')[0].value = "<c:out value="${note.visible}"/>";
         </script>
     </c:if>
+</c:if>
+<c:if test="${noteEdited eq true}">
+    <script>
+        console.log("paso por aca");
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastNoteEdit'));
+        toastBootstrap.show();
+    </script>
 </c:if>
 <c:if test="${reviewScore gt 0}">
     <script>

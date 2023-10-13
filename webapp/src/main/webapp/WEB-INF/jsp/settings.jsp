@@ -271,6 +271,7 @@
 </div>
 
 <fragment:customToast message="toast.changePasswordSucceeded" id="liveToastChangePasswordSucceeded"/>
+<fragment:customToast message="toast.changeInfoSucceeded" id="liveToastChangeInfoSucceeded"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -288,5 +289,12 @@
         toastBootstrap.show();
     </script>
 </c:if>
+<c:if test="${userEdited ne null and userEdited eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastChangeInfoSucceeded'));
+        toastBootstrap.show();
+    </script>
+</c:if>
+
 </body>
 </html>

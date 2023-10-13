@@ -16,8 +16,12 @@ public class ControllerUtils {
     static final String EDIT_DIRECTORY_FORM_BINDING = "org.springframework.validation.BindingResult.editDirectoryForm";
     static final String CREATE_REVIEW_FORM_BINDING = "org.springframework.validation.BindingResult.reviewForm";
     static final String UPLOAD_REVIEW_FORM = "reviewUploaded";
-
-
+    static final String EDIT_USER_FORM = "userEdited";
+    static final String EDIT_NOTE_FORM = "noteEdited";
+    static final String CREATE_DIRECTORY_FORM = "directoryCreated";
+    static final String EDIT_DIRECTORY_FORM = "directoryEdited";
+    static final String DELETE_NOTE_FORM = "noteDeleted";
+    static final String DELETE_DIRECTORY_FORM = "directoryDeleted";
     static final String LINK_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.linkSubjectForm";
 
     static final String UNLINK_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.unlinkSubjectForm";

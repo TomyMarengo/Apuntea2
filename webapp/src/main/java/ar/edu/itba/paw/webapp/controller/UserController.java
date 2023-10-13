@@ -16,14 +16,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ar.edu.itba.paw.services.UserService;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.UUID;
+
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.EDIT_USER_FORM;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.addFormOrGetWithErrors;
 
 @Controller
 public class UserController {
@@ -61,6 +66,7 @@ public class UserController {
                                  @ModelAttribute final EditUserForm editUserForm,
                                  @ModelAttribute final ChangePasswordForm changePasswordForm) {
         ModelAndView mav = new ModelAndView("settings");
+
         mav.addObject("user", this.securityService.getCurrentUserOrThrow());
         mav.addObject("passwordChanged", passwordChanged);
         return mav;
@@ -70,11 +76,12 @@ public class UserController {
     public ModelAndView updateSettings(@ModelAttribute("user") User user,
             @ModelAttribute final ChangePasswordForm changePasswordForm,
             @Valid @ModelAttribute final EditUserForm editUserForm,
-            final BindingResult result) {
+            final BindingResult result, final RedirectAttributes redirectAttributes) {
         ModelAndView mav = new ModelAndView("settings");
         if(!result.hasErrors()) {
             try {
                 userService.update(new User(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername()), editUserForm.getProfilePicture());
+                mav.addObject(EDIT_USER_FORM, true);
             } catch (InvalidFileException e) {
                 mav.addObject("invalidFileError"); // TODO: Add modals for this error
             }
