@@ -130,12 +130,26 @@
                                                                                 value="${note.avgScore}"/> ⭐</span>
 
                     <div class="reviews-comments">
-                        <c:forEach items="${reviews}" var="review">
+                        <c:forEach items="${reviews}" var="review" varStatus="count">
                             <div class="card box review-card mb-3 p-3">
                                 <div class="d-flex flex-wrap justify-content-between">
-                                    <h4 class="card-title overflow-hidden">
-                                        <c:out value="${review.user.email}"/>
-                                    </h4>
+                                    <div class="d-flex flex-row">
+                                        <c:if test="${user.isAdmin}">
+                                            <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                  data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
+                                                <button class="btn nav-icon-button deleteReviewModalButton d-flex align-items-baseline" data-bs-toggle="modal" id="deleteReviewModalButton.${count.index}"
+                                                        value="${review.user.userId}"
+                                                        data-bs-target="#deleteReviewModal">
+                                                    <img src="<c:url value="/svg/trash.svg"/>"
+                                                         alt="<spring:message code="delete"/>"
+                                                         class="icon-s fill-text">
+                                                </button>
+                                            </span>
+                                        </c:if>
+                                        <h4 class="card-title overflow-hidden p-0 m-0">
+                                            <c:out value="${review.user.email}"/>
+                                        </h4>
+                                    </div>
                                     <span class="card-header-pills">
                                         <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
                                     </span>
@@ -222,6 +236,40 @@
         </div>
     </div>
 </div>
+
+
+<!-- DELETE REVIEW MODAL -->
+<c:if test="${user ne null and user.isAdmin}">
+    <div class="modal fade" id="deleteReviewModal" data-bs-backdrop="static" data-bs-keyboard="false"
+         tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content box bg-bg">
+                <div class="modal-header">
+                    <h3 class="modal-title fs-5" id="deleteReviewLabel"><spring:message code="delete"/></h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
+                <form:form id="deleteReviewForm" method="POST" action=""> <!-- Action is set in JS -->
+                    <div class="modal-body pb-0 d-flex flex-column">
+                        <spring:message code="DeleteForm.description"/>
+                        <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
+                            <label for="reason"></label>
+                            <textarea name="reason" class="form-control mt-3" id="reason" placeholder="${deleteMessagePlaceholder}"></textarea>
+                    </div>
+
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn rounded-box button-primary"
+                                data-bs-dismiss="modal">
+                            <spring:message code="close"/></button>
+                        <input id="deleteReviewButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message code="delete"/>"/>
+                    </div>
+
+                </form:form>
+            </div>
+        </div>
+    </div>
+</c:if>
 
 <!-- EDIT NOTE MODAL -->
 <c:if test="${user eq null or note.user.userId eq user.userId}">
@@ -320,11 +368,16 @@
         crossorigin="anonymous">
 </script>
 
+<script>
+    const noteId = "${noteId}";
+</script>
+
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/search-buttons.js"/>"></script>
 <script src="<c:url value="/js/crud-buttons.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>
+<script src="<c:url value="/js/notes.js"/>"></script>
 
 <c:if test="${user eq null or note.user.userId eq user.userId}">
     <c:if test="${errorsEditNoteForm != null}">

@@ -54,8 +54,6 @@ public class NoteController {
         mav.addObject("reviews", noteService.getReviews(noteId));
         mav.addObject("hierarchy", directoryService.getDirectoryPath(note.getParentId()));
 
-        User user = securityService.getCurrentUser().orElse(null);
-        mav.addObject("user", user);
         return mav;
     }
 
@@ -88,7 +86,7 @@ public class NoteController {
         return mav;
     }
 
-    @RequestMapping(value = "/{noteId}/review/${userId}/delete", method = {RequestMethod.POST})
+    @RequestMapping(value = "/{noteId}/review/{userId}/delete", method = {RequestMethod.POST})
     public ModelAndView deleteReview(@PathVariable("noteId") @ValidUuid UUID noteId,
                                    @PathVariable("userId") @ValidUuid UUID userId,
                                    @RequestParam(required = false) @Size(max = 300) String reason) {

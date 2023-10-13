@@ -68,6 +68,7 @@ public class EmailServiceImpl implements EmailService {
         return data;
     }
 
+    @Async
     @Override
     public void sendDeleteReviewEmail(Review review, String reason) {
         final Locale ownerLocale = new Locale(review.getUser().getLocale());
@@ -78,7 +79,7 @@ public class EmailServiceImpl implements EmailService {
 
         try {
             LOGGER.info("Sending delete review email to {}", review.getUser().getEmail());
-            sendMessageUsingThymeleafTemplate(to,subject,"delete-review.html", data, ownerLocale);
+            sendMessageUsingThymeleafTemplate(to,subject,"deleted-review.html", data, ownerLocale);
             LOGGER.info("Delete review email sent to {}", review.getUser().getEmail());
         } catch (MessagingException e) {
             LOGGER.warn("Delete review email could not be sent to {}",review.getUser().getEmail());
