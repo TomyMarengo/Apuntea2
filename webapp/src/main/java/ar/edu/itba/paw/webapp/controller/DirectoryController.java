@@ -57,16 +57,11 @@ public class DirectoryController {
 
         ModelAndView mav = new ModelAndView("directory");
 
-        addFormOrGetWithErrors(mav, model, CREATE_NOTE_FORM_BINDING, "errorsCreateNoteForm", "createNoteForm", CreateNoteForm.class);
-        addFormOrGetWithErrors(mav, model, EDIT_NOTE_FORM_BINDING, "errorsEditNoteForm", "editNoteForm", EditNoteForm.class);
-        addFormOrGetWithErrors(mav, model, CREATE_DIRECTORY_FORM_BINDING, "errorsCreateDirectoryForm", "createDirectoryForm", CreateDirectoryForm.class);
-        addFormOrGetWithErrors(mav, model, EDIT_DIRECTORY_FORM_BINDING, "errorsEditDirectoryForm", "editDirectoryForm", EditDirectoryForm.class);
+        loadFormErrors(mav, model);
 
         mav.addObject("editNoteId", model.get(EDIT_NOTE_ID));
         mav.addObject("editDirectoryId", model.get(EDIT_DIRECTORY_ID));
-        mav.addObject(CREATE_DIRECTORY_FORM, model.getOrDefault(CREATE_DIRECTORY_FORM, false));
-        mav.addObject(DELETE_DIRECTORY_FORM, model.getOrDefault(DELETE_DIRECTORY_FORM, false));
-        mav.addObject(EDIT_DIRECTORY_FORM, model.getOrDefault(EDIT_DIRECTORY_FORM, false));
+        loadToastFlashAttributes(mav, model);
 
         Directory directory = directoryService.getDirectoryById(directoryId).orElseThrow(DirectoryNotFoundException::new);
 
@@ -138,12 +133,15 @@ public class DirectoryController {
                                       final RedirectAttributes redirectAttributes) {
 
         // TODO: Validate redirectUrl?
-        if (noteIds != null && noteIds.length > 0)
+        if (noteIds != null && noteIds.length > 0){
             noteService.delete(noteIds, reason);
-        if (directoryIds != null && directoryIds.length > 0)
+            redirectAttributes.addFlashAttribute(DELETE_NOTE_FORM, true);
+        }
+        if (directoryIds != null && directoryIds.length > 0) {
             directoryService.delete(directoryIds, reason);
+            redirectAttributes.addFlashAttribute(DELETE_DIRECTORY_FORM, true);
+        }
 
-        redirectAttributes.addFlashAttribute(DELETE_DIRECTORY_FORM, true);
         return new ModelAndView("redirect:" + redirectUrl);
     }
 
@@ -166,18 +164,20 @@ public class DirectoryController {
 
     @RequestMapping(value = "/{directoryId}/addfavorite", method = RequestMethod.POST)
     public ModelAndView addFavoriteDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
-                                          @RequestParam String redirectUrl) {
+                                          @RequestParam String redirectUrl, final RedirectAttributes redirectAttributes) {
         // TODO: Validate redirectUrl?
         directoryService.addFavorite(directoryId);
+        redirectAttributes.addFlashAttribute(ADD_FAVORITE, true);
         // TODO: display a message saying that the directory was added to favorites
         return new ModelAndView("redirect:" + redirectUrl);
     }
 
     @RequestMapping(value = "/{directoryId}/removefavorite", method = RequestMethod.POST)
     public ModelAndView removeFavoriteDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
-                                          @RequestParam String redirectUrl) {
+                                          @RequestParam String redirectUrl, final RedirectAttributes redirectAttributes) {
         // TODO: Validate redirectUrl?
         directoryService.removeFavorite(directoryId);
+        redirectAttributes.addFlashAttribute(REMOVE_FAVORITE, true);
         // TODO: display a message saying that the directory was removed from favorites
         // If removeFavorite returns something different than 1, handle the error
         return new ModelAndView("redirect:" + redirectUrl);
@@ -188,5 +188,23 @@ public class DirectoryController {
         return this.securityService.getCurrentUser().orElse(null);
     }
 
+    private void loadToastFlashAttributes(ModelAndView mav, ModelMap model){
+        mav.addObject(CREATE_DIRECTORY_FORM, model.getOrDefault(CREATE_DIRECTORY_FORM, false));
+        mav.addObject(DELETE_DIRECTORY_FORM, model.getOrDefault(DELETE_DIRECTORY_FORM, false));
+        mav.addObject(EDIT_DIRECTORY_FORM, model.getOrDefault(EDIT_DIRECTORY_FORM, false));
+        mav.addObject(DELETE_NOTE_FORM, model.getOrDefault(DELETE_NOTE_FORM, false));
+        mav.addObject(ADD_FAVORITE, model.getOrDefault(ADD_FAVORITE, false));
+        mav.addObject(REMOVE_FAVORITE, model.getOrDefault(REMOVE_FAVORITE, false));
+
+    }
+
+    private void loadFormErrors(ModelAndView mav, ModelMap model){
+        addFormOrGetWithErrors(mav, model, CREATE_NOTE_FORM_BINDING, "errorsCreateNoteForm", "createNoteForm", CreateNoteForm.class);
+        addFormOrGetWithErrors(mav, model, EDIT_NOTE_FORM_BINDING, "errorsEditNoteForm", "editNoteForm", EditNoteForm.class);
+        addFormOrGetWithErrors(mav, model, CREATE_DIRECTORY_FORM_BINDING, "errorsCreateDirectoryForm", "createDirectoryForm", CreateDirectoryForm.class);
+        addFormOrGetWithErrors(mav, model, EDIT_DIRECTORY_FORM_BINDING, "errorsEditDirectoryForm", "editDirectoryForm", EditDirectoryForm.class);
+
+    }
 }
+
 

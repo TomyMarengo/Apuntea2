@@ -7,6 +7,7 @@ import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.forms.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.toSafeJson;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 
 
 @Controller
@@ -33,7 +34,7 @@ public class SearchController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView search(@Valid @ModelAttribute("searchForm") final SearchForm searchForm, final BindingResult result){
+    public ModelAndView search(@Valid @ModelAttribute("searchForm") final SearchForm searchForm, final BindingResult result, final ModelMap model){
         if (result.hasErrors()) {
             return new ModelAndView("/errors/400");
         }
@@ -54,7 +55,8 @@ public class SearchController {
 
         mav.addObject("maxPage", pageResult.getTotalPages());
         mav.addObject("results", pageResult.getContent());
-
+        mav.addObject(ADD_FAVORITE, model.getOrDefault(ADD_FAVORITE, false));
+        mav.addObject(REMOVE_FAVORITE, model.getOrDefault(REMOVE_FAVORITE, false));
         InstitutionData institutionData = institutionService.getInstitutionData();
 
         mav.addObject("institutionData", toSafeJson(institutionData));

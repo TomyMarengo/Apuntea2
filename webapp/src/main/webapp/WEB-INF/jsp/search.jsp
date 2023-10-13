@@ -613,6 +613,8 @@
     </section>
 </c:if>
 
+<fragment:customToast message="toast.addFavorite" id="liveToastAddFavorite"/>
+<fragment:customToast message="toast.removeFavorite" id="liveToastRemoveFavorite"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -644,7 +646,19 @@
     <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
 <script src="<c:url value="/js/popups.js"/>"></script>
-
+<script src="<c:url value="/js/global-search.js"/>"></script>
+<c:if test="${favoriteAdded eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastAddFavorite'));
+        toastBootstrap.show();
+    </script>
+</c:if>
+<c:if test="${favoriteRemoved eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastRemoveFavorite'));
+        toastBootstrap.show();
+    </script>
+</c:if>
 
 </body>
 

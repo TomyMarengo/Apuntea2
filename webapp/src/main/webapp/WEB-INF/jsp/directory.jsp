@@ -1086,7 +1086,8 @@
 <fragment:customToast message="toast.directoryCreateSucceeded" id="liveToastDirectoryCreate"/>
 <fragment:customToast message="toast.directoryDeleteSucceeded" id="liveToastDirectoryDelete"/>
 <fragment:customToast message="toast.directoryEditSucceeded" id="liveToastDirectoryEdit"/>
-
+<fragment:customToast message="toast.addFavorite" id="liveToastAddFavorite"/>
+<fragment:customToast message="toast.removeFavorite" id="liveToastRemoveFavorite"/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -1150,12 +1151,12 @@
         toastBootstrap.show();
     </script>
 </c:if>
-<%--<c:if test="${noteDeleted eq true}">--%>
-<%--    <script>--%>
-<%--        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastNoteDelete'));--%>
-<%--        toastBootstrap.show();--%>
-<%--    </script>--%>
-<%--</c:if>--%>
+<c:if test="${noteDeleted eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastNoteDelete'));
+        toastBootstrap.show();
+    </script>
+</c:if>
 <c:if test="${directoryCreated eq true}">
     <script>
         const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastDirectoryCreate'));
@@ -1174,7 +1175,18 @@
         toastBootstrap.show();
     </script>
 </c:if>
-
+<c:if test="${favoriteAdded eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastAddFavorite'));
+        toastBootstrap.show();
+    </script>
+</c:if>
+<c:if test="${favoriteRemoved eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastRemoveFavorite'));
+        toastBootstrap.show();
+    </script>
+</c:if>
 </body>
 
 </html>
