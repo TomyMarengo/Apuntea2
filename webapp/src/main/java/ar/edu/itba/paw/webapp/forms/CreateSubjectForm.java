@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 
 public class CreateSubjectForm {
     @Range(min = 1, max = 10)
-    private int year;
+    private int year = 1;
 
     @NotBlank
     @Pattern(regexp = RegexUtils.FILE_REGEX)
