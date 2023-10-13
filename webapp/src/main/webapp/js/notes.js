@@ -3,7 +3,6 @@ const deleteReviewButtons = document.querySelectorAll('.deleteReviewModalButton'
 deleteReviewButtons.forEach(button => {
     button.addEventListener('click', () => {
         const userId = button.value;
-        const url = `./${noteId}/review/${userId}/delete`;
-        document.getElementById('deleteReviewForm').action = url;
+        document.getElementById('deleteReviewForm').action = `${baseUrl}/manage/users/${userId}/review/${noteId}/delete`;
     });
 });

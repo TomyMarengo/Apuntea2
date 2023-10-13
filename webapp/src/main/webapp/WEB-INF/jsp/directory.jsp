@@ -951,6 +951,7 @@
                 </div>
                 <input type="hidden" id="noteId" name="id" value=""/>
                 <input type="hidden" name="parentId" value="${directory.id}"/>
+                <input name="redirectUrl" value="/directory/${directory.id}" type="hidden"/>
             </form:form>
         </div>
     </div>

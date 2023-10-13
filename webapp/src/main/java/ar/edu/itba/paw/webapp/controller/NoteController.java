@@ -88,13 +88,6 @@ public class NoteController {
         return mav;
     }
 
-    @RequestMapping(value = "/{noteId}/review/{userId}/delete", method = {RequestMethod.POST})
-    public ModelAndView deleteReview(@PathVariable("noteId") @ValidUuid UUID noteId,
-                                   @PathVariable("userId") @ValidUuid UUID userId,
-                                   @RequestParam(required = false) @Size(max = 300) String reason) {
-        noteService.deleteReview(noteId, userId, reason);
-        return new ModelAndView("redirect:/notes/"+noteId);
-    }
 
     @RequestMapping( value = "/{noteId}/download", method = {RequestMethod.GET})
     @ResponseBody
