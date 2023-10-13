@@ -1,9 +1,19 @@
-image: maven:3.9.2
+image: maven:3.8.4-openjdk-11-slim
 
 pipelines:
   default:
     - step:
         name: Build and Test
+        caches:
+          - maven
         script:
           - mvn clean install -DskipTests=false
           - mvn test
+        artifacts:
+          - target/**
+        services:
+          - docker
+
+definitions:
+  caches:
+    maven: ~/.m2/repository
