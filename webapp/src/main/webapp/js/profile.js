@@ -1,21 +1,25 @@
-//on click on another tab, set the current tab active
-var rdYears = document.querySelectorAll('.rd-year');
-var rdSubjectList = document.querySelectorAll('.rd-subject-list');
+const rootDirs = document.querySelectorAll('.root-dir');
+const rootDirLists = document.querySelectorAll('.root-dir-list');
 
-rdYears.forEach(function(tabLink, index) {
-    tabLink.addEventListener('click', function(event) {
+rootDirs.forEach(function(rootDir, index) {
+    rootDir.addEventListener('click', function(event) {
         event.preventDefault();
 
-        rdSubjectList.forEach(function (tabContent) {
+        rootDirLists.forEach(function (tabContent) {
             tabContent.classList.remove('show', 'active');
         });
 
-        rdSubjectList[index].classList.add('show', 'active');
+        rootDirLists[index].classList.add('show', 'active');
 
-        rdYears.forEach(function (link) {
+        rootDirs.forEach(function (link) {
             link.classList.remove('active');
         });
 
-        rdYears[index].classList.add('active');
+        rootDirs[index].classList.add('active');
     });
 });
+
+// TODO: Change active between favorites and my notes
+const favoriteDirs = document.querySelectorAll('.favorite-dir');
+const favoriteDirLists = document.querySelectorAll('.favorite-dir-list');
+

@@ -31,7 +31,8 @@
     /* grid repeat fit, all the columns with the same width, align left, same space around*/
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    justify-items: left;
+    justify-items: center;
+    align-items: center;
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
@@ -45,7 +46,7 @@
 
 }
 
-.nav-rd-years{
+.mini-nav{
     border-bottom: 0;
     display: flex;
     list-style: none;
@@ -53,7 +54,7 @@
     padding: 0;
 }
 
-.rd-year{
+.mini-nav-button{
     background-color: var(--primary);
     color: var(--bg);
     border-bottom-right-radius: 0;
@@ -61,11 +62,11 @@
     padding: 7px 20px;
 }
 
-.rd-year:not(.active){
+.mini-nav-button:not(.active){
     opacity: 80%;
 }
 
-.rd-year:not(.active):hover{
+.mini-nav-button:not(.active):hover{
     color: var(--primary);
     background-color: var(--bg);
     border: var(--primary) 1px solid;

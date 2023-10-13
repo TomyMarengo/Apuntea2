@@ -49,7 +49,7 @@
 
 <!-- USER INFO & BUTTONS "VER" -->
 <main class="container-fluid px-5 mt-5">
-    <div class="row justify-content-around">
+    <section class="row justify-content-around">
         <!-- User info column -->
         <div class="col-12 col-lg-4 col-xl-3 ">
             <div class="card user-card box mb-5 mb-lg-0">
@@ -120,35 +120,55 @@
             </div>
         </div>
 
-
+        <!-- List of directories -->
         <div class="col-12 col-lg-7 col-xl-8 mb-5">
-            <c:if test="${not empty favorites}">
-                <h2 class="text-center mb-3"><spring:message code="profile.directories.favorites"/></h2>
-                <div class="card box file-list mb-5">
-                    <c:forEach items="${favorites}" var="rd">
-                        <a class="w-100" href="<c:url value="./directory/${rd.id}"/>">
-                            <div class="d-flex flex-column gap-2 align-items-center px-4 py-3">
-                                <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>"
-                                     class="icon-xxl fill-${rd.iconColor}">
-                                <!-- max 2 lines-->
-                                <span class="fw-bold flex-wrap justify-content-center folder-name">
-                                        <c:out value="${rd.name}"/>
-                                    </span>
+
+            <!-- FAVORITES AND MY NOTES -->
+            <c:if test="${not empty favorites }"> <!-- TODO: ADD MY NOTES -->
+                <div class="mb-5">
+                    <ul class="mini-nav">
+                        <!-- FAVORITES -->
+                        <li class="mini-nav-item">
+                            <button class="btn mini-nav-button favorite-dir text-center active" data-toggle="tab" role="tab"
+                                    aria-selected="true"> <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
+                                <spring:message code="profile.directories.favorites"/>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content bg-bg">
+                        <!-- FAVORITES LIST -->
+                        <div class="tab-pane favorite-dir-list fade active" role="tabpanel"> <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
+                            <div class="file-list gap-5 justify-content-center align-items-center">
+                                <c:forEach items="${favorites}" var="dir">
+                                    <a class="align-self-center" href="<c:url value="./directory/${dir.id}"/>">
+                                        <div class="d-flex flex-column gap-2 align-items-center">
+                                            <img src="<c:url value="/svg/folder.svg"/>"
+                                                 alt="<spring:message code="folder"/>"
+                                                 class="icon-xxl fill-${dir.iconColor}">
+                                            <!-- max 2 lines-->
+                                            <span class="fw-bold flex-wrap justify-content-center folder-name">
+                                                    <c:out value="${dir.name}"/>
+                                                </span>
+                                        </div>
+                                    </a>
+                                </c:forEach>
                             </div>
-                        </a>
-                    </c:forEach>
+                        </div>
+                    </div>
                 </div>
             </c:if>
 
-        
 
+            <!-- ROOT DIRECTORIES -->
             <div>
-                <ul class="nav-rd-years">
+                <ul class="mini-nav">
                     <c:forEach items="${root_directories}" var="subjects">
                         <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
                         <!--TAB-->
-                        <li class="nav-rd-year-item">
-                            <button class="btn rd-year text-center ${subjects.key == 1 ? 'active' : ''}" data-toggle="tab" role="tab" aria-selected="true">
+                        <li class="mini-nav-item">
+                            <button class="btn mini-nav-button root-dir text-center ${subjects.key == 1 ? 'active' : ''}"
+                                    data-toggle="tab" role="tab" aria-selected="true">
                                 <spring:message code="profile.directories.year" arguments="${ordinal}"/>
                             </button>
                         </li>
@@ -156,12 +176,14 @@
                 </ul>
                 <div class="tab-content bg-bg">
                     <c:forEach items="${root_directories}" var="subjects">
-                        <div class="tab-pane rd-subject-list fade ${subjects.key == 1 ? 'active' : ''}" role="tabpanel">
-                            <div class="file-list">
+                        <div class="tab-pane root-dir-list fade ${subjects.key == 1 ? 'active' : ''}" role="tabpanel">
+                            <div class="file-list gap-5 justify-content-center align-items-center">
                                 <c:forEach items="${subjects.value}" var="rd">
-                                    <a class="w-100" href="<c:url value="./directory/${rd.rootDirectoryId}"/>">
-                                        <div class="d-flex flex-column gap-2 align-items-center px-3 py-4">
-                                            <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
+                                    <a class="align-self-center"
+                                       href="<c:url value="./directory/${rd.rootDirectoryId}"/>">
+                                        <div class="d-flex flex-column gap-2 align-items-center">
+                                            <img src="<c:url value="/svg/folder.svg"/>"
+                                                 alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
                                             <!-- max 2 lines-->
                                             <span class="fw-bold flex-wrap justify-content-center folder-name">
                                                 <c:out value="${rd.name}"/>
@@ -175,37 +197,9 @@
                 </div>
             </div>
         </div>
-    </div>
+
+    </section>
 </main>
-
-
-<%--<div class="col-lg-auto d-flex justify-content-center gap-5 mt-4 mt-lg-0 ">
-            <div class="d-flex flex-column text-center align-items-center">
-                <span class="fw-bold">28</span>
-                <span>Apuntes</span>
-                <button class="btn button-primary rounded-box profile-button">Ver</button>
-            </div>
-            <div class="d-flex flex-column text-center align-items-center">
-                <span class="fw-bold">28</span>
-                <span>Comentarios</span>
-                <button class="btn button-primary rounded-box profile-button">Ver</button>
-            </div>
-            <div class="d-flex flex-column text-center align-items-center">
-                <span class="fw-bold">28</span>
-                <span>Favoritos</span>
-                <button class="btn button-primary rounded-box profile-button">Ver</button>
-            </div>
-        </div>--%>
-<!--
-<div class="d-flex">
-    <img src="svg/bell.svg" alt="Level" class="icon-l fill-dark-primary" />
-    <div class="d-flex flex-column">
-        <span>Nivel 8</span>
-        <span>Maestro de Sabiduría</span>
-        <span>100/300 XP</span>
-    </div>
-</div> -->
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
