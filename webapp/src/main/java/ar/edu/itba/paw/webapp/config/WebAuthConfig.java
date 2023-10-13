@@ -1,12 +1,14 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.models.user.Role;
+import ar.edu.itba.paw.webapp.auth.AuthPageFilter;
 import ar.edu.itba.paw.webapp.auth.LoginFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,6 +19,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
 import org.springframework.util.StreamUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -35,17 +38,17 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LoginFailureHandler loginFailureHandler;
 
+    @Autowired
+    private Environment env;
+    private final static String[] anonymousPaths = {"/login", "/forgot-password", "/challenge", "/register"};
+
     @Override
     public void configure(final HttpSecurity http) throws Exception {
-
-        http.sessionManagement()
+        http.addFilterBefore(new AuthPageFilter(env.getProperty("base.root"), anonymousPaths), DefaultLoginPageGeneratingFilter.class)
+                .sessionManagement()
                 .invalidSessionUrl("/login")
-
                 .and().authorizeRequests()
-                    .antMatchers("/login",
-                                "/forgot-password",
-                                "/challenge",
-                                "/register").anonymous()
+                    .antMatchers(anonymousPaths).anonymous()
                     .antMatchers(HttpMethod.GET,
                                 "/",
                                 "/search",
