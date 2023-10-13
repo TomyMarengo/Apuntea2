@@ -53,13 +53,13 @@
     <div style="padding: 1em 3em">
         <a th:href="${url}" style="text-decoration: none"><h1>Apuntea</h1></a>
         <p th:text="#{email.review.hasBeenDeletedAdmin(${name})}"/>
-        <p th:if="${not #strings.isEmpty(reason)}" th:text="#{email.reason(${reason})}"></p>
         <div class="card">
             <p th:text="${content}" style="font-size: 18px"/>
             <div style="margin-top: 10px;">
                 <th:block th:each="i : ${#numbers.sequence(1, score, 1)}">⭐</th:block>
             </div>
         </div>
+        <p th:if="${not #strings.isEmpty(reason)}" th:text="#{email.reason(${reason})}"></p>
         <a th:href="${urlNote}"><button th:text="#{email.review.goToNote}"/></a>
         <p th:text="#{email.thanks}"/>
         <p th:text="#{email.signature}"/>

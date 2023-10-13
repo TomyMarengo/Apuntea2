@@ -404,6 +404,9 @@
     <c:if test="${reviewUploaded eq true}">
         displayToast('<spring:message code="toast.reviewUploaded"/>')
     </c:if>
+    <c:if test="${reviewDeleted eq true}">
+    displayToast('<spring:message code="toast.reviewDeleted"/>')
+    </c:if>
 </script>
 
 </body>

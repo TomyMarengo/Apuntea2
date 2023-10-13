@@ -47,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
         final String to = review.getNote().getUser().getEmail();
         final String subject = messageSource.getMessage("email.review.new", new Object[]{review.getNote().getName()}, ownerLocale);
         HashMap<String, Object> data = createReviewEmailMap(review);
-
+        data.put("url", env.getProperty("base.url"));
         try {
             LOGGER.info("Sending review email to {}", review.getNote().getUser().getEmail());
             sendMessageUsingThymeleafTemplate(to,subject,"new-review.html", data, ownerLocale);
@@ -77,7 +77,7 @@ public class EmailServiceImpl implements EmailService {
         final String subject = messageSource.getMessage("email.review.delete", new Object[]{review.getNote().getName()}, ownerLocale);
         HashMap<String, Object> data = createReviewEmailMap(review);
         data.put("reason", reason);
-
+        data.put("url", env.getProperty("base.url"));
         try {
             LOGGER.info("Sending delete review email to {}", review.getUser().getEmail());
             sendMessageUsingThymeleafTemplate(to,subject,"deleted-review.html", data, ownerLocale);
@@ -131,6 +131,7 @@ public class EmailServiceImpl implements EmailService {
         final String subject = messageSource.getMessage("email.forgotPassword.title", null, locale);
         final Map<String, Object> data = new HashMap<>();
         data.put("code", verificationCode.getCode());
+        data.put("url", env.getProperty("base.url"));
         try {
             LOGGER.info("Sending forgot password email to {}", verificationCode.getEmail());
             sendMessageUsingThymeleafTemplate(verificationCode.getEmail(), subject,"forgot-password.html", data, locale);
@@ -147,6 +148,7 @@ public class EmailServiceImpl implements EmailService {
         final String to = user.getEmail();
         final String subject = messageSource.getMessage("email.ban.title", null, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
+        data.put("url", env.getProperty("base.url"));
         data.put("reason", reason);
         data.put("duration", duration);
         try {
@@ -165,7 +167,7 @@ public class EmailServiceImpl implements EmailService {
         final String to = user.getEmail();
         final String subject = messageSource.getMessage("email.unban.title", null, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
-
+        data.put("url", env.getProperty("base.url"));
         try {
             LOGGER.info("Sending unban user email to {}", user.getEmail());
             sendMessageUsingThymeleafTemplate(to,subject,"unban-user", data, ownerLocale);

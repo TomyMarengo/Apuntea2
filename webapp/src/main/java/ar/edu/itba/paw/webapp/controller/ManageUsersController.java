@@ -21,8 +21,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.BAN_USER;
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.UNBAN_USER;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 
 @Controller
 @RequestMapping("/manage/users")
@@ -74,8 +73,10 @@ public class ManageUsersController {
     @RequestMapping(value = "/{userId}/review/{noteId}/delete", method = {RequestMethod.POST})
     public ModelAndView deleteReview(@PathVariable("noteId") @ValidUuid UUID noteId,
                                      @PathVariable("userId") @ValidUuid UUID userId,
-                                     @RequestParam(required = false) @Size(max = 300) String reason) {
+                                     @RequestParam(required = false) @Size(max = 300) String reason,
+                                     final RedirectAttributes redirectAttributes) {
         noteService.deleteReview(noteId, userId, reason);
+        redirectAttributes.addFlashAttribute(DELETE_REVIEW, true);
         return new ModelAndView("redirect:/notes/"+noteId);
     }
 

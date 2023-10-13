@@ -53,7 +53,8 @@ public class NoteController {
         mav.addObject("note", note);
         mav.addObject("reviews", noteService.getReviews(noteId));
         mav.addObject("hierarchy", directoryService.getDirectoryPath(note.getParentId()));
-        mav.addObject(EDIT_NOTE_FORM, model.get(EDIT_NOTE_FORM));
+        mav.addObject(EDIT_NOTE_FORM, model.getOrDefault(EDIT_NOTE_FORM, false));
+        mav.addObject(DELETE_REVIEW, model.getOrDefault(DELETE_REVIEW, false));
 
         return mav;
     }
