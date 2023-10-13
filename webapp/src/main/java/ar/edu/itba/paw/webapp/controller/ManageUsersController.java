@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SecurityService;
@@ -18,7 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
-import java.util.List;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
@@ -48,11 +48,13 @@ public class ManageUsersController {
 
         final ModelAndView mav = new ModelAndView("manage-users");
 
-        List<User> users = userService.getStudents(searchUserForm.getQuery(), searchUserForm.getPageNumber());
-        mav.addObject("maxPage", userService.getStudentPages(searchUserForm.getQuery()));
-        mav.addObject("users", users);
+        Page<User> users = userService.getStudents(searchUserForm.getQuery(), searchUserForm.getPageNumber());
+        mav.addObject("maxPage", users.getTotalPages());
+        mav.addObject("users", users.getContent());
+        
         mav.addObject(BAN_USER, model.getOrDefault(BAN_USER, false));
         mav.addObject(UNBAN_USER, model.getOrDefault(UNBAN_USER, false));
+
         return mav;
     }
 

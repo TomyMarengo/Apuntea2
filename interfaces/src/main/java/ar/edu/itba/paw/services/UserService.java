@@ -1,10 +1,10 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +19,5 @@ public interface UserService {
     void unbanUsers();
     void unbanUser(UUID userId);
     void banUser(UUID userId, String reason);
-    List<User> getStudents(String query, int pageNum);
-    int getStudentPages(String query);
+    Page<User> getStudents(String query, int pageNum);
 }

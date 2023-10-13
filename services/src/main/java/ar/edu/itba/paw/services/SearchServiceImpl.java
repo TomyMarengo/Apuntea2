@@ -33,17 +33,20 @@ public class SearchServiceImpl implements SearchService {
                 .category(category)
                 .word(word)
                 .sortBy(sortBy)
-                .ascending(ascending)
-                .page(page)
-                .pageSize(pageSize);
+                .ascending(ascending);
         securityService.getCurrentUser().ifPresent(u -> sab.currentUserId(u.getUserId()));
-        SearchArguments sa = sab.build();
 
+        SearchArguments searchArgumentsWithoutPaging = sab.build();
+        int countTotalResults = searchDao.countSearchResults(searchArgumentsWithoutPaging);
+        int safePage = Page.getSafePagePosition(page, countTotalResults, pageSize);
+
+        sab.page(safePage).pageSize(pageSize);
+        SearchArguments sa = sab.build();
         return new Page<>(
                 searchDao.search(sa),
                 sa.getPage(),
                 sa.getPageSize(),
-                searchDao.countSearchResults(sa)
+                countTotalResults
         );
     }
 
@@ -54,16 +57,20 @@ public class SearchServiceImpl implements SearchService {
                 .category(category)
                 .word(word)
                 .sortBy(sortBy)
-                .ascending(ascending)
-                .page(page)
-                .pageSize(pageSize);
+                .ascending(ascending);
         securityService.getCurrentUser().ifPresent(u -> sab.currentUserId(u.getUserId()));
+
+        SearchArguments searchArgumentsWithoutPaging = sab.build();
+        int countTotalResults = searchDao.countNavigationResults(searchArgumentsWithoutPaging, parentId);
+        int safePage = Page.getSafePagePosition(page, countTotalResults, pageSize);
+
+        sab.page(safePage).pageSize(pageSize);
         SearchArguments sa = sab.build();
         return new Page<>(
                 searchDao.getNavigationResults(sa, parentId),
                 sa.getPage(),
                 sa.getPageSize(),
-                searchDao.countNavigationResults(sa, parentId)
+                countTotalResults
         );
     }
 

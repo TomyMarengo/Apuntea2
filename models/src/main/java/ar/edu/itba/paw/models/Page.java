@@ -29,9 +29,20 @@ public class Page<T>{
     }
 
     public int getTotalPages() {
+        return Page.getTotalPages(totalResults, pageSize);
+    }
+
+    private static int getTotalPages(int totalResults, int pageSize) {
+        if(totalResults == 0)
+            return 1;
         if (totalResults % pageSize == 0)
             return totalResults / pageSize;
         return totalResults / pageSize + 1;
+    }
+
+    public static int getSafePagePosition(int page, int totalResults, int pageSize) {
+        int result = Math.min(page, Page.getTotalPages(totalResults, pageSize));
+        return Math.max(result, 1);
     }
 
     public int getTotalResults() {

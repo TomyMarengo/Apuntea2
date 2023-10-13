@@ -167,7 +167,7 @@ public class SubjectJdbcDaoTest {
         UUID c2s2Id = insertSubject(namedParameterJdbcTemplate, "c2s2", dirId);
 
         UUID c12s1Id = insertSubject(namedParameterJdbcTemplate, "c12s1", dirId);
-        UUID c12s2Id = insertSubject(namedParameterJdbcTemplate, "c12s1", dirId);
+        UUID c12s2Id = insertSubject(namedParameterJdbcTemplate, "c12s2", dirId);
 
         UUID c3s1Id = insertSubject(namedParameterJdbcTemplate, "c3s1", dirId);
         UUID c3s2Id = insertSubject(namedParameterJdbcTemplate, "c3s2", dirId);
@@ -191,15 +191,15 @@ public class SubjectJdbcDaoTest {
         insertSubjectCareer(jdbcSubjectsCareersInsert, c3s1Id, career3Id, 1);
         insertSubjectCareer(jdbcSubjectsCareersInsert, c3s2Id, career3Id, 2);
 
-        List<Subject> c1compList = subjectDao.getSubjectsByCareerIdComplemented(career1Id);
-        List<Subject> c2compList = subjectDao.getSubjectsByCareerIdComplemented(career2Id);
-        List<Subject> c3compList = subjectDao.getSubjectsByCareerIdComplemented(career3Id);
-
         List<UUID> c1exIds = Stream.of(c1s1Id, c1s2Id, c1s3Id).collect(Collectors.toList());
         List<UUID> c2exIds = Stream.of(c2s1Id, c2s2Id).collect(Collectors.toList());
         List<UUID> c12Ids = Stream.of(c12s1Id, c12s2Id).collect(Collectors.toList());
         List<UUID> c3sIds = Stream.of(c3s1Id, c3s2Id).collect(Collectors.toList());
         List<UUID> nosIds = Stream.of(nos1Id, nos2Id).collect(Collectors.toList());
+
+        List<Subject> c1compList = subjectDao.getSubjectsByCareerIdComplemented(career1Id);
+        List<Subject> c2compList = subjectDao.getSubjectsByCareerIdComplemented(career2Id);
+        List<Subject> c3compList = subjectDao.getSubjectsByCareerIdComplemented(career3Id);
 
         assertEquals(2, c1compList.size());
         assertEquals(3, c2compList.size());
@@ -217,7 +217,6 @@ public class SubjectJdbcDaoTest {
         assertTrue(c2compList.stream().noneMatch(s -> c12Ids.contains(s.getSubjectId()))); // already in career2
         assertTrue(c2compList.stream().noneMatch(s -> c3sIds.contains(s.getSubjectId()))); // career3 is from another institution
         assertTrue(c2compList.stream().noneMatch(s -> nosIds.contains(s.getSubjectId()))); // not in any career
-
     }
 
 

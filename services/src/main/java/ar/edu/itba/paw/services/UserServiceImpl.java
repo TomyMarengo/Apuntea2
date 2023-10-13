@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.user.ProfilePicture;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
@@ -60,16 +61,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public List<User> getStudents(String query, int pageNum) {
+    public Page<User> getStudents(String query, int page) {
         if (query == null) query = "";
-        return userDao.getStudents(query, pageNum, PAGE_SIZE);
-    }
-
-    @Transactional
-    @Override
-    public int getStudentPages(String query) {
-        if (query == null) query = "";
-        return (int) Math.ceil(userDao.getStudentsQuantity(query) / PAGE_SIZE);
+        int countStudents = userDao.getStudentsQuantity(query);
+        int currentPage = Page.getSafePagePosition(page, countStudents, PAGE_SIZE);
+        List<User> users = userDao.getStudents(query, currentPage, PAGE_SIZE);
+        return new Page<>(users, currentPage, PAGE_SIZE, countStudents);
     }
 
     //    @Transactional
