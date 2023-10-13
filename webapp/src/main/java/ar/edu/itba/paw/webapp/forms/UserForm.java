@@ -24,9 +24,11 @@ public class UserForm {
     @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
     private String password;
 
+    @NotNull
     @ValidUuid
     private UUID institutionId;
 
+    @NotNull
     @ValidUuid
     private UUID careerId;
 
