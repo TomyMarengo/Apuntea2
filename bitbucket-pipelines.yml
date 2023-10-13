@@ -1,4 +1,4 @@
-image: maven:3.8.4-openjdk-11-slim
+image: adoptopenjdk/maven-openjdk8
 
 pipelines:
   default:
