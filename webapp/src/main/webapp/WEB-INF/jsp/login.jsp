@@ -131,28 +131,24 @@
 
 </section>
 
-<fragment:customToast message="toast.registerSucceeded" id="liveToastRegister"/>
-<fragment:customToast message="toast.forgotPasswordSucceeded" id="liveToastForgotPassword"/>
+<fragment:customToast message=""/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
 
 <script src="<c:url value="/js/password.js"/>"></script>
+<script src="<c:url value="/js/popups.js"/>"></script>
 
-<c:if test="${success eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastRegister'));
-        toastBootstrap.show();
-    </script>
-</c:if>
 
-<c:if test="${not empty email }">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastForgotPassword'));
-        toastBootstrap.show();
-    </script>
-</c:if>
+<script>
+    <c:if test="${success eq true}">
+        displayToast('<spring:message code="toast.registerSucceeded"/>')
+    </c:if>
+    <c:if test="${not empty email}">
+        displayToast('<spring:message code="toast.forgotPasswordSucceeded"/>')
+    </c:if>
+</script>
 
 </body>
 

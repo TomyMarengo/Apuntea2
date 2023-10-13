@@ -270,8 +270,7 @@
     <%--    </div>--%>
 </div>
 
-<fragment:customToast message="toast.changePasswordSucceeded" id="liveToastChangePasswordSucceeded"/>
-<fragment:customToast message="toast.changeInfoSucceeded" id="liveToastChangeInfoSucceeded"/>
+<fragment:customToast message=""/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -282,19 +281,16 @@
 
 <script src="<c:url value="/js/settings.js"/>"></script>
 <script src="<c:url value="/js/password.js"/>"></script>
+<script src="<c:url value="/js/popups.js"/>"></script>
 
-<c:if test="${passwordChanged eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastChangePasswordSucceeded'));
-        toastBootstrap.show();
-    </script>
-</c:if>
-<c:if test="${userEdited ne null and userEdited eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastChangeInfoSucceeded'));
-        toastBootstrap.show();
-    </script>
-</c:if>
+<script>
+    <c:if test="${passwordChanged eq true}">
+        displayToast('<spring:message code="toast.changePasswordSucceeded"/>')
+    </c:if>
 
+    <c:if test="${userEdited ne null and userEdited eq true}">
+        displayToast('<spring:message code="toast.changeInfoSucceeded"/>')
+    </c:if>
+</script>
 </body>
 </html>

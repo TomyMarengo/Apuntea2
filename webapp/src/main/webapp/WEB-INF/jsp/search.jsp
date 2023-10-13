@@ -386,7 +386,6 @@
         </div>
     </section>
 
-    <fragment:customToast message="toast.linkCopied" id="liveToastLinkCopied"/>
 
     <!-- BOX LIST -->
     <section class="container mt-4 p-0" id="boxList">
@@ -613,8 +612,7 @@
     </section>
 </c:if>
 
-<fragment:customToast message="toast.addFavorite" id="liveToastAddFavorite"/>
-<fragment:customToast message="toast.removeFavorite" id="liveToastRemoveFavorite"/>
+<fragment:customToast message=""/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -625,39 +623,35 @@
     const {institutions, careers, subjects, careerMap, subjectMap} = JSON.parse('${institutionData}');
 </script>
 
-<script>
-    const liveToast = document.getElementById('liveToastLinkCopied');
-
-    for (let copyButton of document.getElementsByClassName('copy-button')) {
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToast)
-        copyButton.addEventListener('click', () => {
-            toastBootstrap.show()
-        })
-    }
-</script>
-
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ics-autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
+<script src="<c:url value="/js/popups.js"/>"></script>
+
 <c:if test="${not empty results}">
     <script src="<c:url value="/js/note-list.js"/>"></script>
     <script src="<c:url value="/js/search-buttons.js"/>"></script>
     <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
-<script src="<c:url value="/js/popups.js"/>"></script>
-<c:if test="${favoriteAdded eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastAddFavorite'));
-        toastBootstrap.show();
-    </script>
-</c:if>
-<c:if test="${favoriteRemoved eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastRemoveFavorite'));
-        toastBootstrap.show();
-    </script>
-</c:if>
+
+<script>
+    const liveToast = document.getElementById('liveToast');
+    for (let copyButton of document.getElementsByClassName('copy-button')) {
+        copyButton.addEventListener('click', () => {
+            displayToast('<spring:message code="toast.linkCopied"/>')
+        })
+    }
+</script>
+
+<script>
+    <c:if test="${favoriteAdded eq true}">
+    displayToast('<spring:message code="toast.addFavorite"/>')
+    </c:if>
+    <c:if test="${favoriteRemoved eq true}">
+    displayToast('<spring:message code="toast.removeFavorite"/>')
+    </c:if>
+</script>
 
 </body>
 

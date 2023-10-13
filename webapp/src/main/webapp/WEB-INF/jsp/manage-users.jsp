@@ -351,9 +351,7 @@
     </div>
 </div>
 
-<fragment:customToast message="toast.userBanned" id="liveToastUserBanned"/>
-<fragment:customToast message="toast.userUnbanned" id="liveToastUserUnbanned"/>
-
+<fragment:customToast message=""/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -365,17 +363,15 @@
     <script src="<c:url value="/js/pagination.js"/>"></script>
     <script src="<c:url value="/js/ban-unban.js"/>"></script>
 </c:if>
-<c:if test="${userBanned eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastUserBanned'));
-        toastBootstrap.show();
-    </script>
-</c:if>
-<c:if test="${userUnbanned eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastUserUnbanned'));
-        toastBootstrap.show();
-    </script>
-</c:if>
+
+<script>
+    <c:if test="${userBanned eq true}">
+        displayToast('<spring:message code="toast.userBanned"/>')
+    </c:if>
+    <c:if test="${userUnbanned eq true}">
+        displayToast('<spring:message code="toast.userUnbanned"/>')
+    </c:if>
+</script>
+
 </body>
 </html>

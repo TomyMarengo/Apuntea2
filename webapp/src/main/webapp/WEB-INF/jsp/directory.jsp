@@ -1079,14 +1079,8 @@
     </div>
 </div>
 
-<fragment:customToast message="toast.linkCopied" id="liveToastLinkCopied"/>
-<fragment:customToast message="toast.noteEditSucceeded" id="liveToastNoteEdit"/>
-<fragment:customToast message="toast.noteDeleteSucceeded" id="liveToastNoteDelete"/>
-<fragment:customToast message="toast.directoryCreateSucceeded" id="liveToastDirectoryCreate"/>
-<fragment:customToast message="toast.directoryDeleteSucceeded" id="liveToastDirectoryDelete"/>
-<fragment:customToast message="toast.directoryEditSucceeded" id="liveToastDirectoryEdit"/>
-<fragment:customToast message="toast.addFavorite" id="liveToastAddFavorite"/>
-<fragment:customToast message="toast.removeFavorite" id="liveToastRemoveFavorite"/>
+<fragment:customToast message=""/>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -1135,57 +1129,44 @@
 </c:if>
 
 <script>
-    const liveToast = document.getElementById('liveToastLinkCopied');
-
+    const liveToast = document.getElementById('liveToast');
     for (let copyButton of document.getElementsByClassName('copy-button')) {
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToast)
         copyButton.addEventListener('click', () => {
-            toastBootstrap.show()
+            displayToast('toast.linkCopied')
         })
     }
 </script>
-<c:if test="${noteEdited eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastNoteEdit'));
-        toastBootstrap.show();
-    </script>
-</c:if>
-<c:if test="${noteDeleted eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastNoteDelete'));
-        toastBootstrap.show();
-    </script>
-</c:if>
-<c:if test="${directoryCreated eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastDirectoryCreate'));
-        toastBootstrap.show();
-    </script>
-</c:if>
-<c:if test="${directoryDeleted eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastDirectoryDelete'));
-        toastBootstrap.show();
-    </script>
-</c:if>
-<c:if test="${directoryEdited eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastDirectoryEdit'));
-        toastBootstrap.show();
-    </script>
-</c:if>
-<c:if test="${favoriteAdded eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastAddFavorite'));
-        toastBootstrap.show();
-    </script>
-</c:if>
-<c:if test="${favoriteRemoved eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastRemoveFavorite'));
-        toastBootstrap.show();
-    </script>
-</c:if>
+
+<script>
+    <c:if test="${noteEdited eq true}">
+        displayToast('<spring:message code="toast.noteEditSucceeded"/>')
+    </c:if>
+
+    <c:if test="${noteDeleted eq true}">
+        displayToast('<spring:message code="toast.noteDeleteSucceeded"/>')
+    </c:if>
+
+    <c:if test="${directoryCreated eq true}">
+        displayToast('<spring:message code="toast.directoryCreateSucceeded"/>')
+    </c:if>
+
+    <c:if test="${directoryDeleted eq true}">
+        displayToast('<spring:message code="toast.directoryDeleteSucceeded"/>')
+    </c:if>
+
+    <c:if test="${directoryEdited eq true}">
+        displayToast('<spring:message code="toast.directoryEditSucceeded"/>')
+    </c:if>
+
+    <c:if test="${favoriteAdded eq true}">
+        displayToast('<spring:message code="toast.addFavorite"/>')
+    </c:if>
+
+    <c:if test="${favoriteRemoved eq true}">
+        displayToast('<spring:message code="toast.removeFavorite"/>')
+    </c:if>
+</script>
+
 </body>
 
 </html>

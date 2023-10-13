@@ -357,8 +357,7 @@
     </div>
 </c:if>
 
-<fragment:customToast message="toast.reviewUploaded" id="liveToastCreation"/>
-<fragment:customToast message="toast.noteEditSucceeded" id="liveToastNoteEdit"/>
+<fragment:customToast message=""/>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -390,13 +389,7 @@
         </script>
     </c:if>
 </c:if>
-<c:if test="${noteEdited eq true}">
-    <script>
-        console.log("paso por aca");
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastNoteEdit'));
-        toastBootstrap.show();
-    </script>
-</c:if>
+
 <c:if test="${reviewScore gt 0}">
     <script>
         const reviewForm = document.getElementById('reviewForm');
@@ -404,12 +397,14 @@
         reviewForm.querySelectorAll('#scoreSelect')[0].value = "<c:out value="${reviewScore}"/>";
     </script>
 </c:if>
-<c:if test="${reviewUploaded eq true}">
-    <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastCreation'));
-        toastBootstrap.show();
-    </script>
-</c:if>
+<script>
+    <c:if test="${noteEdited eq true}">
+        displayToast('<spring:message code="toast.noteEditSucceeded"/>')
+    </c:if>
+    <c:if test="${reviewUploaded eq true}">
+        displayToast('<spring:message code="toast.reviewUploaded"/>')
+    </c:if>
+</script>
 
 </body>
 </html>

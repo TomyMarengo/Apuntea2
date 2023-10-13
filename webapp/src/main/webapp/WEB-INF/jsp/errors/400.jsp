@@ -48,7 +48,7 @@
 </main>
 
 
-<fragment:customToast message="toast.maxSizeExceeded" id="liveToastMaxSize"/>
+<fragment:customToast message=""/>
 
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
@@ -57,8 +57,7 @@
 
 <c:if test="${maxUploadSizeExceeded != null}">
     <script>
-        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastMaxSize'));
-        toastBootstrap.show();
+        displayToast('<spring:message code="toast.maxSizeExceeded"/>')
     </script>
 </c:if>
 
