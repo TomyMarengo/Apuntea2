@@ -3,5 +3,7 @@ image: maven:3.9.2
 pipelines:
   default:
     - step:
+        name: Build and Test
         script:
+          - mvn clean install -DskipTests=false
           - mvn test
