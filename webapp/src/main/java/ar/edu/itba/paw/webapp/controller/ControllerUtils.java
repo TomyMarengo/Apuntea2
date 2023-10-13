@@ -24,6 +24,8 @@ public class ControllerUtils {
     static final String DELETE_DIRECTORY_FORM = "directoryDeleted";
     static final String ADD_FAVORITE = "favoriteAdded";
     static final String REMOVE_FAVORITE = "favoriteRemoved";
+    static final String BAN_USER = "userBanned";
+    static final String UNBAN_USER = "userUnbanned";
     static final String LINK_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.linkSubjectForm";
     static final String UNLINK_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.unlinkSubjectForm";
 

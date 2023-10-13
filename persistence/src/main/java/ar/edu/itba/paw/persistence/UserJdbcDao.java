@@ -150,6 +150,15 @@ class UserJdbcDao implements UserDao{
     }
 
     @Override
+    public Optional<User> findById(UUID userId) {
+        return jdbcTemplate.query("SELECT u.*, array_agg(r.role_name) as roles, i.institution_id, i.institution_name, c.career_id, c.career_name FROM users u " +
+                "INNER JOIN User_Roles r ON u.user_id = r.user_id " +
+                "INNER JOIN Careers c ON u.career_id = c.career_id " +
+                "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
+                "WHERE u.user_id = ? " +
+                "GROUP BY u.user_id, c.career_id, i.institution_id", ROW_MAPPER, userId).stream().findFirst();
+    }
+    @Override
     public Optional<User> findByUsername(String username) {
         return jdbcTemplate.query("SELECT u.*, array_agg(r.role_name) as roles, i.institution_id, i.institution_name, c.career_id, c.career_name FROM users u " +
                 "INNER JOIN User_Roles r ON u.user_id = r.user_id " +
@@ -205,9 +214,9 @@ class UserJdbcDao implements UserDao{
 
     @Transactional
     @Override
-    public boolean banUser(UUID userId, UUID adminId, LocalDateTime endDate) {
+    public boolean banUser(UUID userId, UUID adminId, LocalDateTime endDate, String reason) {
         boolean userFound = jdbcTemplate.update("UPDATE Users SET status = 'BANNED' WHERE user_id = ? AND status = 'ACTIVE'", userId) == 1;
         if (!userFound) throw new UserNotFoundException();
-        return jdbcTemplate.update("INSERT INTO Bans (user_id, admin_id, end_date) VALUES (?, ?, ?)", userId, adminId, endDate) == 1;
+        return jdbcTemplate.update("INSERT INTO Bans (user_id, admin_id, end_date, reason) VALUES (?, ?, ?, ?)", userId, adminId, endDate, reason) == 1;
     }
 }

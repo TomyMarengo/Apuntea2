@@ -111,7 +111,7 @@ public class UserJdbcDaoTest {
     public void testBanUser() {
         UUID studentId = insertStudent(namedParameterJdbcTemplate, "student@mail.com", "", ING_INF, "es");
         UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail.com", "", ING_INF, "es");
-        userDao.banUser(studentId, adminId, LocalDateTime.now().plusDays(10));
+        userDao.banUser(studentId, adminId, LocalDateTime.now().plusDays(10), "Se porto mal");
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentId + "' AND status = 'BANNED'"));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "bans", "user_id = '" + studentId + "' AND admin_id = '" + adminId + "'"));
     }

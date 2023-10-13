@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.VerificationCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +123,6 @@ public class EmailServiceImpl implements EmailService {
         } catch (MessagingException e) {
             LOGGER.warn("Delete directory email could not be sent to {}",directory.getUser().getEmail());
         }
-        // TODO: Send email
     }
 
     @Async
@@ -137,6 +137,41 @@ public class EmailServiceImpl implements EmailService {
             LOGGER.info("Forgot password email sent to {}", verificationCode.getEmail());
         } catch (MessagingException e) {
             LOGGER.warn("Forgot password email could not be sent to {}", verificationCode.getEmail());
+        }
+    }
+
+    @Async
+    @Override
+    public void sendBanEmail(User user, String reason, int duration) {
+        final Locale ownerLocale = new Locale(user.getLocale());
+        final String to = user.getEmail();
+        final String subject = messageSource.getMessage("email.ban.title", null, ownerLocale);
+        final Map<String, Object> data = new HashMap<>();
+        data.put("reason", reason);
+        data.put("duration", duration);
+        try {
+            LOGGER.info("Sending ban user email to {}", user.getEmail());
+            sendMessageUsingThymeleafTemplate(to,subject,"ban-user", data, ownerLocale);
+            LOGGER.info("Ban user email sent to {}", user.getEmail());
+        } catch (MessagingException e) {
+            LOGGER.warn("Ban user email could not be sent to {}",user.getEmail());
+        }
+    }
+
+    @Async
+    @Override
+    public void sendUnbanEmail(User user) {
+        final Locale ownerLocale = new Locale(user.getLocale());
+        final String to = user.getEmail();
+        final String subject = messageSource.getMessage("email.unban.title", null, ownerLocale);
+        final Map<String, Object> data = new HashMap<>();
+
+        try {
+            LOGGER.info("Sending unban user email to {}", user.getEmail());
+            sendMessageUsingThymeleafTemplate(to,subject,"unban-user", data, ownerLocale);
+            LOGGER.info("Unban user email sent to {}", user.getEmail());
+        } catch (MessagingException e) {
+            LOGGER.warn("Unban user email could not be sent to {}",user.getEmail());
         }
     }
 

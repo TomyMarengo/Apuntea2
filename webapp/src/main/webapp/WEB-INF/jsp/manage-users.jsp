@@ -284,6 +284,7 @@
                 <div class="modal-header">
                     <h3 class="modal-title fs-5" id="banUserLabel"><spring:message code="banUser"/> :
                         <span id="banUserName"></span></h3>
+
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close">
                     </button>
@@ -292,6 +293,11 @@
                 <div class="modal-body pb-0">
                     <spring:message code="ban.confirm"/>
                     <form:errors cssClass="text-danger" element="p"/>
+
+                    <spring:message code="BanUserForm.explain" var="banMessagePlaceholder"/>
+                    <label for="reason"></label>
+                    <textarea name="reason" class="form-control mt-3" id="reason"
+                              placeholder="${banMessagePlaceholder}"></textarea>
                 </div>
 
                 <div class="modal-footer mt-4">
@@ -345,6 +351,10 @@
     </div>
 </div>
 
+<fragment:customToast message="toast.userBanned" id="liveToastUserBanned"/>
+<fragment:customToast message="toast.userUnbanned" id="liveToastUserUnbanned"/>
+
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
@@ -355,6 +365,17 @@
     <script src="<c:url value="/js/pagination.js"/>"></script>
     <script src="<c:url value="/js/ban-unban.js"/>"></script>
 </c:if>
-
+<c:if test="${userBanned eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastUserBanned'));
+        toastBootstrap.show();
+    </script>
+</c:if>
+<c:if test="${userUnbanned eq true}">
+    <script>
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(document.getElementById('liveToastUserUnbanned'));
+        toastBootstrap.show();
+    </script>
+</c:if>
 </body>
 </html>

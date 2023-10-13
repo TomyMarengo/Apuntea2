@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.ProfilePicture;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
@@ -26,21 +27,23 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
-
     private final SecurityService securityService;
-
     private final VerificationCodesService verificationCodesService;
+
+    private final EmailService emailService;
 
     private	static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private static final int BAN_DURATION = 3;
     private static final int PAGE_SIZE = 10;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, final SecurityService securityService, final VerificationCodesService verificationCodesService) {
+    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, final SecurityService securityService,
+                           final VerificationCodesService verificationCodesService, final EmailService emailService) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
         this.securityService = securityService;
         this.verificationCodesService = verificationCodesService;
+        this.emailService = emailService;
     }
 
     @Transactional
@@ -126,15 +129,18 @@ public class UserServiceImpl implements UserService {
     public void unbanUser(UUID userId) {
         if (!userDao.unbanUser(userId))
             throw new InvalidUserException();
+        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
+        emailService.sendUnbanEmail(user);
     }
 
     @Transactional
     @Override
-   public void banUser(UUID userId) {
+   public void banUser(UUID userId, String reason) {
         User admin = securityService.getCurrentUserOrThrow();
-        if (!userDao.banUser(userId, admin.getUserId(), LocalDateTime.now().plusDays(BAN_DURATION)))
+        if (!userDao.banUser(userId, admin.getUserId(), LocalDateTime.now().plusDays(BAN_DURATION), reason))
             throw new InvalidUserException();
-        // TODO: Send mail to banned user
+        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
+        emailService.sendBanEmail(user, reason, BAN_DURATION);
     }
 
 

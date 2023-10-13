@@ -13,13 +13,14 @@ public interface UserDao {
     void create(String email, String password, UUID careerId, String lang, Role role);
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
+    Optional<User> findById(UUID userId);
     boolean update(User user);
     Optional<ProfilePicture> getProfilePicture(UUID userId);
     void updateProfilePicture(UUID userId, byte[] profilePicture);
     void updatePassword(UUID userId, String password);
     boolean updatePasswordForUserWithEmail(String email, String password);
     void unbanUsers();
-    boolean banUser(UUID userId, UUID adminId, LocalDateTime endDate);
+    boolean banUser(UUID userId, UUID adminId, LocalDateTime endDate, String reason);
     boolean unbanUser(UUID userId);
     List<User> getStudents(String query, int pageNum, int pageSize);
     int getStudentsQuantity(String query);
