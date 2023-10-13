@@ -107,9 +107,12 @@ public class NoteController {
     }
 
     @RequestMapping(value = "/{noteId}/delete", method = RequestMethod.POST)
-    public ModelAndView deleteNote(@PathVariable("noteId") @ValidUuid UUID noteId, @RequestParam(required = false) @Size(max = 300) String reason, final RedirectAttributes redirectAttributes) {
+    public ModelAndView deleteNote(@PathVariable("noteId") @ValidUuid UUID noteId,
+                                   @RequestParam(required = false) @Size(max = 300) String reason,
+                                   @RequestParam(required = false, defaultValue = "/") String redirectUrl
+                                ) {
         noteService.delete(new UUID[]{noteId}, reason);
-        return new ModelAndView("redirect:/");
+        return new ModelAndView("redirect:"  + redirectUrl);
     }
 
     @ModelAttribute("user")

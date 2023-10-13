@@ -32,7 +32,7 @@ public class AuthPageFilter extends GenericFilterBean {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.isAuthenticated() && (matchesSubpath(((HttpServletRequest)request).getRequestURI()))) {
+        if (auth != null && auth.isAuthenticated() && matchesSubpath(((HttpServletRequest)request).getRequestURI())) {
             LOGGER.info("Redirecting authenticated user {} to index", auth.getName());
             ((HttpServletResponse)response).sendRedirect(basePath);
         }

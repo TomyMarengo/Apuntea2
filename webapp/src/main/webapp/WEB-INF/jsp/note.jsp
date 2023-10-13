@@ -224,6 +224,7 @@
                                   placeholder="${deleteMessagePlaceholder}"></textarea>
                     </c:if>
                 </div>
+                <input type="hidden" name="redirectUrl" value="/directory/${note.parentId}"/>
 
                 <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-primary"

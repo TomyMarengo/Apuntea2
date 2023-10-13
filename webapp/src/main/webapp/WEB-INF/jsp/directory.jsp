@@ -860,7 +860,6 @@
                     </div>
                     <input type="hidden" name="parentId" value="${directory.id}"/>
                     <input type="hidden" name="createDirectory" value="createDirectory"/>
-                    <input type="hidden" name="queryParams" value="${requestScope['javax.servlet.forward.query_string']}"/>
                 </div>
                 <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-primary"
@@ -952,7 +951,6 @@
                 </div>
                 <input type="hidden" id="noteId" name="id" value=""/>
                 <input type="hidden" name="parentId" value="${directory.id}"/>
-                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}?${requestScope['javax.servlet.forward.query_string']}"/>
             </form:form>
         </div>
     </div>
@@ -1034,7 +1032,7 @@
                 </div>
                 <input type="hidden" id="directoryId" name="id" value=""/>
                 <input type="hidden" name="parentId" value="${directory.id}"/>
-                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}?${requestScope['javax.servlet.forward.query_string']}"/>
+                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
             </form:form>
 
         </div>
@@ -1073,7 +1071,7 @@
                                                 code="delete"/>"/>
                 </div>
 
-                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}?${requestScope['javax.servlet.forward.query_string']}"/>
+                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
 
             </form:form>
         </div>

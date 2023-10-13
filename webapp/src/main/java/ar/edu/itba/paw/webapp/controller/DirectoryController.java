@@ -91,7 +91,6 @@ public class DirectoryController {
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createDirectory")
     public ModelAndView addDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                      @Valid @ModelAttribute final CreateDirectoryForm createDirectoryForm,
-                                     @RequestParam(required = false, defaultValue = "") String queryParams,
                                      final BindingResult result,
                                      final RedirectAttributes redirectAttributes)
     {
@@ -102,7 +101,7 @@ public class DirectoryController {
 
         UUID childId = directoryService.create(createDirectoryForm.getName(), directoryId, createDirectoryForm.getVisible(), createDirectoryForm.getColor());
         redirectAttributes.addFlashAttribute(CREATE_DIRECTORY_FORM, true);
-        return new ModelAndView("redirect:/directory/" + directoryId + "?" + queryParams);
+        return new ModelAndView("redirect:/directory/" + directoryId);
     }
 
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST, params = "createNote")

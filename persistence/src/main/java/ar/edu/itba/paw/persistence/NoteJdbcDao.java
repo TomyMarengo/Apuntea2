@@ -204,17 +204,14 @@ public class NoteJdbcDao implements NoteDao {
     @Transactional
     @Override
     public void createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
-        try {
+        boolean success = jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ?, created_at = now() WHERE note_id = ? AND user_id = ?", score, content, noteId, userId) == 1;
+        if (!success) {
             jdbcReviewInsert.execute(new HashMap<String, Object>(){{
                 put(NOTE_ID, noteId);
                 put(USER_ID, userId);
                 put(SCORE, score);
                 put(CONTENT, content);
             }});
-        } catch (DuplicateKeyException e) {
-            jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ?, created_at = now() WHERE note_id = ? AND user_id = ?", score, content, noteId, userId);
-        } catch (DataIntegrityViolationException e) {
-            throw new InvalidReviewException();
         }
     }
 
