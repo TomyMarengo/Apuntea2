@@ -1,15 +1,12 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -225,7 +222,7 @@ public class NoteJdbcDao implements NoteDao {
                         args, USER_ROW_MAPPER)
         );
         int rowsDeleted = namedParameterJdbcTemplate.update("DELETE FROM Notes WHERE note_id IN (:note_id)", args);
-        if (rowsDeleted == 0) return new ArrayList<>();
+        if (rowsDeleted == 0) return Collections.emptyList();
         return notes;
     }
 

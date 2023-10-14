@@ -10,8 +10,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.services.ServiceTestUtils.*;
@@ -32,7 +32,7 @@ public class DirectoryServiceImplTest {
     @Test(expected = InvalidDirectoryException.class)
     public void testDeleteAdminInvalidIds() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
-        Mockito.when(directoryDao.delete(Mockito.any())).thenReturn(new ArrayList<>()); // The deletion failed
+        Mockito.when(directoryDao.delete(Mockito.any())).thenReturn(Collections.emptyList()); // The deletion failed
         directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID}, "lol");
         Assert.fail("Should have thrown InvalidDirectoryException");
     }

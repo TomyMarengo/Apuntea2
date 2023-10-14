@@ -12,7 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import static org.junit.Assert.*;
@@ -36,7 +36,7 @@ public class SearchServiceImplTest {
         int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
         Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(new User(UUID.randomUUID(), "mail")));
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
-        Mockito.when(searchDao.search(Mockito.any())).thenReturn(new ArrayList<>());
+        Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
 
         Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, "date", true, PAGE, PAGE_SIZE);
 
@@ -53,7 +53,7 @@ public class SearchServiceImplTest {
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
         Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(new User(UUID.randomUUID(), "mail")));
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
-        Mockito.when(searchDao.search(Mockito.any())).thenReturn(new ArrayList<>());
+        Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
 
         Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
@@ -70,7 +70,7 @@ public class SearchServiceImplTest {
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
         Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(new User(UUID.randomUUID(), "mail")));
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
-        Mockito.when(searchDao.search(Mockito.any())).thenReturn(new ArrayList<>());
+        Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
 
         Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
