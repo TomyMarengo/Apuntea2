@@ -980,16 +980,19 @@
                         aria-label="Close">
                 </button>
             </div>
-            <form:form id="deleteForm" method="POST" action="${deleteUrl}">
+            <form:form modelAttribute="deleteWithReasonForm" id="deleteForm" method="POST" action="${deleteUrl}">
                 <div class="modal-body pb-0 d-flex flex-column">
                     <spring:message code="DeleteForm.description"/>
                     <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
                     <c:if test="${user ne null and user.isAdmin}">
                         <label for="reason"></label>
-                        <textarea name="reason" class="form-control mt-3" id="reason"
-                                  placeholder="${deleteMessagePlaceholder}"></textarea>
+                        <form:textarea path="reason" name="reason" class="form-control mt-3" id="reason"
+                                  placeholder="${deleteMessagePlaceholder}"/>
+                        <form:errors path="reason" cssClass="text-danger" element="p"/>
                     </c:if>
                 </div>
+
+                <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
 
                 <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-primary"
@@ -998,8 +1001,6 @@
                     <input id="deleteSelectedButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                                 code="delete"/>"/>
                 </div>
-
-                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
 
             </form:form>
         </div>
@@ -1021,7 +1022,7 @@
     <script src="<c:url value="/js/crud-buttons.js"/>"></script>
 </c:if>
 
-<c:if test="${errorsEditNoteForm != null}">
+<c:if test="${errorsEditNoteForm ne null}">
     <script>
         const id = "<c:out value="${editNoteId}"/>";
         edit(id, true);
@@ -1050,6 +1051,45 @@
     <script>
         const createDirectoryModalButton = document.getElementById('createDirectoryModalButton');
         createDirectoryModalButton.click()
+    </script>
+</c:if>
+
+<c:if test="${errorsDeleteWithReasonForm ne null}">
+    <script>
+        const noteIds = "<c:out value="${deleteNoteIds}"/>";
+        const directoryIds = "<c:out value="${deleteDirectoryIds}"/>";
+
+        console.log(noteIds)
+        console.log(directoryIds)
+
+
+        selectedRowIds.clear();
+
+        const deleteForm = document.getElementById('deleteForm')
+
+        noteIds.split(',').forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'noteIds';
+            input.value = id;
+            deleteForm.appendChild(input);
+            selectedRowIds.add(id);
+        });
+
+        directoryIds.split(',').forEach(id => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'directoryIds';
+            input.value = id;
+            deleteForm.appendChild(input);
+            selectedRowIds.add(id);
+        });
+
+        console.log(selectedRowIds)
+        updateSelectedState()
+
+        let deleteModal = new bootstrap.Modal(document.getElementById('deleteManyModal'), {})
+        deleteModal.show();
     </script>
 </c:if>
 

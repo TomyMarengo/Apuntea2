@@ -15,25 +15,28 @@ public class ControllerUtils {
     static final String EDIT_DIRECTORY_ID = "editDirectoryId";
     static final String EDIT_DIRECTORY_FORM_BINDING = "org.springframework.validation.BindingResult.editDirectoryForm";
     static final String CREATE_REVIEW_FORM_BINDING = "org.springframework.validation.BindingResult.reviewForm";
-    static final String UPLOAD_REVIEW_FORM = "reviewUploaded";
-    static final String EDIT_USER_FORM = "userEdited";
-    static final String EDIT_NOTE_FORM = "noteEdited";
-    static final String CREATE_DIRECTORY_FORM = "directoryCreated";
-    static final String EDIT_DIRECTORY_FORM = "directoryEdited";
-    static final String DELETE_NOTE_FORM = "noteDeleted";
-    static final String DELETE_DIRECTORY_FORM = "directoryDeleted";
-    static final String ADD_FAVORITE = "favoriteAdded";
-    static final String REMOVE_FAVORITE = "favoriteRemoved";
-    static final String BAN_USER = "userBanned";
-    static final String UNBAN_USER = "userUnbanned";
-    static final String DELETE_REVIEW = "reviewDeleted";
+    static final String BAN_USER_FORM_BINDING = "org.springframework.validation.BindingResult.banUserForm";
+    static final String BAN_USER_ID = "banUserId";
+    static final String REVIEW_UPLOADED = "reviewUploaded";
+    static final String USER_EDITED = "userEdited";
+    static final String NOTE_EDITED = "noteEdited";
+    static final String DIRECTORY_CREATED = "directoryCreated";
+    static final String DIRECTORY_EDITED = "directoryEdited";
+    static final String NOTE_DELETED = "noteDeleted";
+    static final String DIRECTORY_DELETED = "directoryDeleted";
+    static final String FAVORITE_ADDED = "favoriteAdded";
+    static final String FAVORITE_REMOVED = "favoriteRemoved";
+    static final String USER_BANNED = "userBanned";
+    static final String USER_UNBANNED = "userUnbanned";
+    static final String REVIEW_DELETED = "reviewDeleted";
     static final String LINK_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.linkSubjectForm";
     static final String UNLINK_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.unlinkSubjectForm";
-
     static final String CREATE_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.createSubjectForm";
     static final String EDIT_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.editSubjectForm";
+    static final String DELETE_WITH_REASON_FORM_BINDING = "org.springframework.validation.BindingResult.deleteWithReasonForm";
+    static final String DELETE_NOTE_IDS = "deleteNotesIds";
+    static final String DELETE_DIRECTORY_IDS = "deleteDirectoriesIds";
     private	static final Logger LOGGER	= LoggerFactory.getLogger(ControllerUtils.class);
-
     private ControllerUtils(){}
 
     static void addFormOrGetWithErrors(ModelAndView mav, ModelMap model, String attribute, String errorName, String formName, Class<?> form) {

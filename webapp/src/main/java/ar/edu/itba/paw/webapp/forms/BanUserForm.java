@@ -9,7 +9,6 @@ public class BanUserForm {
 
     @ValidUuid
     private UUID userId;
-
     @Size(max = 300)
     private String reason;
     public UUID getUserId() {

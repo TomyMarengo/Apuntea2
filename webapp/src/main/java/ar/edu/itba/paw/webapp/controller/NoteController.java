@@ -8,8 +8,8 @@ import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SecurityService;
-import ar.edu.itba.paw.webapp.forms.EditNoteForm;
-import ar.edu.itba.paw.webapp.forms.ReviewForm;
+import ar.edu.itba.paw.webapp.forms.*;
+
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
@@ -24,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
+import javax.xml.ws.http.HTTPException;
 import java.util.UUID;
 
 
@@ -44,8 +44,10 @@ public class NoteController {
 
     @RequestMapping(value = "/{noteId}", method = RequestMethod.GET)
     public ModelAndView getNote(@PathVariable("noteId") @ValidUuid UUID noteId, final ModelMap model) {
+
         final ModelAndView mav = new ModelAndView("note");
 
+        addFormOrGetWithErrors(mav, model, DELETE_WITH_REASON_FORM_BINDING, "errorsDeleteWithReasonForm", "deleteWithReasonForm", DeleteWithReasonForm.class);
         addFormOrGetWithErrors(mav, model, CREATE_REVIEW_FORM_BINDING, "errorsReviewForm", "reviewForm", ReviewForm.class);
         addFormOrGetWithErrors(mav, model, EDIT_NOTE_FORM_BINDING, "errorsEditNoteForm", "editNoteForm", EditNoteForm.class);
 
@@ -53,8 +55,8 @@ public class NoteController {
         mav.addObject("note", note);
         mav.addObject("reviews", noteService.getReviews(noteId));
         mav.addObject("hierarchy", directoryService.getDirectoryPath(note.getParentId()));
-        mav.addObject(EDIT_NOTE_FORM, model.getOrDefault(EDIT_NOTE_FORM, false));
-        mav.addObject(DELETE_REVIEW, model.getOrDefault(DELETE_REVIEW, false));
+        mav.addObject(NOTE_EDITED, model.getOrDefault(NOTE_EDITED, false));
+        mav.addObject(REVIEW_DELETED, model.getOrDefault(REVIEW_DELETED, false));
 
         return mav;
     }
@@ -74,7 +76,8 @@ public class NoteController {
                     .category(Category.valueOf(editNoteForm.getCategory().toUpperCase()))
                     .visible(editNoteForm.getVisible())
                     .build();
-            redirectAttributes.addFlashAttribute(EDIT_NOTE_FORM, true);
+            redirectAttributes.addFlashAttribute(NOTE_EDITED, true);
+
             noteService.update(note);
         }
         return mav;
@@ -88,7 +91,7 @@ public class NoteController {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute(CREATE_REVIEW_FORM_BINDING, result);
         } else {
-            redirectAttributes.addFlashAttribute(UPLOAD_REVIEW_FORM, true);
+            redirectAttributes.addFlashAttribute(REVIEW_UPLOADED, true);
             noteService.createOrUpdateReview(noteId, reviewForm.getScore(), reviewForm.getContent());
         }
         return mav;
@@ -107,11 +110,19 @@ public class NoteController {
 
     @RequestMapping(value = "/{noteId}/delete", method = RequestMethod.POST)
     public ModelAndView deleteNote(@PathVariable("noteId") @ValidUuid UUID noteId,
-                                   @RequestParam(required = false) @Size(max = 300) String reason,
-                                   @RequestParam(required = false, defaultValue = "/") String redirectUrl
-                                ) {
-        noteService.delete(new UUID[]{noteId}, reason);
-        return new ModelAndView("redirect:"  + redirectUrl);
+                                   @Valid @ModelAttribute("deleteWithReasonForm") final DeleteWithReasonForm deleteWithReasonForm,
+                                   final BindingResult result, final RedirectAttributes redirectAttributes) {
+
+        if(result.hasErrors()){
+            redirectAttributes.addFlashAttribute(DELETE_WITH_REASON_FORM_BINDING, result);
+            return new ModelAndView("redirect:/notes/" + noteId);
+        }
+        else{
+            redirectAttributes.addFlashAttribute(NOTE_DELETED, true);
+            noteService.delete(new UUID[]{noteId}, deleteWithReasonForm.getReason());
+            return new ModelAndView("redirect:" +  deleteWithReasonForm.getRedirectUrl());
+        }
+
     }
 
     @ModelAttribute("user")

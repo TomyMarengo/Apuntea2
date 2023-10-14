@@ -39,38 +39,54 @@ public class ManageUsersController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView manageUsers (@ModelAttribute("banUserForm") final BanUserForm banUserForm,
-                                     @ModelAttribute("unbanUserForm") final UnbanUserForm unbanUserForm,
+    public ModelAndView manageUsers (@ModelAttribute("unbanUserForm") final UnbanUserForm unbanUserForm,
                                      @Valid @ModelAttribute("searchForm") final SearchUserForm searchUserForm,
-                                     BindingResult result, ModelMap model) {
+                                     final BindingResult result, final ModelMap model) {
 
         if (result.hasErrors())
             throw new HTTPException(400);
 
-        final ModelAndView mav = new ModelAndView("manage-users");
+        ModelAndView mav = new ModelAndView("manage-users");
+
+        addFormOrGetWithErrors(mav, model, BAN_USER_FORM_BINDING, "errorsBanUserForm", "banUserForm", BanUserForm.class);
+
+        mav.addObject("banUserId", model.get(BAN_USER_ID));
 
         Page<User> users = userService.getStudents(searchUserForm.getQuery(), searchUserForm.getPageNumber());
         mav.addObject("maxPage", users.getTotalPages());
         mav.addObject("currentPage", users.getCurrentPage());
         mav.addObject("users", users.getContent());
 
-        mav.addObject(BAN_USER, model.getOrDefault(BAN_USER, false));
-        mav.addObject(UNBAN_USER, model.getOrDefault(UNBAN_USER, false));
+        mav.addObject(USER_BANNED, model.getOrDefault(USER_BANNED, false));
+        mav.addObject(USER_UNBANNED, model.getOrDefault(USER_UNBANNED, false));
 
         return mav;
     }
 
     @RequestMapping(value = "/ban", method = RequestMethod.POST)
-    public ModelAndView banUser(@ModelAttribute("banUserForm") final BanUserForm banUserForm, RedirectAttributes redirectAttributes) {
-        userService.banUser(banUserForm.getUserId(), banUserForm.getReason());
-        redirectAttributes.addFlashAttribute(BAN_USER, true);
-        return new ModelAndView("redirect:/manage/users");
+    public ModelAndView banUser(@Valid @ModelAttribute("banUserForm") final BanUserForm banUserForm,
+                                final BindingResult result,
+                                final RedirectAttributes redirectAttributes) {
+
+        final ModelAndView mav = new ModelAndView("redirect:/manage/users");
+
+        if(result.hasErrors()){
+            redirectAttributes.addFlashAttribute(BAN_USER_FORM_BINDING, result);
+            redirectAttributes.addFlashAttribute(BAN_USER_ID, banUserForm.getUserId());
+        }
+        else{
+            userService.banUser(banUserForm.getUserId(), banUserForm.getReason());
+            redirectAttributes.addFlashAttribute(USER_BANNED, true);
+        }
+        return mav;
     }
 
     @RequestMapping(value = "/unban", method = RequestMethod.POST)
-    public ModelAndView unbanUser(@ModelAttribute("unbanUserForm") final UnbanUserForm unbanUserForm, RedirectAttributes redirectAttributes) {
+    public ModelAndView unbanUser(@ModelAttribute("unbanUserForm") final UnbanUserForm unbanUserForm,
+                                  final RedirectAttributes redirectAttributes) {
+
         userService.unbanUser(unbanUserForm.getUserId());
-        redirectAttributes.addFlashAttribute(UNBAN_USER, true);
+        redirectAttributes.addFlashAttribute(USER_UNBANNED, true);
         return new ModelAndView("redirect:/manage/users");
     }
 
@@ -80,7 +96,7 @@ public class ManageUsersController {
                                      @RequestParam(required = false) @Size(max = 300) String reason,
                                      final RedirectAttributes redirectAttributes) {
         noteService.deleteReview(noteId, userId, reason);
-        redirectAttributes.addFlashAttribute(DELETE_REVIEW, true);
+        redirectAttributes.addFlashAttribute(REVIEW_DELETED, true);
         return new ModelAndView("redirect:/notes/"+noteId);
     }
 

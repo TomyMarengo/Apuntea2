@@ -24,7 +24,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.EDIT_USER_FORM;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.USER_EDITED;
 
 @Controller
 public class UserController {
@@ -77,7 +77,7 @@ public class UserController {
         if(!result.hasErrors()) {
             try {
                 userService.updateProfile(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername(), editUserForm.getProfilePicture());
-                mav.addObject(EDIT_USER_FORM, true);
+                mav.addObject(USER_EDITED, true);
             } catch (InvalidFileException e) {
                 mav.addObject("invalidFileError"); // TODO: Add modals for this error
             }

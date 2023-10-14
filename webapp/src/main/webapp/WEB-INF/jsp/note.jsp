@@ -214,14 +214,15 @@
                         aria-label="Close">
                 </button>
             </div>
-            <form:form id="deleteForm" method="POST" action="${deleteUrl}">
+            <form:form modelAttribute="deleteWithReasonForm" id="deleteForm" method="POST" action="${deleteUrl}">
                 <div class="modal-body pb-0 d-flex flex-column">
                     <spring:message code="DeleteForm.description"/>
                     <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
                     <c:if test="${user ne null and user.isAdmin}">
                         <label for="reason"></label>
-                        <textarea name="reason" class="form-control mt-3" id="reason"
-                                  placeholder="${deleteMessagePlaceholder}"></textarea>
+                        <form:textarea path="reason" name="reason" class="form-control mt-3" id="reason"
+                                  placeholder="${deleteMessagePlaceholder}" />
+                        <form:errors path="reason" cssClass="text-danger" element="p"/>
                     </c:if>
                 </div>
                 <input type="hidden" name="redirectUrl" value="/directory/${note.parentId}"/>
@@ -233,7 +234,6 @@
                     <input id="deleteOneButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                             code="delete"/>"/>
                 </div>
-
             </form:form>
         </div>
     </div>
@@ -374,7 +374,7 @@
 <script src="<c:url value="/js/notes.js"/>"></script>
 
 <c:if test="${user eq null or note.user.userId eq user.userId}">
-    <c:if test="${errorsEditNoteForm != null}">
+    <c:if test="${errorsEditNoteForm ne null}">
         <script>
             const editNoteModalButton = document.getElementById('editNoteModalButton');
             editNoteModalButton.click()
@@ -387,6 +387,13 @@
             editNoteForm.querySelectorAll('#visible')[0].value = "<c:out value="${note.visible}"/>";
         </script>
     </c:if>
+</c:if>
+
+<c:if test="${errorsDeleteWithReasonForm ne null}">
+    <script>
+        let deleteOneModal = new bootstrap.Modal(document.getElementById('deleteOneModal'), {})
+        deleteOneModal.show();
+    </script>
 </c:if>
 
 <c:if test="${reviewScore gt 0}">

@@ -28,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
 import javax.xml.ws.http.HTTPException;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Validated
@@ -51,8 +52,9 @@ public class DirectoryController {
 
     @RequestMapping(value = "/{directoryId}" ,method = RequestMethod.GET)
     public ModelAndView getDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
-                                     @Valid @ModelAttribute("navigationForm") NavigationForm navigationForm, final BindingResult result,
-                                     final ModelMap model) {
+                                     @Valid @ModelAttribute("navigationForm") NavigationForm navigationForm,
+                                     final BindingResult result, final ModelMap model) {
+
         if (result.hasErrors())
             throw new HTTPException(400);
 
@@ -62,6 +64,11 @@ public class DirectoryController {
 
         mav.addObject("editNoteId", model.get(EDIT_NOTE_ID));
         mav.addObject("editDirectoryId", model.get(EDIT_DIRECTORY_ID));
+
+        String json = toSafeJson(model.get(DELETE_NOTE_IDS));
+
+        mav.addObject("deleteNoteIds",  json);
+        mav.addObject("deleteDirectoryIds", model.get(DELETE_DIRECTORY_IDS));
         loadToastFlashAttributes(mav, model);
 
         Directory directory = directoryService.getDirectoryById(directoryId).orElseThrow(DirectoryNotFoundException::new);
@@ -101,7 +108,7 @@ public class DirectoryController {
         }
 
         UUID childId = directoryService.create(createDirectoryForm.getName(), directoryId, createDirectoryForm.getVisible(), createDirectoryForm.getColor());
-        redirectAttributes.addFlashAttribute(CREATE_DIRECTORY_FORM, true);
+        redirectAttributes.addFlashAttribute(DIRECTORY_CREATED, true);
         return new ModelAndView("redirect:/directory/" + directoryId);
     }
 
@@ -124,21 +131,36 @@ public class DirectoryController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public ModelAndView deleteContent(@RequestParam(required = false) UUID[] directoryIds,
                                       @RequestParam(required = false) UUID[] noteIds,
-                                      @RequestParam(required = false) @Size(max = 300) String reason,
-                                      @RequestParam String redirectUrl,
-                                      final RedirectAttributes redirectAttributes) {
+                                      @Valid @ModelAttribute("deleteWithReasonForm") final DeleteWithReasonForm deleteWithReasonForm,
+                                      final BindingResult result, final RedirectAttributes redirectAttributes) {
 
-        // TODO: Validate redirectUrl?
-        if (noteIds != null && noteIds.length > 0){
-            noteService.delete(noteIds, reason);
-            redirectAttributes.addFlashAttribute(DELETE_NOTE_FORM, true);
-        }
-        if (directoryIds != null && directoryIds.length > 0) {
-            directoryService.delete(directoryIds, reason);
-            redirectAttributes.addFlashAttribute(DELETE_DIRECTORY_FORM, true);
-        }
+        final ModelAndView mav = new ModelAndView("redirect:" + deleteWithReasonForm.getRedirectUrl());
 
-        return new ModelAndView("redirect:" + redirectUrl);
+        if(result.hasErrors()){
+            redirectAttributes.addFlashAttribute(DELETE_WITH_REASON_FORM_BINDING, result);
+            if (noteIds != null && noteIds.length > 0) {
+                String[] vec = Arrays.stream(noteIds).map(UUID::toString).toArray(String[]::new);
+                redirectAttributes.addFlashAttribute(DELETE_NOTE_IDS, vec);
+            }
+
+            else
+                redirectAttributes.addFlashAttribute(DELETE_NOTE_IDS, new String[0]);
+            if (directoryIds != null && directoryIds.length > 0)
+                redirectAttributes.addFlashAttribute(DELETE_DIRECTORY_IDS, Arrays.stream(directoryIds).map(UUID::toString).toArray(String[]::new));
+            else
+                redirectAttributes.addFlashAttribute(DELETE_DIRECTORY_IDS, new String[0]);
+        }
+        else {
+            if (noteIds != null && noteIds.length > 0){
+                noteService.delete(noteIds, deleteWithReasonForm.getReason());
+                redirectAttributes.addFlashAttribute(NOTE_DELETED, true);
+            }
+            if (directoryIds != null && directoryIds.length > 0) {
+                directoryService.delete(directoryIds, deleteWithReasonForm.getReason());
+                redirectAttributes.addFlashAttribute(DIRECTORY_DELETED, true);
+            }
+        }
+        return mav;
     }
 
     @RequestMapping(value = "/{directoryId}", method = RequestMethod.POST)
@@ -158,7 +180,7 @@ public class DirectoryController {
                     .iconColor(editDirectoryForm.getColor())
                     .build();
             directoryService.update(directory);
-            redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_FORM, true);
+            redirectAttributes.addFlashAttribute(DIRECTORY_EDITED, true);
         }
         return mav;
     }
@@ -168,7 +190,7 @@ public class DirectoryController {
                                           @RequestParam String redirectUrl, final RedirectAttributes redirectAttributes) {
         // TODO: Validate redirectUrl?
         directoryService.addFavorite(directoryId);
-        redirectAttributes.addFlashAttribute(ADD_FAVORITE, true);
+        redirectAttributes.addFlashAttribute(FAVORITE_ADDED, true);
         // TODO: display a message saying that the directory was added to favorites
         return new ModelAndView("redirect:" + redirectUrl);
     }
@@ -178,7 +200,7 @@ public class DirectoryController {
                                           @RequestParam String redirectUrl, final RedirectAttributes redirectAttributes) {
         // TODO: Validate redirectUrl?
         directoryService.removeFavorite(directoryId);
-        redirectAttributes.addFlashAttribute(REMOVE_FAVORITE, true);
+        redirectAttributes.addFlashAttribute(FAVORITE_REMOVED, true);
         // TODO: display a message saying that the directory was removed from favorites
         // If removeFavorite returns something different than 1, handle the error
         return new ModelAndView("redirect:" + redirectUrl);
@@ -190,12 +212,12 @@ public class DirectoryController {
     }
 
     private void loadToastFlashAttributes(ModelAndView mav, ModelMap model){
-        mav.addObject(CREATE_DIRECTORY_FORM, model.getOrDefault(CREATE_DIRECTORY_FORM, false));
-        mav.addObject(DELETE_DIRECTORY_FORM, model.getOrDefault(DELETE_DIRECTORY_FORM, false));
-        mav.addObject(EDIT_DIRECTORY_FORM, model.getOrDefault(EDIT_DIRECTORY_FORM, false));
-        mav.addObject(DELETE_NOTE_FORM, model.getOrDefault(DELETE_NOTE_FORM, false));
-        mav.addObject(ADD_FAVORITE, model.getOrDefault(ADD_FAVORITE, false));
-        mav.addObject(REMOVE_FAVORITE, model.getOrDefault(REMOVE_FAVORITE, false));
+        mav.addObject(DIRECTORY_CREATED, model.getOrDefault(DIRECTORY_CREATED, false));
+        mav.addObject(DIRECTORY_DELETED, model.getOrDefault(DIRECTORY_DELETED, false));
+        mav.addObject(DIRECTORY_EDITED, model.getOrDefault(DIRECTORY_EDITED, false));
+        mav.addObject(NOTE_DELETED, model.getOrDefault(NOTE_DELETED, false));
+        mav.addObject(FAVORITE_ADDED, model.getOrDefault(FAVORITE_ADDED, false));
+        mav.addObject(FAVORITE_REMOVED, model.getOrDefault(FAVORITE_REMOVED, false));
 
     }
 
@@ -204,7 +226,7 @@ public class DirectoryController {
         addFormOrGetWithErrors(mav, model, EDIT_NOTE_FORM_BINDING, "errorsEditNoteForm", "editNoteForm", EditNoteForm.class);
         addFormOrGetWithErrors(mav, model, CREATE_DIRECTORY_FORM_BINDING, "errorsCreateDirectoryForm", "createDirectoryForm", CreateDirectoryForm.class);
         addFormOrGetWithErrors(mav, model, EDIT_DIRECTORY_FORM_BINDING, "errorsEditDirectoryForm", "editDirectoryForm", EditDirectoryForm.class);
-
+        addFormOrGetWithErrors(mav, model, DELETE_WITH_REASON_FORM_BINDING, "errorsDeleteWithReasonForm", "deleteWithReasonForm", DeleteWithReasonForm.class);
     }
 }
 

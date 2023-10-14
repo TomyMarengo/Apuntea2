@@ -218,13 +218,14 @@
 
                 <div class="modal-body pb-0">
                     <spring:message code="ban.confirm"/>
-                    <form:errors cssClass="text-danger" element="p"/>
 
                     <spring:message code="BanUserForm.explain" var="banMessagePlaceholder"/>
                     <label for="reason"></label>
-                    <textarea name="reason" class="form-control mt-3" id="reason"
-                              placeholder="${banMessagePlaceholder}"></textarea>
+                    <form:textarea name="reason" class="form-control mt-3" id="reason"
+                              placeholder="${banMessagePlaceholder}" path="reason"/>
+                    <form:errors cssClass="text-danger" path="reason" element="p"/>
                 </div>
+
 
                 <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-primary"
@@ -287,6 +288,15 @@
 <script src="<c:url value="/js/sidebar.js"/>"></script>
 <c:if test="${not empty users}">
     <script src="<c:url value="/js/ban-unban.js"/>"></script>
+</c:if>
+
+
+<c:if test="${errorsBanUserForm ne null }">
+    <script>
+        const id = "<c:out value="${banUserId}"/>";
+        const banUserButton = document.getElementById(id + '.b1');
+        banUserButton.click();
+    </script>
 </c:if>
 
 <script>

@@ -58,8 +58,8 @@ public class SearchController {
         mav.addObject("maxPage", pageResult.getTotalPages());
         mav.addObject("currentPage", pageResult.getCurrentPage());
         mav.addObject("results", pageResult.getContent());
-        mav.addObject(ADD_FAVORITE, model.getOrDefault(ADD_FAVORITE, false));
-        mav.addObject(REMOVE_FAVORITE, model.getOrDefault(REMOVE_FAVORITE, false));
+        mav.addObject(FAVORITE_ADDED, model.getOrDefault(FAVORITE_ADDED, false));
+        mav.addObject(FAVORITE_REMOVED, model.getOrDefault(FAVORITE_REMOVED, false));
         InstitutionData institutionData = institutionService.getInstitutionData();
 
         mav.addObject("institutionData", toSafeJson(institutionData));
