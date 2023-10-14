@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Size;
+import javax.xml.ws.http.HTTPException;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
@@ -38,13 +39,13 @@ public class ManageUsersController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView manageUsers (@Valid @ModelAttribute("searchForm") final SearchUserForm searchUserForm,
-                                     @ModelAttribute("banUserForm") final BanUserForm banUserForm,
+    public ModelAndView manageUsers (@ModelAttribute("banUserForm") final BanUserForm banUserForm,
                                      @ModelAttribute("unbanUserForm") final UnbanUserForm unbanUserForm,
+                                     @Valid @ModelAttribute("searchForm") final SearchUserForm searchUserForm,
                                      BindingResult result, ModelMap model) {
-        if (result.hasErrors()) {
-            return new ModelAndView("/errors/400");
-        }
+
+        if (result.hasErrors())
+            throw new HTTPException(400);
 
         final ModelAndView mav = new ModelAndView("manage-users");
 
@@ -52,7 +53,7 @@ public class ManageUsersController {
         mav.addObject("maxPage", users.getTotalPages());
         mav.addObject("currentPage", users.getCurrentPage());
         mav.addObject("users", users.getContent());
-        
+
         mav.addObject(BAN_USER, model.getOrDefault(BAN_USER, false));
         mav.addObject(UNBAN_USER, model.getOrDefault(UNBAN_USER, false));
 
