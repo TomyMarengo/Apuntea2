@@ -15,6 +15,8 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
+
+import static ar.edu.itba.paw.services.ServiceTestUtils.mockUser;
 import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -34,7 +36,7 @@ public class SearchServiceImplTest {
         int PAGE_SIZE = 10;
         int PAGE = 2;
         int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
-        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(new User(UUID.randomUUID(), "mail")));
+        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
 
@@ -51,7 +53,7 @@ public class SearchServiceImplTest {
         final int PAGE_SIZE = 10;
         final int PAGE = -5;
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
-        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(new User(UUID.randomUUID(), "mail")));
+        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
 
@@ -68,7 +70,7 @@ public class SearchServiceImplTest {
         final int PAGE_SIZE = 10;
         final int PAGE = 6;
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
-        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(new User(UUID.randomUUID(), "mail")));
+        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
 

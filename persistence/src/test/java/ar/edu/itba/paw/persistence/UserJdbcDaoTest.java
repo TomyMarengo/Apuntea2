@@ -93,8 +93,7 @@ public class UserJdbcDaoTest {
     @Test
     public void testUpdate() {
         UUID studentId = insertCompleteStudent(namedParameterJdbcTemplate, "tester@itba.edu.ar", "", ING_INF, "es", "tester", "Test", "Er");
-        User user = new User(studentId, "tester@itba.edu.ar");
-        user.setProfileData("Testa", "Er", "tester2001");
+        User user = new User.UserBuilder().userId(studentId).firstName("Testa").lastName("Er").username("tester2001").build();
         boolean success = userDao.update(user);
         assertTrue(success);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentId + "' AND first_name = 'Testa' AND last_name = 'Er' AND username = 'tester2001'"));
@@ -102,8 +101,7 @@ public class UserJdbcDaoTest {
 
     @Test
     public void testUpdateFailure() {
-        User user = new User(UUID.randomUUID(), "tester@itba.edu.ar");
-        user.setProfileData("Testa", "Er", "tester2001");
+        User user = new User.UserBuilder().userId(UUID.randomUUID()).firstName("Testa").lastName("Er").username("tester2001").build();
         boolean success = userDao.update(user);
         assertFalse(success);
     }

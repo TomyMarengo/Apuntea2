@@ -43,33 +43,25 @@ public class ServiceTestUtils {
     private ServiceTestUtils() {}
 
     static User mockUser() {
-        return new User(PEPE_ID,
-                "John",
-                "Doe",
-                "JohnDoe",
-                "pepe@itba.edu.ar",
-                null,
-                UserStatus.ACTIVE,
-                new String[]{Role.ROLE_STUDENT.name()},
-                "es",
-                null,
-                null
-        );
+        return mockUser(PEPE_ID, "John", "Doe", "JohnDoe", "pepe@itba.edu.ar",
+                        UserStatus.ACTIVE, new String[]{Role.ROLE_STUDENT.name()}, "es");
     }
 
     static User mockAdmin() {
-        return new User(ADMIN_ID,
-                "super",
-                "admin",
-                "superadmin",
-                "admin@apuntea.edu.ar",
-                null,
-                UserStatus.ACTIVE,
-                new String[]{Role.ROLE_ADMIN.name()},
-                "en",
-                null,
-                null
-       );
+        return mockUser(ADMIN_ID, "super", "admin", "superadmin", "admin@apuntea.edu.ar",
+                        UserStatus.ACTIVE, new String[]{Role.ROLE_ADMIN.name()}, "en");
+    }
+
+    private static User mockUser(UUID userId, String firstName, String lastName, String username, String email, UserStatus status, String[] roles, String locale) {
+        return new User.UserBuilder()
+                .userId(userId)
+                .firstName(firstName)
+                .lastName(lastName)
+                .username(username)
+                .email(email)
+                .status(status)
+                .roles(roles)
+                .locale(locale).build();
     }
 
     static Directory mockDirectory(String name) {

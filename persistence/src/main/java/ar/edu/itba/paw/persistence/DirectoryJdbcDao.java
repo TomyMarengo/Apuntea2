@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.*;
@@ -49,7 +48,11 @@ public class DirectoryJdbcDao implements DirectoryDao {
                     .iconColor(rs.getString(ICON_COLOR));
 
         if (userId != null)
-            dbuilder.user(new User(UUID.fromString(userId), rs.getString(EMAIL)));
+            dbuilder.user(new User.UserBuilder()
+                    .userId(UUID.fromString(userId))
+                    .email(rs.getString(EMAIL))
+                    .build()
+            );
         if (parentId != null)
             dbuilder.parentId(UUID.fromString(parentId));
         return dbuilder.build();
@@ -58,11 +61,11 @@ public class DirectoryJdbcDao implements DirectoryDao {
     private static final RowMapper<Directory> USER_ROW_MAPPER = (rs, rowNum) -> new Directory.DirectoryBuilder()
             .directoryId(UUID.fromString(rs.getString(DIRECTORY_ID)))
             .name(rs.getString(DIRECTORY_NAME))
-            .user(new User(
-                    UUID.fromString(rs.getString(USER_ID)),
-                    rs.getString(EMAIL),
-                    rs.getString(LOCALE)
-            ))
+            .user(new User.UserBuilder()
+                    .userId(UUID.fromString(rs.getString(USER_ID)))
+                    .email(rs.getString(EMAIL))
+                    .locale(rs.getString(LOCALE))
+                    .build())
             .iconColor(rs.getString(ICON_COLOR))
             .build();
 

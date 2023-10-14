@@ -38,10 +38,10 @@ public class NoteJdbcDao implements NoteDao {
             new Note.NoteBuilder()
                     .noteId(UUID.fromString(rs.getString(NOTE_ID)))
                     .name(rs.getString(NOTE_NAME))
-                    .user( new User(
-                            UUID.fromString(rs.getString(USER_ID)),
-                            rs.getString(EMAIL)
-                    ))
+                    .user(new User.UserBuilder()
+                            .userId(UUID.fromString(rs.getString(USER_ID)))
+                            .email(rs.getString(EMAIL))
+                            .build())
                     .parentId(UUID.fromString(rs.getString(PARENT_ID)))
                     .subject(new Subject(
                             UUID.fromString(rs.getString(SUBJECT_ID)),
@@ -62,19 +62,19 @@ public class NoteJdbcDao implements NoteDao {
                     .name(rs.getString(NOTE_NAME))
                     .category(Category.valueOf(rs.getString(CATEGORY).toUpperCase()))
                     .fileType(rs.getString(FILE_TYPE))
-                    .user( new User(
-                            UUID.fromString(rs.getString(USER_ID)),
-                            rs.getString(EMAIL),
-                            rs.getString(LOCALE)
-                    ))
+                    .user(new User.UserBuilder()
+                            .userId(UUID.fromString(rs.getString(USER_ID)))
+                            .email(rs.getString(EMAIL))
+                            .locale(rs.getString(LOCALE))
+                            .build())
                     .build();
 
     private final static RowMapper<Review> REVIEW_ROW_MAPPER = (rs, rowNum) ->
             new Review(
-                    new User(
-                            UUID.fromString(rs.getString(USER_ID)),
-                            rs.getString(EMAIL)
-                    ),
+                    new User.UserBuilder()
+                            .userId(UUID.fromString(rs.getString(USER_ID)))
+                            .email(rs.getString(EMAIL))
+                            .build(),
                     rs.getString(CONTENT),
                     rs.getInt(SCORE),
                     rs.getTimestamp(CREATED_AT).toLocalDateTime()
@@ -82,21 +82,21 @@ public class NoteJdbcDao implements NoteDao {
 
     private final static RowMapper<Review> COMPLETE_REVIEW_ROW_MAPPER = (rs, rowNum) ->
             new Review(
-                    new User(
-                            UUID.fromString(rs.getString(USER_ID)),
-                            rs.getString(EMAIL),
-                            rs.getString(LOCALE)
-                    ),
+                    new User.UserBuilder()
+                            .userId(UUID.fromString(rs.getString(USER_ID)))
+                            .email(rs.getString(EMAIL))
+                            .locale(rs.getString(LOCALE))
+                            .build(),
                     rs.getString(CONTENT),
                     rs.getInt(SCORE),
                     new Note.NoteBuilder()
                         .noteId(UUID.fromString(rs.getString(NOTE_ID)))
                         .name(rs.getString(NOTE_NAME))
-                        .user( new User(
-                                UUID.fromString(rs.getString(OWNER_ID)),
-                                rs.getString(OWNER_EMAIL),
-                                rs.getString(OWNER_LOCALE)
-                        ))
+                        .user(new User.UserBuilder()
+                                .userId(UUID.fromString(rs.getString(OWNER_ID)))
+                                .email(rs.getString(OWNER_EMAIL))
+                                .locale(rs.getString(OWNER_LOCALE))
+                                .build())
                         .build()
             );
 

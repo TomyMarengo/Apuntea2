@@ -79,8 +79,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void updateProfile(String firstName, String lastName, String username, MultipartFile profilePicture) {
-        User user = securityService.getCurrentUserOrThrow();
-        user.setProfileData(firstName, lastName, username);
+        User user = User.UserBuilder.from(securityService.getCurrentUserOrThrow())
+                .firstName(firstName)
+                .lastName(lastName)
+                .username(username)
+                .build();
         boolean success = userDao.update(user);
         if (!success) throw new InvalidUserException();
         if (profilePicture != null && !profilePicture.isEmpty()) {

@@ -42,10 +42,10 @@ public class SearchJdbcDao implements SearchDao {
             return new Directory.DirectoryBuilder()
                     .directoryId(UUID.fromString(rs.getString(ID)))
                     .name(rs.getString(NAME))
-                    .user(new User(
-                            UUID.fromString(rs.getString(USER_ID)),
-                            rs.getString(EMAIL)
-                    ))
+                    .user(new User.UserBuilder()
+                            .userId(UUID.fromString(rs.getString(USER_ID)))
+                            .email(rs.getString(EMAIL))
+                            .build())
                     .parentId(UUID.fromString(rs.getString(PARENT_ID)))
                     .subject(new Subject(
                             UUID.fromString(rs.getString(SUBJECT_ID)),
@@ -60,25 +60,25 @@ public class SearchJdbcDao implements SearchDao {
                     .build();
         }
         return new Note.NoteBuilder().
-                noteId(UUID.fromString(rs.getString(ID))).
-                name(rs.getString(NAME)).
-                user(new User(
-                        UUID.fromString(rs.getString(USER_ID)),
-                        rs.getString(EMAIL)
-                )).
-                parentId(UUID.fromString(rs.getString(PARENT_ID))).
-                subject(new Subject(
+                noteId(UUID.fromString(rs.getString(ID)))
+                .name(rs.getString(NAME))
+                .user(new User.UserBuilder()
+                    .userId(UUID.fromString(rs.getString(USER_ID)))
+                    .email(rs.getString(EMAIL))
+                    .build())
+                .parentId(UUID.fromString(rs.getString(PARENT_ID)))
+                .subject(new Subject(
                         UUID.fromString(rs.getString(SUBJECT_ID)),
                         rs.getString(SUBJECT_NAME),
                         UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
-                )).
-                category(Category.valueOf(rs.getString(CATEGORY).toUpperCase())).
-                createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime()).
-                lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime()).
-                visible(rs.getBoolean(VISIBLE)).
-                fileType(rs.getString(FILE_TYPE)).
-                avgScore(rs.getFloat(AVG_SCORE)).
-                build();
+                ))
+                .category(Category.valueOf(rs.getString(CATEGORY).toUpperCase()))
+                .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
+                .lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime())
+                .visible(rs.getBoolean(VISIBLE))
+                .fileType(rs.getString(FILE_TYPE))
+                .avgScore(rs.getFloat(AVG_SCORE))
+                .build();
     };
 
     private final static RowMapper<Searchable> NAVIGATION_ROW_MAPPER = (rs, rowNum) -> {
@@ -87,10 +87,10 @@ public class SearchJdbcDao implements SearchDao {
             return new Directory.DirectoryBuilder()
                     .directoryId(UUID.fromString(rs.getString(ID)))
                     .name(rs.getString(NAME))
-                    .user(new User(
-                            UUID.fromString(rs.getString(USER_ID)),
-                            rs.getString(EMAIL)
-                    ))
+                    .user(new User.UserBuilder()
+                            .userId(UUID.fromString(rs.getString(USER_ID)))
+                            .email(rs.getString(EMAIL))
+                            .build())
                     .parentId(UUID.fromString(rs.getString(PARENT_ID)))
                     .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
                     .lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime())
@@ -102,10 +102,10 @@ public class SearchJdbcDao implements SearchDao {
         return new Note.NoteBuilder()
                 .noteId(UUID.fromString(rs.getString(ID)))
                 .name(rs.getString(NAME))
-                .user(new User(
-                        UUID.fromString(rs.getString(USER_ID)),
-                        rs.getString(EMAIL)
-                ))
+                .user(new User.UserBuilder()
+                        .userId(UUID.fromString(rs.getString(USER_ID)))
+                        .email(rs.getString(EMAIL))
+                        .build())
                 .parentId(UUID.fromString(rs.getString(PARENT_ID)))
                 .category(Category.valueOf(rs.getString(CATEGORY).toUpperCase()))
                 .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
