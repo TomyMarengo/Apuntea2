@@ -60,26 +60,26 @@ public class SearchJdbcDao implements SearchDao {
             );
 
         }
-        return new Note(
-                UUID.fromString(rs.getString(ID)),
-                rs.getString(NAME),
-                new User(
+        return new Note.NoteBuilder().
+                noteId(UUID.fromString(rs.getString(ID))).
+                name(rs.getString(NAME)).
+                user(new User(
                         UUID.fromString(rs.getString(USER_ID)),
                         rs.getString(EMAIL)
-                ),
-                UUID.fromString(rs.getString(PARENT_ID)),
-                new Subject(
+                )).
+                parentId(UUID.fromString(rs.getString(PARENT_ID))).
+                subject(new Subject(
                         UUID.fromString(rs.getString(SUBJECT_ID)),
                         rs.getString(SUBJECT_NAME),
                         UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
-                ),
-                Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
-                rs.getTimestamp(CREATED_AT).toLocalDateTime(),
-                rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
-                rs.getBoolean(VISIBLE),
-                rs.getString(FILE_TYPE),
-                rs.getFloat(AVG_SCORE)
-            );
+                )).
+                category(Category.valueOf(rs.getString(CATEGORY).toUpperCase())).
+                createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime()).
+                lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime()).
+                visible(rs.getBoolean(VISIBLE)).
+                fileType(rs.getString(FILE_TYPE)).
+                avgScore(rs.getFloat(AVG_SCORE)).
+                build();
     };
 
     private final static RowMapper<Searchable> NAVIGATION_ROW_MAPPER = (rs, rowNum) -> {
@@ -101,21 +101,21 @@ public class SearchJdbcDao implements SearchDao {
             );
 
         }
-        return new Note(
-                UUID.fromString(rs.getString(ID)),
-                rs.getString(NAME),
-                new User(
+        return new Note.NoteBuilder()
+                .noteId(UUID.fromString(rs.getString(ID)))
+                .name(rs.getString(NAME))
+                .user(new User(
                         UUID.fromString(rs.getString(USER_ID)),
                         rs.getString(EMAIL)
-                ),
-                UUID.fromString(rs.getString(PARENT_ID)),
-                Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
-                rs.getTimestamp(CREATED_AT).toLocalDateTime(),
-                rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
-                rs.getBoolean(VISIBLE),
-                rs.getString(FILE_TYPE),
-                rs.getFloat(AVG_SCORE)
-        );
+                ))
+                .parentId(UUID.fromString(rs.getString(PARENT_ID)))
+                .category(Category.valueOf(rs.getString(CATEGORY).toUpperCase()))
+                .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
+                .lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime())
+                .visible(rs.getBoolean(VISIBLE))
+                .fileType(rs.getString(FILE_TYPE))
+                .avgScore(rs.getFloat(AVG_SCORE))
+                .build();
     };
 
     @Override

@@ -35,39 +35,39 @@ public class NoteJdbcDao implements NoteDao {
     private static final int REVIEW_LIMIT = 10;
 
     private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
-            new Note(
-                    UUID.fromString(rs.getString(NOTE_ID)),
-                    rs.getString(NOTE_NAME),
-                    new User(
+            new Note.NoteBuilder()
+                    .noteId(UUID.fromString(rs.getString(NOTE_ID)))
+                    .name(rs.getString(NOTE_NAME))
+                    .user( new User(
                             UUID.fromString(rs.getString(USER_ID)),
                             rs.getString(EMAIL)
-                    ),
-                    UUID.fromString(rs.getString(PARENT_ID)),
-                    new Subject(
+                    ))
+                    .parentId(UUID.fromString(rs.getString(PARENT_ID)))
+                    .subject(new Subject(
                             UUID.fromString(rs.getString(SUBJECT_ID)),
                             rs.getString(SUBJECT_NAME),
                             UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
-                    ),
-                    Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
-                    rs.getTimestamp(CREATED_AT).toLocalDateTime(),
-                    rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
-                    rs.getBoolean(VISIBLE),
-                    rs.getString(FILE_TYPE),
-                    rs.getFloat(AVG_SCORE)
-            );
+                    ))
+                    .category(Category.valueOf(rs.getString(CATEGORY).toUpperCase()))
+                    .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
+                    .lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime())
+                    .visible(rs.getBoolean(VISIBLE))
+                    .fileType(rs.getString(FILE_TYPE))
+                    .avgScore(rs.getFloat(AVG_SCORE))
+                    .build();
 
     private final static RowMapper<Note> USER_ROW_MAPPER = (rs, rowNum) ->
-        new Note(
-                UUID.fromString(rs.getString(NOTE_ID)),
-                rs.getString(NOTE_NAME),
-                new User(
-                        UUID.fromString(rs.getString(USER_ID)),
-                        rs.getString(EMAIL),
-                        rs.getString(LOCALE)
-                ),
-                Category.valueOf(rs.getString(CATEGORY).toUpperCase()),
-                rs.getString(FILE_TYPE)
-        );
+            new Note.NoteBuilder()
+                    .noteId(UUID.fromString(rs.getString(NOTE_ID)))
+                    .name(rs.getString(NOTE_NAME))
+                    .category(Category.valueOf(rs.getString(CATEGORY).toUpperCase()))
+                    .fileType(rs.getString(FILE_TYPE))
+                    .user( new User(
+                            UUID.fromString(rs.getString(USER_ID)),
+                            rs.getString(EMAIL),
+                            rs.getString(LOCALE)
+                    ))
+                    .build();
 
     private final static RowMapper<Review> REVIEW_ROW_MAPPER = (rs, rowNum) ->
             new Review(
@@ -89,15 +89,15 @@ public class NoteJdbcDao implements NoteDao {
                     ),
                     rs.getString(CONTENT),
                     rs.getInt(SCORE),
-                    new Note(
-                            UUID.fromString(rs.getString(NOTE_ID)),
-                            rs.getString(NOTE_NAME),
-                            new User(
-                                    UUID.fromString(rs.getString(OWNER_ID)),
-                                    rs.getString(OWNER_EMAIL),
-                                    rs.getString(OWNER_LOCALE)
-                            )
-                    )
+                    new Note.NoteBuilder()
+                        .noteId(UUID.fromString(rs.getString(NOTE_ID)))
+                        .name(rs.getString(NOTE_NAME))
+                        .user( new User(
+                                UUID.fromString(rs.getString(OWNER_ID)),
+                                rs.getString(OWNER_EMAIL),
+                                rs.getString(OWNER_LOCALE)
+                        ))
+                        .build()
             );
 
     private final static RowMapper<NoteFile> NOTE_FILE_ROW_MAPPER = (rs, rowNum) ->

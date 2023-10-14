@@ -10,64 +10,29 @@ import java.util.UUID;
 
 public class Note implements Searchable {
     private final UUID noteId;
-    private String name;
-    private User user;
-    private UUID parentId;
-//  private Institution institution;
-//  private Career career;
-    private Subject subject;
-    private Category category;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
-//    private byte[] file;
+    private final String name;
+    private final User user;
+    private final UUID parentId;
+    private final Subject subject;
+    private final Category category;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime lastModifiedAt;
+    private final String fileType;
+    private final Float avgScore;
+    private final Boolean visible;
 
-    private String fileType;
-    private Float avgScore;
-
-    private Boolean visible;
-
-    // For Reviews
-    public Note(UUID noteId, String name, User user) {
-        this.noteId = noteId;
-        this.name = name;
-        this.user = user;
-    }
-
-    // For update
-    public Note(UUID noteId, String name, Category category, boolean visible) {
-        this.noteId = noteId;
-        this.name = name;
-        this.category = category;
-        this.visible = visible;
-    }
-
-    // For navigation
-    public Note(UUID noteId, String name, User user, UUID parentId,  Category category, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String file_type, float avgScore) {
-        this.noteId = noteId;
-        this.name = name;
-        this.user = user;
-        this.parentId = parentId;
-        this.category = category;
-        this.createdAt = createdAt;
-        this.lastModifiedAt = lastModifiedAt;
-        this.visible = visible;
-        this.fileType = file_type;
-        this.avgScore = avgScore;
-    }
-
-    // For Search
-    public Note(UUID noteId, String name, User user, UUID parentId, Subject subject,  Category category, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String file_type, float avgScore) {
-        this(noteId, name, user, parentId, category, createdAt, lastModifiedAt, visible, file_type, avgScore);
-        this.subject = subject;
-    }
-
-    // For admin delete
-    public Note(UUID noteId, String name, User user, Category category, String file_type) {
-        this.noteId = noteId;
-        this.name = name;
-        this.user = user;
-        this.category = category;
-        this.fileType = file_type;
+    private Note(NoteBuilder builder) {
+        this.noteId = builder.noteId;
+        this.name = builder.name;
+        this.user = builder.user;
+        this.parentId = builder.parentId;
+        this.subject = builder.subject;
+        this.category = builder.category;
+        this.createdAt = builder.createdAt;
+        this.lastModifiedAt = builder.lastModifiedAt;
+        this.visible = builder.visible;
+        this.fileType = builder.fileType;
+        this.avgScore = builder.avgScore;
     }
 
     @Override
@@ -125,14 +90,77 @@ public class Note implements Searchable {
         return false;
     }
 
+    public static class NoteBuilder {
+        private UUID noteId;
+        private String name;
+        private User user;
+        private UUID parentId;
+        private Subject subject;
+        private Category category;
+        private LocalDateTime createdAt;
+        private LocalDateTime lastModifiedAt;
+        private Boolean visible;
+        private String fileType;
+        private Float avgScore;
 
-    @Override
-    public String toString() {
-        return "Note{" +
-                "name='" + name + '\'' +
-                ", owner=" + user +
-                '}';
+        public NoteBuilder noteId(UUID noteId) {
+            this.noteId = noteId;
+            return this;
+        }
+
+        public NoteBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public NoteBuilder user(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public NoteBuilder parentId(UUID parentId) {
+            this.parentId = parentId;
+            return this;
+        }
+
+        public NoteBuilder subject(Subject subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        public NoteBuilder category(Category category) {
+            this.category = category;
+            return this;
+        }
+
+        public NoteBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public NoteBuilder lastModifiedAt(LocalDateTime lastModifiedAt) {
+            this.lastModifiedAt = lastModifiedAt;
+            return this;
+        }
+
+        public NoteBuilder visible(Boolean visible) {
+            this.visible = visible;
+            return this;
+        }
+
+        public NoteBuilder fileType(String fileType) {
+            this.fileType = fileType;
+            return this;
+        }
+
+        public NoteBuilder avgScore(Float avgScore) {
+            this.avgScore = avgScore;
+            return this;
+        }
+
+        public Note build() {
+            return new Note(this);
+        }
     }
-    
-//    public byte[] getFile() { return file; }
+
 }
