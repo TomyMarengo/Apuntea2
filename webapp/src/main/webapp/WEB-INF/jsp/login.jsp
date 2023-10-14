@@ -143,10 +143,10 @@
 
 <script>
     <c:if test="${success eq true}">
-        displayToast('<spring:message code="toast.registerSucceeded"/>')
+        displayToast('<spring:message code="toast.register"/>')
     </c:if>
     <c:if test="${not empty email}">
-        displayToast('<spring:message code="toast.forgotPasswordSucceeded"/>')
+        displayToast('<spring:message code="toast.forgotPassword"/>')
     </c:if>
 </script>
 

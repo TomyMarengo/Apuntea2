@@ -1064,23 +1064,23 @@
 
 <script>
     <c:if test="${noteEdited eq true}">
-        displayToast('<spring:message code="toast.noteEditSucceeded"/>')
+        displayToast('<spring:message code="toast.noteEdited"/>')
     </c:if>
 
     <c:if test="${noteDeleted eq true}">
-        displayToast('<spring:message code="toast.noteDeleteSucceeded"/>')
+        displayToast('<spring:message code="toast.noteDeleted"/>')
     </c:if>
 
     <c:if test="${directoryCreated eq true}">
-        displayToast('<spring:message code="toast.directoryCreateSucceeded"/>')
+        displayToast('<spring:message code="toast.directoryCreated"/>')
     </c:if>
 
     <c:if test="${directoryDeleted eq true}">
-        displayToast('<spring:message code="toast.directoryDeleteSucceeded"/>')
+        displayToast('<spring:message code="toast.directoryDeleted"/>')
     </c:if>
 
     <c:if test="${directoryEdited eq true}">
-        displayToast('<spring:message code="toast.directoryEditSucceeded"/>')
+        displayToast('<spring:message code="toast.directoryEdited"/>')
     </c:if>
 
     <c:if test="${favoriteAdded eq true}">

@@ -285,11 +285,11 @@
 
 <script>
     <c:if test="${passwordChanged eq true}">
-        displayToast('<spring:message code="toast.changePasswordSucceeded"/>')
+        displayToast('<spring:message code="toast.changePassword"/>')
     </c:if>
 
     <c:if test="${userEdited ne null and userEdited eq true}">
-        displayToast('<spring:message code="toast.changeInfoSucceeded"/>')
+        displayToast('<spring:message code="toast.changeInfo"/>')
     </c:if>
 </script>
 </body>

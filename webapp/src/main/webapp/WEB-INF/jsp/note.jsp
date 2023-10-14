@@ -398,7 +398,7 @@
 </c:if>
 <script>
     <c:if test="${noteEdited eq true}">
-        displayToast('<spring:message code="toast.noteEditSucceeded"/>')
+        displayToast('<spring:message code="toast.noteEdit"/>')
     </c:if>
     <c:if test="${reviewUploaded eq true}">
         displayToast('<spring:message code="toast.reviewUploaded"/>')
