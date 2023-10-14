@@ -164,14 +164,15 @@
                                class="d-flex flex-column"
                                id="editUserForm">
 
-                        <label for="profile-picture" class="selected-image">
+
+                        <label for="profilePicture" class="selected-image">
                             <img src="${userProfilePicture}" alt="Profile Picture" id="preview-image">
                             <span><img src="<c:url value="/svg/pencil.svg"/>" class="hidden-pencil"
                                        alt="${edit}"></span>
-
                         </label>
-                        <input type="file" name="profilePicture" style="display: none" id="profile-picture"
-                               accept="image/*" onchange="previewImage(event)">
+                        <input type="file" name="profilePicture" style="display: none" id="profilePicture"
+                               accept="image/*">
+                        <form:errors path="profilePicture" cssClass="text-danger mt-3 align-self-center" element="p"/>
 
                         <div>
                             <spring:message var="settingsFirstName" code="name"/>

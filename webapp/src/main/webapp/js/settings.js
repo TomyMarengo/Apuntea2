@@ -27,7 +27,7 @@ tabLinks.forEach(function(tabLink, index) {
 });
 
 var profilePic = document.getElementById('preview-image');
-var fileInput = document.getElementById('profile-picture');
+var fileInput = document.getElementById('profilePicture');
 
 fileInput.addEventListener('change', function() {
     var reader = new FileReader();
