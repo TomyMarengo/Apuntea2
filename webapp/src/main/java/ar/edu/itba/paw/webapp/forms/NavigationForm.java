@@ -22,7 +22,7 @@ public class NavigationForm {
     private Integer pageNumber = 1;
 
     @NotNull
-    @Range(min = 12, max = 24)
+    @Range(min = 4, max = 24)
     private Integer pageSize = 12;
 
 //    @Pattern(regexp = "[a-zA-Z0-9 áéíóúÁÉÍÓÚñÑüÜ]*")
