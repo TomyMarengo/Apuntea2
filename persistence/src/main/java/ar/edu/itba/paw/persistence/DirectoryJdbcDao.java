@@ -88,7 +88,6 @@ public class DirectoryJdbcDao implements DirectoryDao {
                 .withTableName(FAVORITES);
     }
 
-    @Transactional
     @Override
     public UUID create(String name, UUID parentId, UUID userId, boolean visible, String iconColor) {
         MapSqlParameterSource args = new MapSqlParameterSource();
@@ -106,7 +105,6 @@ public class DirectoryJdbcDao implements DirectoryDao {
         return (UUID) holder.getKeys().get(DIRECTORY_ID);
     }
 
-    @Transactional
     @Override
     public UUID createRootDirectory(String name) {
         MapSqlParameterSource args = new MapSqlParameterSource();
@@ -161,7 +159,6 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
-    @Transactional
     public List<Directory> delete(UUID[] directoryIds) {
         MapSqlParameterSource args = new MapSqlParameterSource(DIRECTORY_ID, Arrays.asList(directoryIds));
         List<Directory> dir = new ArrayList<>(
@@ -175,7 +172,6 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
-    @Transactional
     public boolean deleteRootDirectory(UUID directoryId) {
         return jdbcTemplate.update("DELETE FROM Directories d WHERE d.directory_id = ? AND d.parent_id IS NULL AND d.user_id IS NULL", directoryId) == 1;
     }
@@ -215,5 +211,4 @@ public class DirectoryJdbcDao implements DirectoryDao {
         args.addValue(DIRECTORY_ID, directoryId);
         return namedParameterJdbcTemplate.update("DELETE FROM Favorites WHERE user_id = :user_id AND directory_id = :directory_id", args) == 1;
     }
-
 }

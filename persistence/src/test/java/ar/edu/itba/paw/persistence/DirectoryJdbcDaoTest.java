@@ -35,7 +35,7 @@ public class DirectoryJdbcDaoTest {
     @Autowired
     private DataSource ds;
     @Autowired
-    private DirectoryDao directoryDao;
+    private DirectoryJdbcDao directoryDao;
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;

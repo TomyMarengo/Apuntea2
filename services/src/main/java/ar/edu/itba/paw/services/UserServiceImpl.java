@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
         return new Page<>(users, currentPage, PAGE_SIZE, countStudents);
     }
 
-    //    @Transactional
+    //@Transactional    //TODO: enable transactional
     @Override
     public void create(String email, String password, UUID careerId, Role role) {
         final String lang = LocaleContextHolder.getLocale().getLanguage();

@@ -35,7 +35,7 @@ public class SubjectJdbcDaoTest {
     @Autowired
     private DataSource ds;
     @Autowired
-    private SubjectDao subjectDao;
+    private SubjectJdbcDao subjectDao;
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;

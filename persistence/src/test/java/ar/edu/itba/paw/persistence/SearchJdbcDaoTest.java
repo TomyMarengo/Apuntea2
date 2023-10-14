@@ -33,7 +33,7 @@ public class SearchJdbcDaoTest {
     @Autowired
     private DataSource ds;
     @Autowired
-    private SearchDao searchDao;
+    private SearchJdbcDao searchDao;
 
     private JdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcFavoriteInsert;

@@ -34,7 +34,7 @@ public class NoteJdbcDaoTest {
     @Autowired
     private DataSource ds;
     @Autowired
-    private NoteDao noteDao;
+    private NoteJdbcDao noteDao;
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private SimpleJdbcInsert jdbcNoteInsert;

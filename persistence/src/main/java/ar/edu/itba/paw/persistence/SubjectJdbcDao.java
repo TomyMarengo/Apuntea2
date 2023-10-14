@@ -112,7 +112,6 @@ public class SubjectJdbcDao implements SubjectDao {
         return namedParameterJdbcTemplate.update("DELETE FROM Subjects WHERE subject_id = :subject_id", args) == 1;
     }
 
-    @Transactional
     @Override
     public boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
         MapSqlParameterSource args = new MapSqlParameterSource();

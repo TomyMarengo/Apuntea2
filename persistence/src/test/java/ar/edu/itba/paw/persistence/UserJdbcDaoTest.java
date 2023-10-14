@@ -33,7 +33,7 @@ public class UserJdbcDaoTest {
     @Autowired
     private DataSource ds;
     @Autowired
-    private UserDao userDao;
+    private UserJdbcDao userDao;
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 

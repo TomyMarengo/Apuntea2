@@ -120,7 +120,6 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
-    @Transactional
     public UUID create(String name, UUID subjectId, UUID userId, boolean visible, byte[] file, String category, String fileType) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(NOTE_NAME, name);
@@ -137,7 +136,7 @@ public class NoteJdbcDao implements NoteDao {
                 , args, holder, new String[]{NOTE_ID});
         return (UUID) holder.getKeys().get(NOTE_ID);
     }
-    @Transactional
+
     @Override
     public UUID create(String name, UUID subjectId, UUID userId, UUID parentId, boolean visible, byte[] file, String category, String fileType) {
         MapSqlParameterSource args = new MapSqlParameterSource();
@@ -198,7 +197,6 @@ public class NoteJdbcDao implements NoteDao {
         );
     }
 
-    @Transactional
     @Override
     public void createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
         boolean success = jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ?, created_at = now() WHERE note_id = ? AND user_id = ?", score, content, noteId, userId) == 1;

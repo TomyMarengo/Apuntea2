@@ -37,6 +37,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
+    @Transactional
     public List<Subject> getSubjects() {
         return subjectDao.getSubjects();
     }

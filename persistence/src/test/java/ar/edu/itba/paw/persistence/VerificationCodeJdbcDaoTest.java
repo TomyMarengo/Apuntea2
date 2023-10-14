@@ -34,7 +34,7 @@ public class VerificationCodeJdbcDaoTest {
     private DataSource ds;
 
     @Autowired
-    private VerificationCodeDao verificationCodeDao;
+    private VerificationCodeJdbcDao verificationCodeDao;
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;

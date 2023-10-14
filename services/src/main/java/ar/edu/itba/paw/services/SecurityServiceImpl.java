@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -31,6 +32,7 @@ public class SecurityServiceImpl implements SecurityService{
         return Optional.empty();
     }
 
+    @Transactional
     @Override
     public Optional<User> getCurrentUser() {
         final Optional<String> mayBeEmail = getCurrentUserEmail();
@@ -40,11 +42,13 @@ public class SecurityServiceImpl implements SecurityService{
         return userDao.findByEmail(mayBeEmail.get());
     }
 
+    @Transactional
     @Override
     public User getCurrentUserOrThrow() {
         return getCurrentUser().orElseThrow(UserNotFoundException::new);
     }
 
+    @Transactional
     @Override
     public boolean currentUserPasswordMatches(String password) {
         return passwordEncoder.matches(password, getCurrentUser().map(User::getPassword).orElse(""));

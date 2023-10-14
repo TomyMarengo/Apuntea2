@@ -30,7 +30,7 @@ public class CareerJdbcDaoTest {
     @Autowired
     private DataSource ds;
     @Autowired
-    private CareerDao careerDao;
+    private CareerJdbcDao careerDao;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private SimpleJdbcInsert jdbcSubjectsCareersInsert;
