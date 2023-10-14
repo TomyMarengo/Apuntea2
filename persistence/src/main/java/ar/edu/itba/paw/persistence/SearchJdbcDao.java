@@ -39,26 +39,25 @@ public class SearchJdbcDao implements SearchDao {
     private final static RowMapper<Searchable> SEARCH_ROW_MAPPER = (rs, rowNum) -> {
         Category c = Category.valueOf(rs.getString(CATEGORY).toUpperCase());
         if (c.equals(Category.DIRECTORY)) {
-            return new Directory(
-                UUID.fromString(rs.getString(ID)),
-                rs.getString(NAME),
-                new User(
-                        UUID.fromString(rs.getString(USER_ID)),
-                        rs.getString(EMAIL)
-                ),
-                UUID.fromString(rs.getString(PARENT_ID)),
-                rs.getBoolean(FAVORITE),
-                new Subject(
-                        UUID.fromString(rs.getString(SUBJECT_ID)),
-                        rs.getString(SUBJECT_NAME),
-                        UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
-                ),
-                rs.getTimestamp(CREATED_AT).toLocalDateTime(),
-                rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
-                rs.getBoolean(VISIBLE),
-                rs.getString(ICON_COLOR)
-            );
-
+            return new Directory.DirectoryBuilder()
+                    .directoryId(UUID.fromString(rs.getString(ID)))
+                    .name(rs.getString(NAME))
+                    .user(new User(
+                            UUID.fromString(rs.getString(USER_ID)),
+                            rs.getString(EMAIL)
+                    ))
+                    .parentId(UUID.fromString(rs.getString(PARENT_ID)))
+                    .subject(new Subject(
+                            UUID.fromString(rs.getString(SUBJECT_ID)),
+                            rs.getString(SUBJECT_NAME),
+                            UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
+                    ))
+                    .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
+                    .lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime())
+                    .visible(rs.getBoolean(VISIBLE))
+                    .favorite(rs.getBoolean(FAVORITE))
+                    .iconColor(rs.getString(ICON_COLOR))
+                    .build();
         }
         return new Note.NoteBuilder().
                 noteId(UUID.fromString(rs.getString(ID))).
@@ -85,21 +84,20 @@ public class SearchJdbcDao implements SearchDao {
     private final static RowMapper<Searchable> NAVIGATION_ROW_MAPPER = (rs, rowNum) -> {
         Category c = Category.valueOf(rs.getString(CATEGORY).toUpperCase());
         if (c.equals(Category.DIRECTORY)) {
-            return new Directory(
-                    UUID.fromString(rs.getString(ID)),
-                    rs.getString(NAME),
-                    new User(
+            return new Directory.DirectoryBuilder()
+                    .directoryId(UUID.fromString(rs.getString(ID)))
+                    .name(rs.getString(NAME))
+                    .user(new User(
                             UUID.fromString(rs.getString(USER_ID)),
                             rs.getString(EMAIL)
-                    ),
-                    UUID.fromString(rs.getString(PARENT_ID)),
-                    rs.getBoolean(FAVORITE),
-                    rs.getTimestamp(CREATED_AT).toLocalDateTime(),
-                    rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
-                    rs.getBoolean(VISIBLE),
-                    rs.getString(ICON_COLOR)
-            );
-
+                    ))
+                    .parentId(UUID.fromString(rs.getString(PARENT_ID)))
+                    .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
+                    .lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime())
+                    .visible(rs.getBoolean(VISIBLE))
+                    .favorite(rs.getBoolean(FAVORITE))
+                    .iconColor(rs.getString(ICON_COLOR))
+                    .build();
         }
         return new Note.NoteBuilder()
                 .noteId(UUID.fromString(rs.getString(ID)))

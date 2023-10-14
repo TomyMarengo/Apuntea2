@@ -10,8 +10,8 @@ public class DirectoryPath {
         this.directories = directories;
     }
 
-    public RootDirectory getRootDirectory() {
-        return (RootDirectory) directories.get(0);
+    public Directory getRootDirectory() {
+        return directories.get(0);
     }
 
     public Directory getParentDirectory() {

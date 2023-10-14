@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
-import ar.edu.itba.paw.models.directory.RootDirectory;
 import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
@@ -67,7 +66,7 @@ public class DirectoryJdbcDaoTest {
     public void testRootAncestor() {
         DirectoryPath path = directoryDao.getDirectoryPath(GUIAS_DIRECTORY_ID);
 
-        RootDirectory rootDirectory = path.getRootDirectory();
+        Directory rootDirectory = path.getRootDirectory();
         Directory parentDirectory = path.getParentDirectory();
 
         assertEquals(EDA_DIRECTORY_ID, rootDirectory.getId());
@@ -82,7 +81,7 @@ public class DirectoryJdbcDaoTest {
     public void testRootAncestorMoreLevels() {
         DirectoryPath path = directoryDao.getDirectoryPath(MVC_DIRECTORY_ID);
 
-        RootDirectory rootDirectory = path.getRootDirectory();
+        Directory rootDirectory = path.getRootDirectory();
         Directory parentDirectory = path.getParentDirectory();
         Directory currentDirectory = path.getCurrentDirectory();
 

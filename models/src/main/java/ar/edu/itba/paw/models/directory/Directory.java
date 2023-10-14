@@ -10,60 +10,29 @@ import java.util.UUID;
 
 public class Directory implements Searchable {
     private final UUID directoryId;
-    private String name;
-    private User user;
-    private UUID parentId;
-//  private Institution institution;
-//  private Career career;
-    private Subject subject;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastModifiedAt;
+    private final String name;
+    private final User user;
+    private final UUID parentId;
+    private final Subject subject;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime lastModifiedAt;
 
-    private String iconColor;
+    private final String iconColor;
 
-    private Boolean visible;
-    private Boolean favorite;
+    private final Boolean visible;
+    private final Boolean favorite;
 
-    public Directory(UUID directoryId, String name, UUID parentId) {
-        this.directoryId = directoryId;
-        this.name = name;
-        this.parentId = parentId;
-    }
-
-    public Directory(UUID directoryId, String name, boolean visible, String iconColor) {
-        this.directoryId = directoryId;
-        this.name = name;
-        this.visible = visible;
-        this.iconColor = iconColor;
-    }
-
-    public Directory(UUID directoryId, String name, User user, String iconColor) {
-        this.directoryId = directoryId;
-        this.name = name;
-        this.user = user;
-        this.iconColor = iconColor;
-    }
-
-    public Directory(UUID directoryId, String name, User user, UUID parentId, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
-        this.directoryId = directoryId;
-        this.name = name;
-        this.user = user;
-        this.parentId = parentId;
-        this.createdAt = createdAt;
-        this.lastModifiedAt = lastModifiedAt;
-        this.visible = visible;
-        this.iconColor = iconColor;
-    }
-
-    public Directory(UUID directoryId, String name, User user, UUID parentId, boolean favorite, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
-        this(directoryId, name, user, parentId, createdAt, lastModifiedAt, visible, iconColor);
-        this.favorite = favorite;
-    }
-
-
-    public Directory(UUID directoryId, String name, User user, UUID parentId, boolean favorite, Subject subject, LocalDateTime createdAt, LocalDateTime lastModifiedAt, boolean visible, String iconColor) {
-        this(directoryId, name, user, parentId, favorite, createdAt, lastModifiedAt, visible, iconColor);
-        this.subject = subject;
+    private Directory(DirectoryBuilder builder) {
+        this.directoryId = builder.directoryId;
+        this.name = builder.name;
+        this.user = builder.user;
+        this.parentId = builder.parentId;
+        this.subject = builder.subject;
+        this.createdAt = builder.createdAt;
+        this.lastModifiedAt = builder.lastModifiedAt;
+        this.visible = builder.visible;
+        this.favorite = builder.favorite;
+        this.iconColor = builder.iconColor;
     }
 
     public UUID getId() { return directoryId; }
@@ -91,8 +60,6 @@ public class Directory implements Searchable {
     public LocalDateTime getLastModifiedAt() {
         return lastModifiedAt;
     }
-
-    //TODO: change when visibility is implemented
     @Override
     public boolean isVisible() {
         return visible;
@@ -113,9 +80,75 @@ public class Directory implements Searchable {
     public String getIconColor() {
         return iconColor;
     }
-
     @Override
     public boolean getFavorite() {
         return favorite;
+    }
+
+    public static class DirectoryBuilder {
+        private UUID directoryId;
+        private String name;
+        private User user;
+        private UUID parentId;
+        private Subject subject;
+        private LocalDateTime createdAt;
+        private LocalDateTime lastModifiedAt;
+        private String iconColor;
+        private Boolean visible;
+        private Boolean favorite;
+
+        public DirectoryBuilder directoryId(UUID directoryId) {
+            this.directoryId = directoryId;
+            return this;
+        }
+
+        public DirectoryBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public DirectoryBuilder user(User user) {
+            this.user = user;
+            return this;
+        }
+
+        public DirectoryBuilder parentId(UUID parentId) {
+            this.parentId = parentId;
+            return this;
+        }
+
+        public DirectoryBuilder subject(Subject subject) {
+            this.subject = subject;
+            return this;
+        }
+
+        public DirectoryBuilder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
+        }
+
+        public DirectoryBuilder lastModifiedAt(LocalDateTime lastModifiedAt) {
+            this.lastModifiedAt = lastModifiedAt;
+            return this;
+        }
+
+        public DirectoryBuilder visible(Boolean visible) {
+            this.visible = visible;
+            return this;
+        }
+
+        public DirectoryBuilder favorite(Boolean favorite) {
+            this.favorite = favorite;
+            return this;
+        }
+
+        public DirectoryBuilder iconColor(String iconColor) {
+            this.iconColor = iconColor;
+            return this;
+        }
+
+        public Directory build() {
+            return new Directory(this);
+        }
     }
 }

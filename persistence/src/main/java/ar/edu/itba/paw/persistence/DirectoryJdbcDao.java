@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
-import ar.edu.itba.paw.models.directory.RootDirectory;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,60 +27,57 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
     private final SimpleJdbcInsert jdbcFavoritesInsert;
 
-    private static final RowMapper<Directory> LIMITED_ROW_MAPPER = (rs, rowNum)  ->
-            new Directory(
-                    UUID.fromString(rs.getString(DIRECTORY_ID)),
-                    rs.getString(DIRECTORY_NAME),
-                    rs.getString(PARENT_ID) != null?  UUID.fromString(rs.getString(PARENT_ID)) : null
-            );
+    private static final RowMapper<Directory> LIMITED_ROW_MAPPER = (rs, rowNum)  -> {
+        Directory.DirectoryBuilder dbuilder = new Directory.DirectoryBuilder()
+                        .directoryId(UUID.fromString(rs.getString(DIRECTORY_ID)))
+                        .name(rs.getString(DIRECTORY_NAME));
+        String parentId = rs.getString(PARENT_ID);
+        if (parentId != null) dbuilder.parentId(UUID.fromString(parentId));
+        return dbuilder.build();
+    };
 
     private static final RowMapper<Directory> ROW_MAPPER = (rs, rowNum) -> {
         String userId = rs.getString(USER_ID);
         String parentId = rs.getString(PARENT_ID);
-        return new Directory(
-                UUID.fromString(rs.getString(DIRECTORY_ID)),
-                rs.getString(DIRECTORY_NAME),
-                userId != null ? new User(
-                        UUID.fromString(userId),
-                        rs.getString(EMAIL)
-                ) : null,
-                parentId != null ?  UUID.fromString(parentId) : null,
-                rs.getTimestamp(CREATED_AT).toLocalDateTime(),
-                rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime(),
-                rs.getBoolean(VISIBLE),
-                rs.getString(ICON_COLOR)
-        );
+        Directory.DirectoryBuilder dbuilder =
+                new Directory.DirectoryBuilder()
+                    .directoryId(UUID.fromString(rs.getString(DIRECTORY_ID)))
+                    .name(rs.getString(DIRECTORY_NAME))
+                    .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
+                    .lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime())
+                    .visible(rs.getBoolean(VISIBLE))
+                    .iconColor(rs.getString(ICON_COLOR));
+
+        if (userId != null)
+            dbuilder.user(new User(UUID.fromString(userId), rs.getString(EMAIL)));
+        if (parentId != null)
+            dbuilder.parentId(UUID.fromString(parentId));
+        return dbuilder.build();
     };
 
-    private static final RowMapper<Directory> USER_ROW_MAPPER = (rs, rowNum) -> new Directory(
-            UUID.fromString(rs.getString(DIRECTORY_ID)),
-            rs.getString(DIRECTORY_NAME),
-            new User(
+    private static final RowMapper<Directory> USER_ROW_MAPPER = (rs, rowNum) -> new Directory.DirectoryBuilder()
+            .directoryId(UUID.fromString(rs.getString(DIRECTORY_ID)))
+            .name(rs.getString(DIRECTORY_NAME))
+            .user(new User(
                     UUID.fromString(rs.getString(USER_ID)),
                     rs.getString(EMAIL),
                     rs.getString(LOCALE)
-            ),
-            rs.getString(ICON_COLOR)
-    );
+            ))
+            .iconColor(rs.getString(ICON_COLOR))
+            .build();
 
     private static final RowMapper<Directory> ROW_MAPPER_WITH_SUBJECT = (rs, rowNum)  -> {
+        Directory.DirectoryBuilder dbuilder =
+                new Directory.DirectoryBuilder()
+                    .directoryId(UUID.fromString(rs.getString(DIRECTORY_ID)))
+                    .name(rs.getString(DIRECTORY_NAME));
+
         String subjectId = rs.getString(SUBJECT_ID);
-        if (subjectId != null) {
-            return new RootDirectory(
-                    UUID.fromString(rs.getString(DIRECTORY_ID)),
-                    rs.getString(DIRECTORY_NAME),
-                    null,
-                    new Subject(
-                            UUID.fromString(subjectId),
-                            rs.getString(SUBJECT_NAME)
-                    ));
-        } else {
-            return new Directory(
-                    UUID.fromString(rs.getString(DIRECTORY_ID)),
-                    rs.getString(DIRECTORY_NAME),
-                    UUID.fromString(rs.getString(PARENT_ID))
-            );
-        }
+        if (subjectId != null)
+            dbuilder.subject(new Subject(UUID.fromString(subjectId), rs.getString(SUBJECT_NAME)));
+        else
+            dbuilder.parentId(UUID.fromString(rs.getString(PARENT_ID)));
+        return dbuilder.build();
     };
 
     @Autowired

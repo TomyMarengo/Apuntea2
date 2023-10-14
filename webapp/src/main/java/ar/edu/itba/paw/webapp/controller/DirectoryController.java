@@ -151,7 +151,12 @@ public class DirectoryController {
             redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_FORM_BINDING, result);
             redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_ID, directoryId);
         } else {
-            Directory directory = new Directory(directoryId, editDirectoryForm.getName(), editDirectoryForm.getVisible(), editDirectoryForm.getColor());
+            Directory directory = new Directory.DirectoryBuilder()
+                    .directoryId(directoryId)
+                    .name(editDirectoryForm.getName())
+                    .visible(editDirectoryForm.getVisible())
+                    .iconColor(editDirectoryForm.getColor())
+                    .build();
             directoryService.update(directory);
             redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_FORM, true);
         }

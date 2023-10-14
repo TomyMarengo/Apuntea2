@@ -73,14 +73,11 @@ public class ServiceTestUtils {
     }
 
     static Directory mockDirectory(String name) {
-        return new Directory(UUID.randomUUID(),
-                name,
-                null,
-                EDA_DIRECTORY_ID,
-                null,
-                null,
-                true,
-                null
-        );
+        return new Directory.DirectoryBuilder()
+                .directoryId(UUID.randomUUID())
+                .name(name)
+                .parentId(EDA_DIRECTORY_ID)
+                .visible(true)
+                .build();
     }
 }
