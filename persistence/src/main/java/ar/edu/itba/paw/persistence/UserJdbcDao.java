@@ -56,21 +56,6 @@ class UserJdbcDao implements UserDao{
         );
     };
 
-    private static final RowMapper<User> INFO_ROW_MAPPER = (rs, rowNum)  -> {
-        Object[] roles = (Object[]) rs.getArray(ROLES).getArray();
-        String[] rolesString = Arrays.copyOf(roles, roles.length, String[].class);
-        return new User(
-                UUID.fromString(rs.getString(USER_ID)),
-                rs.getString(FIRST_NAME),
-                rs.getString(LAST_NAME),
-                rs.getString(USERNAME),
-                rs.getString(EMAIL),
-                rolesString,
-                UserStatus.valueOf(rs.getString(STATUS)),
-                rs.getString(LOCALE)
-        );
-    };
-
     private static final RowMapper<ProfilePicture> PROFILE_IMAGE_ROW_MAPPER = (rs, rowNum) -> new ProfilePicture(rs.getString(USER_ID), rs.getObject(IMAGE));
 
 
@@ -87,10 +72,12 @@ class UserJdbcDao implements UserDao{
     public List<User> getStudents(String query, int pageNum, int pageSize) {
         String searchWord = escapeLikeString(query);
 
-        return jdbcTemplate.query("SELECT u.user_id, u.username, u.email, u.first_name, u.last_name, u.locale, u.status, array_agg(r.role_name) as roles FROM users u " +
+        return jdbcTemplate.query("SELECT u.user_id, u.username, u.email, u.first_name, u.last_name, u.locale, u.status, array_agg(r.role_name), i.institution_id, i.institution_name, c.career_id, c.career_name  as roles FROM users u " +
                 "INNER JOIN User_Roles r ON u.user_id = r.user_id " +
+                "INNER JOIN Careers c ON u.career_id = c.career_id " +
+                "INNER JOIN Institutions i ON c.institution_id = i.institution_id " +
                 "WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') AND (lower(u.username) LIKE lower(?) ESCAPE '!' OR lower(u.email) LIKE lower(?) ESCAPE '!')" +
-                "GROUP BY u.user_id LIMIT ? OFFSET ?", INFO_ROW_MAPPER, searchWord, searchWord, pageSize, (pageNum - 1) * pageSize);
+                "GROUP BY u.user_id LIMIT ? OFFSET ?", ROW_MAPPER, searchWord, searchWord, pageSize, (pageNum - 1) * pageSize);
     }
 
     @Transactional

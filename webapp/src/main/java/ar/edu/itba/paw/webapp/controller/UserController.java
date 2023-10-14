@@ -76,7 +76,7 @@ public class UserController {
         ModelAndView mav = new ModelAndView("settings");
         if(!result.hasErrors()) {
             try {
-                userService.update(new User(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername()), editUserForm.getProfilePicture());
+                userService.updateProfile(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername(), editUserForm.getProfilePicture());
                 mav.addObject(EDIT_USER_FORM, true);
             } catch (InvalidFileException e) {
                 mav.addObject("invalidFileError"); // TODO: Add modals for this error

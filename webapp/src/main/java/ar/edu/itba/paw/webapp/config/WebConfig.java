@@ -41,7 +41,7 @@ import java.util.Properties;
 
 
 @EnableAsync
-@EnableCaching
+//@EnableCaching
 @EnableScheduling
 @EnableTransactionManagement
 @EnableWebMvc
@@ -156,8 +156,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return new DataSourceTransactionManager(ds);
     }
 
-    @Bean
-    public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("currentUser");
-    }
+//    @Bean
+//    public CacheManager cacheManager() {
+//        return new ConcurrentMapCacheManager("currentUser");
+//    }
 }

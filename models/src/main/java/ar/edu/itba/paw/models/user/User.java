@@ -17,7 +17,6 @@ public class User {
     private Career career;
     private Role[] roles;
     private String locale;
-    private byte[] profilePicture;
     private UserStatus status;
 
     public User(final UUID userId, final String email) {
@@ -25,49 +24,21 @@ public class User {
         this.email = email;
     }
 
-    public User(final UUID userID, final String firstName, final String lastName, final String username, final String email, final String[] roles, final UserStatus status, final String locale) {
-        this.userId = userID;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.email = email;
-        this.roles = Arrays.stream(roles).map(Role::getRole).toArray(Role[]::new);
-        this.status = status;
-        this.locale = locale;
-    }
-
     public User(final UUID userId, final String email, final String locale) {
-        this.userId = userId;
-        this.email = email;
+        this(userId, email);
         this.locale = locale;
     }
-
 
     public User(final UUID userId, final String firstName, final String lastName, final String username, final String email, final String password, final UserStatus status, final String[] roles, final String locale, final Institution institution, final Career career) {
-        this.userId = userId;
+        this(userId, email, locale);
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
-        this.email = email;
         this.password = password;
         this.roles = Arrays.stream(roles).map(Role::getRole).toArray(Role[]::new);
         this.status = status;
-        this.locale = locale;
         this.institution = institution;
         this.career = career;
-    }
-
-    public User (final String firstName, final String lastName, final String username) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-    }
-
-    public User(final UUID userId, final String email, final String locale, final String username, final String firstName, final String lastName) {
-        this(userId, email, locale);
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -82,7 +53,6 @@ public class User {
     public Role[] getRoles() {
         return roles;
     }
-
     public String getLocale() {
         return locale;
     }
@@ -104,14 +74,6 @@ public class User {
 
     public String getUsername() {
         return username;
-    }
-
-    public byte[] getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
     }
 
     public boolean getIsAdmin() {
@@ -137,5 +99,11 @@ public class User {
             return firstName + " " + lastName;
         }
         return email;
+    }
+
+    public void setProfileData(String firstName, String lastName, String username) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
     }
 }
