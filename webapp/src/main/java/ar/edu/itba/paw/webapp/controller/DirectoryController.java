@@ -65,10 +65,8 @@ public class DirectoryController {
         mav.addObject("editNoteId", model.get(EDIT_NOTE_ID));
         mav.addObject("editDirectoryId", model.get(EDIT_DIRECTORY_ID));
 
-        String json = toSafeJson(model.get(DELETE_NOTE_IDS));
-
-        mav.addObject("deleteNoteIds",  json);
-        mav.addObject("deleteDirectoryIds", model.get(DELETE_DIRECTORY_IDS));
+        mav.addObject("deleteNoteIds",  toSafeJson(model.get(DELETE_NOTE_IDS)));
+        mav.addObject("deleteDirectoryIds", toSafeJson(model.get(DELETE_DIRECTORY_IDS)));
         loadToastFlashAttributes(mav, model);
 
         Directory directory = directoryService.getDirectoryById(directoryId).orElseThrow(DirectoryNotFoundException::new);
@@ -138,11 +136,8 @@ public class DirectoryController {
 
         if(result.hasErrors()){
             redirectAttributes.addFlashAttribute(DELETE_WITH_REASON_FORM_BINDING, result);
-            if (noteIds != null && noteIds.length > 0) {
-                String[] vec = Arrays.stream(noteIds).map(UUID::toString).toArray(String[]::new);
-                redirectAttributes.addFlashAttribute(DELETE_NOTE_IDS, vec);
-            }
-
+            if (noteIds != null && noteIds.length > 0)
+                redirectAttributes.addFlashAttribute(DELETE_NOTE_IDS, Arrays.stream(noteIds).map(UUID::toString).toArray(String[]::new));
             else
                 redirectAttributes.addFlashAttribute(DELETE_NOTE_IDS, new String[0]);
             if (directoryIds != null && directoryIds.length > 0)

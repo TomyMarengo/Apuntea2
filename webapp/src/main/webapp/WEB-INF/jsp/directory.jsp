@@ -1056,18 +1056,14 @@
 
 <c:if test="${errorsDeleteWithReasonForm ne null}">
     <script>
-        const noteIds = "<c:out value="${deleteNoteIds}"/>";
-        const directoryIds = "<c:out value="${deleteDirectoryIds}"/>";
-
-        console.log(noteIds)
-        console.log(directoryIds)
-
+        const noteIds = ${deleteNoteIds};
+        const directoryIds = ${deleteDirectoryIds};
 
         selectedRowIds.clear();
 
         const deleteForm = document.getElementById('deleteForm')
 
-        noteIds.split(',').forEach(id => {
+        noteIds.forEach(id => {
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = 'noteIds';
@@ -1076,7 +1072,7 @@
             selectedRowIds.add(id);
         });
 
-        directoryIds.split(',').forEach(id => {
+        directoryIds.forEach(id => {
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = 'directoryIds';
@@ -1085,7 +1081,6 @@
             selectedRowIds.add(id);
         });
 
-        console.log(selectedRowIds)
         updateSelectedState()
 
         let deleteModal = new bootstrap.Modal(document.getElementById('deleteManyModal'), {})
