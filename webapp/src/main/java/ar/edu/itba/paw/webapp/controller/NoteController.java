@@ -51,6 +51,10 @@ public class NoteController {
         addFormOrGetWithErrors(mav, model, CREATE_REVIEW_FORM_BINDING, "errorsReviewForm", "reviewForm", ReviewForm.class);
         addFormOrGetWithErrors(mav, model, EDIT_NOTE_FORM_BINDING, "errorsEditNoteForm", "editNoteForm", EditNoteForm.class);
 
+        mav.addObject(DELETE_WITH_REASON_REVIEW, model.getOrDefault(DELETE_WITH_REASON_REVIEW, false));
+        mav.addObject(DELETE_WITH_REASON_NOTE, model.getOrDefault(DELETE_WITH_REASON_NOTE, false));
+        mav.addObject(REVIEW_USER_ID, model.getOrDefault(REVIEW_USER_ID, null));
+
         Note note = noteService.getNoteById(noteId).orElseThrow(NoteNotFoundException::new);
         mav.addObject("note", note);
         mav.addObject("reviews", noteService.getReviews(noteId));
@@ -115,6 +119,7 @@ public class NoteController {
 
         if(result.hasErrors()){
             redirectAttributes.addFlashAttribute(DELETE_WITH_REASON_FORM_BINDING, result);
+            redirectAttributes.addFlashAttribute(DELETE_WITH_REASON_NOTE, true);
             return new ModelAndView("redirect:/notes/" + noteId);
         }
         else{

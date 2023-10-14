@@ -225,7 +225,7 @@
                         <form:errors path="reason" cssClass="text-danger" element="p"/>
                     </c:if>
                 </div>
-                <input type="hidden" name="redirectUrl" value="/directory/${note.parentId}"/>
+                <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/directory/${note.parentId}"/>
 
                 <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-primary"
@@ -239,7 +239,6 @@
     </div>
 </div>
 
-
 <!-- DELETE REVIEW MODAL -->
 <c:if test="${user ne null and user.isAdmin}">
     <div class="modal fade" id="deleteReviewModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -252,14 +251,16 @@
                             aria-label="Close">
                     </button>
                 </div>
-                <form:form id="deleteReviewForm" method="POST" action=""> <!-- Action is set in JS -->
+                <form:form modelAttribute="deleteWithReasonForm" id="deleteReviewForm" method="POST" action=""> <!-- Action is set in JS -->
                     <div class="modal-body pb-0 d-flex flex-column">
                         <spring:message code="DeleteForm.description"/>
                         <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
                         <label for="reason"></label>
-                        <textarea name="reason" class="form-control mt-3" id="reason"
-                                  placeholder="${deleteMessagePlaceholder}"></textarea>
+                        <form:textarea path="reason" name="reason" class="form-control mt-3" id="reason"
+                                  placeholder="${deleteMessagePlaceholder}"/>
+                        <form:errors path="reason" cssClass="text-danger" element="p"/>
                     </div>
+                    <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/notes/${note.id}"/>
 
                     <div class="modal-footer mt-4">
                         <button type="button" class="btn rounded-box button-primary"
@@ -389,10 +390,21 @@
     </c:if>
 </c:if>
 
-<c:if test="${errorsDeleteWithReasonForm ne null}">
+<c:if test="${errorsDeleteWithReasonForm ne null and deleteWithReasonNote eq true}">
     <script>
         let deleteOneModal = new bootstrap.Modal(document.getElementById('deleteOneModal'), {})
         deleteOneModal.show();
+    </script>
+</c:if>
+
+<c:if test="${errorsDeleteWithReasonForm ne null and deleteWithReasonReview eq true}">
+    <script>
+        const userId = "<c:out value="${reviewUserId}"/>";
+        console.log(userId)
+        document.getElementById('deleteReviewForm').action = `${baseUrl}/manage/users/` + userId + `/review/${noteId}/delete`;
+
+        let deleteReviewModal = new bootstrap.Modal(document.getElementById('deleteReviewModal'), {})
+        deleteReviewModal.show();
     </script>
 </c:if>
 

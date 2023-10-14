@@ -6,6 +6,7 @@ import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.forms.BanUserForm;
+import ar.edu.itba.paw.webapp.forms.DeleteWithReasonForm;
 import ar.edu.itba.paw.webapp.forms.SearchUserForm;
 import ar.edu.itba.paw.webapp.forms.UnbanUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
@@ -93,11 +94,20 @@ public class ManageUsersController {
     @RequestMapping(value = "/{userId}/review/{noteId}/delete", method = {RequestMethod.POST})
     public ModelAndView deleteReview(@PathVariable("noteId") @ValidUuid UUID noteId,
                                      @PathVariable("userId") @ValidUuid UUID userId,
-                                     @RequestParam(required = false) @Size(max = 300) String reason,
-                                     final RedirectAttributes redirectAttributes) {
-        noteService.deleteReview(noteId, userId, reason);
-        redirectAttributes.addFlashAttribute(REVIEW_DELETED, true);
-        return new ModelAndView("redirect:/notes/"+noteId);
+                                     @Valid @ModelAttribute("deleteWithReasonForm") final DeleteWithReasonForm deleteWithReasonForm,
+                                     final BindingResult result, final RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute(DELETE_WITH_REASON_FORM_BINDING, result);
+            redirectAttributes.addFlashAttribute(DELETE_WITH_REASON_REVIEW, true);
+            redirectAttributes.addFlashAttribute(REVIEW_USER_ID, userId.toString());
+        }
+        else {
+            noteService.deleteReview(noteId, userId, deleteWithReasonForm.getReason());
+            redirectAttributes.addFlashAttribute(REVIEW_DELETED, true);
+        }
+
+        return new ModelAndView("redirect:" + deleteWithReasonForm.getRedirectUrl());
     }
 
     @ModelAttribute("user")

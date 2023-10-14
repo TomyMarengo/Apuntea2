@@ -34,6 +34,9 @@ public class ControllerUtils {
     static final String CREATE_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.createSubjectForm";
     static final String EDIT_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.editSubjectForm";
     static final String DELETE_WITH_REASON_FORM_BINDING = "org.springframework.validation.BindingResult.deleteWithReasonForm";
+    static final String DELETE_WITH_REASON_REVIEW = "deleteWithReasonReview";
+    static final String DELETE_WITH_REASON_NOTE = "deleteWithReasonNote";
+    static final String REVIEW_USER_ID = "reviewUserId";
     static final String DELETE_NOTE_IDS = "deleteNotesIds";
     static final String DELETE_DIRECTORY_IDS = "deleteDirectoriesIds";
     private	static final Logger LOGGER	= LoggerFactory.getLogger(ControllerUtils.class);
