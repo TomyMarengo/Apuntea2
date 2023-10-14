@@ -56,6 +56,7 @@ public class SearchController {
         );
 
         mav.addObject("maxPage", pageResult.getTotalPages());
+        mav.addObject("currentPage", pageResult.getCurrentPage());
         mav.addObject("results", pageResult.getContent());
         mav.addObject(ADD_FAVORITE, model.getOrDefault(ADD_FAVORITE, false));
         mav.addObject(REMOVE_FAVORITE, model.getOrDefault(REMOVE_FAVORITE, false));

@@ -50,6 +50,7 @@ public class ManageUsersController {
 
         Page<User> users = userService.getStudents(searchUserForm.getQuery(), searchUserForm.getPageNumber());
         mav.addObject("maxPage", users.getTotalPages());
+        mav.addObject("currentPage", users.getCurrentPage());
         mav.addObject("users", users.getContent());
         
         mav.addObject(BAN_USER, model.getOrDefault(BAN_USER, false));

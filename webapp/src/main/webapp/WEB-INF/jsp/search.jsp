@@ -180,7 +180,7 @@
 
         </div>
 
-        <form:hidden path="pageNumber" id="pageNumber"/>
+        <form:hidden path="pageNumber" id="pageNumber" value="1"/>
         <form:hidden path="pageSize" id="pageSize"/>
 
         <div class="w-25">
@@ -535,80 +535,7 @@
     </section>
 
     <!-- PAGINATION -->
-    <section class="container d-flex justify-content-center mt-3">
-        <nav aria-label="...">
-            <ul class="pagination">
-                <c:if test="${searchForm.pageNumber gt 1}">
-                    <li class="page-item">
-                            <%--suppress XmlDuplicatedId --%>
-                        <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
-                    </li>
-                </c:if>
-                <c:if test="${searchForm.pageNumber le 1}">
-                    <li class="page-item disabled">
-                            <%--suppress XmlDuplicatedId --%>
-                        <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
-                    </li>
-                </c:if>
-
-                <c:if test="${searchForm.pageNumber gt 2}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="1"><c:out value="1"/></a>
-                    </li>
-                </c:if>
-
-                <c:if test="${searchForm.pageNumber gt 3}">
-                    <li class="page-item disabled">
-                        <a class="page-link">...</a>
-                    </li>
-                </c:if>
-
-                <c:if test="${searchForm.pageNumber gt 1}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="${searchForm.pageNumber - 1}"><c:out
-                                value="${searchForm.pageNumber - 1}"/></a>
-                    </li>
-                </c:if>
-
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" data-page="${searchForm.pageNumber}"><c:out
-                            value="${searchForm.pageNumber}"/></a>
-                </li>
-
-                <c:if test="${searchForm.pageNumber lt maxPage}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="${searchForm.pageNumber + 1}"><c:out
-                                value="${searchForm.pageNumber + 1}"/></a>
-                    </li>
-                </c:if>
-
-                <c:if test="${searchForm.pageNumber lt maxPage - 2}">
-                    <li class="page-item disabled">
-                        <a class="page-link">...</a>
-                    </li>
-                </c:if>
-
-                <c:if test="${searchForm.pageNumber lt maxPage - 1}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="${maxPage}"><c:out value="${maxPage}"/></a>
-                    </li>
-                </c:if>
-
-                <c:if test="${searchForm.pageNumber lt maxPage}">
-                    <li class="page-item">
-                            <%--suppress XmlDuplicatedId --%>
-                        <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
-                    </li>
-                </c:if>
-                <c:if test="${searchForm.pageNumber ge maxPage}">
-                    <li class="page-item disabled">
-                            <%--suppress XmlDuplicatedId --%>
-                        <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
-                    </li>
-                </c:if>
-            </ul>
-        </nav>
-    </section>
+    <fragment:paging maxPage="${maxPage}" pageNumber="${currentPage}"/>
 </c:if>
 
 <fragment:custom-toast message=""/>
@@ -631,7 +558,6 @@
 <c:if test="${not empty results}">
     <script src="<c:url value="/js/note-list.js"/>"></script>
     <script src="<c:url value="/js/search-buttons.js"/>"></script>
-    <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
 
 <script>

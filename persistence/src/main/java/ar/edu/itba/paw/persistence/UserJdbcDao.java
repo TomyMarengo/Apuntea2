@@ -103,8 +103,10 @@ class UserJdbcDao implements UserDao{
         args.add(searchWord);
 
         try {
-            return jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT u.user_id) FROM users u WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
-                    "AND (lower(u.username) LIKE lower(?) ESCAPE '!' OR lower(u.email) LIKE lower(?) ESCAPE '!')",
+            return jdbcTemplate.queryForObject("SELECT COUNT(DISTINCT u.user_id) " +
+                            "FROM users u INNER JOIN User_Roles r ON u.user_id = r.user_id " +
+                            "WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
+                            "AND (lower(u.username) LIKE lower(?) ESCAPE '!' OR lower(u.email) LIKE lower(?) ESCAPE '!')",
                      args.toArray(), Integer.class);
         } catch (EmptyResultDataAccessException e) {
             return 0;

@@ -1,13 +1,11 @@
 package ar.edu.itba.paw.webapp.forms;
 
-import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
 public class NavigationForm {
     @Pattern(regexp = "directory|theory|practice|exam|other|")
@@ -24,7 +22,7 @@ public class NavigationForm {
     private Integer pageNumber = 1;
 
     @NotNull
-    @Range(min = 12, max = 36)
+    @Range(min = 12, max = 24)
     private Integer pageSize = 12;
 
 //    @Pattern(regexp = "[a-zA-Z0-9 áéíóúÁÉÍÓÚñÑüÜ]*")

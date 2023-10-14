@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
+import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
@@ -162,7 +163,7 @@ public class UserJdbcDaoTest {
     @Test
     public void testGetStudentsAll() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
+        int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT' AND NOT EXISTS ( SELECT * FROM User_Roles ur WHERE ur.user_id = user_id  AND ur.role_name = 'ROLE_ADMIN')");
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
         assertEquals(oldUsers + STUDENTS_LENGTH, userDao.getStudentsQuantity(""));
     }

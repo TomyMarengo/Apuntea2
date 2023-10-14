@@ -104,7 +104,7 @@
             </div>
 
 
-            <form:hidden path="pageNumber" id="pageNumber"/>
+            <form:hidden path="pageNumber" id="pageNumber" value="1"/>
             <form:hidden path="pageSize" id="pageSize"/>
 
         </div>
@@ -630,80 +630,7 @@
     </section>
 
     <!-- PAGINATION -->
-    <section class="container d-flex justify-content-center mt-3">
-        <nav aria-label="...">
-            <ul class="pagination">
-                <c:if test="${navigationForm.pageNumber gt 1}">
-                    <li class="page-item">
-                            <%--suppress XmlDuplicatedId --%>
-                        <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
-                    </li>
-                </c:if>
-                <c:if test="${navigationForm.pageNumber le 1}">
-                    <li class="page-item disabled">
-                            <%--suppress XmlDuplicatedId --%>
-                        <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
-                    </li>
-                </c:if>
-
-                <c:if test="${navigationForm.pageNumber gt 2}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="1"><c:out value="1"/></a>
-                    </li>
-                </c:if>
-
-                <c:if test="${navigationForm.pageNumber gt 3}">
-                    <li class="page-item disabled">
-                        <a class="page-link">...</a>
-                    </li>
-                </c:if>
-
-                <c:if test="${navigationForm.pageNumber gt 1}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="${navigationForm.pageNumber - 1}"><c:out
-                                value="${navigationForm.pageNumber - 1}"/></a>
-                    </li>
-                </c:if>
-
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" data-page="${navigationForm.pageNumber}"><c:out
-                            value="${navigationForm.pageNumber}"/></a>
-                </li>
-
-                <c:if test="${navigationForm.pageNumber lt maxPage}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="${navigationForm.pageNumber + 1}"><c:out
-                                value="${navigationForm.pageNumber + 1}"/></a>
-                    </li>
-                </c:if>
-
-                <c:if test="${navigationForm.pageNumber lt maxPage - 2}">
-                    <li class="page-item disabled">
-                        <a class="page-link">...</a>
-                    </li>
-                </c:if>
-
-                <c:if test="${navigationForm.pageNumber lt maxPage - 1}">
-                    <li class="page-item">
-                        <a class="page-link" data-page="${maxPage}"><c:out value="${maxPage}"/></a>
-                    </li>
-                </c:if>
-
-                <c:if test="${navigationForm.pageNumber lt maxPage}">
-                    <li class="page-item">
-                            <%--suppress XmlDuplicatedId --%>
-                        <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
-                    </li>
-                </c:if>
-                <c:if test="${navigationForm.pageNumber ge maxPage}">
-                    <li class="page-item disabled">
-                            <%--suppress XmlDuplicatedId --%>
-                        <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
-                    </li>
-                </c:if>
-            </ul>
-        </nav>
-    </section>
+    <fragment:paging maxPage="${maxPage}" pageNumber="${currentPage}"/>
 </c:if>
 
 <!-- CREATE NOTE MODAL -->
@@ -1092,7 +1019,6 @@
     <script src="<c:url value="/js/note-list.js"/>"></script>
     <script src="<c:url value="/js/search-buttons.js"/>"></script>
     <script src="<c:url value="/js/crud-buttons.js"/>"></script>
-    <script src="<c:url value="/js/pagination.js"/>"></script>
 </c:if>
 
 <c:if test="${errorsEditNoteForm != null}">

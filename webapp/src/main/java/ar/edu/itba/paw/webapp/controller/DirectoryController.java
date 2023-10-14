@@ -77,6 +77,7 @@ public class DirectoryController {
         );
 
         mav.addObject("maxPage", pageResult.getTotalPages());
+        mav.addObject("currentPage", pageResult.getCurrentPage());
         mav.addObject("results", pageResult.getContent());
         mav.addObject("directory", directory);
 
