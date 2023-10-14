@@ -118,19 +118,6 @@ public class JdbcDaoTestUtils {
         namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
         return (UUID) keyHolder.getKeys().get(USER_ID);
     }
-
-    static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(DIRECTORY_NAME, directoryName);
-        args.addValue(USER_ID, userId);
-        args.addValue(PARENT_ID, parentId);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Directories (directory_name, user_id, parent_id) VALUES (:directory_name, :user_id, :parent_id)",
-                args, keyHolder, new String[]{DIRECTORY_ID});
-        return (UUID) keyHolder.getKeys().get(DIRECTORY_ID);
-    }
-
     static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(DIRECTORY_NAME, directoryName);
@@ -142,6 +129,10 @@ public class JdbcDaoTestUtils {
         namedParameterJdbcTemplate.update("INSERT INTO Directories (directory_name, user_id, parent_id, visible) VALUES (:directory_name, :user_id, :parent_id, :visible)",
                 args, keyHolder, new String[]{DIRECTORY_ID});
         return (UUID) keyHolder.getKeys().get(DIRECTORY_ID);
+    }
+
+    static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId) {
+        return insertDirectory(namedParameterJdbcTemplate, directoryName, userId, parentId, true);
     }
 
     static UUID insertNote(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID parentId, String name, UUID subjectId, UUID userId, boolean visible, byte[] file, String category, String fileType) {
