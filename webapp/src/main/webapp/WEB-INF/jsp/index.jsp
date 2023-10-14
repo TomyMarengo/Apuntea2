@@ -38,7 +38,7 @@
 
 <main class="h-100-nav container-fluid mt-5">
     <div class="h-100 d-flex flex-column align-items-center gap-3 text-center">
-        <h2><spring:message code="index.title"/></h2>
+        <h2><spring:message code="index.title" arguments='<span class="apuntea-title">Apuntea</span>'/></h2>
         <h4><spring:message code="index.subtitle"/></h4>
 
         <div class="index-cards">
