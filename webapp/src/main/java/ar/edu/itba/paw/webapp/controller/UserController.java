@@ -101,7 +101,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/{userId}/profile/picture", method = RequestMethod.GET, produces = {"image/jpeg", "image/png"})
+    @RequestMapping(value = "/profile/{userId}/picture", method = RequestMethod.GET, produces = {"image/jpeg", "image/png"})
     @ResponseBody
     public byte[] getProfilePicture(@PathVariable("userId") @ValidUuid UUID userId)  {
         return userService.getProfilePicture(userId).orElseGet(() -> {

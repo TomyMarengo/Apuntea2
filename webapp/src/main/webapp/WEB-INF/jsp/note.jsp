@@ -107,7 +107,7 @@
 
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <img src="<c:url  value="${baseUrl}/${note.user.userId}/profile/picture"/>"
+                    <img src="<c:url  value="${baseUrl}/profile/${note.user.userId}/picture"/>"
                          alt="<spring:message code="logotype"/>"
                          style="width: 45px; height: 45px; margin-right: 5px; border-radius: 50%;">
                     <span><strong><c:out value="${note.user.email}"/></strong></span>

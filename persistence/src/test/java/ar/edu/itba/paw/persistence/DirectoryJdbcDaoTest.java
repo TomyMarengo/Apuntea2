@@ -156,8 +156,8 @@ public class DirectoryJdbcDaoTest {
     @Test
     public void testGetFavorites() {
         UUID newDir1 = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
-        UUID newDir2 = insertDirectory(namedParameterJdbcTemplate, "temp2", PEPE_ID, EDA_DIRECTORY_ID);
-        UUID newDir3 = insertDirectory(namedParameterJdbcTemplate, "temp3", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDir2 = insertDirectory(namedParameterJdbcTemplate, "temp2", SAIDMAN_ID, EDA_DIRECTORY_ID);
+        UUID newDir3 = insertDirectory(namedParameterJdbcTemplate, "temp3", SAIDMAN_ID, EDA_DIRECTORY_ID);
         insertFavorite(jdbcFavoriteInsert, newDir1, PEPE_ID);
         insertFavorite(jdbcFavoriteInsert, newDir2, SAIDMAN_ID);
         insertFavorite(jdbcFavoriteInsert, newDir3, PEPE_ID);
@@ -166,6 +166,25 @@ public class DirectoryJdbcDaoTest {
         assertEquals(2, favorites.size());
         favorites.stream().filter(d -> d.getId().equals(newDir1)).findAny().orElseThrow(AssertionError::new);
         favorites.stream().filter(d -> d.getId().equals(newDir3)).findAny().orElseThrow(AssertionError::new);
+    }
+
+    @Test
+    public void testGetFavoritePrivate() {
+        UUID newDir1 = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID, false);
+        UUID newDir2 = insertDirectory(namedParameterJdbcTemplate, "extern1", SAIDMAN_ID, EDA_DIRECTORY_ID, true);
+        UUID newDir3 = insertDirectory(namedParameterJdbcTemplate, "extern2", SAIDMAN_ID, EDA_DIRECTORY_ID, true);
+        UUID newDir4 = insertDirectory(namedParameterJdbcTemplate, "private", SAIDMAN_ID, EDA_DIRECTORY_ID, false);
+        insertFavorite(jdbcFavoriteInsert, newDir1, PEPE_ID);
+        insertFavorite(jdbcFavoriteInsert, newDir2, SAIDMAN_ID);
+        insertFavorite(jdbcFavoriteInsert, newDir3, PEPE_ID);
+        insertFavorite(jdbcFavoriteInsert, newDir4, PEPE_ID);
+
+        List<Directory> favorites = directoryDao.getFavorites(PEPE_ID);
+        assertEquals(2, favorites.size());
+        favorites.stream().filter(d -> d.getId().equals(newDir1)).findAny().orElseThrow(AssertionError::new);
+        favorites.stream().filter(d -> d.getId().equals(newDir2)).findAny().ifPresent(d -> {throw new AssertionError();});
+        favorites.stream().filter(d -> d.getId().equals(newDir3)).findAny().orElseThrow(AssertionError::new);
+        favorites.stream().filter(d -> d.getId().equals(newDir4)).findAny().ifPresent(d -> {throw new AssertionError();});
     }
 
     @Test

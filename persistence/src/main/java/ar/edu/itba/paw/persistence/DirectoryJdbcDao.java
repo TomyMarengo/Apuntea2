@@ -201,7 +201,7 @@ public class DirectoryJdbcDao implements DirectoryDao {
         return namedParameterJdbcTemplate.query("SELECT d.*, u.user_id, u.email FROM Favorites f " +
                 "INNER JOIN Directories d ON d.directory_id = f.directory_id " +
                 "INNER JOIN Users u ON u.user_id = d.user_id " +
-                "WHERE f.user_id = :user_id", args, ROW_MAPPER);
+                "WHERE f.user_id = :user_id AND (d.visible OR d.user_id = :user_id)", args, ROW_MAPPER);
     }
 
     @Override

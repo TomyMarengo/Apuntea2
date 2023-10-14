@@ -55,7 +55,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                                 "/notes/{noteId}",
                                 "/notes/{noteId}/download",
                                 "/directory/{directoryId}",
-                                "/errors/**").permitAll() //TODO restrict permission
+                                "/profile/{userId}/picture",
+                                "/errors/**").permitAll()
                     .antMatchers("/manage/**").hasRole(Role.ROLE_ADMIN.getShortName())
                     .anyRequest().authenticated()
 

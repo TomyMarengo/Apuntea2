@@ -151,7 +151,7 @@
         </ul>
 
         <c:url var="editUserUrl" value="/settings"/>
-        <c:url var="userProfilePicture" value="${baseUrl}/${user.userId}/profile/picture"/>
+        <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
         <c:url var="changePasswordUrl" value="/change-password"/>
         <div class="tab-content">
             <div class="tab-pane fade ${errorsChangePasswordForm == null ? 'show active' : '' }" id="dataTab"

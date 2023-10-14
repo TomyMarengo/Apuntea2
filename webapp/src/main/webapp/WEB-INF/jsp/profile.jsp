@@ -58,7 +58,7 @@
                     <div class="d-none d-lg-flex flex-column">
                         <div class="profile-picture-small mb-3">
                             <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
-                                <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>"
+                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"
                                      alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                     <div class="d-flex d-lg-none justify-content-around align-items-center flex-wrap ">
                         <div class="mb-3 mb-md-0">
                             <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
-                                <img src="<c:url  value="${baseUrl}/${user.userId}/profile/picture"/>"
+                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"
                                      alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
                             </div>
                         </div>
