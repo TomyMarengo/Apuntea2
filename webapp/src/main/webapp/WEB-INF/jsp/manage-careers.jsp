@@ -369,7 +369,7 @@
                     <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                             code="update"/>"/>
                 </div>
-                <input type="hidden" name="subjectId" id="editSubjectId"/>
+                <form:hidden path="subjectId" id="editSubjectId"/>
             </form:form>
         </div>
     </div>
@@ -403,7 +403,7 @@
                                                 code="unlink"/>"/>
                 </div>
 
-                <form:input type="hidden" path="subjectId" id="unlinkSubjectId" value=""/>
+                <form:hidden path="subjectId" id="unlinkSubjectId" value=""/>
 
             </form:form>
         </div>

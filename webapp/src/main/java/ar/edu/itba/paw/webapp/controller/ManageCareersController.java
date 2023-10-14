@@ -129,7 +129,7 @@ public class ManageCareersController {
     ){
         if(result.hasErrors()) {
             redirectAttributes.addFlashAttribute(EDIT_SUBJECT_FORM_BINDING, result);
-            return new ModelAndView("redirect:/manage/areers/"+careerId);
+            return new ModelAndView("redirect:/manage/careers/"+careerId);
         }
         final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
         subjectService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
