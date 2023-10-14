@@ -57,7 +57,7 @@
                                 <spring:message var="registerEmail" code="email"/>
                                 <label for="email"></label>
                                 <form:input path="email" type="email" id="email" class="form-control bg-bg"
-                                            placeholder="${registerEmail}"/>
+                                            placeholder="${registerEmail}" required="true"/>
                                 <form:errors path="email" cssClass="text-danger" element="p"/>
                             </div>
 
@@ -65,7 +65,7 @@
                             <div class="input-group">
                                 <spring:message var="registerPassword" code="password"/>
                                 <form:input path="password" type="password" id="password" class="form-control bg-bg"
-                                            placeholder="${registerPassword}"/>
+                                            placeholder="${registerPassword}" required="true"/>
                                 <span class="input-group-text input-group-icon clickable"
                                       onclick="password_show_hide();">
                                     <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
@@ -94,13 +94,14 @@
 
                                 <form:input path="institutionId" id="institutionId" style="display: none;"/>
 
+                                <label for="institutionAutocomplete"></label>
                                 <div class="input-group">
                                     <div class="autocomplete ">
                                         <spring:message code="search.institution.placeholder"
                                                         var="placeholderInstitution"/>
                                         <input type="text" id="institutionAutocomplete"
                                                class="form-control bg-bg special-radius"
-                                               placeholder="${placeholderInstitution}" autocomplete="off"/>
+                                               placeholder="${placeholderInstitution}" autocomplete="off" required/>
 
                                     </div>
                                     <span class="input-group-text input-group-icon clickable"
@@ -122,13 +123,13 @@
 
                                 <form:input path="careerId" id="careerId" style="display: none;"/>
 
-
+                                <label for="careerAutocomplete"></label>
                                 <div class="input-group">
                                     <div class="autocomplete">
                                         <spring:message code="search.career.placeholder" var="placeholderCareer"/>
                                         <input type="text" id="careerAutocomplete"
                                                class="form-control bg-bg special-radius"
-                                               placeholder="${placeholderCareer}" autocomplete="off"/>
+                                               placeholder="${placeholderCareer}" autocomplete="off" required/>
                                     </div>
                                     <span class="input-group-text input-group-icon clickable" id="eraseCareerButton">
                                         <img src="<c:url value="/svg/cross.svg"/>"

@@ -196,7 +196,7 @@
                             <label for="username"></label>
                             <p><strong><spring:message code="username"/></strong></p>
                             <form:input type="text" name="username" id="username" class="form-control bg-bg"
-                                        placeholder="${settingsUsername}" path="username" value="${user.username}"/>
+                                        placeholder="${settingsUsername}" path="username" value="${user.username}" required="true"/>
                             <form:errors path="username" cssClass="text-danger" element="p"/>
                         </div>
 
@@ -221,7 +221,7 @@
                         <div class="input-group">
                             <spring:message var="settingsOldPassword" code="settings.account.oldPassword"/>
                             <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
-                                        placeholder="${settingsOldPassword}" path="oldPassword" value=""/>
+                                        placeholder="${settingsOldPassword}" path="oldPassword" value="" required="true"/>
                             <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
                                     <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
                                          class="icon-xs fill-dark-primary"/>
@@ -236,7 +236,7 @@
                         <div class="input-group">
                             <spring:message var="settingsNewPassword" code="settings.account.newPassword"/>
                             <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
-                                        placeholder="${settingsNewPassword}" path="newPassword" value=""/>
+                                        placeholder="${settingsNewPassword}" path="newPassword" value="" required="true"/>
                             <span class="input-group-text input-group-icon clickable"
                                   onclick="password_show_hide('2');">
                                     <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"

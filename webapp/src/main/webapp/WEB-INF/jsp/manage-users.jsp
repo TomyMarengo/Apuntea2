@@ -65,7 +65,7 @@
                         <div class="input-group mb-3">
                             <spring:message code="searchUserForm.query" var="placeholderQuery"/>
                             <form:input path="query" type="text" class="form-control bg-bg"
-                                        placeholder="${placeholderQuery}"/>
+                                        placeholder="${placeholderQuery}" required="true"/>
                         </div>
                     </div>
                 </div>

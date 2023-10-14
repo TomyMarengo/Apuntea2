@@ -60,7 +60,7 @@
                                 <spring:message var="codePlaceholder" code="forgotPassword.code"/>
                                 <label for="code"></label>
                                 <form:input path="code" type="text" class="form-control bg-bg" id="code"
-                                            placeholder="${codePlaceholder}" required="required" autofocus="autofocus"/>
+                                            placeholder="${codePlaceholder}" required="true" autofocus="autofocus"/>
                                 <form:errors path="code" cssClass="text-danger" element="p"/>
                                 <c:if test="${invalidCode}">
                                     <p class="text-danger"><spring:message code="Pattern.challengeForm.code"/></p>
@@ -71,7 +71,7 @@
                             <div class="input-group">
                                 <spring:message var="passwordPlaceholder" code="forgotPassword.newPassword"/>
                                 <form:input path="newPassword" type="password" id="password" class="form-control bg-bg"
-                                            placeholder="${passwordPlaceholder}" required="required"/>
+                                            placeholder="${passwordPlaceholder}" required="true"/>
                                 <span class="input-group-text input-group-icon clickable"
                                       onclick="password_show_hide();">
                                     <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"

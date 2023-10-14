@@ -230,11 +230,11 @@
                             <option disabled selected value></option>
                         </select>
                         <form:input path="subjectId" id="linkSubjectId" style="display: none;"/>
-                        <div class="input-group mb-3">
+                        <div class="input-group">
                             <div class="autocomplete">
                                 <spring:message code="linkForm.subject.placeholder" var="placeholderSubject"/>
                                 <input type="text" id="linkSubjectAutocomplete" class="form-control special-radius"
-                                       placeholder="${placeholderSubject}" autocomplete="off"/>
+                                       placeholder="${placeholderSubject}" autocomplete="off" required/>
                             </div>
                             <span class="input-group-text input-group-icon clickable" id="eraseLinkSubjectButton">
                                 <img src="<c:url value="/svg/cross.svg"/>"
@@ -280,7 +280,7 @@
                         aria-label="Close">
                 </button>
             </div>
-            <!-- CREATE NOTE FORM -->
+            <!-- CREATE SUBJECT FORM -->
             <c:url var="createSubjectUrl" value="./${careerId}/createSubject"/>
             <form:form modelAttribute="createSubjectForm"
                        action="${createSubjectUrl}"
@@ -294,7 +294,7 @@
                             <spring:message code="name" var="placeholderName"/>
                             <label class="input-group-text" for="name"><spring:message code="name"/></label>
                             <form:input path="name" type="text" class="form-control" id="createName"
-                                        placeholder="${placeholderName}"/>
+                                        placeholder="${placeholderName}" required="true"/>
                         </div>
 
                         <form:errors path="name" cssClass="text-danger" element="p"/>

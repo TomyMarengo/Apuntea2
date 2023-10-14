@@ -56,14 +56,14 @@
                                 <spring:message var="loginEmail" code="email"/>
                                 <label for="email"></label>
                                 <input type="text" name="email" id="email" class="form-control bg-bg"
-                                       placeholder="${loginEmail}"/>
+                                       placeholder="${loginEmail}" required/>
                             </div>
 
                             <label for="password"></label>
                             <div class="input-group">
                                 <spring:message var="loginPassword" code="password"/>
                                 <input type="password" name="password" id="password" class="form-control bg-bg"
-                                       placeholder="${loginPassword}"/>
+                                       placeholder="${loginPassword}" required/>
                                 <span class="input-group-text input-group-icon clickable"
                                       onclick="password_show_hide();">
                                     <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"

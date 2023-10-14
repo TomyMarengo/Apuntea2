@@ -58,7 +58,7 @@
                                 <label for="email"></label>
                                 <p class="text-sm text-muted mb-2"><spring:message code="forgotPassword.subtitle"/></p>
                                 <form:input path="email" type="email" class="form-control bg-bg mb-2" id="email"
-                                            placeholder="${emailPlaceholder}" required="required"
+                                            placeholder="${emailPlaceholder}" required="true"
                                             autofocus="autofocus"/>
                                 <form:errors path="email" cssClass="text-danger" element="p"/>
                             </div>
@@ -76,10 +76,6 @@
                                            value="${forgotPassword}">
                                 </div>
                             </div>
-                            <%--                            <div class="mb-4">--%>
-                            <%--                                <p class="text-sm text-muted mb-0"><spring:message code="forgotPassword.back"/> <a--%>
-                            <%--                                            href="<c:url value="/login"/>"><spring:message code="forgotPassword.login"/></a></p>--%>
-                            <%--                            </div>--%>
                         </form:form>
                     </div>
                 </div>

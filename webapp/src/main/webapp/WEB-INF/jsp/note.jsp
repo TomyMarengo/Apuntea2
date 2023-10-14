@@ -305,7 +305,7 @@
                                 <label class="input-group-text" for="name"><spring:message
                                         code="name"/></label>
                                 <form:input path="name" type="text"
-                                            class="form-control" id="name"/>
+                                            class="form-control" id="name" required="true"/>
                             </div>
                             <form:errors path="name" cssClass="text-danger" element="p"/>
                             <form:errors cssClass="text-danger" element="p"/> <!-- Global errors -->
@@ -398,7 +398,7 @@
 </c:if>
 <script>
     <c:if test="${noteEdited eq true}">
-        displayToast('<spring:message code="toast.noteEdit"/>')
+        displayToast('<spring:message code="toast.noteEdited"/>')
     </c:if>
     <c:if test="${reviewUploaded eq true}">
         displayToast('<spring:message code="toast.reviewUploaded"/>')

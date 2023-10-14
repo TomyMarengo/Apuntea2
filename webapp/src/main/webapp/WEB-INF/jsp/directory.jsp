@@ -660,7 +660,7 @@
                         <div class="input-group">
                             <label class="input-group-text" for="file"><spring:message
                                     code="file"/></label>
-                            <form:input path="file" type="file" class="form-control" id="file"/>
+                            <form:input path="file" type="file" class="form-control" id="file" required="true"/>
                         </div>
                         <form:errors path="file" cssClass="text-danger" element="p"/>
                     </div>
@@ -670,7 +670,7 @@
                             <label class="input-group-text" for="name"><spring:message
                                     code="name"/></label>
                             <form:input path="name" type="text"
-                                        class="form-control" id="name"/>
+                                        class="form-control" id="name" required="true"/>
                         </div>
                         <form:errors path="name" cssClass="text-danger" element="p"/>
                         <form:errors cssClass="text-danger" element="p"/> <!-- Global errors -->
@@ -750,7 +750,7 @@
                             <label class="input-group-text" for="name"><spring:message
                                     code="name"/></label>
                             <form:input path="name" type="text"
-                                        class="form-control" id="name"/>
+                                        class="form-control" id="name" required="true"/>
                         </div>
                         <form:errors path="name" cssClass="text-danger" element="p"/>
                         <form:errors cssClass="text-danger" element="p"/> <!-- Global errors -->
@@ -834,7 +834,7 @@
                             <label class="input-group-text" for="name"><spring:message
                                     code="name"/></label>
                             <form:input path="name" type="text"
-                                        class="form-control" id="name"/>
+                                        class="form-control" id="name" required="true"/>
                         </div>
                         <form:errors path="name" cssClass="text-danger" element="p"/>
                         <form:errors cssClass="text-danger" element="p"/> <!-- Global errors -->
@@ -914,7 +914,7 @@
                                     code="name"/></label>
                             <!-- TODO: change value JS-->
                             <form:input path="name" type="text"
-                                        class="form-control" id="name"/>
+                                        class="form-control" id="name" required="true"/>
                         </div>
                         <form:errors path="name" cssClass="text-danger" element="p"/>
                         <form:errors cssClass="text-danger" element="p"/> <!-- Global errors -->
