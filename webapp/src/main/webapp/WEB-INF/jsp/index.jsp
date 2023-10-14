@@ -42,24 +42,8 @@
         <h4><spring:message code="index.subtitle"/></h4>
 
         <div class="index-cards">
-            <a href="${baseUrl}/settings" class="call-to-action-card section1">
 
-                <img src="<c:url value="/svg/gears.svg"/>" alt="<spring:message code="search.title"/>"
-                     class="fill-dark-text"/>
-
-                <div class="call-to-action-card-body">
-
-                    <div class="call-to-action-card-title">
-                        <h3><spring:message code="index.card1.title"/></h3>
-                    </div>
-                    <div class="call-to-action-card-text">
-                        <p><spring:message code="index.card1.body"/></p>
-                    </div>
-                </div>
-
-            </a>
-
-            <a href="${baseUrl}/profile" class="call-to-action-card section2">
+            <a href="${baseUrl}/profile" class="call-to-action-card">
 
                 <img src="<c:url value="/svg/add-document.svg"/>" alt="<spring:message code="search.title"/>"
                      class="fill-dark-text"/>
@@ -75,7 +59,15 @@
 
             </a>
 
-            <a href="${baseUrl}/search" class="call-to-action-card section3">
+            <c:if test="${user ne null}">
+                <c:url var="urlParams" value="${baseUrl}/search?institutionId=${user.institution.institutionId}&careerId=${user.career.careerId}"/>
+            </c:if>
+
+            <c:if test="${user eq null}">
+                <c:url var="urlParams" value="${baseUrl}/search"/>
+            </c:if>
+
+            <a href="${urlParams}" class="call-to-action-card">
 
                 <img src="<c:url value="/svg/search-alt.svg"/>" alt="<spring:message code="search.title"/>"
                      class="fill-dark-text"/>
@@ -90,6 +82,44 @@
                 </div>
 
             </a>
+
+            <c:if test="${user != null}">
+                <a href="${baseUrl}/settings" class="call-to-action-card">
+
+                    <img src="<c:url value="/svg/user.svg"/>" alt="<spring:message code="search.title"/>"
+                         class="fill-dark-text"/>
+
+                    <div class="call-to-action-card-body">
+
+                        <div class="call-to-action-card-title">
+                            <h3><spring:message code="index.card1.title.editProfile"/></h3>
+                        </div>
+                        <div class="call-to-action-card-text">
+                            <p><spring:message code="index.card1.body.editProfile"/></p>
+                        </div>
+                    </div>
+
+                </a>
+            </c:if>
+
+            <c:if test="${user == null}">
+                <a href="${baseUrl}/register" class="call-to-action-card">
+
+                    <img src="<c:url value="/svg/users.svg"/>" alt="<spring:message code="search.title"/>"
+                         class="fill-dark-text"/>
+
+                    <div class="call-to-action-card-body">
+
+                        <div class="call-to-action-card-title">
+                            <h3><spring:message code="index.card1.title.register"/></h3>
+                        </div>
+                        <div class="call-to-action-card-text">
+                            <p><spring:message code="index.card1.body.register"/></p>
+                        </div>
+                    </div>
+
+                </a>
+            </c:if>
 
         </div>
     </div>

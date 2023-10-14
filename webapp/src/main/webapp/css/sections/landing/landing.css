@@ -16,7 +16,7 @@ h4 {
 }
 
 .call-to-action-card {
-    height: 300px;
+    height: 350px;
     padding: 1rem 3rem;
     border-radius: 50px;
     display: flex;
@@ -27,29 +27,31 @@ h4 {
     /* transformation scale */
     transition: transform 0.5s ease;
     cursor: pointer;
+    background-color: var(--bg);
 }
 
 .call-to-action-card:hover {
     transform: scale(1.05);
-    border: var(--bg) solid 2px;
+    border: var(--primary) solid 2px;
+    background: var(--light-primary);
+    color: var(--bg);
 }
 
-.call-to-action-card.section1{
-
-    background: linear-gradient(270deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat;
-}
-
-.call-to-action-card.section2{
-    background: linear-gradient(0deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat;
-}
-
-.call-to-action-card.section3{
-    background: linear-gradient(90deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat;
+[data-bs-theme=dark] .call-to-action-card:hover {
+    background: var(--dark-primary);
 }
 
 .call-to-action-card img {
     width: 5rem;
     height: 5rem;
+}
+
+.call-to-action-card:hover img {
+    filter: var(--filter-dark-primary);
+}
+
+[data-bs-theme=dark] .call-to-action-card:hover img {
+    filter: var(--filter-light-primary);
 }
 
 .call-to-action-card-body {
@@ -64,5 +66,35 @@ h4 {
 .call-to-action-card-title {
     font-size: 2em;
     font-weight: bold;
-    color: var(--dark-text);
+    color: var(--text);
+}
+
+.call-to-action-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    text-align: center;
+}
+
+.call-to-action-card:hover p {
+    color: var(--dark-primary);
+}
+
+[data-bs-theme=dark] .call-to-action-card:hover p {
+    color: var(--light-primary);
+}
+
+.call-to-action-card:hover h3 {
+    color: var(--dark-primary);
+}
+
+[data-bs-theme=dark] .call-to-action-card:hover h3 {
+    color: var(--light-primary);
+}
+
+.apuntea-title{
+    font-weight: bold;
+    color: var(--primary);
 }
