@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
+import ar.edu.itba.paw.models.user.ProfilePicture;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.config.TestConfig;
@@ -102,6 +104,24 @@ public class UserJdbcDaoTest {
     }
 
     @Test
+    public void testFindUserById(){
+        String email = "test@itba.edu.ar";
+        UUID studentId = insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
+        Optional<User> maybeUser = userDao.findById(studentId);
+        assertEquals(studentId, maybeUser.get().getUserId());
+        assertEquals(email, maybeUser.get().getEmail());
+        assertEquals(ING_INF, maybeUser.get().getCareer().getCareerId());
+        assertEquals("es", maybeUser.get().getLocale());
+    }
+
+    @Test
+    public void testFindUserByIdNotFound() {
+        UUID userId = UUID.randomUUID();
+        Optional<User> maybeUser = userDao.findById(userId);
+        assertEquals(Optional.empty(), maybeUser);
+    }
+
+    @Test
     public void testUpdate() {
         UUID studentId = insertCompleteStudent(namedParameterJdbcTemplate, "tester@itba.edu.ar", "", ING_INF, "es", "tester", "Test", "Er");
         User user = new User.UserBuilder().userId(studentId).firstName("Testa").lastName("Er").username("tester2001").build();
@@ -127,6 +147,23 @@ public class UserJdbcDaoTest {
     }
 
     @Test
+    public void testUnbanUser() {
+        UUID studentId = insertStudent(namedParameterJdbcTemplate, "student@mail.com", "", ING_INF, "es");
+        UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail.com", "", ING_INF, "es");
+        int firstQtyBanned = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED' AND user_id = '" + studentId + "'");
+        banUser(namedParameterJdbcTemplate, studentId, adminId, LocalDateTime.now().plusDays(10));
+        int secondQtyBanned = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED' AND user_id = '" + studentId + "'");
+        userDao.unbanUser(studentId);
+        int thirdQtyBanned = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED' AND user_id = '" + studentId + "'");
+        assertEquals(0, firstQtyBanned);
+        assertEquals(1, secondQtyBanned);
+        assertEquals(0, thirdQtyBanned);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentId + "' AND status = 'BANNED'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "bans", "user_id = '" + studentId + "' AND admin_id = '" + adminId + "'"));
+
+    }
+
+    @Test
     public void testUnbanUsers() {
         UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail.com", "", ING_INF, "es");
         UUID[] studentIds = new UUID[6];
@@ -145,7 +182,56 @@ public class UserJdbcDaoTest {
             assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentIds[i] + "' AND status = 'ACTIVE'"));
     }
 
-    // TODO: Test profile picture methods?
+    @Test
+    public void testGetProfilePicture() {
+        UUID studentId = insertStudent(namedParameterJdbcTemplate, "student@mail.com", "", ING_INF, "es");
+        byte [] image = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+        insertImage(namedParameterJdbcTemplate, image, studentId);
+        Optional<ProfilePicture> maybePicture = userDao.getProfilePicture(studentId);
+        assertTrue(maybePicture.isPresent());
+        assertEquals(studentId, maybePicture.get().getUserId());
+        assertArrayEquals(image, maybePicture.get().getPicture());
+    }
+
+    @Test
+    public void testGetProfilePictureNotFound() {
+        UUID studentId = insertStudent(namedParameterJdbcTemplate, "student@mail.com", "", ING_INF, "es");
+        Optional<ProfilePicture> maybePicture = userDao.getProfilePicture(studentId);
+        assertTrue(maybePicture.isPresent());
+        assertEquals(studentId, maybePicture.get().getUserId());
+        assertNull(maybePicture.get().getPicture());
+
+    }
+
+    @Test
+    public void testGetProfilePictureUserNotFound() {
+        UUID studentId = UUID.randomUUID();
+        Optional<ProfilePicture> maybePicture = userDao.getProfilePicture(studentId);
+        assertFalse(maybePicture.isPresent());
+    }
+
+
+    @Test
+    public void testUpdateProfilePictureNoPicture(){
+        UUID studentId = insertStudent(namedParameterJdbcTemplate, "student@mail.com", "", ING_INF, "es");
+        byte [] newImage = new byte[]{9, 8, 7, 6, 5, 4, 3, 2, 1};
+        UUID newImageId = userDao.updateProfilePicture(studentId, newImage);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentId + "' AND profile_picture_id = '" + newImageId + "'"));
+
+    }
+
+    @Test
+    public void testUpdateProfilePictureHadPicture(){
+        UUID studentId = insertStudent(namedParameterJdbcTemplate, "student@mail.com", "", ING_INF, "es");
+        byte [] oldImage = new byte[]{9, 8, 7, 6, 5, 4, 3, 2, 1};
+        UUID oldImageId = insertImage(namedParameterJdbcTemplate, oldImage, studentId);
+        byte [] newImage = new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+        UUID newImageId = userDao.updateProfilePicture(studentId, newImage);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentId + "' AND profile_picture_id = '" + oldImageId + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + studentId + "' AND profile_picture_id IS NOT NULL"));
+        assertEquals(1,JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "images", "image_id = '" + newImageId + "'"));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "images", "image_id = '" + oldImageId + "'"));
+    }
 
     @Test
     public void testGetStudents2000Count() {

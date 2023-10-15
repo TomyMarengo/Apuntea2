@@ -83,6 +83,24 @@ public class JdbcDaoTestUtils {
         return (UUID) keyHolder.getKeys().get(USER_ID);
     }
 
+    static UUID insertImage(NamedParameterJdbcTemplate namedParameterJdbcTemplate, byte[] image, UUID userId) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(IMAGE, image);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Images (image) VALUES (:image)",
+                args, keyHolder, new String[]{IMAGE_ID});
+
+        if(userId != null) {
+            args = new MapSqlParameterSource().addValue(USER_ID, userId).addValue(IMAGE_ID, keyHolder.getKeys().get(IMAGE_ID));
+            namedParameterJdbcTemplate.update("UPDATE Users SET profile_picture_id = :image_id WHERE user_id = :user_id", args);
+        }
+
+        return (UUID) keyHolder.getKeys().get(IMAGE_ID);
+
+    }
+
+
     static void banUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID userId, UUID adminId, LocalDateTime endDate) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(USER_ID, userId);

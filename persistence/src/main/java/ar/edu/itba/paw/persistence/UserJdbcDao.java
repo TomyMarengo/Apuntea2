@@ -181,14 +181,17 @@ class UserJdbcDao implements UserDao {
     }
 
     @Override
-    public void updateProfilePicture(UUID userId, byte[] profilePicture) {
+    public UUID updateProfilePicture(UUID userId, byte[] profilePicture) {
         final MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(USER_ID, userId);
         args.addValue(IMAGE, profilePicture);
         KeyHolder holder = new GeneratedKeyHolder();
         jdbcTemplate.update("DELETE FROM Images WHERE image_id = (SELECT profile_picture_id FROM Users WHERE user_id = ?)", userId);
         namedParameterJdbcTemplate.update("INSERT INTO Images (image) VALUES (:image)", args, holder, new String[]{IMAGE_ID});
-        jdbcTemplate.update("UPDATE Users SET profile_picture_id = ? WHERE user_id = ?", holder.getKeys().get(IMAGE_ID), userId);
+        int rows = jdbcTemplate.update("UPDATE Users SET profile_picture_id = ? WHERE user_id = ?", holder.getKeys().get(IMAGE_ID), userId);
+        if(rows == 0)
+            throw new UserNotFoundException();
+        return (UUID) holder.getKeys().get(IMAGE_ID);
     }
 
     @Override

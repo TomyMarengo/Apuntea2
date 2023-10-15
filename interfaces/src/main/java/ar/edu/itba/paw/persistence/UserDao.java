@@ -16,7 +16,7 @@ public interface UserDao {
     Optional<User> findById(UUID userId);
     boolean update(User user);
     Optional<ProfilePicture> getProfilePicture(UUID userId);
-    void updateProfilePicture(UUID userId, byte[] profilePicture);
+    UUID updateProfilePicture(UUID userId, byte[] profilePicture);
     void updatePassword(UUID userId, String password);
     boolean updatePasswordForUserWithEmail(String email, String password);
     int unbanUsers();
