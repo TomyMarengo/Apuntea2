@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -61,11 +60,6 @@ public class SubjectJdbcDao implements SubjectDao {
     }
 
     @Override
-    public List<Subject> getSubjects() {
-        return jdbcTemplate.query("SELECT s.subject_id, s.subject_name FROM Subjects s", ROW_MAPPER);
-    }
-
-    @Override
     public List<Subject> getSubjectsByCareerId(UUID careerId) {
         return jdbcTemplate.query("SELECT DISTINCT s.subject_id, s.subject_name, sc.year, s.root_directory_id FROM Subjects s " +
                 "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id WHERE sc.career_id = ? " +
@@ -84,12 +78,6 @@ public class SubjectJdbcDao implements SubjectDao {
                 ") AND s.subject_id NOT IN (" +
                 "   SELECT target_sc.subject_id FROM Subjects_Careers target_sc WHERE target_sc.career_id = :career_id" +
                 ") ORDER BY s.subject_name", args, ROW_MAPPER);
-    }
-
-    @Override
-    public List<Subject> getSubjectsByInstitutionId(UUID institutionId) {
-        return jdbcTemplate.query("SELECT DISTINCT s.subject_id, s.subject_name FROM Subjects s " +
-                "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id JOIN Careers c on sc.career_id = c.career_id WHERE c.institution_id = ?", ROW_MAPPER, institutionId);
     }
 
     @Override

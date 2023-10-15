@@ -70,16 +70,6 @@ public class SubjectJdbcDaoTest {
         assertNull(subject);
     }
 
-    @Test
-    public void testGetSubjects() {
-        int countSubjects = JdbcTestUtils.countRowsInTable(jdbcTemplate, SUBJECTS);
-
-        List<Subject> subjects = subjectDao.getSubjects();
-
-        assertEquals(countSubjects, subjects.size());
-    }
-
-
     private class TestSubjectsCareersInserts {
         private final UUID i1Id;
         final UUID career1Id, career2Id, career3Id;
@@ -170,31 +160,6 @@ public class SubjectJdbcDaoTest {
 
         assertEquals(0, career3ComplementList.size());
     }
-
-    @Test
-    public void testGetSubjectsByInstitutionId(){
-        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
-
-        List<Subject> institution1SubjectList = subjectDao.getSubjectsByInstitutionId(test.i1Id);
-
-        assertEquals(3, institution1SubjectList.size());
-        assertTrue(institution1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject1Id)));
-        assertTrue(institution1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject2Id)));
-        assertTrue(institution1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject12Id)));
-
-        assertTrue(institution1SubjectList.stream().noneMatch(s -> s.getSubjectId().equals(test.subject3Id)));
-        assertTrue(institution1SubjectList.stream().noneMatch(s -> s.getSubjectId().equals(test.floatingSubjectId)));
-    }
-
-    @Test
-    public void testGetSubjectsByInstitutionIdNonExistentInstitution(){
-        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
-
-        List<Subject> institution1SubjectList = subjectDao.getSubjectsByInstitutionId(test.subject1Id);
-
-        assertEquals(0, institution1SubjectList.size());
-    }
-
 
     @Test
     public void testCreateSuccess(){

@@ -36,11 +36,6 @@ public class SubjectServiceImpl implements SubjectService {
         this.securityService = securityService;
     }
 
-    @Override
-    @Transactional
-    public List<Subject> getSubjects() {
-        return subjectDao.getSubjects();
-    }
 
     @Override
     @Transactional
@@ -66,12 +61,6 @@ public class SubjectServiceImpl implements SubjectService {
     @Transactional
     public List<Subject> getSubjectsByCareerComplemented(UUID careerId) {
         return subjectDao.getSubjectsByCareerIdComplemented(careerId);
-    }
-
-    @Override
-    @Transactional
-    public List<Subject> getSubjectsByInstitution(UUID institutionId) {
-        return subjectDao.getSubjectsByInstitutionId(institutionId);
     }
 
     @Override
