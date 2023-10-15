@@ -125,21 +125,18 @@ class UserJdbcDao implements UserDao {
         int rows = namedParameterJdbcTemplate.update("UPDATE users SET password = :password, career_id = :career_id, locale = :locale WHERE email = :email AND password IS NULL",
                 args);
 
-        UUID userId;
         if (rows == 0) {
-            KeyHolder holder = new GeneratedKeyHolder();
             namedParameterJdbcTemplate.update("INSERT INTO users (email, password, career_id, locale) VALUES (:email, :password, :career_id, :locale)",
-                    args, holder, new String[]{USER_ID} );
-            userId = (UUID) holder.getKeys().get(USER_ID);
+                    args);
         } else {
             LOGGER.warn("Retro-compatible insert: user with email {} updated", email);
-            userId = jdbcTemplate.queryForObject("SELECT user_id FROM users WHERE email = ?", UUID.class, email);
         }
 
-        final Map<String, Object> roleArgs = new HashMap<>();
-        roleArgs.put(USER_ID, userId);
-        roleArgs.put(ROLE_NAME, role.getRole());
-        jdbcRoleInsert.execute(roleArgs);
+        namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) " +
+                "VALUES ((SELECT user_id FROM Users WHERE email = :email), :role_name)",
+                new MapSqlParameterSource()
+                        .addValue(EMAIL, email)
+                        .addValue(ROLE_NAME, role.getRole()));
     }
 
     @Override
