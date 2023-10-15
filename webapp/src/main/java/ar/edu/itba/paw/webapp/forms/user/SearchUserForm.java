@@ -9,7 +9,6 @@ import javax.validation.constraints.Size;
 
 public class SearchUserForm {
     @Size(max = 30)
-    @Pattern(regexp = "[a-zA-Z0-9]*") // TODO: Move regex to utils
     private String query;
 
     @Min(1)
