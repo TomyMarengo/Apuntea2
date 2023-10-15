@@ -113,34 +113,29 @@
 	width: 40px;
 	position: absolute;
 	right: 0;
-	transition: transform 0.4s ease; /* Transición de la propiedad transform */
+	z-index: 1;
 }
 
 .search-input {
 	position: absolute;
 	width: 0;
-	padding: 8px; /* Ajusta el relleno según sea necesario */
+	padding: 8px 12px;
 	border: none;
 	outline: none;
-	background: transparent;
+	background-color: var(--dark-bg);
 	transition: width 0.4s ease, padding-left 0.4s ease; /* Transiciones para el ancho y el padding-left */
 	border-radius: 50px;
 }
 
-.search-container:hover .search-icon {
-	transform: translateX(-160px); /* Mueve la imagen a la izquierda */
-	z-index: 1;
-}
-
 .search-container:hover .search-input {
-	width: 100%; /* Expande el campo de entrada al hacer hover */
-	padding: 8px 12px; /* Ajusta el relleno según sea necesario */
-	background-color: var(--dark-bg);
-	border: 0;
-	padding-left: 40px; /* Añade relleno al lado izquierdo (donde aparece el placeholder) */
+	width: 100%;
 }
 
-.search-container:not(:hover) .search-input {
+.search-input:focus {
+	width: 100%;
+}
+
+.search-container:not(:hover) .search-input:not(:focus){
 	transition: width 0.4s ease, padding-left 0.4s ease, background-color 0.4s ease; /* Agrega una transición inversa */
 	width: 0;
 	padding-left: 0;

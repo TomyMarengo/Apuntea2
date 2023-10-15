@@ -6,6 +6,9 @@ function globalSearch() {
     if (searchTerm !== "") {
         window.location.href = `${baseUrl}/search?word=${encodeURIComponent(searchTerm)}`;
     }
+    else {
+        window.location.href = `${baseUrl}/search`;
+    }
 }
 
 searchButton.addEventListener("click", globalSearch);
