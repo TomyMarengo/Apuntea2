@@ -94,7 +94,16 @@
                 </div>
             </div>
         </div>
+        <c:if test="${career eq null}">
+            <div class="d-flex container mt-4 p-0 justify-content-center">
+                <div class="card box p-4">
+                    <h5 class="text-center"><spring:message code="manageCareers.explanation"/></h5>
+                    <h5 class="text-center"><spring:message code="manageCareers.explanation2"/></h5>
+                </div>
+            </div>
+        </c:if>
     </div>
+
 
     <!-- SIDEBAR -->
     <div class="sidebar">
@@ -113,6 +122,7 @@
         </a>
 
     </div>
+
 
     <c:if test="${career ne null}">
     <!-- TOP BUTTONS -->
