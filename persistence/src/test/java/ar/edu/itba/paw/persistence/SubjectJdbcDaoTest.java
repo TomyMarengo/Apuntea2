@@ -102,7 +102,7 @@ public class SubjectJdbcDaoTest {
     }
 
     @Test
-    public void testGetSubjectsByCareerIdCareer1(){
+    public void testGetSubjectsByCareerId(){
         TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
         List<Subject> career1SubjectList = subjectDao.getSubjectsByCareerId(test.career1Id);
@@ -125,8 +125,6 @@ public class SubjectJdbcDaoTest {
         }
 
     }
-
-
 
     @Test
     public void testGetSubjectsByCareerIdComplemented() {
@@ -171,63 +169,6 @@ public class SubjectJdbcDaoTest {
     }
 
     @Test
-    public void testLinkSubjectToCareer(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-        UUID careedId = ING_INF;
-        boolean result = subjectDao.linkSubjectToCareer(subjectId, careedId, 4);
-
-        assertTrue(result);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careedId + "' AND year = 4"));
-    }
-
-    @Test
-    public void testUpdateSubject(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-
-        boolean result = subjectDao.updateSubject(subjectId, "subject2");
-
-        assertTrue(result);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "' AND subject_name = 'subject2'"));
-    }
-
-    @Test
-    public void testUpdateSubjectCareer(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-        UUID careerId = ING_INF;
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, 3);
-        int year3 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = 3");
-
-        boolean result = subjectDao.updateSubjectCareer(subjectId, careerId, 4);
-
-        assertTrue(result);
-        assertEquals(1, year3);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = 4"));
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = 3"));
-
-
-    }
-
-    @Test
-    public void testUnlinkSubjectFromCareer(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "trash", dirId);
-        UUID careerId = ING_INF;
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, 3);
-        boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = 3") == 1;
-
-        boolean result = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
-
-        assertTrue(result);
-        assertTrue(inserted);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'"));
-    }
-
-
-    @Test
     public void testDelete() {
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject", dirId);
@@ -242,6 +183,84 @@ public class SubjectJdbcDaoTest {
         assertTrue(inserted2);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'"));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject2Id + "'"));
+    }
+
+    @Test
+    public void testUpdateSubject(){
+        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+
+        boolean result = subjectDao.updateSubject(subjectId, "subject2");
+
+        assertTrue(result);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "' AND subject_name = 'subject2'"));
+    }
+
+    @Test
+    public void testLinkSubjectToCareer(){
+        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+        UUID careerId = ING_INF;
+        int year = 4;
+        boolean result = subjectDao.linkSubjectToCareer(subjectId, careerId, year);
+
+        assertTrue(result);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = " + year));
+    }
+
+    @Test
+    public void testLinkSubjectToCareerOtherInstitution() {
+        UUID institution1Id = insertInstitution(namedParameterJdbcTemplate, "i1");
+        UUID institution2Id = insertInstitution(namedParameterJdbcTemplate, "i2");
+
+        UUID career1Id = insertCareer(namedParameterJdbcTemplate, "career1", institution1Id);
+        UUID career2Id = insertCareer(namedParameterJdbcTemplate, "career2", institution2Id);
+
+        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+        insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, career1Id, 1);
+
+        boolean result = subjectDao.linkSubjectToCareer(subjectId, career2Id, 1);
+
+        assertFalse(result);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + career2Id + "'"));
+    }
+
+    @Test
+    public void testUpdateSubjectCareer(){
+        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+        UUID careerId = ING_INF;
+        int oldYear = 3;
+        int newYear = 4;
+        insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, oldYear);
+        int oldCount = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+oldYear);
+
+        boolean result = subjectDao.updateSubjectCareer(subjectId, careerId, newYear);
+
+        assertTrue(result);
+        assertEquals(1, oldCount);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+newYear));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+oldYear));
+
+
+    }
+
+    @Test
+    public void testUnlinkSubjectFromCareer(){
+        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "trash", dirId);
+        UUID careerId = ING_INF;
+        int year = 3;
+        insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, year);
+        boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = " + year) == 1;
+
+        boolean result = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
+
+        assertTrue(result);
+        assertTrue(inserted);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'"));
     }
 
 }

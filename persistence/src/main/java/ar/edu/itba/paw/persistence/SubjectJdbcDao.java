@@ -101,6 +101,14 @@ public class SubjectJdbcDao implements SubjectDao {
     }
 
     @Override
+    public boolean updateSubject(UUID subjectId, String name) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(SUBJECT_ID, subjectId);
+        args.addValue(SUBJECT_NAME, name);
+        return namedParameterJdbcTemplate.update("UPDATE Subjects SET subject_name = :subject_name WHERE subject_id = :subject_id", args) == 1;
+    }
+
+    @Override
     public boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(SUBJECT_ID, subjectId);
@@ -119,14 +127,6 @@ public class SubjectJdbcDao implements SubjectDao {
             }});
         }
         return count == 0;
-    }
-
-    @Override
-    public boolean updateSubject(UUID subjectId, String name) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(SUBJECT_ID, subjectId);
-        args.addValue(SUBJECT_NAME, name);
-        return namedParameterJdbcTemplate.update("UPDATE Subjects SET subject_name = :subject_name WHERE subject_id = :subject_id", args) == 1;
     }
 
     @Override
