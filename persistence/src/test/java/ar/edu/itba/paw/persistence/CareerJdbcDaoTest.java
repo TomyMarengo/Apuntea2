@@ -49,15 +49,6 @@ public class CareerJdbcDaoTest {
     }
 
     @Test
-    public void testGetCareers() {
-        int countCareers = JdbcTestUtils.countRowsInTable(jdbcTemplate, CAREERS);
-
-        List<Career> careers = careerDao.getCareers();
-
-        assertEquals(countCareers, careers.size());
-    }
-
-    @Test
     public void testGetCareerById() {
         UUID careerId = insertCareer(namedParameterJdbcTemplate, "career1", ITBA_ID);
 

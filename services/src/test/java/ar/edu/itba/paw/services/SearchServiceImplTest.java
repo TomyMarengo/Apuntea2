@@ -82,4 +82,54 @@ public class SearchServiceImplTest {
         assertEquals(5, results.getTotalPages());
     }
 
+    @Test
+    public void testNavigationSuccess() {
+        int PAGE_SIZE = 10;
+        int PAGE = 2;
+        int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
+        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
+        Mockito.when(searchDao.countNavigationResults(Mockito.any(), Mockito.any())).thenReturn(TOTAL_RESULTS);
+        Mockito.when(searchDao.getNavigationResults(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
+
+        Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, "date", true, PAGE, PAGE_SIZE);
+
+        assertEquals(TOTAL_RESULTS, results.getTotalResults());
+        assertEquals(PAGE_SIZE, results.getPageSize());
+        assertEquals(PAGE, results.getCurrentPage());
+        assertEquals(5, results.getTotalPages());
+    }
+    @Test
+    public void testNavigationUnderPaged() {
+        final int PAGE_SIZE = 10;
+        final int PAGE = -5;
+        final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
+        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
+        Mockito.when(searchDao.countNavigationResults(Mockito.any(), Mockito.any())).thenReturn(TOTAL_RESULTS);
+        Mockito.when(searchDao.getNavigationResults(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
+
+        Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
+
+        assertEquals(TOTAL_RESULTS, results.getTotalResults());
+        assertEquals(PAGE_SIZE, results.getPageSize());
+        assertEquals(1, results.getCurrentPage());
+        assertEquals(5, results.getTotalPages());
+    }
+
+    @Test
+    public void testNavigationOverPaged() {
+        final int PAGE_SIZE = 10;
+        final int PAGE = 6;
+        final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
+        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
+        Mockito.when(searchDao.countNavigationResults(Mockito.any(), Mockito.any())).thenReturn(TOTAL_RESULTS);
+        Mockito.when(searchDao.getNavigationResults(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
+
+        Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
+
+        assertEquals(TOTAL_RESULTS, results.getTotalResults());
+        assertEquals(PAGE_SIZE, results.getPageSize());
+        assertEquals(results.getTotalPages(), results.getCurrentPage());
+        assertEquals(5, results.getTotalPages());
+    }
+
 }

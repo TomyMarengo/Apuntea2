@@ -22,12 +22,6 @@ public class CareerServiceImpl implements CareerService {
 
     @Transactional
     @Override
-    public List<Career> getCareers() {
-        return careerDao.getCareers();
-    }
-
-    @Transactional
-    @Override
     public Optional<Career> getCareerById(UUID careerId) {
         return careerDao.getCareerById(careerId);
     }

@@ -126,4 +126,11 @@ public class UserServiceImplTest {
         fail();
     }
 
+    @Test(expected = InvalidUserException.class)
+    public void testUnbanUserError() {
+        Mockito.when(userDao.unbanUser(Mockito.any())).thenReturn(false);
+        userService.unbanUser(UUID.randomUUID());
+        fail();
+    }
+
 }

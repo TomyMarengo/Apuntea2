@@ -35,11 +35,6 @@ public class CareerJdbcDao implements CareerDao{
     }
 
     @Override
-    public List<Career> getCareers() {
-        return jdbcTemplate.query("SELECT * FROM Careers", ROW_MAPPER);
-    }
-
-    @Override
     public Optional<Career> getCareerById(UUID careerId) {
         return jdbcTemplate.query("SELECT c.career_id, c.career_name, c.institution_id FROM Careers c WHERE c.career_id = ? "
         , new Object[]{careerId}, INDIVIDUAL_ROW_MAPPER).stream().findFirst();

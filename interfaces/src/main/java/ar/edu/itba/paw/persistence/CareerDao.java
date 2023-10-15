@@ -6,7 +6,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CareerDao {
-    List<Career> getCareers();
 
     Optional<Career> getCareerById(UUID careerId);
 
