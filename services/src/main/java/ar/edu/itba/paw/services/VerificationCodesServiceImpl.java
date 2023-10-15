@@ -1,11 +1,12 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.VerificationCode;
+import ar.edu.itba.paw.persistence.UserDao;
 import ar.edu.itba.paw.persistence.VerificationCodeDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +18,13 @@ import java.util.Random;
 public class VerificationCodesServiceImpl implements VerificationCodesService  {
     private final EmailService emailService;
     private final VerificationCodeDao verificationCodeDao;
+    private final UserDao userDao;
     private	static final Logger LOGGER = LoggerFactory.getLogger(VerificationCodesServiceImpl.class);
     @Autowired
-    public VerificationCodesServiceImpl(EmailService emailService, VerificationCodeDao verificationCodeDao) {
+    public VerificationCodesServiceImpl(EmailService emailService, VerificationCodeDao verificationCodeDao, UserDao userDao) {
         this.emailService = emailService;
         this.verificationCodeDao = verificationCodeDao;
+        this.userDao = userDao;
     }
 
     @Override
@@ -35,8 +38,8 @@ public class VerificationCodesServiceImpl implements VerificationCodesService  {
         verificationCodeDao.saveVerificationCode(verificationCode);
         LOGGER.info("New verification code stored into database for user {}", email);
 
-        final Locale lang = LocaleContextHolder.getLocale();
-        emailService.sendForgotPasswordEmail(verificationCode, lang);
+        String lang = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new).getLocale();
+        emailService.sendForgotPasswordEmail(verificationCode, new Locale(lang));
     }
 
     @Override
