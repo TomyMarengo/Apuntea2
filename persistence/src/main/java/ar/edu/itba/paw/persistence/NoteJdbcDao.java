@@ -41,6 +41,9 @@ public class NoteJdbcDao implements NoteDao {
                     .user(new User.UserBuilder()
                             .userId(UUID.fromString(rs.getString(USER_ID)))
                             .email(rs.getString(EMAIL))
+                            .username(rs.getString(USERNAME))
+                            .firstName(rs.getString(FIRST_NAME))
+                            .lastName(rs.getString(LAST_NAME))
                             .build())
                     .parentId(UUID.fromString(rs.getString(PARENT_ID)))
                     .subject(new Subject(
@@ -160,7 +163,7 @@ public class NoteJdbcDao implements NoteDao {
     public Optional<Note> getNoteById(UUID noteId, UUID currentUserId) {
         MapSqlParameterSource args = new MapSqlParameterSource(NOTE_ID, noteId);
         String query = "SELECT DISTINCT n.note_id, n.note_name, n.parent_id, n.category, n.created_at, n.last_modified_at, n.visible, COALESCE(AVG(r.score), 0) AS avg_score, n.file_type, " +
-                        "u.user_id, u.email, " +
+                        "u.user_id, u.email, u.username, u.first_name, u.last_name, " +
                         "s.subject_id, s.subject_name, s.root_directory_id " +
                         "FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id JOIN Subjects s ON n.subject_id = s.subject_id JOIN Users u ON n.user_id = u.user_id " +
                         "WHERE n.note_id = :note_id AND ( n.visible " + getVisibilityCondition(currentUserId, args) + ") GROUP BY n.note_id, u.user_id, s.subject_id";

@@ -110,7 +110,7 @@
                     <img src="<c:url  value="${baseUrl}/profile/${note.user.userId}/picture"/>"
                          alt="<spring:message code="logotype"/>"
                          style="width: 45px; height: 45px; margin-right: 5px; border-radius: 50%;">
-                    <span><strong><c:out value="${note.user.email}"/></strong></span>
+                    <span><strong><c:out value="${note.user.displayName}"/></strong></span>
                 </div>
                 <div class="mx-2">
                     <c:set var="date" value="${note.createdAt}"/>

@@ -65,7 +65,7 @@
 
                         <!-- User info -->
                         <div class="d-flex flex-column gap-2">
-                            <h4 class="card-title fw-bold">${user.email}</h4>
+                            <h4 class="card-title fw-bold">${user.displayName}</h4>
                             <c:forEach items="${user.roles}" var="r">
                                 <span class="card-text">
                                 <c:choose>
