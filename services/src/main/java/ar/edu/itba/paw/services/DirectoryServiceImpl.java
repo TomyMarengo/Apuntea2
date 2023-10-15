@@ -81,13 +81,15 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Override
     public void addFavorite(UUID directoryId) {
         UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        directoryDao.addFavorite(currentUserId, directoryId);
+        boolean success = directoryDao.addFavorite(currentUserId, directoryId);
+        if (!success) throw new InvalidDirectoryException();
     }
 
     @Transactional
     @Override
-    public boolean removeFavorite(UUID directoryId) {
+    public void removeFavorite(UUID directoryId) {
         UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        return  directoryDao.removeFavorite(currentUserId, directoryId);
+        boolean success = directoryDao.removeFavorite(currentUserId, directoryId);
+        if (!success) throw new InvalidDirectoryException();
     }
 }

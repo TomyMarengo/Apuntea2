@@ -89,7 +89,7 @@ public class DirectoryJdbcDaoTest {
     public void testGetDirectoryByIdPrivate() {
         UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail", "123456",  ING_INF, "es");
         String name = "private static void main";
-        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, true);
+        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, false);
         Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(newDirId, adminId);
         assertFalse(maybeDirectory.isPresent());
     }
@@ -97,7 +97,7 @@ public class DirectoryJdbcDaoTest {
     @Test
     public void testGetDirectoryByIdPrivateOwner() {
         String name = "private static void main";
-        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, true);
+        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, false);
         Directory directory = directoryDao.getDirectoryById(newDirId, PEPE_ID).orElseThrow(AssertionError::new);
         assertEquals(newDirId, directory.getId());
         assertEquals(name, directory.getName());
@@ -336,7 +336,8 @@ public class DirectoryJdbcDaoTest {
     }
     @Test
     public void testAddFavorite() {
-        directoryDao.addFavorite(PEPE_ID, EDA_DIRECTORY_ID);
+        boolean success = directoryDao.addFavorite(PEPE_ID, EDA_DIRECTORY_ID);
+        assertTrue(success);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Favorites", "user_id = '" + PEPE_ID + "' AND directory_id = '" + EDA_DIRECTORY_ID + "'"));
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Favorites", "user_id = '" + SAIDMAN_ID + "' AND directory_id = '" + EDA_DIRECTORY_ID + "'"));
     }

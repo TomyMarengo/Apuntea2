@@ -15,6 +15,6 @@ public interface DirectoryService {
     void delete(UUID[] directoryIds, String reason);
     List<Directory> getFavorites();
     void addFavorite(UUID directoryId);
-    boolean removeFavorite(UUID directoryId);
+    void removeFavorite(UUID directoryId);
 }
 

@@ -190,11 +190,11 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
-    public void addFavorite(UUID userId, UUID directoryId) {
+    public boolean addFavorite(UUID userId, UUID directoryId) {
         HashMap<String, Object> args = new HashMap<>();
         args.put(USER_ID, userId);
         args.put(DIRECTORY_ID, directoryId);
-        jdbcFavoritesInsert.execute(args);
+        return jdbcFavoritesInsert.execute(args) == 1;
     }
 
     @Override
