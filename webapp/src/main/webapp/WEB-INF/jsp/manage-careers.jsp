@@ -210,13 +210,7 @@
      tabindex="-1" aria-labelledby="linkLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="linkLabel"><spring:message
-                        code="linkSubject"/></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                </button>
-            </div>
+
             <!-- LINK SUBJECT FORM -->
             <c:url var="linkSubjectUrl" value="./${careerId}/linkSubject"/>
             <form:form modelAttribute="linkSubjectForm"
@@ -224,6 +218,13 @@
                        method="post"
                        id="linkSubjectForm"
                        class="d-flex flex-column">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="linkLabel"><spring:message
+                            code="linkSubject"/></h1>
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
                 <div class="modal-body pb-0">
                     <div class="d-flex flex-column gap-2">
                         <select id="linkSubjectSelect" style="display: none;">
@@ -257,7 +258,7 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
                     <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
@@ -273,13 +274,6 @@
      tabindex="-1" aria-labelledby="createLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createLabel"><spring:message
-                        code="createSubject"/></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                </button>
-            </div>
             <!-- CREATE SUBJECT FORM -->
             <c:url var="createSubjectUrl" value="./${careerId}/createSubject"/>
             <form:form modelAttribute="createSubjectForm"
@@ -288,6 +282,13 @@
                        autocomplete="off"
                        class="d-flex flex-column"
                        id="createSubjectForm">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="createLabel"><spring:message
+                            code="createSubject"/></h1>
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
                 <div class="modal-body pb-0">
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
@@ -311,7 +312,7 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
                     <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
@@ -327,13 +328,6 @@
      tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editLabel"><spring:message
-                        code="editSubject"/></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                </button>
-            </div>
             <!-- EDIT NOTE FORM -->
             <c:url var="editSubjectUrl" value="./${careerId}/editSubject"/>
             <form:form modelAttribute="editSubjectForm"
@@ -342,6 +336,13 @@
                        autocomplete="off"
                        class="d-flex flex-column"
                        id="editSubjectForm">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editLabel"><spring:message
+                            code="editSubject"/></h1>
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
                 <div class="modal-body pb-0">
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
@@ -363,7 +364,7 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
                     <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
@@ -381,12 +382,14 @@
      tabindex="-1" aria-labelledby="unlinkLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
-            <form:form id="unlinkSubjectForm" method="POST" action="${unlinkSubjectUrl}"
-                       modelAttribute="unlinkSubjectForm">
+            <form:form modelAttribute="unlinkSubjectForm"
+                       action="${unlinkSubjectUrl}"
+                        method="POST"
+                        id="unlinkSubjectForm">
                 <div class="modal-header">
                     <h3 class="modal-title fs-5" id="unlinkLabel"><spring:message code="unlinkForm.description"/> :
                         <span id="unlinkSubjectName"></span></h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
                             aria-label="Close">
                     </button>
                 </div>
@@ -396,7 +399,7 @@
                 </div>
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
                     <input id="unlinkSelectedButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message

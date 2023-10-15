@@ -211,7 +211,7 @@
                     <h3 class="modal-title fs-5" id="banUserLabel"><spring:message code="banUser"/> :
                         <span id="banUserName"></span></h3>
 
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
                             aria-label="Close">
                     </button>
                 </div>
@@ -228,7 +228,7 @@
 
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
                     <input id="banUserButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message

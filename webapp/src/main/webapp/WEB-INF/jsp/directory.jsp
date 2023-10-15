@@ -638,13 +638,6 @@
      tabindex="-1" aria-labelledby="uploadLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="uploadLabel"><spring:message
-                        code="uploadNote"/></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                </button>
-            </div>
             <form:form modelAttribute="createNoteForm"
                        action="${createUrl}"
                        method="post"
@@ -652,6 +645,13 @@
                        autocomplete="off"
                        class="d-flex flex-column"
                        id="createNoteForm">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="uploadLabel"><spring:message
+                            code="uploadNote"/></h1>
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
                 <div class="modal-body pb-0">
                     <!-- CREATE NOTE FORM -->
 
@@ -715,7 +715,7 @@
                     <input type="hidden" name="createNote" value="createNote"/>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
                     <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
@@ -732,13 +732,6 @@
      tabindex="-1" aria-labelledby="createLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="createLabel"><spring:message
-                        code="createDirectory"/></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                </button>
-            </div>
             <form:form modelAttribute="createDirectoryForm"
                        action="${createUrl}"
                        method="post"
@@ -746,6 +739,13 @@
                        autocomplete="off"
                        class="d-flex flex-column"
                        id="createDirectoryForm">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="createLabel"><spring:message
+                            code="createDirectory"/></h1>
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
                 <div class="modal-body pb-0">
 
                     <div class="d-flex flex-column gap-2">
@@ -792,7 +792,7 @@
                     <input type="hidden" name="createDirectory" value="createDirectory"/>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/>
                     </button>
@@ -814,13 +814,6 @@
      tabindex="-1" aria-labelledby="editNoteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editNoteLabel"><spring:message
-                        code="editNote"/></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                </button>
-            </div>
             <form:form modelAttribute="editNoteForm"
                        action="${editNoteUrl}"
                        method="post"
@@ -828,6 +821,13 @@
                        autocomplete="off"
                        class="d-flex flex-column"
                        id="editNoteForm">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editNoteLabel"><spring:message
+                            code="editNote"/></h1>
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
                 <div class="modal-body pb-0">
                     <!-- EDIT NOTE FORM -->
 
@@ -873,7 +873,7 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
                     <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
@@ -893,13 +893,7 @@
      tabindex="-1" aria-labelledby="editDirectoryLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editDirectoryLabel"><spring:message
-                        code="editDirectory"/></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                </button>
-            </div>
+
             <form:form modelAttribute="editDirectoryForm"
                        action=""
                        method="post"
@@ -907,10 +901,15 @@
                        autocomplete="off"
                        class="d-flex flex-column"
                        id="editDirectoryForm">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="editDirectoryLabel"><spring:message
+                            code="editDirectory"/></h1>
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
                 <div class="modal-body pb-0">
                     <!-- EDIT DIRECTORY FORM -->
-
-
                     <div class="d-flex flex-column gap-2">
                         <div class="input-group">
                             <label class="input-group-text" for="name"><spring:message
@@ -955,7 +954,7 @@
                 </div>
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
                     <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
@@ -977,13 +976,13 @@
      tabindex="-1" aria-labelledby="deleteLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteLabel"><spring:message code="delete"/></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                </button>
-            </div>
             <form:form modelAttribute="deleteWithReasonForm" id="deleteForm" method="POST" action="${deleteUrl}">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteLabel"><spring:message code="delete"/></h1>
+                    <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
+                            aria-label="Close">
+                    </button>
+                </div>
                 <div class="modal-body pb-0 d-flex flex-column">
                     <spring:message code="DeleteForm.description"/>
                     <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
@@ -998,7 +997,7 @@
                 <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-primary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
                     <input id="deleteSelectedButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message

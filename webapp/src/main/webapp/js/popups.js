@@ -8,3 +8,11 @@ function displayToast(message){
     toastBootstrap.show();
 }
 
+document.querySelectorAll('.close-modal').forEach((element) => {
+    element.addEventListener('click', () => {
+        const form = element.closest('form');
+        if (form.querySelector('.text-danger:not(.d-none)')) {
+            location.reload();
+        }
+    });
+});
