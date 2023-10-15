@@ -72,12 +72,6 @@ public class DirectoryServiceImpl implements DirectoryService{
 
     @Transactional
     @Override
-    public List<Directory> getRootDirectoriesByCurrentUserCareer() {
-        return directoryDao.getRootDirectoriesByCareer(securityService.getCurrentUserOrThrow().getCareer().getCareerId());
-    }
-
-    @Transactional
-    @Override
     public List<Directory> getFavorites() {
         UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
         return directoryDao.getFavorites(currentUserId);

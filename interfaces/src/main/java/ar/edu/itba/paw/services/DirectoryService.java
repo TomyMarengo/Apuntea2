@@ -13,7 +13,6 @@ public interface DirectoryService {
     DirectoryPath getDirectoryPath(UUID directoryId);
     void update(Directory directory);
     void delete(UUID[] directoryIds, String reason);
-    List<Directory> getRootDirectoriesByCurrentUserCareer();
     List<Directory> getFavorites();
     void addFavorite(UUID directoryId);
     boolean removeFavorite(UUID directoryId);

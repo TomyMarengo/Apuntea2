@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -20,7 +19,7 @@ import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,18 +36,10 @@ public class NoteJdbcDaoTest {
     private NoteJdbcDao noteDao;
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private SimpleJdbcInsert jdbcNoteInsert;
-    private SimpleJdbcInsert jdbcDirectoryInsert;
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
         namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
-        jdbcNoteInsert = new SimpleJdbcInsert(ds)
-                .withTableName(NOTES)
-                .usingColumns(NOTE_ID, NOTE_NAME, USER_ID, SUBJECT_ID, PARENT_ID, VISIBLE, CATEGORY, FILE_TYPE);
-        jdbcDirectoryInsert = new SimpleJdbcInsert(ds)
-                .withTableName(DIRECTORIES)
-                .usingColumns(DIRECTORY_ID, DIRECTORY_NAME, USER_ID, PARENT_ID);
     }
 
 
@@ -119,30 +110,17 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testDeleteMany() {
-        UUID[] noteIds = {TMP_NOTE_ID_1, TMP_NOTE_ID_2, TMP_NOTE_ID_3, TMP_NOTE_ID_4};
+        List<UUID> noteIds = new ArrayList<>();
         String[] names = {"tmp1", "tmp2", "tmp3", "tmp4"};
-        jdbcDirectoryInsert.execute(new HashMap<String, Object>(){{
-            put(DIRECTORY_ID, TMP_PARENT_DIR_ID);
-            put(DIRECTORY_NAME, "tmp");
-            put(USER_ID, PEPE_ID);
-            put(PARENT_ID, EDA_DIRECTORY_ID);
-        }});
-        HashMap<String, Object> args = new HashMap<String, Object>(){{
-            put(USER_ID, PEPE_ID);
-            put(SUBJECT_ID, EDA_ID);
-            put(PARENT_ID, TMP_PARENT_DIR_ID);
-            put(VISIBLE, true);
-            put(CATEGORY, "practice");
-            put(FILE_TYPE, "pdf");
-        }};
-        for (int i = 0; i < noteIds.length; i++) {
-            args.put(NOTE_NAME, names[i]);
-            args.put(NOTE_ID, noteIds[i]);
-            jdbcNoteInsert.execute(args);
+        UUID[] ids = new UUID[names.length];
+        UUID parentId = insertDirectory(namedParameterJdbcTemplate, "tmpParent", PEPE_ID, EDA_DIRECTORY_ID);
+        for (String name : names) {
+            UUID newDirId = insertNote(namedParameterJdbcTemplate, parentId, name, EDA_ID, PEPE_ID, true, new byte[]{1, 2, 3}, "practice", "jpg");
+            noteIds.add(newDirId);
         }
-        int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + TMP_PARENT_DIR_ID + "'");
-        noteDao.delete(noteIds, PEPE_ID);
-        int countPostDelete = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + TMP_PARENT_DIR_ID + "'");
+        int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parentId + "'");
+        noteDao.delete(noteIds.toArray(ids), PEPE_ID);
+        int countPostDelete = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parentId + "'");
         assertEquals(4, countInserted);
         assertEquals(0, countPostDelete);
     }

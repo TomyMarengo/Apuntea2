@@ -11,17 +11,17 @@ public interface DirectoryDao {
     UUID create(String name, UUID parentId, UUID userId, boolean visible, String iconColor);
 
     UUID createRootDirectory(String name);
+
+    Optional<Directory> getDirectoryById(UUID directoryId, UUID currentUserId);
     DirectoryPath getDirectoryPath(UUID directoryId);
 
     boolean update(Directory directory, UUID currentUserId);
-    Optional<Directory> getDirectoryById(UUID directoryId, UUID currentUserId);
 
     boolean delete(UUID[] directoryIds, UUID currentUserId);
 
     List<Directory> delete(UUID[] directoryId); // Strong delete
 
     boolean deleteRootDirectory(UUID directoryId);
-    List<Directory> getRootDirectoriesByCareer(UUID careerId);
 
     List<Directory> getFavorites(UUID userId);
 

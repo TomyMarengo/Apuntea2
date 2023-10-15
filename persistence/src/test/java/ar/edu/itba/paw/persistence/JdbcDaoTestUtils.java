@@ -36,18 +36,6 @@ public class JdbcDaoTestUtils {
     static UUID MATE_ID = UUID.fromString("50000000-0000-0000-0000-000000000005");
     static UUID TVM_ID = UUID.fromString("a0000000-0000-0000-0000-000000000006");
 
-
-    //inserted in test
-    static UUID TMP_PARENT_DIR_ID = UUID.fromString("dF000000-0000-0000-0000-000000000000");
-    static UUID TMP_NOTE_ID_1 = UUID.fromString("aF000000-0000-0000-0000-000000000001");
-    static UUID TMP_NOTE_ID_2 = UUID.fromString("aF000000-0000-0000-0000-000000000002");
-    static UUID TMP_NOTE_ID_3 = UUID.fromString("aF000000-0000-0000-0000-000000000003");
-    static UUID TMP_NOTE_ID_4 = UUID.fromString("aF000000-0000-0000-0000-000000000004");
-    
-    static UUID TMP_DIR_ID_1 = UUID.fromString("dF000000-0000-0000-0000-000000000001");
-    static UUID TMP_DIR_ID_2 = UUID.fromString("dF000000-0000-0000-0000-000000000002");
-    static UUID TMP_DIR_ID_3 = UUID.fromString("dF000000-0000-0000-0000-000000000003");
-    static UUID TMP_DIR_ID_4 = UUID.fromString("dF000000-0000-0000-0000-000000000004");
     private JdbcDaoTestUtils() {}
 
     static UUID insertStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
@@ -128,17 +116,23 @@ public class JdbcDaoTestUtils {
         namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
         return (UUID) keyHolder.getKeys().get(USER_ID);
     }
-    static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible) {
+
+    static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible, String iconColor) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(DIRECTORY_NAME, directoryName);
         args.addValue(USER_ID, userId);
         args.addValue(PARENT_ID, parentId);
         args.addValue(VISIBLE, visible);
+        args.addValue(ICON_COLOR, iconColor);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Directories (directory_name, user_id, parent_id, visible) VALUES (:directory_name, :user_id, :parent_id, :visible)",
+        namedParameterJdbcTemplate.update("INSERT INTO Directories (directory_name, user_id, parent_id, visible, icon_color) VALUES (:directory_name, :user_id, :parent_id, :visible, :icon_color)",
                 args, keyHolder, new String[]{DIRECTORY_ID});
         return (UUID) keyHolder.getKeys().get(DIRECTORY_ID);
+    }
+
+    static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible) {
+        return insertDirectory(namedParameterJdbcTemplate, directoryName, userId, parentId, visible, "BBBBBB");
     }
 
     static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId) {

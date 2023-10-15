@@ -180,16 +180,6 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
-    public List<Directory> getRootDirectoriesByCareer(UUID careerId) {
-        return jdbcTemplate.query("SELECT DISTINCT d.directory_id, d.directory_name, d.parent_id FROM Directories d " +
-                "INNER JOIN Subjects s ON s.root_directory_id = d.directory_id " +
-                "INNER JOIN Subjects_Careers sc ON sc.subject_id = s.subject_id " +
-                "INNER JOIN Careers c ON c.career_id = sc.career_id " +
-                "WHERE c.career_id = ? " +
-                "GROUP BY d.directory_id", LIMITED_ROW_MAPPER, careerId);
-    }
-
-    @Override
     public List<Directory> getFavorites(UUID userId) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(USER_ID, userId);
