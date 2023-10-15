@@ -6,13 +6,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,6 +35,7 @@ public class CareerJdbcDaoTest {
     @Autowired
     private CareerJdbcDao careerDao;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
     private SimpleJdbcInsert jdbcSubjectsCareersInsert;
 
@@ -39,9 +43,19 @@ public class CareerJdbcDaoTest {
     @Before
     public void setUp() {
         namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
+        jdbcTemplate = new JdbcTemplate(ds);
         jdbcSubjectsCareersInsert = new SimpleJdbcInsert(ds)
                 .withTableName(SUBJECTS_CAREERS)
                 .usingColumns(SUBJECT_ID, CAREER_ID, YEAR);
+    }
+
+    @Test
+    public void testGetCareers() {
+        int countCareers = JdbcTestUtils.countRowsInTable(jdbcTemplate, CAREERS);
+
+        List<Career> careers = careerDao.getCareers();
+
+        assertEquals(countCareers, careers.size());
     }
 
     @Test
@@ -57,32 +71,54 @@ public class CareerJdbcDaoTest {
     }
 
     @Test
+    public void testGetCareerByIdNotExisting() {
+        UUID careerId = UUID.randomUUID();
+
+        Optional<Career> maybeCareer = careerDao.getCareerById(careerId);
+
+        assertFalse(maybeCareer.isPresent());
+    }
+
+    private class TestCountCareersBySubjectInserts {
+        private final UUID subject1Id;
+        private final UUID subject3Id;
+        private TestCountCareersBySubjectInserts() {
+            UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+
+            UUID s1Career1Id = insertCareer(namedParameterJdbcTemplate, "s1career1", ITBA_ID);
+            UUID s1Career2Id = insertCareer(namedParameterJdbcTemplate, "s1career2", ITBA_ID);
+            UUID s12Career1Id = insertCareer(namedParameterJdbcTemplate, "s12career1", ITBA_ID);
+            UUID s12Career2Id = insertCareer(namedParameterJdbcTemplate, "s12career2", ITBA_ID);
+            UUID s2Career1Id = insertCareer(namedParameterJdbcTemplate, "s2career1", ITBA_ID);
+
+            subject1Id = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+            UUID subject2Id = insertSubject(namedParameterJdbcTemplate, "subject2", dirId);
+            subject3Id = insertSubject(namedParameterJdbcTemplate, "subject3", dirId);
+
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, s1Career1Id, 1);
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, s1Career2Id, 1);
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, s12Career1Id, 1);
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, s12Career2Id, 1);
+
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject2Id, s2Career1Id, 1);
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject2Id, s12Career1Id, 1);
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject2Id, s12Career2Id, 1);
+        }
+    }
+
+    @Test
     public void testCountCareersBySubjectId() {
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID career1Id = insertCareer(namedParameterJdbcTemplate, "career1", ITBA_ID);
-        UUID career2Id = insertCareer(namedParameterJdbcTemplate, "career2", ITBA_ID);
-        UUID career3Id = insertCareer(namedParameterJdbcTemplate, "career3", ITBA_ID);
-        UUID career4Id = insertCareer(namedParameterJdbcTemplate, "career4", ITBA_ID);
-        UUID career5Id = insertCareer(namedParameterJdbcTemplate, "career5", ITBA_ID);
+        TestCountCareersBySubjectInserts test = new TestCountCareersBySubjectInserts();
+        int qtyBySubject1 = careerDao.countCareersBySubjectId(test.subject1Id);
 
-        UUID subject1Id = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-        UUID subject2Id = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-        UUID subject3Id = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+        assertEquals(4, qtyBySubject1);
+    }
 
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, career1Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, career3Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, career5Id, 1);
+    @Test
+    public void testCountCareersBySubjectIdEmpty() {
+        TestCountCareersBySubjectInserts test = new TestCountCareersBySubjectInserts();
+        int qtyBySubject3 = careerDao.countCareersBySubjectId(test.subject3Id);
 
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subject2Id, career2Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subject2Id, career3Id, 1);
-
-        int qtySubject1 = careerDao.countCareersBySubjectId(subject1Id);
-        int qtySubject2 = careerDao.countCareersBySubjectId(subject2Id);
-        int qtySubject3 = careerDao.countCareersBySubjectId(subject3Id);
-
-        assertEquals(3, qtySubject1);
-        assertEquals(2, qtySubject2);
-        assertEquals(0, qtySubject3);
-
+        assertEquals(0, qtyBySubject3);
     }
 }

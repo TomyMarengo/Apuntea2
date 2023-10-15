@@ -80,13 +80,13 @@ public class SubjectJdbcDaoTest {
     }
 
 
-    private static class TestSubjectsCareersInserts {
+    private class TestSubjectsCareersInserts {
         private final UUID i1Id;
         final UUID career1Id, career2Id, career3Id;
 
         final UUID subject1Id, subject2Id, subject12Id, subject3Id, floatingSubjectId;
 
-        private TestSubjectsCareersInserts(NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert jdbcSubjectsCareersInsert) {
+        private TestSubjectsCareersInserts() {
             i1Id = insertInstitution(namedParameterJdbcTemplate, "i1");
 
             UUID i2Id = insertInstitution(namedParameterJdbcTemplate, "i2");
@@ -113,7 +113,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testGetSubjectsByCareerIdCareer1(){
-        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
         List<Subject> career1SubjectList = subjectDao.getSubjectsByCareerId(test.career1Id);
 
@@ -140,7 +140,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testGetSubjectsByCareerIdComplemented() {
-        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
         List<Subject> career1ComplementList = subjectDao.getSubjectsByCareerIdComplemented(test.career1Id);
 
@@ -155,7 +155,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testGetSubjectsByCareerIdComplementedLoneCareer() {
-        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
         List<Subject> career3ComplementList = subjectDao.getSubjectsByCareerIdComplemented(test.career3Id);
 
@@ -164,7 +164,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testGetSubjectByCareerIdComplementedNonExistentCareer() {
-        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
         List<Subject> career3ComplementList = subjectDao.getSubjectsByCareerIdComplemented(test.i1Id);
 
@@ -173,7 +173,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testGetSubjectsByInstitutionId(){
-        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
         List<Subject> institution1SubjectList = subjectDao.getSubjectsByInstitutionId(test.i1Id);
 
@@ -188,7 +188,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testGetSubjectsByInstitutionIdNonExistentInstitution(){
-        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
         List<Subject> institution1SubjectList = subjectDao.getSubjectsByInstitutionId(test.subject1Id);
 
