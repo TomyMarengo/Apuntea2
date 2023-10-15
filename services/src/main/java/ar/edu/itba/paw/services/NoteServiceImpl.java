@@ -37,13 +37,6 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public UUID createNoteWithSubject(String name, UUID subjectId, boolean visible, MultipartFile file, String category) throws IOException {
-        UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-        return noteDao.create(name, subjectId, userId, visible, file.getBytes(), category, FilenameUtils.getExtension(file.getOriginalFilename()));
-    }
-
-    @Transactional
-    @Override
     public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
         UUID subjectId = directoryDao.getDirectoryPath(parentId)

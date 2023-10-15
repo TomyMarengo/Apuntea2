@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.UserStatus;
@@ -70,6 +71,15 @@ public class ServiceTestUtils {
                 .name(name)
                 .parentId(EDA_DIRECTORY_ID)
                 .visible(true)
+                .build();
+    }
+
+    static Directory mockRootDirectory(String name) {
+        return new Directory.DirectoryBuilder()
+                .directoryId(UUID.randomUUID())
+                .name(name)
+                .parentId(EDA_DIRECTORY_ID)
+                .subject(new Subject(EDA_ID, "EDA"))
                 .build();
     }
 }

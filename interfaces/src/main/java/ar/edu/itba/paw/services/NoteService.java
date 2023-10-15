@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface NoteService {
-    UUID createNoteWithSubject(String name, UUID subjectId, boolean visible, MultipartFile file, String category) throws IOException;
     UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category);
     Optional<Note> getNoteById(UUID noteId);
     Optional<NoteFile> getNoteFileById(UUID noteId);
