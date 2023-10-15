@@ -21,8 +21,6 @@ import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
@@ -64,76 +62,68 @@ public class SubjectJdbcDaoTest {
     }
 
     @Test
-    public void testGetSubjectsByCareerId(){
-        UUID i1Id = insertInstitution(namedParameterJdbcTemplate, "i1");
-
-        UUID i2Id = insertInstitution(namedParameterJdbcTemplate, "i2");
-
-        UUID career1Id = insertCareer(namedParameterJdbcTemplate, "career1", i1Id);
-        UUID career2Id = insertCareer(namedParameterJdbcTemplate, "career2", i1Id);
-
-        UUID career3Id = insertCareer(namedParameterJdbcTemplate, "career3", i2Id);
-
-
+    public void testGetSubjectByIdNonExistent(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID c1s1Id = insertSubject(namedParameterJdbcTemplate, "c1s1", dirId);
-        UUID c1s2Id = insertSubject(namedParameterJdbcTemplate, "c1s2", dirId);
-        UUID c1s3Id = insertSubject(namedParameterJdbcTemplate, "c1s3", dirId);
 
-        UUID c2s1Id = insertSubject(namedParameterJdbcTemplate, "c2s1", dirId);
-        UUID c2s2Id = insertSubject(namedParameterJdbcTemplate, "c2s2", dirId);
+        Subject subject = subjectDao.getSubjectById(dirId).orElse(null);
 
-        UUID c12s1Id = insertSubject(namedParameterJdbcTemplate, "c12s1", dirId);
-        UUID c12s2Id = insertSubject(namedParameterJdbcTemplate, "c12s1", dirId);
+        assertNull(subject);
+    }
 
-        UUID c3s1Id = insertSubject(namedParameterJdbcTemplate, "c3s1", dirId);
-        UUID c3s2Id = insertSubject(namedParameterJdbcTemplate, "c3s2", dirId);
+    @Test
+    public void testGetSubjects() {
+        int countSubjects = JdbcTestUtils.countRowsInTable(jdbcTemplate, SUBJECTS);
 
-        UUID nos1Id = insertSubject(namedParameterJdbcTemplate, "ns1", dirId);
-        UUID nos2Id = insertSubject(namedParameterJdbcTemplate, "ns2", dirId);
+        List<Subject> subjects = subjectDao.getSubjects();
+
+        assertEquals(countSubjects, subjects.size());
+    }
 
 
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c1s1Id, career1Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c1s2Id, career1Id, 2);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c1s3Id, career1Id, 3);
+    private static class TestSubjectsCareersInserts {
+        private final UUID i1Id;
+        final UUID career1Id, career2Id, career3Id;
 
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c2s1Id, career2Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c2s2Id, career2Id, 2);
+        final UUID subject1Id, subject2Id, subject12Id, subject3Id, floatingSubjectId;
 
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s1Id, career1Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s1Id, career2Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s2Id, career1Id, 2);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s2Id, career2Id, 2);
+        private TestSubjectsCareersInserts(NamedParameterJdbcTemplate namedParameterJdbcTemplate, SimpleJdbcInsert jdbcSubjectsCareersInsert) {
+            i1Id = insertInstitution(namedParameterJdbcTemplate, "i1");
 
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c3s1Id, career3Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c3s2Id, career3Id, 2);
+            UUID i2Id = insertInstitution(namedParameterJdbcTemplate, "i2");
 
-        List<Subject> c1sList = subjectDao.getSubjectsByCareerId(career1Id);
-        List<Subject> c2sList = subjectDao.getSubjectsByCareerId(career2Id);
-        List<Subject> c3sList = subjectDao.getSubjectsByCareerId(career3Id);
+            career1Id = insertCareer(namedParameterJdbcTemplate, "career1", i1Id);
+            career2Id = insertCareer(namedParameterJdbcTemplate, "career2", i1Id);
+            career3Id = insertCareer(namedParameterJdbcTemplate, "career3", i2Id);
 
-        List<UUID> c1sIds = Stream.of(c1s1Id, c1s2Id, c1s3Id, c12s1Id, c12s2Id).collect(Collectors.toList());
-        List<UUID> c2sIds = Stream.of(c2s1Id, c2s2Id, c12s1Id, c12s2Id).collect(Collectors.toList());
-        List<UUID> c3sIds = Stream.of(c3s1Id, c3s2Id).collect(Collectors.toList());
-        List<UUID> nosIds = Stream.of(nos1Id, nos2Id).collect(Collectors.toList());
+            UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
 
-        assertEquals(5, c1sList.size());
-        assertEquals(4, c2sList.size());
-        assertEquals(2, c3sList.size());
+            subject1Id = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+            subject2Id = insertSubject(namedParameterJdbcTemplate, "subject2", dirId);
+            subject12Id = insertSubject(namedParameterJdbcTemplate, "subject12", dirId);
+            subject3Id = insertSubject(namedParameterJdbcTemplate, "subject3", dirId);
+            floatingSubjectId = insertSubject(namedParameterJdbcTemplate, "floating subject", dirId);
 
-        assertTrue(c1sList.stream().allMatch(s -> c1sIds.contains(s.getSubjectId())));
-        assertTrue(c2sList.stream().allMatch(s -> c2sIds.contains(s.getSubjectId())));
-        assertTrue(c3sList.stream().allMatch(s -> c3sIds.contains(s.getSubjectId())));
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, career1Id, 1);
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject2Id, career2Id, 1);
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject12Id, career1Id, 1);
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject12Id, career2Id, 1);
+            insertSubjectCareer(jdbcSubjectsCareersInsert, subject3Id, career3Id, 1);
+        }
+    }
 
-        assertTrue(c1sList.stream().noneMatch(s -> nosIds.contains(s.getSubjectId())));
-        assertTrue(c2sList.stream().noneMatch(s -> nosIds.contains(s.getSubjectId())));
-        assertTrue(c3sList.stream().noneMatch(s -> nosIds.contains(s.getSubjectId())));
+    @Test
+    public void testGetSubjectsByCareerIdCareer1(){
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
 
-        assertTrue(c1sList.stream().noneMatch(s -> c3sIds.contains(s.getSubjectId())));
-        assertTrue(c2sList.stream().noneMatch(s -> c3sIds.contains(s.getSubjectId())));
+        List<Subject> career1SubjectList = subjectDao.getSubjectsByCareerId(test.career1Id);
 
-        assertTrue(c3sList.stream().noneMatch(s -> c1sIds.contains(s.getSubjectId())));
-        assertTrue(c3sList.stream().noneMatch(s -> c2sIds.contains(s.getSubjectId())));
+        assertEquals(2, career1SubjectList.size());
+        assertTrue(career1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject1Id)));
+        assertTrue(career1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject12Id)));
+
+        assertTrue(career1SubjectList.stream().noneMatch(s -> s.getSubjectId().equals(test.subject2Id)));
+        assertTrue(career1SubjectList.stream().noneMatch(s -> s.getSubjectId().equals(test.subject3Id)));
+        assertTrue(career1SubjectList.stream().noneMatch(s -> s.getSubjectId().equals(test.floatingSubjectId)));
     }
 
     @Test
@@ -146,144 +136,65 @@ public class SubjectJdbcDaoTest {
 
     }
 
+
+
     @Test
     public void testGetSubjectsByCareerIdComplemented() {
-        UUID i1Id = insertInstitution(namedParameterJdbcTemplate, "i1");
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
 
-        UUID i2Id = insertInstitution(namedParameterJdbcTemplate, "i2");
+        List<Subject> career1ComplementList = subjectDao.getSubjectsByCareerIdComplemented(test.career1Id);
 
-        UUID career1Id = insertCareer(namedParameterJdbcTemplate, "career1", i1Id);
-        UUID career2Id = insertCareer(namedParameterJdbcTemplate, "career2", i1Id);
+        assertEquals(1, career1ComplementList.size());
+        assertTrue(career1ComplementList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject2Id)));
 
-        UUID career3Id = insertCareer(namedParameterJdbcTemplate, "career3", i2Id);
-
-
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID c1s1Id = insertSubject(namedParameterJdbcTemplate, "c1s1", dirId);
-        UUID c1s2Id = insertSubject(namedParameterJdbcTemplate, "c1s2", dirId);
-        UUID c1s3Id = insertSubject(namedParameterJdbcTemplate, "c1s3", dirId);
-
-        UUID c2s1Id = insertSubject(namedParameterJdbcTemplate, "c2s1", dirId);
-        UUID c2s2Id = insertSubject(namedParameterJdbcTemplate, "c2s2", dirId);
-
-        UUID c12s1Id = insertSubject(namedParameterJdbcTemplate, "c12s1", dirId);
-        UUID c12s2Id = insertSubject(namedParameterJdbcTemplate, "c12s2", dirId);
-
-        UUID c3s1Id = insertSubject(namedParameterJdbcTemplate, "c3s1", dirId);
-        UUID c3s2Id = insertSubject(namedParameterJdbcTemplate, "c3s2", dirId);
-
-        UUID nos1Id = insertSubject(namedParameterJdbcTemplate, "ns1", dirId);
-        UUID nos2Id = insertSubject(namedParameterJdbcTemplate, "ns2", dirId);
-
-
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c1s1Id, career1Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c1s2Id, career1Id, 2);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c1s3Id, career1Id, 3);
-
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c2s1Id, career2Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c2s2Id, career2Id, 2);
-
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s1Id, career1Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s1Id, career2Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s2Id, career1Id, 2);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s2Id, career2Id, 2);
-
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c3s1Id, career3Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c3s2Id, career3Id, 2);
-
-        List<UUID> c1exIds = Stream.of(c1s1Id, c1s2Id, c1s3Id).collect(Collectors.toList());
-        List<UUID> c2exIds = Stream.of(c2s1Id, c2s2Id).collect(Collectors.toList());
-        List<UUID> c12Ids = Stream.of(c12s1Id, c12s2Id).collect(Collectors.toList());
-        List<UUID> c3sIds = Stream.of(c3s1Id, c3s2Id).collect(Collectors.toList());
-        List<UUID> nosIds = Stream.of(nos1Id, nos2Id).collect(Collectors.toList());
-
-        List<Subject> c1compList = subjectDao.getSubjectsByCareerIdComplemented(career1Id);
-        List<Subject> c2compList = subjectDao.getSubjectsByCareerIdComplemented(career2Id);
-        List<Subject> c3compList = subjectDao.getSubjectsByCareerIdComplemented(career3Id);
-
-        assertEquals(2, c1compList.size());
-        assertEquals(3, c2compList.size());
-        assertEquals(0, c3compList.size()); //career 3 has all subjects from institution2
-
-        assertTrue(c1compList.stream().allMatch(s -> c2exIds.contains(s.getSubjectId())));
-        assertTrue(c2compList.stream().allMatch(s -> c1exIds.contains(s.getSubjectId())));
-
-        assertTrue(c1compList.stream().noneMatch(s -> c1exIds.contains(s.getSubjectId()))); // already in career1
-        assertTrue(c1compList.stream().noneMatch(s -> c12Ids.contains(s.getSubjectId()))); // already in career1
-        assertTrue(c1compList.stream().noneMatch(s -> c3sIds.contains(s.getSubjectId()))); // career3 is from another institution
-        assertTrue(c1compList.stream().noneMatch(s -> nosIds.contains(s.getSubjectId()))); // not in any career
-
-        assertTrue(c2compList.stream().noneMatch(s -> c2exIds.contains(s.getSubjectId()))); // already in career2
-        assertTrue(c2compList.stream().noneMatch(s -> c12Ids.contains(s.getSubjectId()))); // already in career2
-        assertTrue(c2compList.stream().noneMatch(s -> c3sIds.contains(s.getSubjectId()))); // career3 is from another institution
-        assertTrue(c2compList.stream().noneMatch(s -> nosIds.contains(s.getSubjectId()))); // not in any career
+        assertTrue(career1ComplementList.stream().noneMatch(s -> s.getSubjectId().equals(test.subject1Id)));
+        assertTrue(career1ComplementList.stream().noneMatch(s -> s.getSubjectId().equals(test.subject12Id)));
+        assertTrue(career1ComplementList.stream().noneMatch(s -> s.getSubjectId().equals(test.subject3Id)));
+        assertTrue(career1ComplementList.stream().noneMatch(s -> s.getSubjectId().equals(test.floatingSubjectId)));
     }
 
+    @Test
+    public void testGetSubjectsByCareerIdComplementedLoneCareer() {
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
+
+        List<Subject> career3ComplementList = subjectDao.getSubjectsByCareerIdComplemented(test.career3Id);
+
+        assertEquals(0, career3ComplementList.size());
+    }
+
+    @Test
+    public void testGetSubjectByCareerIdComplementedNonExistentCareer() {
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
+
+        List<Subject> career3ComplementList = subjectDao.getSubjectsByCareerIdComplemented(test.i1Id);
+
+        assertEquals(0, career3ComplementList.size());
+    }
 
     @Test
     public void testGetSubjectsByInstitutionId(){
-        UUID i1Id = insertInstitution(namedParameterJdbcTemplate, "i1");
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
 
-        UUID i2Id = insertInstitution(namedParameterJdbcTemplate, "i2");
+        List<Subject> institution1SubjectList = subjectDao.getSubjectsByInstitutionId(test.i1Id);
 
-        UUID career1Id = insertCareer(namedParameterJdbcTemplate, "career1", i1Id);
-        UUID career2Id = insertCareer(namedParameterJdbcTemplate, "career2", i1Id);
+        assertEquals(3, institution1SubjectList.size());
+        assertTrue(institution1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject1Id)));
+        assertTrue(institution1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject2Id)));
+        assertTrue(institution1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject12Id)));
 
-        UUID career3Id = insertCareer(namedParameterJdbcTemplate, "career3", i2Id);
-
-
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID c1s1Id = insertSubject(namedParameterJdbcTemplate, "c1s1", dirId);
-        UUID c1s2Id = insertSubject(namedParameterJdbcTemplate, "c1s2", dirId);
-        UUID c1s3Id = insertSubject(namedParameterJdbcTemplate, "c1s3", dirId);
-
-        UUID c2s1Id = insertSubject(namedParameterJdbcTemplate, "c2s1", dirId);
-        UUID c2s2Id = insertSubject(namedParameterJdbcTemplate, "c2s2", dirId);
-
-        UUID c12s1Id = insertSubject(namedParameterJdbcTemplate, "c12s1", dirId);
-        UUID c12s2Id = insertSubject(namedParameterJdbcTemplate, "c12s1", dirId);
-
-        UUID c3s1Id = insertSubject(namedParameterJdbcTemplate, "c3s1", dirId);
-        UUID c3s2Id = insertSubject(namedParameterJdbcTemplate, "c3s2", dirId);
-
-        UUID nos1Id = insertSubject(namedParameterJdbcTemplate, "ns1", dirId);
-        UUID nos2Id = insertSubject(namedParameterJdbcTemplate, "ns2", dirId);
-
-
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c1s1Id, career1Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c1s2Id, career1Id, 2);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c1s3Id, career1Id, 3);
-
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c2s1Id, career2Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c2s2Id, career2Id, 2);
-
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s1Id, career1Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s1Id, career2Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s2Id, career1Id, 2);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c12s2Id, career2Id, 2);
-
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c3s1Id, career3Id, 1);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, c3s2Id, career3Id, 2);
-
-        List<Subject> i1sList = subjectDao.getSubjectsByInstitutionId(i1Id);
-        List<Subject> i2sList = subjectDao.getSubjectsByInstitutionId(i2Id);
-
-        List<UUID> i1sIds = Stream.of(c1s1Id, c1s2Id, c1s3Id, c2s1Id, c2s2Id, c12s1Id, c12s2Id).collect(Collectors.toList());
-        List<UUID> i2sIds = Stream.of(c3s1Id, c3s2Id).collect(Collectors.toList());
-        List<UUID> nosIds = Stream.of(nos1Id, nos2Id).collect(Collectors.toList());
-
-        assertEquals(7, i1sList.size());
-        assertEquals(2, i2sList.size());
-
-        assertTrue(i1sList.stream().allMatch(s -> i1sIds.contains(s.getSubjectId())));
-        assertTrue(i2sList.stream().allMatch(s -> i2sIds.contains(s.getSubjectId())));
-
-        assertTrue(i1sList.stream().noneMatch(s -> nosIds.contains(s.getSubjectId())));
-        assertTrue(i2sList.stream().noneMatch(s -> nosIds.contains(s.getSubjectId())));
-
-        assertTrue(i1sList.stream().noneMatch(s -> i2sIds.contains(s.getSubjectId())));
-        assertTrue(i2sList.stream().noneMatch(s -> i1sIds.contains(s.getSubjectId())));
+        assertTrue(institution1SubjectList.stream().noneMatch(s -> s.getSubjectId().equals(test.subject3Id)));
+        assertTrue(institution1SubjectList.stream().noneMatch(s -> s.getSubjectId().equals(test.floatingSubjectId)));
     }
+
+    @Test
+    public void testGetSubjectsByInstitutionIdNonExistentInstitution(){
+        TestSubjectsCareersInserts test = new TestSubjectsCareersInserts(namedParameterJdbcTemplate, jdbcSubjectsCareersInsert);
+
+        List<Subject> institution1SubjectList = subjectDao.getSubjectsByInstitutionId(test.subject1Id);
+
+        assertEquals(0, institution1SubjectList.size());
+    }
+
 
     @Test
     public void testCreateSuccess(){
@@ -291,7 +202,7 @@ public class SubjectJdbcDaoTest {
 
         UUID subjectId = subjectDao.create("subject1", dirId);
 
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "' AND subject_name = 'subject1' AND root_directory_id = '" + dirId + "'"));
     }
 
     @Test

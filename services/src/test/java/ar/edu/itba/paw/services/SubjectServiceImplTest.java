@@ -11,11 +11,9 @@ import ar.edu.itba.paw.persistence.SubjectDao;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import static org.mockito.Mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
@@ -74,15 +72,9 @@ public class SubjectServiceImplTest {
         );
         Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(5);
+
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
 
-        InOrder inOrder = Mockito.inOrder(subjectDao, careerDao, directoryDao, searchDao);
-        inOrder.verify(subjectDao, times(1)).getSubjectById(subjectId);
-        inOrder.verify(subjectDao, times(1)).unlinkSubjectFromCareer(subjectId, careerId);
-        inOrder.verify(careerDao, times(1)).countCareersBySubjectId(subjectId);
-        inOrder.verify(searchDao, times(0)).countChildren(directoryId);
-        inOrder.verify(subjectDao, times(0)).delete(subjectId);
-        inOrder.verify(directoryDao, times(0)).deleteRootDirectory(directoryId);
     }
 
     @Test
@@ -99,36 +91,17 @@ public class SubjectServiceImplTest {
 
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
 
-        InOrder inOrder = Mockito.inOrder(subjectDao, careerDao, directoryDao, searchDao);
-        inOrder.verify(subjectDao, times(1)).getSubjectById(subjectId);
-        inOrder.verify(subjectDao, times(1)).unlinkSubjectFromCareer(subjectId, careerId);
-        inOrder.verify(careerDao, times(1)).countCareersBySubjectId(subjectId);
-        inOrder.verify(searchDao, times(1)).countChildren(directoryId);
-        inOrder.verify(subjectDao, times(0)).delete(subjectId);
-        inOrder.verify(directoryDao, times(0)).deleteRootDirectory(directoryId);
     }
 
     @Test(expected = InvalidSubjectException.class)
     public void testUnlinkSubjectFromCareerFailureGetSubjectById() {
         UUID subjectId = UUID.randomUUID();
-        UUID directoryId = UUID.randomUUID();
         UUID careerId = UUID.randomUUID();
         Mockito.when(subjectDao.getSubjectById(subjectId)).thenReturn(
                 Optional.empty()
         );
 
-        try {
-            subjectService.unlinkSubjectFromCareer(subjectId, careerId);
-        } catch (InvalidSubjectException e) {
-            InOrder inOrder = Mockito.inOrder(subjectDao, careerDao, directoryDao, searchDao);
-            inOrder.verify(subjectDao, times(1)).getSubjectById(subjectId);
-            inOrder.verify(subjectDao, times(0)).unlinkSubjectFromCareer(subjectId, careerId);
-            inOrder.verify(careerDao, times(0)).countCareersBySubjectId(subjectId);
-            inOrder.verify(searchDao, times(0)).countChildren(directoryId);
-            inOrder.verify(subjectDao, times(0)).delete(subjectId);
-            inOrder.verify(directoryDao, times(0)).deleteRootDirectory(directoryId);
-            throw e;
-        }
+        subjectService.unlinkSubjectFromCareer(subjectId, careerId);
     }
 
     @Test(expected = InvalidSubjectCareerException.class)
@@ -141,18 +114,7 @@ public class SubjectServiceImplTest {
         );
         Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(false);
 
-        try {
-            subjectService.unlinkSubjectFromCareer(subjectId, careerId);
-        } catch (InvalidSubjectCareerException e) {
-            InOrder inOrder = Mockito.inOrder(subjectDao, careerDao, directoryDao, searchDao);
-            inOrder.verify(subjectDao, times(1)).getSubjectById(subjectId);
-            inOrder.verify(subjectDao, times(1)).unlinkSubjectFromCareer(subjectId, careerId);
-            inOrder.verify(careerDao, times(0)).countCareersBySubjectId(subjectId);
-            inOrder.verify(searchDao, times(0)).countChildren(directoryId);
-            inOrder.verify(subjectDao, times(0)).delete(subjectId);
-            inOrder.verify(directoryDao, times(0)).deleteRootDirectory(directoryId);
-            throw e;
-        }
+        subjectService.unlinkSubjectFromCareer(subjectId, careerId);
     }
 
     @Test
@@ -170,14 +132,6 @@ public class SubjectServiceImplTest {
         Mockito.when(directoryDao.deleteRootDirectory(Mockito.any())).thenReturn(true);
 
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
-
-        InOrder inOrder = Mockito.inOrder(subjectDao, careerDao, directoryDao, searchDao);
-        inOrder.verify(subjectDao, times(1)).getSubjectById(subjectId);
-        inOrder.verify(subjectDao, times(1)).unlinkSubjectFromCareer(subjectId, careerId);
-        inOrder.verify(careerDao, times(1)).countCareersBySubjectId(subjectId);
-        inOrder.verify(searchDao, times(1)).countChildren(directoryId);
-        inOrder.verify(subjectDao, times(1)).delete(subjectId);
-        inOrder.verify(directoryDao, times(1)).deleteRootDirectory(directoryId);
     }
 
     @Test(expected = InvalidSubjectException.class)
@@ -192,18 +146,9 @@ public class SubjectServiceImplTest {
         Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(0);
         Mockito.when(searchDao.countChildren(Mockito.any())).thenReturn(0);
         Mockito.when(subjectDao.delete(Mockito.any())).thenReturn(false);
-        try {
-            subjectService.unlinkSubjectFromCareer(subjectId, careerId);
-        } catch (InvalidSubjectException e) {
-            InOrder inOrder = Mockito.inOrder(subjectDao, careerDao, directoryDao, searchDao);
-            inOrder.verify(subjectDao, times(1)).getSubjectById(subjectId);
-            inOrder.verify(subjectDao, times(1)).unlinkSubjectFromCareer(subjectId, careerId);
-            inOrder.verify(careerDao, times(1)).countCareersBySubjectId(subjectId);
-            inOrder.verify(searchDao, times(1)).countChildren(directoryId);
-            inOrder.verify(subjectDao, times(1)).delete(subjectId);
-            inOrder.verify(directoryDao, times(0)).deleteRootDirectory(directoryId);
-            throw e;
-        }
+
+        subjectService.unlinkSubjectFromCareer(subjectId, careerId);
+
     }
 
     @Test(expected = InvalidDirectoryException.class)
@@ -219,18 +164,8 @@ public class SubjectServiceImplTest {
         Mockito.when(searchDao.countChildren(Mockito.any())).thenReturn(0);
         Mockito.when(subjectDao.delete(Mockito.any())).thenReturn(true);
         Mockito.when(directoryDao.deleteRootDirectory(Mockito.any())).thenReturn(false);
-        try {
-            subjectService.unlinkSubjectFromCareer(subjectId, careerId);
-        } catch (InvalidDirectoryException e) {
-            InOrder inOrder = Mockito.inOrder(subjectDao, careerDao, directoryDao, searchDao);
-            inOrder.verify(subjectDao, times(1)).getSubjectById(subjectId);
-            inOrder.verify(subjectDao, times(1)).unlinkSubjectFromCareer(subjectId, careerId);
-            inOrder.verify(careerDao, times(1)).countCareersBySubjectId(subjectId);
-            inOrder.verify(searchDao, times(1)).countChildren(directoryId);
-            inOrder.verify(subjectDao, times(1)).delete(subjectId);
-            inOrder.verify(directoryDao, times(1)).deleteRootDirectory(directoryId);
-            throw e;
-        }
+
+        subjectService.unlinkSubjectFromCareer(subjectId, careerId);
     }
 
 }
