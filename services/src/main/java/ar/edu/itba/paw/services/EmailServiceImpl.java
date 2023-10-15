@@ -38,7 +38,7 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private Environment env;
 
-    private	static	final Logger LOGGER	= LoggerFactory.getLogger(EmailServiceImpl.class);
+    private	static final Logger LOGGER = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     @Async
     @Override

@@ -19,7 +19,7 @@ public interface UserDao {
     void updateProfilePicture(UUID userId, byte[] profilePicture);
     void updatePassword(UUID userId, String password);
     boolean updatePasswordForUserWithEmail(String email, String password);
-    void unbanUsers();
+    int unbanUsers();
     boolean banUser(UUID userId, UUID adminId, LocalDateTime endDate, String reason);
     boolean unbanUser(UUID userId);
     List<User> getStudents(String query, int pageNum, int pageSize);

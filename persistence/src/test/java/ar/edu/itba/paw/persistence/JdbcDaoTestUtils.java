@@ -67,6 +67,16 @@ public class JdbcDaoTestUtils {
         return (UUID) keyHolder.getKeys().get(USER_ID);
     }
 
+    static UUID insertLegacyUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email) {
+        MapSqlParameterSource args = new MapSqlParameterSource();
+        args.addValue(EMAIL, email);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update("INSERT INTO Users (email) VALUES (:email)",
+                args, keyHolder, new String[]{USER_ID});
+        return (UUID) keyHolder.getKeys().get(USER_ID);
+    }
+
     // TODO: Modularize?
     static UUID insertAdmin(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
         MapSqlParameterSource args = new MapSqlParameterSource();

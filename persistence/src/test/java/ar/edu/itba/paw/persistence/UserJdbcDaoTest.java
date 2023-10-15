@@ -22,6 +22,7 @@ import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,6 +50,16 @@ public class UserJdbcDaoTest {
         userDao.create(userEmail, "", ING_INF , "es", Role.ROLE_STUDENT);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "email = '" + userEmail + "'"));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "email = '" + userEmail + "' AND career_id = '" + ING_INF + "' AND locale = 'es'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "user_roles", "user_id = (SELECT user_id FROM users WHERE email = '" + userEmail + "') AND role_name = 'ROLE_STUDENT'"));
+    }
+
+    @Test
+    public void testCreateDonofrio() { // Retro-compatibility with sprint 1 users
+        String userEmail = "ndonofri@itba.edu.ar";
+        insertLegacyUser(namedParameterJdbcTemplate, userEmail);
+        userDao.create(userEmail, "1234", ING_MEC , "es", Role.ROLE_STUDENT);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "email = '" + userEmail + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "email = '" + userEmail + "' AND password IS NOT NULL"));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "user_roles", "user_id = (SELECT user_id FROM users WHERE email = '" + userEmail + "') AND role_name = 'ROLE_STUDENT'"));
     }
 
@@ -137,25 +148,62 @@ public class UserJdbcDaoTest {
     // TODO: Test profile picture methods?
 
     @Test
-    public void testGetStudents() {
+    public void testGetStudents2000Count() {
         int currentUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
-        assertEquals(0, userDao.getStudentsQuantity("student2000"));
+        assertEquals(0, userDao.getStudentsQuantity("t2000"));
+    }
+
+    @Test
+    public void testGetStudents20Count() {
+        final int STUDENTS_LENGTH = 20;
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
+        assertEquals(1, userDao.getStudentsQuantity("t20"));
+    }
+
+    @Test
+    public void testGetStudents2Count() {
+        final int STUDENTS_LENGTH = 20;
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
+        assertEquals(2, userDao.getStudentsQuantity("t2"));
+    }
+
+    @Test
+    public void testGetStudentsAllCount() {
+        final int STUDENTS_LENGTH = 20;
+        int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT' AND NOT EXISTS ( SELECT * FROM User_Roles ur WHERE ur.user_id = user_id  AND ur.role_name = 'ROLE_ADMIN')");
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
+        assertEquals(oldUsers + STUDENTS_LENGTH, userDao.getStudentsQuantity(""));
+    }
+
+    @Test
+    public void testGetStudents2000() {
+        int currentUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
+        final int STUDENTS_LENGTH = 20;
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
+        List<User> users = userDao.getStudents("t2000", 1, 10);
+        assertEquals(0, users.size());
+
     }
 
     @Test
     public void testGetStudents20() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
-        assertEquals(1, userDao.getStudentsQuantity("student20"));
+        List<User> users = userDao.getStudents("t20", 1, 10);
+        assertEquals(1, users.size());
+        assertEquals("student20@mail.com", users.get(0).getEmail());
     }
 
     @Test
     public void testGetStudents2() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
-        assertEquals(2, userDao.getStudentsQuantity("student2"));
+        List<User> users = userDao.getStudents("t2", 1, 10);
+        assertEquals(2, users.size());
+        assertEquals("student20@mail.com", users.get(0).getEmail());
+        assertEquals("student2@mail.com", users.get(1).getEmail());
     }
 
     @Test
@@ -163,7 +211,14 @@ public class UserJdbcDaoTest {
         final int STUDENTS_LENGTH = 20;
         int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT' AND NOT EXISTS ( SELECT * FROM User_Roles ur WHERE ur.user_id = user_id  AND ur.role_name = 'ROLE_ADMIN')");
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
-        assertEquals(oldUsers + STUDENTS_LENGTH, userDao.getStudentsQuantity(""));
+        // 100 should be more than enough to get all students, change in the future if necessary
+        List<User> users = userDao.getStudents("", 1, 100);
+        assertEquals(oldUsers + STUDENTS_LENGTH, users.size());
+
+        for (int i = 0; i < STUDENTS_LENGTH; i++) {
+            final int finalI = i;
+            assertTrue(users.stream().anyMatch(u -> u.getEmail().equals("student" + (finalI + 1) + "@mail.com")));
+        }
     }
 }
 

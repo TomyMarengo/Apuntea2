@@ -98,15 +98,19 @@ public class VerificationCodeJdbcDaoTest {
     public void testDeleteVerificationCodes() {
         String email = "verification@itba.edu.ar";
         insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
+        insertStudent(namedParameterJdbcTemplate, "bis" + email, "", ING_INF, "es");
         for (int i = 0; i < 10; i++) {
             VerificationCode code = new VerificationCode("12345" + i, email, LocalDateTime.now().plusMinutes(10));
             insertVerificationCode(namedParameterJdbcTemplate, code);
         }
+        VerificationCode code = new VerificationCode("123456", "bis" + email, LocalDateTime.now().plusMinutes(10));
+        insertVerificationCode(namedParameterJdbcTemplate, code);
         int oldQty = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + email + "')");
         boolean success = verificationCodeDao.deleteVerificationCodes(email);
         assertTrue(success);
         assertEquals(10, oldQty);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + email + "')"));
+        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "verification_codes"));
     }
 
     @Test

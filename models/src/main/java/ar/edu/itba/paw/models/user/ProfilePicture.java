@@ -5,8 +5,8 @@ import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import java.util.UUID;
 
 public class ProfilePicture {
-    private UUID userId;
-    private byte[] picture;
+    private final UUID userId;
+    private final byte[] picture;
 
     public ProfilePicture(String userId, Object picture) {
         if (userId == null) throw new UserNotFoundException();

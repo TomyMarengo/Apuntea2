@@ -15,8 +15,8 @@ import javax.sql.DataSource;
 
 @Repository
 public class VerificationCodeJdbcDao implements VerificationCodeDao {
-    private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private final Logger LOGGER = LoggerFactory.getLogger(VerificationCodeJdbcDao.class);
 
@@ -40,7 +40,7 @@ public class VerificationCodeJdbcDao implements VerificationCodeDao {
                             .addValue("expires_at", verificationCode.getExpirationDate())
             );
         } catch (DataIntegrityViolationException e) {
-            LOGGER.debug("Invalid verification code: email does not exist {}", verificationCode.getEmail());
+            LOGGER.warn("Invalid verification code: email does not exist {}", verificationCode.getEmail());
             throw new UserNotFoundException();
         }
     }
@@ -62,14 +62,13 @@ public class VerificationCodeJdbcDao implements VerificationCodeDao {
                 "DELETE FROM Verification_Codes WHERE user_id = (SELECT user_id FROM Users WHERE email = :email)",
                 new MapSqlParameterSource()
                         .addValue("email", email));
-        LOGGER.debug("Deleted {} verification codes for user {}", qtyRemoved, email);
+        LOGGER.info("Deleted {} verification codes for user {}", qtyRemoved, email);
         return qtyRemoved > 0;
     }
 
-    // TODO: Cron to remove expired codes
     @Override
     public void removeExpiredCodes() {
         int qtyRemoved = this.jdbcTemplate.update("DELETE FROM Verification_Codes WHERE expires_at < NOW()");
-        LOGGER.debug("Deleted {} expired verification codes", qtyRemoved);
+        LOGGER.info("Deleted {} expired verification codes", qtyRemoved);
     }
 }

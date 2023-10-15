@@ -9,4 +9,5 @@ public interface SecurityService {
     Optional<String> getCurrentUserEmail();
     boolean currentUserPasswordMatches(String password);
     User getCurrentUserOrThrow();
+    User getAdminOrThrow();
 }

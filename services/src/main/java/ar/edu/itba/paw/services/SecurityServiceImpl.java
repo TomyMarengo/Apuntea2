@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.exceptions.user.RequiredAdminException;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.persistence.UserDao;
@@ -46,6 +47,12 @@ public class SecurityServiceImpl implements SecurityService{
     @Override
     public User getCurrentUserOrThrow() {
         return getCurrentUser().orElseThrow(UserNotFoundException::new);
+    }
+
+    @Transactional
+    @Override
+    public User getAdminOrThrow() {
+        return getCurrentUser().filter(User::getIsAdmin).orElseThrow(RequiredAdminException::new);
     }
 
     @Transactional

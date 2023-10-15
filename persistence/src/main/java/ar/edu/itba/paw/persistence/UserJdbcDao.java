@@ -7,8 +7,9 @@ import ar.edu.itba.paw.models.user.ProfilePicture;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.UserStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,19 +19,20 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
-class UserJdbcDao implements UserDao{
+class UserJdbcDao implements UserDao {
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert jdbcRoleInsert;
+    private final Logger LOGGER = LoggerFactory.getLogger(UserJdbcDao.class);
 
     private static final RowMapper<User> ROW_MAPPER = (rs, rowNum)  -> {
         Object[] roles = (Object[]) rs.getArray(ROLES).getArray();
@@ -90,7 +92,7 @@ class UserJdbcDao implements UserDao{
         return jdbcTemplate.query("SELECT u.user_id, u.username, u.email, u.first_name, u.last_name, u.locale, u.status, array_agg(r.role_name) as roles FROM users u " +
                 "INNER JOIN User_Roles r ON u.user_id = r.user_id " +
                 "WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') AND (lower(u.username) LIKE lower(?) ESCAPE '!' OR lower(u.email) LIKE lower(?) ESCAPE '!')" +
-                "GROUP BY u.user_id LIMIT ? OFFSET ?", INFO_ROW_MAPPER, searchWord, searchWord, pageSize, (pageNum - 1) * pageSize);
+                "GROUP BY u.user_id ORDER BY u.email LIMIT ? OFFSET ?", INFO_ROW_MAPPER, searchWord, searchWord, pageSize, (pageNum - 1) * pageSize);
     }
 
     @Override
@@ -120,20 +122,22 @@ class UserJdbcDao implements UserDao{
         args.addValue(CAREER_ID, careerId);
         args.addValue(LOCALE, lang);
 
-        KeyHolder holder = new GeneratedKeyHolder();
+        int rows = namedParameterJdbcTemplate.update("UPDATE users SET password = :password, career_id = :career_id, locale = :locale WHERE email = :email AND password IS NULL",
+                args);
 
-        // TODO: See if we can remove the try catch for the last sprint
-        try {
+        UUID userId;
+        if (rows == 0) {
+            KeyHolder holder = new GeneratedKeyHolder();
             namedParameterJdbcTemplate.update("INSERT INTO users (email, password, career_id, locale) VALUES (:email, :password, :career_id, :locale)",
                     args, holder, new String[]{USER_ID} );
-        } catch (DuplicateKeyException e) {
-            int rows = namedParameterJdbcTemplate.update("UPDATE users SET password = :password, career_id = :career_id, locale = :locale WHERE email = :email AND password IS NULL",
-                    args, holder, new String[]{USER_ID} );
-            if (rows == 0) throw e;
+            userId = (UUID) holder.getKeys().get(USER_ID);
+        } else {
+            LOGGER.warn("Retro-compatible insert: user with email {} updated", email);
+            userId = jdbcTemplate.queryForObject("SELECT user_id FROM users WHERE email = ?", UUID.class, email);
         }
 
         final Map<String, Object> roleArgs = new HashMap<>();
-        roleArgs.put(USER_ID, holder.getKeys().get(USER_ID));
+        roleArgs.put(USER_ID, userId);
         roleArgs.put(ROLE_NAME, role.getRole());
         jdbcRoleInsert.execute(roleArgs);
     }
@@ -201,8 +205,8 @@ class UserJdbcDao implements UserDao{
     }
 
     @Override
-    public void unbanUsers() {
-        jdbcTemplate.update("UPDATE Users u SET status = 'ACTIVE' WHERE status = 'BANNED' AND NOT EXISTS (SELECT * FROM Bans WHERE user_id = u.user_id AND end_date > now())");
+    public int unbanUsers() {
+        return jdbcTemplate.update("UPDATE Users u SET status = 'ACTIVE' WHERE status = 'BANNED' AND NOT EXISTS (SELECT * FROM Bans WHERE user_id = u.user_id AND end_date > now())");
     }
 
     @Override

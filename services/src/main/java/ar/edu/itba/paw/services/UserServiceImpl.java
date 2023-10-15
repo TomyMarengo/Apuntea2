@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -69,11 +70,12 @@ public class UserServiceImpl implements UserService {
         return new Page<>(users, currentPage, PAGE_SIZE, countStudents);
     }
 
-    //@Transactional    //TODO: enable transactional
+    @Transactional
     @Override
     public void create(String email, String password, UUID careerId, Role role) {
         final String lang = LocaleContextHolder.getLocale().getLanguage();
         userDao.create(email, passwordEncoder.encode(password), careerId, lang, role);
+        LOGGER.info("User with email {} created (registered language: {})", email, lang);
     }
 
     @Transactional
@@ -85,12 +87,15 @@ public class UserServiceImpl implements UserService {
                 .username(username)
                 .build();
         boolean success = userDao.update(user);
-        if (!success) throw new InvalidUserException();
+        if (!success) {
+            LOGGER.error("Error while updating user with id: {}", user.getUserId());
+            throw new InvalidUserException();
+        }
         if (profilePicture != null && !profilePicture.isEmpty()) {
             try {
                 userDao.updateProfilePicture(user.getUserId(), profilePicture.getBytes());
             } catch (IOException e) {
-                LOGGER.error("Error while updating profile picture for user {}", user.getUserId());
+                LOGGER.error("Error while updating profile picture for user with id: {}", user.getUserId());
                 throw new InvalidFileException();
             }
         }
@@ -106,40 +111,45 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void updateCurrentUserPassword(String password) {
-        userDao.updatePassword(securityService.getCurrentUserOrThrow().getUserId(), passwordEncoder.encode(password));
+        User user = securityService.getCurrentUserOrThrow();
+        userDao.updatePassword(user.getUserId(), passwordEncoder.encode(password));
+        LOGGER.info("Password updated for user with id: {}", user.getUserId());
     }
 
     @Transactional
     @Override
     public boolean updateUserPasswordWithCode(String email, String code, String password) {
-        LOGGER.info("Attempting to update forgotten password for user {}", email);
+        LOGGER.info("Updating forgotten password for user with email: {}", email);
         return verificationCodesService.verifyForgotPasswordCode(email, code) && userDao.updatePasswordForUserWithEmail(email, passwordEncoder.encode(password));
     }
 
     @Scheduled(cron = "0 0 0 * * ?") // Every day at midnight
-    // @Scheduled(cron = "0 * * * * *") // Every minute
     @Transactional
     @Override
     public void unbanUsers() {
-        LOGGER.info("Unbanning users at {}", LocalDateTime.now());
-        userDao.unbanUsers();
+        int unbannedUsers = userDao.unbanUsers();
+        LOGGER.info("{} users unbanned", unbannedUsers);
     }
 
     @Transactional
     @Override
     public void unbanUser(UUID userId) {
-        if (!userDao.unbanUser(userId))
+        if (!userDao.unbanUser(userId)) {
+            LOGGER.error("Error while unbanning user with id: {}", userId);
             throw new InvalidUserException();
+        }
         User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         emailService.sendUnbanEmail(user);
     }
 
     @Transactional
     @Override
-   public void banUser(UUID userId, String reason) {
-        User admin = securityService.getCurrentUserOrThrow();
-        if (!userDao.banUser(userId, admin.getUserId(), LocalDateTime.now().plusDays(BAN_DURATION), reason))
+    public void banUser(UUID userId, String reason) {
+        User admin = securityService.getAdminOrThrow();
+        if (!userDao.banUser(userId, admin.getUserId(), LocalDateTime.now().plusDays(BAN_DURATION), reason)) {
+            LOGGER.error("Error while banning user with id: {}", userId);
             throw new InvalidUserException();
+        }
         User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         emailService.sendBanEmail(user, reason, BAN_DURATION);
     }
