@@ -22,6 +22,7 @@ import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -71,16 +72,35 @@ public class DirectoryJdbcDaoTest {
     }
 
     @Test
-    public void testGetDirectoryById() {
-        Directory directory = directoryDao.getDirectoryById(EDA_DIRECTORY_ID, PEPE_ID).orElseThrow(AssertionError::new);
-        assertEquals(EDA_DIRECTORY_ID, directory.getId());
-        assertEquals("EDA", directory.getName());
-        assertNull(directory.getParentId());
+    public void testGetDirectoryByIdPublic() {
+        String name = "public static void main";
+        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, true);
+        Directory directory = directoryDao.getDirectoryById(newDirId, SAIDMAN_ID).orElseThrow(AssertionError::new);
+        assertEquals(newDirId, directory.getId());
+        assertEquals(name, directory.getName());
     }
 
     @Test
     public void testGetDirectoryByIdNonExistent() {
         assertFalse(directoryDao.getDirectoryById(UUID.randomUUID(), PEPE_ID).isPresent());
+    }
+
+    @Test
+    public void testGetDirectoryByIdPrivate() {
+        UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail", "123456",  ING_INF, "es");
+        String name = "private static void main";
+        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, true);
+        Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(newDirId, adminId);
+        assertFalse(maybeDirectory.isPresent());
+    }
+
+    @Test
+    public void testGetDirectoryByIdPrivateOwner() {
+        String name = "private static void main";
+        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, true);
+        Directory directory = directoryDao.getDirectoryById(newDirId, PEPE_ID).orElseThrow(AssertionError::new);
+        assertEquals(newDirId, directory.getId());
+        assertEquals(name, directory.getName());
     }
 
     @Test
