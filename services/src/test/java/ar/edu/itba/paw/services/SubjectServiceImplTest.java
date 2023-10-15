@@ -62,37 +62,6 @@ public class SubjectServiceImplTest {
                                                                                        .equals(year))));
     }
 
-    @Test
-    public void testUnlinkSubjectFromCareerSuccessNoChildren() {
-        UUID subjectId = UUID.randomUUID();
-        UUID directoryId = UUID.randomUUID();
-        UUID careerId = UUID.randomUUID();
-        Mockito.when(subjectDao.getSubjectById(subjectId)).thenReturn(
-                Optional.of(new Subject(subjectId, "Subject 1a", directoryId))
-        );
-        Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(5);
-
-        subjectService.unlinkSubjectFromCareer(subjectId, careerId);
-
-    }
-
-    @Test
-    public void testUnlinkSubjectFromCareerSuccessNoCareers() {
-        UUID subjectId = UUID.randomUUID();
-        UUID directoryId = UUID.randomUUID();
-        UUID careerId = UUID.randomUUID();
-        Mockito.when(subjectDao.getSubjectById(subjectId)).thenReturn(
-                Optional.of(new Subject(subjectId, "Subject 1a", directoryId))
-        );
-        Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(0);
-        Mockito.when(searchDao.countChildren(Mockito.any())).thenReturn(1);
-
-        subjectService.unlinkSubjectFromCareer(subjectId, careerId);
-
-    }
-
     @Test(expected = InvalidSubjectException.class)
     public void testUnlinkSubjectFromCareerFailureGetSubjectById() {
         UUID subjectId = UUID.randomUUID();
@@ -102,6 +71,7 @@ public class SubjectServiceImplTest {
         );
 
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
+        fail();
     }
 
     @Test(expected = InvalidSubjectCareerException.class)
@@ -115,23 +85,7 @@ public class SubjectServiceImplTest {
         Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(false);
 
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
-    }
-
-    @Test
-    public void testUnlinkSubjectFromCareerDeletionSuccess() {
-        UUID subjectId = UUID.randomUUID();
-        UUID directoryId = UUID.randomUUID();
-        UUID careerId = UUID.randomUUID();
-        Mockito.when(subjectDao.getSubjectById(subjectId)).thenReturn(
-                Optional.of(new Subject(subjectId, "Subject 1a", directoryId))
-        );
-        Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(0);
-        Mockito.when(searchDao.countChildren(Mockito.any())).thenReturn(0);
-        Mockito.when(subjectDao.delete(Mockito.any())).thenReturn(true);
-        Mockito.when(directoryDao.deleteRootDirectory(Mockito.any())).thenReturn(true);
-
-        subjectService.unlinkSubjectFromCareer(subjectId, careerId);
+        fail();
     }
 
     @Test(expected = InvalidSubjectException.class)
@@ -148,7 +102,7 @@ public class SubjectServiceImplTest {
         Mockito.when(subjectDao.delete(Mockito.any())).thenReturn(false);
 
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
-
+        fail();
     }
 
     @Test(expected = InvalidDirectoryException.class)
@@ -166,6 +120,7 @@ public class SubjectServiceImplTest {
         Mockito.when(directoryDao.deleteRootDirectory(Mockito.any())).thenReturn(false);
 
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
+        fail();
     }
 
 }

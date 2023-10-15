@@ -25,7 +25,7 @@ public class VerificationCodesServiceImplTest {
     public void testVerifyInvalidCode() {
         Mockito.doThrow(new UserNotFoundException()).when(verificationCodesDao).saveVerificationCode(Mockito.any());
         verificationCodesService.sendForgotPasswordCode("email");
-        Assert.fail("Should have thrown UserNotFoundException");
+        Assert.fail();
     }
 
 

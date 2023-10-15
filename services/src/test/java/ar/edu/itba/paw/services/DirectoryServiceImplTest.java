@@ -34,7 +34,7 @@ public class DirectoryServiceImplTest {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
         Mockito.when(directoryDao.delete(Mockito.any())).thenReturn(Collections.emptyList()); // The deletion failed
         directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID}, "lol");
-        Assert.fail("Should have thrown InvalidDirectoryException");
+        Assert.fail();
     }
 
     @Test
@@ -49,7 +49,7 @@ public class DirectoryServiceImplTest {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(directoryDao.delete(Mockito.any(), Mockito.any())).thenReturn(false); // The deletion failed
         directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID}, null);
-        Assert.fail("Should have thrown InvalidDirectoryException");
+        Assert.fail();
     }
 
     @Test

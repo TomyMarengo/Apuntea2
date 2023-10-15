@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
-import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +72,7 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testGetDirectoryById() {
-        Directory directory = directoryDao.getDirectoryById(EDA_DIRECTORY_ID, PEPE_ID).orElseThrow(DirectoryNotFoundException::new);
+        Directory directory = directoryDao.getDirectoryById(EDA_DIRECTORY_ID, PEPE_ID).orElseThrow(AssertionError::new);
         assertEquals(EDA_DIRECTORY_ID, directory.getId());
         assertEquals("EDA", directory.getName());
         assertNull(directory.getParentId());
