@@ -1,8 +1,7 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.admin;
 
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 
-import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public class UnbanUserForm {

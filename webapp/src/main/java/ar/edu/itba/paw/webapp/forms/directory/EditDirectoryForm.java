@@ -1,10 +1,11 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.directory;
 
+import ar.edu.itba.paw.webapp.forms.EditSearchableForm;
 import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class EditDirectoryForm extends EditSearchableForm{
+public class EditDirectoryForm extends EditSearchableForm {
 
     private boolean visible = true;
 

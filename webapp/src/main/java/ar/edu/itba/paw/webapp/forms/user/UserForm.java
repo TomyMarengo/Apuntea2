@@ -1,5 +1,6 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.user;
 
+import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import ar.edu.itba.paw.webapp.validation.UnusedEmail;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.Email;

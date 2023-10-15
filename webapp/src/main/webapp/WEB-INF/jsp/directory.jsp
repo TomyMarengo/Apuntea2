@@ -663,6 +663,9 @@
                             <form:input path="file" type="file" class="form-control" id="file" required="true"/>
                         </div>
                         <form:errors path="file" cssClass="text-danger" element="p"/>
+                        <p class="text-danger d-none" id="file-size-error">
+                            <spring:message code="notes.file.tooHeavy"/>
+                        </p>
                     </div>
 
                     <div class="d-flex flex-column gap-2 mt-4">
@@ -1016,6 +1019,7 @@
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/color-picker.js"/>"></script>
+<script src="<c:url value="/js/file-control.js"/>"></script>
 <c:if test="${not empty results}">
     <script src="<c:url value="/js/note-list.js"/>"></script>
     <script src="<c:url value="/js/search-buttons.js"/>"></script>

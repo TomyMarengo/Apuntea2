@@ -5,10 +5,10 @@ import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
-import ar.edu.itba.paw.webapp.forms.BanUserForm;
-import ar.edu.itba.paw.webapp.forms.DeleteWithReasonForm;
-import ar.edu.itba.paw.webapp.forms.SearchUserForm;
-import ar.edu.itba.paw.webapp.forms.UnbanUserForm;
+import ar.edu.itba.paw.webapp.forms.admin.BanUserForm;
+import ar.edu.itba.paw.webapp.forms.admin.DeleteWithReasonForm;
+import ar.edu.itba.paw.webapp.forms.user.SearchUserForm;
+import ar.edu.itba.paw.webapp.forms.admin.UnbanUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 import javax.xml.ws.http.HTTPException;
 import java.util.UUID;
 

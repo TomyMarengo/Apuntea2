@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.validation;
 
 import ar.edu.itba.paw.services.SubjectService;
-import ar.edu.itba.paw.webapp.forms.UnlinkSubjectForm;
+import ar.edu.itba.paw.webapp.forms.institutional.UnlinkSubjectForm;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;

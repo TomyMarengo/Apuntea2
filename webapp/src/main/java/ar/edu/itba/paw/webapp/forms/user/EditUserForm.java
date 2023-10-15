@@ -1,5 +1,6 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.user;
 
+import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import ar.edu.itba.paw.webapp.validation.MaxFileSize;
 import ar.edu.itba.paw.webapp.validation.UnusedUsername;
 import ar.edu.itba.paw.webapp.validation.ValidFileName;

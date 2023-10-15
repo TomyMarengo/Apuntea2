@@ -1,12 +1,13 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.note;
 
+import ar.edu.itba.paw.webapp.forms.EditSearchableForm;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class EditNoteForm extends EditSearchableForm{
+public class EditNoteForm extends EditSearchableForm {
 
     @NotEmpty
     @Pattern(regexp = "theory|practice|exam|other")

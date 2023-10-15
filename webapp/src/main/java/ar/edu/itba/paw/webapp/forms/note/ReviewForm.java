@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.note;
 
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 

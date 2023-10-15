@@ -6,7 +6,7 @@ import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.services.SecurityService;
-import ar.edu.itba.paw.webapp.forms.SearchForm;
+import ar.edu.itba.paw.webapp.forms.search.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

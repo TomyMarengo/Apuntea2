@@ -1,24 +1,13 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.search;
 
-import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
-public class SearchForm {
-    @ValidUuid
-    private UUID institutionId;
-
-    @ValidUuid
-    private UUID careerId;
-
-    @ValidUuid
-    private UUID subjectId;
-
+public class NavigationForm {
     @Pattern(regexp = "directory|theory|practice|exam|other|")
     private String category = "";
 
@@ -40,36 +29,12 @@ public class SearchForm {
     @Size(max = 50)
     private String word;
 
-    public UUID getInstitutionId() {
-        return institutionId;
-    }
-
-    public void setInstitutionId(UUID institutionId) {
-        this.institutionId = institutionId;
-    }
-
-    public UUID getCareerId() {
-        return careerId;
-    }
-
-    public void setCareerId(UUID careerId) {
-        this.careerId = careerId;
-    }
-
     public Boolean getAscending() {
         return ascending;
     }
 
     public void setAscending(Boolean ascending) {
         this.ascending = ascending;
-    }
-
-    public UUID getSubjectId() {
-        return subjectId;
-    }
-
-    public void setSubjectId(UUID subjectId) {
-        this.subjectId = subjectId;
     }
 
     public String getCategory() {

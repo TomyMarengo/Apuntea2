@@ -1,5 +1,6 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.note;
 
+import ar.edu.itba.paw.webapp.forms.CreateSearchableForm;
 import ar.edu.itba.paw.webapp.validation.MaxFileSize;
 import ar.edu.itba.paw.webapp.validation.ValidFileName;
 import org.hibernate.validator.constraints.NotEmpty;

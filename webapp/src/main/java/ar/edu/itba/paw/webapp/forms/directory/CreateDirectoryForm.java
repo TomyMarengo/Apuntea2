@@ -1,5 +1,6 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.directory;
 
+import ar.edu.itba.paw.webapp.forms.CreateSearchableForm;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;

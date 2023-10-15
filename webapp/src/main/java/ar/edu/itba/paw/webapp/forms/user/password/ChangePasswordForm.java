@@ -1,5 +1,6 @@
-package ar.edu.itba.paw.webapp.forms;
+package ar.edu.itba.paw.webapp.forms.user.password;
 
+import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import ar.edu.itba.paw.webapp.validation.MatchesCurrentUserPassword;
 
 import javax.validation.constraints.NotNull;
