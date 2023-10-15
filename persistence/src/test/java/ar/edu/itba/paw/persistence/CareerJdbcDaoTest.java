@@ -28,7 +28,6 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Rollback
-
 public class CareerJdbcDaoTest {
     @Autowired
     private DataSource ds;
