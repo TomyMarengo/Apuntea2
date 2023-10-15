@@ -62,6 +62,56 @@ public class SubjectServiceImplTest {
                                                                                        .equals(year))));
     }
 
+    @Test(expected = InvalidSubjectCareerException.class)
+    public void testLinkSubjectToCareerInvalidSubjectCareer() {
+        Mockito.when(subjectDao.linkSubjectToCareer(Mockito.any(), Mockito.any(), Mockito.anyInt())).thenReturn(false);
+        UUID subjectId = UUID.randomUUID();
+        UUID careerId = UUID.randomUUID();
+        int year = 1;
+
+        subjectService.linkSubjectToCareer(subjectId, careerId, year);
+
+        fail();
+    }
+
+    @Test(expected = InvalidSubjectException.class)
+    public void testUpdateSubjectInvalidSubject() {
+        Mockito.when(subjectDao.updateSubject(Mockito.any(), Mockito.any())).thenReturn(false);
+        UUID subjectId = UUID.randomUUID();
+        String name = "Subject 1a";
+
+        subjectService.updateSubject(subjectId, name);
+
+        fail();
+    }
+
+    @Test(expected = InvalidSubjectException.class)
+    public void testUpdateSubjectCareerFailureUpdateSubject() {
+        Mockito.when(subjectDao.updateSubject(Mockito.any(), Mockito.any())).thenReturn(false);
+        UUID subjectId = UUID.randomUUID();
+        UUID careerId = UUID.randomUUID();
+        String newName = "Subject 1a";
+        int year = 1;
+
+        subjectService.updateSubjectCareer(subjectId, newName, careerId, year);
+
+        fail();
+    }
+
+    @Test(expected = InvalidSubjectCareerException.class)
+    public void testUpdateSubjectCareerInvalidSubjectCareer() {
+        Mockito.when(subjectDao.updateSubject(Mockito.any(), Mockito.any())).thenReturn(true);
+        Mockito.when(subjectDao.updateSubjectCareer(Mockito.any(), Mockito.any(), Mockito.anyInt())).thenReturn(false);
+        UUID subjectId = UUID.randomUUID();
+        UUID careerId = UUID.randomUUID();
+        String newName = "Subject 1a";
+        int year = 1;
+
+        subjectService.updateSubjectCareer(subjectId, newName, careerId, year);
+
+        fail();
+    }
+
     @Test(expected = InvalidSubjectException.class)
     public void testUnlinkSubjectFromCareerFailureGetSubjectById() {
         UUID subjectId = UUID.randomUUID();
