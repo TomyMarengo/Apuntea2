@@ -416,8 +416,7 @@
         crossorigin="anonymous"></script>
 
 <script>
-    //TODO c:out institution data
-    const {institutions, careers, subjects, careerMap, subjectMap} = JSON.parse('${institutionData}');
+    const {institutions, careerMap, subjectMap} = JSON.parse('${institutionData}');
     <c:if test="${career ne null}">
     const institutionId = '${career.institutionId}';
     const careerId = '${career.careerId}';

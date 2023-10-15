@@ -178,8 +178,7 @@
 </section>
 
 <script>
-    //TODO c:out institution data
-    const {institutions, careers, subjects, careerMap, subjectMap} = JSON.parse('${institutionData}');
+    const {institutions, careerMap, subjectMap} = JSON.parse('${institutionData}');
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"

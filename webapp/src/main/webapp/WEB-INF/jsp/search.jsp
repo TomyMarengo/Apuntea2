@@ -545,8 +545,7 @@
         crossorigin="anonymous"></script>
 
 <script>
-    //TODO c:out institution data
-    const {institutions, careers, subjects, careerMap, subjectMap} = JSON.parse('${institutionData}');
+    const {institutions, careerMap, subjectMap} = JSON.parse('${institutionData}');
 </script>
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>

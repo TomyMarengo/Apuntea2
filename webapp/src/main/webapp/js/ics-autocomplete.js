@@ -39,7 +39,7 @@ if (selectElement && institutions) {
 /* -- CAREERS - */
 /* ------------ */
 selectElement = document.getElementById('careerSelect');
-if (selectElement && careers) {
+if (selectElement && careerMap) {
     document.getElementById("eraseCareerButton").addEventListener("click", _ => {
         clearCareer();
         loadFields(false);
@@ -54,7 +54,7 @@ if (selectElement && careers) {
 /* ------------ */
 selectElement = document.getElementById('subjectSelect');
 // Initialize an empty array to store the option values
-if (selectElement && subjects) {
+if (selectElement && subjectMap) {
     document.getElementById("eraseSubjectButton").addEventListener("click", _ => {
         clearSubject();
         loadFields(false);
@@ -76,8 +76,8 @@ function loadFields(autocompleting = true) {
     let subjectAutocomplete = document.getElementById('subjectAutocomplete');
 
     let ins = institutions.find(x => x.institutionId === institutionHidden?.value);
-    let career = careers.find(x => x.careerId === careerHidden?.value);
-    let subject = subjects.find(x => x.subjectId === subjectHidden?.value);
+    let career = careerMap[ins?.institutionId]?.find(x => x.careerId === careerHidden?.value);
+    let subject = subjectMap[career?.careerId]?.find(x => x.subjectId === subjectHidden?.value);
     // Establece el valor de los elementos select según los valores de id
     if (institutionAutocomplete) {
         institutionAutocomplete.value = ins ? ins.name : '';
