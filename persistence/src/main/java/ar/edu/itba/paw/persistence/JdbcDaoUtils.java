@@ -20,6 +20,12 @@ public class JdbcDaoUtils {
     static final String USER_ROLES = "User_Roles";
     static final String VERIFICATION_CODES = "Verification_Codes";
 
+    static final String SEARCH = "Search";
+
+    static final String NAVIGATION = "Navigation";
+
+    static final String INSTITUTION_DATA = "Institution_Data";
+
     static final String INSTITUTION_ID = "institution_id";
     static final String ID = "id";
     static final String NAME = "name";

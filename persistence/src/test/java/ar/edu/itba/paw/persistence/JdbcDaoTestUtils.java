@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.VerificationCode;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -242,6 +243,22 @@ public class JdbcDaoTestUtils {
             put(CAREER_ID, careerId);
             put(YEAR, year);
         }});
+    }
+
+    static int countSearchResults(JdbcTemplate jdbcTemplate, String condition) {
+        String query = "SELECT COUNT(DISTINCT id) FROM Search WHERE visible = TRUE";
+        if (condition != null) {
+            query += " AND " + condition;
+        }
+        return jdbcTemplate.queryForObject(query, Integer.class);
+    }
+
+    static int countNavigationResults(JdbcTemplate jdbcTemplate, String condition) {
+        String query = "SELECT COUNT(DISTINCT id) FROM Navigation WHERE visible = TRUE";
+        if (condition != null) {
+            query += " AND " + condition;
+        }
+        return jdbcTemplate.queryForObject(query, Integer.class);
     }
 
 }

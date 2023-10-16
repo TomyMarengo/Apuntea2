@@ -16,13 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
 
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.FAVORITES;
 import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
 import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.EDA_ID;
+import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 import static org.junit.Assert.*;
 
 @Transactional
@@ -39,172 +40,172 @@ public class SearchJdbcDaoTest {
     private SimpleJdbcInsert jdbcFavoriteInsert;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    private int allResultsPageSize;
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
         namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
         jdbcFavoriteInsert = new SimpleJdbcInsert(ds)
                 .withTableName(FAVORITES);
+        allResultsPageSize = countSearchResults(jdbcTemplate, null);
     }
 
-    /* Note tests */
     @Test
-    public void testSearchNotesByInstitution() {
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).category(Category.NOTE.toString());
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(7, notes.size());
+    public void testCountSearchResults() {
+        int searchResults = searchDao.countSearchResults(new SearchArgumentsBuilder().build());
+        assertEquals(searchResults, allResultsPageSize);
+    }
+
+    @Test
+    public void testCountSearchResultsWithFilters() {
+        int expectedResults = countSearchResults(jdbcTemplate, " institution_id = '" + ITBA_ID + "' AND career_id = '" + ING_INF + "' AND subject_id = '" + EDA_ID + "' AND category = '" + Category.PRACTICE.name() + "'");
+
+        int searchResults = searchDao.countSearchResults(new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF).subjectId(EDA_ID).category(Category.PRACTICE.name()).build());
+
+        assertEquals(expectedResults, searchResults);
+    }
+
+    @Test
+    public void testSearchByInstitution() {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).pageSize(allResultsPageSize);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(11, results.size());
     }
 
     @Test
     public void testSearchNotesByCareer(){
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF).category(Category.NOTE.toString());
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(5, notes.size());
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF).pageSize(allResultsPageSize);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(9, results.size());
     }
 
     @Test
     public void testSearchNotesBySubject(){
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF).subjectId(EDA_ID).category(Category.NOTE.toString());
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(2, notes.size());
-    }
-    @Test
-    public void testByCategory(){
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF).subjectId(EDA_ID).category(Category.PRACTICE.toString());
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(1, notes.size());
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder()
+                                            .institutionId(ITBA_ID)
+                                            .careerId(ING_INF)
+                                            .subjectId(EDA_ID)
+                                            .pageSize(allResultsPageSize);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(4, results.size());
+        assertTrue(results.stream().allMatch(n -> n.getSubject().getSubjectId().equals(EDA_ID)));
     }
 
     @Test
-    public void testSearchNotesOrderBy(){
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().sortBy("name").ascending(true);
-        List<Searchable> notes = searchDao.search(sab.build());
-        for (int i = 0; i < notes.size() - 2; i++) {
-            assertTrue(notes.get(i).getName().toUpperCase().compareTo(notes.get(i + 1).getName().toUpperCase()) <= 0);
+    public void testByCategory(){
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.PRACTICE.toString()).pageSize(allResultsPageSize);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(3, results.size());
+        assertTrue(results.stream().allMatch(n -> n.getCategory().equals(Category.PRACTICE)));
+    }
+
+    @Test
+    public void testSearchNotes() {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.NOTE.toString()).pageSize(allResultsPageSize);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(8, results.size());
+        assertTrue(results.stream().noneMatch(n -> n.getCategory().equals(Category.DIRECTORY)));
+    }
+
+    @Test
+    public void testSearchDirectory() {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.DIRECTORY.toString()).pageSize(allResultsPageSize);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(6, results.size());
+        assertTrue(results.stream().allMatch(n -> n.getCategory().equals(Category.DIRECTORY)));
+    }
+
+    @Test
+    public void testSearchOrderByName(){
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().sortBy(SearchArguments.SortBy.NAME.name()).ascending(true).pageSize(allResultsPageSize);
+        List<Searchable> results = searchDao.search(sab.build());
+        for (int i = 0; i < results.size() - 2; i++) {
+            assertTrue(results.get(i).getName().toUpperCase().compareTo(results.get(i + 1).getName().toUpperCase()) <= 0);
         }
     }
 
     @Test
-    public void testSearchNotesOrderByScore(){
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.NOTE.toString()).sortBy("score").ascending(true);
-        List<Searchable> notes = searchDao.search(sab.build());
-        for (int i = 0; i < notes.size() - 2; i++) {
-            assertTrue(notes.get(i).getAvgScore() <= notes.get(i + 1).getAvgScore());
+    public void testSearchOrderByScore(){
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().sortBy(SearchArguments.SortBy.SCORE.name()).ascending(true).pageSize(allResultsPageSize);
+        List<Searchable> results = searchDao.search(sab.build());
+        for (int i = 0; i < results.size() - 2; i++) {
+            assertTrue(results.get(i).getAvgScore() <= results.get(i + 1).getAvgScore());
+        }
+    }
+
+    @Test
+    public void testSearchOrderByDate(){
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().sortBy(SearchArguments.SortBy.DATE.name()).ascending(false);
+        List<Searchable> results = searchDao.search(sab.build());
+        for (int i = 0; i < results.size() - 2; i++) {
+            assertFalse(results.get(i).getCreatedAt().isBefore(results.get(i + 1).getCreatedAt()));
         }
     }
 
     @Test
     public void testByPage() {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder().page(1).pageSize(2);
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(2, notes.size());
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(2, results.size());
     }
 
     @Test
-    public void testSearchNotesByWord() {
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.NOTE.toString()).word("guIA");
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(2, notes.size());
+    public void testSearchByWord() {
+        String word = "guIA";
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().word(word).pageSize(allResultsPageSize);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(3, results.size());
+        assertTrue(results.stream().allMatch(n -> n.getName().toUpperCase().contains(word.toUpperCase())));
     }
 
     @Test
-    public void testSearchNotesMultipleCareerSubject() {
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_MEC).subjectId(MATE_ID).category(Category.NOTE.toString());
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(1, notes.size());
-        assertEquals(TVM_ID ,notes.get(0).getId());
+    public void testSearchMultipleCareerSubject() {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_MEC).subjectId(MATE_ID);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(1, results.size());
+        assertEquals(TVM_ID ,results.get(0).getId());
     }
-
-    @Test
-    public void testSearchNotesMultipleCareerSubjectBis() {
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_MEC).subjectId(MATE_ID).category(Category.NOTE.toString());
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(1, notes.size());
-        assertEquals(TVM_ID, notes.get(0).getId());
-    }
-
-    /* Directory tests */
-//    @Test
-//    public void testSearchDirectoriesByInstitution() {
-//        SearchArgumentsBuilder sab = new SearchArgumentsBuilder(ITBA_ID, null, null, Category.DIRECTORY.toString(), null, "name", true, 1, 10);
-//        List<Searchable> directories = searchDao.search(sab.build());
-//        assertEquals(5, directories.size());
-//    }
-//
-//    @Test
-//    public void testSearchDirectoriesByCareer(){
-//        SearchArgumentsBuilder sab = new SearchArgumentsBuilder(ITBA_ID, ING_INF, null, Category.DIRECTORY.toString(), null, "name", true, 1, 10);
-//        List<Searchable> directories = searchDao.search(sab.build());
-//        assertEquals(3, directories.size());
-//    }
-//
-//    @Test
-//    public void testSearchDirectoriesBySubject(){
-//        SearchArgumentsBuilder sab = new SearchArgumentsBuilder(ITBA_ID, ING_INF, EDA_ID, Category.DIRECTORY.toString(), null, "name", true, 1, 10);
-//        List<Searchable> directories = searchDao.search(sab.build());
-//        assertEquals(1, directories.size());
-//    }
-
-    @Test
-    public void testSearchDirectoriesOrderBy(){
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.DIRECTORY.toString()).sortBy("date").ascending(false);
-        List<Searchable> directories = searchDao.search(sab.build());
-        for (int i = 0; i < directories.size() - 2; i++) {
-            assertFalse(directories.get(i).getCreatedAt().isBefore(directories.get(i + 1).getCreatedAt()));
-        }
-    }
-
-//    @Test
-//    public void testSearchDirectoriesByPage() {
-//        SearchArgumentsBuilder sab = new SearchArgumentsBuilder(null, null, null, Category.DIRECTORY.toString(), null, "name", true, 1, 2);
-//        List<Searchable> directories = searchDao.search(sab.build());
-//        assertEquals(2, directories.size());
-//    }
-
-    // TODO: Make generic
-//    @Test
-//    public void testChildren() {
-//        List<Directory> directories = directoryDao.getChildren(EDA_DIRECTORY_ID);
-//        assertEquals(2, directories.size());
-//        assertEquals("Guias", directories.get(0).getName());
-//        assertEquals("1eros parciales", directories.get(1).getName());
-//    }
-
-//    @Test
-//    public void testSearchDirectoriesByWord() {
-//        SearchArgumentsBuilder sab = new SearchArgumentsBuilder(null, null, null, Category.DIRECTORY.toString(), "can", "name", true, 1, 10);
-//        List<Searchable> directories = searchDao.search(sab.build());
-//        assertEquals(3, directories.size());
-//        assertEquals("Dinamica de Fluidos", directories.get(0).getName());
-//        assertEquals("Matematica I", directories.get(1).getName());
-//        assertEquals("Mecanica Gral", directories.get(2).getName());
-//    }
 
     @Test
     public void testEscapePercentage() {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.DIRECTORY.toString()).word("%");
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(1, notes.size());
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(1, results.size());
     }
 
     @Test
     public void testEscapeUnderscore() {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.DIRECTORY.toString()).word("_");
-        List<Searchable> notes = searchDao.search(sab.build());
-        assertEquals(1, notes.size());
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(1, results.size());
     }
 
     @Test
     public void testNavigation() {
-        List<Searchable> notes = searchDao.getNavigationResults(new SearchArgumentsBuilder().build(), EDA_DIRECTORY_ID);
-        assertEquals(4, notes.size());
+        List<Searchable> results = searchDao.getNavigationResults(new SearchArgumentsBuilder().build(), EDA_DIRECTORY_ID);
+        assertEquals(4, results.size());
     }
 
     @Test
+    public void testNavigationByCategory() {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.PRACTICE.toString());
+        List<Searchable> results = searchDao.getNavigationResults(sab.build(), EDA_DIRECTORY_ID);
+        assertEquals(1, results.size());
+        assertTrue(results.stream().allMatch(n -> n.getCategory().equals(Category.PRACTICE)));
+    }
+    
+    @Test
     public void testNavigationByWord() {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder().word("guia");
-        List<Searchable> notes = searchDao.getNavigationResults(sab.build(), EDA_DIRECTORY_ID);
-        assertEquals(2, notes.size());
+        List<Searchable> results = searchDao.getNavigationResults(sab.build(), EDA_DIRECTORY_ID);
+        assertEquals(2, results.size());
+
+    }
+
+    @Test
+    public void testCountNavigationResults() {
+        int searchResults = searchDao.countNavigationResults(new SearchArgumentsBuilder().build(), EDA_DIRECTORY_ID);
+        assertEquals(4, searchResults);
     }
 
     @Test
@@ -287,5 +288,28 @@ public class SearchJdbcDaoTest {
         assertEquals(0, searchDao.countChildren(test.child4Id));
     }
 
+    @Test
+    public void testFindByName() {
+        String name = "Guias";
+        Optional<UUID> resultId = searchDao.findByName(EDA_DIRECTORY_ID, name, PEPE_ID);
 
+        assertTrue(resultId.isPresent());
+        assertEquals(GUIAS_DIRECTORY_ID, resultId.get());
+    }
+
+    @Test
+    public void testFindByNameDifferentParent() {
+        String name = "Guias";
+        Optional<UUID> resultId = searchDao.findByName(PAW_DIRECTORY_ID, name, PEPE_ID);
+
+        assertFalse(resultId.isPresent());
+    }
+
+    @Test
+    public void testFindByNameDifferentUser() {
+        String name = "Guias";
+        Optional<UUID> resultId = searchDao.findByName(EDA_DIRECTORY_ID, name, SAIDMAN_ID);
+
+        assertFalse(resultId.isPresent());
+    }
 }
