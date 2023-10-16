@@ -29,7 +29,6 @@ public class VerificationCodeJdbcDao implements VerificationCodeDao {
     @Override
     public void saveVerificationCode(VerificationCode verificationCode) {
         try  {
-            // TODO: Remove last verification code for user (if exists)
             this.namedParameterJdbcTemplate.update(
                     "INSERT INTO Verification_Codes(user_id, code, expires_at) values(" +
                             "(SELECT user_id FROM Users WHERE email = :email), " +

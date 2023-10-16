@@ -322,7 +322,7 @@
                         <td class="search-actions">
                             <div class="d-flex justify-content-end">
                                 <!-- Favorite -->
-                                <c:if test="${user ne null and item.category.formattedName eq 'directory'}"> <!-- TODO: Por ahora es directory nomas -->
+                                <c:if test="${user ne null and item.category.formattedName eq 'directory'}">
                                     <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
                                     <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
 
@@ -914,7 +914,6 @@
                         <div class="input-group">
                             <label class="input-group-text" for="name"><spring:message
                                     code="name"/></label>
-                            <!-- TODO: change value JS-->
                             <form:input path="name" type="text"
                                         class="form-control" id="name" required="true"/>
                         </div>

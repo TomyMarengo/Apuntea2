@@ -22,14 +22,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) {
-        final User user = us.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("No user for email " + username)); // TODO: Change exception
+        final User user = us.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("No user for email " + username));
 
         final Collection<GrantedAuthority> authorities = new HashSet<>();
         for (Role role : user.getRoles()) {
             authorities.add(new SimpleGrantedAuthority(role.getRole()));
         }
 
-        // TODO: Change enabled when user is deleted
         return new CustomUserDetails(user.getEmail(), user.getPassword(), true, true, true, !user.isBanned(), authorities);
     }
 }

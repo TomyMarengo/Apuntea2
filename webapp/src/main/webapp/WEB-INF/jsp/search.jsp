@@ -331,7 +331,7 @@
                             <div class="d-flex justify-content-end">
 
                                 <!-- Favorite -->
-                                <c:if test="${user ne null and item.category.formattedName eq 'directory'}"> <!-- TODO: Por ahora es directory nomas -->
+                                <c:if test="${user ne null and item.category.formattedName eq 'directory'}">
                                     <c:set var="addFavorite" value="./directory/${item.id}/addfavorite"/>
                                     <c:set var="removeFavorite" value="./directory/${item.id}/removefavorite"/>
 

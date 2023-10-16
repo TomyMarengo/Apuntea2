@@ -40,20 +40,7 @@ public class JdbcDaoTestUtils {
     private JdbcDaoTestUtils() {}
 
     static UUID insertStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(EMAIL, email);
-        args.addValue(PASSWORD, password);
-        args.addValue(CAREER_ID, careerId);
-        args.addValue(LOCALE, locale);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Users (email, password, career_id, locale) VALUES (:email, :password, :career_id, :locale)",
-                args, keyHolder, new String[]{USER_ID});
-        UUID newUserId = (UUID) keyHolder.getKeys().get(USER_ID);
-
-        args = new MapSqlParameterSource().addValue(USER_ID, newUserId).addValue(ROLE_NAME, Role.ROLE_STUDENT.getRole());
-        namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
-        return (UUID) keyHolder.getKeys().get(USER_ID);
+        return insertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_STUDENT);
     }
 
     static UUID insertLegacyUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email) {
@@ -66,8 +53,11 @@ public class JdbcDaoTestUtils {
         return (UUID) keyHolder.getKeys().get(USER_ID);
     }
 
-    // TODO: Modularize?
     static UUID insertAdmin(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
+        return insertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_ADMIN);
+    }
+
+    private static UUID insertUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale, Role role) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(EMAIL, email);
         args.addValue(PASSWORD, password);
@@ -79,7 +69,7 @@ public class JdbcDaoTestUtils {
                 args, keyHolder, new String[]{USER_ID});
         UUID newUserId = (UUID) keyHolder.getKeys().get(USER_ID);
 
-        args = new MapSqlParameterSource().addValue(USER_ID, newUserId).addValue(ROLE_NAME, Role.ROLE_ADMIN.getRole());
+        args = new MapSqlParameterSource().addValue(USER_ID, newUserId).addValue(ROLE_NAME, role.getRole());
         namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
         return (UUID) keyHolder.getKeys().get(USER_ID);
     }

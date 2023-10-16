@@ -22,14 +22,13 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
-        if (exception instanceof UsernameNotFoundException) {
-            super.setDefaultFailureUrl("/login?error=true");
-        } else if (exception instanceof LockedException) {
-            super.setDefaultFailureUrl("/login?banned=true");
-        } else {
-            super.setDefaultFailureUrl("/login?error=true"); // TODO: Handle more errors?
+        String url;
+        if (exception instanceof LockedException) {
+            url = "/login?banned=true";
+        } else { // UsernameNotFoundException and others
+            url = "/login?error=true";
         }
-
+        super.setDefaultFailureUrl(url);
         super.onAuthenticationFailure(request, response, exception);
     }
 }

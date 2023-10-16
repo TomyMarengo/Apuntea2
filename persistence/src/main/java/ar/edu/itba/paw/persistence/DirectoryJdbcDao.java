@@ -170,7 +170,7 @@ public class DirectoryJdbcDao implements DirectoryDao {
                 args, USER_ROW_MAPPER)
         );
         int rowsDeleted = namedParameterJdbcTemplate.update("DELETE FROM Directories WHERE directory_id IN (:directory_id)", args);
-        if (rowsDeleted != dir.size()) return Collections.emptyList(); // TODO: Check if this makes sense
+        if (rowsDeleted != dir.size()) return Collections.emptyList();
         return dir;
     }
 

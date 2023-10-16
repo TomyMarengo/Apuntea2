@@ -53,8 +53,6 @@ public class HomeController {
     @RequestMapping(value = "/register")
     public ModelAndView registerForm(@ModelAttribute("userForm") final UserForm userForm) {
         ModelAndView mav = new ModelAndView("register");
-
-        // TODO: Ask if this should go in the service
         InstitutionData institutionData = institutionService.getInstitutionData();
         mav.addObject("institutionData", toSafeJson(institutionData));
         return mav;

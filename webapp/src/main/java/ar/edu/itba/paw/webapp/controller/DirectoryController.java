@@ -187,21 +187,16 @@ public class DirectoryController {
     @RequestMapping(value = "/{directoryId}/addfavorite", method = RequestMethod.POST)
     public ModelAndView addFavoriteDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                           @RequestParam String redirectUrl, final RedirectAttributes redirectAttributes) {
-        // TODO: Validate redirectUrl?
         directoryService.addFavorite(directoryId);
         redirectAttributes.addFlashAttribute(FAVORITE_ADDED, true);
-        // TODO: display a message saying that the directory was added to favorites
         return new ModelAndView("redirect:" + redirectUrl);
     }
 
     @RequestMapping(value = "/{directoryId}/removefavorite", method = RequestMethod.POST)
     public ModelAndView removeFavoriteDirectory(@PathVariable("directoryId") @ValidUuid UUID directoryId,
                                           @RequestParam String redirectUrl, final RedirectAttributes redirectAttributes) {
-        // TODO: Validate redirectUrl?
         directoryService.removeFavorite(directoryId);
         redirectAttributes.addFlashAttribute(FAVORITE_REMOVED, true);
-        // TODO: display a message saying that the directory was removed from favorites
-        // If removeFavorite returns something different than 1, handle the error
         return new ModelAndView("redirect:" + redirectUrl);
     }
 

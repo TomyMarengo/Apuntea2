@@ -72,15 +72,11 @@ public class UserController {
     public ModelAndView updateSettings(@ModelAttribute("user") User user,
             @ModelAttribute final ChangePasswordForm changePasswordForm,
             @Valid @ModelAttribute final EditUserForm editUserForm,
-            final BindingResult result, final RedirectAttributes redirectAttributes) {
+            final BindingResult result) {
         ModelAndView mav = new ModelAndView("settings");
         if(!result.hasErrors()) {
-            try {
-                userService.updateProfile(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername(), editUserForm.getProfilePicture());
-                mav.addObject(USER_EDITED, true);
-            } catch (InvalidFileException e) {
-                mav.addObject("invalidFileError"); // TODO: Add modals for this error
-            }
+            userService.updateProfile(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername(), editUserForm.getProfilePicture());
+            mav.addObject(USER_EDITED, true);
         }
         else
             mav.addObject("errorsEditUserForm", result.getAllErrors());
