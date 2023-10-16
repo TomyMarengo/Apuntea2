@@ -184,8 +184,12 @@ CREATE TABLE IF NOT EXISTS Images
 );
 
 ALTER TABLE Users
-    ADD COLUMN IF NOT EXISTS profile_picture_id uuid REFERENCES Images (image_id) ON DELETE SET NULL,
-    ADD COLUMN IF NOT EXISTS status character varying(10) DEFAULT 'ACTIVE' NOT NULL CHECK (status IN ('ACTIVE', 'BANNED', 'DELETED')),
+    ADD COLUMN IF NOT EXISTS profile_picture_id uuid,
+    DROP CONSTRAINT IF EXISTS "FK_users_images",
+    ADD CONSTRAINT "FK_users_images" FOREIGN KEY (profile_picture_id) REFERENCES Images (image_id) ON DELETE SET NULL,
+    ADD COLUMN IF NOT EXISTS status character varying(10) DEFAULT 'ACTIVE' NOT NULL,
+    DROP CONSTRAINT IF EXISTS "CK_users_status",
+    ADD CONSTRAINT "CK_users_status" CHECK (status IN ('ACTIVE', 'BANNED', 'DELETED')),
     DROP COLUMN IF EXISTS profile_picture;
 
 CREATE TABLE IF NOT EXISTS Favorites

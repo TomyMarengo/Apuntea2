@@ -104,7 +104,7 @@ public class UserController {
             try {
                 return IOUtils.toByteArray(context.getResourceAsStream("image/profile-picture.jpeg"));
             } catch (IOException e) {
-                LOGGER.error("Error while reading default profile picture", e);
+                LOGGER.warn("Error while reading default profile picture");
                 return null;
             }
         });
