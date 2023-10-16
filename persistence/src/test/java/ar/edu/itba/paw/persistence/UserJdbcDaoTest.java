@@ -237,21 +237,24 @@ public class UserJdbcDaoTest {
         int currentUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
-        assertEquals(0, userDao.getStudentsQuantity("t2000"));
+        int results = userDao.getStudentsQuantity("t2000");
+        assertEquals(0, results);
     }
 
     @Test
     public void testGetStudents20Count() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
-        assertEquals(1, userDao.getStudentsQuantity("t20"));
+        int results = userDao.getStudentsQuantity("t20");
+        assertEquals(1, results);
     }
 
     @Test
     public void testGetStudents2Count() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
-        assertEquals(2, userDao.getStudentsQuantity("t2"));
+        int results = userDao.getStudentsQuantity("t2");
+        assertEquals(2, results);
     }
 
     @Test
@@ -259,7 +262,8 @@ public class UserJdbcDaoTest {
         final int STUDENTS_LENGTH = 20;
         int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT' AND NOT EXISTS ( SELECT * FROM User_Roles ur WHERE ur.user_id = user_id  AND ur.role_name = 'ROLE_ADMIN')");
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF, "es");
-        assertEquals(oldUsers + STUDENTS_LENGTH, userDao.getStudentsQuantity(""));
+        int results = userDao.getStudentsQuantity("");
+        assertEquals(oldUsers + STUDENTS_LENGTH, results);
     }
 
     @Test

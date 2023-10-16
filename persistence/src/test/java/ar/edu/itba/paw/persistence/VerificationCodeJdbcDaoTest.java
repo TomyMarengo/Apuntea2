@@ -68,7 +68,8 @@ public class VerificationCodeJdbcDaoTest {
         insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
         VerificationCode code = new VerificationCode("123456", email, LocalDateTime.now().plusMinutes(10));
         insertVerificationCode(namedParameterJdbcTemplate, code);
-        assertTrue(verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), code.getCode()));
+        boolean success = verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), code.getCode());
+        assertTrue(success);
     }
 
     @Test
@@ -77,12 +78,14 @@ public class VerificationCodeJdbcDaoTest {
         insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
         VerificationCode code = new VerificationCode("123456", "verification@itba.edu.ar", LocalDateTime.now().plusMinutes(10));
         insertVerificationCode(namedParameterJdbcTemplate, code);
-        assertFalse(verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), "123457"));
+        boolean success = verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), "123457");
+        assertFalse(success);
     }
 
     @Test
     public void testVerifyForgotPasswordCodeInvalidEmail() {
-        assertFalse(verificationCodeDao.verifyForgotPasswordCode("verification@itba.edu.ar", "123457"));
+        boolean success = verificationCodeDao.verifyForgotPasswordCode("verification@itba.edu.ar", "123457");
+        assertFalse(success);
     }
 
     @Test
@@ -91,7 +94,8 @@ public class VerificationCodeJdbcDaoTest {
         insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
         VerificationCode code = new VerificationCode("123456", "verification@itba.edu.ar", LocalDateTime.now().minusMinutes(10));
         insertVerificationCode(namedParameterJdbcTemplate, code);
-        assertFalse(verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), "123456"));
+        boolean success = verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), "123456");
+        assertFalse(success);
     }
 
     @Test

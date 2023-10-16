@@ -255,37 +255,43 @@ public class SearchJdbcDaoTest {
     @Test
     public void testCountChildrenMixed() {
         TestCountChildrenObject test = new TestCountChildrenObject();
-        assertEquals(4, searchDao.countChildren(test.rootDirId));
+        int result = searchDao.countChildren(test.rootDirId);
+        assertEquals(4, result);
     }
 
     @Test
     public void testCountChildrenAllDirectories() {
         TestCountChildrenObject test = new TestCountChildrenObject();
-        assertEquals(2, searchDao.countChildren(test.child1Id));
+        int result = searchDao.countChildren(test.child1Id);
+        assertEquals(2, result);
     }
 
     @Test
     public void testCountChildrenAllNotes() {
         TestCountChildrenObject test = new TestCountChildrenObject();
-        assertEquals(2, searchDao.countChildren(test.child2Id));
+        int result = searchDao.countChildren(test.child2Id);
+        assertEquals(2, result);
     }
 
     @Test
     public void testCountChildrenEmpty() {
         TestCountChildrenObject test = new TestCountChildrenObject();
-        assertEquals(0, searchDao.countChildren(test.child3Id));
+        int result = searchDao.countChildren(test.child3Id);
+        assertEquals(0, result);
     }
 
     @Test
     public void testCountChildrenGrandChildren() {
         TestCountChildrenObject test = new TestCountChildrenObject();
-        assertEquals(1, searchDao.countChildren(test.grandchild11Id));
+        int result = searchDao.countChildren(test.grandchild11Id);
+        assertEquals(1, result);
     }
 
     @Test
     public void testCountChildrenNotADirectory() {
         TestCountChildrenObject test = new TestCountChildrenObject();
-        assertEquals(0, searchDao.countChildren(test.child4Id));
+        int result = searchDao.countChildren(test.child4Id);
+        assertEquals(0, result);
     }
 
     @Test

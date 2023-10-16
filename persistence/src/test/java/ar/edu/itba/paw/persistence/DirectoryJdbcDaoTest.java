@@ -82,7 +82,8 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testGetDirectoryByIdNonExistent() {
-        assertFalse(directoryDao.getDirectoryById(UUID.randomUUID(), PEPE_ID).isPresent());
+        Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(UUID.randomUUID(), PEPE_ID);
+        assertFalse(maybeDirectory.isPresent());
     }
 
     @Test
