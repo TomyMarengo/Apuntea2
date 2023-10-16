@@ -20,4 +20,16 @@ public class InstitutionData {
         subjectMap.putIfAbsent(career.getCareerId(), new HashSet<>());
         subjectMap.get(career.getCareerId()).add(subject);
     }
+
+    public Set<Institution> getInstitutions() {
+        return institutions;
+    }
+
+    public Set<Career> getCareers(UUID institutionId) {
+        return careerMap.get(institutionId);
+    }
+
+    public Set<Subject> getSubjects(UUID careerId) {
+        return subjectMap.get(careerId);
+    }
 }
