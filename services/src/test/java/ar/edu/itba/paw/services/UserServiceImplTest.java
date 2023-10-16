@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.user.InvalidUserException;
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.ProfilePicture;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.UserDao;
@@ -111,9 +112,16 @@ public class UserServiceImplTest {
         assertArrayEquals(new byte[]{1, 2, 3}, maybePic.get());
     }
 
+    @Test(expected = UserNotFoundException.class)
+    public void testGetProfilePictureUserNotFound() {
+        Mockito.when(userDao.getProfilePicture(Mockito.any())).thenReturn(Optional.empty());
+        userService.getProfilePicture(UUID.randomUUID());
+        fail();
+    }
+
     @Test
     public void testGetProfilePictureEmpty() {
-        Mockito.when(userDao.getProfilePicture(Mockito.any())).thenReturn(Optional.empty());
+        Mockito.when(userDao.getProfilePicture(Mockito.any())).thenReturn(Optional.of(new ProfilePicture(UUID.randomUUID().toString(), null)));
         Optional<byte[]> maybePic = userService.getProfilePicture(UUID.randomUUID());
         assertFalse(maybePic.isPresent());
     }

@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -105,6 +104,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<byte[]> getProfilePicture(UUID userId) {
         Optional<ProfilePicture> picture = userDao.getProfilePicture(userId);
+        if (!picture.isPresent()) {
+            LOGGER.warn("Error while getting profile picture for user with id: {}", userId);
+            throw new UserNotFoundException();
+        }
         return picture.map(ProfilePicture::getPicture);
     }
 
