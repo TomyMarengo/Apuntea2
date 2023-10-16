@@ -39,6 +39,10 @@ public class ControllerUtils {
     static final String REVIEW_USER_ID = "reviewUserId";
     static final String DELETE_NOTE_IDS = "deleteNotesIds";
     static final String DELETE_DIRECTORY_IDS = "deleteDirectoriesIds";
+    static final String SUBJECT_LINKED = "subjectLinked";
+    static final String SUBJECT_UNLINKED = "subjectUnlinked";
+    static final String SUBJECT_CREATED = "subjectCreated";
+    static final String SUBJECT_EDITED = "subjectEdited";
     private	static final Logger LOGGER	= LoggerFactory.getLogger(ControllerUtils.class);
     private ControllerUtils(){}
 

@@ -14,7 +14,7 @@ En esta primera entrega del trabajo práctico de la materia Proyecto de Aplicaci
 
 ## Usuarios
 ### Administrador
-* Usuario: admin@admin.edu.ar
+* Usuario: admin@apuntea.com
 * Contraseña: Admin1
 
 ### Alumno ITBA Ingeniería Informática

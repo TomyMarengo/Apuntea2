@@ -163,11 +163,11 @@
             <!-- ROOT DIRECTORIES -->
             <div>
                 <ul class="mini-nav">
-                    <c:forEach items="${root_directories}" var="subjects">
+                    <c:forEach items="${root_directories}" var="subjects" varStatus="i">
                         <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
                         <!--TAB-->
                         <li class="mini-nav-item">
-                            <button class="btn mini-nav-button root-dir text-center ${subjects.key == 1 ? 'active' : ''}"
+                            <button class="btn mini-nav-button root-dir text-center ${i.index eq 0 ? 'active' : ''}"
                                     data-toggle="tab" role="tab" aria-selected="true">
                                 <spring:message code="profile.directories.year" arguments="${ordinal}"/>
                             </button>
@@ -175,8 +175,8 @@
                     </c:forEach>
                 </ul>
                 <div class="tab-content bg-bg">
-                    <c:forEach items="${root_directories}" var="subjects">
-                        <div class="tab-pane root-dir-list fade ${subjects.key == 1 ? 'active' : ''}" role="tabpanel">
+                    <c:forEach items="${root_directories}" var="subjects" varStatus="i">
+                        <div class="tab-pane root-dir-list fade ${i.index eq 0 ? 'active' : ''}" role="tabpanel">
                             <div class="file-list gap-5 justify-content-center align-items-center">
                                 <c:forEach items="${subjects.value}" var="rd">
                                     <a class="align-self-center"

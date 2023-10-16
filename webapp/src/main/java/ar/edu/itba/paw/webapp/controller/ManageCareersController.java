@@ -58,7 +58,11 @@ public class ManageCareersController {
         addFormOrGetWithErrors(mav, model, UNLINK_SUBJECT_FORM_BINDING, "errorsUnlinkSubjectForm", "unlinkSubjectForm", UnlinkSubjectForm.class);
         addFormOrGetWithErrors(mav, model, CREATE_SUBJECT_FORM_BINDING, "errorsCreateSubjectForm", "createSubjectForm", CreateSubjectForm.class);
         addFormOrGetWithErrors(mav, model, EDIT_SUBJECT_FORM_BINDING, "errorsEditSubjectForm", "editSubjectForm", EditSubjectForm.class);
-        
+
+        mav.addObject(SUBJECT_LINKED, model.getOrDefault(SUBJECT_LINKED, false));
+        mav.addObject(SUBJECT_UNLINKED, model.getOrDefault(SUBJECT_UNLINKED, false));
+        mav.addObject(SUBJECT_CREATED, model.getOrDefault(SUBJECT_CREATED, false));
+        mav.addObject(SUBJECT_EDITED, model.getOrDefault(SUBJECT_EDITED, false));
 
         InstitutionData institutionData = institutionService.getInstitutionData();
         mav.addObject("institutionData", toSafeJson(institutionData));
@@ -87,6 +91,7 @@ public class ManageCareersController {
         }
         final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
         subjectService.linkSubjectToCareer(linkSubjectForm.getSubjectId(), careerId, linkSubjectForm.getYear());
+        redirectAttributes.addFlashAttribute(SUBJECT_LINKED, true);
         return mav;
     }
 
@@ -102,6 +107,7 @@ public class ManageCareersController {
         }
         final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
         subjectService.unlinkSubjectFromCareer(unlinkSubjectForm.getSubjectId(), careerId);
+        redirectAttributes.addFlashAttribute(SUBJECT_UNLINKED, true);
         return mav;
     }
 
@@ -118,6 +124,7 @@ public class ManageCareersController {
         }
         final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
         subjectService.createSubject(createSubjectForm.getName(), careerId, createSubjectForm.getYear());
+        redirectAttributes.addFlashAttribute(SUBJECT_CREATED, true);
         return mav;
     }
 
@@ -133,6 +140,7 @@ public class ManageCareersController {
         }
         final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
         subjectService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
+        redirectAttributes.addFlashAttribute(SUBJECT_EDITED, true);
         return mav;
     }
 

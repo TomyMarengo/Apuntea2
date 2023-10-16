@@ -359,7 +359,7 @@
                             <label class="input-group-text" for="name"><spring:message
                                     code="name"/></label>
                             <form:input path="name" type="text"
-                                        class="form-control" id="editSubjectName"/>
+                                        class="form-control" id="editSubjectName" required="true"/>
                         </div>
                         <form:errors path="name" cssClass="text-danger" element="p"/>
                     </div>
@@ -397,8 +397,7 @@
                         method="POST"
                         id="unlinkSubjectForm">
                 <div class="modal-header">
-                    <h3 class="modal-title fs-5" id="unlinkLabel"><spring:message code="unlinkForm.description"/> :
-                        <span id="unlinkSubjectName"></span></h3>
+                    <h3 class="modal-title fs-5" id="unlinkLabel"><spring:message code="unlinkForm.description"/>: <span id="unlinkSubjectName"></span></h3>
                     <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
                             aria-label="Close">
                     </button>
@@ -424,9 +423,12 @@
 </div>
 </c:if>
 
+<fragment:custom-toast message=""/>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+
+<script src="<c:url value="/js/popups.js"/>"></script>
 
 <script>
     const {institutions, careerMap, subjectMap} = JSON.parse('${institutionData}');
@@ -443,7 +445,7 @@
     let unlinkSubjectIdNode = document.getElementById('unlinkSubjectId');
     if (unlinkSubjectIdNode.value != null) {
         let unlinkSubjectNameNode = document.getElementById('unlinkSubjectName');
-        unlinkSubjectNameNode.innerText = subjects.find(subject => subject.subjectId === unlinkSubjectIdNode.value).name;
+        unlinkSubjectNameNode.innerText = subjectMap[careerId].find(subject => subject.subjectId === unlinkSubjectIdNode.value).name;
     }
     let unlinkSubjectModal = new bootstrap.Modal(document.getElementById('unlinkSubjectModal'), {})
     unlinkSubjectModal.show();
@@ -456,11 +458,22 @@
     let editSubjectModal = new bootstrap.Modal(document.getElementById('editSubjectModal'), {})
     editSubjectModal.show();
     </c:if>
+    <c:if test="${subjectCreated eq true}">
+    displayToast('<spring:message code="toast.subjectCreated"/>')
+    </c:if>
+    <c:if test="${subjectEdited eq true}">
+    displayToast('<spring:message code="toast.subjectEdited"/>')
+    </c:if>
+    <c:if test="${subjectLinked eq true}">
+    displayToast('<spring:message code="toast.subjectLinked"/>')
+    </c:if>
+    <c:if test="${subjectUnlinked eq true}">
+    displayToast('<spring:message code="toast.subjectUnlinked"/>')
+    </c:if>
 </script>
 
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ics-autocomplete.js"/>"></script>
-<script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/manage-career.js"/>"></script>
 <script src="<c:url value="/js/sidebar.js"/>"></script>
 
