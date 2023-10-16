@@ -141,12 +141,12 @@ public class SearchArguments {
             return this;
         }
 
-        public SearchArgumentsBuilder page(Integer page) {
+        public SearchArgumentsBuilder page(int page) {
             this.page = page;
             return this;
         }
 
-        public SearchArgumentsBuilder pageSize(Integer pageSize) {
+        public SearchArgumentsBuilder pageSize(int pageSize) {
             this.pageSize = pageSize;
             return this;
         }

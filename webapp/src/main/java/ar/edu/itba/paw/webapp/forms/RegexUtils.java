@@ -14,6 +14,12 @@ public class RegexUtils {
 
     public static final String CHALLENGE_CODE_REGEX = "^[0-9]{6}$";
 
+    public static final String AVAILABLE_FOLDER_COLORS_REGEX = "(BBBBBB|16A765|4986E7|CD35A6)";
+
+    public static final String CATEGORY_REGEX = "theory|practice|exam|other";
+
+    public static final String SEARCHABLE_REDIRECT = "/|/notes/.*|/directory/.*";
+
     private RegexUtils() {
     }
 

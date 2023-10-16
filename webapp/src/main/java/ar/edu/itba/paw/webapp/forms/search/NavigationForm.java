@@ -14,26 +14,22 @@ public class NavigationForm {
     @Pattern(regexp = "score|name|date")
     private String sortBy = "score";
 
-    @NotNull
-    private Boolean ascending = false;
+    private boolean ascending = false;
 
-    @NotNull
     @Min(1)
-    private Integer pageNumber = 1;
+    private int pageNumber = 1;
 
-    @NotNull
     @Range(min = 4, max = 24)
-    private Integer pageSize = 12;
+    private int pageSize = 12;
 
-//    @Pattern(regexp = "[a-zA-Z0-9 áéíóúÁÉÍÓÚñÑüÜ]*")
     @Size(max = 50)
     private String word;
 
-    public Boolean getAscending() {
+    public boolean getAscending() {
         return ascending;
     }
 
-    public void setAscending(Boolean ascending) {
+    public void setAscending(boolean ascending) {
         this.ascending = ascending;
     }
 
@@ -53,19 +49,19 @@ public class NavigationForm {
         this.sortBy = sortBy;
     }
 
-    public Integer getPageNumber() {
+    public int getPageNumber() {
         return pageNumber;
     }
 
-    public void setPageNumber(Integer pageNumber) {
+    public void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
     }
 
-    public Integer getPageSize() {
+    public int getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(Integer pageSize) {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 

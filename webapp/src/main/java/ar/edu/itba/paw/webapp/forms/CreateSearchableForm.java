@@ -17,6 +17,17 @@ public abstract class CreateSearchableForm {
 
     @ValidUuid
     private UUID parentId;
+
+    private boolean visible = true;
+
+    public boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
     public String getName() {
         return name;
     }

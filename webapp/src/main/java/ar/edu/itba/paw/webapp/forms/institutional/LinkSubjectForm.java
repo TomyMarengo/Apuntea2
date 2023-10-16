@@ -11,9 +11,8 @@ public class LinkSubjectForm {
     @NotNull
     private UUID subjectId;
 
-    @NotNull
     @Range(min = 1, max = 10)
-    private Integer year;
+    private int year = 1;
 
     public UUID getSubjectId() {
         return subjectId;
@@ -23,11 +22,11 @@ public class LinkSubjectForm {
         this.subjectId = subjectId;
     }
 
-    public Integer getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(Integer year) {
+    public void setYear(int year) {
         this.year = year;
     }
 }

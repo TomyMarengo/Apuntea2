@@ -21,6 +21,8 @@ public abstract class EditSearchableForm {
     @ValidUuid
     private UUID parentId;
 
+    private boolean visible = true;
+
     public String getName() {
         return name;
     }
@@ -40,5 +42,13 @@ public abstract class EditSearchableForm {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

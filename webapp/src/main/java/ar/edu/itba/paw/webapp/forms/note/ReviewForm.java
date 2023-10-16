@@ -15,16 +15,16 @@ import java.util.UUID;
 
 public class ReviewForm {
     @Range(min = 1, max = 5)
-    private Integer score;
+    private int score = 5;
 
     @Length(max = 255)
     private String content;
 
-    public Integer getScore() {
+    public int getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(int score) {
         this.score = score;
     }
 

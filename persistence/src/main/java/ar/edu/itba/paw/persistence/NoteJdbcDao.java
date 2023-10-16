@@ -229,7 +229,7 @@ public class NoteJdbcDao implements NoteDao {
     }
 
     @Override
-    public void createOrUpdateReview(UUID noteId, UUID userId, Integer score, String content) {
+    public void createOrUpdateReview(UUID noteId, UUID userId, int score, String content) {
         boolean success = jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ?, created_at = now() WHERE note_id = ? AND user_id = ?", score, content, noteId, userId) == 1;
         if (!success) {
             jdbcReviewInsert.execute(new HashMap<String, Object>(){{

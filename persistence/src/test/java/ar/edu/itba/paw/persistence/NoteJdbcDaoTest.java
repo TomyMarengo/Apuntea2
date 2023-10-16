@@ -250,7 +250,7 @@ public class NoteJdbcDaoTest {
         Review review = noteDao.getReview(GUIA1EDA_NOTE_ID, newUserId);
 
         assertEquals(newUserId, review.getUser().getUserId());
-        assertEquals(4, review.getScore().intValue());
+        assertEquals(4, review.getScore());
         assertEquals("ta ok", review.getContent());
     }
 

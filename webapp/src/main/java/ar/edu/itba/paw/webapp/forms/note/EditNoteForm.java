@@ -1,22 +1,19 @@
 package ar.edu.itba.paw.webapp.forms.note;
 
 import ar.edu.itba.paw.webapp.forms.EditSearchableForm;
+import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 public class EditNoteForm extends EditSearchableForm {
 
     @NotEmpty
-    @Pattern(regexp = "theory|practice|exam|other")
+    @Pattern(regexp = RegexUtils.CATEGORY_REGEX)
     private String category;
 
-    @Pattern(regexp = "/|/notes/.*|/directory/.*")
+    @Pattern(regexp = RegexUtils.SEARCHABLE_REDIRECT)
     private String redirectUrl = "/";
-
-    private boolean visible = true;
 
     public String getCategory() {
         return category;
@@ -32,11 +29,4 @@ public class EditNoteForm extends EditSearchableForm {
         this.redirectUrl = redirectUrl;
     }
 
-    public Boolean getVisible() {
-        return visible;
-    }
-
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
-    }
 }

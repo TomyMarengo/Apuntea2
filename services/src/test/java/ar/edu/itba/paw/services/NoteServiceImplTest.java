@@ -81,7 +81,7 @@ public class NoteServiceImplTest {
     }
 
     @Test(expected = InvalidNoteException.class)
-    public void  testDeleteNoteFailure() {
+    public void testDeleteNoteFailure() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(noteDao.delete(Mockito.any(), Mockito.any())).thenReturn(false);
         noteService.delete(new UUID[]{UUID.randomUUID()}, "reason");
@@ -89,7 +89,7 @@ public class NoteServiceImplTest {
     }
 
     @Test(expected = InvalidReviewException.class)
-    public void testCreateOrUpdateReviewFailure() {
+    public void testDeleteReviewFailure() {
         Mockito.when(noteDao.getReview(Mockito.any(), Mockito.any())).thenReturn(new Review(mockUser(), "wowie", 5, new Note.NoteBuilder().build()));
         Mockito.when(noteDao.deleteReview(Mockito.any(), Mockito.any())).thenReturn(false);
         noteService.deleteReview(UUID.randomUUID(), UUID.randomUUID(), "Inappropriate");

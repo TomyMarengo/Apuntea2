@@ -7,18 +7,18 @@ import java.time.LocalDateTime;
 public class Review {
     private final User user;
     private final String content;
-    private final Integer score;
+    private final int score;
     private Note note;
     private LocalDateTime createdAt;
 
-    public Review(User user, String content, Integer score, LocalDateTime createdAt) {
+    public Review(User user, String content, int score, LocalDateTime createdAt) {
         this.user = user;
         this.content = content;
         this.score = score;
         this.createdAt = createdAt;
     }
 
-    public Review(User user, String content, Integer score, Note note) {
+    public Review(User user, String content, int score, Note note) {
         this.user = user;
         this.content = content;
         this.score = score;
@@ -33,7 +33,7 @@ public class Review {
         return content;
     }
 
-    public Integer getScore() {
+    public int getScore() {
         return score;
     }
 

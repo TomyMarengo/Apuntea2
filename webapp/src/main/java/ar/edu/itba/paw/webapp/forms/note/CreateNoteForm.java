@@ -5,6 +5,7 @@ import ar.edu.itba.paw.webapp.validation.MaxFileSize;
 import ar.edu.itba.paw.webapp.validation.ValidFileName;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
+import ar.edu.itba.paw.webapp.forms.RegexUtils;
 
 import javax.validation.constraints.*;
 
@@ -15,10 +16,8 @@ public class CreateNoteForm extends CreateSearchableForm {
     private MultipartFile file;
 
     @NotEmpty
-    @Pattern(regexp = "theory|practice|exam|other")
+    @Pattern(regexp = RegexUtils.CATEGORY_REGEX)
     private String category;
-    private boolean visible = true;
-
     public MultipartFile getFile() {
         return file;
     }
@@ -34,13 +33,4 @@ public class CreateNoteForm extends CreateSearchableForm {
     public void setCategory(String category) {
         this.category = category;
     }
-
-    public Boolean getVisible() {
-        return visible;
-    }
-
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
-    }
-
 }
