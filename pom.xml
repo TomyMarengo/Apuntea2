@@ -12,6 +12,7 @@
     <!-- Spring dependencies -->
     <spring.version>4.2.5.RELEASE</spring.version>
     <fileupload.version>1.5</fileupload.version>
+    <commons.io.version>2.7</commons.io.version>
     <!-- Servlet dependencies -->
     <servlet-api.version>2.5</servlet-api.version>
     <jstl.version>1.2</jstl.version>
@@ -79,7 +80,7 @@
       <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
-        <version>2.7</version>
+        <version>${commons.io.version}</version>
       </dependency>
 
       <!-- Spring dependencies -->
@@ -97,6 +98,12 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-tx</artifactId>
         <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${spring.version}</version>
+        <scope>compile</scope>
       </dependency>
 
       <!-- Servlet dependencies -->
