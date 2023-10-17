@@ -56,7 +56,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                                 "/notes/{noteId}/download",
                                 "/directory/{directoryId}",
                                 "/profile/{userId}/picture",
-                                "/errors/**").permitAll()
+                                "/{\\d}{\\d}{\\d}").permitAll()
                     .antMatchers("/manage/**").hasRole(Role.ROLE_ADMIN.getShortName())
                     .anyRequest().authenticated()
 
@@ -77,7 +77,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/login")
 
                 .and().exceptionHandling()
-                    .accessDeniedPage("/errors/403")
+                    .accessDeniedPage("/403")
 
                 .and().headers().frameOptions().sameOrigin()
 

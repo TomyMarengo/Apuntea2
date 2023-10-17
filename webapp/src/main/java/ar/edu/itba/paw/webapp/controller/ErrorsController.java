@@ -15,13 +15,25 @@ public class ErrorsController {
     @Autowired
     private SecurityService securityService;
 
-    @RequestMapping("/errors/403")
+    @RequestMapping("/500")
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ModelAndView error500() {
+        return new ModelAndView("/errors/500");
+    }
+
+    @RequestMapping("/404")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ModelAndView error404() {
+        return new ModelAndView("/errors/404");
+    }
+
+    @RequestMapping("/403")
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ModelAndView error403() {
         return new ModelAndView("/errors/403");
     }
 
-    @RequestMapping("/errors/400")
+    @RequestMapping("/400")
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ModelAndView error400() {
         return new ModelAndView("/errors/400");

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.user.User;
-import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.SubjectService;
@@ -12,12 +11,12 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import ar.edu.itba.paw.services.UserService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
@@ -97,7 +96,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/profile/{userId}/picture", method = RequestMethod.GET, produces = {"image/jpeg", "image/png"})
+    @RequestMapping(value = "/profile/{userId}/picture", method = RequestMethod.GET, produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
     public byte[] getProfilePicture(@PathVariable("userId") @ValidUuid UUID userId)  {
         return userService.getProfilePicture(userId).orElseGet(() -> {
