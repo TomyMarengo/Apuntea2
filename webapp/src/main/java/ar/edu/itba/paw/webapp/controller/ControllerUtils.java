@@ -23,6 +23,7 @@ public class ControllerUtils {
     static final String DIRECTORY_CREATED = "directoryCreated";
     static final String DIRECTORY_EDITED = "directoryEdited";
     static final String NOTE_DELETED = "noteDeleted";
+    static final String ITEMS_DELETED = "itemsDeleted";
     static final String DIRECTORY_DELETED = "directoryDeleted";
     static final String FAVORITE_ADDED = "favoriteAdded";
     static final String FAVORITE_REMOVED = "favoriteRemoved";

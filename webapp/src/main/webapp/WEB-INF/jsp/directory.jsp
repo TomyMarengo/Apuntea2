@@ -985,7 +985,7 @@
                 <div class="modal-body pb-0 d-flex flex-column">
                     <spring:message code="DeleteForm.description"/>
                     <spring:message code="DeleteForm.explain" var="deleteMessagePlaceholder"/>
-                    <c:if test="${user ne null and user.isAdmin}">
+                    <c:if test="${user ne null and user.isAdmin and directory.user.userId ne user.userId}">
                         <label for="reason"></label>
                         <form:textarea path="reason" name="reason" class="form-control mt-3" id="reason"
                                   placeholder="${deleteMessagePlaceholder}"/>
@@ -1126,6 +1126,9 @@
 
     <c:if test="${favoriteRemoved eq true}">
         displayToast('<spring:message code="toast.removeFavorite"/>')
+    </c:if>
+    <c:if test="${itemsDeleted eq true}">
+        displayToast('<spring:message code="toast.itemsDeleted"/>')
     </c:if>
 </script>
 

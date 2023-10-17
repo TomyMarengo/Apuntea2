@@ -92,9 +92,6 @@ public class DirectoryController {
 
         mav.addObject("hierarchy", directoryService.getDirectoryPath(directoryId));
 
-        User user = securityService.getCurrentUser().orElse(null);
-        mav.addObject("user", user);
-
         return mav;
     }
 
@@ -131,8 +128,8 @@ public class DirectoryController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public ModelAndView deleteContent(@RequestParam(required = false) UUID[] directoryIds,
-                                      @RequestParam(required = false) UUID[] noteIds,
+    public ModelAndView deleteContent(@RequestParam(required = false, defaultValue = "") UUID[] directoryIds,
+                                      @RequestParam(required = false, defaultValue = "") UUID[] noteIds,
                                       @Valid @ModelAttribute("deleteWithReasonForm") final DeleteWithReasonForm deleteWithReasonForm,
                                       final BindingResult result, final RedirectAttributes redirectAttributes) {
 
@@ -140,24 +137,12 @@ public class DirectoryController {
 
         if(result.hasErrors()){
             redirectAttributes.addFlashAttribute(DELETE_WITH_REASON_FORM_BINDING, result);
-            if (noteIds != null && noteIds.length > 0)
-                redirectAttributes.addFlashAttribute(DELETE_NOTE_IDS, Arrays.stream(noteIds).map(UUID::toString).toArray(String[]::new));
-            else
-                redirectAttributes.addFlashAttribute(DELETE_NOTE_IDS, new String[0]);
-            if (directoryIds != null && directoryIds.length > 0)
-                redirectAttributes.addFlashAttribute(DELETE_DIRECTORY_IDS, Arrays.stream(directoryIds).map(UUID::toString).toArray(String[]::new));
-            else
-                redirectAttributes.addFlashAttribute(DELETE_DIRECTORY_IDS, new String[0]);
+            redirectAttributes.addFlashAttribute(DELETE_NOTE_IDS, Arrays.stream(noteIds).map(UUID::toString).toArray(String[]::new));
+            redirectAttributes.addFlashAttribute(DELETE_DIRECTORY_IDS, Arrays.stream(directoryIds).map(UUID::toString).toArray(String[]::new));
         }
         else {
-            if (noteIds != null && noteIds.length > 0){
-                noteService.delete(noteIds, deleteWithReasonForm.getReason());
-                redirectAttributes.addFlashAttribute(NOTE_DELETED, true);
-            }
-            if (directoryIds != null && directoryIds.length > 0) {
-                directoryService.delete(directoryIds, deleteWithReasonForm.getReason());
-                redirectAttributes.addFlashAttribute(DIRECTORY_DELETED, true);
-            }
+            searchService.delete(noteIds, directoryIds, deleteWithReasonForm.getReason());
+            redirectAttributes.addFlashAttribute(ITEMS_DELETED, true);
         }
         return mav;
     }
@@ -212,6 +197,7 @@ public class DirectoryController {
         mav.addObject(NOTE_DELETED, model.getOrDefault(NOTE_DELETED, false));
         mav.addObject(FAVORITE_ADDED, model.getOrDefault(FAVORITE_ADDED, false));
         mav.addObject(FAVORITE_REMOVED, model.getOrDefault(FAVORITE_REMOVED, false));
+        mav.addObject(ITEMS_DELETED, model.getOrDefault(ITEMS_DELETED, false));
 
     }
 

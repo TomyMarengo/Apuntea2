@@ -17,10 +17,16 @@ public class SearchServiceImpl implements SearchService {
     private final SecurityService securityService;
     private final SearchDao searchDao;
 
+    private final NoteService noteService;
+
+    private final DirectoryService directoryService;
+
     @Autowired
-    public SearchServiceImpl(final SearchDao searchDao, final SecurityService securityService) {
+    public SearchServiceImpl(final SearchDao searchDao, final SecurityService securityService, NoteService noteService, DirectoryService directoryService) {
         this.searchDao = searchDao;
         this.securityService = securityService;
+        this.noteService = noteService;
+        this.directoryService = directoryService;
     }
 
     @Transactional
@@ -81,4 +87,12 @@ public class SearchServiceImpl implements SearchService {
         return searchDao.findByName(parentId, name, currentUserId);
     }
 
+    @Transactional
+    @Override
+    public void delete(UUID[] noteIds, UUID[] directoryIds, String reason) {
+        if(noteIds.length > 0)
+            noteService.delete(noteIds, reason);
+        if(directoryIds.length > 0)
+            directoryService.delete(directoryIds, reason);
+    }
 }

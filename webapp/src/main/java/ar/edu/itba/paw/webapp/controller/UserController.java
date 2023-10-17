@@ -88,8 +88,7 @@ public class UserController {
                                         @Valid @ModelAttribute final ChangePasswordForm changePasswordForm,
                                        final BindingResult result) {
         if(!result.hasErrors()) {
-            if (!changePasswordForm.getOldPassword().equals(changePasswordForm.getNewPassword()))
-                userService.updateCurrentUserPassword(changePasswordForm.getNewPassword());
+            userService.updateCurrentUserPassword(changePasswordForm.getNewPassword());
             return new ModelAndView("redirect:settings?password-changed=true");
         }
         return new ModelAndView("settings").addObject("errorsChangePasswordForm", result.getAllErrors());
