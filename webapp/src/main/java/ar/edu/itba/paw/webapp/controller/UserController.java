@@ -27,7 +27,6 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.USER_EDITED;
 
 @Controller
 public class UserController {
-
     private final UserService userService;
     private final SubjectService subjectService;
     private final DirectoryService directoryService;
@@ -68,8 +67,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/settings", method = RequestMethod.POST)
-    public ModelAndView updateSettings(@ModelAttribute("user") User user,
-            @ModelAttribute final ChangePasswordForm changePasswordForm,
+    public ModelAndView updateSettings(@ModelAttribute final ChangePasswordForm changePasswordForm,
             @Valid @ModelAttribute final EditUserForm editUserForm,
             final BindingResult result) {
         ModelAndView mav = new ModelAndView("settings");
