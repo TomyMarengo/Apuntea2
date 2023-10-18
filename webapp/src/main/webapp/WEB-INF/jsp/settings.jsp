@@ -42,100 +42,8 @@
     <fragment:bottom-navbar title="./settings:${title}"/>
 </header>
 
-
-<!-- CONFIGURATION -->
-<div class="container">
-    <%--    <div class="row row-cols-md-2 row-cols-1 gx-md-4 gy-4 gy-md-0">--%>
-    <%--        <!-- NOTIFICATIONS -->--%>
-    <%--        <div class="col col-lg-3">--%>
-    <%--            <div class="card box">--%>
-    <%--                <div class="card-body d-flex flex-column gap-3">--%>
-    <%--                    <h5 class="card-title fw-bold"><spring:message code="settings.notifications.title"/></h5>--%>
-    <%--                    <div class="form-check form-switch p-0">--%>
-    <%--                        <label class="form-check-label" for="newNotes">--%>
-    <%--                            <spring:message code="settings.notifications.newNotes"/>--%>
-    <%--                        </label>--%>
-    <%--                        <input class="form-check-input" type="checkbox" id="newNotes">--%>
-    <%--                    </div>--%>
-    <%--                    <div class="form-check form-switch d-flex justify-content-between p-0">--%>
-    <%--                        <label class="form-check-label" for="newComments">--%>
-    <%--                            <spring:message code="settings.notifications.newComments"/>--%>
-    <%--                        </label>--%>
-    <%--                        <input class="form-check-input" type="checkbox" id="newComments">--%>
-    <%--                    </div>--%>
-    <%--                    <div class="form-check form-switch d-flex justify-content-between p-0">--%>
-    <%--                        <label class="form-check-label" for="newReviews">--%>
-    <%--                            <spring:message code="settings.notifications.newReviews"/>--%>
-    <%--                        </label>--%>
-    <%--                        <input class="form-check-input" type="checkbox" id="newReviews">--%>
-    <%--                    </div>--%>
-    <%--                    <div class="form-check form-switch d-flex justify-content-between p-0">--%>
-    <%--                        <label class="form-check-label" for="aboutUs">--%>
-    <%--                            <spring:message code="settings.notifications.aboutUs"/>--%>
-    <%--                        </label>--%>
-    <%--                        <input class="form-check-input" type="checkbox" id="aboutUs">--%>
-    <%--                    </div>--%>
-    <%--                    <h6 class="card-title fw-bold mt-3"><spring:message code="settings.lapse.title"/></h6>--%>
-    <%--                    <div class="form-check form-switch d-flex justify-content-between p-0">--%>
-    <%--                        <label class="form-check-label" for="immediately">--%>
-    <%--                            <spring:message code="settings.lapse.immediately"/>--%>
-    <%--                        </label>--%>
-    <%--                        <input class="form-check-input" type="checkbox" id="immediately">--%>
-    <%--                    </div>--%>
-    <%--                    <div class="form-check form-switch d-flex justify-content-between p-0">--%>
-    <%--                        <label class="form-check-label" for="dailySummary">--%>
-    <%--                            <spring:message code="settings.lapse.dailySummary"/>--%>
-    <%--                        </label>--%>
-    <%--                        <input class="form-check-input" type="checkbox" id="dailySummary">--%>
-    <%--                    </div>--%>
-    <%--                    <div class="form-check form-switch d-flex justify-content-between p-0">--%>
-    <%--                        <label class="form-check-label" for="weeklySummary">--%>
-    <%--                            <spring:message code="settings.lapse.weeklySummary"/>--%>
-    <%--                        </label>--%>
-    <%--                        <input class="form-check-input" type="checkbox" id="weeklySummary">--%>
-    <%--                    </div>--%>
-    <%--                </div>--%>
-    <%--            </div>--%>
-    <%--        </div>--%>
-
-    <%--        <div class="col col-lg-9">--%>
-    <%--            <div class="row row-cols-lg-3 row-cols-1 gy-4 gx-lg-4">--%>
-    <%--                <!-- PRIVACY -->--%>
-    <%--                <div class="col">--%>
-    <%--                    <div class="card box">--%>
-    <%--                        <div class="card-body d-flex flex-column gap-3">--%>
-    <%--                            <h5 class="card-title fw-bold"><spring:message code="settings.privacy.title"/></h5>--%>
-    <%--                            <div class="form-check form-switch p-0">--%>
-    <%--                                <label class="form-check-label" for="privateProfile">--%>
-    <%--                                    <spring:message code="settings.privacy.privateProfile"/>--%>
-    <%--                                </label>--%>
-    <%--                                <input class="form-check-input" type="checkbox" id="privateProfile">--%>
-    <%--                            </div>--%>
-    <%--                            <div class="form-check form-switch d-flex justify-content-between p-0">--%>
-    <%--                                <label class="form-check-label" for="privateNotes">--%>
-    <%--                                    <spring:message code="settings.privacy.privateNotes"/>--%>
-    <%--                                </label>--%>
-    <%--                                <input class="form-check-input" type="checkbox" id="privateNotes">--%>
-    <%--                            </div>--%>
-    <%--                        </div>--%>
-    <%--                    </div>--%>
-    <%--                </div>--%>
-
-    <%--                <!-- APPEARANCE AND INTERFACE -->--%>
-    <%--                <div class="col">--%>
-    <%--                    <div class="card box">--%>
-    <%--                        <div class="card-body d-flex flex-column gap-3">--%>
-    <%--                            <h5 class="card-title fw-bold"><spring:message code="settings.ui.title"/></h5>--%>
-    <%--                            <div class="form-check form-switch p-0">--%>
-    <%--                                <label class="form-check-label" for="darkMode">--%>
-    <%--                                    <spring:message code="settings.ui.darkMode"/>--%>
-    <%--                                </label>--%>
-    <%--                                <input class="form-check-input" type="checkbox" id="darkMode">--%>
-    <%--                            </div>--%>
-    <%--                        </div>--%>
-    <%--                    </div>--%>
-    <%--                </div>--%>
-    <div class="container mt-5">
+<main class="container mt-5 w-75">
+    <div class="container-fluid">
         <ul class="nav nav-tabs">
             <li class="nav-item flex-fill">
                 <a class="nav-link ${errorsChangePasswordForm == null ? 'active' : '' } text-center" data-toggle="tab"
@@ -153,6 +61,7 @@
         <c:url var="editUserUrl" value="/settings"/>
         <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
         <c:url var="changePasswordUrl" value="/change-password"/>
+
         <div class="tab-content">
             <div class="tab-pane fade ${errorsChangePasswordForm == null ? 'show active' : '' }" id="dataTab"
                  role="tab-panel">
@@ -197,7 +106,8 @@
                             <label for="username"></label>
                             <p><strong><spring:message code="username"/></strong></p>
                             <form:input type="text" name="username" id="username" class="form-control bg-bg"
-                                        placeholder="${settingsUsername}" path="username" value="${user.username}" required="true"/>
+                                        placeholder="${settingsUsername}" path="username" value="${user.username}"
+                                        required="true"/>
                             <form:errors path="username" cssClass="text-danger" element="p"/>
                         </div>
 
@@ -224,11 +134,11 @@
                             <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
                                         placeholder="${settingsOldPassword}" path="oldPassword" value="" required="true"/>
                             <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
-                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
-                                         class="icon-xs fill-dark-primary"/>
-                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
-                                         class="d-none icon-xs fill-dark-primary"/>
-                                </span>
+                                            <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
+                                                 class="icon-xs fill-dark-primary"/>
+                                            <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
+                                                 class="d-none icon-xs fill-dark-primary"/>
+                                        </span>
                         </div>
                         <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
 
@@ -240,11 +150,11 @@
                                         placeholder="${settingsNewPassword}" path="newPassword" value="" required="true"/>
                             <span class="input-group-text input-group-icon clickable"
                                   onclick="password_show_hide('2');">
-                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"
-                                         class="icon-xs fill-dark-primary"/>
-                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2"
-                                         class="d-none icon-xs fill-dark-primary"/>
-                                </span>
+                                            <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"
+                                                 class="icon-xs fill-dark-primary"/>
+                                            <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2"
+                                                 class="d-none icon-xs fill-dark-primary"/>
+                                        </span>
                         </div>
                         <form:errors path="newPassword" cssClass="text-danger" element="p"/>
 
@@ -257,19 +167,8 @@
             </div>
         </div>
     </div>
+</main>
 
-
-    <!-- PROFILE AND ACCOUNT -->
-    <%--    <div class="col col-3">--%>
-    <%--        <div class="card box">--%>
-    <%--            <div class="card-body d-flex flex-column gap-3">--%>
-    <%--                <h5 class="card-title fw-bold"><spring:message code="settings.account.title"/></h5>--%>
-    <%--                <a href="#" class="card-link"><spring:message code="settings.account.personalData"/></a>--%>
-    <%--                <a href="#" class="card-link"><spring:message code="settings.account.changePassword"/></a>--%>
-    <%--            </div>--%>
-    <%--        </div>--%>
-    <%--    </div>--%>
-</div>
 
 <fragment:custom-toast message=""/>
 
@@ -286,11 +185,11 @@
 
 <script>
     <c:if test="${passwordChanged eq true}">
-        displayToast('<spring:message code="toast.changePassword"/>')
+    displayToast('<spring:message code="toast.changePassword"/>')
     </c:if>
 
     <c:if test="${userEdited ne null and userEdited eq true}">
-        displayToast('<spring:message code="toast.changeInfo"/>')
+    displayToast('<spring:message code="toast.changeInfo"/>')
     </c:if>
 </script>
 </body>

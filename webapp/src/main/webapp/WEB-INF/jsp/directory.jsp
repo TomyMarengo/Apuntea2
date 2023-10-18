@@ -474,7 +474,7 @@
                                                 </form:form>
                                             </div>
 
-                                            <c:if test="${user ne null and (item.user.userId eq user.userId or user.isAdmin) }">
+                                            <c:if test="${user ne null and (item.user.userId eq user.userId) }">
                                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
                                                    data-bs-title="<spring:message code="edit"/>"
                                                    data-bs-trigger="hover">
@@ -486,7 +486,8 @@
                                                              class="icon-xs fill-text">
                                                     </button>
                                                 </a>
-
+                                            </c:if>
+                                            <c:if test="${user ne null and (item.user.userId eq user.userId or user.isAdmin) }">
                                                 <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                      data-bs-title="<spring:message code="delete"/>"
                                                      data-bs-trigger="hover">
@@ -577,6 +578,8 @@
                                                              class="icon-xs fill-text">
                                                     </button>
                                                 </a>
+                                            </c:if>
+                                            <c:if test="${user ne null and (item.user.userId eq user.userId or user.isAdmin) }">
                                                 <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                      data-bs-title="<spring:message code="delete"/>"
                                                      data-bs-trigger="hover">

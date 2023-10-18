@@ -87,7 +87,7 @@
                     </div>
                     <!-- Profile picture (visible on small screens) -->
                     <div class="d-flex d-lg-none justify-content-around align-items-center flex-wrap ">
-                        <div class="mb-3 mb-md-0">
+                        <div class="mb-3 mb-md-0 w-100">
                             <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
                                 <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"
                                      alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
@@ -95,7 +95,7 @@
                         </div>
 
                         <!-- User info -->
-                        <div class="d-flex flex-column gap-2">
+                        <div class="d-flex flex-column gap-2 w-100">
                             <h4 class="card-title fw-bold">${user.email}</h4>
                             <c:forEach items="${user.roles}" var="r">
                                 <span class="card-text">

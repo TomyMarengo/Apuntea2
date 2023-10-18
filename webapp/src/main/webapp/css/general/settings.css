@@ -5,12 +5,9 @@
     border-bottom-right-radius: var(--bs-border-radius);
     padding: 1rem;
     background-color: var(--bg);
+    box-shadow: 10px 10px 10px -5px rgba(48, 42, 36, 0.10);
 }
 
-/*container width */
-.container {
-    max-width: 80%;
-}
 
 #profile-picture{
     width: 100%;
@@ -45,7 +42,8 @@ img {
 }
 
 .selected-image{
-    width: 30%;
+    width: 200px;
+    height: 200px;
     position: relative;
     overflow: hidden;
     border-radius: 50%;
