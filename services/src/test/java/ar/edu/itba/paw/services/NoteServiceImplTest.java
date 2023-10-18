@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
 import org.junit.Test;
@@ -93,6 +94,15 @@ public class NoteServiceImplTest {
         Mockito.when(noteDao.getReview(Mockito.any(), Mockito.any())).thenReturn(new Review(mockUser(), "wowie", 5, new Note.NoteBuilder().build()));
         Mockito.when(noteDao.deleteReview(Mockito.any(), Mockito.any())).thenReturn(false);
         noteService.deleteReview(UUID.randomUUID(), UUID.randomUUID(), "Inappropriate");
+        fail();
+    }
+
+    @Test(expected = InvalidReviewException.class)
+    public void testAddReviewSameUser() {
+        User mUser = mockUser();
+        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mUser);
+        Mockito.when(noteDao.getReview(Mockito.any(), Mockito.any())).thenReturn(new Review(mUser, "my note is great", 5, new Note.NoteBuilder().user(mUser).build()));
+        noteService.createOrUpdateReview(UUID.randomUUID(), 5, "my note is great");
         fail();
     }
 }

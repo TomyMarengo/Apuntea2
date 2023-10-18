@@ -101,6 +101,8 @@ public class NoteServiceImpl implements NoteService {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
         noteDao.createOrUpdateReview(noteId, userId, score, content);
         Review review = noteDao.getReview(noteId, userId);
+        if (review.getNote().getUser().getUserId().equals(userId))
+            throw new InvalidReviewException();
         emailService.sendReviewEmail(review);
     }
 
