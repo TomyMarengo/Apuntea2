@@ -12,13 +12,13 @@
             <c:if test="${pageNumber gt 1}">
                 <li class="page-item">
                         <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
+                    <a class="page-link" id="previousPage" data-page="${pageNumber-1}"><spring:message code="search.pagination.previous"/></a>
                 </li>
             </c:if>
             <c:if test="${pageNumber le 1}">
                 <li class="page-item disabled">
                         <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="previousPage"><spring:message code="search.pagination.previous"/></a>
+                    <a class="page-link" id="previousPage" data-page="${pageNumber-1}"><spring:message code="search.pagination.previous"/></a>
                 </li>
             </c:if>
 
@@ -68,13 +68,13 @@
             <c:if test="${pageNumber lt maxPage}">
                 <li class="page-item">
                         <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
+                    <a class="page-link" id="nextPage" data-page="${pageNumber + 1}"><spring:message code="search.pagination.next"/></a>
                 </li>
             </c:if>
             <c:if test="${pageNumber ge maxPage}">
                 <li class="page-item disabled">
                         <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="nextPage"><spring:message code="search.pagination.next"/></a>
+                    <a class="page-link" id="nextPage" data-page="${pageNumber + 1}"><spring:message code="search.pagination.next"/></a>
                 </li>
             </c:if>
         </ul>

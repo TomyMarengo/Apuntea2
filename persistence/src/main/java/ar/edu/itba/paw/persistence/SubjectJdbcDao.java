@@ -63,7 +63,7 @@ public class SubjectJdbcDao implements SubjectDao {
     public List<Subject> getSubjectsByCareerId(UUID careerId) {
         return jdbcTemplate.query("SELECT DISTINCT s.subject_id, s.subject_name, sc.year, s.root_directory_id FROM Subjects s " +
                 "INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id WHERE sc.career_id = ? " +
-                "ORDER BY sc.year", ROW_MAPPER_CAREER, careerId);
+                "ORDER BY sc.year, s.subject_name", ROW_MAPPER_CAREER, careerId);
     }
 
     @Override

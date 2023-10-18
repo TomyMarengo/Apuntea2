@@ -879,7 +879,7 @@
                     <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                                 code="update"/>"/>
                 </div>
-                <input type="hidden" id="noteId" name="id" value=""/>
+                <form:hidden path="id" id="noteId"/>
                 <input type="hidden" name="parentId" value="${directory.id}"/>
                 <input name="redirectUrl" value="/directory/${directory.id}" type="hidden"/>
             </form:form>
@@ -959,7 +959,7 @@
                     <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
                                                 code="update"/>"/>
                 </div>
-                <input type="hidden" id="directoryId" name="id" value=""/>
+                <form:hidden path="id" id="directoryId"/>
                 <input type="hidden" name="parentId" value="${directory.id}"/>
                 <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
             </form:form>
