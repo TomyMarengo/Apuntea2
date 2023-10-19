@@ -228,10 +228,10 @@
                 <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/directory/${note.parentId}"/>
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-secondary"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input id="deleteOneButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input id="deleteOneButton" type="submit" class="btn rounded-box button-primary" value="<spring:message
                                             code="delete"/>"/>
                 </div>
             </form:form>
@@ -263,10 +263,10 @@
                     <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/notes/${note.id}"/>
 
                     <div class="modal-footer mt-4">
-                        <button type="button" class="btn rounded-box button-primary"
+                        <button type="button" class="btn rounded-box button-secondary"
                                 data-bs-dismiss="modal">
                             <spring:message code="close"/></button>
-                        <input id="deleteReviewButton" type="submit" class="btn rounded-box button-secondary"
+                        <input id="deleteReviewButton" type="submit" class="btn rounded-box button-primary"
                                value="<spring:message code="delete"/>"/>
                     </div>
 
@@ -343,10 +343,10 @@
 
                     </div>
                     <div class="modal-footer mt-4">
-                        <button type="button" class="btn rounded-box button-primary"
+                        <button type="button" class="btn rounded-box button-secondary"
                                 data-bs-dismiss="modal">
                             <spring:message code="close"/></button>
-                        <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                        <input type="submit" class="btn rounded-box button-primary" value="<spring:message
                                                 code="update"/>"/>
                     </div>
                     <input type="hidden" name="id" value="${note.id}"/>

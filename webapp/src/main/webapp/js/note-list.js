@@ -107,7 +107,7 @@ for (let i = 0; i < rows.length; i++) {
                 selectedRowIds.add(content[j].id);
             }
         }
-        else if (event.ctrlKey) {
+        else if (event.ctrlKey || event.metaKey) {
             if (selectedRowIds.has(id)) {
                 selectedRowIds.delete(id);
             } else {

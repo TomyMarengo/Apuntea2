@@ -146,7 +146,7 @@
 
             <div class="col">
                 <div class="input-group mb-3">
-                    <span class="input-group-text input-group-icon clickable">
+                    <button class="input-group-text input-group-icon" id="ascDescButton">
                         <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
                             <c:if test="${searchForm.ascending}">
                                 <img src="<c:url value="/svg/arrow-up.svg"/>"
@@ -160,7 +160,7 @@
                                      class="icon-s fill-dark-primary"
                                      id="arrowImage" title="descending"/>
                             </c:if>
-                    </span>
+                    </button>
 
                     <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect">
                         <form:option value="score"><spring:message code="search.sort.score"/></form:option>

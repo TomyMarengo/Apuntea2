@@ -1,6 +1,7 @@
 // const arrowSpan = document.getElementById("arrow-span");
 const arrowImage = document.getElementById("arrowImage");
 const ascCheckbox = document.getElementById("ascCheckbox");
+const ascDescButton = document.getElementById("ascDescButton");
 
 if (!baseUrl) {
     const currentUrl = window.location.origin + '/'
@@ -8,7 +9,7 @@ if (!baseUrl) {
     const baseUrl = currentUrl + path
 }
 
-arrowImage.addEventListener("click", function () {
+ascDescButton.addEventListener("click", function () {
     if (arrowImage.getAttribute("title") === "ascending") {
         arrowImage.src = `${baseUrl}/svg/arrow-down.svg`;
         arrowImage.setAttribute("title", "descending");

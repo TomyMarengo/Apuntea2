@@ -71,7 +71,7 @@
 
             <div class="col">
                 <div class="input-group mb-3">
-                    <span class="input-group-text input-group-icon clickable">
+                    <button class="input-group-text input-group-icon" id="ascDescButton">
                         <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
                             <c:if test="${navigationForm.ascending}">
                                 <img src="<c:url value="/svg/arrow-up.svg"/>"
@@ -85,7 +85,7 @@
                                      class="icon-s fill-dark-primary"
                                      id="arrowImage" title="descending"/>
                             </c:if>
-                    </span>
+                    </button>
 
                     <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect">
                         <form:option value="score"><spring:message code="search.sort.score"/></form:option>
@@ -718,10 +718,10 @@
                     <input type="hidden" name="createNote" value="createNote"/>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input type="submit" class="btn rounded-box button-primary" value="<spring:message
                                             code="upload"/>"/>
                 </div>
                 </form:form>
@@ -795,11 +795,11 @@
                     <input type="hidden" name="createDirectory" value="createDirectory"/>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/>
                     </button>
-                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input type="submit" class="btn rounded-box button-primary" value="<spring:message
                                             code="upload"/>"/>
                 </div>
             </form:form>
@@ -876,10 +876,10 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input type="submit" class="btn rounded-box button-primary" value="<spring:message
                                                 code="update"/>"/>
                 </div>
                 <form:hidden path="id" id="noteId"/>
@@ -956,10 +956,10 @@
                 </div>
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input type="submit" class="btn rounded-box button-primary" value="<spring:message
                                                 code="update"/>"/>
                 </div>
                 <form:hidden path="id" id="directoryId"/>
@@ -999,10 +999,10 @@
                 <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input id="deleteSelectedButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input id="deleteSelectedButton" type="submit" class="btn rounded-box button-primary" value="<spring:message
                                                 code="delete"/>"/>
                 </div>
 
