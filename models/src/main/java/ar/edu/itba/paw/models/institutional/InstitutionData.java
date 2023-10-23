@@ -7,10 +7,17 @@ public class InstitutionData {
     private final Map<UUID, Set<Career>> careerMap;
     private final Map<UUID, Set<Subject>> subjectMap;
 
-    public InstitutionData() {
-        institutions = new HashSet<>();
-        careerMap = new HashMap<>();
-        subjectMap = new HashMap<>();
+    public InstitutionData(List<Institution> institutions) {
+        this.institutions = new HashSet<>();
+        this.careerMap = new HashMap<>();
+        this.subjectMap = new HashMap<>();
+        for (Institution i : institutions) addInstitution(i);
+    }
+
+    public void addInstitution(Institution institution) {
+        for (Career c : institution.getCareers())
+            for (Subject s : c.getSubjects())
+                add(institution, c, s);
     }
 
     public void add(Institution institution, Career career, Subject subject) {

@@ -73,6 +73,12 @@ public class JdbcDaoUtils {
     static final String YEAR = "year";
     static final String END_DATE = "end_date";
 
+    // JPA Attributes
+    static final String CAREERS_ATTR = "careers";
+    static final String SUBJECTS_ATTR = "subjects";
+
+    static final String FETCH_GRAPH =  "javax.persistence.fetchgraph";
+
     static{
         SORTBY.put(SortBy.SCORE, AVG_SCORE);
         SORTBY.put(SortBy.DATE, CREATED_AT);

@@ -13,12 +13,12 @@
   <name>models</name>
   <url>http://pawserver.it.itba.edu.ar/paw-2023b-12/</url>
 
-<!--  <dependencies>-->
-<!--    <dependency>-->
-<!--      <groupId>org.hibernate.javax.persistence</groupId>-->
-<!--      <artifactId>hibernate-jpa-2.1-api</artifactId>-->
-<!--    </dependency>-->
-<!--  </dependencies>-->
+  <dependencies>
+    <dependency>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.1-api</artifactId>
+    </dependency>
+  </dependencies>
 
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->

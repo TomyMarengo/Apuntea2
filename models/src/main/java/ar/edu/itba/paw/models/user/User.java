@@ -3,21 +3,44 @@ package ar.edu.itba.paw.models.user;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.Institution;
 
+import javax.persistence.*;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+@Entity
+@Table(name = "users")
 public class User {
-    private final UUID userId;
-    private final String firstName;
-    private final String lastName;
-    private final String username;
-    private final String email;
-    private final String password;
-    private final Institution institution;
-    private final Career career;
-    private final Role[] roles;
-    private final String locale;
-    private final UserStatus status;
+    @Id
+    @Column(name = "user_id")
+    private UUID userId;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Column(length = 30, unique = true)
+    private String username;
+    @Column(length = 320, unique = true)
+    private String email;
+    @Column(nullable = false)
+    private String password;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Institution institution;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Career career;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role_name")
+    private Collection<Role> roles;
+    @Column(nullable = false)
+    private String locale;
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
+    /* package-private */ User() {
+    }
 
     private User(UserBuilder builder) {
         this.userId = builder.userId;
@@ -42,7 +65,7 @@ public class User {
     public String getPassword() {
         return password;
     }
-    public Role[] getRoles() {
+    public Collection<Role> getRoles() {
         return roles;
     }
     public String getLocale() {
@@ -69,7 +92,7 @@ public class User {
     }
 
     public boolean getIsAdmin() {
-        return roles != null && Arrays.stream(roles).anyMatch(role -> role == Role.ROLE_ADMIN);
+        return roles != null && roles.stream().anyMatch(role -> role == Role.ROLE_ADMIN);
     }
 
     public boolean isBanned() {
@@ -98,7 +121,7 @@ public class User {
         private String password;
         private Institution institution;
         private Career career;
-        private Role[] roles;
+        private Collection<Role> roles;
         private String locale;
         private UserStatus status;
 
@@ -160,7 +183,8 @@ public class User {
         }
 
         public UserBuilder roles(String[] roles) {
-            this.roles = Arrays.stream(roles).map(Role::getRole).toArray(Role[]::new);
+            // TODO: Make roles a Collection
+            this.roles = Arrays.stream(roles).map(Role::getRole).collect(Collectors.toList());
             return this;
         }
 

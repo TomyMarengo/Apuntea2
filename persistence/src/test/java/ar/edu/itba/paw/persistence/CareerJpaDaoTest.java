@@ -12,10 +12,8 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import javax.sql.DataSource;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,11 +26,11 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Rollback
-public class CareerJdbcDaoTest {
+public class CareerJpaDaoTest {
     @Autowired
     private DataSource ds;
     @Autowired
-    private CareerJdbcDao careerDao;
+    private CareerJpaDao careerDao;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private JdbcTemplate jdbcTemplate;
 
@@ -57,7 +55,6 @@ public class CareerJdbcDaoTest {
         assertTrue(maybeCareer.isPresent());
         assertEquals(careerId, maybeCareer.get().getCareerId());
         assertEquals("career1", maybeCareer.get().getName());
-
     }
 
     @Test

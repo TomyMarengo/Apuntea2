@@ -1,12 +1,39 @@
 package ar.edu.itba.paw.models.institutional;
 
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
+@Entity
+@Table(name = "careers")
 public class Career {
-    private final UUID careerId;
-    private final String name;
+    @Id
+    @Column(name = "career_id")
+    private UUID careerId;
+    @Column(name = "career_name")
+    private String name;
 
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Institution institution;
+
+    // TODO: Remove?
+    @Column(name = "institution_id")
     private UUID institutionId;
+
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "subjects_careers",
+            joinColumns = @JoinColumn(name = "career_id"),
+            inverseJoinColumns = @JoinColumn(name = "subject_id")
+    )
+    private Set<Subject> subjects;
+
+
+    /* package-private */ Career() {
+
+    }
 
     public Career(UUID careerId, String name) {
         this.careerId = careerId;
@@ -44,4 +71,7 @@ public class Career {
         return c.careerId.equals(careerId);
     }
 
+    public Set<Subject> getSubjects() {
+        return subjects;
+    }
 }

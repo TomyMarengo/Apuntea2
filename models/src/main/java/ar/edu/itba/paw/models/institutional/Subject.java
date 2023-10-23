@@ -1,17 +1,42 @@
 package ar.edu.itba.paw.models.institutional;
 
+import javax.persistence.*;
+import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
+@Entity
+@Table(name = "subjects")
 public class Subject {
-    private final UUID subjectId;
-    private final String name;
+    @Id
+    @Column(name = "subject_id")
+    private UUID subjectId;
+    @Column(name="subject_name")
+    private String name;
+
+    // TODO: Implement directory JPA
+    @Column(name = "root_directory_id")
     private UUID rootDirectoryId;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "subjects_careers",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "career_id")
+    )
+    private Set<Career> careers;
 
     private static final int MIN_YEAR = 1;
     private static final int MAX_YEAR = 10;
 
-    //only has meaning in the context of subject-career relation
+
+    // TODO: Change!
+    @Transient
     Integer year;
+
+    /* package-private */ Subject() {
+
+    }
 
     public Subject(UUID subjectId, String name) {
         this.subjectId = subjectId;
@@ -70,5 +95,9 @@ public class Subject {
                 "subjectId:" + subjectId +
                 ", name:'" + name + '\'' +
                 '}';
+    }
+
+    public Collection<Career> getCareers() {
+        return careers;
     }
 }
