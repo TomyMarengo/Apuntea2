@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
+import static ar.edu.itba.paw.persistence.TestUtils.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -118,7 +118,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testOrderGetSubjectsByCareerId() {
-        List<Subject> subjects = subjectDao.getSubjectsByCareerId(ING_INF);
+        List<Subject> subjects = subjectDao.getSubjectsByCareerId(ING_INF_ID);
 
         for (int i = 0; i < subjects.size() - 2; i++) {
             assertTrue(subjects.get(i).getYear() <= subjects.get(i + 1).getYear());
@@ -200,7 +200,7 @@ public class SubjectJdbcDaoTest {
     public void testLinkSubjectToCareer(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-        UUID careerId = ING_INF;
+        UUID careerId = ING_INF_ID;
         int year = 4;
         boolean result = subjectDao.linkSubjectToCareer(subjectId, careerId, year);
 
@@ -230,7 +230,7 @@ public class SubjectJdbcDaoTest {
     public void testUpdateSubjectCareer(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-        UUID careerId = ING_INF;
+        UUID careerId = ING_INF_ID;
         int oldYear = 3;
         int newYear = 4;
         insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, oldYear);
@@ -250,7 +250,7 @@ public class SubjectJdbcDaoTest {
     public void testUnlinkSubjectFromCareer(){
         UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "trash", dirId);
-        UUID careerId = ING_INF;
+        UUID careerId = ING_INF_ID;
         int year = 3;
         insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, year);
         boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = " + year) == 1;

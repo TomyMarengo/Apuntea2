@@ -6,6 +6,11 @@ INSERT INTO Users (user_id, email) VALUES ('00000000-0000-0000-0000-000000000001
 INSERT INTO Users (user_id, email) VALUES ('00000000-0000-0000-0000-000000000002','carla@itba.edu.ar');
 INSERT INTO Users (user_id, email) VALUES ('00000000-0000-0000-0000-000000000003','saidman@utn.edu.ar');
 
+INSERT INTO User_Roles (user_id, role_name) VALUES ('00000000-0000-0000-0000-000000000000', 'ROLE_STUDENT');
+INSERT INTO User_Roles (user_id, role_name) VALUES ('00000000-0000-0000-0000-000000000001', 'ROLE_STUDENT');
+INSERT INTO User_Roles (user_id, role_name) VALUES ('00000000-0000-0000-0000-000000000002', 'ROLE_STUDENT');
+INSERT INTO User_Roles (user_id, role_name) VALUES ('00000000-0000-0000-0000-000000000003', 'ROLE_STUDENT');
+
 INSERT INTO Directories (directory_id, directory_name) VALUES ('d0000000-0000-0000-0000-000000000000', 'EDA');
 INSERT INTO Directories (directory_id, directory_name) VALUES ('d0000000-0000-0000-0000-000000000001', 'PAW');
 INSERT INTO Directories (directory_id, directory_name) VALUES ('d0000000-0000-0000-0000-000000000002', 'Mecanica Gral');

@@ -9,6 +9,7 @@ import java.util.UUID;
 public class Institution {
     @Id
     @Column(name = "institution_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID institutionId;
     @Column(name = "institution_name")
     private String name;

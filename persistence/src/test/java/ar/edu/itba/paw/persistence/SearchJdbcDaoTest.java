@@ -21,8 +21,8 @@ import java.util.UUID;
 
 import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
 
-import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.EDA_ID;
+import static ar.edu.itba.paw.persistence.TestUtils.*;
+import static ar.edu.itba.paw.persistence.TestUtils.EDA_ID;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 import static org.junit.Assert.*;
 
@@ -58,9 +58,9 @@ public class SearchJdbcDaoTest {
 
     @Test
     public void testCountSearchResultsWithFilters() {
-        int expectedResults = countSearchResults(jdbcTemplate, " institution_id = '" + ITBA_ID + "' AND career_id = '" + ING_INF + "' AND subject_id = '" + EDA_ID + "' AND category = '" + Category.PRACTICE.name() + "'");
+        int expectedResults = countSearchResults(jdbcTemplate, " institution_id = '" + ITBA_ID + "' AND career_id = '" + ING_INF_ID + "' AND subject_id = '" + EDA_ID + "' AND category = '" + Category.PRACTICE.name() + "'");
 
-        int searchResults = searchDao.countSearchResults(new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF).subjectId(EDA_ID).category(Category.PRACTICE.name()).build());
+        int searchResults = searchDao.countSearchResults(new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF_ID).subjectId(EDA_ID).category(Category.PRACTICE.name()).build());
 
         assertEquals(expectedResults, searchResults);
     }
@@ -74,7 +74,7 @@ public class SearchJdbcDaoTest {
 
     @Test
     public void testSearchNotesByCareer(){
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF).pageSize(allResultsPageSize);
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF_ID).pageSize(allResultsPageSize);
         List<Searchable> results = searchDao.search(sab.build());
         assertEquals(9, results.size());
     }
@@ -83,7 +83,7 @@ public class SearchJdbcDaoTest {
     public void testSearchNotesBySubject(){
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder()
                                             .institutionId(ITBA_ID)
-                                            .careerId(ING_INF)
+                                            .careerId(ING_INF_ID)
                                             .subjectId(EDA_ID)
                                             .pageSize(allResultsPageSize);
         List<Searchable> results = searchDao.search(sab.build());
@@ -160,7 +160,7 @@ public class SearchJdbcDaoTest {
 
     @Test
     public void testSearchMultipleCareerSubject() {
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_MEC).subjectId(MATE_ID);
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_MEC_ID).subjectId(MATE_ID);
         List<Searchable> results = searchDao.search(sab.build());
         assertEquals(1, results.size());
         assertEquals(TVM_ID ,results.get(0).getId());

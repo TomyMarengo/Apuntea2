@@ -10,17 +10,19 @@ import java.util.UUID;
 public class Career {
     @Id
     @Column(name = "career_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID careerId;
     @Column(name = "career_name")
     private String name;
 
 //    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "institution_id")
 //    private Institution institution;
+
 
     // TODO: Remove?
     @Column(name = "institution_id")
     private UUID institutionId;
-
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -40,12 +42,6 @@ public class Career {
         this.name = name;
     }
 
-    public Career(UUID careerId, String name, UUID institutionId) {
-        this.careerId = careerId;
-        this.name = name;
-        this.institutionId = institutionId;
-    }
-
     public UUID getCareerId() {
         return careerId;
     }
@@ -54,9 +50,13 @@ public class Career {
         return name;
     }
 
-    public UUID getInstitutionId() {
-        return institutionId;
-    }
+//    public UUID getInstitutionId() {
+//        return institution.getInstitutionId();
+//    }
+//
+//    public Institution getInstitution() {
+//        return institution;
+//    }
 
     @Override
     public int hashCode() {

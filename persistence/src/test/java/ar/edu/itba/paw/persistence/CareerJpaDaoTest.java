@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
+import static ar.edu.itba.paw.persistence.TestUtils.*;
 
 import static org.junit.Assert.*;
 

@@ -6,6 +6,8 @@ import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.UserStatus;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.UUID;
 
 public class ServiceTestUtils {
@@ -45,15 +47,15 @@ public class ServiceTestUtils {
 
     static User mockUser() {
         return mockUser(PEPE_ID, "John", "Doe", "JohnDoe", "pepe@itba.edu.ar",
-                        UserStatus.ACTIVE, new String[]{Role.ROLE_STUDENT.name()}, "es");
+                        UserStatus.ACTIVE, Collections.singleton(Role.ROLE_STUDENT), "es");
     }
 
     static User mockAdmin() {
         return mockUser(ADMIN_ID, "super", "admin", "superadmin", "admin@apuntea.edu.ar",
-                        UserStatus.ACTIVE, new String[]{Role.ROLE_ADMIN.name()}, "en");
+                        UserStatus.ACTIVE, Collections.singleton(Role.ROLE_ADMIN), "en");
     }
 
-    private static User mockUser(UUID userId, String firstName, String lastName, String username, String email, UserStatus status, String[] roles, String locale) {
+    private static User mockUser(UUID userId, String firstName, String lastName, String username, String email, UserStatus status, Collection<Role> roles, String locale) {
         return new User.UserBuilder()
                 .userId(userId)
                 .firstName(firstName)

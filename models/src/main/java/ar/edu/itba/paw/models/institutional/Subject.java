@@ -10,6 +10,7 @@ import java.util.UUID;
 public class Subject {
     @Id
     @Column(name = "subject_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID subjectId;
     @Column(name="subject_name")
     private String name;

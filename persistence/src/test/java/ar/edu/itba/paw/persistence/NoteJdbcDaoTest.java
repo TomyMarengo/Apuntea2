@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
-import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
+import static ar.edu.itba.paw.persistence.TestUtils.*;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.sql.DataSource;
@@ -98,7 +98,7 @@ public class NoteJdbcDaoTest {
     @Test
     public void testGetNoteByIdPrivateAdmin() {
         String name = "private";
-        UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail.com" , "admin", ING_MEC, "es");
+        UUID adminId = jdbcInsertAdmin(namedParameterJdbcTemplate, "admin@mail.com" , "admin", ING_MEC_ID, "es");
         UUID noteId = insertNote(namedParameterJdbcTemplate, EDA_DIRECTORY_ID, name, EDA_ID, PEPE_ID, false, new byte[]{1, 2, 3}, "practice", "jpg");
 
         Optional<Note> maybeNote = noteDao.getNoteById(noteId, adminId);
@@ -122,7 +122,7 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testGetNoteFileByIdPrivate() {
-        UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail.com" , "admin", ING_MEC, "es");
+        UUID adminId = jdbcInsertAdmin(namedParameterJdbcTemplate, "admin@mail.com" , "admin", ING_MEC_ID, "es");
         String name = "private";
         UUID noteId = insertNote(namedParameterJdbcTemplate, EDA_DIRECTORY_ID, name, EDA_ID, PEPE_ID, false, new byte[]{1, 2, 3}, "practice", "jpg");
 
@@ -210,7 +210,7 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testUpdateNoteNotOwner() {
-        UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail.com" , "admin", ING_MEC, "es");
+        UUID adminId = jdbcInsertAdmin(namedParameterJdbcTemplate, "admin@mail.com" , "admin", ING_MEC_ID, "es");
         String oldName = "oldName";
         String newName = "newName";
         String oldCategory = "practice";
@@ -244,7 +244,7 @@ public class NoteJdbcDaoTest {
 
     @Test
     public void testGetReview() {
-        UUID newUserId = insertStudent(namedParameterJdbcTemplate, "new@mail.com", "new", ING_INF, "es");
+        UUID newUserId = jdbcInsertStudent(namedParameterJdbcTemplate, "new@mail.com", "new", ING_INF_ID, "es");
         insertReview(namedParameterJdbcTemplate, GUIA1EDA_NOTE_ID, newUserId, 4, "ta ok");
 
         Review review = noteDao.getReview(GUIA1EDA_NOTE_ID, newUserId);
@@ -266,7 +266,7 @@ public class NoteJdbcDaoTest {
     public void testLimitReviews() {
         UUID[] userIds = new UUID[20];
         for (int i = 0; i < 20; i++)  {
-            userIds[i] = insertStudent(namedParameterJdbcTemplate, "pepe" + i + "@itba.edu.ar", "", ING_INF, "es");
+            userIds[i] = jdbcInsertStudent(namedParameterJdbcTemplate, "pepe" + i + "@itba.edu.ar", "", ING_INF_ID, "es");
             insertReview(namedParameterJdbcTemplate, GUIA1EDA_NOTE_ID, userIds[i], (i % 5) + 1, "review " + i);
         }
         List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);

@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
+import static ar.edu.itba.paw.persistence.TestUtils.*;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
@@ -49,7 +49,7 @@ public class VerificationCodeJdbcDaoTest {
     @Test
     public void testSaveVerificationCode() {
         String email = "no@itba.edu.ar";
-        UUID studentId = insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
+        UUID studentId = jdbcInsertStudent(namedParameterJdbcTemplate, email, "", ING_INF_ID, "es");
         VerificationCode verificationCode = new VerificationCode("123456", email, LocalDateTime.now().plusMinutes(10));
         verificationCodeDao.saveVerificationCode(verificationCode);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "user_id = '" + studentId + "' AND code = '123456' AND expires_at > NOW()"));
@@ -65,7 +65,7 @@ public class VerificationCodeJdbcDaoTest {
     @Test
     public void testVerifyForgotPasswordCode() {
         String email = "verification@itba.edu.ar";
-        insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
+        jdbcInsertStudent(namedParameterJdbcTemplate, email, "", ING_INF_ID, "es");
         VerificationCode code = new VerificationCode("123456", email, LocalDateTime.now().plusMinutes(10));
         insertVerificationCode(namedParameterJdbcTemplate, code);
         boolean success = verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), code.getCode());
@@ -75,7 +75,7 @@ public class VerificationCodeJdbcDaoTest {
     @Test
     public void testVerifyForgotPasswordCodeInvalidCode() {
         String email = "verification@itba.edu.ar";
-        insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
+        jdbcInsertStudent(namedParameterJdbcTemplate, email, "", ING_INF_ID, "es");
         VerificationCode code = new VerificationCode("123456", "verification@itba.edu.ar", LocalDateTime.now().plusMinutes(10));
         insertVerificationCode(namedParameterJdbcTemplate, code);
         boolean success = verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), "123457");
@@ -91,7 +91,7 @@ public class VerificationCodeJdbcDaoTest {
     @Test
     public void testVerifyForgotPasswordExpired() {
         String email = "verification@itba.edu.ar";
-        insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
+        jdbcInsertStudent(namedParameterJdbcTemplate, email, "", ING_INF_ID, "es");
         VerificationCode code = new VerificationCode("123456", "verification@itba.edu.ar", LocalDateTime.now().minusMinutes(10));
         insertVerificationCode(namedParameterJdbcTemplate, code);
         boolean success = verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), "123456");
@@ -101,8 +101,8 @@ public class VerificationCodeJdbcDaoTest {
     @Test
     public void testDeleteVerificationCodes() {
         String email = "verification@itba.edu.ar";
-        insertStudent(namedParameterJdbcTemplate, email, "", ING_INF, "es");
-        insertStudent(namedParameterJdbcTemplate, "bis" + email, "", ING_INF, "es");
+        jdbcInsertStudent(namedParameterJdbcTemplate, email, "", ING_INF_ID, "es");
+        jdbcInsertStudent(namedParameterJdbcTemplate, "bis" + email, "", ING_INF_ID, "es");
         for (int i = 0; i < 10; i++) {
             VerificationCode code = new VerificationCode("12345" + i, email, LocalDateTime.now().plusMinutes(10));
             insertVerificationCode(namedParameterJdbcTemplate, code);
@@ -121,8 +121,8 @@ public class VerificationCodeJdbcDaoTest {
     public void testRemoveExpiredCodes() {
         String email1 = "verification@itba.edu.ar";
         String email2 = "verification2@itba.edu.ar";
-        insertStudent(namedParameterJdbcTemplate, email1, "", ING_INF, "es");
-        insertStudent(namedParameterJdbcTemplate, email2, "", ING_MEC, "es");
+        jdbcInsertStudent(namedParameterJdbcTemplate, email1, "", ING_INF_ID, "es");
+        jdbcInsertStudent(namedParameterJdbcTemplate, email2, "", ING_MEC_ID, "es");
         for (int i = 0; i < 10; i++) {
             VerificationCode code = new VerificationCode("12345" + i, i % 2 == 0? email1 : email2, LocalDateTime.now().minusMinutes(10));
             insertVerificationCode(namedParameterJdbcTemplate, code);

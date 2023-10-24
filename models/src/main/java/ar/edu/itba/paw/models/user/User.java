@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class User {
     @Id
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID userId;
     @Column(name = "first_name")
     private String firstName;
@@ -26,19 +27,24 @@ public class User {
     @Column(nullable = false)
     private String password;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Institution institution;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "career_id")
     private Career career;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
     private Collection<Role> roles;
+
     @Column(nullable = false)
     private String locale;
+
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_picture_id")
+    private Image profilePicture;
     /* package-private */ User() {
     }
 
@@ -49,7 +55,6 @@ public class User {
         this.username = builder.username;
         this.email = builder.email;
         this.password = builder.password;
-        this.institution = builder.institution;
         this.career = builder.career;
         this.roles = builder.roles;
         this.locale = builder.locale;
@@ -70,9 +75,6 @@ public class User {
     }
     public String getLocale() {
         return locale;
-    }
-    public Institution getInstitution() {
-        return institution;
     }
 
     public Career getCareer() {
@@ -103,6 +105,14 @@ public class User {
         return status;
     }
 
+    public Image getProfilePicture() {
+        return profilePicture;
+    }
+
+//    public Institution getInstitution() {
+//        return career.getInstitution();
+//    }
+
     public String getDisplayName() {
         if (username != null) {
             return username;
@@ -112,6 +122,30 @@ public class User {
         return email;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setProfilePicture(Image profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
     public static class UserBuilder {
         private UUID userId;
         private String firstName;
@@ -119,27 +153,12 @@ public class User {
         private String username;
         private String email;
         private String password;
-        private Institution institution;
         private Career career;
         private Collection<Role> roles;
         private String locale;
         private UserStatus status;
 
         public UserBuilder() {
-        }
-
-        private UserBuilder(User user) {
-            this.userId = user.userId;
-            this.firstName = user.firstName;
-            this.lastName = user.lastName;
-            this.username = user.username;
-            this.email = user.email;
-            this.password = user.password;
-            this.institution = user.institution;
-            this.career = user.career;
-            this.roles = user.roles;
-            this.locale = user.locale;
-            this.status = user.status;
         }
 
         public UserBuilder userId(UUID userId) {
@@ -172,19 +191,13 @@ public class User {
             return this;
         }
 
-        public UserBuilder institution(Institution institution) {
-            this.institution = institution;
-            return this;
-        }
-
         public UserBuilder career(Career career) {
             this.career = career;
             return this;
         }
 
-        public UserBuilder roles(String[] roles) {
-            // TODO: Make roles a Collection
-            this.roles = Arrays.stream(roles).map(Role::getRole).collect(Collectors.toList());
+        public UserBuilder roles(Collection<Role> roles) {
+            this.roles = roles;
             return this;
         }
 
@@ -196,10 +209,6 @@ public class User {
         public UserBuilder status(UserStatus status) {
             this.status = status;
             return this;
-        }
-
-        public static UserBuilder from(User user) {
-            return new UserBuilder(user);
         }
 
         public User build() {

@@ -17,7 +17,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
+import static ar.edu.itba.paw.persistence.TestUtils.*;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -88,7 +88,7 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testGetDirectoryByIdPrivate() {
-        UUID adminId = insertAdmin(namedParameterJdbcTemplate, "admin@mail", "123456",  ING_INF, "es");
+        UUID adminId = jdbcInsertAdmin(namedParameterJdbcTemplate, "admin@mail", "123456", ING_INF_ID, "es");
         String name = "private static void main";
         UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, false);
         Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(newDirId, adminId);
@@ -282,7 +282,7 @@ public class DirectoryJdbcDaoTest {
     public void testDeleteRootDirectoryNonRoot() {
         UUID rootDirectoryId = insertDirectory(namedParameterJdbcTemplate, "root", null, null);
         UUID root2DirectoryId = insertDirectory(namedParameterJdbcTemplate, "root2", null, null);
-        UUID ruthId = insertStudent(namedParameterJdbcTemplate, "ruthy@itba.edu.ar", "7777777", ING_INF, "es");
+        UUID ruthId = jdbcInsertStudent(namedParameterJdbcTemplate, "ruthy@itba.edu.ar", "7777777", ING_INF_ID, "es");
         UUID ruthDirectoryId = insertDirectory(namedParameterJdbcTemplate, "Apuntes ruthy", ruthId, rootDirectoryId);
         int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + ruthDirectoryId + "'");
 

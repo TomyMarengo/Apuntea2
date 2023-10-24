@@ -221,3 +221,5 @@ CREATE TABLE IF NOT EXISTS Verification_Codes
 );
 
 ALTER TABLE Reviews ADD COLUMN IF NOT EXISTS created_at timestamp DEFAULT now() NOT NULL;
+------------------------------------------------------------------------------------------------------------------
+--SPRINT 4

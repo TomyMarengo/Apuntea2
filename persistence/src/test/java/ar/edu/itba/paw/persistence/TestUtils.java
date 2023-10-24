@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.user.Role;
-import ar.edu.itba.paw.models.user.VerificationCode;
+import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.user.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -9,18 +9,22 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
-public class JdbcDaoTestUtils {
+public class TestUtils {
     static UUID ITBA_ID = UUID.fromString("10000000-0000-0000-0000-000000000000");
 
     static UUID UTN_ID = UUID.fromString("10000000-0000-0000-0000-000000000001");
-    static UUID ING_INF = UUID.fromString("c0000000-0000-0000-0000-000000000000");
-    static UUID ING_MEC = UUID.fromString("c0000000-0000-0000-0000-000000000001");
+    static UUID ING_INF_ID = UUID.fromString("c0000000-0000-0000-0000-000000000000");
+    static Career ING_INF = new Career(ING_INF_ID, "");
+    static UUID ING_MEC_ID = UUID.fromString("c0000000-0000-0000-0000-000000000001");
+    static Career ING_MEC = new Career(ING_MEC_ID, "");
     static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
     static UUID EDA_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000000");
     static UUID PAW_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000001");
@@ -37,13 +41,43 @@ public class JdbcDaoTestUtils {
     static UUID MATE_ID = UUID.fromString("50000000-0000-0000-0000-000000000005");
     static UUID TVM_ID = UUID.fromString("a0000000-0000-0000-0000-000000000006");
 
-    private JdbcDaoTestUtils() {}
+    private TestUtils() {}
 
-    static UUID insertStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
+    static User insertStudent(EntityManager em, String email, String password, UUID careerId, String locale) {
+        return insertUser(em, email, password, careerId, locale, Role.ROLE_STUDENT);
+    }
+
+    static User insertAdmin(EntityManager em, String email, String password, UUID careerId, String locale) {
+        return insertUser(em, email, password, careerId, locale, Role.ROLE_ADMIN);
+    }
+
+    static void banUser(EntityManager em, User user, User admin, String reason, LocalDateTime endDate) {
+        Ban ban = new Ban(user, admin, reason, endDate);
+        em.persist(ban);
+        ban.getUser().setStatus(UserStatus.BANNED);
+        em.flush();
+    }
+
+    private static User insertUser(EntityManager em, String email, String password, UUID careerId, String locale, Role role) {
+        Career career = em.find(Career.class, careerId);
+        User user = new User.UserBuilder()
+                .email(email)
+                .password(password)
+                .career(career)
+                .locale(locale)
+                .status(UserStatus.ACTIVE)
+                .roles(Collections.singleton(role))
+                .build();
+        em.persist(user);
+        em.flush();
+        return user;
+    }
+
+    static UUID jdbcInsertStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
         return insertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_STUDENT);
     }
 
-    static UUID insertLegacyUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email) {
+    static UUID jdbcInsertLegacyUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(EMAIL, email);
 
@@ -53,7 +87,7 @@ public class JdbcDaoTestUtils {
         return (UUID) keyHolder.getKeys().get(USER_ID);
     }
 
-    static UUID insertAdmin(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
+    static UUID jdbcInsertAdmin(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
         return insertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_ADMIN);
     }
 
@@ -74,7 +108,14 @@ public class JdbcDaoTestUtils {
         return (UUID) keyHolder.getKeys().get(USER_ID);
     }
 
-    static UUID insertImage(NamedParameterJdbcTemplate namedParameterJdbcTemplate, byte[] image, UUID userId) {
+    static Image insertImage(EntityManager em, Image image, User user) {
+        em.persist(image);
+        user.setProfilePicture(image);
+        em.flush();
+        return image;
+    }
+
+    static UUID jdbcInsertImage(NamedParameterJdbcTemplate namedParameterJdbcTemplate, byte[] image, UUID userId) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(IMAGE, image);
 
@@ -92,7 +133,7 @@ public class JdbcDaoTestUtils {
     }
 
 
-    static void banUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID userId, UUID adminId, LocalDateTime endDate) {
+    static void jdbcBanUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID userId, UUID adminId, LocalDateTime endDate) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(USER_ID, userId);
         args.addValue(ADMIN_ID, adminId);

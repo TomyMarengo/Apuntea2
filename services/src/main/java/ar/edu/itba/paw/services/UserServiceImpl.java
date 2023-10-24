@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.exceptions.institutional.CareerNotFoundException;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.Page;
-import ar.edu.itba.paw.models.user.ProfilePicture;
+import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.user.Image;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.user.InvalidUserException;
+import ar.edu.itba.paw.persistence.CareerDao;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +19,8 @@ import ar.edu.itba.paw.models.user.User;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +29,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
+    private final CareerDao careerDao;
     private final PasswordEncoder passwordEncoder;
     private final SecurityService securityService;
     private final VerificationCodesService verificationCodesService;
@@ -38,9 +41,10 @@ public class UserServiceImpl implements UserService {
     private static final int PAGE_SIZE = 10;
 
     @Autowired
-    public UserServiceImpl(final UserDao userDao, final PasswordEncoder passwordEncoder, final SecurityService securityService,
+    public UserServiceImpl(final UserDao userDao, final CareerDao careerDao, PasswordEncoder passwordEncoder, final SecurityService securityService,
                            final VerificationCodesService verificationCodesService, final EmailService emailService) {
         this.userDao = userDao;
+        this.careerDao = careerDao;
         this.passwordEncoder = passwordEncoder;
         this.securityService = securityService;
         this.verificationCodesService = verificationCodesService;
@@ -73,26 +77,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void create(String email, String password, UUID careerId, Role role) {
         final String lang = LocaleContextHolder.getLocale().getLanguage();
-        userDao.create(email, passwordEncoder.encode(password), careerId, lang, role);
+        Career career = careerDao.getCareerById(careerId).orElseThrow(CareerNotFoundException::new);
+        userDao.create(email, passwordEncoder.encode(password), career, lang, Collections.singleton(role));
         LOGGER.info("User with email {} created (registered language: {})", email, lang);
     }
 
     @Transactional
     @Override
     public void updateProfile(String firstName, String lastName, String username, MultipartFile profilePicture) {
-        User user = User.UserBuilder.from(securityService.getCurrentUserOrThrow())
-                .firstName(firstName)
-                .lastName(lastName)
-                .username(username)
-                .build();
-        boolean success = userDao.update(user);
-        if (!success) {
-            LOGGER.error("Error while updating user with id: {}", user.getUserId());
-            throw new InvalidUserException();
-        }
+        User user = securityService.getCurrentUserOrThrow();
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setUsername(username);
         if (profilePicture != null && !profilePicture.isEmpty()) {
             try {
-                userDao.updateProfilePicture(user.getUserId(), profilePicture.getBytes());
+                userDao.updateProfilePicture(user, new Image(profilePicture.getBytes()));
             } catch (IOException e) {
                 LOGGER.error("Error while updating profile picture for user with id: {}", user.getUserId());
                 throw new InvalidFileException();
@@ -103,19 +102,19 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Optional<byte[]> getProfilePicture(UUID userId) {
-        Optional<ProfilePicture> picture = userDao.getProfilePicture(userId);
-        if (!picture.isPresent()) {
+        Optional<User> maybeUser = userDao.findById(userId);
+        if (!maybeUser.isPresent()) {
             LOGGER.warn("Error while getting profile picture for user with id: {}", userId);
             throw new UserNotFoundException();
         }
-        return picture.map(ProfilePicture::getPicture);
+        return maybeUser.map(User::getProfilePicture).map(Image::getPicture);
     }
 
     @Transactional
     @Override
     public void updateCurrentUserPassword(String password) {
         User user = securityService.getCurrentUserOrThrow();
-        userDao.updatePassword(user.getUserId(), passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(password));
         LOGGER.info("Password updated for user with id: {}", user.getUserId());
     }
 
@@ -123,7 +122,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUserPasswordWithCode(String email, String code, String password) {
         LOGGER.info("Updating forgotten password for user with email: {}", email);
-        return verificationCodesService.verifyForgotPasswordCode(email, code) && userDao.updatePasswordForUserWithEmail(email, passwordEncoder.encode(password));
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        boolean success = verificationCodesService.verifyForgotPasswordCode(email, code);
+        if (!success) {
+            LOGGER.warn("Invalid code for user with email: {}", email);
+            return false;
+        }
+        user.setPassword(passwordEncoder.encode(password));
+        return true;
     }
 
     @Scheduled(cron = "0 0 0 * * ?") // Every day at midnight
@@ -137,23 +143,23 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void unbanUser(UUID userId) {
-        if (!userDao.unbanUser(userId)) {
+        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
+        if (!userDao.unbanUser(user)) {
             LOGGER.error("Error while unbanning user with id: {}", userId);
             throw new InvalidUserException();
         }
-        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         emailService.sendUnbanEmail(user);
     }
 
     @Transactional
     @Override
     public void banUser(UUID userId, String reason) {
+        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         User admin = securityService.getAdminOrThrow();
-        if (!userDao.banUser(userId, admin.getUserId(), LocalDateTime.now().plusDays(BAN_DURATION), reason)) {
+        if (!userDao.banUser(user, admin, LocalDateTime.now().plusDays(BAN_DURATION), reason)) {
             LOGGER.error("Error while banning user with id: {}", userId);
             throw new InvalidUserException();
         }
-        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         emailService.sendBanEmail(user, reason, BAN_DURATION);
     }
 

@@ -21,7 +21,7 @@ import javax.sql.DataSource;
 import java.util.HashSet;
 import java.util.Set;
 
-import static ar.edu.itba.paw.persistence.JdbcDaoTestUtils.*;
+import static ar.edu.itba.paw.persistence.TestUtils.*;
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 import static org.junit.Assert.assertEquals;
 
@@ -85,9 +85,9 @@ public class InstitutionJpaDaoTest {
         InstitutionData data = institutionDao.getInstitutionData();
         Institution institution = data.getInstitutions().stream().filter(i -> i.getInstitutionId().equals(ITBA_ID)).findFirst().orElseThrow(AssertionError::new);
         assertEquals(ITBA_ID, institution.getInstitutionId());
-        Career career = data.getCareers(ITBA_ID).stream().filter(c -> c.getCareerId().equals(ING_INF)).findFirst().orElseThrow(AssertionError::new);
-        assertEquals(ING_INF, career.getCareerId());
-        Subject subject = data.getSubjects(ING_INF).stream().filter(s -> s.getSubjectId().equals(EDA_ID)).findFirst().orElseThrow(AssertionError::new);
+        Career career = data.getCareers(ITBA_ID).stream().filter(c -> c.getCareerId().equals(ING_INF_ID)).findFirst().orElseThrow(AssertionError::new);
+        assertEquals(ING_INF_ID, career.getCareerId());
+        Subject subject = data.getSubjects(ING_INF_ID).stream().filter(s -> s.getSubjectId().equals(EDA_ID)).findFirst().orElseThrow(AssertionError::new);
         assertEquals(EDA_ID, subject.getSubjectId());
     }
 }
