@@ -1,13 +1,9 @@
 package ar.edu.itba.paw.models.user;
 
 import ar.edu.itba.paw.models.institutional.Career;
-import ar.edu.itba.paw.models.institutional.Institution;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -29,22 +25,19 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "career_id")
     private Career career;
-
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
     private Collection<Role> roles;
-
     @Column(nullable = false)
     private String locale;
-
     @Enumerated(EnumType.STRING)
     private UserStatus status;
-
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_picture_id")
     private Image profilePicture;
+
     /* package-private */ User() {
     }
 
@@ -73,8 +66,8 @@ public class User {
     public Collection<Role> getRoles() {
         return roles;
     }
-    public String getLocale() {
-        return locale;
+    public Locale getLocale() {
+        return new Locale(locale);
     }
 
     public Career getCareer() {
@@ -144,6 +137,19 @@ public class User {
 
     public void setStatus(UserStatus status) {
         this.status = status;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
     }
 
     public static class UserBuilder {

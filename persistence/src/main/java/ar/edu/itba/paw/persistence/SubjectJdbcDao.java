@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.models.NameConstants.*;
 
 @Repository
 public class SubjectJdbcDao implements SubjectDao {

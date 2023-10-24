@@ -16,7 +16,7 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.models.NameConstants.*;
 import static ar.edu.itba.paw.persistence.TestUtils.*;
 
 import java.util.List;

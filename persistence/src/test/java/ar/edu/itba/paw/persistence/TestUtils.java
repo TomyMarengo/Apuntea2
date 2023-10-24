@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.models.NameConstants.*;
 
 public class TestUtils {
     static UUID ITBA_ID = UUID.fromString("10000000-0000-0000-0000-000000000000");
@@ -40,6 +40,10 @@ public class TestUtils {
 
     static UUID MATE_ID = UUID.fromString("50000000-0000-0000-0000-000000000005");
     static UUID TVM_ID = UUID.fromString("a0000000-0000-0000-0000-000000000006");
+
+    static String VERIFICATION_EMAIL = "verification@itba.edu.ar";
+    static String DEFAULT_CODE = "123456";
+    static String DEFAULT_CODE2 = "123457";
 
     private TestUtils() {}
 
@@ -73,8 +77,17 @@ public class TestUtils {
         return user;
     }
 
+    static VerificationCode insertVerificationCode(EntityManager em, String code, User user, LocalDateTime expirationDate) {
+        VerificationCode vc = new VerificationCode(code, user, expirationDate);
+        em.persist(vc);
+        em.flush();
+        return vc;
+    }
+
+    /*----------------------------------------------------------------------------------------------------*/
+
     static UUID jdbcInsertStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
-        return insertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_STUDENT);
+        return jdbcInsertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_STUDENT);
     }
 
     static UUID jdbcInsertLegacyUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email) {
@@ -88,10 +101,10 @@ public class TestUtils {
     }
 
     static UUID jdbcInsertAdmin(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
-        return insertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_ADMIN);
+        return jdbcInsertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_ADMIN);
     }
 
-    private static UUID insertUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale, Role role) {
+    private static UUID jdbcInsertUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale, Role role) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(EMAIL, email);
         args.addValue(PASSWORD, password);
@@ -226,7 +239,7 @@ public class TestUtils {
         }});
     }
 
-    static void insertVerificationCode(NamedParameterJdbcTemplate namedParameterJdbcTemplate, VerificationCode verificationCode) {
+    static void jdbcInsertVerificationCode(NamedParameterJdbcTemplate namedParameterJdbcTemplate, VerificationCode verificationCode) {
         namedParameterJdbcTemplate.update(
                 "INSERT INTO Verification_Codes(user_id, code, expires_at) values(" +
                         "(SELECT user_id FROM Users WHERE email = :email), " +

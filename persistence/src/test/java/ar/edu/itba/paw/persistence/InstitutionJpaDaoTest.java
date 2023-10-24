@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static ar.edu.itba.paw.persistence.TestUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.models.NameConstants.*;
 import static org.junit.Assert.assertEquals;
 
 @Transactional

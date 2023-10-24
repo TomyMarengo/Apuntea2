@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.models.NameConstants.*;
 
 @Repository
 public class SearchJdbcDao implements SearchDao {

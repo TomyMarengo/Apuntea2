@@ -11,7 +11,6 @@ import javax.persistence.TypedQuery;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
-import java.util.*;
 
 @Repository
 public class InstitutionJpaDao implements InstitutionDao{

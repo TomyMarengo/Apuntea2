@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.VerificationCode;
 import ar.edu.itba.paw.persistence.UserDao;
 import ar.edu.itba.paw.persistence.VerificationCodeDao;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Locale;
 import java.util.Random;
 
 @Service
@@ -33,13 +33,13 @@ public class VerificationCodesServiceImpl implements VerificationCodesService  {
         Random rnd = new Random();
         int number = rnd.nextInt(999999);
 
-        verificationCodeDao.deleteVerificationCodes(email);
-        VerificationCode verificationCode = new VerificationCode(String.format("%06d", number), email, LocalDateTime.now().plusMinutes(10));
-        verificationCodeDao.saveVerificationCode(verificationCode);
-        LOGGER.info("New verification code stored into database for user {}", email);
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
-        String lang = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new).getLocale();
-        emailService.sendForgotPasswordEmail(verificationCode, new Locale(lang));
+        verificationCodeDao.deleteVerificationCodes(email);
+
+        VerificationCode verificationCode = verificationCodeDao.saveVerificationCode(String.format("%06d", number), user, LocalDateTime.now().plusMinutes(10));
+        LOGGER.info("New verification code stored into database for user {}", email);
+        emailService.sendForgotPasswordEmail(verificationCode, user.getLocale());
     }
 
     @Override

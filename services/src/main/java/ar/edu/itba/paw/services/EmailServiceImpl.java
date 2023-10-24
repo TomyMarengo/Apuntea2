@@ -43,7 +43,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendReviewEmail(Review review) {
-        final Locale ownerLocale = new Locale(review.getNote().getUser().getLocale());
+        final Locale ownerLocale = review.getNote().getUser().getLocale();
         final String to = review.getNote().getUser().getEmail();
         final String subject = messageSource.getMessage("email.review.new", new Object[]{review.getNote().getName()}, ownerLocale);
         HashMap<String, Object> data = createReviewEmailMap(review);
@@ -72,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendDeleteReviewEmail(Review review, String reason) {
-        final Locale ownerLocale = new Locale(review.getUser().getLocale());
+        final Locale ownerLocale = review.getUser().getLocale();
         final String to = review.getUser().getEmail();
         final String subject = messageSource.getMessage("email.review.delete", new Object[]{review.getNote().getName()}, ownerLocale);
         HashMap<String, Object> data = createReviewEmailMap(review);
@@ -90,7 +90,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendDeleteNoteEmail(Note note, String reason) {
-        final Locale ownerLocale = new Locale(note.getUser().getLocale());
+        final Locale ownerLocale = note.getUser().getLocale();
         final String to = note.getUser().getEmail();
         final String subject = messageSource.getMessage("email.note.hasBeenDeleted", new Object[]{note.getName()}, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
@@ -109,7 +109,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendDeleteDirectoryEmail(Directory directory, String reason) {
-        final Locale ownerLocale = new Locale(directory.getUser().getLocale());
+        final Locale ownerLocale = directory.getUser().getLocale();
         final String to = directory.getUser().getEmail();
         final String subject = messageSource.getMessage("email.directory.hasBeenDeleted", new Object[]{directory.getName()}, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
@@ -144,7 +144,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendBanEmail(User user, String reason, int duration) {
-        final Locale ownerLocale = new Locale(user.getLocale());
+        final Locale ownerLocale = user.getLocale();
         final String to = user.getEmail();
         final String subject = messageSource.getMessage("email.ban.title", null, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
@@ -163,7 +163,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendUnbanEmail(User user) {
-        final Locale ownerLocale = new Locale(user.getLocale());
+        final Locale ownerLocale = user.getLocale();
         final String to = user.getEmail();
         final String subject = messageSource.getMessage("email.unban.title", null, ownerLocale);
         final Map<String, Object> data = new HashMap<>();

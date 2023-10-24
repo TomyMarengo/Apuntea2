@@ -29,7 +29,6 @@ public class VerificationCodesServiceImplTest {
 
     @Test(expected = UserNotFoundException.class)
     public void testVerifyInvalidCode() {
-        Mockito.doThrow(new UserNotFoundException()).when(verificationCodesDao).saveVerificationCode(Mockito.any());
         verificationCodesService.sendForgotPasswordCode("email");
         Assert.fail();
     }

@@ -17,7 +17,7 @@ import javax.sql.DataSource;
 import java.util.Optional;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.models.NameConstants.*;
 import static ar.edu.itba.paw.persistence.TestUtils.*;
 
 import static org.junit.Assert.*;

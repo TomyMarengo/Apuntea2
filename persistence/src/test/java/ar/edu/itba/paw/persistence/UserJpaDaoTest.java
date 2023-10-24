@@ -21,7 +21,7 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import static ar.edu.itba.paw.persistence.TestUtils.*;
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.models.NameConstants.*;
 import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
@@ -68,7 +68,7 @@ public class UserJpaDaoTest {
         assertEquals(studentId, maybeUser.get().getUserId());
         assertEquals(email, maybeUser.get().getEmail());
         assertEquals(ING_INF_ID, maybeUser.get().getCareer().getCareerId());
-        assertEquals("es", maybeUser.get().getLocale());
+        assertEquals("es", maybeUser.get().getLocale().getLanguage());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class UserJpaDaoTest {
         assertEquals(studentId, maybeUser.get().getUserId());
         assertEquals(username, maybeUser.get().getUsername());
         assertEquals(ING_INF_ID, maybeUser.get().getCareer().getCareerId());
-        assertEquals("es", maybeUser.get().getLocale());
+        assertEquals("es", maybeUser.get().getLocale().getLanguage());
         assertEquals("Test", maybeUser.get().getFirstName());
         assertEquals("Er", maybeUser.get().getLastName());
     }
@@ -106,7 +106,7 @@ public class UserJpaDaoTest {
         assertEquals(studentId, maybeUser.get().getUserId());
         assertEquals(email, maybeUser.get().getEmail());
         assertEquals(ING_INF_ID, maybeUser.get().getCareer().getCareerId());
-        assertEquals("es", maybeUser.get().getLocale());
+        assertEquals("es", maybeUser.get().getLocale().getLanguage());
     }
 
     @Test

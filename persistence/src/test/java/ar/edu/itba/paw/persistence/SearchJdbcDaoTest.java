@@ -23,7 +23,7 @@ import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
 
 import static ar.edu.itba.paw.persistence.TestUtils.*;
 import static ar.edu.itba.paw.persistence.TestUtils.EDA_ID;
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.models.NameConstants.*;
 import static org.junit.Assert.*;
 
 @Transactional
