@@ -1,18 +1,23 @@
 package ar.edu.itba.paw.models.institutional;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "subjects")
-public class Subject {
+public class Subject implements Serializable {
     @Id
     @Column(name = "subject_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Expose
     private UUID subjectId;
     @Column(name="subject_name")
+    @Expose
     private String name;
 
     // TODO: Implement directory JPA
@@ -88,14 +93,6 @@ public class Subject {
         if (!(o instanceof Subject)) return false;
         Subject s = (Subject) o;
         return s.subjectId.equals(subjectId);
-    }
-
-    @Override
-    public String toString() {
-        return "Subject{" +
-                "subjectId:" + subjectId +
-                ", name:'" + name + '\'' +
-                '}';
     }
 
     public Collection<Career> getCareers() {

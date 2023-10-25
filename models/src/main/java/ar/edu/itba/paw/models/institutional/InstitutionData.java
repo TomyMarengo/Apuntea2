@@ -1,10 +1,17 @@
 package ar.edu.itba.paw.models.institutional;
 
+import com.google.gson.annotations.Expose;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class InstitutionData {
+public class InstitutionData implements Serializable {
+
+    @Expose
     private final Set<Institution> institutions;
+    @Expose
     private final Map<UUID, Set<Career>> careerMap;
+    @Expose
     private final Map<UUID, Set<Subject>> subjectMap;
 
     public InstitutionData(List<Institution> institutions) {

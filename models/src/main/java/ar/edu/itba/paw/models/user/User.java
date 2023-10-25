@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models.user;
 
 import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.institutional.Institution;
 
 import javax.persistence.*;
 import java.util.*;
@@ -102,9 +103,9 @@ public class User {
         return profilePicture;
     }
 
-//    public Institution getInstitution() {
-//        return career.getInstitution();
-//    }
+    public Institution getInstitution() {
+        return career.getInstitution();
+    }
 
     public String getDisplayName() {
         if (username != null) {

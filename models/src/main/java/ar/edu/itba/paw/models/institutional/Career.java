@@ -1,28 +1,28 @@
 package ar.edu.itba.paw.models.institutional;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "careers")
-public class Career {
+public class Career implements Serializable {
     @Id
     @Column(name = "career_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Expose
     private UUID careerId;
     @Column(name = "career_name")
+    @Expose
     private String name;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "institution_id")
-//    private Institution institution;
-
-
-    // TODO: Remove?
-    @Column(name = "institution_id")
-    private UUID institutionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -50,13 +50,13 @@ public class Career {
         return name;
     }
 
-//    public UUID getInstitutionId() {
-//        return institution.getInstitutionId();
-//    }
-//
-//    public Institution getInstitution() {
-//        return institution;
-//    }
+    public UUID getInstitutionId() {
+        return institution.getInstitutionId();
+    }
+
+    public Institution getInstitution() {
+        return institution;
+    }
 
     @Override
     public int hashCode() {

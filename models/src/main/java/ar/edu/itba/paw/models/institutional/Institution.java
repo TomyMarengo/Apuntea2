@@ -1,20 +1,25 @@
 package ar.edu.itba.paw.models.institutional;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "institutions")
-public class Institution {
+public class Institution implements Serializable {
     @Id
     @Column(name = "institution_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Expose
     private UUID institutionId;
     @Column(name = "institution_name")
+    @Expose
     private String name;
 
-    @OneToMany(mappedBy = "institutionId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "institution", fetch = FetchType.LAZY)
     private Set<Career> careers;
 
     /* package-private */ Institution(){
