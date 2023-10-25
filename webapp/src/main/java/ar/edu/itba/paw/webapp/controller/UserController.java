@@ -45,9 +45,9 @@ public class UserController {
         this.subjectService = subjectService;
     }
 
-    @RequestMapping(value = "/profile", method = RequestMethod.GET)
-    public ModelAndView profile() {
-        ModelAndView mav = new ModelAndView("profile");
+    @RequestMapping(value = "/profile/notes", method = RequestMethod.GET)
+    public ModelAndView profileNotes() {
+        ModelAndView mav = new ModelAndView("profile-notes");
         User user = securityService.getCurrentUserOrThrow();
         mav.addObject("user", user);
         mav.addObject("root_directories", subjectService.getSubjectsByCareerGroupByYear());
@@ -56,20 +56,20 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public ModelAndView settings(@ModelAttribute final EditUserForm editUserForm,
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public ModelAndView profile(@ModelAttribute final EditUserForm editUserForm,
                                  @ModelAttribute final ChangePasswordForm changePasswordForm) {
-        ModelAndView mav = new ModelAndView("settings");
+        ModelAndView mav = new ModelAndView("profile");
 
         mav.addObject("user", this.securityService.getCurrentUserOrThrow());
         return mav;
     }
 
-    @RequestMapping(value = "/settings", method = RequestMethod.POST)
+    @RequestMapping(value = "/profile", method = RequestMethod.POST)
     public ModelAndView updateSettings(@ModelAttribute final ChangePasswordForm changePasswordForm,
             @Valid @ModelAttribute final EditUserForm editUserForm,
             final BindingResult result) {
-        ModelAndView mav = new ModelAndView("settings");
+        ModelAndView mav = new ModelAndView("profile");
         if(!result.hasErrors()) {
             userService.updateProfile(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername(), editUserForm.getProfilePicture());
             mav.addObject(USER_EDITED, true);

@@ -48,9 +48,9 @@
 
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message
-                                    code="profile.title"/></a></li>
-                            <li><a class="dropdown-item" href="${baseUrl}/settings"><spring:message
-                                    code="settings.title"/></a></li>
+                                    code="myProfile.title"/></a></li>
+                            <li><a class="dropdown-item" href="${baseUrl}/profile/notes"><spring:message
+                                    code="myProfileNotes.title"/></a></li>
                             <li><a class="dropdown-item" href="${baseUrl}/change-password"><spring:message
                                     code="changePassword.title"/></a></li>
                             <li><a class="dropdown-item" href="${baseUrl}/logout"><spring:message

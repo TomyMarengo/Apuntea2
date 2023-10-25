@@ -43,7 +43,7 @@
 
         <div class="index-cards">
 
-            <a href="${baseUrl}/profile" class="call-to-action-card">
+            <a href="${baseUrl}/profile/notes" class="call-to-action-card">
 
                 <img src="<c:url value="/svg/add-document.svg"/>" alt="<spring:message code="search.title"/>"
                      class="fill-dark-text"/>
@@ -84,7 +84,7 @@
             </a>
 
             <c:if test="${user != null}">
-                <a href="${baseUrl}/settings" class="call-to-action-card">
+                <a href="${baseUrl}/profile" class="call-to-action-card">
 
                     <img src="<c:url value="/svg/user.svg"/>" alt="<spring:message code="search.title"/>"
                          class="fill-dark-text"/>

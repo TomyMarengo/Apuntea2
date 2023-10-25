@@ -20,21 +20,17 @@
     <link rel="stylesheet" href="<c:url value="/css/general/backgrounds.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/texts.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/general/color-picker.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
+    <link rel="stylesheet" href=<c:url value="/css/sections/navbar.css"/>/>
     <link rel="stylesheet" href="<c:url value="/css/sections/user/profile.css"/>"/>
 
-    <link rel="stylesheet" href=
-            <c:url value="/css/sections/navbar.css"/>/>
-    <link rel="stylesheet" href=
-            <c:url value="/css/sections/user/profile.css"/>/>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet"/>
 
 </head>
+
 <body>
 
 <header>
@@ -46,167 +42,122 @@
     <fragment:bottom-navbar title="./profile:${title}"/>
 </header>
 
+<section class="container d-flex flex-row justify-content-center align-items-center mt-3">
+    <div class="card box w-50">
+        <div class="card-body p-3 p-md-5 mx-4">
+            <c:url var="editUserUrl" value="/profile"/>
+            <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
 
-<!-- USER INFO & BUTTONS "VER" -->
-<main class="container-fluid px-5 mt-5">
-    <section class="row justify-content-around">
-        <!-- User info column -->
-        <div class="col-12 col-lg-4 col-xl-3 ">
-            <div class="card user-card box mb-5 mb-lg-0">
-                <div class="card-body">
-                    <!-- Profile picture (visible on large screens) -->
-                    <div class="d-none d-lg-flex flex-column">
-                        <div class="profile-picture-small mb-3">
-                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
-                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"
-                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
-                            </div>
-                        </div>
+            <form:form modelAttribute="editUserForm"
+                       action="${editUserUrl}"
+                       method="post"
+                       enctype="multipart/form-data"
+                       class="d-flex flex-column"
+                       id="editUserForm">
+                <h1><spring:message code="profile.title"/></h1>
 
-                        <!-- User info -->
-                        <div class="d-flex flex-column gap-2">
-                            <h4 class="card-title fw-bold">${user.displayName}</h4>
-                            <c:forEach items="${user.roles}" var="r">
-                                <span class="card-text">
-                                <c:choose>
-                                    <c:when test="${r eq 'ROLE_STUDENT'}">
-                                        <spring:message code="role.student"/>
-                                    </c:when>
-                                    <c:when test="${r eq 'ROLE_MODERATOR'}">
-                                        <spring:message code="role.moderator"/>
-                                    </c:when>
-                                    <c:when test="${r eq 'ROLE_ADMIN'}">
-                                        <spring:message code="role.admin"/>
-                                    </c:when>
-                                </c:choose>
-                                </span>
-                            </c:forEach>
-                            <span class="card-text">${user.institution.name}</span>
-                            <span class="card-text">${user.career.name}</span>
-                        </div>
-                    </div>
-                    <!-- Profile picture (visible on small screens) -->
-                    <div class="d-flex d-lg-none justify-content-around align-items-center flex-wrap ">
-                        <div class="mb-3 mb-md-0 w-100">
-                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">
-                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"
-                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">
-                            </div>
-                        </div>
-
-                        <!-- User info -->
-                        <div class="d-flex flex-column gap-2 w-100">
-                            <h4 class="card-title fw-bold">${user.email}</h4>
-                            <c:forEach items="${user.roles}" var="r">
-                                <span class="card-text">
-                                <c:choose>
-                                    <c:when test="${r eq 'ROLE_STUDENT'}">
-                                        <spring:message code="role.student"/>
-                                    </c:when>
-                                    <c:when test="${r eq 'ROLE_MODERATOR'}">
-                                        <spring:message code="role.moderator"/>
-                                    </c:when>
-                                    <c:when test="${r eq 'ROLE_ADMIN'}">
-                                        <spring:message code="role.admin"/>
-                                    </c:when>
-                                </c:choose>
-                                </span>
-                            </c:forEach>
-                            <span class="card-text">${user.institution.name}</span>
-                            <span class="card-text">${user.career.name}</span>
-                        </div>
-                    </div>
+                <div class="align-items-center d-flex" id="image-input">
+                    <label for="profilePicture" id="selected-image">
+                        <img src="${userProfilePicture}" alt="Profile Picture" class="picture" id="preview-image">
+                        <span><img src="<c:url value="/svg/pencil.svg"/>" class="d-none" id="hidden-pencil"
+                                   alt="${edit}"></span>
+                    </label>
+                    <form:errors path="profilePicture" cssClass="text-danger mt-3 align-self-center" element="p"/>
                 </div>
-            </div>
-        </div>
 
-        <!-- List of directories -->
-        <div class="col-12 col-lg-7 col-xl-8 mb-5">
 
-            <!-- FAVORITES AND MY NOTES -->
-            <c:if test="${not empty favorites }"> <!-- TODO: ADD MY NOTES -->
-                <div class="mb-5">
-                    <ul class="mini-nav">
-                        <!-- FAVORITES -->
-                        <li class="mini-nav-item">
-                            <button class="btn mini-nav-button favorite-dir text-center active" data-toggle="tab" role="tab"
-                                    aria-selected="true"> <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
-                                <spring:message code="profile.directories.favorites"/>
-                            </button>
-                        </li>
-                    </ul>
-
-                    <div class="tab-content bg-bg">
-                        <!-- FAVORITES LIST -->
-                        <div class="tab-pane favorite-dir-list fade active" role="tabpanel"> <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
-                            <div class="file-list gap-5 justify-content-center align-items-center">
-                                <c:forEach items="${favorites}" var="dir">
-                                    <a class="align-self-center" href="<c:url value="./directory/${dir.id}"/>">
-                                        <div class="d-flex flex-column gap-2 align-items-center">
-                                            <img src="<c:url value="/svg/folder.svg"/>"
-                                                 alt="<spring:message code="folder"/>"
-                                                 class="icon-xxl fill-${dir.iconColor}">
-                                            <!-- max 2 lines-->
-                                            <span class="fw-bold flex-wrap justify-content-center folder-name">
-                                                    <c:out value="${dir.name}"/>
-                                                </span>
-                                        </div>
-                                    </a>
-                                </c:forEach>
-                            </div>
-                        </div>
-                    </div>
+                <div>
+                    <spring:message var="profileFirstName" code="name"/>
+                    <label for="firstName"></label>
+                    <p><strong><spring:message code="name"/></strong></p>
+                    <form:input disabled="true" type="text" name="firstName" id="firstName" class="form-control bg-bg dynamic-info"
+                                placeholder="${profileFirstName}" path="firstName" value="${user.firstName}"/>
+                    <form:errors path="firstName" cssClass="text-danger" element="p"/>
                 </div>
-            </c:if>
 
 
-            <!-- ROOT DIRECTORIES -->
-            <div>
-                <ul class="mini-nav">
-                    <c:forEach items="${root_directories}" var="subjects" varStatus="i">
-                        <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
-                        <!--TAB-->
-                        <li class="mini-nav-item">
-                            <button class="btn mini-nav-button root-dir text-center ${i.index eq 0 ? 'active' : ''}"
-                                    data-toggle="tab" role="tab" aria-selected="true">
-                                <spring:message code="profile.directories.year" arguments="${ordinal}"/>
-                            </button>
-                        </li>
-                    </c:forEach>
-                </ul>
-                <div class="tab-content bg-bg">
-                    <c:forEach items="${root_directories}" var="subjects" varStatus="i">
-                        <div class="tab-pane root-dir-list fade ${i.index eq 0 ? 'active' : ''}" role="tabpanel">
-                            <div class="file-list gap-5 justify-content-center align-items-center">
-                                <c:forEach items="${subjects.value}" var="rd">
-                                    <a class="align-self-center"
-                                       href="<c:url value="./directory/${rd.rootDirectoryId}"/>">
-                                        <div class="d-flex flex-column gap-2 align-items-center">
-                                            <img src="<c:url value="/svg/folder.svg"/>"
-                                                 alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
-                                            <!-- max 2 lines-->
-                                            <span class="fw-bold flex-wrap justify-content-center folder-name">
-                                                <c:out value="${rd.name}"/>
-                                            </span>
-                                        </div>
-                                    </a>
-                                </c:forEach>
-                            </div>
-                        </div>
+                <div>
+                    <spring:message var="profileLastName" code="lastName"/>
+                    <label for="lastName"></label>
+                    <p><strong><spring:message code="lastName"/></strong></p>
+                    <form:input disabled="true"  type="text" name="lastName" id="lastName" class="form-control bg-bg dynamic-info"
+                                placeholder="${profileLastName}" path="lastName" value="${user.lastName}"/>
+                    <form:errors path="lastName" cssClass="text-danger" element="p"/>
+                </div>
+
+
+                <div>
+                    <spring:message var="profileUsername" code="username"/>
+                    <label for="username"></label>
+                    <p><strong><spring:message code="username"/></strong></p>
+                    <form:input disabled="true" type="text" name="username" id="username" class="form-control bg-bg dynamic-info"
+                                placeholder="${profileUsername}" path="username" value="${user.username}"
+                                required="true"/>
+                    <form:errors path="username" cssClass="text-danger" element="p"/>
+                </div>
+
+                <div class="d-flex flex-column mt-4">
+                    <p><strong><spring:message code="email"/></strong></p>
+                    <span class="card-text">${user.email}</span>
+                </div>
+                <div class="d-flex flex-column my-4">
+                    <p><strong><spring:message code="roles"/></strong></p>
+                    <c:forEach items="${user.roles}" var="r">
+                            <span class="card-text">
+                            <c:choose>
+                                <c:when test="${r eq 'ROLE_STUDENT'}">
+                                    <spring:message code="role.student"/>
+                                </c:when>
+                                <c:when test="${r eq 'ROLE_MODERATOR'}">
+                                    <spring:message code="role.moderator"/>
+                                </c:when>
+                                <c:when test="${r eq 'ROLE_ADMIN'}">
+                                    <spring:message code="role.admin"/>
+                                </c:when>
+                            </c:choose>
+                            </span>
                     </c:forEach>
                 </div>
-            </div>
-        </div>
+                <div class="d-flex flex-column mb-4">
+                    <p><strong><spring:message code="institution"/></strong></p>
+                    <span class="card-text">${user.institution.name}</span>
+                </div>
+                <div class="d-flex flex-column">
+                    <p><strong><spring:message code="career"/></strong></p>
+                    <span class="card-text">${user.career.name}</span>
+                </div>
 
-    </section>
-</main>
+                <div class="mt-5 d-flex justify-content-center d-none" id="update-info">
+                    <spring:message var="update" code="update"/>
+                    <input class="btn rounded-box button-primary mx-3" id="update-button" type="submit" value="${update}">
+                    <input type="button" class="btn rounded-box button-secondary" id="cancel-edit-button" value="<spring:message code="close"/>">
+                </div>
+
+                <div class="mt-5 d-flex justify-content-center" id="edit-info-button">
+                    <input type="button" class="btn rounded-box button-primary" value="<spring:message code="editInformation"/>">
+                </div>
+            </form:form>
+        </div>
+    </div>
+</section>
+
+
+<fragment:custom-toast message=""/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
 
-<script src="<c:url value="/js/color-picker.js"/>"></script>
-<script src="<c:url value="/js/profile.js"/>"></script>
-</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
+<script src="<c:url value="/js/profile.js"/>"></script>
+<script src="<c:url value="/js/password.js"/>"></script>
+<script src="<c:url value="/js/popups.js"/>"></script>
+
+<script>
+    <c:if test="${userEdited ne null and userEdited eq true}">
+    displayToast('<spring:message code="toast.changeInfo"/>')
+    </c:if>
+</script>
+</body>
 </html>

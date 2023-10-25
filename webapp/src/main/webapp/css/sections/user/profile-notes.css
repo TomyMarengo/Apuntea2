@@ -1,0 +1,73 @@
+
+.folder-name{
+    width: 8em;
+    text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    /*    show also the last word of the name*/
+    overflow: hidden;
+}
+
+.file-list {
+    /* grid repeat fit, all the columns with the same width, align left, same space around*/
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    justify-items: center;
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.tab-content {
+    /*    borders with shadow*/
+    border-top: none;
+    border-bottom-left-radius: var(--bs-border-radius);
+    border-bottom-right-radius: var(--bs-border-radius);
+    padding: 1rem;
+    background-color: var(--bg);
+    box-shadow: 10px 10px 10px -5px rgba(48, 42, 36, 0.10);
+}
+
+
+.mini-nav{
+    border-bottom: 0;
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+}
+
+.mini-nav-button{
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    padding: 7px 20px;
+}
+
+.mini-nav-button:not(.active){
+    opacity: 80%;
+}
+
+.root-dir {
+    background-color: var(--primary);
+    color: var(--bg);
+}
+
+.root-dir:not(.active):hover{
+    color: var(--primary);
+    background-color: var(--bg);
+    border: var(--primary) 1px solid;
+}
+
+.favorite-dir {
+    background-color: #ff5e6d;
+    color: var(--bg);
+}
+
+.favorite-dir:not(.active):hover{
+    color: #ff5e6d;
+    background-color: var(--text);
+    border: #ff5e6d 1px solid;
+}

@@ -59,11 +59,11 @@
                 <h1><spring:message code="changePassword.title"/></h1>
 
                 <label for="oldPassword"></label>
-                <p><strong><spring:message code="settings.account.oldPassword"/></strong></p>
+                <p><strong><spring:message code="changePassword.oldPassword"/></strong></p>
                 <div class="input-group">
-                    <spring:message var="settingsOldPassword" code="settings.account.oldPassword"/>
+                    <spring:message var="oldPassword" code="changePassword.oldPassword"/>
                     <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
-                                placeholder="${settingsOldPassword}" path="oldPassword" value="" required="true"/>
+                                placeholder="${oldPassword}" path="oldPassword" value="" required="true"/>
                     <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
                                                 <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
                                                      class="icon-xs fill-dark-primary"/>
@@ -74,11 +74,11 @@
                 <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
 
                 <label for="newPassword"></label>
-                <p><strong><spring:message code="settings.account.newPassword"/></strong></p>
+                <p><strong><spring:message code="changePassword.newPassword"/></strong></p>
                 <div class="input-group">
-                    <spring:message var="settingsNewPassword" code="settings.account.newPassword"/>
+                    <spring:message var="newPassword" code="changePassword.newPassword"/>
                     <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
-                                placeholder="${settingsNewPassword}" path="newPassword" value="" required="true"/>
+                                placeholder="${newPassword}" path="newPassword" value="" required="true"/>
                     <span class="input-group-text input-group-icon clickable"
                           onclick="password_show_hide('2');">
                                                 <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"
@@ -106,7 +106,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 </body>
 
-<script src="<c:url value="/js/settings.js"/>"></script>
 <script src="<c:url value="/js/password.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
 
