@@ -55,14 +55,13 @@ public class UserController {
         return mav;
     }
 
+
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
-    public ModelAndView settings(@RequestParam(value = "password-changed", required = false) final boolean passwordChanged,
-                                 @ModelAttribute final EditUserForm editUserForm,
+    public ModelAndView settings(@ModelAttribute final EditUserForm editUserForm,
                                  @ModelAttribute final ChangePasswordForm changePasswordForm) {
         ModelAndView mav = new ModelAndView("settings");
 
         mav.addObject("user", this.securityService.getCurrentUserOrThrow());
-        mav.addObject("passwordChanged", passwordChanged);
         return mav;
     }
 
@@ -81,18 +80,6 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
-    public ModelAndView changePassword(@ModelAttribute final EditUserForm editUserForm,
-                                        @Valid @ModelAttribute final ChangePasswordForm changePasswordForm,
-                                       final BindingResult result) {
-        if(!result.hasErrors()) {
-            userService.updateCurrentUserPassword(changePasswordForm.getNewPassword());
-            return new ModelAndView("redirect:settings?password-changed=true");
-        }
-        return new ModelAndView("settings").addObject("errorsChangePasswordForm", result.getAllErrors());
-    }
-
-
     @RequestMapping(value = "/profile/{userId}/picture", method = RequestMethod.GET, produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     @ResponseBody
     public byte[] getProfilePicture(@PathVariable("userId") @ValidUuid UUID userId)  {
@@ -105,4 +92,24 @@ public class UserController {
             }
         });
     }
+
+    @RequestMapping(value = "/change-password", method = RequestMethod.GET)
+    public ModelAndView getPassword(@RequestParam(value = "password-changed", required = false) final boolean passwordChanged,
+                                    @ModelAttribute final ChangePasswordForm changePasswordForm) {
+        User user = securityService.getCurrentUserOrThrow();
+        ModelAndView mav = new ModelAndView("change-password");
+        mav.addObject("user", user);
+        mav.addObject("passwordChanged", passwordChanged);
+        return mav;
+    }
+    @RequestMapping(value = "/change-password", method = RequestMethod.POST)
+    public ModelAndView changePassword(@Valid @ModelAttribute final ChangePasswordForm changePasswordForm,
+                                       final BindingResult result) {
+        if(!result.hasErrors()) {
+            userService.updateCurrentUserPassword(changePasswordForm.getNewPassword());
+            return new ModelAndView("redirect:change-password?password-changed=true");
+        }
+        return new ModelAndView("change-password").addObject("errorsChangePasswordForm", result.getAllErrors());
+    }
+
 }

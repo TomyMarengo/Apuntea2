@@ -51,7 +51,10 @@
                                     code="profile.title"/></a></li>
                             <li><a class="dropdown-item" href="${baseUrl}/settings"><spring:message
                                     code="settings.title"/></a></li>
-                            <li><a class="dropdown-item" href="${baseUrl}/logout"><spring:message code="logout"/></a></li>
+                            <li><a class="dropdown-item" href="${baseUrl}/change-password"><spring:message
+                                    code="changePassword.title"/></a></li>
+                            <li><a class="dropdown-item" href="${baseUrl}/logout"><spring:message
+                                    code="logout"/></a></li>
                         </ul>
                 </div>
             </c:if>
