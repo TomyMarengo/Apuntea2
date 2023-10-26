@@ -72,22 +72,12 @@
                         <form:errors path="firstName" cssClass="text-danger" element="p"/>
                     </div>
 
-                    <div class="d-flex flex-column px-3 py-2">
-                        <p><strong><spring:message code="email"/></strong></p>
-                        <span class="card-text">${user.email}</span>
-                    </div>
-
                     <div class="px-3 py-2">
                         <spring:message var="profileLastName" code="lastName"/>
                         <p><strong><spring:message code="lastName"/></strong></p>
                         <form:input disabled="true"  type="text" id="lastName" class="form-control bg-bg dynamic-info"
                                     placeholder="${profileLastName}" path="lastName" value="${user.lastName}"/>
                         <form:errors path="lastName" cssClass="text-danger" element="p"/>
-                    </div>
-
-                    <div class="d-flex flex-column px-3 py-2">
-                        <p><strong><spring:message code="institution"/></strong></p>
-                        <span class="card-text">${user.institution.name}</span>
                     </div>
 
                     <div class="px-3 py-2">
@@ -99,8 +89,17 @@
                         <form:errors path="username" cssClass="text-danger" element="p"/>
                     </div>
 
+                    <div class="d-flex flex-column px-3 py-2 gap-1">
+                        <p><strong><spring:message code="email"/></strong></p>
+                        <span class="card-text">${user.email}</span>
+                    </div>
 
-                    <div class="d-flex flex-column px-3 py-2">
+                    <div class="d-flex flex-column px-3 py-2 gap-1">
+                        <p><strong><spring:message code="institution"/></strong></p>
+                        <span class="card-text">${user.institution.name}</span>
+                    </div>
+
+                    <div class="d-flex flex-column px-3 py-2 gap-1">
                         <p><strong><spring:message code="career"/></strong></p>
                         <span class="card-text">${user.career.name}</span>
                     </div>
