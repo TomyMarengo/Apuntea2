@@ -33,7 +33,7 @@
 <body>
 
 <header>
-    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
+    <fragment:navbar user="${user}"/>
 </header>
 
 <main class="h-100-nav container-fluid mt-5">

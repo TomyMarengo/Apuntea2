@@ -35,7 +35,7 @@
 
 <header>
     <!-- NAVBAR -->
-    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
+    <fragment:navbar user="${user}"/>
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="profile.title" var="title"/>

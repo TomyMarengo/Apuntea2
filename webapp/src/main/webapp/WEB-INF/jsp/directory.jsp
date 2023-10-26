@@ -39,7 +39,7 @@
 <body>
 
 <header>
-    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
+    <fragment:navbar user="${user}"/>
 
     <fragment:bottom-navbar title="./${directoryId}:${directory.name}" hierarchy="${hierarchy}" category="directory"/>
 </header>

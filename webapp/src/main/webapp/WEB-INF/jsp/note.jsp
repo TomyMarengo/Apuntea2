@@ -37,7 +37,7 @@
 
 <header>
     <!-- NAVBAR -->
-    <fragment:navbar loggedIn="${user != null}" isAdmin="${user.roles[1] ne null}"/>
+    <fragment:navbar user="${user}"/>
 
     <fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}" category="note"/>
 </header>
