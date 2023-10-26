@@ -43,7 +43,7 @@
 </header>
 
 <section class="container d-flex flex-row justify-content-center align-items-center mt-3">
-    <div class="card box w-50">
+    <div class="card box w-75">
         <div class="card-body p-3 p-md-5 mx-4">
             <c:url var="editUserUrl" value="/profile"/>
             <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
@@ -55,7 +55,6 @@
                        class="d-flex flex-column"
                        id="editUserForm">
                 <h1><spring:message code="profile.title"/></h1>
-
                 <div class="align-items-center d-flex" id="image-input">
                     <label for="profilePicture" id="selected-image">
                         <img src="${userProfilePicture}" alt="Profile Picture" class="picture" id="preview-image">
@@ -64,67 +63,47 @@
                     </label>
                     <form:errors path="profilePicture" cssClass="text-danger mt-3 align-self-center" element="p"/>
                 </div>
+                <div class="user-information">
+                    <div class="px-3 py-2">
+                        <spring:message var="profileFirstName" code="name"/>
+                        <p><strong><spring:message code="name"/></strong></p>
+                        <form:input disabled="true" type="text" id="firstName" class="form-control bg-bg dynamic-info"
+                                    placeholder="${profileFirstName}" path="firstName" value="${user.firstName}"/>
+                        <form:errors path="firstName" cssClass="text-danger" element="p"/>
+                    </div>
+
+                    <div class="d-flex flex-column px-3 py-2">
+                        <p><strong><spring:message code="email"/></strong></p>
+                        <span class="card-text">${user.email}</span>
+                    </div>
+
+                    <div class="px-3 py-2">
+                        <spring:message var="profileLastName" code="lastName"/>
+                        <p><strong><spring:message code="lastName"/></strong></p>
+                        <form:input disabled="true"  type="text" id="lastName" class="form-control bg-bg dynamic-info"
+                                    placeholder="${profileLastName}" path="lastName" value="${user.lastName}"/>
+                        <form:errors path="lastName" cssClass="text-danger" element="p"/>
+                    </div>
+
+                    <div class="d-flex flex-column px-3 py-2">
+                        <p><strong><spring:message code="institution"/></strong></p>
+                        <span class="card-text">${user.institution.name}</span>
+                    </div>
+
+                    <div class="px-3 py-2">
+                        <spring:message var="profileUsername" code="username"/>
+                        <p><strong><spring:message code="username"/></strong></p>
+                        <form:input disabled="true" type="text" id="username" class="form-control bg-bg dynamic-info"
+                                    placeholder="${profileUsername}" path="username" value="${user.username}"
+                                    required="true"/>
+                        <form:errors path="username" cssClass="text-danger" element="p"/>
+                    </div>
 
 
-                <div>
-                    <spring:message var="profileFirstName" code="name"/>
-                    <label for="firstName"></label>
-                    <p><strong><spring:message code="name"/></strong></p>
-                    <form:input disabled="true" type="text" name="firstName" id="firstName" class="form-control bg-bg dynamic-info"
-                                placeholder="${profileFirstName}" path="firstName" value="${user.firstName}"/>
-                    <form:errors path="firstName" cssClass="text-danger" element="p"/>
-                </div>
-
-
-                <div>
-                    <spring:message var="profileLastName" code="lastName"/>
-                    <label for="lastName"></label>
-                    <p><strong><spring:message code="lastName"/></strong></p>
-                    <form:input disabled="true"  type="text" name="lastName" id="lastName" class="form-control bg-bg dynamic-info"
-                                placeholder="${profileLastName}" path="lastName" value="${user.lastName}"/>
-                    <form:errors path="lastName" cssClass="text-danger" element="p"/>
-                </div>
-
-
-                <div>
-                    <spring:message var="profileUsername" code="username"/>
-                    <label for="username"></label>
-                    <p><strong><spring:message code="username"/></strong></p>
-                    <form:input disabled="true" type="text" name="username" id="username" class="form-control bg-bg dynamic-info"
-                                placeholder="${profileUsername}" path="username" value="${user.username}"
-                                required="true"/>
-                    <form:errors path="username" cssClass="text-danger" element="p"/>
-                </div>
-
-                <div class="d-flex flex-column mt-4">
-                    <p><strong><spring:message code="email"/></strong></p>
-                    <span class="card-text">${user.email}</span>
-                </div>
-                <div class="d-flex flex-column my-4">
-                    <p><strong><spring:message code="roles"/></strong></p>
-                    <c:forEach items="${user.roles}" var="r">
-                            <span class="card-text">
-                            <c:choose>
-                                <c:when test="${r eq 'ROLE_STUDENT'}">
-                                    <spring:message code="role.student"/>
-                                </c:when>
-                                <c:when test="${r eq 'ROLE_MODERATOR'}">
-                                    <spring:message code="role.moderator"/>
-                                </c:when>
-                                <c:when test="${r eq 'ROLE_ADMIN'}">
-                                    <spring:message code="role.admin"/>
-                                </c:when>
-                            </c:choose>
-                            </span>
-                    </c:forEach>
-                </div>
-                <div class="d-flex flex-column mb-4">
-                    <p><strong><spring:message code="institution"/></strong></p>
-                    <span class="card-text">${user.institution.name}</span>
-                </div>
-                <div class="d-flex flex-column">
-                    <p><strong><spring:message code="career"/></strong></p>
-                    <span class="card-text">${user.career.name}</span>
+                    <div class="d-flex flex-column px-3 py-2">
+                        <p><strong><spring:message code="career"/></strong></p>
+                        <span class="card-text">${user.career.name}</span>
+                    </div>
                 </div>
 
                 <div class="mt-5 d-flex justify-content-center d-none" id="update-info">
@@ -136,6 +115,7 @@
                 <div class="mt-5 d-flex justify-content-center" id="edit-info-button">
                     <input type="button" class="btn rounded-box button-primary" value="<spring:message code="editInformation"/>">
                 </div>
+
             </form:form>
         </div>
     </div>
