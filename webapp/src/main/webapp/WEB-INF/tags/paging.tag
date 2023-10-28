@@ -9,73 +9,75 @@
 <section class="container d-flex justify-content-center mt-3">
     <nav aria-label="...">
         <ul class="pagination">
-            <c:if test="${pageNumber gt 1}">
-                <li class="page-item">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="previousPage" data-page="${pageNumber-1}"><spring:message code="search.pagination.previous"/></a>
-                </li>
-            </c:if>
-            <c:if test="${pageNumber le 1}">
-                <li class="page-item disabled">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="previousPage" data-page="${pageNumber-1}"><spring:message code="search.pagination.previous"/></a>
-                </li>
-            </c:if>
+            <c:if test="${maxPage gt 1}">
+                <c:if test="${pageNumber gt 1}">
+                    <li class="page-item">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="previousPage" data-page="${pageNumber-1}"><spring:message code="search.pagination.previous"/></a>
+                    </li>
+                </c:if>
+                <c:if test="${pageNumber le 1}">
+                    <li class="page-item disabled">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="previousPage" data-page="${pageNumber-1}"><spring:message code="search.pagination.previous"/></a>
+                    </li>
+                </c:if>
 
-            <c:if test="${pageNumber gt 2}">
-                <li class="page-item">
-                    <a class="page-link" data-page="1"><c:out value="1"/></a>
-                </li>
-            </c:if>
+                <c:if test="${pageNumber gt 2}">
+                    <li class="page-item">
+                        <a class="page-link" data-page="1"><c:out value="1"/></a>
+                    </li>
+                </c:if>
 
-            <c:if test="${pageNumber gt 3}">
-                <li class="page-item disabled">
-                    <a class="page-link">...</a>
-                </li>
-            </c:if>
+                <c:if test="${pageNumber gt 3}">
+                    <li class="page-item disabled">
+                        <a class="page-link">...</a>
+                    </li>
+                </c:if>
 
-            <c:if test="${pageNumber gt 1}">
-                <li class="page-item">
-                    <a class="page-link" data-page="${pageNumber - 1}"><c:out
-                            value="${pageNumber - 1}"/></a>
-                </li>
-            </c:if>
+                <c:if test="${pageNumber gt 1}">
+                    <li class="page-item">
+                        <a class="page-link" data-page="${pageNumber - 1}"><c:out
+                                value="${pageNumber - 1}"/></a>
+                    </li>
+                </c:if>
 
-            <li class="page-item active" aria-current="page">
-                <a class="page-link" data-page="${pageNumber}"><c:out
-                        value="${pageNumber}"/></a>
-            </li>
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" data-page="${pageNumber}"><c:out
+                            value="${pageNumber}"/></a>
+                </li>
 
-            <c:if test="${pageNumber lt maxPage}">
-                <li class="page-item">
-                    <a class="page-link" data-page="${pageNumber + 1}"><c:out
-                            value="${pageNumber + 1}"/></a>
-                </li>
-            </c:if>
+                <c:if test="${pageNumber lt maxPage}">
+                    <li class="page-item">
+                        <a class="page-link" data-page="${pageNumber + 1}"><c:out
+                                value="${pageNumber + 1}"/></a>
+                    </li>
+                </c:if>
 
-            <c:if test="${pageNumber lt maxPage - 2}">
-                <li class="page-item disabled">
-                    <a class="page-link">...</a>
-                </li>
-            </c:if>
+                <c:if test="${pageNumber lt maxPage - 2}">
+                    <li class="page-item disabled">
+                        <a class="page-link">...</a>
+                    </li>
+                </c:if>
 
-            <c:if test="${pageNumber lt maxPage - 1}">
-                <li class="page-item">
-                    <a class="page-link" data-page="${maxPage}"><c:out value="${maxPage}"/></a>
-                </li>
-            </c:if>
+                <c:if test="${pageNumber lt maxPage - 1}">
+                    <li class="page-item">
+                        <a class="page-link" data-page="${maxPage}"><c:out value="${maxPage}"/></a>
+                    </li>
+                </c:if>
 
-            <c:if test="${pageNumber lt maxPage}">
-                <li class="page-item">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="nextPage" data-page="${pageNumber + 1}"><spring:message code="search.pagination.next"/></a>
-                </li>
-            </c:if>
-            <c:if test="${pageNumber ge maxPage}">
-                <li class="page-item disabled">
-                        <%--suppress XmlDuplicatedId --%>
-                    <a class="page-link" id="nextPage" data-page="${pageNumber + 1}"><spring:message code="search.pagination.next"/></a>
-                </li>
+                <c:if test="${pageNumber lt maxPage}">
+                    <li class="page-item">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="nextPage" data-page="${pageNumber + 1}"><spring:message code="search.pagination.next"/></a>
+                    </li>
+                </c:if>
+                <c:if test="${pageNumber ge maxPage}">
+                    <li class="page-item disabled">
+                            <%--suppress XmlDuplicatedId --%>
+                        <a class="page-link" id="nextPage" data-page="${pageNumber + 1}"><spring:message code="search.pagination.next"/></a>
+                    </li>
+                </c:if>
             </c:if>
         </ul>
     </nav>
