@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 
@@ -27,4 +28,6 @@ public interface NoteDao {
     boolean deleteReview(UUID noteId, UUID userId);
     Review getReview(UUID noteId, UUID userId);
     void createOrUpdateReview(UUID noteId, UUID userId, int score, String content);
+
+    List<Note> findNoteByIds(List<UUID> noteIds);
 }

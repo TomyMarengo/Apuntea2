@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.user.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,8 @@ public interface DirectoryDao {
 
     Optional<Directory> getDirectoryById(UUID directoryId, UUID currentUserId);
     DirectoryPath getDirectoryPath(UUID directoryId);
+
+    Subject getSubjectByDirectory(UUID directoryId);
 
     boolean update(Directory directory, UUID currentUserId);
 
@@ -28,4 +32,6 @@ public interface DirectoryDao {
     boolean addFavorite(UUID userId, UUID directoryId);
 
     boolean removeFavorite(UUID userId, UUID directoryId);
+
+    List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser);
 }

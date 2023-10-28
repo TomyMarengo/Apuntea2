@@ -69,18 +69,18 @@ public class ServiceTestUtils {
 
     static Directory mockDirectory(String name) {
         return new Directory.DirectoryBuilder()
-                .directoryId(UUID.randomUUID())
+                .id(UUID.randomUUID())
                 .name(name)
-                .parentId(EDA_DIRECTORY_ID)
+//                .parentId(EDA_DIRECTORY_ID)
                 .visible(true)
                 .build();
     }
 
     static Directory mockRootDirectory(String name) {
         return new Directory.DirectoryBuilder()
-                .directoryId(UUID.randomUUID())
+                .id(UUID.randomUUID())
                 .name(name)
-                .parentId(EDA_DIRECTORY_ID)
+//                .parentId(EDA_DIRECTORY_ID)
                 .subject(new Subject(EDA_ID, "EDA"))
                 .build();
     }

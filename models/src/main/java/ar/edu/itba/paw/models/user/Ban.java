@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.converter.LocalDateTimeConverter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "bans")
@@ -66,6 +67,19 @@ public class Ban {
 
         public User getUser() {
             return user;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            BanId banId = (BanId) o;
+            return Objects.equals(user, banId.user) && Objects.equals(admin, banId.admin) && Objects.equals(startDate, banId.startDate);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(user, admin, startDate);
         }
     }
 }

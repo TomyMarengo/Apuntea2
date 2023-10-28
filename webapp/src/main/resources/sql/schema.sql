@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS Notes
   note_name varchar NOT NULL,
   user_id uuid,
   file bytea NOT NULL,
-  category varchar CHECK (category IN ('practice', 'theory', 'exam', 'other')),
+  category varchar CHECK (category IN ('PRACTICE', 'THEORY', 'EXAM', 'OTHER')),
   subject_id uuid,
   parent_id uuid,
   created_at timestamp DEFAULT now(),
@@ -225,3 +225,30 @@ CREATE TABLE IF NOT EXISTS Verification_Codes
 );
 
 ALTER TABLE Reviews ADD COLUMN IF NOT EXISTS created_at timestamp DEFAULT now() NOT NULL;
+
+-----------------------------------------------------------------------------------------------------------
+--SPRINT 4
+
+ALTER TABLE Notes ADD COLUMN IF NOT EXISTS file bytea;
+
+CREATE TABLE IF NOT EXISTS Note_Files
+(
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    file bytea NOT NULL,
+    note_id uuid NOT NULL,
+    CONSTRAINT "PK_note_files" PRIMARY KEY (id),
+    CONSTRAINT "FK_note_files_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE,
+    CONSTRAINT "UQ_note_files" UNIQUE (note_id)
+);
+
+INSERT INTO Note_Files (file, note_id) SELECT file, note_id FROM Notes WHERE file IS NOT NULL;
+
+ALTER TABLE NOTES ADD COLUMN IF NOT EXISTS file_id uuid,
+    DROP COLUMN IF EXISTS file,
+    DROP CONSTRAINT IF EXISTS "FK_notes_note_files",
+    ADD CONSTRAINT "FK_notes_note_files" FOREIGN KEY (file_id) REFERENCES Note_Files (id) ON DELETE CASCADE;
+
+UPDATE Notes SET file_id = nf.id FROM Note_Files nf WHERE Notes.note_id = nf.note_id;
+
+ALTER TABLE Notes ALTER COLUMN file_id SET NOT NULL;
+

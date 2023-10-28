@@ -1,11 +1,22 @@
 package ar.edu.itba.paw.models.note;
 
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
+@Entity
+@Table(name = "note_files")
 public class NoteFile {
-    private String type;
-    private byte[] content;
+    @Id
+    @Column(name = "note_id")
+    private UUID noteId;
+
+    @Column(name = "file")
+    private byte[] file;
+
+    @OneToOne(mappedBy = "noteFile")
+    private Note note;
 
     private static final Map<String, String> mimeTypes = new HashMap<String, String>(){{
         put("pdf", "application/pdf");
@@ -16,17 +27,14 @@ public class NoteFile {
         put("mp4",  "video/mp4");
     }};
 
+    /* package-private */ NoteFile() {}
 
-    public NoteFile(String type, byte[] content) {
-        this.type = type;
-        this.content = content;
-    }
 
     public String getMimeType()  {
-        return mimeTypes.get(type);
+        return mimeTypes.get(note.getFileType());
     }
 
     public byte[] getContent() {
-        return content;
+        return file;
     }
 }

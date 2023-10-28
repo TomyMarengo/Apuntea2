@@ -14,6 +14,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.*;
 
@@ -21,6 +23,9 @@ import static ar.edu.itba.paw.models.NameConstants.*;
 
 @Repository
 public class DirectoryJdbcDao implements DirectoryDao {
+    @PersistenceContext
+    private EntityManager em;
+
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -28,10 +33,10 @@ public class DirectoryJdbcDao implements DirectoryDao {
 
     private static final RowMapper<Directory> LIMITED_ROW_MAPPER = (rs, rowNum)  -> {
         Directory.DirectoryBuilder dbuilder = new Directory.DirectoryBuilder()
-                        .directoryId(UUID.fromString(rs.getString(DIRECTORY_ID)))
+//                        .id(UUID.fromString(rs.getString(DIRECTORY_ID)))
                         .name(rs.getString(DIRECTORY_NAME));
         String parentId = rs.getString(PARENT_ID);
-        if (parentId != null) dbuilder.parentId(UUID.fromString(parentId));
+//        if (parentId != null) dbuilder.parentId(UUID.fromString(parentId));
         return dbuilder.build();
     };
 
@@ -40,7 +45,7 @@ public class DirectoryJdbcDao implements DirectoryDao {
         String parentId = rs.getString(PARENT_ID);
         Directory.DirectoryBuilder dbuilder =
                 new Directory.DirectoryBuilder()
-                    .directoryId(UUID.fromString(rs.getString(DIRECTORY_ID)))
+//                    .id(UUID.fromString(rs.getString(DIRECTORY_ID)))
                     .name(rs.getString(DIRECTORY_NAME))
                     .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
                     .lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime())
@@ -53,13 +58,13 @@ public class DirectoryJdbcDao implements DirectoryDao {
                     .email(rs.getString(EMAIL))
                     .build()
             );
-        if (parentId != null)
-            dbuilder.parentId(UUID.fromString(parentId));
+//        if (parentId != null)
+//            dbuilder.parentId(UUID.fromString(parentId));
         return dbuilder.build();
     };
 
     private static final RowMapper<Directory> USER_ROW_MAPPER = (rs, rowNum) -> new Directory.DirectoryBuilder()
-            .directoryId(UUID.fromString(rs.getString(DIRECTORY_ID)))
+//            .id(UUID.fromString(rs.getString(DIRECTORY_ID)))
             .name(rs.getString(DIRECTORY_NAME))
             .user(new User.UserBuilder()
                     .userId(UUID.fromString(rs.getString(USER_ID)))
@@ -72,14 +77,14 @@ public class DirectoryJdbcDao implements DirectoryDao {
     private static final RowMapper<Directory> ROW_MAPPER_WITH_SUBJECT = (rs, rowNum)  -> {
         Directory.DirectoryBuilder dbuilder =
                 new Directory.DirectoryBuilder()
-                    .directoryId(UUID.fromString(rs.getString(DIRECTORY_ID)))
+//                    .id(UUID.fromString(rs.getString(DIRECTORY_ID)))
                     .name(rs.getString(DIRECTORY_NAME));
 
         String subjectId = rs.getString(SUBJECT_ID);
         if (subjectId != null)
             dbuilder.subject(new Subject(UUID.fromString(subjectId), rs.getString(SUBJECT_NAME)));
-        else
-            dbuilder.parentId(UUID.fromString(rs.getString(PARENT_ID)));
+//        else
+//            dbuilder.parentId(UUID.fromString(rs.getString(PARENT_ID)));
         return dbuilder.build();
     };
 
@@ -147,6 +152,11 @@ public class DirectoryJdbcDao implements DirectoryDao {
     }
 
     @Override
+    public Subject getSubjectByDirectory(UUID directoryId) {
+        return null;
+    }
+
+    @Override
     public boolean update(Directory directory, UUID currentUserId) {
         return jdbcTemplate.update("UPDATE Directories SET directory_name = ?, icon_color = ?, visible = ? WHERE directory_id = ? AND user_id = ?",
                 directory.getName(), directory.getIconColor(), directory.isVisible(), directory.getId(), currentUserId) == 1;
@@ -204,4 +214,21 @@ public class DirectoryJdbcDao implements DirectoryDao {
         args.addValue(DIRECTORY_ID, directoryId);
         return namedParameterJdbcTemplate.update("DELETE FROM Favorites WHERE user_id = :user_id AND directory_id = :directory_id", args) == 1;
     }
+
+    @Override
+    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser) {
+        // TODO: Sort
+        List<Directory> directories = em.createQuery("FROM Directory d WHERE d.id IN :directoryIds ", Directory.class)
+                .setParameter("directoryIds", directoryIds)
+                .getResultList();
+        if (currentUser != null) {
+            List<Directory> favorites = em.createQuery("SELECT f.directory FROM Favorite f WHERE f.user = :user AND f.directory.id IN :directoryIds", Directory.class)
+                    .setParameter("user", currentUser)
+                    .setParameter("directoryIds", directoryIds)
+                    .getResultList();
+            favorites.forEach(dir -> dir.setFavorite(true));
+        }
+        return directories;
+    }
+
 }

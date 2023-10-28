@@ -1,14 +1,21 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.user.User;
+import ar.edu.itba.paw.persistence.DirectoryDao;
+import ar.edu.itba.paw.persistence.NoteDao;
 import ar.edu.itba.paw.persistence.SearchDao;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,12 +28,24 @@ public class SearchServiceImpl implements SearchService {
 
     private final DirectoryService directoryService;
 
+    private final NoteDao noteDao;
+
+    private final DirectoryDao directoryDao;
+
     @Autowired
-    public SearchServiceImpl(final SearchDao searchDao, final SecurityService securityService, NoteService noteService, DirectoryService directoryService) {
+    public SearchServiceImpl(final SearchDao searchDao,
+                             final SecurityService securityService,
+                             final NoteService noteService,
+                             final DirectoryService directoryService,
+                             final NoteDao noteDao,
+                             final DirectoryDao directoryDao
+    ) {
         this.searchDao = searchDao;
         this.securityService = securityService;
         this.noteService = noteService;
         this.directoryService = directoryService;
+        this.noteDao = noteDao;
+        this.directoryDao = directoryDao;
     }
 
     @Transactional
@@ -40,7 +59,9 @@ public class SearchServiceImpl implements SearchService {
                 .word(word)
                 .sortBy(sortBy)
                 .ascending(ascending);
-        securityService.getCurrentUser().ifPresent(u -> sab.currentUserId(u.getUserId()));
+
+        Optional<User> maybeUser = securityService.getCurrentUser();
+        maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
 
         SearchArguments searchArgumentsWithoutPaging = sab.build();
         int countTotalResults = searchDao.countSearchResults(searchArgumentsWithoutPaging);
@@ -48,8 +69,18 @@ public class SearchServiceImpl implements SearchService {
 
         sab.page(safePage).pageSize(pageSize);
         SearchArguments sa = sab.build();
+        List<Pair<UUID, Category>> ids = searchDao.search(sa);
+        //TODO optimize?
+        List<UUID> noteIds = ids.stream().filter(p -> p.getValue() != Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
+        List<UUID> directoryIds = ids.stream().filter(p -> p.getValue() == Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
+
+        List<Searchable> results = new ArrayList<>();
+
+        results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null)));
+        results.addAll(noteDao.findNoteByIds(noteIds));
+
         return new Page<>(
-                searchDao.search(sa),
+                results,
                 sa.getPage(),
                 sa.getPageSize(),
                 countTotalResults

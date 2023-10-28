@@ -2,52 +2,86 @@ package ar.edu.itba.paw.models.directory;
 
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.converter.LocalDateTimeConverter;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
+@Entity
+@Table(name = "directories")
 public class Directory implements Searchable {
-    private final UUID directoryId;
-    private final String name;
-    private final User user;
-    private final UUID parentId;
-    private final Subject subject;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime lastModifiedAt;
+    @Id
+    @Column(name = "directory_id")
+    private UUID directoryId;
 
-    private final String iconColor;
+    @Column(nullable = false, name="directory_name")
+    private String name;
 
-    private final Boolean visible;
-    private final Boolean favorite;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Directory parent;
+
+//    private Subject subject;
+
+    @Column(name = "created_at")
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime createdAt;
+
+    @Column(name = "last_modified_at")
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime lastModifiedAt;
+
+    @Column(name = "icon_color")
+    private String iconColor;
+
+    private Boolean visible;
+
+    @Transient
+    private Boolean favorite = false;
+
+    /* package-private */ Directory() {}
 
     private Directory(DirectoryBuilder builder) {
         this.directoryId = builder.directoryId;
         this.name = builder.name;
         this.user = builder.user;
-        this.parentId = builder.parentId;
-        this.subject = builder.subject;
+        this.parent = builder.parent;
+//        this.subject = builder.subject;
         this.createdAt = builder.createdAt;
         this.lastModifiedAt = builder.lastModifiedAt;
         this.visible = builder.visible;
-        this.favorite = builder.favorite;
+//        this.favorite = builder.favorite;
         this.iconColor = builder.iconColor;
     }
 
     public UUID getId() { return directoryId; }
+
     @Override
-    public UUID getParentId() {
-        return parentId;
+    public Directory getParent() {
+        return parent;
     }
+
+//    @Override
+    public UUID getParentId() {
+        return parent.getId();
+    }
+
     @Override
     public User getUser() {
         return user;
     }
-    @Override
-    public Subject getSubject() {
-        return subject;
-    }
+//  @Override
+//    public Subject getSubject() {
+//        return subject;
+//    }
     @Override
     public String getName() {
         return name;
@@ -85,11 +119,16 @@ public class Directory implements Searchable {
         return favorite;
     }
 
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+
     public static class DirectoryBuilder {
         private UUID directoryId;
         private String name;
         private User user;
-        private UUID parentId;
+        private Directory parent;
         private Subject subject;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
@@ -97,7 +136,7 @@ public class Directory implements Searchable {
         private Boolean visible;
         private Boolean favorite;
 
-        public DirectoryBuilder directoryId(UUID directoryId) {
+        public DirectoryBuilder id(UUID directoryId) {
             this.directoryId = directoryId;
             return this;
         }
@@ -112,8 +151,8 @@ public class Directory implements Searchable {
             return this;
         }
 
-        public DirectoryBuilder parentId(UUID parentId) {
-            this.parentId = parentId;
+        public DirectoryBuilder parent(Directory parent) {
+            this.parent = parent;
             return this;
         }
 
@@ -134,11 +173,6 @@ public class Directory implements Searchable {
 
         public DirectoryBuilder visible(Boolean visible) {
             this.visible = visible;
-            return this;
-        }
-
-        public DirectoryBuilder favorite(Boolean favorite) {
-            this.favorite = favorite;
             return this;
         }
 

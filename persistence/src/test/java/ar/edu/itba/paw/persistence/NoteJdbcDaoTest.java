@@ -69,7 +69,7 @@ public class NoteJdbcDaoTest {
         assertEquals(name, note.getName());
         assertEquals(EDA_ID, note.getSubject().getSubjectId());
         assertEquals(PEPE_ID, note.getUser().getUserId());
-        assertEquals(EDA_DIRECTORY_ID, note.getParentId());
+        assertEquals(EDA_DIRECTORY_ID, note.getParent().getId());
         assertEquals("practice".toUpperCase(), note.getCategory().name());
         assertEquals("jpg", note.getFileType());
     }
@@ -190,7 +190,7 @@ public class NoteJdbcDaoTest {
         UUID noteId = insertNote(namedParameterJdbcTemplate, parentId, oldName, EDA_ID, userId, oldVisible, new byte[]{1, 2, 3}, oldCategory, "jpg");
 
         Note note = new Note.NoteBuilder()
-                .noteId(noteId)
+                .id(noteId)
                 .name(newName)
                 .visible(newVisible)
                 .category(Category.valueOf(newCategory.toUpperCase()))
@@ -223,7 +223,7 @@ public class NoteJdbcDaoTest {
         UUID noteId = insertNote(namedParameterJdbcTemplate, parentId, oldName, EDA_ID, userId, oldVisible, new byte[]{1, 2, 3}, oldCategory, "jpg");
 
         Note note = new Note.NoteBuilder()
-                .noteId(noteId)
+                .id(noteId)
                 .name(newName)
                 .visible(newVisible)
                 .category(Category.valueOf(newCategory.toUpperCase()))

@@ -158,7 +158,7 @@ public class DirectoryController {
             redirectAttributes.addFlashAttribute(EDIT_DIRECTORY_ID, directoryId);
         } else {
             Directory directory = new Directory.DirectoryBuilder()
-                    .directoryId(directoryId)
+                    .id(directoryId)
                     .name(editDirectoryForm.getName())
                     .visible(editDirectoryForm.getVisible())
                     .iconColor(editDirectoryForm.getColor())

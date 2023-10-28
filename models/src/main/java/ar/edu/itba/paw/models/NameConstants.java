@@ -67,4 +67,8 @@ public class NameConstants {
 
     public static final String YEAR = "year";
     public static final String END_DATE = "end_date";
+
+    public static final String CURRENT_USER_ID = "currentUserId";
+
+    private NameConstants() {}
 }

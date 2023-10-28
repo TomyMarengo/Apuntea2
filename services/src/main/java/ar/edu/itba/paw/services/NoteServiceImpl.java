@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
@@ -39,10 +40,7 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
         UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-        UUID subjectId = directoryDao.getDirectoryPath(parentId)
-                                        .getRootDirectory()
-                                        .getSubject()
-                                        .getSubjectId();
+        UUID subjectId = directoryDao.getSubjectByDirectory(parentId).getSubjectId();
         byte[] fileBytes;
         try {
             fileBytes = file.getBytes();

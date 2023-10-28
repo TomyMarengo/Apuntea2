@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
@@ -59,7 +60,7 @@ public class NoteController {
         Note note = noteService.getNoteById(noteId).orElseThrow(NoteNotFoundException::new);
         mav.addObject("note", note);
         mav.addObject("reviews", noteService.getReviews(noteId));
-        mav.addObject("hierarchy", directoryService.getDirectoryPath(note.getParentId()));
+        mav.addObject("hierarchy", directoryService.getDirectoryPath(note.getParent().getId()));
         mav.addObject(NOTE_EDITED, model.getOrDefault(NOTE_EDITED, false));
         mav.addObject(REVIEW_DELETED, model.getOrDefault(REVIEW_DELETED, false));
 
@@ -76,7 +77,7 @@ public class NoteController {
             redirectAttributes.addFlashAttribute(EDIT_NOTE_ID, noteId);
         } else {
             Note note = new Note.NoteBuilder()
-                    .noteId(noteId)
+                    .id(noteId)
                     .name(editNoteForm.getName())
                     .category(Category.valueOf(editNoteForm.getCategory().toUpperCase()))
                     .visible(editNoteForm.getVisible())

@@ -2,30 +2,70 @@ package ar.edu.itba.paw.models.note;
 
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.converter.LocalDateTimeConverter;
+import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
+import org.hibernate.annotations.Formula;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
+@Table(name = "notes")
 public class Note implements Searchable {
-    private final UUID noteId;
-    private final String name;
-    private final User user;
-    private final UUID parentId;
-    private final Subject subject;
-    private final Category category;
-    private final LocalDateTime createdAt;
-    private final LocalDateTime lastModifiedAt;
-    private final String fileType;
-    private final Float avgScore;
-    private final Boolean visible;
+
+    @Id
+    @Column(name = "note_id")
+    private UUID noteId;
+
+    @Column(name = "note_name", nullable = false)
+    private String name;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Directory parent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
+    @Column(name = "created_at")
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime createdAt;
+
+    @Column(name = "last_modified_at")
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime lastModifiedAt;
+
+    @Column(name = "file_type")
+    private String fileType;
+
+    @Formula("(SELECT COALESCE(AVG(r.score), 0) FROM reviews r WHERE r.note_id = note_id)")
+    private Float avgScore;
+
+    private Boolean visible;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "file_id")
+    private NoteFile noteFile;
+
+    /* package-private */ Note() {}
 
     private Note(NoteBuilder builder) {
         this.noteId = builder.noteId;
         this.name = builder.name;
         this.user = builder.user;
-        this.parentId = builder.parentId;
+        this.parent = builder.parent;
         this.subject = builder.subject;
         this.category = builder.category;
         this.createdAt = builder.createdAt;
@@ -40,14 +80,15 @@ public class Note implements Searchable {
         return noteId;
     }
     @Override
-    public UUID getParentId() {
-        return parentId;
+    public Directory getParent() {
+        return parent;
     }
     @Override
     public User getUser() {
         return user;
     }
-    @Override
+
+    //@Override //not override
     public Subject getSubject() {
         return subject;
     }
@@ -90,11 +131,15 @@ public class Note implements Searchable {
         return false;
     }
 
+    public NoteFile getNoteFile() {
+        return noteFile;
+    }
+
     public static class NoteBuilder {
         private UUID noteId;
         private String name;
         private User user;
-        private UUID parentId;
+        private Directory parent;
         private Subject subject;
         private Category category;
         private LocalDateTime createdAt;
@@ -103,7 +148,7 @@ public class Note implements Searchable {
         private String fileType;
         private Float avgScore;
 
-        public NoteBuilder noteId(UUID noteId) {
+        public NoteBuilder id(UUID noteId) {
             this.noteId = noteId;
             return this;
         }
@@ -118,8 +163,8 @@ public class Note implements Searchable {
             return this;
         }
 
-        public NoteBuilder parentId(UUID parentId) {
-            this.parentId = parentId;
+        public NoteBuilder parent(Directory parent) {
+            this.parent = parent;
             return this;
         }
 

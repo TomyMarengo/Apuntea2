@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
@@ -20,91 +21,31 @@ import org.slf4j.LoggerFactory;
 
 import static ar.edu.itba.paw.models.NameConstants.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.*;
 
 @Repository
 public class NoteJdbcDao implements NoteDao {
+    @PersistenceContext
+    private EntityManager em;
+
     private final Logger LOGGER = LoggerFactory.getLogger(NoteJdbcDao.class);
     private final JdbcTemplate jdbcTemplate;
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private final SimpleJdbcInsert jdbcReviewInsert;
     private static final int REVIEW_LIMIT = 10;
 
-    private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) ->
-            new Note.NoteBuilder()
-                    .noteId(UUID.fromString(rs.getString(NOTE_ID)))
-                    .name(rs.getString(NOTE_NAME))
-                    .user(new User.UserBuilder()
-                            .userId(UUID.fromString(rs.getString(USER_ID)))
-                            .email(rs.getString(EMAIL))
-                            .username(rs.getString(USERNAME))
-                            .firstName(rs.getString(FIRST_NAME))
-                            .lastName(rs.getString(LAST_NAME))
-                            .build())
-                    .parentId(UUID.fromString(rs.getString(PARENT_ID)))
-                    .subject(new Subject(
-                            UUID.fromString(rs.getString(SUBJECT_ID)),
-                            rs.getString(SUBJECT_NAME),
-                            UUID.fromString(rs.getString(ROOT_DIRECTORY_ID))
-                    ))
-                    .category(Category.valueOf(rs.getString(CATEGORY).toUpperCase()))
-                    .createdAt(rs.getTimestamp(CREATED_AT).toLocalDateTime())
-                    .lastModifiedAt(rs.getTimestamp(LAST_MODIFIED_AT).toLocalDateTime())
-                    .visible(rs.getBoolean(VISIBLE))
-                    .fileType(rs.getString(FILE_TYPE))
-                    .avgScore(rs.getFloat(AVG_SCORE))
-                    .build();
+    private final static RowMapper<Note> ROW_MAPPER = (rs, rowNum) -> null;
 
-    private final static RowMapper<Note> USER_ROW_MAPPER = (rs, rowNum) ->
-            new Note.NoteBuilder()
-                    .noteId(UUID.fromString(rs.getString(NOTE_ID)))
-                    .name(rs.getString(NOTE_NAME))
-                    .category(Category.valueOf(rs.getString(CATEGORY).toUpperCase()))
-                    .fileType(rs.getString(FILE_TYPE))
-                    .user(new User.UserBuilder()
-                            .userId(UUID.fromString(rs.getString(USER_ID)))
-                            .email(rs.getString(EMAIL))
-                            .locale(rs.getString(LOCALE))
-                            .build())
-                    .build();
+    private final static RowMapper<Note> USER_ROW_MAPPER = (rs, rowNum) -> null;
 
-    private final static RowMapper<Review> REVIEW_ROW_MAPPER = (rs, rowNum) ->
-            new Review(
-                    new User.UserBuilder()
-                            .userId(UUID.fromString(rs.getString(USER_ID)))
-                            .email(rs.getString(EMAIL))
-                            .build(),
-                    rs.getString(CONTENT),
-                    rs.getInt(SCORE),
-                    rs.getTimestamp(CREATED_AT).toLocalDateTime()
-            );
+    private final static RowMapper<Review> REVIEW_ROW_MAPPER = (rs, rowNum) -> null;
 
-    private final static RowMapper<Review> COMPLETE_REVIEW_ROW_MAPPER = (rs, rowNum) ->
-            new Review(
-                    new User.UserBuilder()
-                            .userId(UUID.fromString(rs.getString(USER_ID)))
-                            .email(rs.getString(EMAIL))
-                            .locale(rs.getString(LOCALE))
-                            .build(),
-                    rs.getString(CONTENT),
-                    rs.getInt(SCORE),
-                    new Note.NoteBuilder()
-                        .noteId(UUID.fromString(rs.getString(NOTE_ID)))
-                        .name(rs.getString(NOTE_NAME))
-                        .user(new User.UserBuilder()
-                                .userId(UUID.fromString(rs.getString(OWNER_ID)))
-                                .email(rs.getString(OWNER_EMAIL))
-                                .locale(rs.getString(OWNER_LOCALE))
-                                .build())
-                        .build()
-            );
+    private final static RowMapper<Review> COMPLETE_REVIEW_ROW_MAPPER = (rs, rowNum) -> null;
 
-    private final static RowMapper<NoteFile> NOTE_FILE_ROW_MAPPER = (rs, rowNum) ->
-            new NoteFile(
-                    rs.getString(FILE_TYPE),
-                    rs.getBytes(FILE)
-            );
+    private final static RowMapper<Note> NOTE_FILE_ROW_MAPPER = (rs, rowNum) -> null;
 
     @Autowired
     public NoteJdbcDao(final DataSource ds){
@@ -154,6 +95,7 @@ public class NoteJdbcDao implements NoteDao {
 
     @Override
     public Optional<Note> getNoteById(UUID noteId, UUID currentUserId) {
+        // TODO: Add JPA join with parent directory!
         MapSqlParameterSource args = new MapSqlParameterSource(NOTE_ID, noteId);
         String query = "SELECT DISTINCT n.note_id, n.note_name, n.parent_id, n.category, n.created_at, n.last_modified_at, n.visible, COALESCE(AVG(r.score), 0) AS avg_score, n.file_type, " +
                         "u.user_id, u.email, u.username, u.first_name, u.last_name, " +
@@ -166,8 +108,9 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     public Optional<NoteFile> getNoteFileById(UUID noteId, UUID currentUserId){
         MapSqlParameterSource args = new MapSqlParameterSource(NOTE_ID, noteId);
-        return namedParameterJdbcTemplate.query("SELECT file, file_type FROM Notes n WHERE note_id = :note_id AND ( visible " + getVisibilityCondition(currentUserId, args) + ")",
-                args, NOTE_FILE_ROW_MAPPER).stream().findFirst();
+//        return namedParameterJdbcTemplate.query("SELECT file, file_type FROM Notes n WHERE note_id = :note_id AND ( visible " + getVisibilityCondition(currentUserId, args) + ")",
+//                args, NOTE_FILE_ROW_MAPPER).stream().findFirst();
+        return Optional.empty();
     }
 
 
@@ -244,6 +187,13 @@ public class NoteJdbcDao implements NoteDao {
     @Override
     public boolean deleteReview(UUID noteId, UUID userId) {
         return jdbcTemplate.update("DELETE FROM Reviews WHERE note_id = ? AND user_id = ?", noteId, userId) == 1;
+    }
+
+    @Override
+    public List<Note> findNoteByIds(List<UUID> noteIds) {
+        return em.createQuery("FROM Note n WHERE n.id IN :noteIds", Note.class)
+                .setParameter("noteIds", noteIds)
+                .getResultList();
     }
 
 }

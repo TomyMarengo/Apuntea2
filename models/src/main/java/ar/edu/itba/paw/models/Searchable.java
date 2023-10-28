@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.models;
 
+import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
 
+import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -13,9 +15,9 @@ public interface Searchable {
 
     User getUser();
 
-    UUID getParentId();
+    Directory getParent();
 
-    Subject getSubject();
+    //Subject getSubject();
 
     LocalDateTime getCreatedAt();
 
