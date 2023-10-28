@@ -57,52 +57,56 @@ public class SearchJpaDao implements SearchDao {
     }
 
     @Override
-    public List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId) {
-        List<Object> args = new ArrayList<>();
+    public List<Pair<UUID, Category>> getNavigationResults(SearchArguments sa, UUID parentId) {
+        QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), category ")
+                .append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME))
+                .append(" FROM Navigation t WHERE t.parent_id = :parentId ");
+        queryCreator.addParameter("parentId", parentId);
+        // TODO: Modularize
+        applyGeneralFilters(queryCreator, sa);
+        queryCreator.append("ORDER BY category, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME)).append(sa.isAscending() ? "" : " DESC ");
 
-//        StringBuilder query = new StringBuilder(
-//                "SELECT DISTINCT t.id, t.name, t.parent_id, t.category, t.created_at, t.last_modified_at, t.visible, " +
-//                        "t.avg_score, t.file_type, " +
-//                        "t.icon_color, " +
-//                        "t.user_id, t.email, " +
-//                        " ( f.directory_id IS NOT NULL ) AS favorite " +
-//                        "FROM Navigation t " +
-//                        "LEFT JOIN Favorites f ON t.category = 'directory' AND t.id = f.directory_id AND f.user_id = ? " +
-//                        "WHERE t.parent_id = ? ");
-//
-//        args.add(sa.getCurrentUserId().orElse(null));
-//        args.add(parentId);
-//
-//        applyGeneralFilters(query, args, sa, NAVIGATION_WORD_CONDITIONS, NAVIGATION_WORD_ARGS);
-//        applyPagination(query, sa);
-//        return jdbcTemplate.query(query.toString(), args.toArray(), NAVIGATION_ROW_MAPPER);
-        return Collections.emptyList();
+        Query query = em.createNativeQuery(queryCreator.createQuery())
+                .setFirstResult(sa.getPageSize() * (sa.getPage() - 1))
+                .setMaxResults(sa.getPageSize());
+
+        queryCreator.getParams().forEach(query::setParameter);
+        return ((List<Object[]>) query.getResultList())
+                .stream()
+                .map(o -> new Pair<>(UUID.fromString((String) o[0]), Category.valueOf(((String) o[1]).toUpperCase())))
+                .collect(Collectors.toList());
     }
 
     @Override
     public int countNavigationResults(SearchArguments sa, UUID parentId){
-//        StringBuilder query = new StringBuilder("SELECT COUNT(DISTINCT t.id) FROM Navigation t WHERE t.parent_id = ? ");
-//        List<Object> args = new ArrayList<>();
-//        args.add(parentId);
-//
-//        applyGeneralFilters(query, args, sa, NAVIGATION_WORD_CONDITIONS, NAVIGATION_WORD_ARGS);
-//        return jdbcTemplate.queryForObject(query.toString(), args.toArray(), Integer.class);
-        return 0;
+        QueryCreator queryCreator = new QueryCreator("SELECT COUNT(DISTINCT t.id) FROM Navigation t WHERE t.parent_id = :parentId ");
+        queryCreator.addParameter("parentId", parentId);
+        
+        applyGeneralFilters(queryCreator, sa);
+
+        Query query = em.createNativeQuery(queryCreator.createQuery());
+        queryCreator.getParams().forEach(query::setParameter);
+
+        return ((BigInteger)query.getSingleResult()).intValue();
     }
 
     @Override
     public Optional<UUID> findByName(UUID parentId, String name, UUID currentUserId) {
-//       return jdbcTemplate.query("SELECT id FROM Navigation WHERE name = ? AND parent_id = ? AND user_id = ?",
-//                new Object[]{name, parentId, currentUserId}, (rs, rowNum) -> UUID.fromString(rs.getString(ID)))
-//                .stream()
-//                .findFirst();
-        return Optional.empty();
+        return (em.createNativeQuery("SELECT CAST(n.id AS VARCHAR(36)) FROM Navigation n WHERE n.name = :name AND n.parent_id = :parentId AND n.user_id = :currentUserId")
+                .setParameter("name", name)
+                .setParameter("parentId", parentId)
+                .setParameter("currentUserId", currentUserId)
+                .getResultList()
+                .stream()
+                .findFirst()).map(o -> UUID.fromString((String) o));
     }
 
     @Override
     public int countChildren(UUID parentId) {
+        return ((BigInteger)em.createNativeQuery("SELECT COUNT(*) FROM Navigation WHERE parent_id = :parentId")
+                .setParameter("parentId", parentId)
+                .getSingleResult()).intValue();
         //return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Navigation WHERE parent_id = ?", new Object[]{parentId}, Integer.class);
-        return 0;
     }
 
     private void applyInstitutionFilters(QueryCreator queryCreator, SearchArguments sa) {

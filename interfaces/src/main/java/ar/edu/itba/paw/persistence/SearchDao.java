@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface SearchDao {
     List<Pair<UUID, Category>> search(SearchArguments sa);
-    List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId);
+    List<Pair<UUID, Category>> getNavigationResults(SearchArguments sa, UUID parentId);
     int countSearchResults(SearchArguments sa);
     int countNavigationResults(SearchArguments sa, UUID parentId);
     Optional<UUID> findByName(UUID parentId, String name, UUID currentUserId);

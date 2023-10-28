@@ -70,7 +70,8 @@ public class SearchServiceImpl implements SearchService {
         sab.page(safePage).pageSize(pageSize);
         SearchArguments sa = sab.build();
         List<Pair<UUID, Category>> ids = searchDao.search(sa);
-        //TODO optimize?
+        //TODO: optimize?
+        //TODO: Modularize
         List<UUID> noteIds = ids.stream().filter(p -> p.getValue() != Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
         List<UUID> directoryIds = ids.stream().filter(p -> p.getValue() == Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
 
@@ -95,7 +96,8 @@ public class SearchServiceImpl implements SearchService {
                 .word(word)
                 .sortBy(sortBy)
                 .ascending(ascending);
-        securityService.getCurrentUser().ifPresent(u -> sab.currentUserId(u.getUserId()));
+        Optional<User> maybeUser = securityService.getCurrentUser();
+        maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
 
         SearchArguments searchArgumentsWithoutPaging = sab.build();
         int countTotalResults = searchDao.countNavigationResults(searchArgumentsWithoutPaging, parentId);
@@ -103,8 +105,18 @@ public class SearchServiceImpl implements SearchService {
 
         sab.page(safePage).pageSize(pageSize);
         SearchArguments sa = sab.build();
+
+        List<Pair<UUID, Category>> ids = searchDao.getNavigationResults(sa, parentId);
+        List<UUID> noteIds = ids.stream().filter(p -> p.getValue() != Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
+        List<UUID> directoryIds = ids.stream().filter(p -> p.getValue() == Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
+
+        List<Searchable> results = new ArrayList<>();
+
+        results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null)));
+        results.addAll(noteDao.findNoteByIds(noteIds));
+
         return new Page<>(
-                searchDao.getNavigationResults(sa, parentId),
+                results,
                 sa.getPage(),
                 sa.getPageSize(),
                 countTotalResults

@@ -242,7 +242,7 @@ ALTER TABLE Notes ADD COLUMN IF NOT EXISTS file_id uuid;
 ALTER TABLE Notes DROP COLUMN file;
 ALTER TABLE Notes ADD CONSTRAINT "FK_notes_note_files" FOREIGN KEY (file_id) REFERENCES Note_Files (id) ON DELETE CASCADE;
 
-UPDATE Notes SET file_id = nf.id FROM Note_Files nf WHERE Notes.note_id = nf.note_id;
+-- UPDATE Notes SET file_id = nf.id FROM Note_Files AS nf WHERE Notes.note_id = nf.note_id;
 
-ALTER TABLE Notes ALTER COLUMN file_id SET NOT NULL;
+-- ALTER TABLE Notes ALTER COLUMN file_id SET NOT NULL;
 
