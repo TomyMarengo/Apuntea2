@@ -81,7 +81,7 @@ public class SearchJpaDao implements SearchDao {
     public int countNavigationResults(SearchArguments sa, UUID parentId){
         QueryCreator queryCreator = new QueryCreator("SELECT COUNT(DISTINCT t.id) FROM Navigation t WHERE t.parent_id = :parentId ");
         queryCreator.addParameter("parentId", parentId);
-        
+
         applyGeneralFilters(queryCreator, sa);
 
         Query query = em.createNativeQuery(queryCreator.createQuery());

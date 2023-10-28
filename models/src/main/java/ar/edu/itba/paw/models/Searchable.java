@@ -15,7 +15,7 @@ public interface Searchable {
 
     User getUser();
 
-    Directory getParent();
+    UUID getParentId();
 
     //Subject getSubject();
 

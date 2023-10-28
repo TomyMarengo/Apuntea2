@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.user.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -36,12 +38,14 @@ public class TestUtils {
     static UUID GUIA1EDA_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000000");
     static UUID PARCIAL_DINAMICA_FLUIDOS_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000004");
     static UUID PEPE_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+    static UUID CARLADMIN_ID = UUID.fromString("00000000-0000-0000-0000-000000000002");
     static UUID SAIDMAN_ID = UUID.fromString("00000000-0000-0000-0000-000000000003");
 
     static UUID MATE_ID = UUID.fromString("50000000-0000-0000-0000-000000000005");
     static UUID TVM_ID = UUID.fromString("a0000000-0000-0000-0000-000000000006");
 
     static String VERIFICATION_EMAIL = "verification@itba.edu.ar";
+    static String ADMIN_EMAIL = "admin@apuntea.com";
     static String DEFAULT_CODE = "123456";
     static String DEFAULT_CODE2 = "123457";
 
@@ -83,6 +87,21 @@ public class TestUtils {
         em.flush();
         return vc;
     }
+
+    static Note insertNote(EntityManager em, Note.NoteBuilder builder) {
+        return insertNote(em, builder, new byte[]{1});
+    }
+
+    static Note insertNote(EntityManager em, Note.NoteBuilder builder, byte [] file) {
+        builder.createdAt(LocalDateTime.now()); // TODO: Remove
+        builder.lastModifiedAt(LocalDateTime.now()); // TODO: Remove
+        Note note = builder.build();
+        note.setNoteFile(new NoteFile(file, note)); // Empty file for testing
+        em.persist(note);
+        em.flush();
+        return note;
+    }
+
 
     /*----------------------------------------------------------------------------------------------------*/
 
@@ -202,14 +221,13 @@ public class TestUtils {
         return insertDirectory(namedParameterJdbcTemplate, directoryName, userId, parentId, true);
     }
 
-    static UUID insertNote(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID parentId, String name, UUID subjectId, UUID userId, boolean visible, byte[] file, String category, String fileType) {
+    static UUID jdbcInsertNote(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID parentId, String name, UUID subjectId, UUID userId, boolean visible, byte[] file, String category, String fileType) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(NOTE_NAME, name);
         args.addValue(SUBJECT_ID, subjectId);
         args.addValue(USER_ID, userId);
         args.addValue(PARENT_ID, parentId);
         args.addValue(VISIBLE, visible);
-//        args.addValue(FILE, file);
         args.addValue(CATEGORY, category.toLowerCase());
         args.addValue(FILE_TYPE, fileType);
         KeyHolder holder = new GeneratedKeyHolder();

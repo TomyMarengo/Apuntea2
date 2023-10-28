@@ -4,15 +4,14 @@ import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.user.User;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface NoteDao {
-    UUID create(String name, UUID subjectId, UUID userId, UUID parentId, boolean visible, byte[] file, String category, String fileType);
-
-    UUID create(String name, UUID subjectId, UUID userId, boolean visible, byte[] file, String category, String fileType);
+    UUID create(String name, UUID subjectId, User user, UUID parentId, boolean visible, byte[] file, String category, String fileType);
 
     Optional<NoteFile> getNoteFileById(UUID noteId, UUID currentUserId);
 

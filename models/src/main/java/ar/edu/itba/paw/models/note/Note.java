@@ -4,8 +4,8 @@ import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Searchable;
 import ar.edu.itba.paw.models.converter.LocalDateTimeConverter;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
@@ -18,6 +18,7 @@ public class Note implements Searchable {
 
     @Id
     @Column(name = "note_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID noteId;
 
     @Column(name = "note_name", nullable = false)
@@ -27,27 +28,25 @@ public class Note implements Searchable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Directory parent;
+    @Column(name = "parent_id", nullable = false)
+    private UUID parentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+    @Column(name = "subject_id", nullable = false)
+    private UUID subjectId;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime createdAt;
 
-    @Column(name = "last_modified_at")
+    @Column(name = "last_modified_at", nullable = false)
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime lastModifiedAt;
 
-    @Column(name = "file_type")
+    @Column(name = "file_type", nullable = false)
     private String fileType;
 
     @Formula("(SELECT COALESCE(AVG(r.score), 0) FROM reviews r WHERE r.note_id = note_id)")
@@ -65,8 +64,8 @@ public class Note implements Searchable {
         this.noteId = builder.noteId;
         this.name = builder.name;
         this.user = builder.user;
-        this.parent = builder.parent;
-        this.subject = builder.subject;
+        this.parentId = builder.parentId;
+        this.subjectId = builder.subjectId;
         this.category = builder.category;
         this.createdAt = builder.createdAt;
         this.lastModifiedAt = builder.lastModifiedAt;
@@ -79,9 +78,8 @@ public class Note implements Searchable {
     public UUID getId() {
         return noteId;
     }
-    @Override
-    public Directory getParent() {
-        return parent;
+    public UUID getParentId() {
+        return parentId;
     }
     @Override
     public User getUser() {
@@ -89,8 +87,8 @@ public class Note implements Searchable {
     }
 
     //@Override //not override
-    public Subject getSubject() {
-        return subject;
+    public UUID getSubjectId() {
+        return subjectId;
     }
     @Override
     public String getName() {
@@ -135,12 +133,16 @@ public class Note implements Searchable {
         return noteFile;
     }
 
+    public void setNoteFile(NoteFile noteFile) {
+        this.noteFile = noteFile;
+    }
+
     public static class NoteBuilder {
         private UUID noteId;
         private String name;
         private User user;
-        private Directory parent;
-        private Subject subject;
+        private UUID parentId;
+        private UUID subjectId;
         private Category category;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
@@ -163,13 +165,13 @@ public class Note implements Searchable {
             return this;
         }
 
-        public NoteBuilder parent(Directory parent) {
-            this.parent = parent;
+        public NoteBuilder parentId(UUID parentId) {
+            this.parentId = parentId;
             return this;
         }
 
-        public NoteBuilder subject(Subject subject) {
-            this.subject = subject;
+        public NoteBuilder subjectId(UUID subjectId) {
+            this.subjectId = subjectId;
             return this;
         }
 

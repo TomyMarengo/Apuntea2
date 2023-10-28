@@ -8,7 +8,6 @@ import ar.edu.itba.paw.models.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -16,6 +15,7 @@ import java.util.UUID;
 public class Directory implements Searchable {
     @Id
     @Column(name = "directory_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID directoryId;
 
     @Column(nullable = false, name="directory_name")
@@ -25,18 +25,19 @@ public class Directory implements Searchable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id")
-    private Directory parent;
+    @Column(name = "parent_id")
+    private UUID parentId;
 
 //    private Subject subject;
 
     @Column(name = "created_at")
     @Convert(converter = LocalDateTimeConverter.class)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private LocalDateTime createdAt;
 
     @Column(name = "last_modified_at")
     @Convert(converter = LocalDateTimeConverter.class)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private LocalDateTime lastModifiedAt;
 
     @Column(name = "icon_color")
@@ -53,7 +54,7 @@ public class Directory implements Searchable {
         this.directoryId = builder.directoryId;
         this.name = builder.name;
         this.user = builder.user;
-        this.parent = builder.parent;
+        this.parentId = builder.parentId;
 //        this.subject = builder.subject;
         this.createdAt = builder.createdAt;
         this.lastModifiedAt = builder.lastModifiedAt;
@@ -65,13 +66,8 @@ public class Directory implements Searchable {
     public UUID getId() { return directoryId; }
 
     @Override
-    public Directory getParent() {
-        return parent;
-    }
-
-//    @Override
     public UUID getParentId() {
-        return parent.getId();
+        return parentId;
     }
 
     @Override
@@ -128,7 +124,7 @@ public class Directory implements Searchable {
         private UUID directoryId;
         private String name;
         private User user;
-        private Directory parent;
+        private UUID parentId;
         private Subject subject;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
@@ -151,8 +147,8 @@ public class Directory implements Searchable {
             return this;
         }
 
-        public DirectoryBuilder parent(Directory parent) {
-            this.parent = parent;
+        public DirectoryBuilder parentId(UUID parentId) {
+            this.parentId = parentId;
             return this;
         }
 

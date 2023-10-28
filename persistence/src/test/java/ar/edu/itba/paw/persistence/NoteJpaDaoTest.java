@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import static ar.edu.itba.paw.persistence.TestUtils.*;
 import static ar.edu.itba.paw.models.NameConstants.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.ArrayList;
@@ -33,116 +36,109 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Rollback
-public class NoteJdbcDaoTest {
+public class NoteJpaDaoTest {
+    @PersistenceContext
+    private EntityManager em;
     @Autowired
     private DataSource ds;
     @Autowired
-    private NoteJdbcDao noteDao;
+    private NoteJpaDao noteDao;
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    private User pepeUser;
+    private User carlaAdmin;
+    private Note notePublic;
+    private Note notePrivate;
+
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
         namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
-    }
-
-    @Test
-    public void testCreateNote() {
-        UUID noteId = noteDao.create("RBT", EDA_ID, PEPE_ID, true, new byte[]{1, 2, 3}, "practice", "jpg");
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'practice'"));
-        JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "'");
+        pepeUser = em.find(User.class, PEPE_ID);
+        carlaAdmin = em.find(User.class, CARLADMIN_ID);
+        Note.NoteBuilder builder = new Note.NoteBuilder()
+                .name("public")
+                .subjectId(EDA_ID)
+                .parentId(EDA_DIRECTORY_ID)
+                .user(pepeUser)
+                .visible(true)
+                .category(Category.PRACTICE)
+                .fileType("jpg");
+        byte[] publicContent = new byte[]{1, 2, 3};
+        notePublic = insertNote(em, builder, publicContent);
+        builder.name("private").visible(false);
+        byte[] privateContent = new byte[]{4, 5, 6};
+        notePrivate = insertNote(em, builder, privateContent);
     }
 
     @Test
     public void testCreateNoteInDirectory() {
-        UUID noteId = noteDao.create("RBT", EDA_ID, PEPE_ID, EDA_DIRECTORY_ID,true, new byte[]{1, 2, 3}, "practice", "jpg");
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'practice'"));
-        JdbcTestUtils.deleteFromTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "'");
+        UUID noteId = noteDao.create("RBT", EDA_ID, pepeUser, EDA_DIRECTORY_ID,true, new byte[]{1, 2, 3}, "PRACTICE", "jpg");
+        em.flush();
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'PRACTICE'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "note_files", "note_id = '" + noteId + "'"));
     }
 
     @Test
     public void testGetNoteByIdPublic() {
-        String name = "public";
-        UUID noteId = insertNote(namedParameterJdbcTemplate, EDA_DIRECTORY_ID, name, EDA_ID, PEPE_ID, true, new byte[]{1, 2, 3}, "practice", "jpg");
-        Note note = noteDao.getNoteById(noteId, SAIDMAN_ID).orElseThrow(AssertionError::new);
+        Note foundNote = noteDao.getNoteById(notePublic.getId(), SAIDMAN_ID).orElseThrow(AssertionError::new);
 
-        assertEquals(name, note.getName());
-        assertEquals(EDA_ID, note.getSubject().getSubjectId());
-        assertEquals(PEPE_ID, note.getUser().getUserId());
-        assertEquals(EDA_DIRECTORY_ID, note.getParent().getId());
-        assertEquals("practice".toUpperCase(), note.getCategory().name());
-        assertEquals("jpg", note.getFileType());
+        assertEquals(notePublic, foundNote);
+        assertEquals(notePublic.getName(), foundNote.getName());
+        assertEquals(EDA_ID, foundNote.getSubjectId());
+        assertEquals(PEPE_ID, foundNote.getUser().getUserId());
+        assertEquals(EDA_DIRECTORY_ID, foundNote.getParentId());
+        assertEquals("practice".toUpperCase(), foundNote.getCategory().name());
+        assertEquals("jpg", foundNote.getFileType());
     }
 
     @Test
     public void testGetNoteByIdPrivate() {
-        String name = "private";
-        UUID noteId = insertNote(namedParameterJdbcTemplate, EDA_DIRECTORY_ID, name, EDA_ID, PEPE_ID, false, new byte[]{1, 2, 3}, "practice", "jpg");
-
-        Optional<Note> maybeNote = noteDao.getNoteById(noteId, SAIDMAN_ID);
+        Optional<Note> maybeNote = noteDao.getNoteById(notePrivate.getId(), SAIDMAN_ID);
 
         assertFalse(maybeNote.isPresent());
     }
 
     @Test
     public void testGetNoteByIdPrivateOwner() {
-        String name = "private";
-        UUID noteId = insertNote(namedParameterJdbcTemplate, EDA_DIRECTORY_ID, name, EDA_ID, PEPE_ID, false, new byte[]{1, 2, 3}, "practice", "jpg");
+        Note note = noteDao.getNoteById(notePrivate.getId(), PEPE_ID).orElseThrow(AssertionError::new);
 
-        Note note = noteDao.getNoteById(noteId, PEPE_ID).orElseThrow(AssertionError::new);
-
-        assertEquals(noteId, note.getId());
-        assertEquals(name, note.getName());
+        assertEquals(notePrivate.getId(), note.getId());
+        assertEquals(notePrivate.getName(), note.getName());
     }
 
     @Test
     public void testGetNoteByIdPrivateAdmin() {
-        String name = "private";
-        UUID adminId = jdbcInsertAdmin(namedParameterJdbcTemplate, "admin@mail.com" , "admin", ING_MEC_ID, "es");
-        UUID noteId = insertNote(namedParameterJdbcTemplate, EDA_DIRECTORY_ID, name, EDA_ID, PEPE_ID, false, new byte[]{1, 2, 3}, "practice", "jpg");
+        User admin = insertAdmin(em, ADMIN_EMAIL , "admin", ING_MEC_ID, "es");
 
-        Optional<Note> maybeNote = noteDao.getNoteById(noteId, adminId);
+        Optional<Note> maybeNote = noteDao.getNoteById(notePrivate.getId(), admin.getUserId());
 
         assertFalse(maybeNote.isPresent());
     }
 
     @Test
     public void testGetNoteFileByIdPublic() {
-        String name = "public";
-        String extension = "jpg";
-        String mimeType = "image/jpeg";
-        byte[] content = new byte[]{1, 2, 3};
-        UUID noteId = insertNote(namedParameterJdbcTemplate, EDA_DIRECTORY_ID, name, EDA_ID, PEPE_ID, true, content, "practice", extension);
+        NoteFile file = noteDao.getNoteFileById(notePublic.getId(), SAIDMAN_ID).orElseThrow(AssertionError::new);
 
-        NoteFile file = noteDao.getNoteFileById(noteId, SAIDMAN_ID).orElseThrow(AssertionError::new);
-
-        assertEquals(mimeType, file.getMimeType());
-        assertArrayEquals(content.clone(), file.getContent());
+        assertEquals(notePublic.getNoteFile().getMimeType(), file.getMimeType());
+        assertArrayEquals(notePublic.getNoteFile().getContent(), file.getContent());
     }
 
     @Test
     public void testGetNoteFileByIdPrivate() {
-        UUID adminId = jdbcInsertAdmin(namedParameterJdbcTemplate, "admin@mail.com" , "admin", ING_MEC_ID, "es");
-        String name = "private";
-        UUID noteId = insertNote(namedParameterJdbcTemplate, EDA_DIRECTORY_ID, name, EDA_ID, PEPE_ID, false, new byte[]{1, 2, 3}, "practice", "jpg");
-
-        Optional<NoteFile> maybeFile = noteDao.getNoteFileById(noteId, adminId);
+        Optional<NoteFile> maybeFile = noteDao.getNoteFileById(notePrivate.getId(), carlaAdmin.getUserId());
 
         assertFalse(maybeFile.isPresent());
     }
 
     @Test
     public void testGetNoteFileByIdPrivateOwner() {
-        String name = "public";
-        String extension = "jpg";
-        String mimeType = "image/jpeg";
-        byte[] content = new byte[]{1, 2, 3};
-        UUID noteId = insertNote(namedParameterJdbcTemplate, EDA_DIRECTORY_ID, name, EDA_ID, PEPE_ID, false, content, "practice", extension);
 
-        NoteFile file = noteDao.getNoteFileById(noteId, PEPE_ID).orElseThrow(AssertionError::new);
+        NoteFile file = noteDao.getNoteFileById(notePrivate.getId(), PEPE_ID).orElseThrow(AssertionError::new);
 
-        assertEquals(mimeType, file.getMimeType());
-        assertArrayEquals(content.clone(), file.getContent());
+        assertEquals(notePrivate.getNoteFile().getMimeType(), file.getMimeType());
+        assertArrayEquals(notePrivate.getNoteFile().getContent().clone(), file.getContent());
     }
 
     @Test
@@ -152,7 +148,7 @@ public class NoteJdbcDaoTest {
         UUID[] ids = new UUID[names.length];
         UUID parentId = insertDirectory(namedParameterJdbcTemplate, "tmpParent", PEPE_ID, EDA_DIRECTORY_ID);
         for (String name : names) {
-            UUID newDirId = insertNote(namedParameterJdbcTemplate, parentId, name, EDA_ID, PEPE_ID, true, new byte[]{1, 2, 3}, "practice", "jpg");
+            UUID newDirId = jdbcInsertNote(namedParameterJdbcTemplate, parentId, name, EDA_ID, PEPE_ID, true, new byte[]{1, 2, 3}, "practice", "jpg");
             noteIds.add(newDirId);
         }
         int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parentId + "'");
@@ -187,7 +183,7 @@ public class NoteJdbcDaoTest {
         UUID parentId = EDA_DIRECTORY_ID;
         UUID userId = PEPE_ID;
 
-        UUID noteId = insertNote(namedParameterJdbcTemplate, parentId, oldName, EDA_ID, userId, oldVisible, new byte[]{1, 2, 3}, oldCategory, "jpg");
+        UUID noteId = jdbcInsertNote(namedParameterJdbcTemplate, parentId, oldName, EDA_ID, userId, oldVisible, new byte[]{1, 2, 3}, oldCategory, "jpg");
 
         Note note = new Note.NoteBuilder()
                 .id(noteId)
@@ -220,7 +216,7 @@ public class NoteJdbcDaoTest {
         UUID parentId = EDA_DIRECTORY_ID;
         UUID userId = PEPE_ID;
 
-        UUID noteId = insertNote(namedParameterJdbcTemplate, parentId, oldName, EDA_ID, userId, oldVisible, new byte[]{1, 2, 3}, oldCategory, "jpg");
+        UUID noteId = jdbcInsertNote(namedParameterJdbcTemplate, parentId, oldName, EDA_ID, userId, oldVisible, new byte[]{1, 2, 3}, oldCategory, "jpg");
 
         Note note = new Note.NoteBuilder()
                 .id(noteId)

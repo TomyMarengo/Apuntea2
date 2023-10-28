@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import javafx.util.Pair;
 import org.junit.Before;
@@ -20,7 +19,6 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
 
@@ -241,13 +239,13 @@ public class SearchJpaDaoTest {
             child1Id = insertDirectory(namedParameterJdbcTemplate, "child1", PEPE_ID, rootDirId);
             child2Id = insertDirectory(namedParameterJdbcTemplate, "child2", PEPE_ID, rootDirId);
             child3Id = insertDirectory(namedParameterJdbcTemplate, "child3", PEPE_ID, rootDirId);
-            child4Id = insertNote(namedParameterJdbcTemplate, rootDirId,"child4", EDA_ID,PEPE_ID, true, new byte[]{0}, "other", "pdf");
+            child4Id = jdbcInsertNote(namedParameterJdbcTemplate, rootDirId,"child4", EDA_ID,PEPE_ID, true, new byte[]{0}, "other", "pdf");
 
             grandchild11Id = insertDirectory(namedParameterJdbcTemplate, "grandchild11", PEPE_ID, child1Id);
             insertDirectory(namedParameterJdbcTemplate, "grandchild12", PEPE_ID, child1Id);
 
-            insertNote(namedParameterJdbcTemplate, child2Id, "grandchild21", EDA_ID, PEPE_ID, true, new byte[]{0}, "other", "pdf");
-            insertNote(namedParameterJdbcTemplate, child2Id, "grandchild22", EDA_ID, PEPE_ID, true, new byte[]{0}, "other", "pdf");
+            jdbcInsertNote(namedParameterJdbcTemplate, child2Id, "grandchild21", EDA_ID, PEPE_ID, true, new byte[]{0}, "other", "pdf");
+            jdbcInsertNote(namedParameterJdbcTemplate, child2Id, "grandchild22", EDA_ID, PEPE_ID, true, new byte[]{0}, "other", "pdf");
 
             insertDirectory(namedParameterJdbcTemplate, "ggchild111", PEPE_ID, grandchild11Id);
         }

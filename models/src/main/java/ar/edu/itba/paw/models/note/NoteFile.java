@@ -9,13 +9,15 @@ import java.util.UUID;
 @Table(name = "note_files")
 public class NoteFile {
     @Id
-    @Column(name = "note_id")
-    private UUID noteId;
+    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    @Column(name = "file")
+    @Column(name = "file", nullable = false)
     private byte[] file;
 
-    @OneToOne(mappedBy = "noteFile")
+    @OneToOne
+    @JoinColumn(name = "note_id", nullable = false)
     private Note note;
 
     private static final Map<String, String> mimeTypes = new HashMap<String, String>(){{
@@ -28,6 +30,11 @@ public class NoteFile {
     }};
 
     /* package-private */ NoteFile() {}
+
+    public NoteFile(byte[] file, Note note) {
+        this.file = file;
+        this.note = note;
+    }
 
 
     public String getMimeType()  {

@@ -39,7 +39,7 @@ public class NoteServiceImpl implements NoteService {
     @Transactional
     @Override
     public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
-        UUID userId = securityService.getCurrentUserOrThrow().getUserId();
+        User user = securityService.getCurrentUserOrThrow();
         UUID subjectId = directoryDao.getSubjectByDirectory(parentId).getSubjectId();
         byte[] fileBytes;
         try {
@@ -47,7 +47,7 @@ public class NoteServiceImpl implements NoteService {
         } catch (IOException e) {
             throw new InvalidFileException();
         }
-        return noteDao.create(name, subjectId, userId, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()));
+        return noteDao.create(name, subjectId, user, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()));
     }
 
     @Transactional

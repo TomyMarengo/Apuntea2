@@ -215,7 +215,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudentsAllCount() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT' AND NOT EXISTS ( SELECT * FROM User_Roles ur WHERE ur.user_id = user_id  AND ur.role_name = 'ROLE_ADMIN')");
+        int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
         for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         int results = userDao.getStudentsQuantity("");
         assertEquals(oldUsers + STUDENTS_LENGTH, results);
@@ -253,7 +253,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudentsAll() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT' AND NOT EXISTS ( SELECT * FROM User_Roles ur WHERE ur.user_id = user_id  AND ur.role_name = 'ROLE_ADMIN')");
+        int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         // 100 should be more than enough to get all students, change in the future if necessary
         List<User> users = userDao.getStudents("", 1, 100);
