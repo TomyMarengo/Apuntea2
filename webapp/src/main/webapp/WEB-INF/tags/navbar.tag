@@ -11,13 +11,13 @@
 <spring:message var="manage" code="manage"/>
 <%@ attribute name="user" required="false" type="ar.edu.itba.paw.models.user.User" %>
 <c:set var="loggedIn" value="${user ne null}"/>
-<c:set var="isAdmin" value="${user.roles[1] ne null}"/>
+<c:set var="isAdmin" value="${user.isAdmin}"/>
+
 
 <nav class="navbar">
     <div class="container-fluid d-flex align-items-center">
         <a class="navbar-brand text-dark-primary" href="${baseUrl}">Apuntea</a>
-        <div class="d-flex justify-content-center align-items-center mx-1">
-
+        <div class="d-flex justify-content-center align-items-center mx-2">
             <div class="search-container">
                 <button class="btn nav-icon-button search-icon" type="button" id="searchNavButton">
                     <img src="<c:url value="/svg/search.svg"/>" alt="${search}" class="icon-s fill-dark-primary"/>
@@ -26,21 +26,15 @@
                        placeholder="<spring:message code="search.word.placeholder"/>"/>
             </div>
 
+
             <button id="darkModeToggle" class="btn nav-icon-button" type="button">
                 <img id="darkModeIcon" src="<c:url value="/svg/sun.svg"/>" alt="${darkMode}"
                      class="icon-s fill-dark-primary"/>
             </button>
 
-            <c:if test="${isAdmin eq true}">
-                <a href="${baseUrl}/manage/careers" class="btn nav-icon-button">
-                    <img src="<c:url value="/svg/gears.svg"/>" alt="${manage}"
-                         class="icon-s fill-dark-primary"/>
-                </a>
-            </c:if>
-
             <c:if test="${loggedIn}">
-                <div class="btn-group mx-2">
-                    <div class="p-2 my-1 d-flex flex-row align-items-center justify-content-center dropdown-container" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="btn-group">
+                    <div class="p-2 my-1 d-flex flex-row align-items-center justify-content-center dropdown-button-container" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="<c:url value="/svg/user.svg"/>" alt="${profile}" class="icon-s fill-dark-primary mx-1 dropdown-icon"/>
                         <img src="<c:url value="/svg/chevron-down.svg"/>" alt="${profile}" class="icon-xs fill-dark-primary mx-1 dropdown-icon"/>
                     </div>
@@ -58,6 +52,10 @@
                                     code="myProfileNotes.title"/></a></li>
                             <li><a class="dropdown-item" href="${baseUrl}/change-password"><spring:message
                                     code="changePassword.title"/></a></li>
+                            <c:if test="${isAdmin eq true}">
+                                <li><a class="dropdown-item" href="${baseUrl}/manage/careers"><spring:message
+                                        code="adminPanel.title"/></a></li>
+                            </c:if>
                             <hr class="p-0">
                             <li><a class="dropdown-item my-2" href="${baseUrl}/logout"><spring:message
                                     code="logout"/></a></li>

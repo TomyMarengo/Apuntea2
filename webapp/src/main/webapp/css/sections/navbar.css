@@ -165,20 +165,20 @@
 	border-top-right-radius: 0;
 }
 
-.dropdown-container{
+.dropdown-button-container{
 	cursor: pointer;
 	border-color: var(--dark-primary) 1px;
 	border-radius: 50px;
 }
 
 
-.dropdown-container:hover{
+.dropdown-button-container:hover{
 	background-color: var(--dark-primary);
 
-	transition: background-color 0.2s ease-in-out;
+	transition: background-color 0.2s ease;
 }
 
-.dropdown-container:hover .dropdown-icon{
+.dropdown-button-container:hover .dropdown-icon{
 	filter: var(--filter-bg);
 }
 
@@ -188,6 +188,6 @@
 	opacity: 0.7;
 }
 
-.dropdown-menu{
+.dropdown-menu {
 	border-radius: 15px;
 }
