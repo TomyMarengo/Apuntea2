@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/search/table-list.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -376,7 +377,7 @@
 
                                 <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
                                     <a href="../notes/${item.id}/download" download="${item.name}">
-                                        <button type="button" class="btn button-expansion rounded-circle"
+                                        <button type="button" class="btn nav-icon-button"
                                                 data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                 data-bs-title="<spring:message code="download"/>"
                                                 data-bs-trigger="hover">
@@ -388,7 +389,7 @@
 
                                 <!-- ALL CAN BE COPIED -->
                                 <div>
-                                    <button class="btn button-expansion rounded-circle copy-button"
+                                    <button class="btn nav-icon-button copy-button"
                                             id="<c:out value="${item.id}"/>.c1"
                                             data-category=""
                                             data-bs-toggle="tooltip"
@@ -478,7 +479,7 @@
                                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
                                                    data-bs-title="<spring:message code="edit"/>"
                                                    data-bs-trigger="hover">
-                                                    <button class="btn button-expansion rounded-circle edit-button"
+                                                    <button class="btn nav-icon-button edit-button"
                                                             data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
                                                             id="<c:out value="${item.id}.e2"/>">
                                                         <img src="<c:url value="/svg/pencil.svg"/>"
@@ -569,7 +570,7 @@
                                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
                                                    data-bs-title="<spring:message code="edit"/>"
                                                    data-bs-trigger="hover">
-                                                    <button class="btn button-expansion rounded-circle edit-button"
+                                                    <button class="btn nav-icon-button edit-button"
                                                             data-bs-toggle="modal" data-bs-target="#editNoteModal"
                                                             id="<c:out value="${item.id}.e2"/>">
 

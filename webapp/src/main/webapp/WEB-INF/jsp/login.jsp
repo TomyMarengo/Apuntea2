@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/user/register-login.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

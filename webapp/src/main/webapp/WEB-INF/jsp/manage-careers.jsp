@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/search/table-list.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/manage/bar.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

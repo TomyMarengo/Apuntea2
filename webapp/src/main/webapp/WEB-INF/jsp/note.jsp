@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/notes/note.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,7 +85,7 @@
                         </span>
                     </c:if>
                     <a href="./${note.id}/download" download="${note.name}">
-                        <button type="button" class="btn button-expansion rounded-circle" data-bs-toggle="tooltip"
+                        <button type="button" class="btn nav-icon-button" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
                                 data-bs-trigger="hover">
                             <img src="<c:url value="/svg/download.svg"/>" alt="<spring:message code="download"/>"

@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/user/profile.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="stylesheet" href=
             <c:url value="/css/sections/navbar.css"/>/>

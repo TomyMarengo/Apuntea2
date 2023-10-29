@@ -167,14 +167,13 @@
 
 .dropdown-button-container{
 	cursor: pointer;
-	border-color: var(--dark-primary) 1px;
 	border-radius: 50px;
+	background-color: transparent;
+	border: 0;
 }
-
 
 .dropdown-button-container:hover{
 	background-color: var(--dark-primary);
-
 	transition: background-color 0.2s ease;
 }
 

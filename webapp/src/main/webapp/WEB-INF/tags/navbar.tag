@@ -36,32 +36,35 @@
 
             <c:if test="${loggedIn}">
                 <div class="btn-group">
-                    <div class="p-2 my-1 d-flex flex-row align-items-center justify-content-center dropdown-button-container" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="<c:url value="/svg/user.svg"/>" alt="${profile}" class="icon-s fill-dark-primary mx-1 dropdown-icon"/>
-                        <img src="<c:url value="/svg/chevron-down.svg"/>" alt="${profile}" class="icon-xs fill-dark-primary mx-1 dropdown-icon"/>
-                    </div>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <div class="d-flex flex-column dropdown-item disabled my-2">
-                                    <span class="logged-in"><spring:message code="navbar.loggedIn"/></span>
-                                    <strong><c:out value="${user.displayName}"/></strong>
-                                </div>
-                            </li>
-                            <hr class="p-0">
-                            <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message
-                                    code="myProfile.title"/></a></li>
-                            <li><a class="dropdown-item" href="${baseUrl}/profile/notes"><spring:message
-                                    code="myProfileNotes.title"/></a></li>
-                            <li><a class="dropdown-item" href="${baseUrl}/change-password"><spring:message
-                                    code="changePassword.title"/></a></li>
-                            <c:if test="${isAdmin eq true}">
-                                <li><a class="dropdown-item" href="${baseUrl}/manage/careers"><spring:message
-                                        code="adminPanel.title"/></a></li>
-                            </c:if>
-                            <hr class="p-0">
-                            <li><a class="dropdown-item my-2" href="${baseUrl}/logout"><spring:message
-                                    code="logout"/></a></li>
-                        </ul>
+                    <button class="dropdown-button-container p-2 my-1 d-flex flex-row align-items-center justify-content-center"
+                         data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="<c:url value="/svg/user.svg"/>" alt="${profile}"
+                             class="icon-s fill-dark-primary mx-1 dropdown-icon"/>
+                        <img src="<c:url value="/svg/chevron-down.svg"/>" alt="${profile}"
+                             class="icon-xs fill-dark-primary mx-1 dropdown-icon"/>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <div class="d-flex flex-column dropdown-item disabled my-2">
+                                <span class="logged-in"><spring:message code="navbar.loggedIn"/></span>
+                                <strong><c:out value="${user.displayName}"/></strong>
+                            </div>
+                        </li>
+                        <hr class="p-0">
+                        <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message
+                                code="myProfile.title"/></a></li>
+                        <li><a class="dropdown-item" href="${baseUrl}/profile/notes"><spring:message
+                                code="myProfileNotes.title"/></a></li>
+                        <li><a class="dropdown-item" href="${baseUrl}/change-password"><spring:message
+                                code="changePassword.title"/></a></li>
+                        <c:if test="${isAdmin eq true}">
+                            <li><a class="dropdown-item" href="${baseUrl}/manage/careers"><spring:message
+                                    code="adminPanel.title"/></a></li>
+                        </c:if>
+                        <hr class="p-0">
+                        <li><a class="dropdown-item my-2" href="${baseUrl}/logout"><spring:message
+                                code="logout"/></a></li>
+                    </ul>
                 </div>
             </c:if>
 

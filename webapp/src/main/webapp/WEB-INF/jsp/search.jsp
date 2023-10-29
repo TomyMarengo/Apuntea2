@@ -28,7 +28,6 @@
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/search/table-list.css"/>"/>
-
     <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -358,7 +357,7 @@
 
                                 <c:if test="${item.category.formattedName ne 'directory'}"> <!-- FOLDERS CANNOT BE DOWNLOADED -->
                                     <a href="./notes/${item.id}/download" download="${item.name}">
-                                        <button type="button" class="btn button-expansion rounded-circle"
+                                        <button type="button" class="btn nav-icon-button"
                                                 data-bs-toggle="tooltip" data-bs-placement="bottom"
                                                 data-bs-title="<spring:message code="download"/>"
                                                 data-bs-trigger="hover">
@@ -369,7 +368,7 @@
                                 </c:if>
 
                                 <!-- ALL CAN BE COPIED -->
-                                <button class="btn button-expansion rounded-circle copy-button"
+                                <button class="btn nav-icon-button copy-button"
                                         id="<c:out value="${item.id}"/>.c1"
                                         data-bs-toggle="tooltip"
                                         data-bs-placement="bottom" data-bs-title="<spring:message code="copyLink"/>"
@@ -550,7 +549,6 @@
     const {institutions, careerMap, subjectMap} = JSON.parse('${institutionData}');
 </script>
 
-<script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ics-autocomplete.js"/>"></script>
 <script src="<c:url value="/js/ascdesc.js"/>"></script>

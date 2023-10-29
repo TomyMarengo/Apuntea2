@@ -7,15 +7,57 @@
     content:'';
     position:absolute;
 }
+
+[data-bs-theme=halloween] * {
+    cursor: url('../../image/axe.cur'), auto !important;
+}
+
+[data-bs-theme=halloween] a, [data-bs-theme=halloween] button, [data-bs-theme=halloween] button img {
+    cursor: url('../../image/knife_auto.cur'), pointer !important;
+}
+
+[data-bs-theme=halloween] input, [data-bs-theme=halloween] textarea {
+    cursor: url('../../image/knife_text.cur'), text !important;
+}
+
+[data-bs-theme=halloween] .nav-icon-button img, [data-bs-theme=halloween] .dropdown-button-container img {
+    filter: var(--filter-secondary);
+}
+
+[data-bs-theme=halloween] .page-size-button {
+    color: var(--secondary);
+}
+
+[data-bs-theme=halloween] .active-note-found {
+    background-color: rgba(var(--tertiary-rgb), 0.7);
+}
+
+[data-bs-theme=halloween] .search-note-box:hover, [data-bs-theme=halloween] .note-found:hover {
+    border-color: var(--tertiary);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(var(--tertiary-rgb), 0.6);
+    background-color: rgba(var(--tertiary-rgb), 0.5);
+}
+
+/* halloween display none if data-bs-theme is not halloween */
+:not([data-bs-theme=halloween]) .halloween{
+    display:none;
+}
+
+/* halloween if data-bs-theme is halloween */
+[data-bs-theme=halloween] .halloween{
+    display: block;
+    position: absolute;
+    transform: none;
+}
+
 .halloween{
-    top:50%;
-    left:50%;
     width:30px;
     height:44px;
-    position:fixed;
     margin-top:-22px;
     margin-left:-15px;
     animation:move 3s infinite;
+    z-index: -99;
 }
 .halloween .head{
     z-index:1;
