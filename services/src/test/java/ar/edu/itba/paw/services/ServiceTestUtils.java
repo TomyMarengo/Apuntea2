@@ -84,4 +84,8 @@ public class ServiceTestUtils {
                 .subject(new Subject(EDA_ID, "EDA"))
                 .build();
     }
+
+    static Subject mockSubject() {
+        return new Subject(EDA_ID, "EDA");
+    }
 }

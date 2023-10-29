@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
-import javafx.util.Pair;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;

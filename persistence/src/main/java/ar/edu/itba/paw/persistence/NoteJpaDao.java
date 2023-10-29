@@ -5,22 +5,13 @@ import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static ar.edu.itba.paw.models.NameConstants.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -30,7 +21,7 @@ public class NoteJpaDao implements NoteDao {
     private EntityManager em;
 
     private final Logger LOGGER = LoggerFactory.getLogger(NoteJpaDao.class);
-    private static final int REVIEW_LIMIT = 10;
+    /*package-private*/ static final int REVIEW_LIMIT = 10;
 
     @Override
     public UUID create(String name, UUID subjectId, User user, UUID parentId, boolean visible, byte[] file, String category, String fileType) {
@@ -101,29 +92,23 @@ public class NoteJpaDao implements NoteDao {
 
     @Override
     public List<Review> getReviews(UUID noteId) {
-//        // Right now it's not necessary to validate that the current user has visibility enabled
-//        return jdbcTemplate.query(
-//                "SELECT u.user_id, u.email, r.score, r.content, r.created_at FROM Reviews r INNER JOIN Users u ON r.user_id = u.user_id WHERE r.note_id = ? ORDER BY r.created_at DESC LIMIT " + REVIEW_LIMIT,
-//                    new Object[]{noteId},
-//                    REVIEW_ROW_MAPPER
-//        );
-        return Collections.emptyList();
+        // Right now it's not necessary to validate that the current user has visibility enabled
+        List<UUID> userIDs = em.createQuery("SELECT r.user.id FROM Review r WHERE r.note.id = :noteId ORDER BY r.createdAt DESC", UUID.class)
+                .setParameter("noteId", noteId)
+                .setMaxResults(REVIEW_LIMIT)
+                .getResultList();
+        if (userIDs.isEmpty()) return Collections.emptyList();
+        return em.createQuery("FROM Review r WHERE r.note.id = :noteId AND r.user.id IN :userIDs ORDER BY r.createdAt DESC", Review.class)
+                .setParameter("noteId", noteId)
+                .setParameter("userIDs", userIDs)
+                .getResultList();
     }
 
     @Override
     public Review createOrUpdateReview(Note note, User user, int score, String content) {
-        Review review = new Review(note, user, content, score);
+        Review review = new Review(note, user, score, content);
         em.merge(review);
         return review;
-//        boolean success = jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ?, created_at = now() WHERE note_id = ? AND user_id = ?", score, content, noteId, userId) == 1;
-//        if (!success) {
-//            jdbcReviewInsert.execute(new HashMap<String, Object>(){{
-//                put(NOTE_ID, noteId);
-//                put(USER_ID, userId);
-//                put(SCORE, score);
-//                put(CONTENT, content);
-//            }});
-//        }
     }
 
     @Override

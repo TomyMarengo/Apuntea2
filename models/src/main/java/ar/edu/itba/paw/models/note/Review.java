@@ -33,7 +33,7 @@ public class Review {
 
     /* package-private */ Review() {}
 
-    public Review(Note note, User user, String content, int score) {
+    public Review(Note note, User user, int score, String content) {
         this.note = note;
         this.user = user;
         this.content = content;

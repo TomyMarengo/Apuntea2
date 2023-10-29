@@ -251,12 +251,14 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testGetReview() {
-        UUID newUserId = jdbcInsertStudent(namedParameterJdbcTemplate, "new@mail.com", "new", ING_INF_ID, "es");
-        insertReview(namedParameterJdbcTemplate, GUIA1EDA_NOTE_ID, newUserId, 4, "ta ok");
+        User newUser = insertStudent(em, "new@mail.com", "new", ING_INF_ID, "es");
+        Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
+        insertReview(em, guiaEda, newUser, 4, "ta ok");
 
-        Review review = noteDao.getReview(GUIA1EDA_NOTE_ID, newUserId);
+        Review review = noteDao.getReview(guiaEda.getId(), newUser.getUserId());
 
-        assertEquals(newUserId, review.getUser().getUserId());
+        assertEquals(newUser, review.getUser());
+        assertEquals(guiaEda, review.getNote());
         assertEquals(4, review.getScore());
         assertEquals("ta ok", review.getContent());
     }
@@ -265,26 +267,25 @@ public class NoteJpaDaoTest {
     @Test
     public void testGetReviews() {
         List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
-//        Note note = noteDao.getNoteById(GUIA1EDA_NOTE_ID, SAIDMAN_ID).orElseThrow(AssertionError::new);
-//        Set<Review> reviews = note.getReviews();
         assertEquals(2, reviews.size());
-//        assertEquals(PEPE_ID, reviews.get(0).getUser().getUserId());
         assertNotNull(reviews.stream().filter(r -> r.getUser().getUserId().equals(PEPE_ID)).findFirst().orElse(null));
     }
 
     @Test
     public void testLimitReviews() {
-        UUID[] userIds = new UUID[20];
-        for (int i = 0; i < 20; i++)  {
-            userIds[i] = jdbcInsertStudent(namedParameterJdbcTemplate, "pepe" + i + "@itba.edu.ar", "", ING_INF_ID, "es");
-            insertReview(namedParameterJdbcTemplate, GUIA1EDA_NOTE_ID, userIds[i], (i % 5) + 1, "review " + i);
+        int botCount = 15;
+        Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
+        for (int i=0; i<botCount; i++) {
+            User trollUser = insertStudent(em, "troll" + i + "@mail.com", "new" + i, ING_INF_ID, "es");
+            insertReview(em, guiaEda, trollUser, 1, "malisimo "+i);
         }
-        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
-        assertEquals(10, reviews.size());
 
-        for (int i = 0; i < reviews.size() - 1; i++) {
-            assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i + 1).getCreatedAt()));
+        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
+        assertEquals(NoteJpaDao.REVIEW_LIMIT, reviews.size());
+        for (int i=0; i<reviews.size()-2; i++) {
+            assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i+1).getCreatedAt()));
         }
+        assertNull(reviews.stream().filter(r -> r.getUser().getUserId().equals(PEPE_ID)).findFirst().orElse(null));
     }
 
 

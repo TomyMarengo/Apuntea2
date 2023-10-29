@@ -6,7 +6,6 @@ import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.models.note.Note;
-import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
@@ -89,7 +88,7 @@ public class NoteServiceImpl implements NoteService {
                 throw new InvalidNoteException();
         } else {
             List<Note> notes = noteDao.findNoteByIds(noteIdsList);
-            if (noteDao.delete(noteIdsList)) throw new InvalidNoteException();
+            if (notes.size() != noteIdsList.size() || noteDao.delete(noteIdsList)) throw new InvalidNoteException();
             notes.forEach(n -> emailService.sendDeleteNoteEmail(n, reason));
         }
     }

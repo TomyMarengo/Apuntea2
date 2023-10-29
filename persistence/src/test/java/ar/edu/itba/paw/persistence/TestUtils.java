@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
+import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -112,6 +113,12 @@ public class TestUtils {
         em.persist(directory);
         em.flush();
         return directory;
+    }
+
+    static void insertReview(EntityManager em, Note note, User user, int score, String content) {
+        Review review = new Review(note, user, score, content);
+        em.persist(review);
+        em.flush();
     }
 
     /*----------------------------------------------------------------------------------------------------*/
@@ -251,7 +258,7 @@ public class TestUtils {
     }
 
 
-    static void insertReview(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID noteId, UUID userId, int score, String content) {
+    static void jdbcInsertReview(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID noteId, UUID userId, int score, String content) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(NOTE_ID, noteId);
         args.addValue(USER_ID, userId);
