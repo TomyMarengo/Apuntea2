@@ -64,10 +64,12 @@ img {
     opacity: 1;
 }
 
-.user-information {
-    display: grid;
-    grid-template-rows: repeat(3, 100px);
-    align-content: center;
-    grid-auto-flow: column;
-    padding-top: 2rem;
+.change-password-container {
+    width: 75%;
+}
+
+@media (min-width: 1024px) {
+    .change-password-container {
+        width: 50%
+    }
 }

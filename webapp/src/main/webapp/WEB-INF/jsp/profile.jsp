@@ -43,8 +43,8 @@
     <fragment:bottom-navbar title="./profile:${title}"/>
 </header>
 
-<section class="container d-flex flex-row justify-content-center align-items-center mt-3">
-    <div class="card box w-75">
+<section class="container d-flex justify-content-center mt-3">
+    <div class="card box">
         <div class="card-body p-3 p-md-5 mx-4">
             <c:url var="editUserUrl" value="/profile"/>
             <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
@@ -64,45 +64,49 @@
                     </label>
                     <form:errors path="profilePicture" cssClass="text-danger mt-3 align-self-center" element="p"/>
                 </div>
-                <div class="user-information">
-                    <div class="px-3 py-2">
-                        <spring:message var="profileFirstName" code="name"/>
-                        <p><strong><spring:message code="name"/></strong></p>
-                        <form:input disabled="true" type="text" id="firstName" class="form-control bg-bg dynamic-info"
-                                    placeholder="${profileFirstName}" path="firstName" value="${user.firstName}"/>
-                        <form:errors path="firstName" cssClass="text-danger" element="p"/>
+                <div class="row row-cols-1 row-cols-md-2">
+                    <div class="col">
+                        <div class="px-3 py-2">
+                            <spring:message var="profileFirstName" code="name"/>
+                            <p><strong><spring:message code="name"/></strong></p>
+                            <form:input disabled="true" type="text" id="firstName" class="form-control bg-bg dynamic-info"
+                                        placeholder="${profileFirstName}" path="firstName" value="${user.firstName}"/>
+                            <form:errors path="firstName" cssClass="text-danger" element="p"/>
+                        </div>
+
+                        <div class="px-3 py-2">
+                            <spring:message var="profileLastName" code="lastName"/>
+                            <p><strong><spring:message code="lastName"/></strong></p>
+                            <form:input disabled="true"  type="text" id="lastName" class="form-control bg-bg dynamic-info"
+                                        placeholder="${profileLastName}" path="lastName" value="${user.lastName}"/>
+                            <form:errors path="lastName" cssClass="text-danger" element="p"/>
+                        </div>
+
+                        <div class="px-3 py-2">
+                            <spring:message var="profileUsername" code="username"/>
+                            <p><strong><spring:message code="username"/></strong></p>
+                            <form:input disabled="true" type="text" id="username" class="form-control bg-bg dynamic-info"
+                                        placeholder="${profileUsername}" path="username" value="${user.username}"
+                                        required="true"/>
+                            <form:errors path="username" cssClass="text-danger" element="p"/>
+                        </div>
                     </div>
 
-                    <div class="px-3 py-2">
-                        <spring:message var="profileLastName" code="lastName"/>
-                        <p><strong><spring:message code="lastName"/></strong></p>
-                        <form:input disabled="true"  type="text" id="lastName" class="form-control bg-bg dynamic-info"
-                                    placeholder="${profileLastName}" path="lastName" value="${user.lastName}"/>
-                        <form:errors path="lastName" cssClass="text-danger" element="p"/>
-                    </div>
+                    <div class="col">
+                        <div class="d-flex flex-column px-3 py-2 gap-1">
+                            <p><strong><spring:message code="email"/></strong></p>
+                            <span class="card-text">${user.email}</span>
+                        </div>
 
-                    <div class="px-3 py-2">
-                        <spring:message var="profileUsername" code="username"/>
-                        <p><strong><spring:message code="username"/></strong></p>
-                        <form:input disabled="true" type="text" id="username" class="form-control bg-bg dynamic-info"
-                                    placeholder="${profileUsername}" path="username" value="${user.username}"
-                                    required="true"/>
-                        <form:errors path="username" cssClass="text-danger" element="p"/>
-                    </div>
+                        <div class="d-flex flex-column px-3 py-2 gap-1">
+                            <p><strong><spring:message code="institution"/></strong></p>
+                            <span class="card-text">${user.institution.name}</span>
+                        </div>
 
-                    <div class="d-flex flex-column px-3 py-2 gap-1">
-                        <p><strong><spring:message code="email"/></strong></p>
-                        <span class="card-text">${user.email}</span>
-                    </div>
-
-                    <div class="d-flex flex-column px-3 py-2 gap-1">
-                        <p><strong><spring:message code="institution"/></strong></p>
-                        <span class="card-text">${user.institution.name}</span>
-                    </div>
-
-                    <div class="d-flex flex-column px-3 py-2 gap-1">
-                        <p><strong><spring:message code="career"/></strong></p>
-                        <span class="card-text">${user.career.name}</span>
+                        <div class="d-flex flex-column px-3 py-2 gap-1">
+                            <p><strong><spring:message code="career"/></strong></p>
+                            <span class="card-text">${user.career.name}</span>
+                        </div>
                     </div>
                 </div>
 

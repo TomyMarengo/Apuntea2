@@ -47,8 +47,8 @@
     <fragment:bottom-navbar title="./change-password:${title}"/>
 </header>
 
-<section class="container d-flex flex-column justify-content-center align-items-center mt-3">
-    <div class="card box w-50">
+<section class="container d-flex justify-content-center  mt-3">
+    <div class="card box change-password-container">
         <div class="card-body p-3 p-md-5 mx-4">
             <c:url var="changePasswordUrl" value="/change-password"/>
             <form:form action="${changePasswordUrl}"
