@@ -35,7 +35,7 @@
 
 <header>
     <!-- NAVBAR -->
-    <fragment:navbar loggedIn="${false}" isAdmin="${false}"/>
+    <fragment:navbar user="${user}"/>
 
     <c:url var="challengeUrl" value="/challenge"/>
     <spring:message var="logotype" code="logotype"/>

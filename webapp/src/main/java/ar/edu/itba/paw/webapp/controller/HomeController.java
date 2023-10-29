@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.institutional.InstitutionData;
 import ar.edu.itba.paw.models.user.Role;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.search.SearchForm;
 import ar.edu.itba.paw.webapp.forms.user.password.ChallengeForm;
@@ -95,5 +96,6 @@ public class HomeController {
         return new ModelAndView("challenge").addObject("invalidCode", true)
                 .addObject("email", challengeForm.getEmail());
     }
+
 
 }

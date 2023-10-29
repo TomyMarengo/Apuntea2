@@ -11,7 +11,9 @@
 <spring:message var="manage" code="manage"/>
 <%@ attribute name="user" required="false" type="ar.edu.itba.paw.models.user.User" %>
 <c:set var="loggedIn" value="${user ne null}"/>
-<c:set var="isAdmin" value="${user.isAdmin}"/>
+<c:if test="${user ne null}">
+    <c:set var="isAdmin" value="${user.isAdmin}"/>
+</c:if>
 
 
 <nav class="navbar">

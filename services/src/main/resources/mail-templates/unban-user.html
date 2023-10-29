@@ -8,31 +8,87 @@
   <title th:text="#{email.unban.title}"></title>
   <style>
     *{
+      color: #5A5044;
+      font-family: Lato, sans-serif;
+    }
+    body {
+      background-color: #FFFCFC;
       margin: 0;
       padding: 0;
     }
-    .bg{
-      background: linear-gradient(180deg, #FFFCFC 0%, #F5F1E7 42.19%, #F8EBCA 99.99%);
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
     }
-    h1{
+
+    .header {
+      background: linear-gradient(180deg, #F8EBCA  0%, #F5F1E7 42.19%, #FFFCFC 99.99%);
+      padding: 20px 30px;
+    }
+
+    .body-content {
+      background-color: #FFFCFC;
+      padding: 0 30px;
+    }
+
+    .review {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 15px;
+      border: 3px solid #EF7765;
+      text-align: center;
+    }
+
+    h1 {
       color: #EF7765;
-      font-size: 32px;
-      font-weight: bold;
+      font-size: 40px;
+      margin: 0;
+      font-weight: 900;
     }
-    p{
+
+    p {
       font-size: 16px;
-      color: #5A5044;
+      line-height: 1.6;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    h3 {
+      font-size: 18px;
+    }
+
+    .footer {
+      background: linear-gradient(180deg, #FFFCFC  0%, #F5F1E7 42.19%, #F8EBCA  99.99%);
+      padding: 20px 30px;
+      text-align: center;
     }
 
   </style>
 </head>
 
 <body class="bg">
-<div style="padding: 1em 3em">
-  <a th:href="${url}" style="text-decoration: none"><h1>Apuntea</h1></a>
-  <p th:text="#{email.unban.hasBeenUnbannedAdmin}"/>
-  <p th:text="#{email.thanks}"/>
-  <p th:text="#{email.signature}"/>
+  <div style="padding: 1em 3em">
+    <div style="background-color: #CC6252">
+      <div class="container">
+        <div class="header">
+          <a th:href="${url}" style="text-decoration: none"><h1>Apuntea</h1></a>
+        </div>
+        <div class="body-content">
+          <h2 th:text="#{email.unban.hasBeenUnbannedAdmin}"/>
+          <p th:text="#{email.thanks}"/>
+          <p style="margin-bottom: 0" th:text="#{email.signature}"/>
+        </div>
+        <div class="footer">
+          <p style="font-size: 13px" th:text="#{email.unsubscribe}"/>
+        </div>
+      </div>
+    </div>
+
 </div>
 </body>
 
