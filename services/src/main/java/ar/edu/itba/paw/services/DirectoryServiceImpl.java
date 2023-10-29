@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class DirectoryServiceImpl implements DirectoryService{
@@ -29,8 +27,8 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Transactional
     @Override
     public UUID create(String name, UUID parentId, boolean visible, String iconColor) {
-        UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-        return directoryDao.create(name, parentId, userId, visible, iconColor);
+        User user = securityService.getCurrentUserOrThrow();
+        return directoryDao.create(name, parentId, user, visible, iconColor).getId();
     }
 
     @Transactional
@@ -43,15 +41,20 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Transactional
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
-        return directoryDao.getDirectoryPath(directoryId);
+        List<UUID> directoryPathIds =  directoryDao.getDirectoryPathIds(directoryId);
+        List<Directory> directories = directoryDao.findDirectoriesByIds(directoryPathIds, securityService.getCurrentUserOrThrow());
+        return new DirectoryPath(directories);
     }
 
     @Transactional
     @Override
-    public void update(Directory directory) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = directoryDao.update(directory, currentUserId);
-        if (!success) throw new InvalidDirectoryException();
+    public void update(UUID directoryId, String name, boolean visible, String iconColor) {
+        User currentUser = securityService.getCurrentUserOrThrow();
+        Directory directory = directoryDao.getDirectoryById(directoryId, currentUser.getUserId()).orElseThrow(InvalidDirectoryException::new);
+        if (!directory.getUser().equals(currentUser)) throw new InvalidDirectoryException(); // TODO: Forbidden exception
+        directory.setName(name);
+        directory.setVisible(visible);
+        directory.setIconColor(iconColor);
     }
 
     @Transactional
@@ -59,14 +62,17 @@ public class DirectoryServiceImpl implements DirectoryService{
     public void delete(UUID[] directoryIds, String reason) {
         if (directoryIds.length == 0) return;
 
+        // TODO: Propagate this to the Controller?
+        List<UUID> directoryIdsList = Collections.unmodifiableList(Arrays.asList(directoryIds));
+
         User currentUser = securityService.getCurrentUserOrThrow();
         if (!currentUser.getIsAdmin()) {
-            if (!directoryDao.delete(directoryIds, currentUser.getUserId()))
+            if (!directoryDao.delete(directoryIdsList, currentUser.getUserId()))
                 throw new InvalidDirectoryException();
         } else {
-            List<Directory> dir = directoryDao.delete(directoryIds);
-            if (dir.isEmpty()) throw new InvalidDirectoryException();
-            dir.forEach(d -> emailService.sendDeleteDirectoryEmail(d, reason));
+            List<Directory> directories = directoryDao.findDirectoriesByIds(directoryIdsList, currentUser);
+            if (directories.size() != directoryIdsList.size() || !directoryDao.delete(directoryIdsList)) throw new InvalidDirectoryException();
+            directories.forEach(d -> emailService.sendDeleteDirectoryEmail(d, reason));
         }
     }
 
@@ -81,15 +87,13 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Override
     public void addFavorite(UUID directoryId) {
         UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = directoryDao.addFavorite(currentUserId, directoryId);
-        if (!success) throw new InvalidDirectoryException();
+        directoryDao.addFavorite(currentUserId, directoryId);
     }
 
     @Transactional
     @Override
     public void removeFavorite(UUID directoryId) {
         UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = directoryDao.removeFavorite(currentUserId, directoryId);
-        if (!success) throw new InvalidDirectoryException();
+        directoryDao.removeFavorite(currentUserId, directoryId);
     }
 }

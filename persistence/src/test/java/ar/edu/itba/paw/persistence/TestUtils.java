@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.directory.Favorite;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
@@ -42,6 +43,8 @@ public class TestUtils {
     static UUID PEPE_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
     static UUID CARLADMIN_ID = UUID.fromString("00000000-0000-0000-0000-000000000002");
     static UUID SAIDMAN_ID = UUID.fromString("00000000-0000-0000-0000-000000000003");
+
+    static String PSVM = "private static void main";
 
     static UUID MATE_ID = UUID.fromString("50000000-0000-0000-0000-000000000005");
     static UUID TVM_ID = UUID.fromString("a0000000-0000-0000-0000-000000000006");
@@ -107,8 +110,6 @@ public class TestUtils {
     static Directory insertDirectory(EntityManager em, Directory.DirectoryBuilder builder) {
         builder.createdAt(LocalDateTime.now()); // TODO: Remove
         builder.lastModifiedAt(LocalDateTime.now()); // TODO: Remove
-        builder.visible(true);
-        builder.iconColor("BBBBBB");
         Directory directory = builder.build();
         em.persist(directory);
         em.flush();
@@ -118,6 +119,12 @@ public class TestUtils {
     static void insertReview(EntityManager em, Note note, User user, int score, String content) {
         Review review = new Review(note, user, score, content);
         em.persist(review);
+        em.flush();
+    }
+
+    static void insertFavorite(EntityManager em, UUID directoryId, UUID userId) {
+        Favorite favorite = new Favorite(em.getReference(User.class, userId), em.getReference(Directory.class, directoryId));
+        em.persist(favorite);
         em.flush();
     }
 
@@ -269,7 +276,7 @@ public class TestUtils {
                 args);
     }
 
-    static void insertFavorite(SimpleJdbcInsert jdbcFavoriteInsert, UUID directoryId, UUID userId) {
+    static void jdbcInsertFavorite(SimpleJdbcInsert jdbcFavoriteInsert, UUID directoryId, UUID userId) {
         jdbcFavoriteInsert.execute(new HashMap<String, Object>(){{
             put(DIRECTORY_ID, directoryId);
             put(USER_ID, userId);

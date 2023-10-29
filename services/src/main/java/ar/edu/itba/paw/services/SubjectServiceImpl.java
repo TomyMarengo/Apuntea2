@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -66,8 +68,8 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public UUID createSubject(String name, UUID careerId, int year) {
-        UUID rootDirectoryId = directoryDao.createRootDirectory(name);
-        UUID subjectId = subjectDao.create(name, rootDirectoryId);
+        Directory rootDirectory = directoryDao.createRootDirectory(name);
+        UUID subjectId = subjectDao.create(name, rootDirectory.getId());
         subjectDao.linkSubjectToCareer(subjectId, careerId, year);
         return subjectId;
     }
@@ -111,7 +113,7 @@ public class SubjectServiceImpl implements SubjectService {
             success = subjectDao.delete(subjectId);
             if (!success)
                 throw new InvalidSubjectException();
-            success = directoryDao.deleteRootDirectory(subject.getRootDirectoryId());
+            success = directoryDao.delete(Collections.singletonList(subject.getRootDirectoryId()));
             if (!success)
                 throw new InvalidDirectoryException();
         }

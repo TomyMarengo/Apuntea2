@@ -21,8 +21,8 @@ public class Directory implements Searchable {
     @Column(nullable = false, name="directory_name")
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "parent_id")
@@ -55,11 +55,9 @@ public class Directory implements Searchable {
         this.name = builder.name;
         this.user = builder.user;
         this.parentId = builder.parentId;
-//        this.subject = builder.subject;
         this.createdAt = builder.createdAt;
         this.lastModifiedAt = builder.lastModifiedAt;
         this.visible = builder.visible;
-//        this.favorite = builder.favorite;
         this.iconColor = builder.iconColor;
     }
 
@@ -119,18 +117,27 @@ public class Directory implements Searchable {
         this.favorite = favorite;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIconColor(String iconColor) {
+        this.iconColor = iconColor;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
 
     public static class DirectoryBuilder {
         private UUID directoryId;
         private String name;
         private User user;
         private UUID parentId;
-        private Subject subject;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
-        private String iconColor;
-        private Boolean visible;
-        private Boolean favorite;
+        private String iconColor = "000000";
+        private Boolean visible = true;
 
         public DirectoryBuilder id(UUID directoryId) {
             this.directoryId = directoryId;
@@ -149,11 +156,6 @@ public class Directory implements Searchable {
 
         public DirectoryBuilder parentId(UUID parentId) {
             this.parentId = parentId;
-            return this;
-        }
-
-        public DirectoryBuilder subject(Subject subject) {
-            this.subject = subject;
             return this;
         }
 

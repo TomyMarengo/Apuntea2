@@ -76,15 +76,6 @@ public class ServiceTestUtils {
                 .build();
     }
 
-    static Directory mockRootDirectory(String name) {
-        return new Directory.DirectoryBuilder()
-                .id(UUID.randomUUID())
-                .name(name)
-//                .parentId(EDA_DIRECTORY_ID)
-                .subject(new Subject(EDA_ID, "EDA"))
-                .build();
-    }
-
     static Subject mockSubject() {
         return new Subject(EDA_ID, "EDA");
     }

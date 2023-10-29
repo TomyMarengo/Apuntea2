@@ -29,11 +29,11 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Rollback
-public class SubjectJdbcDaoTest {
+public class SubjectJpaDaoTest {
     @Autowired
     private DataSource ds;
     @Autowired
-    private SubjectJdbcDao subjectDao;
+    private SubjectJpaDao subjectDao;
 
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;

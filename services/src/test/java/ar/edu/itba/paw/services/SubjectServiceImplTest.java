@@ -167,7 +167,7 @@ public class SubjectServiceImplTest {
         Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(0);
         Mockito.when(searchDao.countChildren(Mockito.any())).thenReturn(0);
         Mockito.when(subjectDao.delete(Mockito.any())).thenReturn(true);
-        Mockito.when(directoryDao.deleteRootDirectory(Mockito.any())).thenReturn(false);
+        Mockito.when(directoryDao.delete(Mockito.any())).thenReturn(false);
 
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
         fail();

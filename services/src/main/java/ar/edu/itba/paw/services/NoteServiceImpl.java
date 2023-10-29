@@ -11,6 +11,7 @@ import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
+import ar.edu.itba.paw.persistence.SubjectDao;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,22 +26,25 @@ import java.util.*;
 public class NoteServiceImpl implements NoteService {
     private final NoteDao noteDao;
     private final DirectoryDao directoryDao;
+    private final SubjectDao subjectDao;
     private final EmailService emailService;
     private final SecurityService securityService;
 
     @Autowired
-    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService) {
+    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SubjectDao subjectDao) {
         this.noteDao = noteDao;
         this.securityService = securityService;
         this.emailService = emailService;
         this.directoryDao = directoryDao;
+        this.subjectDao = subjectDao;
     }
 
     @Transactional
     @Override
     public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
         User user = securityService.getCurrentUserOrThrow();
-        UUID subjectId = directoryDao.getSubjectByDirectory(parentId).getSubjectId();
+        UUID rootDirectoryId = directoryDao.getDirectoryPathIds(parentId).get(0);
+        UUID subjectId = subjectDao.getSubjectByRootDirectoryId(rootDirectoryId);
         byte[] fileBytes;
         try {
             fileBytes = file.getBytes();
@@ -88,7 +92,7 @@ public class NoteServiceImpl implements NoteService {
                 throw new InvalidNoteException();
         } else {
             List<Note> notes = noteDao.findNoteByIds(noteIdsList);
-            if (notes.size() != noteIdsList.size() || noteDao.delete(noteIdsList)) throw new InvalidNoteException();
+            if (notes.size() != noteIdsList.size() || !noteDao.delete(noteIdsList)) throw new InvalidNoteException();
             notes.forEach(n -> emailService.sendDeleteNoteEmail(n, reason));
         }
     }

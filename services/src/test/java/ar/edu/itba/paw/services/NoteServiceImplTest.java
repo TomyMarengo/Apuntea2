@@ -9,6 +9,7 @@ import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
+import ar.edu.itba.paw.persistence.SubjectDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -35,6 +36,9 @@ public class NoteServiceImplTest {
     private DirectoryDao directoryDao;
 
     @Mock
+    private SubjectDao subjectDao;
+
+    @Mock
     private SecurityService securityService;
 
     @InjectMocks
@@ -44,7 +48,7 @@ public class NoteServiceImplTest {
     @Test(expected = InvalidFileException.class)
     public void testCreateNoteInvalidFile() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        Mockito.when(directoryDao.getSubjectByDirectory(Mockito.any())).thenReturn(mockSubject());
+        Mockito.when(subjectDao.getSubjectByRootDirectoryId(Mockito.any())).thenReturn(UUID.randomUUID());
         CommonsMultipartFile noteFile = Mockito.mock(CommonsMultipartFile.class);
         given(noteFile.getBytes()).willAnswer(invocation -> {throw new IOException();});
         noteService.createNote("new", UUID.randomUUID(), true, noteFile , Category.EXAM.getFormattedName());
@@ -55,7 +59,7 @@ public class NoteServiceImplTest {
     public void testCreateNote() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         CommonsMultipartFile noteFile = Mockito.mock(CommonsMultipartFile.class);
-        Mockito.when(directoryDao.getSubjectByDirectory(Mockito.any())).thenReturn(mockSubject());
+        Mockito.when(subjectDao.getSubjectByRootDirectoryId(Mockito.any())).thenReturn(UUID.randomUUID());
         Mockito.when(noteFile.getOriginalFilename()).thenReturn("test.pdf");
         Mockito.when(noteFile.getBytes()).thenReturn(new byte[0]);
         UUID expectedNoteId = UUID.randomUUID();

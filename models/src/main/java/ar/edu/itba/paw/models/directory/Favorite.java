@@ -25,6 +25,11 @@ public class Favorite {
 
     /* package-private */ Favorite() {}
 
+    public Favorite(User user, Directory directory) {
+        this.user = user;
+        this.directory = directory;
+    }
+
     public static class FavoriteKey implements Serializable {
         private User user;
         private Directory directory;

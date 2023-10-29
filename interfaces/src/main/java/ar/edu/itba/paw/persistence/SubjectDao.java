@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface SubjectDao {
     Optional<Subject> getSubjectById(UUID subjectId);
+    UUID getSubjectByRootDirectoryId(UUID rootDirectoryId);
     List<Subject> getSubjectsByCareerId(UUID careerId);
     List<Subject> getSubjectsByCareerIdComplemented(UUID careerId);
     UUID create(String name, UUID rootDirectoryId);
