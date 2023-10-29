@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
+import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
@@ -102,11 +103,11 @@ public class NoteServiceImpl implements NoteService {
     @Transactional
     @Override
     public void createOrUpdateReview(UUID noteId, int score, String content) {
-        UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-        noteDao.createOrUpdateReview(noteId, userId, score, content);
-        Review review = noteDao.getReview(noteId, userId);
-        if (review.getNote().getUser().getUserId().equals(userId))
+        User user = securityService.getCurrentUserOrThrow();
+        Note note = noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
+        if (note.getUser().equals(user))
             throw new InvalidReviewException();
+        Review review = noteDao.createOrUpdateReview(note, user, score, content);
         emailService.sendReviewEmail(review);
     }
 

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.services.ServiceTestUtils.*;
@@ -45,7 +46,7 @@ public class NoteServiceImplTest {
     @Test(expected = InvalidFileException.class)
     public void testCreateNoteInvalidFile() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        Mockito.when(directoryDao.getDirectoryPath(Mockito.any())).thenReturn(new DirectoryPath(Collections.singletonList(mockRootDirectory("levenshtein"))));
+//        Mockito.when(directoryDao.getSubjectByDirectory(Mockito.any())).thenReturn(mockSubject());
         CommonsMultipartFile noteFile = Mockito.mock(CommonsMultipartFile.class);
         given(noteFile.getBytes()).willAnswer(invocation -> {throw new IOException();});
         noteService.createNote("new", UUID.randomUUID(), true, noteFile , Category.EXAM.getFormattedName());
@@ -91,7 +92,7 @@ public class NoteServiceImplTest {
 
     @Test(expected = InvalidReviewException.class)
     public void testDeleteReviewFailure() {
-        Mockito.when(noteDao.getReview(Mockito.any(), Mockito.any())).thenReturn(new Review(mockUser(), "wowie", 5, new Note.NoteBuilder().build()));
+        Mockito.when(noteDao.getReview(Mockito.any(), Mockito.any())).thenReturn(new Review(new Note.NoteBuilder().build(), mockUser(), "wowie", 5));
         Mockito.when(noteDao.deleteReview(Mockito.any(), Mockito.any())).thenReturn(false);
         noteService.deleteReview(UUID.randomUUID(), UUID.randomUUID(), "Inappropriate");
         fail();
@@ -101,7 +102,8 @@ public class NoteServiceImplTest {
     public void testAddReviewSameUser() {
         User mUser = mockUser();
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mUser);
-        Mockito.when(noteDao.getReview(Mockito.any(), Mockito.any())).thenReturn(new Review(mUser, "my note is great", 5, new Note.NoteBuilder().user(mUser).build()));
+        Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.ofNullable(new Note.NoteBuilder().user(mUser).build()));
+        Mockito.when(noteDao.createOrUpdateReview(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(new Review(new Note.NoteBuilder().user(mUser).build(), mUser, "my note is great", 5));
         noteService.createOrUpdateReview(UUID.randomUUID(), 5, "my note is great");
         fail();
     }

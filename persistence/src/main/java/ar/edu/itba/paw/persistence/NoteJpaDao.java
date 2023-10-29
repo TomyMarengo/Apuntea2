@@ -91,23 +91,12 @@ public class NoteJpaDao implements NoteDao {
                 .executeUpdate() == noteIds.size();
     }
 
-    private String getVisibilityCondition(UUID currentUserId, MapSqlParameterSource args) {
-        if (currentUserId != null) args.addValue(USER_ID, currentUserId);
-        return currentUserId != null? "OR n.user_id = :user_id" : "";
-    }
-
     @Override
     public Review getReview(UUID noteId, UUID userId)  {
-//        return jdbcTemplate.queryForObject(
-//                "SELECT u.user_id, u.email, u.locale, r.score, r.content, n.note_id, n.note_name, o.user_id AS owner_id, o.email AS owner_email, o.locale as owner_locale FROM Reviews r " +
-//                        "INNER JOIN Users u ON r.user_id = u.user_id " +
-//                        "INNER JOIN Notes n ON r.note_id = n.note_id " +
-//                        "INNER JOIN Users o ON n.user_id = o.user_id " +
-//                        "WHERE r.note_id = ? AND r.user_id = ?",
-//                new Object[]{noteId, userId},
-//                COMPLETE_REVIEW_ROW_MAPPER
-//        );
-        return null;
+        return em.createQuery("FROM Review r WHERE r.note.id = :noteId AND r.user.id = :userId", Review.class)
+                .setParameter("noteId", noteId)
+                .setParameter("userId", userId)
+                .getSingleResult();
     }
 
     @Override
@@ -122,7 +111,10 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
-    public void createOrUpdateReview(UUID noteId, UUID userId, int score, String content) {
+    public Review createOrUpdateReview(Note note, User user, int score, String content) {
+        Review review = new Review(note, user, content, score);
+        em.merge(review);
+        return review;
 //        boolean success = jdbcTemplate.update("UPDATE Reviews SET score = ?, content = ?, created_at = now() WHERE note_id = ? AND user_id = ?", score, content, noteId, userId) == 1;
 //        if (!success) {
 //            jdbcReviewInsert.execute(new HashMap<String, Object>(){{
@@ -136,8 +128,10 @@ public class NoteJpaDao implements NoteDao {
 
     @Override
     public boolean deleteReview(UUID noteId, UUID userId) {
-//        return jdbcTemplate.update("DELETE FROM Reviews WHERE note_id = ? AND user_id = ?", noteId, userId) == 1;
-        return false;
+        return em.createQuery("DELETE FROM Review r WHERE r.note.id = :noteId AND r.user.id = :userId")
+                .setParameter("noteId", noteId)
+                .setParameter("userId", userId)
+                .executeUpdate() == 1;
     }
 
     @Override

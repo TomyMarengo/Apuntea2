@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.institutional.Career;
-import ar.edu.itba.paw.models.institutional.InstitutionDataDto;
+import ar.edu.itba.paw.models.institutional.dtos.InstitutionDataDto;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.institutional.CareerNotFoundException;

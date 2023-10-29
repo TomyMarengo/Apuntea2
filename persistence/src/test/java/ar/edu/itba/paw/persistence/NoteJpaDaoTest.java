@@ -265,8 +265,11 @@ public class NoteJpaDaoTest {
     @Test
     public void testGetReviews() {
         List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
+//        Note note = noteDao.getNoteById(GUIA1EDA_NOTE_ID, SAIDMAN_ID).orElseThrow(AssertionError::new);
+//        Set<Review> reviews = note.getReviews();
         assertEquals(2, reviews.size());
-        assertEquals(PEPE_ID, reviews.get(0).getUser().getUserId());
+//        assertEquals(PEPE_ID, reviews.get(0).getUser().getUserId());
+        assertNotNull(reviews.stream().filter(r -> r.getUser().getUserId().equals(PEPE_ID)).findFirst().orElse(null));
     }
 
     @Test
@@ -287,22 +290,26 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testCreateReview(){
-        noteDao.createOrUpdateReview(MVC_NOTE_ID, PEPE_ID , 5, "Muy buen apunte");
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + MVC_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 5"));
+        noteDao.createOrUpdateReview(notePublic, pepeUser , 5, "Muy buen apunte");
+        em.flush();
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + notePublic.getId() + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));
     }
 
     @Test
     public void testUpdateReview(){
-        int countScore4 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 4");
-        noteDao.createOrUpdateReview(GUIA1EDA_NOTE_ID, PEPE_ID , 5, "Cacique in the JODA");
+        Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
+        int countScore4 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 4");
+        noteDao.createOrUpdateReview(guiaEda, pepeUser , 5, "Cacique in the JODA");
+        em.flush();
         assertEquals(1, countScore4);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 5"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));
     }
 
     @Test
     public void testDeleteReview(){
         int countReview = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 4");
         noteDao.deleteReview(GUIA1EDA_NOTE_ID, PEPE_ID);
+        em.flush();
         assertEquals(1, countReview);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 4"));
     }

@@ -24,7 +24,7 @@ public interface NoteDao {
     List<Review> getReviews(UUID noteId);
     boolean deleteReview(UUID noteId, UUID userId);
     Review getReview(UUID noteId, UUID userId);
-    void createOrUpdateReview(UUID noteId, UUID userId, int score, String content);
+    Review createOrUpdateReview(Note note, User user, int score, String content);
 
     List<Note> findNoteByIds(List<UUID> noteIds);
 }
