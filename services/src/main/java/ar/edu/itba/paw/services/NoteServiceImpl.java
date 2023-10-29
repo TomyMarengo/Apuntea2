@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
@@ -17,9 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -66,24 +66,30 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public void update(Note note) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = noteDao.update(note, currentUserId);
-        if (!success) throw new InvalidNoteException();
+    public void update(UUID noteId, String name, boolean visible, String category) {
+        Note note = noteDao.getNoteById(noteId, securityService.getCurrentUserOrThrow().getUserId()).orElseThrow(InvalidNoteException::new);
+        // TODO: Should we move this to the Dao again for testing purposes?
+        note.setName(name);
+        note.setVisible(visible);
+        note.setCategory(Category.valueOf(category.toUpperCase()));
+        note.setLastModifiedAt(LocalDateTime.now());
     }
 
 
     @Transactional
     @Override
-    public void delete(UUID[] noteId, String reason) {
+    public void delete(UUID[] noteIds, String reason) {
         User currentUser = securityService.getCurrentUserOrThrow();
+        // TODO: Propagate List<UUID> instead of UUID[] to the Controller?
+        List<UUID> noteIdsList = Collections.unmodifiableList(Arrays.asList(noteIds));
+
         if (!currentUser.getIsAdmin()) {
-            if (!noteDao.delete(noteId, currentUser.getUserId()))
+            if (!noteDao.delete(noteIdsList, currentUser.getUserId()))
                 throw new InvalidNoteException();
         } else {
-            List<Note> note = noteDao.delete(noteId);
-            if (note.isEmpty()) throw new InvalidNoteException();
-            note.forEach(n -> emailService.sendDeleteNoteEmail(n, reason));
+            List<Note> notes = noteDao.findNoteByIds(noteIdsList);
+            if (noteDao.delete(noteIdsList)) throw new InvalidNoteException();
+            notes.forEach(n -> emailService.sendDeleteNoteEmail(n, reason));
         }
     }
 

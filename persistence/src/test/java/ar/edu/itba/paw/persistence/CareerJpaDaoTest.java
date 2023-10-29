@@ -70,7 +70,7 @@ public class CareerJpaDaoTest {
         private final UUID subject1Id;
         private final UUID subject3Id;
         private TestCountCareersBySubjectInserts() {
-            UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+            UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
 
             UUID s1Career1Id = insertCareer(namedParameterJdbcTemplate, "s1career1", ITBA_ID);
             UUID s1Career2Id = insertCareer(namedParameterJdbcTemplate, "s1career2", ITBA_ID);

@@ -50,7 +50,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testGetSubjectById(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
 
         Subject subject = subjectDao.getSubjectById(subjectId).orElse(null);
@@ -63,7 +63,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testGetSubjectByIdNonExistent(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
 
         Subject subject = subjectDao.getSubjectById(dirId).orElse(null);
 
@@ -85,7 +85,7 @@ public class SubjectJdbcDaoTest {
             career2Id = insertCareer(namedParameterJdbcTemplate, "career2", i1Id);
             career3Id = insertCareer(namedParameterJdbcTemplate, "career3", i2Id);
 
-            UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+            UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
 
             subject1Id = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
             subject2Id = insertSubject(namedParameterJdbcTemplate, "subject2", dirId);
@@ -161,7 +161,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testCreateSuccess(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
 
         UUID subjectId = subjectDao.create("subject1", dirId);
 
@@ -170,7 +170,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testDelete() {
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject", dirId);
         UUID subject2Id = insertSubject(namedParameterJdbcTemplate, "subject2", dirId);
         boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'") == 1;
@@ -187,7 +187,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testUpdateSubject(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
 
         boolean result = subjectDao.updateSubject(subjectId, "subject2");
@@ -198,7 +198,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testLinkSubjectToCareer(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
         UUID careerId = ING_INF_ID;
         int year = 4;
@@ -216,7 +216,7 @@ public class SubjectJdbcDaoTest {
         UUID career1Id = insertCareer(namedParameterJdbcTemplate, "career1", institution1Id);
         UUID career2Id = insertCareer(namedParameterJdbcTemplate, "career2", institution2Id);
 
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
         insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, career1Id, 1);
 
@@ -228,7 +228,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testUpdateSubjectCareer(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
         UUID careerId = ING_INF_ID;
         int oldYear = 3;
@@ -248,7 +248,7 @@ public class SubjectJdbcDaoTest {
 
     @Test
     public void testUnlinkSubjectFromCareer(){
-        UUID dirId = insertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
         UUID subjectId = insertSubject(namedParameterJdbcTemplate, "trash", dirId);
         UUID careerId = ING_INF_ID;
         int year = 3;

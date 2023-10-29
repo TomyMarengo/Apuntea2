@@ -68,15 +68,15 @@ public class NoteServiceImplTest {
     @Test(expected = InvalidNoteException.class)
     public void testUpdateNoteFailure() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        Mockito.when(noteDao.update(Mockito.any(), Mockito.any())).thenReturn(false);
-        noteService.update(new Note.NoteBuilder().build());
+//        Mockito.when(noteDao.update(Mockito.any(), Mockito.any())).thenReturn(false);
+        noteService.update(UUID.randomUUID(), "new", true, Category.EXAM.getFormattedName());
         fail();
     }
 
     @Test(expected = InvalidNoteException.class)
     public void testDeleteNoteFailureAdmin() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
-        Mockito.when(noteDao.delete(Mockito.any())).thenReturn(Collections.emptyList());
+        Mockito.when(noteDao.delete(Mockito.any())).thenReturn(false);
         noteService.delete(new UUID[]{UUID.randomUUID()}, "reason");
         fail();
     }

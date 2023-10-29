@@ -137,6 +137,22 @@ public class Note implements Searchable {
         this.noteFile = noteFile;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public void setLastModifiedAt(LocalDateTime lastModifiedAt) {
+        this.lastModifiedAt = lastModifiedAt;
+    }
+
     public static class NoteBuilder {
         private UUID noteId;
         private String name;

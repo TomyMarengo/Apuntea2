@@ -75,15 +75,8 @@ public class NoteController {
             redirectAttributes.addFlashAttribute(EDIT_NOTE_FORM_BINDING, result);
             redirectAttributes.addFlashAttribute(EDIT_NOTE_ID, noteId);
         } else {
-            Note note = new Note.NoteBuilder()
-                    .id(noteId)
-                    .name(editNoteForm.getName())
-                    .category(Category.valueOf(editNoteForm.getCategory().toUpperCase()))
-                    .visible(editNoteForm.getVisible())
-                    .build();
+            noteService.update(noteId,editNoteForm.getName(), editNoteForm.getVisible(), editNoteForm.getCategory());
             redirectAttributes.addFlashAttribute(NOTE_EDITED, true);
-
-            noteService.update(note);
         }
         return mav;
     }

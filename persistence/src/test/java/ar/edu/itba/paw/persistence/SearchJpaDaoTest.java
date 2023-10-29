@@ -235,19 +235,19 @@ public class SearchJpaDaoTest {
         private final UUID grandchild11Id;
 
         private TestCountChildrenObject() {
-            rootDirId = insertDirectory(namedParameterJdbcTemplate, "root", null, null);
-            child1Id = insertDirectory(namedParameterJdbcTemplate, "child1", PEPE_ID, rootDirId);
-            child2Id = insertDirectory(namedParameterJdbcTemplate, "child2", PEPE_ID, rootDirId);
-            child3Id = insertDirectory(namedParameterJdbcTemplate, "child3", PEPE_ID, rootDirId);
+            rootDirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "root", null, null);
+            child1Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "child1", PEPE_ID, rootDirId);
+            child2Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "child2", PEPE_ID, rootDirId);
+            child3Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "child3", PEPE_ID, rootDirId);
             child4Id = jdbcInsertNote(namedParameterJdbcTemplate, rootDirId,"child4", EDA_ID,PEPE_ID, true, new byte[]{0}, "other", "pdf");
 
-            grandchild11Id = insertDirectory(namedParameterJdbcTemplate, "grandchild11", PEPE_ID, child1Id);
-            insertDirectory(namedParameterJdbcTemplate, "grandchild12", PEPE_ID, child1Id);
+            grandchild11Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "grandchild11", PEPE_ID, child1Id);
+            jdbcInsertDirectory(namedParameterJdbcTemplate, "grandchild12", PEPE_ID, child1Id);
 
             jdbcInsertNote(namedParameterJdbcTemplate, child2Id, "grandchild21", EDA_ID, PEPE_ID, true, new byte[]{0}, "other", "pdf");
             jdbcInsertNote(namedParameterJdbcTemplate, child2Id, "grandchild22", EDA_ID, PEPE_ID, true, new byte[]{0}, "other", "pdf");
 
-            insertDirectory(namedParameterJdbcTemplate, "ggchild111", PEPE_ID, grandchild11Id);
+            jdbcInsertDirectory(namedParameterJdbcTemplate, "ggchild111", PEPE_ID, grandchild11Id);
         }
     }
 

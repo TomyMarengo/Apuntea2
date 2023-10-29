@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
@@ -102,6 +103,16 @@ public class TestUtils {
         return note;
     }
 
+    static Directory insertDirectory(EntityManager em, Directory.DirectoryBuilder builder) {
+        builder.createdAt(LocalDateTime.now()); // TODO: Remove
+        builder.lastModifiedAt(LocalDateTime.now()); // TODO: Remove
+        builder.visible(true);
+        builder.iconColor("BBBBBB");
+        Directory directory = builder.build();
+        em.persist(directory);
+        em.flush();
+        return directory;
+    }
 
     /*----------------------------------------------------------------------------------------------------*/
 
@@ -199,7 +210,7 @@ public class TestUtils {
         return (UUID) keyHolder.getKeys().get(USER_ID);
     }
 
-    static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible, String iconColor) {
+    static UUID jdbcInsertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible, String iconColor) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(DIRECTORY_NAME, directoryName);
         args.addValue(USER_ID, userId);
@@ -213,12 +224,12 @@ public class TestUtils {
         return (UUID) keyHolder.getKeys().get(DIRECTORY_ID);
     }
 
-    static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible) {
-        return insertDirectory(namedParameterJdbcTemplate, directoryName, userId, parentId, visible, "BBBBBB");
+    static UUID jdbcInsertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible) {
+        return jdbcInsertDirectory(namedParameterJdbcTemplate, directoryName, userId, parentId, visible, "BBBBBB");
     }
 
-    static UUID insertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId) {
-        return insertDirectory(namedParameterJdbcTemplate, directoryName, userId, parentId, true);
+    static UUID jdbcInsertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId) {
+        return jdbcInsertDirectory(namedParameterJdbcTemplate, directoryName, userId, parentId, true);
     }
 
     static UUID jdbcInsertNote(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID parentId, String name, UUID subjectId, UUID userId, boolean visible, byte[] file, String category, String fileType) {

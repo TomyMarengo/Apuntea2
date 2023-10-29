@@ -74,7 +74,7 @@ public class DirectoryJdbcDaoTest {
     @Test
     public void testGetDirectoryByIdPublic() {
         String name = "public static void main";
-        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, true);
+        UUID newDirId = jdbcInsertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, true);
         Directory directory = directoryDao.getDirectoryById(newDirId, SAIDMAN_ID).orElseThrow(AssertionError::new);
         assertEquals(newDirId, directory.getId());
         assertEquals(name, directory.getName());
@@ -90,7 +90,7 @@ public class DirectoryJdbcDaoTest {
     public void testGetDirectoryByIdPrivate() {
         UUID adminId = jdbcInsertAdmin(namedParameterJdbcTemplate, "admin@mail", "123456", ING_INF_ID, "es");
         String name = "private static void main";
-        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, false);
+        UUID newDirId = jdbcInsertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, false);
         Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(newDirId, adminId);
         assertFalse(maybeDirectory.isPresent());
     }
@@ -98,7 +98,7 @@ public class DirectoryJdbcDaoTest {
     @Test
     public void testGetDirectoryByIdPrivateOwner() {
         String name = "private static void main";
-        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, false);
+        UUID newDirId = jdbcInsertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, EDA_DIRECTORY_ID, false);
         Directory directory = directoryDao.getDirectoryById(newDirId, PEPE_ID).orElseThrow(AssertionError::new);
         assertEquals(newDirId, directory.getId());
         assertEquals(name, directory.getName());
@@ -155,11 +155,11 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testDirectoryPathLengthGreaterThan3() {
-        UUID dir1Id = insertDirectory(namedParameterJdbcTemplate, "d1", PEPE_ID, EDA_DIRECTORY_ID);
-        UUID dir2Id = insertDirectory(namedParameterJdbcTemplate, "d2", PEPE_ID, dir1Id);
-        UUID dir3Id = insertDirectory(namedParameterJdbcTemplate, "d3", PEPE_ID, dir2Id);
-        UUID dir4Id = insertDirectory(namedParameterJdbcTemplate, "d4", PEPE_ID, dir3Id);
-        UUID dir5Id = insertDirectory(namedParameterJdbcTemplate, "d5", PEPE_ID, dir4Id);
+        UUID dir1Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "d1", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID dir2Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "d2", PEPE_ID, dir1Id);
+        UUID dir3Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "d3", PEPE_ID, dir2Id);
+        UUID dir4Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "d4", PEPE_ID, dir3Id);
+        UUID dir5Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "d5", PEPE_ID, dir4Id);
 
         DirectoryPath path = directoryDao.getDirectoryPath(dir5Id);
 
@@ -180,7 +180,7 @@ public class DirectoryJdbcDaoTest {
         boolean newVisible = false;
         UUID parentId = EDA_DIRECTORY_ID;
         UUID userId = PEPE_ID;
-        UUID directoryId = insertDirectory(namedParameterJdbcTemplate, oldName, userId, parentId, oldVisible, oldColor);
+        UUID directoryId = jdbcInsertDirectory(namedParameterJdbcTemplate, oldName, userId, parentId, oldVisible, oldColor);
 
         Directory updatedDirectory = new Directory.DirectoryBuilder()
                 .id(directoryId)
@@ -226,9 +226,9 @@ public class DirectoryJdbcDaoTest {
         List<UUID> directoryIds = new ArrayList<>();
         String[] names = {"tmp1", "tmp2", "tmp3", "tmp4"};
         UUID[] ids = new UUID[names.length];
-        UUID parentId = insertDirectory(namedParameterJdbcTemplate, "tmpParent", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID parentId = jdbcInsertDirectory(namedParameterJdbcTemplate, "tmpParent", PEPE_ID, EDA_DIRECTORY_ID);
         for (String name : names) {
-            UUID newDirId = insertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, parentId);
+            UUID newDirId = jdbcInsertDirectory(namedParameterJdbcTemplate, name, PEPE_ID, parentId);
             directoryIds.add(newDirId);
         }
 
@@ -244,7 +244,7 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testUserTriesToDeleteDirectory() {
-        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
         int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId + "'");
         boolean success = directoryDao.delete(new UUID[]{newDirId}, SAIDMAN_ID);
         assertFalse(success);
@@ -254,9 +254,9 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testAdminDeletesDirectory() {
-        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
-        UUID newDirId2 = insertDirectory(namedParameterJdbcTemplate, "temp2", PEPE_ID, EDA_DIRECTORY_ID);
-        UUID newDirId3 = insertDirectory(namedParameterJdbcTemplate, "temp3", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDirId2 = jdbcInsertDirectory(namedParameterJdbcTemplate, "temp2", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDirId3 = jdbcInsertDirectory(namedParameterJdbcTemplate, "temp3", PEPE_ID, EDA_DIRECTORY_ID);
         int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + newDirId + "' OR directory_id = '" + newDirId2 + "' OR directory_id = '" + newDirId3 + "'");
         List<Directory> dirs = directoryDao.delete(new UUID[]{newDirId, newDirId2, newDirId3});
         assertEquals(3, dirs.size());
@@ -268,8 +268,8 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testDeleteRootDirectorySuccess() {
-        UUID rootDirectoryId = insertDirectory(namedParameterJdbcTemplate, "root", null, null);
-        UUID root2DirectoryId = insertDirectory(namedParameterJdbcTemplate, "root2", null, null);
+        UUID rootDirectoryId = jdbcInsertDirectory(namedParameterJdbcTemplate, "root", null, null);
+        UUID root2DirectoryId = jdbcInsertDirectory(namedParameterJdbcTemplate, "root2", null, null);
         int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + rootDirectoryId + "'");
         boolean success = directoryDao.deleteRootDirectory(rootDirectoryId);
         assertTrue(success);
@@ -280,10 +280,10 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testDeleteRootDirectoryNonRoot() {
-        UUID rootDirectoryId = insertDirectory(namedParameterJdbcTemplate, "root", null, null);
-        UUID root2DirectoryId = insertDirectory(namedParameterJdbcTemplate, "root2", null, null);
+        UUID rootDirectoryId = jdbcInsertDirectory(namedParameterJdbcTemplate, "root", null, null);
+        UUID root2DirectoryId = jdbcInsertDirectory(namedParameterJdbcTemplate, "root2", null, null);
         UUID ruthId = jdbcInsertStudent(namedParameterJdbcTemplate, "ruthy@itba.edu.ar", "7777777", ING_INF_ID, "es");
-        UUID ruthDirectoryId = insertDirectory(namedParameterJdbcTemplate, "Apuntes ruthy", ruthId, rootDirectoryId);
+        UUID ruthDirectoryId = jdbcInsertDirectory(namedParameterJdbcTemplate, "Apuntes ruthy", ruthId, rootDirectoryId);
         int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Directories", "directory_id = '" + ruthDirectoryId + "'");
 
         boolean success = directoryDao.deleteRootDirectory(ruthDirectoryId);
@@ -304,9 +304,9 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testGetFavorites() {
-        UUID newDir1 = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
-        UUID newDir2 = insertDirectory(namedParameterJdbcTemplate, "temp2", SAIDMAN_ID, EDA_DIRECTORY_ID);
-        UUID newDir3 = insertDirectory(namedParameterJdbcTemplate, "temp3", SAIDMAN_ID, EDA_DIRECTORY_ID);
+        UUID newDir1 = jdbcInsertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDir2 = jdbcInsertDirectory(namedParameterJdbcTemplate, "temp2", SAIDMAN_ID, EDA_DIRECTORY_ID);
+        UUID newDir3 = jdbcInsertDirectory(namedParameterJdbcTemplate, "temp3", SAIDMAN_ID, EDA_DIRECTORY_ID);
         insertFavorite(jdbcFavoriteInsert, newDir1, PEPE_ID);
         insertFavorite(jdbcFavoriteInsert, newDir2, SAIDMAN_ID);
         insertFavorite(jdbcFavoriteInsert, newDir3, PEPE_ID);
@@ -319,10 +319,10 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testGetFavoritePrivate() {
-        UUID newDir1 = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID, false);
-        UUID newDir2 = insertDirectory(namedParameterJdbcTemplate, "extern1", SAIDMAN_ID, EDA_DIRECTORY_ID, true);
-        UUID newDir3 = insertDirectory(namedParameterJdbcTemplate, "extern2", SAIDMAN_ID, EDA_DIRECTORY_ID, true);
-        UUID newDir4 = insertDirectory(namedParameterJdbcTemplate, "private", SAIDMAN_ID, EDA_DIRECTORY_ID, false);
+        UUID newDir1 = jdbcInsertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID, false);
+        UUID newDir2 = jdbcInsertDirectory(namedParameterJdbcTemplate, "extern1", SAIDMAN_ID, EDA_DIRECTORY_ID, true);
+        UUID newDir3 = jdbcInsertDirectory(namedParameterJdbcTemplate, "extern2", SAIDMAN_ID, EDA_DIRECTORY_ID, true);
+        UUID newDir4 = jdbcInsertDirectory(namedParameterJdbcTemplate, "private", SAIDMAN_ID, EDA_DIRECTORY_ID, false);
         insertFavorite(jdbcFavoriteInsert, newDir1, PEPE_ID);
         insertFavorite(jdbcFavoriteInsert, newDir2, SAIDMAN_ID);
         insertFavorite(jdbcFavoriteInsert, newDir3, PEPE_ID);
@@ -345,7 +345,7 @@ public class DirectoryJdbcDaoTest {
 
     @Test
     public void testRemoveFavorite() {
-        UUID newDirId = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
+        UUID newDirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
         insertFavorite(jdbcFavoriteInsert, newDirId, PEPE_ID);
         insertFavorite(jdbcFavoriteInsert, newDirId, SAIDMAN_ID);
         directoryDao.removeFavorite(PEPE_ID, newDirId);

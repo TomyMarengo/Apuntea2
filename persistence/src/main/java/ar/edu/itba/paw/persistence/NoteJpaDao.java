@@ -71,43 +71,24 @@ public class NoteJpaDao implements NoteDao {
                 .getResultList()
                 .stream()
                 .findFirst();
-
-//        return namedParameterJdbcTemplate.query("SELECT file, file_type FROM Notes n WHERE note_id = :note_id AND ( visible " + getVisibilityCondition(currentUserId, args) + ")",
-//                args, NOTE_FILE_ROW_MAPPER).stream().findFirst();
-//        return Optional.empty();
     }
 
 
     @Override
-    public List<Note> delete(UUID[] noteIds) {
-//        MapSqlParameterSource args = new MapSqlParameterSource();
-//        args.addValue(NOTE_ID, Arrays.asList(noteIds));
-//        List<Note> notes = new ArrayList<>(
-//                namedParameterJdbcTemplate.query("SELECT n.note_id, n.note_name, n.category, n.file_type, " +
-//                                "u.user_id, u.email, u.locale FROM Notes n INNER JOIN Users u ON n.user_id = u.user_id WHERE note_id IN (:note_id)",
-//                        args, USER_ROW_MAPPER)
-//        );
-//        int rowsDeleted = namedParameterJdbcTemplate.update("DELETE FROM Notes WHERE note_id IN (:note_id)", args);
-//        if (rowsDeleted == 0) return Collections.emptyList();
-//        return notes;
-        return Collections.emptyList();
+    public boolean delete(List<UUID> noteIds) {
+        if (noteIds.isEmpty()) return false;
+        return em.createQuery("DELETE FROM Note n WHERE n.id IN :noteIds")
+                .setParameter("noteIds", noteIds)
+                .executeUpdate() == noteIds.size();
     }
 
     @Override
-    public boolean delete(UUID[] noteIds, UUID currentUserId) {
-//        MapSqlParameterSource args = new MapSqlParameterSource();
-//        args.addValue(NOTE_ID, Arrays.asList(noteIds));
-//        args.addValue(USER_ID, currentUserId);
-//        int deleted = namedParameterJdbcTemplate.update("DELETE FROM Notes WHERE note_id IN (:note_id) AND user_id = :user_id", args);
-//        return deleted == noteIds.length;
-        return false;
-    }
-
-    @Override
-    public boolean update(Note note, UUID currentUserId) {
-//        return jdbcTemplate.update("UPDATE Notes SET note_name = ?, category = ?, visible = ?, last_modified_at = now() WHERE note_id = ? AND user_id = ?",
-//                note.getName(), note.getCategory().toString().toLowerCase(), note.isVisible(), note.getId(), currentUserId) == 1;
-        return false;
+    public boolean delete(List<UUID> noteIds, UUID currentUserId) {
+        if (noteIds.isEmpty()) return false;
+        return em.createQuery("DELETE FROM Note n WHERE n.id IN :noteIds AND n.user.id = :currentUserId")
+                .setParameter("noteIds", noteIds)
+                .setParameter("currentUserId", currentUserId)
+                .executeUpdate() == noteIds.size();
     }
 
     private String getVisibilityCondition(UUID currentUserId, MapSqlParameterSource args) {
