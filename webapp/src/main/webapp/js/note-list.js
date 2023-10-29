@@ -107,7 +107,7 @@ for (let i = 0; i < rows.length; i++) {
                 selectedRowIds.add(content[j].id);
             }
         }
-        else if (event.ctrlKey || event.metaKey) {
+        else if (event.ctrlKey || (event.metaKey && navigator.appVersion.indexOf("Mac") !== -1) ) {
             if (selectedRowIds.has(id)) {
                 selectedRowIds.delete(id);
             } else {
