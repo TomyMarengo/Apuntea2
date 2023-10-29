@@ -77,5 +77,18 @@
     </div>
 </nav>
 
+<div class="halloween">
+    <div class="head">
+        <div class="skull">
+            <div class="eyes">
+                <div class="eye eye-left"></div>
+                <div class="eye eye-right"></div>
+            </div>
+        </div>
+    </div>
+    <div class="body"></div>
+    <div class="legs"></div>
+</div>
+
 <script src="<c:url value="/js/global-search.js"/>"></script>
 <script src="<c:url value="/js/darkmode.js"/>"></script>
