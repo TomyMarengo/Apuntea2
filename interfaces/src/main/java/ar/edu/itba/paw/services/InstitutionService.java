@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.institutional.InstitutionData;
+import ar.edu.itba.paw.models.institutional.InstitutionDataDto;
 
 
 public interface InstitutionService {
-    InstitutionData getInstitutionData();
+    InstitutionDataDto getInstitutionData();
 }

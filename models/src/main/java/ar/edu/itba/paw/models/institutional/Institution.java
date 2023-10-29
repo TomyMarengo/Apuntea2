@@ -9,14 +9,12 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "institutions")
-public class Institution implements Serializable {
+public class Institution {
     @Id
     @Column(name = "institution_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Expose
     private UUID institutionId;
     @Column(name = "institution_name")
-    @Expose
     private String name;
 
     @OneToMany(mappedBy = "institution", fetch = FetchType.LAZY)

@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.institutional.InstitutionData;
+import ar.edu.itba.paw.models.institutional.InstitutionDataDto;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
@@ -54,8 +54,8 @@ public class HomeController {
     @RequestMapping(value = "/register")
     public ModelAndView registerForm(@ModelAttribute("userForm") final UserForm userForm) {
         ModelAndView mav = new ModelAndView("register");
-        InstitutionData institutionData = institutionService.getInstitutionData();
-        mav.addObject("institutionData", toSafeJson(institutionData));
+        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
+        mav.addObject("institutionData", toSafeJson(institutionDataDto));
         return mav;
     }
 

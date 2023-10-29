@@ -10,14 +10,13 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "careers")
-public class Career implements Serializable {
+public class Career {
     @Id
     @Column(name = "career_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Expose
     private UUID careerId;
+
     @Column(name = "career_name")
-    @Expose
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)

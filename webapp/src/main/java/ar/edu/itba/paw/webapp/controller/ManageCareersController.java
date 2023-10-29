@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.institutional.Career;
-import ar.edu.itba.paw.models.institutional.InstitutionData;
+import ar.edu.itba.paw.models.institutional.InstitutionDataDto;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.institutional.CareerNotFoundException;
@@ -45,8 +45,8 @@ public class ManageCareersController {
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView manageCareers (){
         final ModelAndView mav = new ModelAndView("manage-careers");
-        InstitutionData institutionData = institutionService.getInstitutionData();
-        mav.addObject("institutionData", toSafeJson(institutionData));
+        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
+        mav.addObject("institutionData", toSafeJson(institutionDataDto));
         return mav;
     }
 
@@ -64,8 +64,8 @@ public class ManageCareersController {
         mav.addObject(SUBJECT_CREATED, model.getOrDefault(SUBJECT_CREATED, false));
         mav.addObject(SUBJECT_EDITED, model.getOrDefault(SUBJECT_EDITED, false));
 
-        InstitutionData institutionData = institutionService.getInstitutionData();
-        mav.addObject("institutionData", toSafeJson(institutionData));
+        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
+        mav.addObject("institutionData", toSafeJson(institutionDataDto));
 
         Career career = careerService.getCareerById(careerId).orElseThrow(CareerNotFoundException::new);
         mav.addObject("career", career);

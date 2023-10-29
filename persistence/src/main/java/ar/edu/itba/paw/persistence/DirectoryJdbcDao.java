@@ -218,6 +218,7 @@ public class DirectoryJdbcDao implements DirectoryDao {
     @Override
     public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser) {
         // TODO: Sort
+        if (directoryIds.isEmpty()) return Collections.emptyList();
         List<Directory> directories = em.createQuery("FROM Directory d WHERE d.id IN :directoryIds ", Directory.class)
                 .setParameter("directoryIds", directoryIds)
                 .getResultList();

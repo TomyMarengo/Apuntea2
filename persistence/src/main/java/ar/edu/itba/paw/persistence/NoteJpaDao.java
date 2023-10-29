@@ -161,6 +161,7 @@ public class NoteJpaDao implements NoteDao {
 
     @Override
     public List<Note> findNoteByIds(List<UUID> noteIds) {
+        if (noteIds.isEmpty()) return Collections.emptyList();
         return em.createQuery("FROM Note n WHERE n.id IN :noteIds", Note.class)
                 .setParameter("noteIds", noteIds)
                 .getResultList();

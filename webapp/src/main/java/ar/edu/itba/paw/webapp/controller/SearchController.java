@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.*;
-import ar.edu.itba.paw.models.institutional.InstitutionData;
+import ar.edu.itba.paw.models.institutional.InstitutionDataDto;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SearchService;
@@ -60,9 +60,10 @@ public class SearchController {
         mav.addObject("results", pageResult.getContent());
         mav.addObject(FAVORITE_ADDED, model.getOrDefault(FAVORITE_ADDED, false));
         mav.addObject(FAVORITE_REMOVED, model.getOrDefault(FAVORITE_REMOVED, false));
-        InstitutionData institutionData = institutionService.getInstitutionData();
+        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
 
-        mav.addObject("institutionData", toSafeJson(institutionData));
+        String data = toSafeJson(institutionDataDto);
+        mav.addObject("institutionData", data);
         return mav;
     }
 

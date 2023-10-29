@@ -63,7 +63,7 @@ public class ControllerUtils {
     }
 
     static String toSafeJson(Object object) {
-        return new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().toJson(object);
+        return new GsonBuilder().create().toJson(object);
     }
 }
 

@@ -10,14 +10,12 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "subjects")
-public class Subject implements Serializable {
+public class Subject {
     @Id
     @Column(name = "subject_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Expose
     private UUID subjectId;
     @Column(name="subject_name")
-    @Expose
     private String name;
 
     // TODO: Implement directory JPA

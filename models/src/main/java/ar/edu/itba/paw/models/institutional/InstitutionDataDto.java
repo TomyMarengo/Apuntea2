@@ -1,24 +1,25 @@
 package ar.edu.itba.paw.models.institutional;
 
+import ar.edu.itba.paw.models.institutional.dtos.CareerDto;
+import ar.edu.itba.paw.models.institutional.dtos.InstitutionDto;
+import ar.edu.itba.paw.models.institutional.dtos.SubjectDto;
 import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
 import java.util.*;
 
-public class InstitutionData implements Serializable {
+public class InstitutionDataDto implements Serializable {
 
-    @Expose
-    private final Set<Institution> institutions;
-    @Expose
-    private final Map<UUID, Set<Career>> careerMap;
-    @Expose
-    private final Map<UUID, Set<Subject>> subjectMap;
+    private final Set<InstitutionDto> institutions;
 
-    public InstitutionData(List<Institution> institutions) {
+    private final Map<UUID, Set<CareerDto>> careerMap;
+
+    private final Map<UUID, Set<SubjectDto>> subjectMap;
+
+    public InstitutionDataDto() {
         this.institutions = new HashSet<>();
         this.careerMap = new HashMap<>();
         this.subjectMap = new HashMap<>();
-        for (Institution i : institutions) addInstitution(i);
     }
 
     public void addInstitution(Institution institution) {
@@ -28,22 +29,25 @@ public class InstitutionData implements Serializable {
     }
 
     public void add(Institution institution, Career career, Subject subject) {
-        institutions.add(institution);
+        institutions.add(new InstitutionDto(institution));
         careerMap.putIfAbsent(institution.getInstitutionId(), new HashSet<>());
-        careerMap.get(institution.getInstitutionId()).add(career);
+        careerMap.get(institution.getInstitutionId()).add(new CareerDto(career));
         subjectMap.putIfAbsent(career.getCareerId(), new HashSet<>());
-        subjectMap.get(career.getCareerId()).add(subject);
+        subjectMap.get(career.getCareerId()).add(new SubjectDto(subject));
     }
 
-    public Set<Institution> getInstitutions() {
+    public Set<InstitutionDto> getInstitutions() {
         return institutions;
     }
 
-    public Set<Career> getCareers(UUID institutionId) {
+    public Set<CareerDto> getCareers(UUID institutionId) {
         return careerMap.get(institutionId);
     }
 
-    public Set<Subject> getSubjects(UUID careerId) {
+    public Set<SubjectDto> getSubjects(UUID careerId) {
         return subjectMap.get(careerId);
     }
+
+
+
 }
