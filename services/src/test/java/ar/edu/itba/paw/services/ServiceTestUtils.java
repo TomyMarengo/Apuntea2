@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.UserStatus;
@@ -76,7 +75,4 @@ public class ServiceTestUtils {
                 .build();
     }
 
-    static Subject mockSubject() {
-        return new Subject(EDA_ID, "EDA");
-    }
 }

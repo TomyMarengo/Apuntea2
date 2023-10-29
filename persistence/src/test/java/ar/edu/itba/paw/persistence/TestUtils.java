@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.Favorite;
 import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
@@ -126,6 +127,13 @@ public class TestUtils {
         Favorite favorite = new Favorite(em.getReference(User.class, userId), em.getReference(Directory.class, directoryId));
         em.persist(favorite);
         em.flush();
+    }
+
+    static Subject insertSubject(EntityManager em, String name, UUID rootDirectoryId) {
+        Subject subject = new Subject(name, rootDirectoryId);
+        em.persist(subject);
+        em.flush();
+        return subject;
     }
 
     /*----------------------------------------------------------------------------------------------------*/
@@ -293,7 +301,7 @@ public class TestUtils {
                         .addValue("code", verificationCode.getCode())
                         .addValue("expires_at", verificationCode.getExpirationDate()));
     }
-    static UUID insertSubject(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String subjectName, UUID rootDirectoryId) {
+    static UUID jdbcInsertSubject(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String subjectName, UUID rootDirectoryId) {
         MapSqlParameterSource args = new MapSqlParameterSource();
         args.addValue(SUBJECT_NAME, subjectName);
         args.addValue(ROOT_DIRECTORY_ID, rootDirectoryId);

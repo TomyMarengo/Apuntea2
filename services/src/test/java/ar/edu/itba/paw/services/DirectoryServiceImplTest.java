@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collections;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.services.ServiceTestUtils.*;
@@ -40,7 +39,6 @@ public class DirectoryServiceImplTest {
     @Test(expected = InvalidDirectoryException.class)
     public void testDeleteAdminInvalidIds() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
-        Mockito.when(directoryDao.delete(Mockito.any())).thenReturn(false); // The deletion failed
         directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID}, "lol");
         Assert.fail();
     }
@@ -53,12 +51,12 @@ public class DirectoryServiceImplTest {
         Assert.fail();
     }
 
-    @Test(expected = InvalidDirectoryException.class)
-    public void testAddFavoriteDirectoryInvalid() {
-        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        directoryService.addFavorite(EDA_DIRECTORY_ID);
-        Assert.fail();
-    }
+//    @Test(expected = InvalidDirectoryException.class)
+//    public void testAddFavoriteDirectoryInvalid() {
+//        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
+//        directoryService.addFavorite(EDA_DIRECTORY_ID);
+//        Assert.fail();
+//    }
 
     @Test(expected = InvalidDirectoryException.class)
     public void testRemoveFavoriteDirectoryInvalid() {

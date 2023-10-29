@@ -19,6 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -47,6 +48,7 @@ public class NoteServiceImplTest {
 
     @Test(expected = InvalidFileException.class)
     public void testCreateNoteInvalidFile() {
+        Mockito.when(directoryDao.getDirectoryPathIds(Mockito.any())).thenReturn(Collections.singletonList(UUID.randomUUID()));
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(subjectDao.getSubjectByRootDirectoryId(Mockito.any())).thenReturn(UUID.randomUUID());
         CommonsMultipartFile noteFile = Mockito.mock(CommonsMultipartFile.class);
@@ -59,9 +61,10 @@ public class NoteServiceImplTest {
     public void testCreateNote() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         CommonsMultipartFile noteFile = Mockito.mock(CommonsMultipartFile.class);
+        Mockito.when(directoryDao.getDirectoryPathIds(Mockito.any())).thenReturn(Collections.singletonList(UUID.randomUUID()));
         Mockito.when(subjectDao.getSubjectByRootDirectoryId(Mockito.any())).thenReturn(UUID.randomUUID());
         Mockito.when(noteFile.getOriginalFilename()).thenReturn("test.pdf");
-        Mockito.when(noteFile.getBytes()).thenReturn(new byte[0]);
+        Mockito.when(noteFile.getBytes()).thenReturn(new byte[]{1});
         UUID expectedNoteId = UUID.randomUUID();
         Mockito.when(noteDao.create(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyBoolean(), Mockito.any(), Mockito.anyString(), Mockito.anyString())).thenReturn(expectedNoteId);
         UUID noteId = noteService.createNote("new", UUID.randomUUID(), true, noteFile , Category.EXAM.getFormattedName());

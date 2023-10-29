@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.models.institutional;
 
-import com.google.gson.annotations.Expose;
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
@@ -18,7 +15,6 @@ public class Subject {
     @Column(name="subject_name")
     private String name;
 
-    // TODO: Implement directory JPA
     @Column(name = "root_directory_id")
     private UUID rootDirectoryId;
 
@@ -33,35 +29,30 @@ public class Subject {
     private static final int MIN_YEAR = 1;
     private static final int MAX_YEAR = 10;
 
-
-    // TODO: Change!
+    //TODO: filter, dto or subjectcareer?
     @Transient
-    Integer year;
+    private Integer year;
 
     /* package-private */ Subject() {
 
     }
 
-    public Subject(UUID subjectId, String name) {
-        this.subjectId = subjectId;
+    public Subject(String name, UUID rootDirectoryId) {
         this.name = name;
-    }
-
-    public Subject(UUID subjectId, String name, UUID rootDirectoryId) {
-        this(subjectId, name);
         this.rootDirectoryId = rootDirectoryId;
     }
 
-    //for subject-career relation
-    public Subject(UUID subjectId, String name, int year) {
-        this(subjectId, name);
-        if (year > MAX_YEAR || year < MIN_YEAR)
-            throw new IllegalArgumentException();
-        this.year = year;
+    //TODO: for tests, remove?
+    public Subject(UUID subjectId, String name, UUID rootDirectoryId, int year) {
+        this.subjectId = subjectId;
+        this.name = name;
+        this.rootDirectoryId = rootDirectoryId;
+        this.year =year;
     }
 
-    public Subject(UUID subjectId, String name, UUID rootDirectoryId, int year) {
-        this(subjectId, name, year);
+    public Subject(UUID subjectId, String name, UUID rootDirectoryId) {
+        this.subjectId = subjectId;
+        this.name = name;
         this.rootDirectoryId = rootDirectoryId;
     }
 
@@ -72,12 +63,22 @@ public class Subject {
         return name;
     }
 
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        if (year < MIN_YEAR || year > MAX_YEAR)
+            throw new IllegalArgumentException();
+        this.year = year;
+    }
+
     public UUID getRootDirectoryId() {
         return rootDirectoryId;
     }
 
-    public Integer getYear() {
-        return year;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

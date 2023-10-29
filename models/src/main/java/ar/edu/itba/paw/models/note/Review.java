@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "reviews")
-@IdClass(Review.ReviewId.class)
+@IdClass(Review.ReviewKey.class)
 public class Review {
     @Id
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -61,13 +61,13 @@ public class Review {
         return createdAt;
     }
 
-    public static class ReviewId implements Serializable {
+    public static class ReviewKey implements Serializable {
         private User user;
         private Note note;
 
-        /* package-private */ ReviewId() {}
+        /* package-private */ ReviewKey() {}
 
-        public ReviewId(User user, Note note) {
+        public ReviewKey(User user, Note note) {
             this.user = user;
             this.note = note;
         }
@@ -76,7 +76,7 @@ public class Review {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            ReviewId reviewId = (ReviewId) o;
+            ReviewKey reviewId = (ReviewKey) o;
             return Objects.equals(user, reviewId.user) && Objects.equals(note, reviewId.note);
         }
 

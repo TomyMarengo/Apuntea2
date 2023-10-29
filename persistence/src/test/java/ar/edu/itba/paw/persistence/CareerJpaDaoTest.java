@@ -78,9 +78,9 @@ public class CareerJpaDaoTest {
             UUID s12Career2Id = insertCareer(namedParameterJdbcTemplate, "s12career2", ITBA_ID);
             UUID s2Career1Id = insertCareer(namedParameterJdbcTemplate, "s2career1", ITBA_ID);
 
-            subject1Id = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-            UUID subject2Id = insertSubject(namedParameterJdbcTemplate, "subject2", dirId);
-            subject3Id = insertSubject(namedParameterJdbcTemplate, "subject3", dirId);
+            subject1Id = jdbcInsertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+            UUID subject2Id = jdbcInsertSubject(namedParameterJdbcTemplate, "subject2", dirId);
+            subject3Id = jdbcInsertSubject(namedParameterJdbcTemplate, "subject3", dirId);
 
             insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, s1Career1Id, 1);
             insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, s1Career2Id, 1);

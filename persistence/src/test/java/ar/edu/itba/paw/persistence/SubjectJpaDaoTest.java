@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
@@ -15,6 +16,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import static ar.edu.itba.paw.models.NameConstants.*;
 import static ar.edu.itba.paw.persistence.TestUtils.*;
@@ -30,6 +33,9 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 @Rollback
 public class SubjectJpaDaoTest {
+    @PersistenceContext
+    private EntityManager em;
+    
     @Autowired
     private DataSource ds;
     @Autowired
@@ -50,22 +56,20 @@ public class SubjectJpaDaoTest {
 
     @Test
     public void testGetSubjectById(){
-        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+        Directory dir1 = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1"));
+        Subject insertedSubject = insertSubject(em, "subject1", dir1.getId());
 
-        Subject subject = subjectDao.getSubjectById(subjectId).orElse(null);
+        Subject foundSubject = subjectDao.getSubjectById(insertedSubject.getSubjectId()).orElse(null);
 
-        assertNotNull(subject);
-        assertEquals(subjectId, subject.getSubjectId());
-        assertEquals("subject1", subject.getName());
-        assertEquals(dirId, subject.getRootDirectoryId());
+        assertNotNull(foundSubject);
+        assertEquals(insertedSubject.getSubjectId(), foundSubject.getSubjectId());
+        assertEquals("subject1", foundSubject.getName());
+        assertEquals(dir1.getId(), foundSubject.getRootDirectoryId());
     }
 
     @Test
     public void testGetSubjectByIdNonExistent(){
-        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-
-        Subject subject = subjectDao.getSubjectById(dirId).orElse(null);
+        Subject subject = subjectDao.getSubjectById(UUID.randomUUID()).orElse(null);
 
         assertNull(subject);
     }
@@ -85,13 +89,13 @@ public class SubjectJpaDaoTest {
             career2Id = insertCareer(namedParameterJdbcTemplate, "career2", i1Id);
             career3Id = insertCareer(namedParameterJdbcTemplate, "career3", i2Id);
 
-            UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+            UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
 
-            subject1Id = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-            subject2Id = insertSubject(namedParameterJdbcTemplate, "subject2", dirId);
-            subject12Id = insertSubject(namedParameterJdbcTemplate, "subject12", dirId);
-            subject3Id = insertSubject(namedParameterJdbcTemplate, "subject3", dirId);
-            floatingSubjectId = insertSubject(namedParameterJdbcTemplate, "floating subject", dirId);
+            subject1Id = insertSubject(em, "subject1", dirId).getSubjectId();
+            subject2Id = insertSubject(em, "subject2", dirId).getSubjectId();
+            subject12Id = insertSubject(em, "subject12", dirId).getSubjectId();
+            subject3Id = insertSubject(em, "subject3", dirId).getSubjectId();
+            floatingSubjectId = insertSubject(em, "floating subject", dirId).getSubjectId();
 
             insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, career1Id, 1);
             insertSubjectCareer(jdbcSubjectsCareersInsert, subject2Id, career2Id, 1);
@@ -161,51 +165,41 @@ public class SubjectJpaDaoTest {
 
     @Test
     public void testCreateSuccess(){
-        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
+        UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
 
-        UUID subjectId = subjectDao.create("subject1", dirId);
+        Subject newSubject = subjectDao.create("subject1", dirId);
+        em.flush();
 
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "' AND subject_name = 'subject1' AND root_directory_id = '" + dirId + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + newSubject.getSubjectId() + "' AND subject_name = 'subject1' AND root_directory_id = '" + dirId + "'"));
     }
 
     @Test
     public void testDelete() {
-        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject", dirId);
-        UUID subject2Id = insertSubject(namedParameterJdbcTemplate, "subject2", dirId);
-        boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'") == 1;
-        boolean inserted2 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject2Id + "'") == 1;
+        UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
+        Subject subject = insertSubject(em, "subject", dirId);
+        Subject subject2 = insertSubject(em, "subject2", dirId);
+        boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject.getSubjectId() + "'") == 1;
+        boolean inserted2 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject2.getSubjectId() + "'") == 1;
 
-        boolean result = subjectDao.delete(subjectId);
+        boolean result = subjectDao.delete(subject.getSubjectId());
+        em.flush();
 
         assertTrue(result);
         assertTrue(inserted);
         assertTrue(inserted2);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject2Id + "'"));
-    }
-
-    @Test
-    public void testUpdateSubject(){
-        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-
-        boolean result = subjectDao.updateSubject(subjectId, "subject2");
-
-        assertTrue(result);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "' AND subject_name = 'subject2'"));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject.getSubjectId() + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject2.getSubjectId() + "'"));
     }
 
     @Test
     public void testLinkSubjectToCareer(){
-        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+        UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
+        Subject subject = insertSubject(em, "subject1", dirId);
         UUID careerId = ING_INF_ID;
         int year = 4;
-        boolean result = subjectDao.linkSubjectToCareer(subjectId, careerId, year);
-
-        assertTrue(result);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = " + year));
+        subjectDao.linkSubjectToCareer(subject, careerId, year);
+        em.flush();
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subject.getSubjectId() + "' AND career_id = '" + careerId + "' AND year = " + year));
     }
 
     @Test
@@ -216,20 +210,20 @@ public class SubjectJpaDaoTest {
         UUID career1Id = insertCareer(namedParameterJdbcTemplate, "career1", institution1Id);
         UUID career2Id = insertCareer(namedParameterJdbcTemplate, "career2", institution2Id);
 
-        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, career1Id, 1);
+        UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
+        Subject subject = insertSubject(em, "subject1", dirId);
+        insertSubjectCareer(jdbcSubjectsCareersInsert, subject.getSubjectId(), career1Id, 1);
 
-        boolean result = subjectDao.linkSubjectToCareer(subjectId, career2Id, 1);
+        boolean success = subjectDao.linkSubjectToCareer(subject, career2Id, 1);
 
-        assertFalse(result);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + career2Id + "'"));
+        assertFalse(success);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subject.getSubjectId() + "' AND career_id = '" + career2Id + "'"));
     }
 
     @Test
     public void testUpdateSubjectCareer(){
         UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+        UUID subjectId = jdbcInsertSubject(namedParameterJdbcTemplate, "subject1", dirId);
         UUID careerId = ING_INF_ID;
         int oldYear = 3;
         int newYear = 4;
@@ -237,25 +231,25 @@ public class SubjectJpaDaoTest {
         int oldCount = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+oldYear);
 
         boolean result = subjectDao.updateSubjectCareer(subjectId, careerId, newYear);
+        em.flush();
 
         assertTrue(result);
         assertEquals(1, oldCount);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+newYear));
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+oldYear));
-
-
     }
 
     @Test
     public void testUnlinkSubjectFromCareer(){
         UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = insertSubject(namedParameterJdbcTemplate, "trash", dirId);
+        UUID subjectId = jdbcInsertSubject(namedParameterJdbcTemplate, "trash", dirId);
         UUID careerId = ING_INF_ID;
         int year = 3;
         insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, year);
         boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = " + year) == 1;
 
         boolean result = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
+        em.flush();
 
         assertTrue(result);
         assertTrue(inserted);

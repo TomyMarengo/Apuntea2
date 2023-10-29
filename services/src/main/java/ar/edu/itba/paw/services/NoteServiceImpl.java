@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
+import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
@@ -43,7 +44,10 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
         User user = securityService.getCurrentUserOrThrow();
-        UUID rootDirectoryId = directoryDao.getDirectoryPathIds(parentId).get(0);
+        List<UUID> directoryPathIds = directoryDao.getDirectoryPathIds(parentId);
+        if (directoryPathIds.isEmpty()) throw new InvalidDirectoryException();
+        UUID rootDirectoryId = directoryPathIds.get(0);
+
         UUID subjectId = subjectDao.getSubjectByRootDirectoryId(rootDirectoryId);
         byte[] fileBytes;
         try {

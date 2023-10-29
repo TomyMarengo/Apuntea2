@@ -62,9 +62,8 @@ public class SubjectServiceImplTest {
                                                                                        .equals(year))));
     }
 
-    @Test(expected = InvalidSubjectCareerException.class)
+    @Test(expected = InvalidSubjectException.class)
     public void testLinkSubjectToCareerInvalidSubjectCareer() {
-        Mockito.when(subjectDao.linkSubjectToCareer(Mockito.any(), Mockito.any(), Mockito.anyInt())).thenReturn(false);
         UUID subjectId = UUID.randomUUID();
         UUID careerId = UUID.randomUUID();
         int year = 1;
@@ -76,7 +75,6 @@ public class SubjectServiceImplTest {
 
     @Test(expected = InvalidSubjectException.class)
     public void testUpdateSubjectInvalidSubject() {
-        Mockito.when(subjectDao.updateSubject(Mockito.any(), Mockito.any())).thenReturn(false);
         UUID subjectId = UUID.randomUUID();
         String name = "Subject 1a";
 
@@ -87,7 +85,6 @@ public class SubjectServiceImplTest {
 
     @Test(expected = InvalidSubjectException.class)
     public void testUpdateSubjectCareerFailureUpdateSubject() {
-        Mockito.when(subjectDao.updateSubject(Mockito.any(), Mockito.any())).thenReturn(false);
         UUID subjectId = UUID.randomUUID();
         UUID careerId = UUID.randomUUID();
         String newName = "Subject 1a";
@@ -98,10 +95,8 @@ public class SubjectServiceImplTest {
         fail();
     }
 
-    @Test(expected = InvalidSubjectCareerException.class)
+    @Test(expected = InvalidSubjectException.class)
     public void testUpdateSubjectCareerInvalidSubjectCareer() {
-        Mockito.when(subjectDao.updateSubject(Mockito.any(), Mockito.any())).thenReturn(true);
-        Mockito.when(subjectDao.updateSubjectCareer(Mockito.any(), Mockito.any(), Mockito.anyInt())).thenReturn(false);
         UUID subjectId = UUID.randomUUID();
         UUID careerId = UUID.randomUUID();
         String newName = "Subject 1a";
