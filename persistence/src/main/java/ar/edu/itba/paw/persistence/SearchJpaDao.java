@@ -21,15 +21,15 @@ public class SearchJpaDao implements SearchDao {
     private static final String WORD_CONDITION = "AND LOWER(t.name) LIKE LOWER(:name) ESCAPE '!' ";
 
     @Override
-    public List<Pair<UUID, Category>> search(SearchArguments sa) {
-        QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), category ")
+    public List<Pair<UUID, Boolean>> search(SearchArguments sa) {
+        QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
                 .append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME))
                 .append(" FROM Search t WHERE TRUE ");
 
         applyInstitutionFilters(queryCreator, sa);
         applyGeneralFilters(queryCreator, sa);
 
-        queryCreator.append("ORDER BY category, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME)).append(sa.isAscending() ? "" : " DESC ");
+        queryCreator.append("ORDER BY isNote ASC, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME)).append(sa.isAscending() ? "" : " DESC ");
 
         Query query = em.createNativeQuery(queryCreator.createQuery())
                 .setFirstResult(sa.getPageSize() * (sa.getPage() - 1))
@@ -38,7 +38,7 @@ public class SearchJpaDao implements SearchDao {
        queryCreator.getParams().forEach(query::setParameter);
        return ((List<Object[]>) query.getResultList())
                .stream()
-               .map(o -> new Pair<>(UUID.fromString((String) o[0]), Category.valueOf(((String) o[1]).toUpperCase())))
+               .map(o -> new Pair<>(UUID.fromString((String) o[0]), o[1].equals(Boolean.TRUE)))
                .collect(Collectors.toList());
     }
 
@@ -56,14 +56,14 @@ public class SearchJpaDao implements SearchDao {
     }
 
     @Override
-    public List<Pair<UUID, Category>> getNavigationResults(SearchArguments sa, UUID parentId) {
-        QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), category ")
+    public List<Pair<UUID, Boolean>> getNavigationResults(SearchArguments sa, UUID parentId) {
+        QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
                 .append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME))
                 .append(" FROM Navigation t WHERE t.parent_id = :parentId ");
         queryCreator.addParameter("parentId", parentId);
         // TODO: Modularize
         applyGeneralFilters(queryCreator, sa);
-        queryCreator.append("ORDER BY category, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME)).append(sa.isAscending() ? "" : " DESC ");
+        queryCreator.append("ORDER BY isNote ASC, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME)).append(sa.isAscending() ? "" : " DESC ");
 
         Query query = em.createNativeQuery(queryCreator.createQuery())
                 .setFirstResult(sa.getPageSize() * (sa.getPage() - 1))
@@ -72,7 +72,7 @@ public class SearchJpaDao implements SearchDao {
         queryCreator.getParams().forEach(query::setParameter);
         return ((List<Object[]>) query.getResultList())
                 .stream()
-                .map(o -> new Pair<>(UUID.fromString((String) o[0]), Category.valueOf(((String) o[1]).toUpperCase())))
+                .map(o -> new Pair<>(UUID.fromString((String) o[0]), o[1].equals(Boolean.TRUE)))
                 .collect(Collectors.toList());
     }
 

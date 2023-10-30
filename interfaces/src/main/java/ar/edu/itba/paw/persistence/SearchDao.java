@@ -10,8 +10,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SearchDao {
-    List<Pair<UUID, Category>> search(SearchArguments sa);
-    List<Pair<UUID, Category>> getNavigationResults(SearchArguments sa, UUID parentId);
+    List<Pair<UUID, Boolean>> search(SearchArguments sa);
+    List<Pair<UUID, Boolean>> getNavigationResults(SearchArguments sa, UUID parentId);
     int countSearchResults(SearchArguments sa);
     int countNavigationResults(SearchArguments sa, UUID parentId);
     Optional<UUID> findByName(UUID parentId, String name, UUID currentUserId);

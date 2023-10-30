@@ -5,10 +5,8 @@ import ar.edu.itba.paw.models.SearchArguments;
 import static ar.edu.itba.paw.models.SearchArguments.*;
 import static ar.edu.itba.paw.models.NameConstants.*;
 
-import java.security.InvalidParameterException;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -26,9 +24,9 @@ public class JdbcDaoUtils {
     }
     static final EnumMap<SortBy, String> SORTBY_CAMELCASE = new EnumMap<>(SearchArguments.SortBy.class);
     static{
-        SORTBY.put(SortBy.DATE, CREATED_AT);
-        SORTBY.put(SortBy.NAME, NAME);
-        SORTBY.put(SortBy.SCORE, "avgScore"); // TODO: Change
+        SORTBY_CAMELCASE.put(SortBy.DATE, "createdAt");
+        SORTBY_CAMELCASE.put(SortBy.NAME, NAME);
+        SORTBY_CAMELCASE.put(SortBy.SCORE, "avgScore"); // TODO: Change
     }
     static class QueryCreator {
         private final StringBuilder query;

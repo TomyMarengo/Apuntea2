@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static ar.edu.itba.paw.models.NameConstants.AVG_SCORE;
-import static ar.edu.itba.paw.models.NameConstants.NAME;
+import static ar.edu.itba.paw.models.NameConstants.*;
 
 @Repository
 public class DirectoryJpaDao implements DirectoryDao {
@@ -121,7 +120,7 @@ public class DirectoryJpaDao implements DirectoryDao {
     public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser, SearchArguments.SortBy sortBy, boolean ascending) {
         // TODO: make more readable
         if (directoryIds.isEmpty()) return Collections.emptyList();
-        List<Directory> directories = em.createQuery(String.format("FROM Directory d WHERE d.id IN :directoryIds ORDER BY %s %s", JdbcDaoUtils.SORTBY.getOrDefault(sortBy, NAME), ascending? "ASC" : "DESC"), Directory.class)
+        List<Directory> directories = em.createQuery(String.format("FROM Directory d WHERE d.id IN :directoryIds ORDER BY %s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sortBy, NAME), ascending? "ASC" : "DESC"), Directory.class)
                 .setParameter("directoryIds", directoryIds)
                 .getResultList();
         // TODO: Optimize

@@ -65,11 +65,11 @@ public class SearchServiceImpl implements SearchService {
 
         sab.page(safePage).pageSize(pageSize);
         SearchArguments sa = sab.build();
-        List<Pair<UUID, Category>> ids = searchDao.search(sa);
+        List<Pair<UUID, Boolean>> ids = searchDao.search(sa);
         //TODO: optimize?
         //TODO: Modularize
-        List<UUID> noteIds = ids.stream().filter(p -> p.getValue() != Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
-        List<UUID> directoryIds = ids.stream().filter(p -> p.getValue() == Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
+        List<UUID> noteIds = ids.stream().filter(Pair::getValue).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
+        List<UUID> directoryIds = ids.stream().filter(p -> !p.getValue()).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
 
         List<Searchable> results = new ArrayList<>();
 
@@ -104,9 +104,9 @@ public class SearchServiceImpl implements SearchService {
         sab.page(safePage).pageSize(pageSize);
         SearchArguments sa = sab.build();
 
-        List<Pair<UUID, Category>> ids = searchDao.getNavigationResults(sa, parentId);
-        List<UUID> noteIds = ids.stream().filter(p -> p.getValue() != Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
-        List<UUID> directoryIds = ids.stream().filter(p -> p.getValue() == Category.DIRECTORY).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
+        List<Pair<UUID, Boolean>> ids = searchDao.getNavigationResults(sa, parentId);
+        List<UUID> noteIds = ids.stream().filter(Pair::getValue).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
+        List<UUID> directoryIds = ids.stream().filter(p -> !p.getValue()).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
 
         List<Searchable> results = new ArrayList<>();
 

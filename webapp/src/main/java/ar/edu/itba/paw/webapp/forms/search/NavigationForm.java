@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 public class NavigationForm {
 
     @Pattern(regexp = "note|theory|practice|exam|other|directory|all")
-    private String category = "note";
+    private String category = "all";
 
     @Pattern(regexp = "score|name|date")
     private String sortBy = "date";
