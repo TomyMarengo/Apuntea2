@@ -46,8 +46,6 @@ public class SearchServiceImplTest {
         Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(directoryDao.findDirectoriesByIds(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(noteDao.findNoteByIds(Mockito.any())).thenReturn(Collections.emptyList());
 
         Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, "date", true, PAGE, PAGE_SIZE);
 
@@ -65,8 +63,6 @@ public class SearchServiceImplTest {
         Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(directoryDao.findDirectoriesByIds(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(noteDao.findNoteByIds(Mockito.any())).thenReturn(Collections.emptyList());
 
         Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
@@ -84,8 +80,6 @@ public class SearchServiceImplTest {
         Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(directoryDao.findDirectoriesByIds(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(noteDao.findNoteByIds(Mockito.any())).thenReturn(Collections.emptyList());
 
         Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
@@ -103,8 +97,6 @@ public class SearchServiceImplTest {
         Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
         Mockito.when(searchDao.countNavigationResults(Mockito.any(), Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.getNavigationResults(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(directoryDao.findDirectoriesByIds(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(noteDao.findNoteByIds(Mockito.any())).thenReturn(Collections.emptyList());
 
         Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, "date", true, PAGE, PAGE_SIZE);
 
@@ -121,8 +113,6 @@ public class SearchServiceImplTest {
         Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
         Mockito.when(searchDao.countNavigationResults(Mockito.any(), Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.getNavigationResults(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(directoryDao.findDirectoriesByIds(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(noteDao.findNoteByIds(Mockito.any())).thenReturn(Collections.emptyList());
 
         Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
@@ -140,8 +130,6 @@ public class SearchServiceImplTest {
         Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.of(mockUser()));
         Mockito.when(searchDao.countNavigationResults(Mockito.any(), Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.getNavigationResults(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(directoryDao.findDirectoriesByIds(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
-        Mockito.when(noteDao.findNoteByIds(Mockito.any())).thenReturn(Collections.emptyList());
 
         Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
