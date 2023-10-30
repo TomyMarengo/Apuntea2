@@ -18,15 +18,18 @@ public class JdbcDaoUtils {
     static final String CAREERS_ATTR = "careers";
     static final String SUBJECTS_ATTR = "subjects";
 
-    static final String FETCH_GRAPH =  "javax.persistence.fetchgraph";
-
     static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SearchArguments.SortBy.class);
     static{
-        SORTBY.put(SortBy.SCORE, AVG_SCORE);
         SORTBY.put(SortBy.DATE, CREATED_AT);
         SORTBY.put(SortBy.NAME, NAME);
+        SORTBY.put(SortBy.SCORE, AVG_SCORE);
     }
-
+    static final EnumMap<SortBy, String> SORTBY_CAMELCASE = new EnumMap<>(SearchArguments.SortBy.class);
+    static{
+        SORTBY.put(SortBy.DATE, CREATED_AT);
+        SORTBY.put(SortBy.NAME, NAME);
+        SORTBY.put(SortBy.SCORE, "avgScore"); // TODO: Change
+    }
     static class QueryCreator {
         private final StringBuilder query;
         private final HashMap<String, Object> params = new HashMap<>();

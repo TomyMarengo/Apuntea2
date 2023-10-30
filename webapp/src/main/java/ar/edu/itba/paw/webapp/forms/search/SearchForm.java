@@ -112,4 +112,8 @@ public class SearchForm {
             return null;
         return category;
     }
+
+    public boolean getIsNote() {
+        return !category.equals("all") && !category.equals("directory");
+    }
 }

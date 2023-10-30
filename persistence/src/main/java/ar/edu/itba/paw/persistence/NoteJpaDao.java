@@ -124,7 +124,7 @@ public class NoteJpaDao implements NoteDao {
     @Override
     public List<Note> findNoteByIds(List<UUID> noteIds, SearchArguments.SortBy sortBy, boolean ascending) {
         if (noteIds.isEmpty()) return Collections.emptyList();
-        return em.createQuery(String.format("FROM Note n WHERE n.id IN :noteIds ORDER BY %s %s", JdbcDaoUtils.SORTBY.getOrDefault(sortBy, NAME), ascending? "ASC" : "DESC"), Note.class)
+        return em.createQuery(String.format("FROM Note n WHERE n.id IN :noteIds ORDER BY %s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sortBy, "avgScore"), ascending? "ASC" : "DESC"), Note.class)
                 .setParameter("noteIds", noteIds)
                 .getResultList();
     }

@@ -84,20 +84,14 @@
                     <img src="<c:url value="/svg/file.svg"/>" alt="<spring:message code="folder"/>"
                          class="icon-s fill-bg"/>
                 </button>
-
-                <form:select path="type" class="d-none" id="typeSelect">
-                    <form:option value=""/>
-                    <form:option value="directory"/>
-                    <form:option value="note"/>
-                </form:select>
             </div>
 
-            <c:if test="${navigationForm.type eq 'note'}">
+            <c:if test="${navigationForm.isNote}">
                 <div class="input-group">
                     <form:select path="category" class="form-select bg-bg" id="categorySelect"
                                  onchange="submitSearchForm()">
                         <form:option
-                                value=""><spring:message
+                                value="note"><spring:message
                                 code="search.category.all"/></form:option>
                         <form:option
                                 value="theory"><spring:message
@@ -111,8 +105,15 @@
                         <form:option
                                 value="other"><spring:message
                                 code="search.category.other"/></form:option>
+                        <form:option cssClass="d-none"
+                                     value="directory"/>
+                        <form:option cssClass="d-none"
+                                     value="all"/>
                     </form:select>
                 </div>
+            </c:if>
+            <c:if test="${!navigationForm.isNote}">
+                <form:hidden path="category" class="form-select bg-bg" id="categorySelect"/>
             </c:if>
 
             <div class="input-group">
@@ -133,7 +134,7 @@
                 </button>
 
                 <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect" onchange="submitSearchForm()">
-                    <c:if test="${navigationForm.type eq 'note'}">
+                    <c:if test="${navigationForm.isNote}">
                         <form:option value="score"><spring:message code="search.sort.score"/></form:option>
                     </c:if>
                     <form:option value="name"><spring:message code="search.sort.name"/></form:option>
@@ -141,101 +142,97 @@
                 </form:select>
             </div>
         </div>
+    </div>
+</form:form>
+<c:if test="${not empty results}">
+    <!-- DEFINES -->
+    <spring:message code="download" var="download"/>
+    <spring:message code="folder" var="folder"/>
+    <spring:message code="search.toggleView" var="searchViewImage"/>
+    <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
+    <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
 
-        <!-- BUTTONS -->
-        <c:if test="${not empty results}">
-            <!-- DEFINES -->
-            <spring:message code="download" var="download"/>
-            <spring:message code="folder" var="folder"/>
-            <spring:message code="search.toggleView" var="searchViewImage"/>
-            <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
-            <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
-
-            <div class="d-flex">
-                <div id="selectedButtons" class="align-items-center" style="display: none;">
-                    <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                            data-bs-placement="bottom"
-                            data-bs-title="<spring:message code="search.button.deselectAll"/>"
-                            data-bs-trigger="hover">
-                        <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary"/>
-                    </button>
-                    <span class="text-dark-primary mx-2">
+    <div class="d-flex">
+        <div id="selectedButtons" class="align-items-center" style="display: none;">
+            <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    data-bs-title="<spring:message code="search.button.deselectAll"/>"
+                    data-bs-trigger="hover">
+                <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary"/>
+            </button>
+            <span class="text-dark-primary mx-2">
                     <strong id="selectedCount" class="text-dark-primary"> 0 </strong>
                     <spring:message code="search.selected"/>
                 </span>
 
-                    <c:if test="${user ne null and directory.user ne null and (directory.user.userId eq user.userId or directory.user.isAdmin)}">
-                        <div data-bs-toggle="tooltip" data-bs-placement="bottom"
-                             data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
-                            <button id="openDeleteSelectedModalButton" class="btn nav-icon-button"
-                                    data-bs-toggle="modal" data-bs-target="#deleteManyModal">
-                                <img src="<c:url value="/svg/trash.svg"/>"
-                                     alt="<spring:message code="delete"/>"
-                                     class="icon-s fill-dark-primary">
-                            </button>
-                        </div>
-                    </c:if>
-
-                    <button id="downloadSelectedButton" class="btn nav-icon-button" type="button"
-                            data-bs-toggle="tooltip"
-                            data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
-                            data-bs-trigger="hover">
-                        <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
+            <c:if test="${user ne null and directory.user ne null and (directory.user.userId eq user.userId or directory.user.isAdmin)}">
+                <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                     data-bs-title="<spring:message code="delete"/>" data-bs-trigger="hover">
+                    <button id="openDeleteSelectedModalButton" class="btn nav-icon-button"
+                            data-bs-toggle="modal" data-bs-target="#deleteManyModal">
+                        <img src="<c:url value="/svg/trash.svg"/>"
+                             alt="<spring:message code="delete"/>"
+                             class="icon-s fill-dark-primary">
                     </button>
                 </div>
+            </c:if>
 
-                <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
-                        data-bs-trigger="hover">
-                    <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary"/>
+            <button id="downloadSelectedButton" class="btn nav-icon-button" type="button"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
+                    data-bs-trigger="hover">
+                <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
+            </button>
+        </div>
+
+        <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
+                data-bs-trigger="hover">
+            <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary"/>
+        </button>
+
+        <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
+                data-horizontal="<spring:message code="search.button.listView"/>"
+                data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
+            <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
+                 class="icon-s fill-dark-primary"/>
+        </button>
+
+        <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
+                data-bs-trigger="hover"
+                onclick="changePageSize(${navigationForm.pageSize})">
+            <c:out value="${navigationForm.pageSize}"/>
+
+        </button>
+
+        <c:if test="${user ne null and (directory.user eq null or directory.user.userId eq user.userId)}">
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+               data-bs-title="<spring:message code="uploadNote"/>"
+               data-bs-trigger="hover">
+                <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
+                        id="createNoteModalButton">
+                    <img src="<c:url value="/svg/add-document.svg"/>"
+                         alt="<spring:message code="uploadNote"/>"
+                         class="icon-m fill-dark-primary"/>
                 </button>
-
-                <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
-                        data-horizontal="<spring:message code="search.button.listView"/>"
-                        data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
-                    <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
-                         class="icon-s fill-dark-primary"/>
+            </a>
+            <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+               data-bs-title="<spring:message code="createDirectory"/>"
+               data-bs-trigger="hover">
+                <button class="btn nav-icon-button" data-bs-toggle="modal"
+                        data-bs-target="#createDirectoryModal"
+                        id="createDirectoryModalButton">
+                    <img src="<c:url value="/svg/add-folder.svg"/>"
+                         alt="<spring:message code="createDirectory"/>"
+                         class="icon-m fill-dark-primary"/>
                 </button>
-
-                <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
-                        data-bs-trigger="hover"
-                        onclick="changePageSize(${navigationForm.pageSize})">
-                    <c:out value="${navigationForm.pageSize}"/>
-
-                </button>
-
-                <c:if test="${user ne null and (directory.user eq null or directory.user.userId eq user.userId)}">
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                       data-bs-title="<spring:message code="uploadNote"/>"
-                       data-bs-trigger="hover">
-                        <button class="btn nav-icon-button" data-bs-toggle="modal" data-bs-target="#createNoteModal"
-                                id="createNoteModalButton">
-                            <img src="<c:url value="/svg/add-document.svg"/>"
-                                 alt="<spring:message code="uploadNote"/>"
-                                 class="icon-m fill-dark-primary"/>
-                        </button>
-                    </a>
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                       data-bs-title="<spring:message code="createDirectory"/>"
-                       data-bs-trigger="hover">
-                        <button class="btn nav-icon-button" data-bs-toggle="modal"
-                                data-bs-target="#createDirectoryModal"
-                                id="createDirectoryModalButton">
-                            <img src="<c:url value="/svg/add-folder.svg"/>"
-                                 alt="<spring:message code="createDirectory"/>"
-                                 class="icon-m fill-dark-primary"/>
-                        </button>
-                    </a>
-                </c:if>
-            </div>
-
+            </a>
         </c:if>
     </div>
-
-</form:form>
+</c:if>
 
 
 <c:if test="${empty results}">
@@ -1056,9 +1053,9 @@
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/color-picker.js"/>"></script>
 <script src="<c:url value="/js/file-control.js"/>"></script>
+<script src="<c:url value="/js/search-buttons.js"/>"></script>
 <c:if test="${not empty results}">
     <script src="<c:url value="/js/note-list.js"/>"></script>
-    <script src="<c:url value="/js/search-buttons.js"/>"></script>
     <script src="<c:url value="/js/crud-buttons.js"/>"></script>
 </c:if>
 

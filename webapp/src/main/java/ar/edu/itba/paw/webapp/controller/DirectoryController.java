@@ -77,7 +77,7 @@ public class DirectoryController {
 
         Page<Searchable> pageResult = searchService.getNavigationResults(
                 directoryId,
-                navigationForm.getCategory(),
+                navigationForm.getNormalizedCategory(),
                 navigationForm.getWord(),
                 navigationForm.getSortBy(),
                 navigationForm.getAscending(),

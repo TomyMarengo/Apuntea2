@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static ar.edu.itba.paw.models.NameConstants.AVG_SCORE;
 import static ar.edu.itba.paw.models.NameConstants.NAME;
 
 @Repository

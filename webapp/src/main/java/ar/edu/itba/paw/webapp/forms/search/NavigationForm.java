@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 
 public class NavigationForm {
 
-    @Pattern(regexp = "note|theory|practice|exam|other|")
+    @Pattern(regexp = "note|theory|practice|exam|other|directory|all")
     private String category = "note";
 
     @Pattern(regexp = "score|name|date")
@@ -71,5 +71,15 @@ public class NavigationForm {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public String getNormalizedCategory() {
+        if (category.equals("all"))
+            return null;
+        return category;
+    }
+
+    public boolean getIsNote() {
+        return !category.equals("all") && !category.equals("directory");
     }
 }
