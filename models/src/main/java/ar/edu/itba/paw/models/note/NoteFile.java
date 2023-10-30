@@ -9,9 +9,8 @@ import java.util.UUID;
 @Table(name = "note_files")
 public class NoteFile {
     @Id
-    @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @Column(name = "note_id")
+    private UUID noteId;
 
     @Column(name = "file", nullable = false)
     private byte[] file;
@@ -31,6 +30,11 @@ public class NoteFile {
 
     /* package-private */ NoteFile() {}
 
+    @PrePersist
+    private void prePersist() {
+        noteId = note.getId();
+    }
+
     public NoteFile(byte[] file, Note note) {
         this.file = file;
         this.note = note;
@@ -43,5 +47,9 @@ public class NoteFile {
 
     public byte[] getContent() {
         return file;
+    }
+
+    public void setNote(Note note) {
+        this.note = note;
     }
 }

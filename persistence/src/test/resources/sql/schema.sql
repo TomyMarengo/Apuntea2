@@ -228,21 +228,13 @@ ALTER TABLE Notes ADD COLUMN IF NOT EXISTS file bytea;
 
 CREATE TABLE IF NOT EXISTS Note_Files
 (
-    id uuid NOT NULL DEFAULT uuid(),
-    file bytea NOT NULL,
     note_id uuid NOT NULL,
-    CONSTRAINT "PK_note_files" PRIMARY KEY (id),
+    file bytea NOT NULL,
+    CONSTRAINT "PK_note_files" PRIMARY KEY (note_id),
     CONSTRAINT "FK_note_files_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE,
-    CONSTRAINT "UQ_note_files" UNIQUE (note_id)
-    );
+);
 
 INSERT INTO Note_Files (file, note_id) SELECT file, note_id FROM Notes WHERE file IS NOT NULL;
 
-ALTER TABLE Notes ADD COLUMN IF NOT EXISTS file_id uuid;
 ALTER TABLE Notes DROP COLUMN file;
-ALTER TABLE Notes ADD CONSTRAINT "FK_notes_note_files" FOREIGN KEY (file_id) REFERENCES Note_Files (id) ON DELETE CASCADE;
-
--- UPDATE Notes SET file_id = nf.id FROM Note_Files AS nf WHERE Notes.note_id = nf.note_id;
-
--- ALTER TABLE Notes ALTER COLUMN file_id SET NOT NULL;
 

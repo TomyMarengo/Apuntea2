@@ -15,7 +15,6 @@ public interface NoteDao {
 
     Optional<NoteFile> getNoteFileById(UUID noteId, UUID currentUserId);
 
-
     Optional<Note> getNoteById(UUID noteId, UUID currentUserId);
 
     boolean delete(List<UUID> noteId);

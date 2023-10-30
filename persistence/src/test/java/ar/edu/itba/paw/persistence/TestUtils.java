@@ -102,8 +102,10 @@ public class TestUtils {
         builder.createdAt(LocalDateTime.now()); // TODO: Remove
         builder.lastModifiedAt(LocalDateTime.now()); // TODO: Remove
         Note note = builder.build();
-        note.setNoteFile(new NoteFile(file, note)); // Empty file for testing
         em.persist(note);
+        NoteFile nf = new NoteFile(file, note); // Empty file for testing
+        nf.setNote(note);
+        em.persist(nf);
         em.flush();
         return note;
     }

@@ -47,8 +47,9 @@ public class NoteJpaDaoTest {
     private User pepeUser;
     private User carlaAdmin;
     private Note notePublic;
+    private byte[] publicContent;
     private Note notePrivate;
-
+    private byte[] privateContent;
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
@@ -63,10 +64,10 @@ public class NoteJpaDaoTest {
                 .visible(true)
                 .category(Category.PRACTICE)
                 .fileType("jpg");
-        byte[] publicContent = new byte[]{1, 2, 3};
+        publicContent = new byte[]{1, 2, 3};
         notePublic = insertNote(em, builder, publicContent);
         builder.name("private").visible(false);
-        byte[] privateContent = new byte[]{4, 5, 6};
+        privateContent = new byte[]{4, 5, 6};
         notePrivate = insertNote(em, builder, privateContent);
     }
 
@@ -117,10 +118,12 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testGetNoteFileByIdPublic() {
-        NoteFile file = noteDao.getNoteFileById(notePublic.getId(), SAIDMAN_ID).orElseThrow(AssertionError::new);
+        NoteFile realNoteFile = em.find(NoteFile.class, notePublic.getId());
 
-        assertEquals(notePublic.getNoteFile().getMimeType(), file.getMimeType());
-        assertArrayEquals(notePublic.getNoteFile().getContent(), file.getContent());
+        NoteFile foundFile = noteDao.getNoteFileById(notePublic.getId(), SAIDMAN_ID).orElseThrow(AssertionError::new);
+
+        assertEquals(realNoteFile.getMimeType(), foundFile.getMimeType());
+        assertArrayEquals(publicContent, foundFile.getContent());
     }
 
     @Test
@@ -132,11 +135,12 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testGetNoteFileByIdPrivateOwner() {
+        NoteFile realNoteFile = em.find(NoteFile.class, notePrivate.getId());
 
         NoteFile file = noteDao.getNoteFileById(notePrivate.getId(), PEPE_ID).orElseThrow(AssertionError::new);
 
-        assertEquals(notePrivate.getNoteFile().getMimeType(), file.getMimeType());
-        assertArrayEquals(notePrivate.getNoteFile().getContent().clone(), file.getContent());
+        assertEquals(realNoteFile.getMimeType(), file.getMimeType());
+        assertArrayEquals(privateContent, file.getContent());
     }
 
     @Test

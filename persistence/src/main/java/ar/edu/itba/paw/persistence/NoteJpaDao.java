@@ -40,10 +40,9 @@ public class NoteJpaDao implements NoteDao {
                 .lastModifiedAt(LocalDateTime.now())
                 .build();
 
-        NoteFile noteFile = new NoteFile(file, note);
-        note.setNoteFile(noteFile);
-
         em.persist(note);
+        NoteFile noteFile = new NoteFile(file, note);
+        em.persist(noteFile);
         return note.getId();
     }
 
