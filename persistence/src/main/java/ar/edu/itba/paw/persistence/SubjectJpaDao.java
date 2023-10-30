@@ -26,7 +26,7 @@ public class SubjectJpaDao implements SubjectDao {
     @Override
     public List<Subject> getSubjectsByCareerId(UUID careerId) {
         //TODO: optimize
-        List<SubjectCareer> subjectsCareers = em.createQuery("SELECT DISTINCT sc FROM SubjectCareer sc WHERE sc.career.careerId = :careerId", SubjectCareer.class)
+        List<SubjectCareer> subjectsCareers = em.createQuery("SELECT DISTINCT sc FROM SubjectCareer sc WHERE sc.career.careerId = :careerId ORDER BY sc.year", SubjectCareer.class)
                 .setParameter("careerId", careerId)
                 .getResultList();
         subjectsCareers.forEach(

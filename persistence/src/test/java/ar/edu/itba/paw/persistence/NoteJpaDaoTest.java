@@ -42,7 +42,6 @@ public class NoteJpaDaoTest {
     @Autowired
     private NoteJpaDao noteDao;
     private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private User pepeUser;
     private User carlaAdmin;
@@ -53,7 +52,6 @@ public class NoteJpaDaoTest {
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
         pepeUser = em.find(User.class, PEPE_ID);
         carlaAdmin = em.find(User.class, CARLADMIN_ID);
         Note.NoteBuilder builder = new Note.NoteBuilder()

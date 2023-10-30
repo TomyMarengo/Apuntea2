@@ -42,7 +42,7 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
         List<UUID> directoryPathIds =  directoryDao.getDirectoryPathIds(directoryId);
-        List<Directory> directories = directoryDao.findDirectoriesByIds(directoryPathIds, securityService.getCurrentUserOrThrow());
+        List<Directory> directories = directoryDao.findDirectoriesByIds(directoryPathIds, securityService.getCurrentUser().orElse(null));
         return new DirectoryPath(directories);
     }
 
