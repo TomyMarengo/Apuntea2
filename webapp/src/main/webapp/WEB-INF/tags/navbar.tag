@@ -15,6 +15,14 @@
     <c:set var="isAdmin" value="${user.isAdmin}"/>
 </c:if>
 
+<script>
+    (function() {
+        const storedTheme = localStorage.getItem('theme') || 'halloween';
+        document.documentElement.setAttribute('data-bs-theme', storedTheme);
+        localStorage.setItem('theme', storedTheme);
+    })();
+</script>
+
 <nav class="navbar">
     <div class="container-fluid d-flex align-items-center">
         <a class="navbar-brand text-dark-primary" href="${baseUrl}">Apuntea</a>
@@ -107,6 +115,5 @@
     </c:forEach>
 </div>
 
-
-<script src="<c:url value="/js/global-search.js"/>"></script>
 <script src="<c:url value="/js/darkmode.js"/>"></script>
+<script src="<c:url value="/js/global-search.js"/>"></script>

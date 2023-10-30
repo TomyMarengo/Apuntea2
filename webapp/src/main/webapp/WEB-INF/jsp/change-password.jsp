@@ -6,7 +6,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="halloween">
+<html lang="en">
 
 <head>
     <meta charset="utf-8"/>
@@ -65,12 +65,12 @@
                     <spring:message var="oldPassword" code="changePassword.oldPassword"/>
                     <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
                                 placeholder="${oldPassword}" path="oldPassword" value="" required="true"/>
-                    <span class="input-group-text input-group-icon clickable" onclick="password_show_hide();">
+                    <button type="button" class="input-group-text input-group-icon" onclick="passwordShowHide()">
                                                 <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
                                                      class="icon-xs fill-dark-primary"/>
                                                 <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
                                                      class="d-none icon-xs fill-dark-primary"/>
-                                            </span>
+                                            </button>
                 </div>
                 <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
 
@@ -80,19 +80,18 @@
                     <spring:message var="newPassword" code="changePassword.newPassword"/>
                     <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
                                 placeholder="${newPassword}" path="newPassword" value="" required="true"/>
-                    <span class="input-group-text input-group-icon clickable"
-                          onclick="password_show_hide('2');">
+                    <button type="button" class="input-group-text input-group-icon"
+                          onclick="passwordShowHide('2');">
                                                 <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"
                                                      class="icon-xs fill-dark-primary"/>
                                                 <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2"
                                                      class="d-none icon-xs fill-dark-primary"/>
-                                            </span>
+                                            </button>
                 </div>
                 <form:errors path="newPassword" cssClass="text-danger" element="p"/>
 
                 <div class="mt-5 d-flex justify-content-center">
-                    <spring:message var="update" code="update"/>
-                    <input class="btn rounded-box button-primary" type="submit" value="${update}">
+                    <button class="btn rounded-box button-primary"><spring:message code="update"/></button>
                 </div>
             </form:form>
         </div>

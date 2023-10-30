@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="halloween">
+<html lang="en">
 
 <head>
     <meta charset="utf-8"/>
@@ -73,21 +73,22 @@
                                 <spring:message var="passwordPlaceholder" code="forgotPassword.newPassword"/>
                                 <form:input path="newPassword" type="password" id="password" class="form-control bg-bg"
                                             placeholder="${passwordPlaceholder}" required="true"/>
-                                <span class="input-group-text input-group-icon clickable"
-                                      onclick="password_show_hide();">
+                                <button type="button" class="input-group-text input-group-icon"
+                                      onclick="passwordShowHide();">
                                     <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
                                          class="icon-xs fill-dark-primary"/>
                                     <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
                                          class="d-none icon-xs fill-dark-primary"/>
-                                </span>
+                                </button>
                             </div>
                             <form:errors path="newPassword" cssClass="text-danger" element="p"/>
 
                             <input type="hidden" value="${email}" name="email"/>
 
                             <div class="mt-3 d-flex justify-content-center">
-                                <spring:message var="forgotPassword" code="forgotPassword.title"/>
-                                <input class="btn rounded-box button-primary" type="submit" value="${forgotPassword}">
+                                <button class="btn rounded-box button-primary">
+                                    <spring:message code="forgotPassword.title"/>
+                                </button>
                             </div>
 
                             <%--                            <div class="mb-4">--%>

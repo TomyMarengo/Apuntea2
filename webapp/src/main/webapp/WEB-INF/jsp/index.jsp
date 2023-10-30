@@ -6,7 +6,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="halloween">
+<html lang="en">
 
 <head>
     <meta charset="utf-8"/>

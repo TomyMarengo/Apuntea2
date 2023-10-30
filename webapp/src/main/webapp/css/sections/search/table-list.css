@@ -103,18 +103,29 @@
 }
 
 .search-pill button:nth-child(2) {
+    border-radius: 0;
+}
+
+.search-pill button:nth-child(3) {
     border-radius: 0 50px 50px 0;
 }
 
 .search-pill button:not(.active) {
-    opacity: 65%;
-}
-
-.search-pill button:hover {
+    opacity: 0.4;
     background-color: var(--bg);
     color: var(--primary);
 }
 
-.search-pill button:hover img {
+.search-pill button:not(.active) img {
+    filter: var(--filter-primary);
+}
+
+.search-pill button:not(.active):hover {
+    opacity: 1;
+    background-color: var(--bg);
+    color: var(--primary);
+}
+
+.search-pill button:not(.active):hover img {
     filter: var(--filter-primary);
 }

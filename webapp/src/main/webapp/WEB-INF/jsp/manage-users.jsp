@@ -8,7 +8,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="halloween" data-search-view="horizontal">
+<html lang="en" data-search-view="horizontal">
 
 <head>
     <meta charset="utf-8"/>
@@ -58,7 +58,7 @@
                    action="${searchUrl}"
                    method="get"
                    id="searchForm">
-            <div class="row row-cols-1 row-cols-lg-2 justify-content-center" >
+            <div class="row row-cols-1 row-cols-lg-2 justify-content-center">
 
 
                 <div class="col col-lg-5">
@@ -86,7 +86,8 @@
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <a class="btn nav-icon-button" href="${baseUrl}/manage/careers" data-bs-toggle="tooltip" data-bs-placement="right"
+        <a class="btn nav-icon-button" href="${baseUrl}/manage/careers" data-bs-toggle="tooltip"
+           data-bs-placement="right"
            data-bs-title="<spring:message code="manageCareers.title"/>" data-bs-trigger="hover">
             <img src="<c:url value="/svg/books.svg"/>"
                  alt="<spring:message code="manageUsers.title"/>"
@@ -138,16 +139,16 @@
                             </c:choose>
                             <c:forEach var="role" items="${item.roles}" begin="1">
                                 - <c:choose>
-                                    <c:when test="${role eq 'ROLE_STUDENT'}">
-                                        <spring:message code="role.student"/>
-                                    </c:when>
-                                    <c:when test="${role eq 'ROLE_MODERATOR'}">
-                                        <spring:message code="role.moderator"/>
-                                    </c:when>
-                                    <c:when test="${role eq 'ROLE_ADMIN'}">
-                                        <spring:message code="role.admin"/>
-                                    </c:when>
-                                </c:choose>
+                                <c:when test="${role eq 'ROLE_STUDENT'}">
+                                    <spring:message code="role.student"/>
+                                </c:when>
+                                <c:when test="${role eq 'ROLE_MODERATOR'}">
+                                    <spring:message code="role.moderator"/>
+                                </c:when>
+                                <c:when test="${role eq 'ROLE_ADMIN'}">
+                                    <spring:message code="role.admin"/>
+                                </c:when>
+                            </c:choose>
                             </c:forEach>
                         </td>
                         <td>
@@ -223,7 +224,7 @@
                     <spring:message code="BanUserForm.explain" var="banMessagePlaceholder"/>
                     <label for="reason"></label>
                     <form:textarea name="reason" class="form-control mt-3" id="reason"
-                              placeholder="${banMessagePlaceholder}" path="reason"/>
+                                   placeholder="${banMessagePlaceholder}" path="reason"/>
                     <form:errors cssClass="text-danger" path="reason" element="p"/>
                 </div>
 
@@ -232,8 +233,8 @@
                     <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input id="banUserButton" type="submit" class="btn rounded-box button-primary" value="<spring:message
-                                                code="banUser"/>"/>
+                    <button id="banUserButton" class="btn rounded-box button-primary"><spring:message
+                            code="banUser"/></button>
                 </div>
 
                 <form:input type="hidden" path="userId" id="banUserId" value=""/>
@@ -268,8 +269,8 @@
                     <button type="button" class="btn rounded-box button-secondary"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input id="unbanUserButton" type="submit" class="btn rounded-box button-primary" value="<spring:message
-                                                code="unbanUser"/>"/>
+                    <button id="unbanUserButton" class="btn rounded-box button-primary"><spring:message
+                            code="unbanUser"/></button>
                 </div>
 
                 <form:input type="hidden" path="userId" id="unbanUserId" value=""/>
@@ -302,10 +303,10 @@
 
 <script>
     <c:if test="${userBanned eq true}">
-        displayToast('<spring:message code="toast.userBanned"/>')
+    displayToast('<spring:message code="toast.userBanned"/>')
     </c:if>
     <c:if test="${userUnbanned eq true}">
-        displayToast('<spring:message code="toast.userUnbanned"/>')
+    displayToast('<spring:message code="toast.userUnbanned"/>')
     </c:if>
 </script>
 

@@ -6,7 +6,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="halloween">
+<html lang="en">
 
 <head>
     <meta charset="utf-8"/>
@@ -111,13 +111,12 @@
                 </div>
 
                 <div class="mt-5 d-flex justify-content-center" id="edit-info-button">
-                    <input type="button" class="btn rounded-box button-primary" value="<spring:message code="editInformation"/>">
+                    <button type="button" class="btn rounded-box button-primary"><spring:message code="editInformation"/></button>
                 </div>
 
                 <div class="mt-5 d-flex justify-content-center d-none" id="update-info">
-                    <spring:message var="update" code="update"/>
-                    <input type="button" class="btn rounded-box button-secondary" id="cancel-edit-button" value="<spring:message code="close"/>">
-                    <input class="btn rounded-box button-primary mx-3" id="update-button" type="submit" value="${update}">
+                    <button type="button" class="btn rounded-box button-secondary" id="cancel-edit-button"><spring:message code="close"/></button>
+                    <button class="btn rounded-box button-primary mx-3"><spring:message code="update"/></button>
                 </div>
 
             </form:form>

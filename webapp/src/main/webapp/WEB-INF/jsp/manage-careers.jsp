@@ -8,7 +8,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="halloween" data-search-view="horizontal">
+<html lang="en" data-search-view="horizontal">
 
 <head>
     <meta charset="utf-8"/>
@@ -273,8 +273,7 @@
                     <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input type="submit" class="btn rounded-box button-primary" value="<spring:message
-                                            code="link"/>"/>
+                    <button class="btn rounded-box button-primary"><spring:message code="link"/></button>
                 </div>
             </form:form>
         </div>
@@ -327,8 +326,8 @@
                     <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input type="submit" class="btn rounded-box button-primary" value="<spring:message
-                                            code="create"/>"/>
+                    <button class="btn rounded-box button-primary"><spring:message
+                            code="create"/></button>
                 </div>
             </form:form>
         </div>

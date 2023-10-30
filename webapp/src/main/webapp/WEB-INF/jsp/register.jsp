@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="halloween">
+<html lang="en">
 
 <head>
     <meta charset="utf-8"/>
@@ -67,13 +67,13 @@
                                 <spring:message var="registerPassword" code="password"/>
                                 <form:input path="password" type="password" id="password" class="form-control bg-bg"
                                             placeholder="${registerPassword}" required="true"/>
-                                <span class="input-group-text input-group-icon clickable"
-                                      onclick="password_show_hide();">
+                                <button type="button" class="input-group-text input-group-icon"
+                                      onclick="passwordShowHide()">
                                     <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
                                          class="icon-xs fill-dark-primary"/>
                                     <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
                                          class="d-none icon-xs fill-dark-primary"/>
-                                </span>
+                                </button>
                             </div>
                             <form:errors path="password" cssClass="text-danger" element="p"/>
 
@@ -144,17 +144,17 @@
 
 
                             <div class="mt-3 d-flex justify-content-center">
-                                <spring:message var="register" code="register.title"/>
-                                <input class="btn rounded-box button-primary" type="submit" value="${register}">
+                                <button class="btn rounded-box button-primary">
+                                    <spring:message code="register.title"/>
+                                </button>
                             </div>
 
                         </form:form>
 
                         <div class="d-flex align-items-center justify-content-center mt-3">
                             <p class="mb-0 me-2"><spring:message code="register.have"/></p>
-                            <a href="./login">
-                                <button type="button" class="btn login-register-button box"><spring:message
-                                        code="login.title"/></button>
+                            <a href="./login" class="btn login-register-button box">
+                                <spring:message code="login.title"/>
                             </a>
                         </div>
 

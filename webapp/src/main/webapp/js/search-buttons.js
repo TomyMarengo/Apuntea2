@@ -96,29 +96,51 @@ if (deselectAllButton)
 
 const selectOnlyFoldersButton = document.getElementById('selectOnlyFoldersButton');
 const selectOnlyFilesButton = document.getElementById('selectOnlyFilesButton');
+const selectAllCategoriesButton = document.getElementById('selectAllCategoriesButton');
+
 const searchForm = document.getElementById('searchForm');
 const categorySelect = document.getElementById('categorySelect');
+const categorySelectContainer = document.getElementById('categorySelectContainer');
+const sortBySelect = document.getElementById('sortBySelect');
 
-if (categorySelect.value === "directory")
+if (categorySelect.value === "directory") {
     selectOnlyFoldersButton.classList.add('active');
-
-if (categorySelect.value !== "directory" && categorySelect.value !== "all")
+}
+else if (categorySelect.value === "all") {
+    selectAllCategoriesButton.classList.add('active');
+}
+else {
     selectOnlyFilesButton.classList.add('active');
+}
+
+if (categorySelect.value === "directory" || categorySelect.value === "all") {
+    categorySelectContainer.style.width = '0px';
+}
 
 selectOnlyFoldersButton.addEventListener('click', () => {
-    if (categorySelect.value === "directory")
-        categorySelect.value = "all";
-    else
+    if (categorySelect.value !== "directory") {
         categorySelect.value = "directory";
-    searchForm.submit();
+        categorySelectContainer.style.display = 'none';
+        sortBySelect.value = "date";
+        searchForm.submit();
+    }
+});
+
+selectAllCategoriesButton.addEventListener('click', () => {
+    if (categorySelect.value !== "all") {
+        categorySelect.value = "all";
+        categorySelectContainer.style.display = 'none';
+        sortBySelect.value = "date";
+        searchForm.submit();
+    }
 });
 
 selectOnlyFilesButton.addEventListener('click', () => {
-    if (categorySelect.value !== "directory" && categorySelect.value !== "all")
-        categorySelect.value = "all";
-    else
+    if (categorySelect.value === "directory" || categorySelect.value === "all") {
+        categorySelectContainer.style.display = 'flex';
         categorySelect.value = "note";
-    searchForm.submit();
+        searchForm.submit();
+    }
 });
 
 function submitSearchForm() {

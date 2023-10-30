@@ -7,13 +7,15 @@ const baseUrl = currentUrl + path
 
 // Obtener el valor del estado almacenado en el localStorage
 const storedTheme = localStorage.getItem('theme');
-if (!storedTheme) {
-    // Si no hay un valor almacenado, se establece el valor por defecto
-    localStorage.setItem('theme', 'light');
-}
+
 
 // Verificar y mostrar la vista según el valor almacenado
-if (storedTheme === 'light') {
+if (storedTheme === 'halloween' || !storedTheme) {
+    darkModeIcon.src = `${baseUrl}/svg/sun.svg`;
+    document.documentElement.setAttribute('data-bs-theme', 'halloween');
+    moveGhost();
+}
+else if (storedTheme === 'light') {
     darkModeIcon.src = `${baseUrl}/svg/moon.svg`;
     document.documentElement.setAttribute('data-bs-theme', 'light');
     dontMoveGhost();
@@ -23,11 +25,7 @@ else if (storedTheme === 'dark') {
     document.documentElement.setAttribute('data-bs-theme', 'dark');
     dontMoveGhost();
 }
-else if (storedTheme === 'halloween') {
-    darkModeIcon.src = `${baseUrl}/svg/sun.svg`;
-    document.documentElement.setAttribute('data-bs-theme', 'halloween');
-    moveGhost();
-}
+
 
 function toggleDarkMode() {
     if (localStorage.getItem('theme') === 'light') {

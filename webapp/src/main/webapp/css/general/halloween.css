@@ -12,12 +12,16 @@
     cursor: url('../../image/axe.cur'), auto !important;
 }
 
-[data-bs-theme=halloween] a, [data-bs-theme=halloween] a *, [data-bs-theme=halloween] button, [data-bs-theme=halloween] button * {
-    cursor: url('../../image/knife_auto.cur'), pointer !important;
+/* input not disabled */
+[data-bs-theme=halloween] input:not([disabled]), [data-bs-theme=halloween] input:not([disabled]) *, [data-bs-theme=halloween] textarea:not([disabled]), [data-bs-theme=halloween] textarea:not([disabled]) * {
+    cursor: url('../../image/knife_text.cur'), text !important;
 }
 
-[data-bs-theme=halloween] input, [data-bs-theme=halloween] input *, [data-bs-theme=halloween] textarea, [data-bs-theme=halloween] textarea * {
-    cursor: url('../../image/knife_text.cur'), text !important;
+[data-bs-theme=halloween] a, [data-bs-theme=halloween] a *, [data-bs-theme=halloween] button, [data-bs-theme=halloween] button *,
+[data-bs-theme=halloween] input[type=checkbox], [data-bs-theme=halloween] input[type=radio],
+[data-bs-theme=halloween] input[type=checkbox] + label, [data-bs-theme=halloween] input[type=radio] + label
+{
+    cursor: url('../../image/knife_auto.cur'), pointer !important;
 }
 
 [data-bs-theme=halloween] .nav-icon-button img, [data-bs-theme=halloween] .dropdown-button-container img {

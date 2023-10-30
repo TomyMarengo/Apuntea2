@@ -8,7 +8,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="halloween" data-search-view="horizontal">
+<html lang="en" data-search-view="horizontal">
 
 <head>
     <meta charset="utf-8"/>
@@ -159,42 +159,16 @@
                     <spring:message code="folders"/>
                 </button>
 
+                <button type="button" id="selectAllCategoriesButton">
+                    <spring:message code="category.all"/>
+                </button>
+
                 <button type="button" id="selectOnlyFilesButton">
                     <spring:message code="files"/>
                     <img src="<c:url value="/svg/file.svg"/>" alt="<spring:message code="folder"/>"
                          class="icon-s fill-bg"/>
                 </button>
             </div>
-
-            <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
-                <div class="input-group">
-                    <form:select path="category" class="form-select bg-bg" id="categorySelect"
-                                 onchange="submitSearchForm()">
-                        <form:option
-                                value="note"><spring:message
-                                code="search.category.all"/></form:option>
-                        <form:option
-                                value="theory"><spring:message
-                                code="search.category.theory"/></form:option>
-                        <form:option
-                                value="practice"><spring:message
-                                code="search.category.practice"/></form:option>
-                        <form:option
-                                value="exam"><spring:message
-                                code="search.category.exam"/></form:option>
-                        <form:option
-                                value="other"><spring:message
-                                code="search.category.other"/></form:option>
-                        <form:option cssClass="d-none"
-                                value="directory"/>
-                        <form:option cssClass="d-none"
-                                value="all"/>
-                    </form:select>
-                </div>
-            </c:if>
-            <c:if test="${searchForm.category eq 'all' or searchForm.category eq 'directory'}">
-                    <form:hidden path="category" class="form-select bg-bg" id="categorySelect"/>
-            </c:if>
 
             <div class="input-group">
                 <button class="input-group-text input-group-icon" id="ascDescButton">
@@ -213,21 +187,55 @@
                     </c:if>
                 </button>
 
-                <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect" onchange="submitSearchForm()">
+                <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect" cssStyle="width:270px;" onchange="submitSearchForm()">
+                    <form:option value="date"><spring:message code="search.sort.date"/></form:option>
                     <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
                         <form:option value="score"><spring:message code="search.sort.score"/></form:option>
                     </c:if>
                     <form:option value="name"><spring:message code="search.sort.name"/></form:option>
-                    <form:option value="date"><spring:message code="search.sort.date"/></form:option>
                 </form:select>
             </div>
+
+            <div class="input-group" id="categorySelectContainer">
+                <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
+                    <div class="input-group">
+                        <form:select path="category" class="form-select bg-bg" id="categorySelect"
+                                     onchange="submitSearchForm()">
+                            <form:option
+                                    value="note"><spring:message
+                                    code="search.category.all"/></form:option>
+                            <form:option
+                                    value="theory"><spring:message
+                                    code="search.category.theory"/></form:option>
+                            <form:option
+                                    value="practice"><spring:message
+                                    code="search.category.practice"/></form:option>
+                            <form:option
+                                    value="exam"><spring:message
+                                    code="search.category.exam"/></form:option>
+                            <form:option
+                                    value="other"><spring:message
+                                    code="search.category.other"/></form:option>
+                            <form:option cssClass="d-none"
+                                    value="directory"/>
+                            <form:option cssClass="d-none"
+                                    value="all"/>
+                        </form:select>
+                    </div>
+                </c:if>
+                <c:if test="${searchForm.category eq 'all' or searchForm.category eq 'directory'}">
+                        <form:hidden path="category" cssClass="form-select bg-bg d-none" id="categorySelect"/>
+                </c:if>
+            </div>
+
+
         </div>
 
         <!-- BUTTONS -->
         <c:if test="${not empty results}">
             <div class="d-flex">
                 <div id="selectedButtons" class="align-items-center" style="display: none;">
-                    <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                    <button type="button" id="deselectAllButton" class="btn nav-icon-button" data-bs-toggle="tooltip"
                             data-bs-placement="bottom"
                             data-bs-title="<spring:message code="search.button.deselectAll"/>"
                             data-bs-trigger="hover">
@@ -237,7 +245,7 @@
                     <strong id="selectedCount" class="text-dark-primary"> 0 </strong>
                     <spring:message code="search.selected"/>
                 </span>
-                    <button id="downloadSelectedButton" class="btn nav-icon-button" type="button"
+                    <button type="button" id="downloadSelectedButton" class="btn nav-icon-button"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
                             data-bs-trigger="hover">
@@ -245,13 +253,13 @@
                     </button>
                 </div>
 
-                <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                <button type="button" id="selectAllButton" class="btn nav-icon-button" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
                         data-bs-trigger="hover">
                     <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary"/>
                 </button>
 
-                <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                <button type="button" id="searchViewToggle" class="btn nav-icon-button" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
                         data-horizontal="<spring:message code="search.button.listView"/>"
                         data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
@@ -259,13 +267,12 @@
                          class="icon-s fill-dark-primary"/>
                 </button>
 
-                <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button"
+                <button type="button" id="pageSizeToggle" class="btn nav-icon-button page-size-button"
                         data-bs-toggle="tooltip"
                         data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
                         data-bs-trigger="hover" onclick="changePageSize(${searchForm.pageSize})">
                     <c:out value="${searchForm.pageSize}"/>
                 </button>
-
             </div>
         </c:if>
     </div>
