@@ -73,8 +73,10 @@ public class SearchServiceImpl implements SearchService {
 
         List<Searchable> results = new ArrayList<>();
 
-        results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null)));
-        results.addAll(noteDao.findNoteByIds(noteIds));
+        if (!directoryIds.isEmpty())
+            results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null), sa.getSortBy(), sa.isAscending()));
+        if (!noteIds.isEmpty())
+            results.addAll(noteDao.findNoteByIds(noteIds, sa.getSortBy(), sa.isAscending()));
 
         return new Page<>(
                 results,
@@ -108,8 +110,10 @@ public class SearchServiceImpl implements SearchService {
 
         List<Searchable> results = new ArrayList<>();
 
-        results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null)));
-        results.addAll(noteDao.findNoteByIds(noteIds));
+        if (!directoryIds.isEmpty())
+            results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null), sa.getSortBy(), sa.isAscending()));
+        if (!noteIds.isEmpty())
+            results.addAll(noteDao.findNoteByIds(noteIds, sa.getSortBy(), sa.isAscending()));
 
         return new Page<>(
                 results,

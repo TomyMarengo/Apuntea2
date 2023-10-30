@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
@@ -14,6 +15,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import static ar.edu.itba.paw.models.NameConstants.NAME;
 
 @Repository
 public class NoteJpaDao implements NoteDao {
@@ -120,11 +123,16 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
-    public List<Note> findNoteByIds(List<UUID> noteIds) {
+    public List<Note> findNoteByIds(List<UUID> noteIds, SearchArguments.SortBy sortBy, boolean ascending) {
         if (noteIds.isEmpty()) return Collections.emptyList();
-        return em.createQuery("FROM Note n WHERE n.id IN :noteIds", Note.class)
+        return em.createQuery(String.format("FROM Note n WHERE n.id IN :noteIds ORDER BY %s %s", JdbcDaoUtils.SORTBY.getOrDefault(sortBy, NAME), ascending? "ASC" : "DESC"), Note.class)
                 .setParameter("noteIds", noteIds)
                 .getResultList();
+    }
+
+    @Override
+    public List<Note> findNoteByIds(List<UUID> noteIds) {
+        return findNoteByIds(noteIds, SearchArguments.SortBy.DATE, true);
     }
 
 }

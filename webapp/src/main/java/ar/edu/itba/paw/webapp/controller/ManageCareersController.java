@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.dtos.InstitutionDataDto;
 import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.institutional.dtos.SubjectDto;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.institutional.CareerNotFoundException;
 import ar.edu.itba.paw.services.*;
@@ -73,7 +74,7 @@ public class ManageCareersController {
         List<Subject> ownedSubjects = subjectService.getSubjectsByCareer(careerId);
         mav.addObject("ownedSubjects", ownedSubjects);
 
-        List<Subject> unownedSubjects = subjectService.getSubjectsByCareerComplemented(careerId);
+        List<SubjectDto> unownedSubjects = subjectService.getSubjectsByCareerComplemented(careerId);
         mav.addObject("unownedSubjects", toSafeJson(unownedSubjects));
         return mav;
     }

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.institutional.dtos.SubjectDto;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.institutional.InvalidSubjectException;
@@ -61,8 +62,8 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional
-    public List<Subject> getSubjectsByCareerComplemented(UUID careerId) {
-        return subjectDao.getSubjectsByCareerIdComplemented(careerId);
+    public List<SubjectDto> getSubjectsByCareerComplemented(UUID careerId) {
+        return subjectDao.getSubjectsByCareerIdComplemented(careerId).stream().map(SubjectDto::new).collect(Collectors.toList());
     }
 
     @Override

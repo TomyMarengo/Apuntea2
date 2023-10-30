@@ -1,11 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.SearchArguments;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.directory.DirectoryPath;
 import ar.edu.itba.paw.models.directory.Favorite;
-import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,6 +11,8 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static ar.edu.itba.paw.models.NameConstants.NAME;
 
 @Repository
 public class DirectoryJpaDao implements DirectoryDao {
@@ -52,12 +52,14 @@ public class DirectoryJpaDao implements DirectoryDao {
 
     @Override
     public Optional<Directory> getDirectoryById(UUID directoryId, UUID currentUserId) {
-        return em.createQuery("SELECT d FROM Directory d JOIN d.user u WHERE d.id = :directoryId AND (d.visible = true OR u.userId = :currentUserId)", Directory.class)
+        Optional<Directory> d =
+         em.createQuery("SELECT d FROM Directory d WHERE d.id = :directoryId AND (d.visible = true OR d.user.userId = :currentUserId)", Directory.class)
                 .setParameter("directoryId", directoryId)
                 .setParameter("currentUserId", currentUserId)
                 .getResultList()
                 .stream()
                 .findFirst();
+        return d;
     }
 
     @Override
@@ -95,7 +97,7 @@ public class DirectoryJpaDao implements DirectoryDao {
 
     @Override
     public List<Directory> getFavorites(UUID userId) {
-        return em.createQuery("SELECT d FROM Favorite f JOIN f.directory d JOIN d.user u WHERE f.user.id = :userId AND (d.visible = true OR u.id = :userId)", Directory.class)
+        return em.createQuery("SELECT d FROM Favorite f JOIN f.directory d LEFT JOIN d.user u WHERE f.user.id = :userId AND (d.visible = true OR u.id = :userId)", Directory.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
@@ -115,10 +117,10 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
-    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser) {
-        // TODO: Sort
+    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser, SearchArguments.SortBy sortBy, boolean ascending) {
+        // TODO: make more readable
         if (directoryIds.isEmpty()) return Collections.emptyList();
-        List<Directory> directories = em.createQuery("FROM Directory d WHERE d.id IN :directoryIds ", Directory.class)
+        List<Directory> directories = em.createQuery(String.format("FROM Directory d WHERE d.id IN :directoryIds ORDER BY %s %s", JdbcDaoUtils.SORTBY.getOrDefault(sortBy, NAME), ascending? "ASC" : "DESC"), Directory.class)
                 .setParameter("directoryIds", directoryIds)
                 .getResultList();
         // TODO: Optimize
@@ -130,6 +132,10 @@ public class DirectoryJpaDao implements DirectoryDao {
             favorites.forEach(dir -> dir.setFavorite(true));
         }
         return directories;
+    }
+
+    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser) {
+        return findDirectoriesByIds(directoryIds, currentUser, SearchArguments.SortBy.DATE, true);
     }
 
 }
