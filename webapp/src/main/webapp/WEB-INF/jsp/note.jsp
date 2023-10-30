@@ -319,8 +319,7 @@
                                         code="category"/></label>
                                 <form:select path="category" class="form-select" id="categorySelect">
                                     <form:option value="theory"><spring:message code="category.theory"/></form:option>
-                                    <form:option value="practice"><spring:message
-                                            code="category.practice"/></form:option>
+                                    <form:option value="practice"><spring:message code="category.practice"/></form:option>
                                     <form:option value="exam"><spring:message code="category.exam"/></form:option>
                                     <form:option value="other"><spring:message code="category.other"/></form:option>
                                 </form:select>
@@ -370,7 +369,6 @@
     const noteId = "${noteId}";
 </script>
 
-<script src="<c:url value="/js/search-buttons.js"/>"></script>
 <script src="<c:url value="/js/crud-buttons.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/notes.js"/>"></script>
@@ -385,7 +383,7 @@
     <c:if test="${errorsEditNoteForm == null}">
         <script>
             editNoteForm.querySelectorAll('#name')[0].value = "<c:out value="${note.name}"/>";
-            editNoteForm.querySelectorAll('#categorySelect')[0].value = "<c:out value="${note.category}"/>";
+            editNoteForm.querySelectorAll('#categorySelect')[0].value = "<c:out value="${note.category}"/>".toLowerCase();
             editNoteForm.querySelectorAll('#visible')[0].value = "<c:out value="${note.visible}"/>";
         </script>
     </c:if>

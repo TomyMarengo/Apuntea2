@@ -50,7 +50,9 @@
 
 <!-- USER INFO & BUTTONS "VER" -->
 <main class="container-fluid px-5 mt-5">
-    <section class="row row-cols-1 row-cols-xl-2">
+    <c:if test="${not empty favorites}"><section class="row row-cols-1 row-cols-xl-2"></c:if>
+    <c:if test="${empty favorites}"><section class="row row-cols-1 row-cols-xl-2 justify-content-center"></c:if>
+
         <!-- User info column -->
         <%--        <div class="col-12 col-lg-4 col-xl-3 ">--%>
         <%--            <div class="card user-card box mb-5 mb-lg-0">--%>
@@ -161,42 +163,43 @@
         </c:if>
 
 
-        <!-- ROOT DIRECTORIES -->
-        <div class="col">
-            <ul class="mini-nav">
-                <c:forEach items="${root_directories}" var="subjects" varStatus="i">
-                    <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
-                    <!--TAB-->
-                    <li class="mini-nav-item">
-                        <button class="btn mini-nav-button root-dir text-center ${i.index eq 0 ? 'active' : ''}"
-                                data-toggle="tab" role="tab" aria-selected="true">
-                            <spring:message code="profileNotes.directories.year" arguments="${ordinal}"/>
-                        </button>
-                    </li>
-                </c:forEach>
-            </ul>
-            <div class="tab-content bg-bg">
-                <c:forEach items="${root_directories}" var="subjects" varStatus="i">
-                    <div class="tab-pane root-dir-list fade ${i.index eq 0 ? 'active' : ''}" role="tabpanel">
-                        <div class="file-list gap-5 justify-content-center align-items-center">
-                            <c:forEach items="${subjects.value}" var="rd">
-                                <a class="align-self-center"
-                                   href="<c:url value="../directory/${rd.rootDirectoryId}"/>">
-                                    <div class="d-flex flex-column gap-2 align-items-center">
-                                        <img src="<c:url value="/svg/folder.svg"/>"
-                                             alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
-                                        <!-- max 2 lines-->
-                                        <span class="fw-bold flex-wrap justify-content-center folder-name">
-                                                <c:out value="${rd.name}"/>
-                                            </span>
-                                    </div>
-                                </a>
-                            </c:forEach>
+        <c:if test="${not empty favorites}"><div class="col"></c:if>
+        <c:if test="${empty favorites}"><div class="col w-75"></c:if>
+            <!-- ROOT DIRECTORIES -->
+                <ul class="mini-nav">
+                    <c:forEach items="${root_directories}" var="subjects" varStatus="i">
+                        <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
+                        <!--TAB-->
+                        <li class="mini-nav-item">
+                            <button class="btn mini-nav-button root-dir text-center ${i.index eq 0 ? 'active' : ''}"
+                                    data-toggle="tab" role="tab" aria-selected="true">
+                                <spring:message code="profileNotes.directories.year" arguments="${ordinal}"/>
+                            </button>
+                        </li>
+                    </c:forEach>
+                </ul>
+                <div class="tab-content bg-bg">
+                    <c:forEach items="${root_directories}" var="subjects" varStatus="i">
+                        <div class="tab-pane root-dir-list fade ${i.index eq 0 ? 'active' : ''}" role="tabpanel">
+                            <div class="file-list gap-5 justify-content-center align-items-center">
+                                <c:forEach items="${subjects.value}" var="rd">
+                                    <a class="align-self-center"
+                                       href="<c:url value="../directory/${rd.rootDirectoryId}"/>">
+                                        <div class="d-flex flex-column gap-2 align-items-center">
+                                            <img src="<c:url value="/svg/folder.svg"/>"
+                                                 alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
+                                            <!-- max 2 lines-->
+                                            <span class="fw-bold flex-wrap justify-content-center folder-name">
+                                                    <c:out value="${rd.name}"/>
+                                                </span>
+                                        </div>
+                                    </a>
+                                </c:forEach>
+                            </div>
                         </div>
-                    </div>
-                </c:forEach>
+                    </c:forEach>
+                </div>
             </div>
-        </div>
 
 
     </section>

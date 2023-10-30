@@ -1137,7 +1137,7 @@
     const liveToast = document.getElementById('liveToast');
     for (let copyButton of document.getElementsByClassName('copy-button')) {
         copyButton.addEventListener('click', () => {
-            displayToast('toast.linkCopied')
+            displayToast('<spring:message code="toast.linkCopied"/>')
         })
     }
 </script>

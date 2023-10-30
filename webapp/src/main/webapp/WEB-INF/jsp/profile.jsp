@@ -44,7 +44,7 @@
 </header>
 
 <section class="container d-flex justify-content-center mt-3">
-    <div class="card box">
+    <div class="card box w-75">
         <div class="card-body p-3 p-md-5 mx-4">
             <c:url var="editUserUrl" value="/profile"/>
             <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
@@ -64,8 +64,8 @@
                     </label>
                     <form:errors path="profilePicture" cssClass="text-danger mt-3 align-self-center" element="p"/>
                 </div>
-                <div class="mt-5 row row-cols-1 row-cols-md-2">
-                    <div class="col">
+                <div class="mt-3 row row-cols-1 row-cols-md-2">
+                    <div>
                         <div class="px-3 py-2">
                             <spring:message var="profileFirstName" code="name"/>
                             <p><strong><spring:message code="name"/></strong></p>
@@ -92,7 +92,7 @@
                         </div>
                     </div>
 
-                    <div class="col">
+                    <div class="d-flex flex-column justify-content-between">
                         <div class="d-flex flex-column px-3 py-2 gap-1">
                             <p><strong><spring:message code="email"/></strong></p>
                             <span class="card-text">${user.email}</span>
