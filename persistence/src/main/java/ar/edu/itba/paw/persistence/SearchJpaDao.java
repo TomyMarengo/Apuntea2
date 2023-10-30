@@ -117,9 +117,9 @@ public class SearchJpaDao implements SearchDao {
     private void applyGeneralFilters(QueryCreator queryCreator, SearchArguments sa) {
         sa.getCategory().ifPresent(c -> {
             if (c == Category.NOTE) {
-                queryCreator.addConditionIfPresent(CATEGORY, "!=", "AND", Optional.of(Category.DIRECTORY.toString().toLowerCase()));
+                queryCreator.addConditionIfPresent(CATEGORY, "!=", "AND", Optional.of(Category.DIRECTORY.toString()));
             } else {
-                queryCreator.addConditionIfPresent(CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString).map(String::toLowerCase));
+                queryCreator.addConditionIfPresent(CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString));
             }
         });
 

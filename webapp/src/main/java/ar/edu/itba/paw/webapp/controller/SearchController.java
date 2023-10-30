@@ -47,7 +47,7 @@ public class SearchController {
                     searchForm.getInstitutionId(),
                     searchForm.getCareerId(),
                     searchForm.getSubjectId(),
-                    searchForm.getCategory(),
+                    searchForm.getNormalizedCategory(),
                     searchForm.getWord(),
                     searchForm.getSortBy(),
                     searchForm.getAscending(),

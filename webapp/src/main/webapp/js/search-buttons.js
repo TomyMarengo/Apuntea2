@@ -97,27 +97,27 @@ if (deselectAllButton)
 const selectOnlyFoldersButton = document.getElementById('selectOnlyFoldersButton');
 const selectOnlyFilesButton = document.getElementById('selectOnlyFilesButton');
 const searchForm = document.getElementById('searchForm');
-const typeSelect = document.getElementById('typeSelect');
+const categorySelect = document.getElementById('categorySelect');
 
-if (typeSelect.value === "directory")
+if (categorySelect.value === "directory")
     selectOnlyFoldersButton.classList.add('active');
 
-if (typeSelect.value === "note")
+if (categorySelect.value !== "directory" && categorySelect.value !== "all")
     selectOnlyFilesButton.classList.add('active');
 
 selectOnlyFoldersButton.addEventListener('click', () => {
-    if (typeSelect.value === "directory")
-        typeSelect.value = "";
+    if (categorySelect.value === "directory")
+        categorySelect.value = "all";
     else
-        typeSelect.value = "directory";
+        categorySelect.value = "directory";
     searchForm.submit();
 });
 
 selectOnlyFilesButton.addEventListener('click', () => {
-    if (typeSelect.value === "note")
-        typeSelect.value = "";
+    if (categorySelect.value !== "directory" && categorySelect.value !== "all")
+        categorySelect.value = "all";
     else
-        typeSelect.value = "note";
+        categorySelect.value = "note";
     searchForm.submit();
 });
 

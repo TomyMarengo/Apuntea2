@@ -15,12 +15,7 @@ public enum Category {
         this.displayName = displayName;
     }
 
-    @Override
-    public String toString() {
-        return displayName;
-    }
-
     public String getFormattedName() {
-        return toString();
+        return displayName;
     }
 }

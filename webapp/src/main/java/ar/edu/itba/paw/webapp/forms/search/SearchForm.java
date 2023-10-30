@@ -18,11 +18,8 @@ public class SearchForm {
     @ValidUuid
     private UUID subjectId;
 
-    @Pattern(regexp = "directory|note|")
-    private String type = "note";
-
-    @Pattern(regexp = "theory|practice|exam|other|")
-    private String category = "";
+    @Pattern(regexp = "note|directory|theory|practice|exam|other|all")
+    private String category = "note";
 
     @Pattern(regexp = "score|name|date")
     private String sortBy = "date";
@@ -45,15 +42,6 @@ public class SearchForm {
     public void setInstitutionId(UUID institutionId) {
         this.institutionId = institutionId;
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
 
     public UUID getCareerId() {
         return careerId;
@@ -117,5 +105,11 @@ public class SearchForm {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public String getNormalizedCategory() {
+        if (category.equals("all"))
+            return null;
+        return category;
     }
 }

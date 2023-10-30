@@ -8,10 +8,8 @@ import javax.validation.constraints.Size;
 
 public class NavigationForm {
 
-    @Pattern(regexp = "directory|note|")
-    private String type = "note";
-    @Pattern(regexp = "theory|practice|exam|other|")
-    private String category = "";
+    @Pattern(regexp = "note|theory|practice|exam|other|")
+    private String category = "note";
 
     @Pattern(regexp = "score|name|date")
     private String sortBy = "date";
@@ -41,13 +39,6 @@ public class NavigationForm {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getSortBy() {

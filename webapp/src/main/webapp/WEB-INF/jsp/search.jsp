@@ -164,20 +164,14 @@
                     <img src="<c:url value="/svg/file.svg"/>" alt="<spring:message code="folder"/>"
                          class="icon-s fill-bg"/>
                 </button>
-
-                <form:select path="type" class="d-none" id="typeSelect">
-                    <form:option value=""/>
-                    <form:option value="directory"/>
-                    <form:option value="note"/>
-                </form:select>
             </div>
 
-            <c:if test="${searchForm.type eq 'note'}">
+            <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
                 <div class="input-group">
                     <form:select path="category" class="form-select bg-bg" id="categorySelect"
                                  onchange="submitSearchForm()">
                         <form:option
-                                value=""><spring:message
+                                value="note"><spring:message
                                 code="search.category.all"/></form:option>
                         <form:option
                                 value="theory"><spring:message
@@ -191,8 +185,15 @@
                         <form:option
                                 value="other"><spring:message
                                 code="search.category.other"/></form:option>
+                        <form:option cssClass="d-none"
+                                value="directory"/>
+                        <form:option cssClass="d-none"
+                                value="all"/>
                     </form:select>
                 </div>
+            </c:if>
+            <c:if test="${searchForm.category eq 'all' or searchForm.category eq 'directory'}">
+                    <form:hidden path="category" class="form-select bg-bg" id="categorySelect"/>
             </c:if>
 
             <div class="input-group">
@@ -213,7 +214,7 @@
                 </button>
 
                 <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect" onchange="submitSearchForm()">
-                    <c:if test="${searchForm.type eq 'note'}">
+                    <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
                         <form:option value="score"><spring:message code="search.sort.score"/></form:option>
                     </c:if>
                     <form:option value="name"><spring:message code="search.sort.name"/></form:option>
@@ -291,7 +292,7 @@
                     <th class="col-md-2"><spring:message code="owner"/></th>
                     <th class="col-md-1"><spring:message code="createdAt"/></th>
 
-                    <c:if test="${searchForm.type eq 'note'}">
+                    <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
                         <th class="col-md-1"><spring:message code="score"/></th>
                     </c:if>
                     <th class="col-md-2"></th> <!-- ACTIONS -->
@@ -348,7 +349,7 @@
                         <td><spring:message code="date.format"
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
 
-                        <c:if test="${searchForm.type eq 'note'}">
+                        <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
                             <td>
                                 <c:if test="${item.avgScore eq 0}">
                                     <spring:message code="notes.noScore"/>
@@ -589,9 +590,9 @@
 <script src="<c:url value="/js/ascdesc.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
 
+<script src="<c:url value="/js/search-buttons.js"/>"></script>
 <c:if test="${not empty results}">
     <script src="<c:url value="/js/note-list.js"/>"></script>
-    <script src="<c:url value="/js/search-buttons.js"/>"></script>
 </c:if>
 
 <script>
