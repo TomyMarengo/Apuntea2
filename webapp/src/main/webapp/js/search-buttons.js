@@ -88,3 +88,39 @@ function deselectAll() {
 
 if (deselectAllButton)
     deselectAllButton.addEventListener('click', deselectAll);
+
+
+/**************************/
+/**** FILES || FOLDERS ****/
+/*************************/
+
+const selectOnlyFoldersButton = document.getElementById('selectOnlyFoldersButton');
+const selectOnlyFilesButton = document.getElementById('selectOnlyFilesButton');
+const searchForm = document.getElementById('searchForm');
+const typeSelect = document.getElementById('typeSelect');
+
+if (typeSelect.value === "directory")
+    selectOnlyFoldersButton.classList.add('active');
+
+if (typeSelect.value === "note")
+    selectOnlyFilesButton.classList.add('active');
+
+selectOnlyFoldersButton.addEventListener('click', () => {
+    if (typeSelect.value === "directory")
+        typeSelect.value = "";
+    else
+        typeSelect.value = "directory";
+    searchForm.submit();
+});
+
+selectOnlyFilesButton.addEventListener('click', () => {
+    if (typeSelect.value === "note")
+        typeSelect.value = "";
+    else
+        typeSelect.value = "note";
+    searchForm.submit();
+});
+
+function submitSearchForm() {
+    document.getElementById('searchForm').submit();
+}

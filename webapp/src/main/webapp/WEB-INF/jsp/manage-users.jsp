@@ -8,7 +8,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark" data-search-view="horizontal">
+<html lang="en" data-bs-theme="halloween" data-search-view="horizontal">
 
 <head>
     <meta charset="utf-8"/>
@@ -229,10 +229,10 @@
 
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input id="banUserButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input id="banUserButton" type="submit" class="btn rounded-box button-primary" value="<spring:message
                                                 code="banUser"/>"/>
                 </div>
 
@@ -265,10 +265,10 @@
                 </div>
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary"
+                    <button type="button" class="btn rounded-box button-secondary"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input id="unbanUserButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input id="unbanUserButton" type="submit" class="btn rounded-box button-primary" value="<spring:message
                                                 code="unbanUser"/>"/>
                 </div>
 

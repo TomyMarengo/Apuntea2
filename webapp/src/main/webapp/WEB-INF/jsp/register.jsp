@@ -5,7 +5,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="halloween">
 
 <head>
     <meta charset="utf-8"/>
@@ -105,12 +105,12 @@
                                                placeholder="${placeholderInstitution}" autocomplete="off" required/>
 
                                     </div>
-                                    <span class="input-group-text input-group-icon clickable"
+                                    <button type="button" class="input-group-text input-group-icon"
                                           id="eraseInstitutionButton">
                                         <img src="<c:url value="/svg/cross.svg"/>"
                                              alt="<spring:message code="search.sort.image"/>"
                                              class="icon-xs fill-dark-primary"/>
-                                    </span>
+                                    </button>
                                 </div>
 
                                 <form:errors path="institutionId" cssClass="text-danger" element="p"/>
@@ -132,11 +132,11 @@
                                                class="form-control bg-bg special-radius"
                                                placeholder="${placeholderCareer}" autocomplete="off" required/>
                                     </div>
-                                    <span class="input-group-text input-group-icon clickable" id="eraseCareerButton">
+                                    <button type="button" class="input-group-text input-group-icon" id="eraseCareerButton">
                                         <img src="<c:url value="/svg/cross.svg"/>"
                                              alt="<spring:message code="search.sort.image"/>"
                                              class="icon-xs fill-dark-primary"/>
-                                    </span>
+                                    </button>
                                 </div>
 
                                 <form:errors path="careerId" cssClass="text-danger" element="p"/>

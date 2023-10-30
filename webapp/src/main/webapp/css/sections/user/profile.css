@@ -52,7 +52,7 @@ img {
     transition: opacity 0.3s;
     width: 4em;
     height: 4em;
-    filter: invert(70%);
+    color: black;
 }
 
 .layout-image:hover {

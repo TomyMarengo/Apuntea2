@@ -6,7 +6,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="halloween">
 
 <head>
     <meta charset="utf-8"/>
@@ -64,7 +64,7 @@
                     </label>
                     <form:errors path="profilePicture" cssClass="text-danger mt-3 align-self-center" element="p"/>
                 </div>
-                <div class="row row-cols-1 row-cols-md-2">
+                <div class="mt-5 row row-cols-1 row-cols-md-2">
                     <div class="col">
                         <div class="px-3 py-2">
                             <spring:message var="profileFirstName" code="name"/>
@@ -110,14 +110,14 @@
                     </div>
                 </div>
 
-                <div class="mt-5 d-flex justify-content-center d-none" id="update-info">
-                    <spring:message var="update" code="update"/>
-                    <input class="btn rounded-box button-primary mx-3" id="update-button" type="submit" value="${update}">
-                    <input type="button" class="btn rounded-box button-secondary" id="cancel-edit-button" value="<spring:message code="close"/>">
-                </div>
-
                 <div class="mt-5 d-flex justify-content-center" id="edit-info-button">
                     <input type="button" class="btn rounded-box button-primary" value="<spring:message code="editInformation"/>">
+                </div>
+
+                <div class="mt-5 d-flex justify-content-center d-none" id="update-info">
+                    <spring:message var="update" code="update"/>
+                    <input type="button" class="btn rounded-box button-secondary" id="cancel-edit-button" value="<spring:message code="close"/>">
+                    <input class="btn rounded-box button-primary mx-3" id="update-button" type="submit" value="${update}">
                 </div>
 
             </form:form>

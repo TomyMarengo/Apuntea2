@@ -182,23 +182,24 @@
   --gradient-primary-mid: #74cb8e;
   --gradient-primary-bot: #97e1b1;
 
+  --light-primary: #e9ffe6;
+  --light-primary-rgb: 233, 255, 230;
   --primary: #b3e8c3;
   --primary-rgb: 179, 232, 195;
   --dark-primary: #7fb58f;
-  --light-primary: #e9ffe6;
-  --light-primary-rgb: 233, 255, 230;
+    --dark-primary-rgb: 127, 181, 143;
 
   --secondary: #50c4ec;
-  --secondary-rgb: 29, 179, 225;
+  --secondary-rgb: 80, 196, 236;
   --dark-secondary: #2f9cbb;
-  --dark-secondary-rgb: 18, 101, 126;
+  --dark-secondary-rgb: 47, 156, 187;
 
-  --filter-light-primary: invert(94%) sepia(5%) saturate(1402%) hue-rotate(62deg) brightness(104%) contrast(113%);
-  --filter-primary: invert(94%) sepia(11%) saturate(808%) hue-rotate(72deg) brightness(95%) contrast(91%);
-  --filter-dark-primary: invert(75%) sepia(29%) saturate(373%) hue-rotate(85deg) brightness(86%) contrast(85%);
+  --filter-light-primary: invert(84%) sepia(20%) saturate(261%) hue-rotate(68deg) brightness(112%) contrast(110%);
+  --filter-primary: invert(87%) sepia(44%) saturate(210%) hue-rotate(74deg) brightness(96%) contrast(90%);
+  --filter-dark-primary: invert(74%) sepia(13%) saturate(767%) hue-rotate(85deg) brightness(90%) contrast(86%);
 
-  --filter-secondary: invert(93%) sepia(30%) saturate(940%) hue-rotate(2deg) brightness(91%) contrast(96%);
-  --filter-dark-secondary: invert(74%) sepia(27%) saturate(920%) hue-rotate(21deg) brightness(89%) contrast(90%);
+  --filter-secondary: invert(70%) sepia(25%) saturate(1150%) hue-rotate(161deg) brightness(97%) contrast(90%);
+  --filter-dark-secondary: invert(48%) sepia(72%) saturate(471%) hue-rotate(147deg) brightness(97%) contrast(83%);
 
   --filter-text: invert(82%) sepia(83%) saturate(7%) hue-rotate(108deg) brightness(111%) contrast(99%);
   --filter-dark-text: invert(92%) sepia(2%) saturate(1338%) hue-rotate(334deg) brightness(106%) contrast(95%);
@@ -280,11 +281,12 @@
   --gradient-primary-mid: #b2d066;
   --gradient-primary-bot: #dfefb7;
 
+  --light-primary: #e8f3d2;
+  --light-primary-rgb: 232, 243, 210;
   --primary: #bfda7a;
-  --primary-rgb: 179, 232, 195;
+  --primary-rgb: 191, 218, 122;
   --dark-primary: #96c457;
-  --light-primary: #e9ffe6;
-  --light-primary-rgb: 233, 255, 230;
+  --dark-primary-rgb: 150, 196, 87;
 
   --secondary: #e9804d;
   --secondary-rgb: 233, 128, 77;
@@ -294,14 +296,14 @@
   --tertiary: #5e32ba;
   --tertiary-rgb: 94, 50, 186;
 
-  --filter-light-primary: invert(95%) sepia(42%) saturate(210%) hue-rotate(46deg) brightness(101%) contrast(101%);
-  --filter-primary: invert(91%) sepia(17%) saturate(979%) hue-rotate(23deg) brightness(94%) contrast(87%);
-  --filter-dark-primary: invert(75%) sepia(33%) saturate(615%) hue-rotate(42deg) brightness(90%) contrast(90%);
+  --filter-light-primary: invert(88%) sepia(12%) saturate(383%) hue-rotate(43deg) brightness(109%) contrast(91%);
+  --filter-primary: invert(97%) sepia(69%) saturate(781%) hue-rotate(17deg) brightness(95%) contrast(79%);
+  --filter-dark-primary: invert(79%) sepia(31%) saturate(716%) hue-rotate(38deg) brightness(89%) contrast(85%);
 
-  --filter-secondary: invert(57%) sepia(100%) saturate(574%) hue-rotate(327deg) brightness(96%) contrast(90%);
-  --filter-dark-secondary: invert(53%) sepia(85%) saturate(4456%) hue-rotate(353deg) brightness(102%) contrast(84%);
+  --filter-secondary: invert(73%) sepia(24%) saturate(5521%) hue-rotate(326deg) brightness(96%) contrast(90%);
+  --filter-dark-secondary: invert(69%) sepia(67%) saturate(6697%) hue-rotate(350deg) brightness(98%) contrast(89%);
 
-  --filter-tertiary: invert(21%) sepia(36%) saturate(5379%) hue-rotate(251deg) brightness(87%) contrast(94%);
+  --filter-tertiary: invert(17%) sepia(51%) saturate(4476%) hue-rotate(253deg) brightness(100%) contrast(91%);
 
   --filter-text: invert(82%) sepia(83%) saturate(7%) hue-rotate(108deg) brightness(111%) contrast(99%);
   --filter-dark-text: invert(92%) sepia(2%) saturate(1338%) hue-rotate(334deg) brightness(106%) contrast(95%);

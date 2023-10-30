@@ -6,7 +6,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="halloween">
 
 <head>
     <meta charset="utf-8"/>
@@ -50,154 +50,154 @@
 
 <!-- USER INFO & BUTTONS "VER" -->
 <main class="container-fluid px-5 mt-5">
-    <section class="row justify-content-around">
+    <section class="row row-cols-1 row-cols-xl-2">
         <!-- User info column -->
-<%--        <div class="col-12 col-lg-4 col-xl-3 ">--%>
-<%--            <div class="card user-card box mb-5 mb-lg-0">--%>
-<%--                <div class="card-body">--%>
-<%--                    <!-- Profile picture (visible on large screens) -->--%>
-<%--                    <div class="d-none d-lg-flex flex-column">--%>
-<%--                        <div class="profile-picture-small mb-3">--%>
-<%--                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">--%>
-<%--                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"--%>
-<%--                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
+        <%--        <div class="col-12 col-lg-4 col-xl-3 ">--%>
+        <%--            <div class="card user-card box mb-5 mb-lg-0">--%>
+        <%--                <div class="card-body">--%>
+        <%--                    <!-- Profile picture (visible on large screens) -->--%>
+        <%--                    <div class="d-none d-lg-flex flex-column">--%>
+        <%--                        <div class="profile-picture-small mb-3">--%>
+        <%--                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">--%>
+        <%--                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"--%>
+        <%--                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">--%>
+        <%--                            </div>--%>
+        <%--                        </div>--%>
 
-<%--                        <!-- User info -->--%>
-<%--                        <div class="d-flex flex-column gap-2">--%>
-<%--                            <h4 class="card-title fw-bold">${user.displayName}</h4>--%>
-<%--                            <c:forEach items="${user.roles}" var="r">--%>
-<%--                                <span class="card-text">--%>
-<%--                                <c:choose>--%>
-<%--                                    <c:when test="${r eq 'ROLE_STUDENT'}">--%>
-<%--                                        <spring:message code="role.student"/>--%>
-<%--                                    </c:when>--%>
-<%--                                    <c:when test="${r eq 'ROLE_MODERATOR'}">--%>
-<%--                                        <spring:message code="role.moderator"/>--%>
-<%--                                    </c:when>--%>
-<%--                                    <c:when test="${r eq 'ROLE_ADMIN'}">--%>
-<%--                                        <spring:message code="role.admin"/>--%>
-<%--                                    </c:when>--%>
-<%--                                </c:choose>--%>
-<%--                                </span>--%>
-<%--                            </c:forEach>--%>
-<%--                            <span class="card-text">${user.institution.name}</span>--%>
-<%--                            <span class="card-text">${user.career.name}</span>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                    <!-- Profile picture (visible on small screens) -->--%>
-<%--                    <div class="d-flex d-lg-none justify-content-around align-items-center flex-wrap ">--%>
-<%--                        <div class="mb-3 mb-md-0 w-100">--%>
-<%--                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">--%>
-<%--                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"--%>
-<%--                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">--%>
-<%--                            </div>--%>
-<%--                        </div>--%>
+        <%--                        <!-- User info -->--%>
+        <%--                        <div class="d-flex flex-column gap-2">--%>
+        <%--                            <h4 class="card-title fw-bold">${user.displayName}</h4>--%>
+        <%--                            <c:forEach items="${user.roles}" var="r">--%>
+        <%--                                <span class="card-text">--%>
+        <%--                                <c:choose>--%>
+        <%--                                    <c:when test="${r eq 'ROLE_STUDENT'}">--%>
+        <%--                                        <spring:message code="role.student"/>--%>
+        <%--                                    </c:when>--%>
+        <%--                                    <c:when test="${r eq 'ROLE_MODERATOR'}">--%>
+        <%--                                        <spring:message code="role.moderator"/>--%>
+        <%--                                    </c:when>--%>
+        <%--                                    <c:when test="${r eq 'ROLE_ADMIN'}">--%>
+        <%--                                        <spring:message code="role.admin"/>--%>
+        <%--                                    </c:when>--%>
+        <%--                                </c:choose>--%>
+        <%--                                </span>--%>
+        <%--                            </c:forEach>--%>
+        <%--                            <span class="card-text">${user.institution.name}</span>--%>
+        <%--                            <span class="card-text">${user.career.name}</span>--%>
+        <%--                        </div>--%>
+        <%--                    </div>--%>
+        <%--                    <!-- Profile picture (visible on small screens) -->--%>
+        <%--                    <div class="d-flex d-lg-none justify-content-around align-items-center flex-wrap ">--%>
+        <%--                        <div class="mb-3 mb-md-0 w-100">--%>
+        <%--                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">--%>
+        <%--                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"--%>
+        <%--                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">--%>
+        <%--                            </div>--%>
+        <%--                        </div>--%>
 
-<%--                        <!-- User info -->--%>
-<%--                        <div class="d-flex flex-column gap-2 w-100">--%>
-<%--                            <h4 class="card-title fw-bold">${user.email}</h4>--%>
-<%--                            <c:forEach items="${user.roles}" var="r">--%>
-<%--                                <span class="card-text">--%>
-<%--                                <c:choose>--%>
-<%--                                    <c:when test="${r eq 'ROLE_STUDENT'}">--%>
-<%--                                        <spring:message code="role.student"/>--%>
-<%--                                    </c:when>--%>
-<%--                                    <c:when test="${r eq 'ROLE_MODERATOR'}">--%>
-<%--                                        <spring:message code="role.moderator"/>--%>
-<%--                                    </c:when>--%>
-<%--                                    <c:when test="${r eq 'ROLE_ADMIN'}">--%>
-<%--                                        <spring:message code="role.admin"/>--%>
-<%--                                    </c:when>--%>
-<%--                                </c:choose>--%>
-<%--                                </span>--%>
-<%--                            </c:forEach>--%>
-<%--                            <span class="card-text">${user.institution.name}</span>--%>
-<%--                            <span class="card-text">${user.career.name}</span>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
+        <%--                        <!-- User info -->--%>
+        <%--                        <div class="d-flex flex-column gap-2 w-100">--%>
+        <%--                            <h4 class="card-title fw-bold">${user.email}</h4>--%>
+        <%--                            <c:forEach items="${user.roles}" var="r">--%>
+        <%--                                <span class="card-text">--%>
+        <%--                                <c:choose>--%>
+        <%--                                    <c:when test="${r eq 'ROLE_STUDENT'}">--%>
+        <%--                                        <spring:message code="role.student"/>--%>
+        <%--                                    </c:when>--%>
+        <%--                                    <c:when test="${r eq 'ROLE_MODERATOR'}">--%>
+        <%--                                        <spring:message code="role.moderator"/>--%>
+        <%--                                    </c:when>--%>
+        <%--                                    <c:when test="${r eq 'ROLE_ADMIN'}">--%>
+        <%--                                        <spring:message code="role.admin"/>--%>
+        <%--                                    </c:when>--%>
+        <%--                                </c:choose>--%>
+        <%--                                </span>--%>
+        <%--                            </c:forEach>--%>
+        <%--                            <span class="card-text">${user.institution.name}</span>--%>
+        <%--                            <span class="card-text">${user.career.name}</span>--%>
+        <%--                        </div>--%>
+        <%--                    </div>--%>
+        <%--                </div>--%>
+        <%--            </div>--%>
+        <%--        </div>--%>
 
         <!-- List of directories -->
-        <div class="col-12 col-lg-7 col-xl-8 mb-5">
 
-            <!-- FAVORITES AND MY NOTES -->
-            <c:if test="${not empty favorites }"> <!-- TODO: ADD MY NOTES -->
-                <div class="mb-5">
-                    <ul class="mini-nav">
-                        <!-- FAVORITES -->
-                        <li class="mini-nav-item">
-                            <button class="btn mini-nav-button favorite-dir text-center active" data-toggle="tab" role="tab"
-                                    aria-selected="true"> <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
-                                <spring:message code="profileNotes.directories.favorites"/>
-                            </button>
-                        </li>
-                    </ul>
+        <!-- FAVORITES AND MY NOTES -->
+        <c:if test="${not empty favorites }"> <!-- TODO: ADD MY NOTES -->
+            <div class="col mb-5 mb-xl-0">
+                <ul class="mini-nav">
+                    <!-- FAVORITES -->
+                    <li class="mini-nav-item">
+                        <button class="btn mini-nav-button favorite-dir text-center active" data-toggle="tab" role="tab"
+                                aria-selected="true"> <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
+                            <spring:message code="profileNotes.directories.favorites"/>
+                        </button>
+                    </li>
+                </ul>
 
-                    <div class="tab-content bg-bg">
-                        <!-- FAVORITES LIST -->
-                        <div class="tab-pane favorite-dir-list fade active" role="tabpanel"> <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
-                            <div class="file-list gap-5 justify-content-center align-items-center">
-                                <c:forEach items="${favorites}" var="dir">
-                                    <a class="align-self-center" href="<c:url value="../directory/${dir.id}"/>">
-                                        <div class="d-flex flex-column gap-2 align-items-center">
-                                            <img src="<c:url value="/svg/folder.svg"/>"
-                                                 alt="<spring:message code="folder"/>"
-                                                 class="icon-xxl fill-${dir.iconColor}">
-                                            <!-- max 2 lines-->
-                                            <span class="fw-bold flex-wrap justify-content-center folder-name">
+                <div class="tab-content bg-bg">
+                    <!-- FAVORITES LIST -->
+                    <div class="tab-pane favorite-dir-list fade active" role="tabpanel">
+                        <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
+                        <div class="file-list gap-5 justify-content-center align-items-center">
+                            <c:forEach items="${favorites}" var="dir">
+                                <a class="align-self-center" href="<c:url value="../directory/${dir.id}"/>">
+                                    <div class="d-flex flex-column gap-2 align-items-center">
+                                        <img src="<c:url value="/svg/folder.svg"/>"
+                                             alt="<spring:message code="folder"/>"
+                                             class="icon-xxl fill-${dir.iconColor}">
+                                        <!-- max 2 lines-->
+                                        <span class="fw-bold flex-wrap justify-content-center folder-name">
                                                     <c:out value="${dir.name}"/>
                                                 </span>
-                                        </div>
-                                    </a>
-                                </c:forEach>
-                            </div>
+                                    </div>
+                                </a>
+                            </c:forEach>
                         </div>
                     </div>
                 </div>
-            </c:if>
+            </div>
+        </c:if>
 
 
-            <!-- ROOT DIRECTORIES -->
-            <div>
-                <ul class="mini-nav">
-                    <c:forEach items="${root_directories}" var="subjects" varStatus="i">
-                        <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
-                        <!--TAB-->
-                        <li class="mini-nav-item">
-                            <button class="btn mini-nav-button root-dir text-center ${i.index eq 0 ? 'active' : ''}"
-                                    data-toggle="tab" role="tab" aria-selected="true">
-                                <spring:message code="profileNotes.directories.year" arguments="${ordinal}"/>
-                            </button>
-                        </li>
-                    </c:forEach>
-                </ul>
-                <div class="tab-content bg-bg">
-                    <c:forEach items="${root_directories}" var="subjects" varStatus="i">
-                        <div class="tab-pane root-dir-list fade ${i.index eq 0 ? 'active' : ''}" role="tabpanel">
-                            <div class="file-list gap-5 justify-content-center align-items-center">
-                                <c:forEach items="${subjects.value}" var="rd">
-                                    <a class="align-self-center"
-                                       href="<c:url value="../directory/${rd.rootDirectoryId}"/>">
-                                        <div class="d-flex flex-column gap-2 align-items-center">
-                                            <img src="<c:url value="/svg/folder.svg"/>"
-                                                 alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
-                                            <!-- max 2 lines-->
-                                            <span class="fw-bold flex-wrap justify-content-center folder-name">
+        <!-- ROOT DIRECTORIES -->
+        <div class="col">
+            <ul class="mini-nav">
+                <c:forEach items="${root_directories}" var="subjects" varStatus="i">
+                    <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
+                    <!--TAB-->
+                    <li class="mini-nav-item">
+                        <button class="btn mini-nav-button root-dir text-center ${i.index eq 0 ? 'active' : ''}"
+                                data-toggle="tab" role="tab" aria-selected="true">
+                            <spring:message code="profileNotes.directories.year" arguments="${ordinal}"/>
+                        </button>
+                    </li>
+                </c:forEach>
+            </ul>
+            <div class="tab-content bg-bg">
+                <c:forEach items="${root_directories}" var="subjects" varStatus="i">
+                    <div class="tab-pane root-dir-list fade ${i.index eq 0 ? 'active' : ''}" role="tabpanel">
+                        <div class="file-list gap-5 justify-content-center align-items-center">
+                            <c:forEach items="${subjects.value}" var="rd">
+                                <a class="align-self-center"
+                                   href="<c:url value="../directory/${rd.rootDirectoryId}"/>">
+                                    <div class="d-flex flex-column gap-2 align-items-center">
+                                        <img src="<c:url value="/svg/folder.svg"/>"
+                                             alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
+                                        <!-- max 2 lines-->
+                                        <span class="fw-bold flex-wrap justify-content-center folder-name">
                                                 <c:out value="${rd.name}"/>
                                             </span>
-                                        </div>
-                                    </a>
-                                </c:forEach>
-                            </div>
+                                    </div>
+                                </a>
+                            </c:forEach>
                         </div>
-                    </c:forEach>
-                </div>
+                    </div>
+                </c:forEach>
             </div>
         </div>
+
 
     </section>
 </main>

@@ -40,21 +40,27 @@ function toggleDarkMode() {
         darkModeIcon.src = `${baseUrl}/svg/sun.svg`;
         document.documentElement.setAttribute('data-bs-theme', 'halloween');
         localStorage.setItem('theme', 'halloween'); // Guarda el modo seleccionado en localStorage
-        dontMoveGhost();
+        moveGhost();
+
     }
     else if (localStorage.getItem('theme') === 'halloween') {
         darkModeIcon.src = `${baseUrl}/svg/moon.svg`;
         document.documentElement.setAttribute('data-bs-theme', 'light');
         localStorage.setItem('theme', 'light'); // Guarda el modo seleccionado en localStorage
-        moveGhost();
+        dontMoveGhost();
     }
 }
 
 // Asociar la función de cambio de vista al botón
 darkModeToggle.addEventListener('click', toggleDarkMode);
 
+
+/*************/
+/* HALLOWEEN */
+/*************/
+
 /* Create an event listener that the halloween div follows the user's mouse */
-const halloween = document.querySelector('.halloween');
+const ghost = document.querySelector('.ghost');
 let targetX = 170, targetY = 30;
 let currentX = 170, currentY = 30;
 const easingFactor = 0.1;
@@ -63,8 +69,8 @@ function animate() {
     currentX += (targetX - currentX) * easingFactor;
     currentY += (targetY - currentY) * easingFactor;
 
-    halloween.style.left = currentX + 'px';
-    halloween.style.top = currentY + 'px';
+    ghost.style.left = currentX + 'px';
+    ghost.style.top = currentY + 'px';
 
     requestAnimationFrame(animate);
 }
@@ -73,19 +79,21 @@ function moveGhost() {
     document.addEventListener('mousemove', (e) => {
         targetX = e.clientX;
         targetY = e.clientY;
-        halloween.style.position = 'absolute'; // or 'fixed'
-        halloween.style.transform = 'none';
+        ghost.style.position = 'absolute'; // or 'fixed'
+        ghost.style.transform = 'none';
     });
+
+    requestAnimationFrame(animate);
 }
 
 function dontMoveGhost() {
     document.removeEventListener('mousemove', (e) => {
         targetX = e.clientX;
         targetY = e.clientY;
-        halloween.style.position = 'absolute'; // or 'fixed'
-        halloween.style.transform = 'none';
+        ghost.style.position = 'absolute'; // or 'fixed'
+        ghost.style.transform = 'none';
     });
 }
 
-requestAnimationFrame(animate);
+
 

@@ -8,7 +8,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark" data-search-view="horizontal">
+<html lang="en" data-bs-theme="halloween" data-search-view="horizontal">
 
 <head>
     <meta charset="utf-8"/>
@@ -49,14 +49,17 @@
 
 
 <!-- SEARCH -->
-<div class="container my-5">
-    <c:url var="searchUrl" value="./search"/>
-    <form:form modelAttribute="searchForm"
-               action="${searchUrl}"
-               method="get"
-               id="searchForm"
-               cssClass="d-flex flex-column w-100 align-items-center">
-        <div class="row row-cols-2 row-cols-md-3">
+<c:url var="searchUrl" value="./search"/>
+<form:form modelAttribute="searchForm"
+           action="${searchUrl}"
+           method="get"
+           id="searchForm"
+           cssClass="d-flex flex-column gap-2">
+
+    <div class="container my-5 d-flex flex-column align-items-center">
+
+
+        <div class="w-100 row row-cols-2 row-cols-lg-4">
             <div class="col">
                 <select id="institutionSelect" style="display: none;">
                     <option disabled selected value></option>
@@ -70,11 +73,11 @@
                         <input type="text" id="institutionAutocomplete" class="form-control bg-bg special-radius"
                                placeholder="${placeholderInstitution}" autocomplete="off"/>
                     </div>
-                    <span class="input-group-text input-group-icon clickable" id="eraseInstitutionButton">
+                    <button type="button" class="input-group-text input-group-icon" id="eraseInstitutionButton">
                         <img src="<c:url value="/svg/cross.svg"/>"
                              alt="<spring:message code="search.sort.image"/>"
                              class="icon-xs fill-dark-primary"/>
-                    </span>
+                    </button>
                 </div>
             </div>
 
@@ -91,11 +94,11 @@
                         <input type="text" id="careerAutocomplete" class="form-control bg-bg special-radius"
                                placeholder="${placeholderCareer}" autocomplete="off"/>
                     </div>
-                    <span class="input-group-text input-group-icon clickable" id="eraseCareerButton">
+                    <button type="button" class="input-group-text input-group-icon" id="eraseCareerButton">
                         <img src="<c:url value="/svg/cross.svg"/>"
                              alt="<spring:message code="search.sort.image"/>"
                              class="icon-xs fill-dark-primary"/>
-                    </span>
+                    </button>
                 </div>
             </div>
 
@@ -112,63 +115,11 @@
                         <input type="text" id="subjectAutocomplete" class="form-control bg-bg special-radius"
                                placeholder="${placeholderSubject}" autocomplete="off"/>
                     </div>
-                    <span class="input-group-text input-group-icon clickable" id="eraseSubjectButton">
+                    <button type="button" class="input-group-text input-group-icon" id="eraseSubjectButton">
                         <img src="<c:url value="/svg/cross.svg"/>"
                              alt="<spring:message code="search.sort.image"/>"
                              class="icon-xs fill-dark-primary"/>
-                    </span>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="input-group mb-3">
-                    <form:select path="category" class="form-select bg-bg" id="categorySelect">
-                        <form:option
-                                value=""><spring:message
-                                code="search.category.all"/></form:option>
-                        <form:option
-                                value="directory"><spring:message
-                                code="search.category.folder"/></form:option>
-                        <form:option
-                                value="theory"><spring:message
-                                code="search.category.theory"/></form:option>
-                        <form:option
-                                value="practice"><spring:message
-                                code="search.category.practice"/></form:option>
-                        <form:option
-                                value="exam"><spring:message
-                                code="search.category.exam"/></form:option>
-                        <form:option
-                                value="other"><spring:message
-                                code="search.category.other"/></form:option>
-                    </form:select>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="input-group mb-3">
-                    <button class="input-group-text input-group-icon" id="ascDescButton">
-                        <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
-                            <c:if test="${searchForm.ascending}">
-                                <img src="<c:url value="/svg/arrow-up.svg"/>"
-                                     alt="<spring:message code="search.sort.image"/>"
-                                     class="icon-s fill-dark-primary"
-                                     id="arrowImage" title="ascending"/>
-                            </c:if>
-                            <c:if test="${!searchForm.ascending}">
-                                <img src="<c:url value="/svg/arrow-down.svg"/>"
-                                     alt="<spring:message code="search.sort.image"/>"
-                                     class="icon-s fill-dark-primary"
-                                     id="arrowImage" title="descending"/>
-                            </c:if>
                     </button>
-
-                    <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect">
-                        <form:option value="score"><spring:message code="search.sort.score"/></form:option>
-                        <%--                        <form:option value=""><spring:message code="search.sort.placeholder"/></form:option>--%>
-                        <form:option value="name"><spring:message code="search.sort.name"/></form:option>
-                        <form:option value="date"><spring:message code="search.sort.date"/></form:option>
-                    </form:select>
                 </div>
             </div>
 
@@ -187,18 +138,9 @@
         <div class="w-25">
             <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
         </div>
-    </form:form>
+    </div>
 
-</div>
-
-<c:if test="${empty results}">
-    <section class="container mt-4">
-        <p><spring:message code="notes.noNotes"/></p>
-    </section>
-</c:if>
-
-<!-- LIST OF NOTES MATCHING -->
-<c:if test="${not empty results}">
+    <!-- TOP BUTTONS -->
     <!-- DEFINES -->
     <spring:message code="download" var="download"/>
     <spring:message code="folder" var="folder"/>
@@ -206,53 +148,136 @@
     <c:url value="/svg/box-list.svg" var="boxViewUrl"/>
     <c:url value="/svg/horizontal-list.svg" var="horizontalViewUrl"/>
 
+    <div class="container mt-5 d-flex justify-content-between p-0">
 
-    <!-- TOP BUTTONS -->
-    <div class="d-flex container mt-4 justify-content-between p-0">
-        <div class="d-flex"></div>
-        <div class="d-flex">
-
-            <div id="selectedButtons" class="align-items-center" style="display: none;">
-                <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.deselectAll"/>"
-                        data-bs-trigger="hover">
-                    <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary"/>
+        <!-- SEARCH PILL -->
+        <div class="d-flex align-items-center gap-3">
+            <div class="search-pill">
+                <button type="button" id="selectOnlyFoldersButton">
+                    <img src="<c:url value="/svg/folder.svg"/>" alt="<spring:message code="folder"/>"
+                         class="icon-s fill-bg"/>
+                    <spring:message code="folders"/>
                 </button>
-                <span class="text-dark-primary mx-2">
+
+                <button type="button" id="selectOnlyFilesButton">
+                    <spring:message code="files"/>
+                    <img src="<c:url value="/svg/file.svg"/>" alt="<spring:message code="folder"/>"
+                         class="icon-s fill-bg"/>
+                </button>
+
+                <form:select path="type" class="d-none" id="typeSelect">
+                    <form:option value=""/>
+                    <form:option value="directory"/>
+                    <form:option value="note"/>
+                </form:select>
+            </div>
+
+            <c:if test="${searchForm.type eq 'note'}">
+                <div class="input-group">
+                    <form:select path="category" class="form-select bg-bg" id="categorySelect"
+                                 onchange="submitSearchForm()">
+                        <form:option
+                                value=""><spring:message
+                                code="search.category.all"/></form:option>
+                        <form:option
+                                value="theory"><spring:message
+                                code="search.category.theory"/></form:option>
+                        <form:option
+                                value="practice"><spring:message
+                                code="search.category.practice"/></form:option>
+                        <form:option
+                                value="exam"><spring:message
+                                code="search.category.exam"/></form:option>
+                        <form:option
+                                value="other"><spring:message
+                                code="search.category.other"/></form:option>
+                    </form:select>
+                </div>
+            </c:if>
+
+            <div class="input-group">
+                <button class="input-group-text input-group-icon" id="ascDescButton">
+                    <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
+                    <c:if test="${searchForm.ascending}">
+                        <img src="<c:url value="/svg/arrow-up.svg"/>"
+                             alt="<spring:message code="search.sort.image"/>"
+                             class="icon-s fill-dark-primary"
+                             id="arrowImage" title="ascending"/>
+                    </c:if>
+                    <c:if test="${!searchForm.ascending}">
+                        <img src="<c:url value="/svg/arrow-down.svg"/>"
+                             alt="<spring:message code="search.sort.image"/>"
+                             class="icon-s fill-dark-primary"
+                             id="arrowImage" title="descending"/>
+                    </c:if>
+                </button>
+
+                <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect" onchange="submitSearchForm()">
+                    <c:if test="${searchForm.type eq 'note'}">
+                        <form:option value="score"><spring:message code="search.sort.score"/></form:option>
+                    </c:if>
+                    <form:option value="name"><spring:message code="search.sort.name"/></form:option>
+                    <form:option value="date"><spring:message code="search.sort.date"/></form:option>
+                </form:select>
+            </div>
+        </div>
+
+        <!-- BUTTONS -->
+        <c:if test="${not empty results}">
+            <div class="d-flex">
+                <div id="selectedButtons" class="align-items-center" style="display: none;">
+                    <button id="deselectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                            data-bs-placement="bottom"
+                            data-bs-title="<spring:message code="search.button.deselectAll"/>"
+                            data-bs-trigger="hover">
+                        <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary"/>
+                    </button>
+                    <span class="text-dark-primary mx-2">
                     <strong id="selectedCount" class="text-dark-primary"> 0 </strong>
                     <spring:message code="search.selected"/>
                 </span>
-                <button id="downloadSelectedButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
+                    <button id="downloadSelectedButton" class="btn nav-icon-button" type="button"
+                            data-bs-toggle="tooltip"
+                            data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
+                            data-bs-trigger="hover">
+                        <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
+                    </button>
+                </div>
+
+                <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
                         data-bs-trigger="hover">
-                    <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
+                    <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary"/>
                 </button>
+
+                <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
+                        data-horizontal="<spring:message code="search.button.listView"/>"
+                        data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
+                    <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
+                         class="icon-s fill-dark-primary"/>
+                </button>
+
+                <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button"
+                        data-bs-toggle="tooltip"
+                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
+                        data-bs-trigger="hover" onclick="changePageSize(${searchForm.pageSize})">
+                    <c:out value="${searchForm.pageSize}"/>
+                </button>
+
             </div>
-
-            <button id="selectAllButton" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
-                    data-bs-trigger="hover">
-                <img src="<c:url value="/svg/list-check.svg"/>" alt="select all" class="icon-s fill-dark-primary"/>
-            </button>
-
-            <button id="searchViewToggle" class="btn nav-icon-button" type="button" data-bs-toggle="tooltip"
-                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.listView"/>"
-                    data-horizontal="<spring:message code="search.button.listView"/>"
-                    data-box="<spring:message code="search.button.boxView"/>" data-bs-trigger="hover">
-                <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
-                     class="icon-s fill-dark-primary"/>
-            </button>
-
-            <button id="pageSizeToggle" class="btn nav-icon-button page-size-button" type="button"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
-                    data-bs-trigger="hover" onclick="changePageSize(${searchForm.pageSize})">
-                <c:out value="${searchForm.pageSize}"/>
-            </button>
-
-        </div>
+        </c:if>
     </div>
 
+</form:form>
+
+<c:if test="${empty results}">
+    <section class="container mt-4">
+        <p><spring:message code="notes.noNotes"/></p>
+    </section>
+</c:if>
+
+<c:if test="${not empty results}">
     <c:set var="folders" value=""/>
     <c:set var="files" value=""/>
 
@@ -265,7 +290,10 @@
                     <th class="col-md-5"><spring:message code="name"/></th>
                     <th class="col-md-2"><spring:message code="owner"/></th>
                     <th class="col-md-1"><spring:message code="createdAt"/></th>
-                    <th class="col-md-1"><spring:message code="score"/></th>
+
+                    <c:if test="${searchForm.type eq 'note'}">
+                        <th class="col-md-1"><spring:message code="score"/></th>
+                    </c:if>
                     <th class="col-md-2"></th> <!-- ACTIONS -->
                     <!-- TODO: ADD SIZE OF FILE -->
                 </tr>
@@ -313,20 +341,23 @@
                                      class="icon-m fill-${item.iconColor} folder-icon">
                             </c:if>
                             <span class="card-title align-middle mx-2 note-name">
-                                <c:out value="${item.name}"/>
-                            </span>
+                                    <c:out value="${item.name}"/>
+                                </span>
                         </td>
                         <td><c:out value="${item.user.email}"/></td>
                         <td><spring:message code="date.format"
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
-                        <td>
-                            <c:if test="${item.avgScore eq 0}">
-                                <spring:message code="notes.noScore"/>
-                            </c:if>
-                            <c:if test="${item.avgScore ne 0}">
-                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
-                            </c:if>
-                        </td>
+
+                        <c:if test="${searchForm.type eq 'note'}">
+                            <td>
+                                <c:if test="${item.avgScore eq 0}">
+                                    <spring:message code="notes.noScore"/>
+                                </c:if>
+                                <c:if test="${item.avgScore ne 0}">
+                                    <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
+                                </c:if>
+                            </td>
+                        </c:if>
 
                         <td class="search-actions">
                             <div class="d-flex justify-content-end">
@@ -340,7 +371,9 @@
                                          data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
                                         <form:form action="${item.favorite ? removeFavorite : addFavorite}"
                                                    method="post">
-                                            <input name="redirectUrl" value="/search?${requestScope['javax.servlet.forward.query_string']}" type="hidden"/>
+                                            <input name="redirectUrl"
+                                                   value="/search?${requestScope['javax.servlet.forward.query_string']}"
+                                                   type="hidden"/>
                                             <button type="submit"
                                                     class="btn nav-icon-button favorite-button"
                                                     data-bs-toggle="tooltip"
@@ -423,7 +456,9 @@
                                                  data-bs-trigger="hover">
                                                 <form:form action="${item.favorite ? removeFavorite : addFavorite}"
                                                            method="post">
-                                                    <input name="redirectUrl" value="/search?${requestScope['javax.servlet.forward.query_string']}" type="hidden"/>
+                                                    <input name="redirectUrl"
+                                                           value="/search?${requestScope['javax.servlet.forward.query_string']}"
+                                                           type="hidden"/>
                                                     <button type="submit"
                                                             class="btn nav-icon-button favorite-button"
                                                             data-bs-toggle="tooltip"
@@ -441,17 +476,17 @@
                                     </div>
 
                                     <span class="card-text">
-                                        <strong><spring:message code="owner"/></strong>:
-                                        <c:out value="${item.user.email}"/>
-                                    </span>
+                                            <strong><spring:message code="owner"/></strong>:
+                                            <c:out value="${item.user.email}"/>
+                                        </span>
 
                                     <br>
 
                                     <span class="card-text">
-                                        <strong><spring:message code="createdAt"/></strong>:
-                                        <spring:message code="date.format"
-                                                        arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
-                                    </span>
+                                            <strong><spring:message code="createdAt"/></strong>:
+                                            <spring:message code="date.format"
+                                                            arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                                        </span>
 
                                     <input type="checkbox" class="select-checkbox d-none"/>
                                 </div>
@@ -502,29 +537,29 @@
                                     </div>
 
                                     <span class="card-text">
-                                        <strong><spring:message code="owner"/></strong>:
-                                        <c:out value="${item.user.email}"/>
-                                    </span>
+                                            <strong><spring:message code="owner"/></strong>:
+                                            <c:out value="${item.user.email}"/>
+                                        </span>
 
                                     <br>
 
                                     <span class="card-text">
-                                        <strong><spring:message code="createdAt"/></strong>:
-                                        <spring:message code="date.format"
-                                                        arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
-                                    </span>
+                                            <strong><spring:message code="createdAt"/></strong>:
+                                            <spring:message code="date.format"
+                                                            arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                                        </span>
 
                                     <br>
                                     <span class="card-text">
-                                        <c:if test="${item.avgScore eq 0}">
-                                            <strong><spring:message code="notes.noScore"/></strong>
-                                        </c:if>
-                                        <c:if test="${item.avgScore ne 0}">
-                                            <strong><spring:message code="score"/></strong>:
-                                            <fmt:formatNumber type="number" maxFractionDigits="1"
-                                                              value="${item.avgScore}"/>
-                                        </c:if>
-                                    </span>
+                                            <c:if test="${item.avgScore eq 0}">
+                                                <strong><spring:message code="notes.noScore"/></strong>
+                                            </c:if>
+                                            <c:if test="${item.avgScore ne 0}">
+                                                <strong><spring:message code="score"/></strong>:
+                                                <fmt:formatNumber type="number" maxFractionDigits="1"
+                                                                  value="${item.avgScore}"/>
+                                            </c:if>
+                                        </span>
                                     <input type="checkbox" class="select-checkbox d-none"/>
                                 </div>
                             </div>

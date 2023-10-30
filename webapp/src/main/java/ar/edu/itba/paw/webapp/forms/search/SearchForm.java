@@ -19,11 +19,14 @@ public class SearchForm {
     @ValidUuid
     private UUID subjectId;
 
-    @Pattern(regexp = "directory|theory|practice|exam|other|")
+    @Pattern(regexp = "directory|note|")
+    private String type = "note";
+
+    @Pattern(regexp = "theory|practice|exam|other|")
     private String category = "";
 
     @Pattern(regexp = "score|name|date")
-    private String sortBy = "score";
+    private String sortBy = "date";
 
     private boolean ascending = false;
 
@@ -43,6 +46,15 @@ public class SearchForm {
     public void setInstitutionId(UUID institutionId) {
         this.institutionId = institutionId;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
 
     public UUID getCareerId() {
         return careerId;

@@ -15,15 +15,14 @@
     <c:set var="isAdmin" value="${user.isAdmin}"/>
 </c:if>
 
-
 <nav class="navbar">
     <div class="container-fluid d-flex align-items-center">
         <a class="navbar-brand text-dark-primary" href="${baseUrl}">Apuntea</a>
         <div class="d-flex justify-content-center align-items-center mx-2">
             <div class="search-container">
-                <button class="btn nav-icon-button search-icon" type="button" id="searchNavButton">
+                <a class="btn nav-icon-button search-icon" id="searchNavButton">
                     <img src="<c:url value="/svg/search.svg"/>" alt="${search}" class="icon-s fill-dark-primary"/>
-                </button>
+                </a>
                 <input id="searchNavInput" type="text" class="search-input"
                        placeholder="<spring:message code="search.word.placeholder"/>"/>
             </div>
@@ -81,17 +80,33 @@
 </nav>
 
 <div class="halloween">
-    <div class="head">
-        <div class="skull">
-            <div class="eyes">
-                <div class="eye eye-left"></div>
-                <div class="eye eye-right"></div>
+    <div class="ghost">
+        <div class="head">
+            <div class="skull">
+                <div class="eyes">
+                    <div class="eye eye-left"></div>
+                    <div class="eye eye-right"></div>
+                </div>
             </div>
         </div>
+        <div class="body"></div>
+        <div class="legs"></div>
     </div>
-    <div class="body"></div>
-    <div class="legs"></div>
+
+    <c:forEach begin="0" end="3" step="1" var="count">
+        <div class="spider spider_<c:out value="${count}"/>">
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+            <c:forEach begin="0" end="3" step="1">
+                <span class="leg left"></span>
+            </c:forEach>
+            <c:forEach begin="0" end="3" step="1">
+                <span class="leg right"></span>
+            </c:forEach>
+        </div>
+    </c:forEach>
 </div>
+
 
 <script src="<c:url value="/js/global-search.js"/>"></script>
 <script src="<c:url value="/js/darkmode.js"/>"></script>

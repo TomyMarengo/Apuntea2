@@ -8,7 +8,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark" data-search-view="horizontal">
+<html lang="en" data-bs-theme="halloween" data-search-view="horizontal">
 
 <head>
     <meta charset="utf-8"/>
@@ -66,11 +66,11 @@
                         <input type="text" id="institutionAutocomplete" class="form-control bg-bg special-radius"
                                placeholder="${placeholderInstitution}" autocomplete="off"/>
                     </div>
-                    <span class="input-group-text input-group-icon clickable" id="eraseInstitutionButton">
-                    <img src="<c:url value="/svg/cross.svg"/>"
-                         alt="<spring:message code="search.sort.image"/>"
-                         class="icon-xs fill-dark-primary"/>
-                </span>
+                    <button type="button" class="input-group-text input-group-icon" id="eraseInstitutionButton">
+                        <img src="<c:url value="/svg/cross.svg"/>"
+                             alt="<spring:message code="search.sort.image"/>"
+                             class="icon-xs fill-dark-primary"/>
+                    </button>
                 </div>
             </div>
 
@@ -87,11 +87,11 @@
                         <input type="text" id="careerAutocomplete" class="form-control bg-bg special-radius"
                                placeholder="${placeholderCareer}" autocomplete="off"/>
                     </div>
-                    <span class="input-group-text input-group-icon clickable" id="eraseCareerButton">
-                    <img src="<c:url value="/svg/cross.svg"/>"
-                         alt="<spring:message code="search.sort.image"/>"
-                         class="icon-xs fill-dark-primary"/>
-                </span>
+                    <button type="button" class="input-group-text input-group-icon" id="eraseCareerButton">
+                        <img src="<c:url value="/svg/cross.svg"/>"
+                             alt="<spring:message code="search.sort.image"/>"
+                             class="icon-xs fill-dark-primary"/>
+                    </button>
                 </div>
             </div>
         </div>
@@ -108,7 +108,8 @@
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <a class="btn nav-icon-button" href="${baseUrl}/manage/careers" data-bs-toggle="tooltip" data-bs-placement="right"
+        <a class="btn nav-icon-button" href="${baseUrl}/manage/careers" data-bs-toggle="tooltip"
+           data-bs-placement="right"
            data-bs-title="<spring:message code="manageCareers.title"/>" data-bs-trigger="hover">
             <img src="<c:url value="/svg/books.svg"/>"
                  alt="<spring:message code="manageUsers.title"/>"
@@ -248,11 +249,11 @@
                                 <input type="text" id="linkSubjectAutocomplete" class="form-control special-radius"
                                        placeholder="${placeholderSubject}" autocomplete="off" required/>
                             </div>
-                            <span class="input-group-text input-group-icon clickable" id="eraseLinkSubjectButton">
+                            <button type="button" class="input-group-text input-group-icon" id="eraseLinkSubjectButton">
                                 <img src="<c:url value="/svg/cross.svg"/>"
                                      alt="<spring:message code="search.sort.image"/>"
                                      class="icon-xs fill-dark-primary"/>
-                                </span>
+                            </button>
                         </div>
                         <form:errors path="subjectId" cssClass="text-danger" element="p"/>
                     </div>
@@ -269,10 +270,10 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input type="submit" class="btn rounded-box button-primary" value="<spring:message
                                             code="link"/>"/>
                 </div>
             </form:form>
@@ -323,10 +324,10 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input type="submit" class="btn rounded-box button-primary" value="<spring:message
                                             code="create"/>"/>
                 </div>
             </form:form>
@@ -375,10 +376,10 @@
                     </div>
                 </div>
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input type="submit" class="btn rounded-box button-primary" value="<spring:message
                                             code="update"/>"/>
                 </div>
                 <form:hidden path="subjectId" id="editSubjectId"/>
@@ -395,10 +396,11 @@
         <div class="modal-content box bg-bg">
             <form:form modelAttribute="unlinkSubjectForm"
                        action="${unlinkSubjectUrl}"
-                        method="POST"
-                        id="unlinkSubjectForm">
+                       method="POST"
+                       id="unlinkSubjectForm">
                 <div class="modal-header">
-                    <h3 class="modal-title fs-5" id="unlinkLabel"><spring:message code="unlinkForm.description"/>: <span id="unlinkSubjectName"></span></h3>
+                    <h3 class="modal-title fs-5" id="unlinkLabel"><spring:message code="unlinkForm.description"/>: <span
+                            id="unlinkSubjectName"></span></h3>
                     <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
                             aria-label="Close">
                     </button>
@@ -409,10 +411,10 @@
                 </div>
 
                 <div class="modal-footer mt-4">
-                    <button type="button" class="btn rounded-box button-primary close-modal"
+                    <button type="button" class="btn rounded-box button-secondary close-modal"
                             data-bs-dismiss="modal">
                         <spring:message code="close"/></button>
-                    <input id="unlinkSelectedButton" type="submit" class="btn rounded-box button-secondary" value="<spring:message
+                    <input id="unlinkSelectedButton" type="submit" class="btn rounded-box button-primary" value="<spring:message
                                                 code="unlink"/>"/>
                 </div>
 

@@ -6,7 +6,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="halloween">
 
 <head>
     <meta charset="utf-8"/>
@@ -37,8 +37,8 @@
     <fragment:navbar user="${user}"/>
 </header>
 
-<main class="h-100-nav container-fluid mt-5">
-    <div class="h-100 d-flex flex-column align-items-center gap-3 text-center">
+<main class="container-fluid mt-5">
+    <div class="d-flex flex-column align-items-center gap-3 text-center">
         <h2><spring:message code="index.title" arguments='<span class="apuntea-title">Apuntea</span>'/></h2>
         <h4><spring:message code="index.subtitle"/></h4>
 
