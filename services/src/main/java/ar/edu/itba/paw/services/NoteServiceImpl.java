@@ -87,10 +87,12 @@ public class NoteServiceImpl implements NoteService {
     @Transactional
     @Override
     public void delete(UUID[] noteIds, String reason) {
-        User currentUser = securityService.getCurrentUserOrThrow();
+        if (noteIds.length == 0) return;
+
         // TODO: Propagate List<UUID> instead of UUID[] to the Controller?
         List<UUID> noteIdsList = Collections.unmodifiableList(Arrays.asList(noteIds));
 
+        User currentUser = securityService.getCurrentUserOrThrow();
         if (!currentUser.getIsAdmin()) {
             if (!noteDao.delete(noteIdsList, currentUser.getUserId()))
                 throw new InvalidNoteException();

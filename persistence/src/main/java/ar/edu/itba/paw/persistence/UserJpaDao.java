@@ -28,7 +28,8 @@ class UserJpaDao implements UserDao {
         @SuppressWarnings("unchecked")
         List<UUID> userIds =  ( (List<String>) em.createNativeQuery("SELECT CAST(user_id AS VARCHAR(36)) FROM users u WHERE " +
                         "NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
-                        "AND (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!')")
+                        "AND (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!') " +
+                        "ORDER BY email")
                 .setMaxResults(pageSize)
                 .setFirstResult((pageNum - 1) * pageSize)
                 .setParameter("searchWord", searchWord)
