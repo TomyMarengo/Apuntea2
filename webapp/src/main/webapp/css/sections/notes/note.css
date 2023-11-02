@@ -41,3 +41,11 @@
     max-width: 100%;
     max-height: calc(100vh - 148px);
 }
+
+.user-profile-picture {
+    width: 45px;
+    height: 45px;
+    margin-right: 0.5em;
+    border-radius: 50%;
+    object-fit: cover;
+}

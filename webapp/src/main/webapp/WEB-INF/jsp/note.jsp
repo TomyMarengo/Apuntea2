@@ -43,7 +43,7 @@
     <fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}" category="note"/>
 </header>
 
-<div class="h-100-navs container-fluid">
+<div class="px-4 h-100-navs container-fluid">
     <div class="h-100 row row-cols-1 row-cols-lg-2">
         <section class="col col-lg-8">
 
@@ -106,11 +106,10 @@
                 </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <img src="<c:url  value="${baseUrl}/profile/${note.user.userId}/picture"/>"
-                         alt="<spring:message code="logotype"/>"
-                         style="width: 45px; height: 45px; margin-right: 5px; border-radius: 50%;">
+                         alt="<spring:message code="logotype"/>" class="user-profile-picture">
                     <span><strong><c:out value="${note.user.displayName}"/></strong></span>
                 </div>
                 <div class="mx-2">
@@ -122,14 +121,11 @@
 
         <section class="h-100 col col-lg-4 mt-5 mt-lg-0">
             <div class="h-100 d-flex flex-column">
-                <input type="submit" class="btn reviews-comments-button mb-3"
-                       value="<spring:message code="notes.reviews.button"/>"/>
-
+                <h2 class="text-dark-primary"><spring:message code="notes.reviews.button"/></h2>
 
                 <c:if test="${not empty reviews}">
                         <span><spring:message code="score"/>: <fmt:formatNumber type="number" maxFractionDigits="1"
                                                                                 value="${note.avgScore}"/> ⭐</span>
-
                     <div class="reviews-comments">
                         <c:forEach items="${reviews}" var="review" varStatus="count">
                             <div class="card box review-card mb-3 p-3 gap-2">

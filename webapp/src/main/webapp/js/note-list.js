@@ -208,17 +208,3 @@ function changeTooltipText() {
 // Asociar la función de cambio de vista al botón
 searchViewToggle.addEventListener('click', toggleView);
 
-
-/*************/
-/* PAGE SIZE */
-/*************/
-
-const pageSizes = [12, 18, 24];
-function changePageSize(pageSize) {
-    /* Get searchForm, change pageSize to next element of the array and submit the form */
-    const searchForm = document.getElementById('searchForm');
-    const index = pageSizes.indexOf(pageSize);
-    const newPageSize = pageSizes[(index + 1) % pageSizes.length];
-    searchForm.querySelector('input[name="pageSize"]').value = newPageSize;
-    searchForm.submit();
-}

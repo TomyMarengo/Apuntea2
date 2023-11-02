@@ -133,7 +133,6 @@
         </div>
 
         <form:hidden path="pageNumber" id="pageNumber" value="1"/>
-        <form:hidden path="pageSize" id="pageSize"/>
 
         <div class="w-25">
             <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
@@ -241,10 +240,10 @@
                             data-bs-trigger="hover">
                         <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary"/>
                     </button>
-                    <span class="text-dark-primary mx-2">
-                    <strong id="selectedCount" class="text-dark-primary"> 0 </strong>
-                    <spring:message code="search.selected"/>
-                </span>
+                    <span class="text-dark-primary d-flex flex-row">
+                        <strong id="selectedCount" class="text-dark-primary mx-1"> 0 </strong>
+                        <spring:message code="search.selected"/>
+                    </span>
                     <button type="button" id="downloadSelectedButton" class="btn nav-icon-button"
                             data-bs-toggle="tooltip"
                             data-bs-placement="bottom" data-bs-title="<spring:message code="download"/>"
@@ -252,6 +251,7 @@
                         <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
                     </button>
                 </div>
+
 
                 <button type="button" id="selectAllButton" class="btn nav-icon-button" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
@@ -267,13 +267,15 @@
                          class="icon-s fill-dark-primary"/>
                 </button>
 
-                <button type="button" id="pageSizeToggle" class="btn nav-icon-button page-size-button"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
-                        data-bs-trigger="hover" onclick="changePageSize(${searchForm.pageSize})">
-                    <c:out value="${searchForm.pageSize}"/>
-                </button>
-            </div>
+                <form:select path="pageSize" class="form-select bg-bg mx-2" onchange="submitSearchForm()">
+                    <form:option value="12">12</form:option>
+                    <form:option value="18">18</form:option>
+                    <form:option value="24">24</form:option>
+                    <c:if test="${searchForm.pageSize ne 12 and searchForm.pageSize ne 18 and searchForm.pageSize ne 24}">
+                        <form:option value="${searchForm.pageSize}"><c:out value="${searchForm.pageSize}"/></form:option>
+                    </c:if>
+                </form:select>
+                </div>
         </c:if>
     </div>
 

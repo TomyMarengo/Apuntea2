@@ -56,7 +56,7 @@
                        class="d-flex flex-column"
                        id="editUserForm">
                 <h1><spring:message code="profile.title"/></h1>
-                <div class="align-items-center d-flex" id="image-input">
+                <div class="align-items-center d-flex flex-column" id="image-input">
                     <label for="profilePicture" id="selected-image">
                         <img src="${userProfilePicture}" alt="Profile Picture" class="picture" id="preview-image">
                         <span><img src="<c:url value="/svg/pencil.svg"/>" class="d-none" id="hidden-pencil"

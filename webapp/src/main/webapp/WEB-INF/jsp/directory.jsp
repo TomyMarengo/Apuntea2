@@ -62,7 +62,6 @@
         </div>
 
         <form:hidden path="pageNumber" id="pageNumber" value="1"/>
-        <form:hidden path="pageSize" id="pageSize"/>
 
         <div class="w-25">
             <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
@@ -166,10 +165,10 @@
                             data-bs-trigger="hover">
                         <img src="<c:url value="/svg/cross.svg"/>" alt="deselect" class="icon-s fill-dark-primary"/>
                     </button>
-                    <span class="text-dark-primary mx-2">
-                    <strong id="selectedCount" class="text-dark-primary"> 0 </strong>
-                    <spring:message code="search.selected"/>
-                </span>
+                    <span class="text-dark-primary d-flex flex-row">
+                        <strong id="selectedCount" class="text-dark-primary mx-1"> 0 </strong>
+                        <spring:message code="search.selected"/>
+                    </span>
 
                     <c:if test="${user ne null and directory.user ne null and (directory.user.userId eq user.userId or directory.user.isAdmin)}">
                         <div data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -189,7 +188,9 @@
                             data-bs-trigger="hover">
                         <img src="<c:url value="/svg/download.svg"/>" alt="download" class="icon-s fill-dark-primary"/>
                     </button>
+
                 </div>
+
 
                 <button type="button" id="selectAllButton" class="btn nav-icon-button" data-bs-toggle="tooltip"
                         data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.selectAll"/>"
@@ -205,14 +206,6 @@
                          class="icon-s fill-dark-primary"/>
                 </button>
 
-                <button type="button" id="pageSizeToggle" class="btn nav-icon-button page-size-button"
-                        data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" data-bs-title="<spring:message code="search.button.pageSize"/>"
-                        data-bs-trigger="hover"
-                        onclick="changePageSize(${navigationForm.pageSize})">
-                    <c:out value="${navigationForm.pageSize}"/>
-
-                </button>
 
                 <c:if test="${user ne null and (directory.user eq null or directory.user.userId eq user.userId)}">
                     <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -237,6 +230,15 @@
                         </button>
                     </a>
                 </c:if>
+
+                <form:select path="pageSize" class="form-select bg-bg mx-2" onchange="submitSearchForm()">
+                    <form:option value="12">12</form:option>
+                    <form:option value="18">18</form:option>
+                    <form:option value="24">24</form:option>
+                    <c:if test="${navigationForm.pageSize ne 12 and navigationForm.pageSize ne 18 and navigationForm.pageSize ne 24}">
+                        <form:option value="${navigationForm.pageSize}"><c:out value="${navigationForm.pageSize}"/></form:option>
+                    </c:if>
+                </form:select>
             </div>
         </c:if>
     </div>
@@ -292,7 +294,9 @@
                     <th class="col-md-5"><spring:message code="name"/></th>
                     <th class="col-md-2"><spring:message code="owner"/></th>
                     <th class="col-md-1"><spring:message code="createdAt"/></th>
-                    <th class="col-md-1"><spring:message code="score"/></th>
+                    <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
+                        <th class="col-md-1"><spring:message code="score"/></th>
+                    </c:if>
                     <th class="col-md-2"></th> <!-- ACTIONS -->
                     <!-- TODO: ADD SIZE OF FILE -->
                 </tr>
@@ -346,14 +350,16 @@
                         <td><c:out value="${item.user.email}"/></td>
                         <td><spring:message code="date.format"
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
-                        <td>
-                            <c:if test="${item.avgScore eq 0}">
-                                <spring:message code="notes.noScore"/>
-                            </c:if>
-                            <c:if test="${item.avgScore ne 0}">
-                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
-                            </c:if>
-                        </td>
+                        <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
+                            <td>
+                                <c:if test="${item.avgScore eq 0}">
+                                    <spring:message code="notes.noScore"/>
+                                </c:if>
+                                <c:if test="${item.avgScore ne 0}">
+                                    <fmt:formatNumber type="number" maxFractionDigits="1" value="${item.avgScore}"/>
+                                </c:if>
+                            </td>
+                        </c:if>
 
 
                         <td class="search-actions">
