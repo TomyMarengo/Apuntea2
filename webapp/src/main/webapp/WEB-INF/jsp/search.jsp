@@ -371,9 +371,16 @@
                             <div class="d-flex justify-content-end">
 
                                 <!-- Favorite -->
-                                <c:if test="${user ne null and item.category.formattedName eq 'directory'}">
-                                    <c:set var="addFavorite" value="./directory/${item.id}/addfavorite"/>
-                                    <c:set var="removeFavorite" value="./directory/${item.id}/removefavorite"/>
+                                <c:if test="${user ne null}">
+                                    <!-- TODO: Change all occurrences of notes for note -->
+                                    <c:if test="${item.category.type eq 'directory'}">
+                                        <c:set var="addFavorite" value="./directory/${item.id}/addfavorite"/>
+                                        <c:set var="removeFavorite" value="./directory/${item.id}/removefavorite"/>
+                                    </c:if>
+                                    <c:if test="${item.category.type ne 'directory'}">
+                                        <c:set var="addFavorite" value="./notes/${item.id}/addfavorite"/>
+                                        <c:set var="removeFavorite" value="./notes/${item.id}/removefavorite"/>
+                                    </c:if>
 
                                     <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                          data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
@@ -388,7 +395,7 @@
                                                     data-bs-placement="bottom"
                                                     data-bs-title="<spring:message code="favorite"/>"
                                                     id="<c:out value="${item.id}"/>.f1">
-                                                <img src="<c:url value="${ item.favorite ?  '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
+                                                <img src="<c:url value="${ item.favorite ? '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
                                                      alt="<spring:message code="favorite"/>"
                                                      class="icon-xs fill-text">
                                             </button>
@@ -541,6 +548,33 @@
                                             <h4 class="card-title text-truncate mb-0 note-name">
                                                 <c:out value="${item.name}"/>
                                             </h4>
+                                        </div>
+
+                                        <div class="d-flex">
+                                            <!-- FAVORITE -->
+                                            <c:set var="addFavorite" value="./notes/${item.id}/addfavorite"/>
+                                            <c:set var="removeFavorite" value="./notes/${item.id}/removefavorite"/>
+
+                                            <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                 data-bs-title="<spring:message code="favorite"/>"
+                                                 data-bs-trigger="hover">
+                                                <form:form action="${item.favorite ? removeFavorite : addFavorite}"
+                                                           method="post">
+                                                    <input name="redirectUrl"
+                                                           value="/search?${requestScope['javax.servlet.forward.query_string']}"
+                                                           type="hidden"/>
+                                                    <button type="submit"
+                                                            class="btn nav-icon-button favorite-button"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            data-bs-title="<spring:message code="favorite"/>"
+                                                            id="<c:out value="${item.id}"/>.f1">
+                                                        <img src="<c:url value="${ item.favorite ?  '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
+                                                             alt="<spring:message code="favorite"/>"
+                                                             class="icon-xs fill-text">
+                                                    </button>
+                                                </form:form>
+                                            </div>
                                         </div>
                                     </div>
 

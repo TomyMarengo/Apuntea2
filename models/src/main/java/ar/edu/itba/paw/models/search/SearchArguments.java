@@ -1,4 +1,6 @@
-package ar.edu.itba.paw.models;
+package ar.edu.itba.paw.models.search;
+
+import ar.edu.itba.paw.models.Category;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -11,8 +13,7 @@ public class SearchArguments {
     private String word;
     private UUID userId;
     private UUID currentUserId;
-    private SortBy sortBy;
-    private boolean ascending;
+    private SortArguments sortArgs;
     private int page;
     private int pageSize;
 
@@ -24,8 +25,7 @@ public class SearchArguments {
         this.word = builder.word;
         this.userId = builder.userId;
         this.currentUserId = builder.currentUserId;
-        this.sortBy = builder.sortBy;
-        this.ascending = builder.ascending;
+        this.sortArgs = builder.sortArgs;
         this.page = builder.page;
         this.pageSize = builder.pageSize;
     }
@@ -57,11 +57,7 @@ public class SearchArguments {
         return Optional.ofNullable(currentUserId);
     }
 
-    public SortBy getSortBy() {
-        return sortBy;
-    }
-
-    public boolean isAscending() { return ascending; }
+    public SortArguments getSortArguments() { return sortArgs; }
 
     public int getPage() {
         return page;
@@ -69,10 +65,6 @@ public class SearchArguments {
 
     public int getPageSize() {
         return pageSize;
-    }
-
-    public enum SortBy {
-        NAME, SCORE, DATE;
     }
 
     public static class SearchArgumentsBuilder {
@@ -83,15 +75,14 @@ public class SearchArguments {
         private String word;
         private UUID userId;
         private UUID currentUserId;
-        private SortBy sortBy;
-        private boolean ascending;
+        private SortArguments sortArgs;
         private int page;
         private int pageSize;
 
         public SearchArgumentsBuilder() {
-            this.ascending = true;
             this.page = 1;
             this.pageSize = 10;
+            this.sortArgs = new SortArguments(SortArguments.SortBy.DATE, true);
         }
 
         public SearchArgumentsBuilder institutionId(UUID institutionId) {
@@ -132,12 +123,12 @@ public class SearchArguments {
 
         public SearchArgumentsBuilder sortBy(String sortBy) {
             if (sortBy != null && !sortBy.isEmpty())
-                this.sortBy = SortBy.valueOf(sortBy.toUpperCase());
+                this.sortArgs.setSortBy(SortArguments.SortBy.valueOf(sortBy.toUpperCase()));
             return this;
         }
 
         public SearchArgumentsBuilder ascending(boolean ascending) {
-            this.ascending = ascending;
+            this.sortArgs.setAscending(ascending);
             return this;
         }
 

@@ -44,6 +44,7 @@ public class NoteJpaDaoTest {
     private JdbcTemplate jdbcTemplate;
 
     private User pepeUser;
+    private User saidmanUser;
     private User carlaAdmin;
     private Note notePublic;
     private byte[] publicContent;
@@ -53,6 +54,7 @@ public class NoteJpaDaoTest {
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
         pepeUser = em.find(User.class, PEPE_ID);
+        saidmanUser = em.find(User.class, SAIDMAN_ID);
         carlaAdmin = em.find(User.class, CARLADMIN_ID);
         Note.NoteBuilder builder = new Note.NoteBuilder()
                 .name("public")
@@ -315,6 +317,61 @@ public class NoteJpaDaoTest {
         em.flush();
         assertEquals(1, countReview);
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 4"));
+    }
+
+    @Test
+    public void testGetFavorites() {
+        Note.NoteBuilder nb = new Note.NoteBuilder().category(Category.EXAM).fileType(".jpg").parentId(EDA_DIRECTORY_ID).subjectId(EDA_ID).user(pepeUser).visible(true);
+        Note newNote1 = insertNote(em, nb.name("temp"));
+        Note newNote2 = insertNote(em, nb.name("temp2"));
+        Note newNote3 = insertNote(em, nb.name("temp3"));
+
+        insertFavoriteNote(em, newNote1.getId(), PEPE_ID);
+        insertFavoriteNote(em, newNote2.getId(), SAIDMAN_ID);
+        insertFavoriteNote(em, newNote3.getId(), PEPE_ID);
+
+        List<Note> favorites = noteDao.getFavorites(PEPE_ID);
+        assertEquals(2, favorites.size());
+        favorites.stream().filter(d -> d.equals(newNote1)).findAny().orElseThrow(AssertionError::new);
+        favorites.stream().filter(d -> d.equals(newNote3)).findAny().orElseThrow(AssertionError::new);
+    }
+
+    @Test
+    public void testGetFavoritePrivate() {
+        Note.NoteBuilder nb = new Note.NoteBuilder().category(Category.OTHER).fileType(".jpg").parentId(EDA_DIRECTORY_ID).subjectId(EDA_ID);
+        Note newNote1 = insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(pepeUser).visible(false));
+        Note newNote2 = insertNote(em, nb.name("extern1").parentId(EDA_DIRECTORY_ID).user(saidmanUser).visible(true));
+        Note newNote3 = insertNote(em, nb.name("extern2").parentId(EDA_DIRECTORY_ID).user(saidmanUser).visible(true));
+        Note newNote4 = insertNote(em, nb.name("private").parentId(EDA_DIRECTORY_ID).user(saidmanUser).visible(false));
+        insertFavoriteNote(em, newNote1.getId(), PEPE_ID);
+        insertFavoriteNote(em, newNote2.getId(), SAIDMAN_ID);
+        insertFavoriteNote(em, newNote3.getId(), PEPE_ID);
+        insertFavoriteNote(em, newNote4.getId(), PEPE_ID);
+
+        List<Note> favorites = noteDao.getFavorites(PEPE_ID);
+        assertEquals(2, favorites.size());
+        favorites.stream().filter(n -> n.equals(newNote1)).findAny().orElseThrow(AssertionError::new);
+        favorites.stream().filter(n -> n.equals(newNote2)).findAny().ifPresent(d -> {throw new AssertionError();});
+        favorites.stream().filter(n -> n.equals(newNote3)).findAny().orElseThrow(AssertionError::new);
+        favorites.stream().filter(n -> n.equals(newNote4)).findAny().ifPresent(d -> {throw new AssertionError();});
+    }
+
+    @Test
+    public void testAddFavorite() {
+        noteDao.addFavorite(PEPE_ID, MVC_NOTE_ID);
+        em.flush();
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
+    }
+
+    @Test
+    public void testRemoveFavorite() {
+        insertFavoriteNote(em, notePublic.getId(), PEPE_ID);
+        insertFavoriteNote(em, notePublic.getId(), SAIDMAN_ID);
+        noteDao.removeFavorite(PEPE_ID, notePublic.getId());
+        em.flush();
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + notePublic.getId() + "'"));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + notePublic.getId() + "'"));
     }
 
 }

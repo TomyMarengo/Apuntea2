@@ -75,8 +75,8 @@ public class TestConfig {
         properties.setProperty("hibernate.hbm2ddl.auto", "none"); // TODO: Check if update is better than none
 
         // TODO: REMOVE
-//        properties.setProperty("hibernate.show_sql", "true");
-//        properties.setProperty("format_sql", "true");
+        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);
 
         return factoryBean;

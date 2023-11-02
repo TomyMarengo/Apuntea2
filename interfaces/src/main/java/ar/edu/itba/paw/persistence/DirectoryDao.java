@@ -1,7 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 
 import java.util.List;
@@ -27,8 +28,8 @@ public interface DirectoryDao {
 
     boolean removeFavorite(UUID userId, UUID directoryId);
 
-    List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser);
+    List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser, SortArguments sortArgs);
 
-    List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser, SearchArguments.SortBy sortBy, boolean ascending);
+    List<Directory> findDirectoriesByIds(List<UUID> directoryIds);
 }
 

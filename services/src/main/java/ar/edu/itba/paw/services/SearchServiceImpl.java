@@ -1,13 +1,16 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.search.SearchArguments;
+import ar.edu.itba.paw.models.search.Searchable;
+import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
 import ar.edu.itba.paw.persistence.SearchDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
+import ar.edu.itba.paw.models.search.SearchArguments.SearchArgumentsBuilder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -73,10 +76,11 @@ public class SearchServiceImpl implements SearchService {
 
         List<Searchable> results = new ArrayList<>();
 
+        SortArguments sortArgs = sa.getSortArguments();
         if (!directoryIds.isEmpty())
-            results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null), sa.getSortBy(), sa.isAscending()));
+            results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null), sortArgs));
         if (!noteIds.isEmpty())
-            results.addAll(noteDao.findNoteByIds(noteIds, sa.getSortBy(), sa.isAscending()));
+            results.addAll(noteDao.findNoteByIds(noteIds, maybeUser.orElse(null), sortArgs));
 
         return new Page<>(
                 results,
@@ -111,9 +115,9 @@ public class SearchServiceImpl implements SearchService {
         List<Searchable> results = new ArrayList<>();
 
         if (!directoryIds.isEmpty())
-            results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null), sa.getSortBy(), sa.isAscending()));
+            results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null), sa.getSortArguments()));
         if (!noteIds.isEmpty())
-            results.addAll(noteDao.findNoteByIds(noteIds, sa.getSortBy(), sa.isAscending()));
+            results.addAll(noteDao.findNoteByIds(noteIds, maybeUser.orElse(null), sa.getSortArguments()));
 
         return new Page<>(
                 results,

@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.models.directory;
 
 import ar.edu.itba.paw.models.Category;
-import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.search.Searchable;
 import ar.edu.itba.paw.models.converter.LocalDateTimeConverter;
-import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
 
 import javax.persistence.*;
@@ -108,6 +107,7 @@ public class Directory implements Searchable {
     public String getIconColor() {
         return iconColor;
     }
+
     @Override
     public boolean getFavorite() {
         return favorite;

@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Pair;
-import ar.edu.itba.paw.models.SearchArguments;
-import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.search.SearchArguments;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
+import ar.edu.itba.paw.models.search.SearchArguments;
+import ar.edu.itba.paw.models.search.SortArguments;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -22,14 +24,16 @@ public class SearchJpaDao implements SearchDao {
 
     @Override
     public List<Pair<UUID, Boolean>> search(SearchArguments sa) {
+        SortArguments sortArgs = sa.getSortArguments();
+
         QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
-                .append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME))
+                .append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Search t WHERE TRUE ");
 
         applyInstitutionFilters(queryCreator, sa);
         applyGeneralFilters(queryCreator, sa);
 
-        queryCreator.append("ORDER BY isNote ASC, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME)).append(sa.isAscending() ? "" : " DESC ");
+        queryCreator.append("ORDER BY isNote ASC, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME)).append(sortArgs.isAscending() ? "" : " DESC ");
 
         Query query = em.createNativeQuery(queryCreator.createQuery())
                 .setFirstResult(sa.getPageSize() * (sa.getPage() - 1))
@@ -57,13 +61,15 @@ public class SearchJpaDao implements SearchDao {
 
     @Override
     public List<Pair<UUID, Boolean>> getNavigationResults(SearchArguments sa, UUID parentId) {
+        SortArguments sortArgs = sa.getSortArguments();
+
         QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
-                .append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME))
+                .append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Navigation t WHERE t.parent_id = :parentId ");
         queryCreator.addParameter("parentId", parentId);
         // TODO: Modularize
         applyGeneralFilters(queryCreator, sa);
-        queryCreator.append("ORDER BY isNote ASC, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sa.getSortBy(), NAME)).append(sa.isAscending() ? "" : " DESC ");
+        queryCreator.append("ORDER BY isNote ASC, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME)).append(sortArgs.isAscending() ? "" : " DESC ");
 
         Query query = em.createNativeQuery(queryCreator.createQuery())
                 .setFirstResult(sa.getPageSize() * (sa.getPage() - 1))

@@ -1,8 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.directory.Favorite;
+import ar.edu.itba.paw.models.directory.DirectoryFavorite;
+import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
 
@@ -97,35 +98,35 @@ public class DirectoryJpaDao implements DirectoryDao {
 
     @Override
     public List<Directory> getFavorites(UUID userId) {
-        return em.createQuery("SELECT d FROM Favorite f JOIN f.directory d LEFT JOIN d.user u WHERE f.user.id = :userId AND (d.visible = true OR u.id = :userId)", Directory.class)
+        return em.createQuery("SELECT d FROM DirectoryFavorite f JOIN f.directory d LEFT JOIN d.user u WHERE f.user.id = :userId AND (d.visible = true OR u.id = :userId)", Directory.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
 
     @Override
     public void addFavorite(UUID userId, UUID directoryId) {
-        Favorite fav = new Favorite(em.getReference(User.class, userId), em.getReference(Directory.class, directoryId));
+        DirectoryFavorite fav = new DirectoryFavorite(em.getReference(User.class, userId), em.getReference(Directory.class, directoryId));
         em.persist(fav);
     }
 
     @Override
     public boolean removeFavorite(UUID userId, UUID directoryId) {
-        return em.createQuery("DELETE FROM Favorite f WHERE f.user.id = :userId AND f.directory.id = :directoryId")
+        return em.createQuery("DELETE FROM DirectoryFavorite f WHERE f.user.id = :userId AND f.directory.id = :directoryId")
                 .setParameter("userId", userId)
                 .setParameter("directoryId", directoryId)
                 .executeUpdate() == 1;
     }
 
     @Override
-    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser, SearchArguments.SortBy sortBy, boolean ascending) {
+    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser, SortArguments sortArgs) {
         // TODO: make more readable
         if (directoryIds.isEmpty()) return Collections.emptyList();
-        List<Directory> directories = em.createQuery(String.format("FROM Directory d WHERE d.id IN :directoryIds ORDER BY %s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sortBy, NAME), ascending? "ASC" : "DESC"), Directory.class)
+        List<Directory> directories = em.createQuery(String.format("SELECT d FROM Directory d LEFT JOIN d.user u WHERE d.id IN :directoryIds ORDER BY d.%s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sortArgs.getSortBy(), NAME), sortArgs.isAscending()? "ASC" : "DESC"), Directory.class)
                 .setParameter("directoryIds", directoryIds)
                 .getResultList();
-        // TODO: Optimize
+
         if (currentUser != null) {
-            List<Directory> favorites = em.createQuery("SELECT f.directory FROM Favorite f WHERE f.user = :user AND f.directory.id IN :directoryIds", Directory.class)
+            List<Directory> favorites = em.createQuery("SELECT f.directory FROM DirectoryFavorite f WHERE f.user = :user AND f.directory.id IN :directoryIds", Directory.class)
                     .setParameter("user", currentUser)
                     .setParameter("directoryIds", directoryIds)
                     .getResultList();
@@ -134,8 +135,9 @@ public class DirectoryJpaDao implements DirectoryDao {
         return directories;
     }
 
-    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser) {
-        return findDirectoriesByIds(directoryIds, currentUser, SearchArguments.SortBy.DATE, true);
+    @Override
+    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds) {
+        return findDirectoriesByIds(directoryIds, null, new SortArguments(SortArguments.SortBy.DATE, true));
     }
 
 }

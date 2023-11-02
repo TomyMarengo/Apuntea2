@@ -127,4 +127,26 @@ public class NoteServiceImpl implements NoteService {
         if (!noteDao.deleteReview(noteId, userId)) throw new InvalidReviewException();
         emailService.sendDeleteReviewEmail(review, reason);
     }
+
+    @Transactional
+    @Override
+    public List<Note> getFavorites() {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        return noteDao.getFavorites(currentUserId);
+    }
+
+    @Transactional
+    @Override
+    public void addFavorite(UUID noteId) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        noteDao.addFavorite(currentUserId, noteId);
+    }
+
+    @Transactional
+    @Override
+    public void removeFavorite(UUID noteId) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        boolean success = noteDao.removeFavorite(currentUserId, noteId);
+        if (!success) throw new InvalidNoteException();
+    }
 }

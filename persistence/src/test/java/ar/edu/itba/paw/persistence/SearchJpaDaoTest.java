@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import ar.edu.itba.paw.models.SearchArguments.SearchArgumentsBuilder;
+import ar.edu.itba.paw.models.search.SearchArguments.SearchArgumentsBuilder;
 
 import static ar.edu.itba.paw.persistence.TestUtils.*;
 import static ar.edu.itba.paw.persistence.TestUtils.EDA_ID;

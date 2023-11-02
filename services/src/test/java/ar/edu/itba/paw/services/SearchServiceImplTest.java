@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Page;
-import ar.edu.itba.paw.models.SearchArguments;
-import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.search.Searchable;
+import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
 import ar.edu.itba.paw.persistence.SearchDao;
@@ -64,7 +64,7 @@ public class SearchServiceImplTest {
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
 
-        Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
+        Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, SortArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -81,7 +81,7 @@ public class SearchServiceImplTest {
         Mockito.when(searchDao.countSearchResults(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.search(Mockito.any())).thenReturn(Collections.emptyList());
 
-        Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
+        Page<Searchable> results = searchService.search(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), "other", null, SortArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -114,7 +114,7 @@ public class SearchServiceImplTest {
         Mockito.when(searchDao.countNavigationResults(Mockito.any(), Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.getNavigationResults(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
 
-        Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
+        Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, SortArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -131,7 +131,7 @@ public class SearchServiceImplTest {
         Mockito.when(searchDao.countNavigationResults(Mockito.any(), Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(searchDao.getNavigationResults(Mockito.any(), Mockito.any())).thenReturn(Collections.emptyList());
 
-        Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, SearchArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
+        Page<Searchable> results = searchService.getNavigationResults(UUID.randomUUID(), "other", null, SortArguments.SortBy.DATE.toString(), true, PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());

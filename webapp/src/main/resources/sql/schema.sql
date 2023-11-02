@@ -192,7 +192,10 @@ ALTER TABLE Users
     ADD CONSTRAINT "CK_users_status" CHECK (status IN ('ACTIVE', 'BANNED', 'DELETED')),
     DROP COLUMN IF EXISTS profile_picture;
 
-CREATE TABLE IF NOT EXISTS Favorites
+-- Run before sprint 5 deployment if there are any favorites
+ALTER TABLE IF EXISTS Favorites RENAME TO Directory_Favorites;
+
+CREATE TABLE IF NOT EXISTS Directory_Favorites
 (
   user_id uuid NOT NULL,
   directory_id uuid NOT NULL,
@@ -242,4 +245,16 @@ CREATE TABLE IF NOT EXISTS Note_Files
 INSERT INTO Note_Files (file, note_id) SELECT file, note_id FROM Notes WHERE file IS NOT NULL;
 
 ALTER TABLE Notes DROP COLUMN IF EXISTS file;
+
+-----------------------------------------------------------------------------------------------------------
+--SPRINT 5
+
+CREATE TABLE IF NOT EXISTS Note_Favorites
+(
+    user_id uuid NOT NULL,
+    note_id uuid NOT NULL,
+    CONSTRAINT "PK_note_favorites" PRIMARY KEY (user_id, note_id),
+    CONSTRAINT "FK_note_favorites_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE,
+    CONSTRAINT "FK_note_favorites_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE
+);
 

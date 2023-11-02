@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.institutional.dtos.InstitutionDataDto;
+import ar.edu.itba.paw.models.search.Searchable;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SearchService;

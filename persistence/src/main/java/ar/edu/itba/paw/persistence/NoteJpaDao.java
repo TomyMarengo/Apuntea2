@@ -1,10 +1,14 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Category;
-import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.directory.DirectoryFavorite;
+import ar.edu.itba.paw.models.note.NoteFavorite;
+import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
 import org.slf4j.Logger;
@@ -15,8 +19,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.*;
-
-import static ar.edu.itba.paw.models.NameConstants.NAME;
 
 @Repository
 public class NoteJpaDao implements NoteDao {
@@ -121,17 +123,49 @@ public class NoteJpaDao implements NoteDao {
                 .executeUpdate() == 1;
     }
 
+
     @Override
-    public List<Note> findNoteByIds(List<UUID> noteIds, SearchArguments.SortBy sortBy, boolean ascending) {
-        if (noteIds.isEmpty()) return Collections.emptyList();
-        return em.createQuery(String.format("FROM Note n WHERE n.id IN :noteIds ORDER BY %s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sortBy, "avgScore"), ascending? "ASC" : "DESC"), Note.class)
-                .setParameter("noteIds", noteIds)
+    public List<Note> getFavorites(UUID userId) {
+        return em.createQuery("SELECT n FROM NoteFavorite f JOIN f.note n LEFT JOIN n.user u WHERE f.user.id = :userId AND (n.visible = true OR u.id = :userId)", Note.class)
+                .setParameter("userId", userId)
                 .getResultList();
     }
 
     @Override
+    public void addFavorite(UUID userId, UUID noteId) {
+        NoteFavorite fav = new NoteFavorite(em.getReference(User.class, userId), em.getReference(Note.class, noteId));
+        em.persist(fav);
+    }
+
+    @Override
+    public boolean removeFavorite(UUID userId, UUID noteId) {
+        return em.createQuery("DELETE FROM NoteFavorite f WHERE f.user.id = :userId AND f.note.id = :noteId")
+                .setParameter("userId", userId)
+                .setParameter("noteId", noteId)
+                .executeUpdate() == 1;
+    }
+
+
+    @Override
+    public List<Note> findNoteByIds(List<UUID> noteIds, User currentUser, SortArguments sa) {
+        if (noteIds.isEmpty()) return Collections.emptyList();
+        List<Note> notes = em.createQuery(String.format("SELECT n FROM Note n JOIN n.user u WHERE n.id IN :noteIds ORDER BY n.%s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sa.getSortBy(), "avgScore"), sa.isAscending()? "" : "DESC"), Note.class)
+                .setParameter("noteIds", noteIds)
+                .getResultList();
+
+        if (currentUser != null) {
+            List<Note> favorites = em.createQuery("SELECT f.note FROM NoteFavorite f WHERE f.user = :user AND f.note.id IN :noteIds", Note.class)
+                    .setParameter("user", currentUser)
+                    .setParameter("noteIds", noteIds)
+                    .getResultList();
+            favorites.forEach(note -> note.setFavorite(true));
+        }
+        return notes;
+    }
+
+    @Override
     public List<Note> findNoteByIds(List<UUID> noteIds) {
-        return findNoteByIds(noteIds, SearchArguments.SortBy.DATE, true);
+        return findNoteByIds(noteIds, null, new SortArguments(SortArguments.SortBy.DATE, true));
     }
 
 }

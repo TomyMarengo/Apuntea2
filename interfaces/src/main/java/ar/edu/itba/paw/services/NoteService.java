@@ -19,4 +19,7 @@ public interface NoteService {
     void delete(UUID[] noteIds, String reason);
     List<Review> getReviews(UUID noteId);
     void deleteReview(UUID noteId, UUID userId, String reason);
+    List<Note> getFavorites();
+    void addFavorite(UUID noteId);
+    void removeFavorite(UUID noteId);
 }

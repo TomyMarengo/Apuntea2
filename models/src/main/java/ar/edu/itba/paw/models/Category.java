@@ -18,4 +18,8 @@ public enum Category {
     public String getFormattedName() {
         return displayName;
     }
+
+    public String getType() {
+        return this == DIRECTORY ? DIRECTORY.getFormattedName() : NOTE.getFormattedName();
+    }
 }

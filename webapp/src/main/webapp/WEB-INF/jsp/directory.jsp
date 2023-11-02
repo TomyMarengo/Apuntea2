@@ -359,9 +359,15 @@
                         <td class="search-actions">
                             <div class="d-flex justify-content-end">
                                 <!-- Favorite -->
-                                <c:if test="${user ne null and item.category.formattedName eq 'directory'}">
-                                    <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
-                                    <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
+                                <c:if test="${user ne null}">
+                                    <c:if test="${item.category.type eq 'directory'}">
+                                        <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
+                                        <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
+                                    </c:if>
+                                    <c:if test="${item.category.type ne 'directory'}">
+                                        <c:set var="addFavorite" value="../notes/${item.id}/addfavorite"/>
+                                        <c:set var="removeFavorite" value="../notes/${item.id}/removefavorite"/>
+                                    </c:if>
 
                                     <div data-bs-toggle="tooltip" data-bs-placement="bottom"
                                          data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
@@ -489,30 +495,32 @@
                                         </div>
 
                                         <div class="d-flex">
-                                            <!-- FAVORITE -->
-                                            <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
-                                            <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
+                                            <c:if test="${user ne null}">
+                                                <!-- FAVORITE -->
+                                                <c:set var="addFavorite" value="./${item.id}/addfavorite"/>
+                                                <c:set var="removeFavorite" value="./${item.id}/removefavorite"/>
 
-                                            <div data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                 data-bs-title="<spring:message code="favorite"/>"
-                                                 data-bs-trigger="hover">
-                                                <form:form action="${item.favorite ? removeFavorite : addFavorite}"
-                                                           method="post">
-                                                    <input name="redirectUrl"
-                                                           value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}"
-                                                           type="hidden"/>
-                                                    <button type="submit"
-                                                            class="btn nav-icon-button favorite-button"
-                                                            data-bs-toggle="tooltip"
-                                                            data-bs-placement="bottom"
-                                                            data-bs-title="<spring:message code="favorite"/>"
-                                                            id="<c:out value="${item.id}"/>.f1">
-                                                        <img src="<c:url value="${ item.favorite ?  '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
-                                                             alt="<spring:message code="favorite"/>"
-                                                             class="icon-xs fill-text">
-                                                    </button>
-                                                </form:form>
-                                            </div>
+                                                <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                     data-bs-title="<spring:message code="favorite"/>"
+                                                     data-bs-trigger="hover">
+                                                    <form:form action="${item.favorite ? removeFavorite : addFavorite}"
+                                                               method="post">
+                                                        <input name="redirectUrl"
+                                                               value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}"
+                                                               type="hidden"/>
+                                                        <button type="submit"
+                                                                class="btn nav-icon-button favorite-button"
+                                                                data-bs-toggle="tooltip"
+                                                                data-bs-placement="bottom"
+                                                                data-bs-title="<spring:message code="favorite"/>"
+                                                                id="<c:out value="${item.id}"/>.f1">
+                                                            <img src="<c:url value="${ item.favorite ?  '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
+                                                                 alt="<spring:message code="favorite"/>"
+                                                                 class="icon-xs fill-text">
+                                                        </button>
+                                                    </form:form>
+                                                </div>
+                                            </c:if>
 
                                             <c:if test="${user ne null and (item.user.userId eq user.userId) }">
                                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
@@ -605,6 +613,31 @@
                                         </div>
 
                                         <div class="d-flex">
+                                            <c:if test="${user ne null}">
+                                                <c:set var="addFavorite" value="../notes/${item.id}/addfavorite"/>
+                                                <c:set var="removeFavorite" value="../notes/${item.id}/removefavorite"/>
+
+                                                <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                     data-bs-title="<spring:message code="favorite"/>"
+                                                     data-bs-trigger="hover">
+                                                    <form:form action="${item.favorite ? removeFavorite : addFavorite}"
+                                                               method="post">
+                                                        <input name="redirectUrl"
+                                                               value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}"
+                                                               type="hidden"/>
+                                                        <button type="submit"
+                                                                class="btn nav-icon-button favorite-button"
+                                                                data-bs-toggle="tooltip"
+                                                                data-bs-placement="bottom"
+                                                                data-bs-title="<spring:message code="favorite"/>"
+                                                                id="<c:out value="${item.id}"/>.f1">
+                                                            <img src="<c:url value="${ item.favorite ?  '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
+                                                                 alt="<spring:message code="favorite"/>"
+                                                                 class="icon-xs fill-text">
+                                                        </button>
+                                                    </form:form>
+                                                </div>
+                                            </c:if>
                                             <c:if test="${user ne null and (item.user.userId eq user.userId)}">
                                                 <a data-bs-toggle="tooltip" data-bs-placement="bottom" href="#"
                                                    data-bs-title="<spring:message code="edit"/>"

@@ -1,10 +1,11 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.directory.Favorite;
+import ar.edu.itba.paw.models.directory.DirectoryFavorite;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.NoteFavorite;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.*;
@@ -125,9 +126,15 @@ public class TestUtils {
         em.flush();
     }
 
-    static void insertFavorite(EntityManager em, UUID directoryId, UUID userId) {
-        Favorite favorite = new Favorite(em.getReference(User.class, userId), em.getReference(Directory.class, directoryId));
-        em.persist(favorite);
+    static void insertFavoriteDirectory(EntityManager em, UUID directoryId, UUID userId) {
+        DirectoryFavorite directoryFavorite = new DirectoryFavorite(em.getReference(User.class, userId), em.getReference(Directory.class, directoryId));
+        em.persist(directoryFavorite);
+        em.flush();
+    }
+
+    static void insertFavoriteNote(EntityManager em, UUID noteId, UUID userId) {
+        NoteFavorite noteFavorite = new NoteFavorite(em.getReference(User.class, userId), em.getReference(Note.class, noteId));
+        em.persist(noteFavorite);
         em.flush();
     }
 

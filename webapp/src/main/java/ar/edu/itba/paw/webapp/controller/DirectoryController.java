@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
+import ar.edu.itba.paw.models.search.Searchable;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;

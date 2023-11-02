@@ -13,7 +13,7 @@ import java.util.Objects;
 @IdClass(Review.ReviewKey.class)
 public class Review {
     @Id
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -23,7 +23,7 @@ public class Review {
     private int score;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "note_id")
     private Note note;
 

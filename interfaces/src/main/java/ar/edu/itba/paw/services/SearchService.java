@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Page;
-import ar.edu.itba.paw.models.Searchable;
+import ar.edu.itba.paw.models.search.Searchable;
 
 import java.util.Optional;
 import java.util.UUID;

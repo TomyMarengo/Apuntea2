@@ -41,8 +41,9 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Transactional
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
+        // TODO: Group both methods in one
         List<UUID> directoryPathIds =  directoryDao.getDirectoryPathIds(directoryId);
-        List<Directory> directories = directoryDao.findDirectoriesByIds(directoryPathIds, securityService.getCurrentUser().orElse(null));
+        List<Directory> directories = directoryDao.findDirectoriesByIds(directoryPathIds);
         return new DirectoryPath(directories);
     }
 
@@ -70,7 +71,7 @@ public class DirectoryServiceImpl implements DirectoryService{
             if (!directoryDao.delete(directoryIdsList, currentUser.getUserId()))
                 throw new InvalidDirectoryException();
         } else {
-            List<Directory> directories = directoryDao.findDirectoriesByIds(directoryIdsList, currentUser);
+            List<Directory> directories = directoryDao.findDirectoriesByIds(directoryIdsList);
             if (directories.size() != directoryIdsList.size() || !directoryDao.delete(directoryIdsList)) throw new InvalidDirectoryException();
             directories.forEach(d -> emailService.sendDeleteDirectoryEmail(d, reason));
         }

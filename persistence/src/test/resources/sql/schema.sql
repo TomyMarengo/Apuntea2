@@ -238,3 +238,17 @@ INSERT INTO Note_Files (file, note_id) SELECT file, note_id FROM Notes WHERE fil
 
 ALTER TABLE Notes DROP COLUMN file;
 
+-----------------------------------------------------------------------------------------------------------
+--SPRINT 5
+
+ALTER TABLE Favorites RENAME TO Directory_Favorites;
+
+CREATE TABLE IF NOT EXISTS Note_Favorites
+(
+    user_id uuid NOT NULL,
+    note_id uuid NOT NULL,
+    CONSTRAINT "PK_note_favorites" PRIMARY KEY (user_id, note_id),
+    CONSTRAINT "FK_note_favorites_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE,
+    CONSTRAINT "FK_note_favorites_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE
+);
+

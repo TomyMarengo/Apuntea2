@@ -1,5 +1,4 @@
-package ar.edu.itba.paw.models.directory;
-
+package ar.edu.itba.paw.models.note;
 
 import ar.edu.itba.paw.models.user.User;
 
@@ -8,9 +7,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "favorites")
-@IdClass(Favorite.FavoriteKey.class)
-public class Favorite {
+@Table(name = "Note_Favorites")
+@IdClass(NoteFavorite.FavoriteKey.class)
+public class NoteFavorite {
     @Id
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -19,20 +18,20 @@ public class Favorite {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "directory_id")
+    @JoinColumn(name = "note_id")
     @MapsId
-    Directory directory;
+    Note note;
 
-    /* package-private */ Favorite() {}
+    /* package-private */ NoteFavorite() {}
 
-    public Favorite(User user, Directory directory) {
+    public NoteFavorite(User user, Note note) {
         this.user = user;
-        this.directory = directory;
+        this.note = note;
     }
 
     public static class FavoriteKey implements Serializable {
         private User user;
-        private Directory directory;
+        private Note note;
 
         /* package-private */ FavoriteKey() {}
 
@@ -41,12 +40,12 @@ public class Favorite {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             FavoriteKey that = (FavoriteKey) o;
-            return Objects.equals(user, that.user) && Objects.equals(directory, that.directory);
+            return Objects.equals(user, that.user) && Objects.equals(note, that.note);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(user, directory);
+            return Objects.hash(user, note);
         }
     }
 

@@ -1,8 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.SearchArguments;
+import ar.edu.itba.paw.models.search.SearchArguments;
 
-import static ar.edu.itba.paw.models.SearchArguments.*;
+import static ar.edu.itba.paw.models.search.SortArguments.*;
 import static ar.edu.itba.paw.models.NameConstants.*;
 
 import java.util.EnumMap;
@@ -16,13 +16,13 @@ public class JdbcDaoUtils {
     static final String CAREERS_ATTR = "careers";
     static final String SUBJECTS_ATTR = "subjects";
 
-    static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SearchArguments.SortBy.class);
+    static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SortBy.class);
     static{
         SORTBY.put(SortBy.DATE, CREATED_AT);
         SORTBY.put(SortBy.NAME, NAME);
         SORTBY.put(SortBy.SCORE, AVG_SCORE);
     }
-    static final EnumMap<SortBy, String> SORTBY_CAMELCASE = new EnumMap<>(SearchArguments.SortBy.class);
+    static final EnumMap<SortBy, String> SORTBY_CAMELCASE = new EnumMap<>(SortBy.class);
     static{
         SORTBY_CAMELCASE.put(SortBy.DATE, "createdAt");
         SORTBY_CAMELCASE.put(SortBy.NAME, NAME);

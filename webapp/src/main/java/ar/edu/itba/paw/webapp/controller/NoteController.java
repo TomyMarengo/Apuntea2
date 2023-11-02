@@ -124,6 +124,22 @@ public class NoteController {
 
     }
 
+    @RequestMapping(value = "/{noteId}/addfavorite", method = RequestMethod.POST)
+    public ModelAndView addFavoriteNote(@PathVariable("noteId") @ValidUuid UUID noteId,
+                                             @RequestParam String redirectUrl, final RedirectAttributes redirectAttributes) {
+        noteService.addFavorite(noteId);
+        redirectAttributes.addFlashAttribute(FAVORITE_ADDED, true);
+        return new ModelAndView("redirect:" + redirectUrl);
+    }
+
+    @RequestMapping(value = "/{noteId}/removefavorite", method = RequestMethod.POST)
+    public ModelAndView removeFavoriteNote(@PathVariable("noteId") @ValidUuid UUID noteId,
+                                                @RequestParam String redirectUrl, final RedirectAttributes redirectAttributes) {
+        noteService.removeFavorite(noteId);
+        redirectAttributes.addFlashAttribute(FAVORITE_REMOVED, true);
+        return new ModelAndView("redirect:" + redirectUrl);
+    }
+
     @ModelAttribute("user")
     public User getCurrentUser() {
         return this.securityService.getCurrentUser().orElse(null);
