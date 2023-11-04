@@ -18,6 +18,9 @@ public class SearchForm {
     @ValidUuid
     private UUID subjectId;
 
+    @ValidUuid
+    private UUID userId;
+
     @Pattern(regexp = "note|directory|theory|practice|exam|other|all")
     private String category = "note";
 
@@ -65,6 +68,14 @@ public class SearchForm {
 
     public void setSubjectId(UUID subjectId) {
         this.subjectId = subjectId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getCategory() {

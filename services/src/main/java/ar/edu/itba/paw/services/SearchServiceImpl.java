@@ -49,11 +49,12 @@ public class SearchServiceImpl implements SearchService {
 
     @Transactional
     @Override
-    public Page<Searchable> search(UUID institutionId, UUID careerId, UUID subjectId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
+    public Page<Searchable> search(UUID institutionId, UUID careerId, UUID subjectId, UUID userId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder()
                 .institutionId(institutionId)
                 .careerId(careerId)
                 .subjectId(subjectId)
+                .userId(userId)
                 .category(category)
                 .word(word)
                 .sortBy(sortBy)
@@ -92,9 +93,11 @@ public class SearchServiceImpl implements SearchService {
 
     @Transactional
     @Override
-    public Page<Searchable> getNavigationResults(UUID parentId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
+    public Page<Searchable> getNavigationResults(UUID parentId, UUID userId, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder()
+                .userId(userId)
                 .category(category)
+                .userId(userId)
                 .word(word)
                 .sortBy(sortBy)
                 .ascending(ascending);

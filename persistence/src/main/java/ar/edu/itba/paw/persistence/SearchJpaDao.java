@@ -111,7 +111,6 @@ public class SearchJpaDao implements SearchDao {
         return ((BigInteger)em.createNativeQuery("SELECT COUNT(*) FROM Navigation WHERE parent_id = :parentId")
                 .setParameter("parentId", parentId)
                 .getSingleResult()).intValue();
-        //return jdbcTemplate.queryForObject("SELECT COUNT(*) FROM Navigation WHERE parent_id = ?", new Object[]{parentId}, Integer.class);
     }
 
     private void applyInstitutionFilters(QueryCreator queryCreator, SearchArguments sa) {

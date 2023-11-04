@@ -111,5 +111,4 @@ public class UserController {
         }
         return new ModelAndView("change-password").addObject("errorsChangePasswordForm", result.getAllErrors());
     }
-
 }

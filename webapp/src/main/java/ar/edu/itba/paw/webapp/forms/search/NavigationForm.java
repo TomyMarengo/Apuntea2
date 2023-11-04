@@ -1,12 +1,17 @@
 package ar.edu.itba.paw.webapp.forms.search;
 
+import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 public class NavigationForm {
+
+    @ValidUuid
+    private UUID userId;
 
     @Pattern(regexp = "note|theory|practice|exam|other|directory|all")
     private String category = "all";
@@ -81,5 +86,13 @@ public class NavigationForm {
 
     public boolean getIsNote() {
         return !category.equals("all") && !category.equals("directory");
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 }

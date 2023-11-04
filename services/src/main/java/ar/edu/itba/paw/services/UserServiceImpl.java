@@ -53,6 +53,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public Optional<User> findById(UUID userId) {
+        return userDao.findById(userId);
+    }
+
+    @Transactional
+    @Override
     public Optional<User> findByEmail(String email) {
         return userDao.findByEmail(email);
     }

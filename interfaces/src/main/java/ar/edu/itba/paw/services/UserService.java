@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
+    Optional<User> findById(UUID userId);
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
     void create(String email, String password, UUID careerId, Role role);

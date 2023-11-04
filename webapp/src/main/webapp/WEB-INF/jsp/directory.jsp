@@ -62,6 +62,12 @@
         </div>
 
         <form:hidden path="pageNumber" id="pageNumber" value="1"/>
+        <form:hidden path="pageSize" id="pageSize"/>
+        
+        <!-- TODO: Maybe move and add profile info? -->
+        <c:if test="${filterUser ne null}">
+            <form:hidden path="userId" id="userId" value="${filterUser.userId}"/>
+        </c:if>
 
         <div class="w-25">
             <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>

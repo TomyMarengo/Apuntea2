@@ -5,10 +5,7 @@ import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
 import ar.edu.itba.paw.models.search.Searchable;
 import ar.edu.itba.paw.models.user.User;
-import ar.edu.itba.paw.services.DirectoryService;
-import ar.edu.itba.paw.services.NoteService;
-import ar.edu.itba.paw.services.SearchService;
-import ar.edu.itba.paw.services.SecurityService;
+import ar.edu.itba.paw.services.*;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 
@@ -44,15 +41,17 @@ public class DirectoryController {
     private final NoteService noteService;
     private final SearchService searchService;
     private final SecurityService securityService;
+    private final UserService userService;
 
     private	static	final Logger LOGGER	= LoggerFactory.getLogger(DirectoryController.class);
 
     @Autowired
-    public DirectoryController(DirectoryService directoryService, NoteService noteService, SearchService searchService, SecurityService securityService) {
+    public DirectoryController(DirectoryService directoryService, NoteService noteService, SearchService searchService, SecurityService securityService, UserService userService) {
         this.directoryService = directoryService;
         this.noteService = noteService;
         this.searchService = searchService;
         this.securityService = securityService;
+        this.userService = userService;
     }
 
     @RequestMapping(value = "/{directoryId}" ,method = RequestMethod.GET)
@@ -74,10 +73,15 @@ public class DirectoryController {
         mav.addObject("deleteDirectoryIds", toSafeJson(model.get(DELETE_DIRECTORY_IDS)));
         loadToastFlashAttributes(mav, model);
 
+
+        if (navigationForm.getUserId() != null)
+            userService.findById(navigationForm.getUserId()).ifPresent(u -> mav.addObject("filterUser", u));
+
         Directory directory = directoryService.getDirectoryById(directoryId).orElseThrow(DirectoryNotFoundException::new);
 
         Page<Searchable> pageResult = searchService.getNavigationResults(
                 directoryId,
+                navigationForm.getUserId(),
                 navigationForm.getNormalizedCategory(),
                 navigationForm.getWord(),
                 navigationForm.getSortBy(),

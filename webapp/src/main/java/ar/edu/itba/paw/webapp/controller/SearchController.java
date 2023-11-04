@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.services.SecurityService;
+import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.forms.search.SearchForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,12 +30,14 @@ public class SearchController {
     private final InstitutionService institutionService;
     private final SearchService searchService;
     private final SecurityService securityService;
+    private final UserService userService;
 
     @Autowired
-    public SearchController(final InstitutionService institutionService, final SearchService searchService, final SecurityService securityService) {
+    public SearchController(final InstitutionService institutionService, final SearchService searchService, final SecurityService securityService, final UserService userService) {
         this.institutionService = institutionService;
         this.searchService = searchService;
         this.securityService = securityService;
+        this.userService = userService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -44,10 +47,14 @@ public class SearchController {
 
         final ModelAndView mav = new ModelAndView("search");
 
+        if (searchForm.getUserId() != null)
+            userService.findById(searchForm.getUserId()).ifPresent(u -> mav.addObject("filterUser", u));
+
         Page<Searchable> pageResult = searchService.search(
                     searchForm.getInstitutionId(),
                     searchForm.getCareerId(),
                     searchForm.getSubjectId(),
+                    searchForm.getUserId(),
                     searchForm.getNormalizedCategory(),
                     searchForm.getWord(),
                     searchForm.getSortBy(),
