@@ -53,9 +53,7 @@
            method="get"
            id="searchForm"
            cssClass="d-flex flex-column gap-2">
-
     <div class="container my-5 d-flex flex-column align-items-center">
-
         <div class="w-50 input-group mb-3">
             <spring:message code="search.word.placeholder" var="placeholderSearch"/>
             <form:input path="word" type="text" class="form-control bg-bg" placeholder='${placeholderSearch}'/>
@@ -63,14 +61,19 @@
 
         <form:hidden path="pageNumber" id="pageNumber" value="1"/>
         <form:hidden path="pageSize" id="pageSize"/>
-        
+
         <!-- TODO: Maybe move and add profile info? -->
         <c:if test="${filterUser ne null}">
             <form:hidden path="userId" id="userId" value="${filterUser.userId}"/>
         </c:if>
-
-        <div class="w-25">
-            <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
+        <div class="w-50 d-flex flex-column justify-content-center align-items-center">
+            <button type="submit" class="btn button-primary w-50"><spring:message code="search.button"/></button>
+            <c:if test="${filterUser ne null}">
+                <a class="btn text-dark-primary" href="./${directory.id}?userId=${filterUser.userId}"><spring:message code="search.button.clearAll"/></a>
+            </c:if>
+            <c:if test="${filterUser eq null}">
+                <a class="btn text-dark-primary" href="./${directory.id}"><spring:message code="search.button.clearAll"/></a>
+            </c:if>
         </div>
     </div>
 
@@ -236,20 +239,22 @@
                         </button>
                     </a>
                 </c:if>
-
-                <form:select path="pageSize" class="form-select bg-bg mx-2" onchange="submitSearchForm()">
-                    <form:option value="12">12</form:option>
-                    <form:option value="18">18</form:option>
-                    <form:option value="24">24</form:option>
-                    <c:if test="${navigationForm.pageSize ne 12 and navigationForm.pageSize ne 18 and navigationForm.pageSize ne 24}">
-                        <form:option value="${navigationForm.pageSize}"><c:out value="${navigationForm.pageSize}"/></form:option>
-                    </c:if>
-                </form:select>
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                   data-bs-title="<spring:message code="search.button.pageSize"/>"
+                   data-bs-trigger="hover">
+                    <form:select path="pageSize" class="form-select bg-bg mx-2" onchange="submitSearchForm()">
+                        <form:option value="12">12</form:option>
+                        <form:option value="18">18</form:option>
+                        <form:option value="24">24</form:option>
+                        <c:if test="${navigationForm.pageSize ne 12 and navigationForm.pageSize ne 18 and navigationForm.pageSize ne 24}">
+                            <form:option value="${navigationForm.pageSize}"><c:out value="${navigationForm.pageSize}"/></form:option>
+                        </c:if>
+                    </form:select>
+                </a>
             </div>
         </c:if>
     </div>
 </form:form>
-
 
 <c:if test="${empty results}">
     <section class="container text-center mt-4 d-flex flex-column align-items-center gap-2">

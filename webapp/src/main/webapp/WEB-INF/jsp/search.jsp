@@ -279,14 +279,18 @@
                          class="icon-s fill-dark-primary"/>
                 </button>
 
-                <form:select path="pageSize" class="form-select bg-bg mx-2" onchange="submitSearchForm()">
-                    <form:option value="12">12</form:option>
-                    <form:option value="18">18</form:option>
-                    <form:option value="24">24</form:option>
-                    <c:if test="${searchForm.pageSize ne 12 and searchForm.pageSize ne 18 and searchForm.pageSize ne 24}">
-                        <form:option value="${searchForm.pageSize}"><c:out value="${searchForm.pageSize}"/></form:option>
-                    </c:if>
-                </form:select>
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                   data-bs-title="<spring:message code="search.button.pageSize"/>"
+                   data-bs-trigger="hover">
+                    <form:select path="pageSize" class="form-select bg-bg mx-2" onchange="submitSearchForm()">
+                        <form:option value="12">12</form:option>
+                        <form:option value="18">18</form:option>
+                        <form:option value="24">24</form:option>
+                        <c:if test="${searchForm.pageSize ne 12 and searchForm.pageSize ne 18 and searchForm.pageSize ne 24}">
+                            <form:option value="${searchForm.pageSize}"><c:out value="${searchForm.pageSize}"/></form:option>
+                        </c:if>
+                    </form:select>
+                </a>
                 </div>
         </c:if>
     </div>
@@ -310,7 +314,7 @@
                 <thead>
                 <tr>
                     <th class="col-md-3"><spring:message code="name"/></th>
-                    <th class="col-md-2"><spring:message code="subject"/></th>
+                    <th class="col-md-3"><spring:message code="subject"/></th>
                     <th class="col-md-2"><spring:message code="owner"/></th>
                     <th class="col-md-1"><spring:message code="createdAt"/></th>
 
@@ -367,7 +371,11 @@
                                     <c:out value="${item.name}"/>
                                 </span>
                         </td>
-                        <td><c:out value="${item.subject.name}"/></td>
+                        <td>
+                            <p class="subject-name">
+                                <c:out value="${item.subject.name}"/>
+                            </p>
+                        </td>
                         <td><c:out value="${item.user.email}"/></td>
                         <td><spring:message code="date.format"
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
