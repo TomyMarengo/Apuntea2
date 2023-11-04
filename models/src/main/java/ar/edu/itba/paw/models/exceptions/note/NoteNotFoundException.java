@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models.exceptions.note;
 
-public class NoteNotFoundException extends RuntimeException{
+import ar.edu.itba.paw.models.exceptions.NotFoundException;
+
+public class NoteNotFoundException extends NotFoundException {
     public NoteNotFoundException() {
     }
     public NoteNotFoundException(Throwable var1) {

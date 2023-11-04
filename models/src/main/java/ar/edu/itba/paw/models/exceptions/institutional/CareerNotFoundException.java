@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models.exceptions.institutional;
 
-public class CareerNotFoundException extends RuntimeException {
+import ar.edu.itba.paw.models.exceptions.NotFoundException;
+
+public class CareerNotFoundException extends NotFoundException {
     public CareerNotFoundException() {
     }
     public CareerNotFoundException(Throwable var1) {

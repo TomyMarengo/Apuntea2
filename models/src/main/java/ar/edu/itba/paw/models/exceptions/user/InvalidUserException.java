@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models.exceptions.user;
 
-public class InvalidUserException extends RuntimeException {
+import ar.edu.itba.paw.models.exceptions.InvalidException;
+
+public class InvalidUserException extends InvalidException {
     public InvalidUserException() {
     }
     public InvalidUserException(Throwable var1) {

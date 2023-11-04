@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models.exceptions.user;
 
-public class UserNotFoundException extends RuntimeException{
+import ar.edu.itba.paw.models.exceptions.NotFoundException;
+
+public class UserNotFoundException extends NotFoundException {
     public UserNotFoundException() {
 
     }

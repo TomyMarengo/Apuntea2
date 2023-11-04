@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models.exceptions.note;
 
-public class InvalidNoteException extends RuntimeException {
+import ar.edu.itba.paw.models.exceptions.InvalidException;
+
+public class InvalidNoteException extends InvalidException {
     public InvalidNoteException() {
     }
     public InvalidNoteException(Throwable var1) {

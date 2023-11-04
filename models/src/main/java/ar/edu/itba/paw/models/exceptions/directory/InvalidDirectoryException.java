@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models.exceptions.directory;
 
-public class InvalidDirectoryException extends RuntimeException {
+import ar.edu.itba.paw.models.exceptions.InvalidException;
+
+public class InvalidDirectoryException extends InvalidException {
     public InvalidDirectoryException() {
     }
     public InvalidDirectoryException(Throwable var1) {

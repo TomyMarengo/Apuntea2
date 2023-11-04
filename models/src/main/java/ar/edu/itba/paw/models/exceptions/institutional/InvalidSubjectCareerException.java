@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models.exceptions.institutional;
 
-public class InvalidSubjectCareerException extends RuntimeException {
+import ar.edu.itba.paw.models.exceptions.InvalidException;
+
+public class InvalidSubjectCareerException extends InvalidException {
     public InvalidSubjectCareerException() {
     }
     public InvalidSubjectCareerException(Throwable var1) {
