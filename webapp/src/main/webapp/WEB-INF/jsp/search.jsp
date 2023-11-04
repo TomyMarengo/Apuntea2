@@ -126,7 +126,7 @@
             <div class="col">
                 <div class="input-group mb-3">
                     <spring:message code="search.word.placeholder" var="placeholderSearch"/>
-                    <form:input path="word" type="text" class="form-control bg-bg" placeholder='${placeholderSearch}'/>
+                    <form:input path="word" type="text" id="wordInput" class="form-control bg-bg" placeholder='${placeholderSearch}'/>
                 </div>
             </div>
 
@@ -138,10 +138,17 @@
         <c:if test="${filterUser ne null}">
             <form:hidden path="userId" id="userId" value="${filterUser.userId}"/>
         </c:if>
-
-        <div class="w-25">
-            <button type="submit" class="btn button-primary w-100"><spring:message code="search.button"/></button>
+        
+        <div class="w-50 d-flex flex-column justify-content-center align-items-center">
+            <button type="submit" class="btn button-primary w-50"><spring:message code="search.button"/></button>
+            <c:if test="${filterUser ne null}">
+                <a class="btn text-dark-primary" href="./search?userId=${filterUser.userId}"><spring:message code="search.button.clearAll"/></a>
+            </c:if>
+            <c:if test="${filterUser eq null}">
+                <a class="btn text-dark-primary" href="./search"><spring:message code="search.button.clearAll"/></a>
+            </c:if>
         </div>
+
     </div>
 
     <!-- TOP BUTTONS -->
