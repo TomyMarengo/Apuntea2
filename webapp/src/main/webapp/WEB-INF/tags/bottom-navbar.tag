@@ -6,10 +6,12 @@
 <%@ attribute name="hierarchy" required="false" type="ar.edu.itba.paw.models.directory.DirectoryPath" %>
 <%@ attribute name="category" required="false" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
+<%@ attribute name="user" required="false" type="ar.edu.itba.paw.models.user.User" %>
+<%@ attribute name="blob" required="false" type="ar.edu.itba.paw.models.directory.Directory" %>
 
 <div class="bottom-navbar">
     <c:if test="${hierarchy ne null and (hierarchy.length > 1 or category ne 'directory')}">
-        <div class="d-none d-lg-flex">
+        <div class="d-none d-lg-flex align-items-center">
 
             <a href="<c:url value="${baseUrl}/directory/${hierarchy.rootDirectory.id}"/>">
                 <div class="bottom-navbar-item bn-title">
@@ -17,17 +19,13 @@
                 </div>
             </a>
             <c:if test="${hierarchy.length gt 3}">
-                <div class="bottom-navbar-separator overflow-hidden">
-                    <spring:message code="navbar.bottom.separator"/>
-                </div>
-                <div class="bottom-navbar-item overflow-hidden">
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
+                <div class="bottom-navbar-item">
                     <spring:message code="navbar.bottom.ellipsis"/>
                 </div>
             </c:if>
             <c:if test="${hierarchy.length gt 2}">
-                <div class="bottom-navbar-separator overflow-hidden">
-                    <spring:message code="navbar.bottom.separator"/>
-                </div>
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
                 <a href="<c:url value="${baseUrl}/directory/${hierarchy.parentDirectory.id}"/>">
                     <div class="bottom-navbar-item overflow-hidden">
                         <c:out value="${hierarchy.parentDirectory.name}"/>
@@ -36,9 +34,7 @@
             </c:if>
 
             <c:if test="${category ne 'directory' and hierarchy.length gt 1}">
-                <div class="bottom-navbar-separator overflow-hidden">
-                    <spring:message code="navbar.bottom.separator"/>
-                </div>
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
                 <a href="<c:url value="${baseUrl}/directory/${hierarchy.currentDirectory.id}"/>">
                     <div class="bottom-navbar-item overflow-hidden">
                         <c:out value="${hierarchy.currentDirectory.name}"/>
@@ -47,9 +43,7 @@
             </c:if>
 
             <c:if test="${title != null}">
-                <div class="bottom-navbar-separator overflow-hidden">
-                    <spring:message code="navbar.bottom.separator"/>
-                </div>
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
             </c:if>
 
         </div>
@@ -92,9 +86,7 @@
                     </c:if>
                 </div>
 
-                <div class="bottom-navbar-separator overflow-hidden">
-                    <spring:message code="navbar.bottom.separator"/>
-                </div>
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
 
             </div>
         </div>
@@ -102,10 +94,37 @@
 
     <c:if test="${title != null}">
         <c:set var="titleData" value="${fn:split(title, ':')}"/>
-        <a href="<c:url value="${titleData[0]}"/>">
-            <div class="bottom-navbar-item bn-title active">
-                <c:out value="${titleData[1]}"/>
+        <c:if test="${category ne 'directory' or user.userId ne blob.user.userId}">
+            <a href="<c:url value="${titleData[0]}"/>">
+                <div class="bottom-navbar-item bn-title active">
+                    <c:out value="${titleData[1]}"/>
+                </div>
+            </a>
+        </c:if>
+        <c:if test="${category eq 'directory' and user.userId eq blob.user.userId}">
+            <div class="btn-group">
+                <button class="dropdown-button-container px-2 py-1 d-flex align-items-center justify-content-center text-bg gap-2"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="d-block bottom-navbar-item bn-title active">
+                        <c:out value="${titleData[1]}"/>
+                    </span>
+                    <img src="<c:url value="/svg/chevron-down.svg"/>" class="icon-s dropdown-icon fill-bg" alt="dropdown"/>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <button class="dropdown-item d-flex gap-2 align-items-center justify-content-center"
+                                data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
+                                onclick="editBNavDirectory('<c:out value="${blob.id}"/>', '<c:out value="${blob.name}"/>',
+                                        '<c:out value="${blob.visible}"/>', '<c:out value="${blob.iconColor}"/>',
+                                        '<c:out value="${blob.parentId}"/>')">
+                            <img src="<c:url value="/svg/pencil.svg"/>"
+                                 alt="<spring:message code="edit"/>"
+                                 class="icon-xs fill-text">
+                            <span><spring:message code="editDirectory"/></span>
+                        </button>
+                    </li>
+                </ul>
             </div>
-        </a>
+        </c:if>
     </c:if>
 </div>

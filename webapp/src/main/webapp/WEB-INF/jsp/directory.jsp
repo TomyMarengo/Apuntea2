@@ -42,7 +42,12 @@
 <header>
     <fragment:navbar user="${user}"/>
 
-    <fragment:bottom-navbar title="./${directoryId}:${directory.name}" hierarchy="${hierarchy}" category="directory"/>
+    <fragment:bottom-navbar
+            title="./${directoryId}:${directory.name}"
+            hierarchy="${hierarchy}"
+            category="directory"
+            blob="${directory}"
+    />
 </header>
 
 <c:url var="createUrl" value="./${directoryId}"/>
@@ -60,7 +65,6 @@
         </div>
 
         <form:hidden path="pageNumber" id="pageNumber" value="1"/>
-        <form:hidden path="pageSize" id="pageSize"/>
 
         <!-- TODO: Maybe move and add profile info? -->
         <c:if test="${filterUser ne null}">
@@ -69,10 +73,10 @@
         <div class="w-50 d-flex flex-column justify-content-center align-items-center">
             <button type="submit" class="btn button-primary w-50"><spring:message code="search.button"/></button>
             <c:if test="${filterUser ne null}">
-                <a class="btn text-dark-primary" href="./${directory.id}?userId=${filterUser.userId}"><spring:message code="search.button.clearAll"/></a>
+                <a class="btn text-dark-primary" href="./${directory.id}?userId=${filterUser.userId}"><spring:message code="search.button.clearAllFilters"/></a>
             </c:if>
             <c:if test="${filterUser eq null}">
-                <a class="btn text-dark-primary" href="./${directory.id}"><spring:message code="search.button.clearAll"/></a>
+                <a class="btn text-dark-primary" href="./${directory.id}"><spring:message code="search.button.clearAllFilters"/></a>
             </c:if>
         </div>
     </div>
@@ -242,7 +246,7 @@
                 <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
                    data-bs-title="<spring:message code="search.button.pageSize"/>"
                    data-bs-trigger="hover">
-                    <form:select path="pageSize" class="form-select bg-bg mx-2" onchange="submitSearchForm()">
+                    <form:select path="pageSize" class="form-select bg-bg" onchange="submitSearchForm()">
                         <form:option value="12">12</form:option>
                         <form:option value="18">18</form:option>
                         <form:option value="24">24</form:option>
@@ -1053,7 +1057,7 @@
                                                 code="update"/>"/>
                 </div>
                 <form:hidden path="id" id="directoryId"/>
-                <input type="hidden" name="parentId" value="${directory.id}"/>
+                <input type="hidden" name="parentId" id="parentId" value="${directory.id}"/>
                 <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
             </form:form>
 
@@ -1116,6 +1120,7 @@
     <script src="<c:url value="/js/note-list.js"/>"></script>
     <script src="<c:url value="/js/crud-buttons.js"/>"></script>
 </c:if>
+<script src="<c:url value="/js/crud-buttons-bnav.js"/>"></script>
 
 <c:if test="${errorsEditNoteForm ne null}">
     <script>
@@ -1129,9 +1134,18 @@
 <c:if test="${errorsEditDirectoryForm ne null}">
     <script>
         const id = "<c:out value="${editDirectoryId}"/>";
-        edit(id, true);
+        const myId = "<c:out value="${directoryId}"/>";
+        const name = "<c:out value="${directory.name}"/>";
+        const iconColor = "<c:out value="${directory.iconColor}"/>";
+        const visible = "<c:out value="${directory.visible}"/>";
+        const parentId = "<c:out value="${directory.parentId}"/>";
+        if (id === myId)
+            editBNavDirectory(id, name, visible, iconColor, parentId, true)
+        else
+            edit(id, true)
         let editDirectoryModal = new bootstrap.Modal(document.getElementById('editDirectoryModal'), {})
-        editDirectoryModal.show();
+        editDirectoryModal.show()
+
     </script>
 </c:if>
 

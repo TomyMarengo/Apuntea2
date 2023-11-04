@@ -36,8 +36,8 @@
 	display: flex;
 	align-items: center;
 	background-color: var(--primary);
-	border-top-right-radius: 15px;
-	border-bottom-right-radius: 15px;
+	border-top-right-radius: 50px;
+	border-bottom-right-radius: 50px;
 	min-width: 300px;
 	width: fit-content;
 	height: 40px;
@@ -46,13 +46,6 @@
 	margin-bottom: 1rem;
 }
 
-.bottom-navbar-separator {
-	font-size: large;
-	font-weight: bold;
-	color: var(--dark-bg);
-	padding: 0 15px;
-	cursor: default;
-}
 
 .bottom-navbar-item {
 	font-size: large;
