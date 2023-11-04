@@ -25,16 +25,26 @@ import java.util.UUID;
 import static ar.edu.itba.paw.models.NameConstants.*;
 
 public class TestUtils {
+    // Institutions
     static UUID ITBA_ID = UUID.fromString("10000000-0000-0000-0000-000000000000");
-
     static UUID UTN_ID = UUID.fromString("10000000-0000-0000-0000-000000000001");
+
+    // Careers
     static UUID ING_INF_ID = UUID.fromString("c0000000-0000-0000-0000-000000000000");
     static Career ING_INF = new Career(ING_INF_ID, "");
     static UUID ING_MEC_ID = UUID.fromString("c0000000-0000-0000-0000-000000000001");
     static Career ING_MEC = new Career(ING_MEC_ID, "");
+
+    // Subjects
     static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
+    static UUID PAW_ID = UUID.fromString("50000000-0000-0000-0000-000000000001");
+    static UUID MATE_ID = UUID.fromString("50000000-0000-0000-0000-000000000005");
+
+    // Notes, directories
     static UUID EDA_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000000");
     static UUID PAW_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000001");
+    static UUID MATE_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-00000000000b");
+
     static UUID GUIAS_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000005");
     static UUID THEORY_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000007");
     static UUID MVC_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000008");
@@ -42,13 +52,15 @@ public class TestUtils {
     static UUID MVC_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000002");
     static UUID GUIA1EDA_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000000");
     static UUID PARCIAL_DINAMICA_FLUIDOS_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000004");
+
+    // Users
     static UUID PEPE_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+    static UUID JAIMITO_ID = UUID.fromString("00000000-0000-0000-0000-000000000001");
     static UUID CARLADMIN_ID = UUID.fromString("00000000-0000-0000-0000-000000000002");
     static UUID SAIDMAN_ID = UUID.fromString("00000000-0000-0000-0000-000000000003");
 
     static String PSVM = "private static void main";
 
-    static UUID MATE_ID = UUID.fromString("50000000-0000-0000-0000-000000000005");
     static UUID TVM_ID = UUID.fromString("a0000000-0000-0000-0000-000000000006");
 
     static String VERIFICATION_EMAIL = "verification@itba.edu.ar";

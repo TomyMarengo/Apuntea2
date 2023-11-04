@@ -40,7 +40,7 @@ public class SubjectJpaDao implements SubjectDao {
 
     @Override
     public UUID getSubjectByRootDirectoryId(UUID rootDirectoryId) {
-        return em.createQuery("SELECT s.id FROM Subject s WHERE s.rootDirectoryId = :rootDirectoryId", UUID.class)
+        return em.createQuery("SELECT s.id FROM Subject s WHERE s.rootDirectory.id = :rootDirectoryId", UUID.class)
                 .setParameter("rootDirectoryId", rootDirectoryId)
                 .getSingleResult();
     }
@@ -51,6 +51,15 @@ public class SubjectJpaDao implements SubjectDao {
                         "WHERE sc1.subject NOT IN (SELECT sc2.subject FROM SubjectCareer sc2 WHERE sc2.career.careerId = :careerId) " +
                         "AND sc1.career.institution IN (SELECT sc3.career.institution FROM SubjectCareer sc3 WHERE sc3.career.careerId = :careerId)", Subject.class)
                 .setParameter("careerId", careerId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Subject> getSubjectsByUserId(UUID userId) {
+        return em.createQuery("SELECT DISTINCT s FROM Subject s JOIN s.rootDirectory rd " +
+                        "WHERE EXISTS(SELECT n FROM Note n WHERE n.parentId = rd.id AND n.user.id = :userId) " +
+                        "OR EXISTS(SELECT d FROM Directory d WHERE d.parent = rd AND d.user.id = :userId)", Subject.class)
+                .setParameter("userId", userId)
                 .getResultList();
     }
 

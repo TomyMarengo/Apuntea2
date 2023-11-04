@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -130,6 +131,19 @@ public class Directory implements Searchable {
 
     public void setIconColor(String iconColor) {
         this.iconColor = iconColor;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Directory directory = (Directory) o;
+        return Objects.equals(directoryId, directory.directoryId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(directoryId);
     }
 
     public void setVisible(Boolean visible) {

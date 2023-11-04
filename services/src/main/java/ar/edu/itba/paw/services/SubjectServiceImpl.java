@@ -66,6 +66,12 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectDao.getSubjectsByCareerIdComplemented(careerId).stream().map(SubjectDto::new).collect(Collectors.toList());
     }
 
+    @Transactional
+    @Override
+    public List<Subject> getSubjectsByUserId(UUID userId) {
+        return subjectDao.getSubjectsByUserId(userId);
+    }
+
     @Override
     @Transactional
     public UUID createSubject(String name, UUID careerId, int year) {

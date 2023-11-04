@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +48,9 @@ public class SubjectJpaDaoTest {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private SimpleJdbcInsert jdbcSubjectsCareersInsert;
+
+    private User jaimitoUser;
+    private User pepeUser;
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
@@ -52,6 +58,8 @@ public class SubjectJpaDaoTest {
         jdbcSubjectsCareersInsert = new SimpleJdbcInsert(ds)
                 .withTableName(SUBJECTS_CAREERS)
                 .usingColumns(SUBJECT_ID, CAREER_ID, YEAR);
+        jaimitoUser = em.find(User.class, JAIMITO_ID);
+        pepeUser = em.find(User.class, PEPE_ID);
     }
 
     @Test
@@ -131,6 +139,16 @@ public class SubjectJpaDaoTest {
     }
 
     @Test
+    public void testGetSubjectByRootDirectoryId(){
+        UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
+        Subject insertedSubject = insertSubject(em, "subject1", dirId);
+
+        UUID foundSubjectId = subjectDao.getSubjectByRootDirectoryId(dirId);
+
+        assertEquals(insertedSubject.getSubjectId(), foundSubjectId);
+    }
+
+    @Test
     public void testGetSubjectsByCareerIdComplemented() {
         TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
@@ -161,6 +179,24 @@ public class SubjectJpaDaoTest {
         List<Subject> career3ComplementList = subjectDao.getSubjectsByCareerIdComplemented(test.i1Id);
 
         assertEquals(0, career3ComplementList.size());
+    }
+
+    @Test
+    public void testGetUserSubjects() {
+        Note.NoteBuilder nb = new Note.NoteBuilder()
+                .visible(true)
+                .category(Category.PRACTICE)
+                .fileType("jpg");
+        insertNote(em, nb.name("n1").subject(em.getReference(Subject.class, EDA_ID)).parentId(EDA_DIRECTORY_ID).user(jaimitoUser));
+        insertDirectory(em, new Directory.DirectoryBuilder().name("d1").parentId(PAW_DIRECTORY_ID).user(jaimitoUser));
+        insertNote(em, nb.name("n1").subject(em.getReference(Subject.class, MATE_ID)).parentId(MATE_DIRECTORY_ID).user(pepeUser));
+
+        List<Subject> subjects = subjectDao.getSubjectsByUserId(jaimitoUser.getUserId());
+
+        assertEquals(2, subjects.size());
+        assertTrue(subjects.stream().anyMatch(s -> s.getSubjectId().equals(EDA_ID)));
+        assertTrue(subjects.stream().anyMatch(s -> s.getSubjectId().equals(PAW_ID)));
+        assertTrue(subjects.stream().noneMatch(s -> s.getSubjectId().equals(MATE_ID)));
     }
 
     @Test
