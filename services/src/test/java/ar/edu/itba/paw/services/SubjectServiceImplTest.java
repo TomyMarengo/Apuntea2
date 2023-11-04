@@ -8,6 +8,8 @@ import ar.edu.itba.paw.persistence.CareerDao;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.SearchDao;
 import ar.edu.itba.paw.persistence.SubjectDao;
+
+import static ar.edu.itba.paw.services.ServiceTestUtils.mockDirectory;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,12 +42,12 @@ public class SubjectServiceImplTest {
     @Test
     public void testGetSubjectsGroupByYear() {
         Mockito.when(subjectDao.getSubjectsByCareerId(Mockito.any())).thenReturn(Stream.of(
-                new Subject(UUID.randomUUID(), "Subject 1a", UUID.randomUUID(), 1),
-                new Subject(UUID.randomUUID(), "Subject 1b", UUID.randomUUID(), 1),
-                new Subject(UUID.randomUUID(), "Subject 1c", UUID.randomUUID(), 1),
-                new Subject(UUID.randomUUID(), "Subject 2", UUID.randomUUID(), 2),
-                new Subject(UUID.randomUUID(), "Subject 3a", UUID.randomUUID(), 3),
-                new Subject(UUID.randomUUID(), "Subject 3b", UUID.randomUUID(), 3)
+                new Subject(UUID.randomUUID(), "Subject 1a",  1),
+                new Subject(UUID.randomUUID(), "Subject 1b",  1),
+                new Subject(UUID.randomUUID(), "Subject 1c",  1),
+                new Subject(UUID.randomUUID(), "Subject 2", 2),
+                new Subject(UUID.randomUUID(), "Subject 3a",  3),
+                new Subject(UUID.randomUUID(), "Subject 3b",  3)
         ).collect(Collectors.toList()));
 
         Map<Integer, List<Subject>> subjectsMap =  subjectService.getSubjectsByCareerGroupByYear(UUID.randomUUID());
@@ -125,7 +127,7 @@ public class SubjectServiceImplTest {
         UUID directoryId = UUID.randomUUID();
         UUID careerId = UUID.randomUUID();
         Mockito.when(subjectDao.getSubjectById(subjectId)).thenReturn(
-                Optional.of(new Subject(subjectId, "Subject 1a", directoryId))
+                Optional.of(new Subject("Subject 1a", mockDirectory("1a")))
         );
         Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(false);
 
@@ -139,7 +141,7 @@ public class SubjectServiceImplTest {
         UUID directoryId = UUID.randomUUID();
         UUID careerId = UUID.randomUUID();
         Mockito.when(subjectDao.getSubjectById(subjectId)).thenReturn(
-                Optional.of(new Subject(subjectId, "Subject 1a", directoryId))
+                Optional.of(new Subject("Subject 1a", mockDirectory("1a")))
         );
         Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(0);
@@ -156,7 +158,7 @@ public class SubjectServiceImplTest {
         UUID directoryId = UUID.randomUUID();
         UUID careerId = UUID.randomUUID();
         Mockito.when(subjectDao.getSubjectById(subjectId)).thenReturn(
-                Optional.of(new Subject(subjectId, "Subject 1a", directoryId))
+                Optional.of(new Subject("Subject 1a", mockDirectory("1a")))
         );
         Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(0);

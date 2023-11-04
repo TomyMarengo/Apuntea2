@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavorite;
+import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.NoteFavorite;
 import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.note.Note;
@@ -32,7 +33,7 @@ public class NoteJpaDao implements NoteDao {
     public UUID create(String name, UUID subjectId, User user, UUID parentId, boolean visible, byte[] file, String category, String fileType) {
         Note note = new Note.NoteBuilder()
                 .name(name)
-                .subjectId(subjectId)
+                .subject(em.getReference(Subject.class, subjectId))
                 .parentId(parentId)
                 .user(user)
                 .visible(visible)

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models.directory;
 
 import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.search.Searchable;
 import ar.edu.itba.paw.models.converter.LocalDateTimeConverter;
 import ar.edu.itba.paw.models.user.User;
@@ -27,7 +28,13 @@ public class Directory implements Searchable {
     @Column(name = "parent_id")
     private UUID parentId;
 
-//    private Subject subject;
+    // TODO: Ask if this is ok
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id", insertable = false, updatable = false)
+    private Directory parent;
+
+    @OneToOne(mappedBy = "rootDirectory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Subject subject;
 
     @Column(name = "created_at")
     @Convert(converter = LocalDateTimeConverter.class)
@@ -71,10 +78,10 @@ public class Directory implements Searchable {
     public User getUser() {
         return user;
     }
-//  @Override
-//    public Subject getSubject() {
-//        return subject;
-//    }
+    @Override
+    public Subject getSubject() {
+        return parentId == null ? subject : parent.getSubject();
+    }
     @Override
     public String getName() {
         return name;

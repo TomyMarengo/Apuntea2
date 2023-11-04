@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.institutional.SubjectCareer;
@@ -55,7 +56,7 @@ public class SubjectJpaDao implements SubjectDao {
 
     @Override
     public Subject create(String name, UUID rootDirectoryId) {
-        Subject newSubject = new Subject(name, rootDirectoryId);
+        Subject newSubject = new Subject(name, em.getReference(Directory.class, rootDirectoryId));
         em.persist(newSubject);
         return newSubject;
     }

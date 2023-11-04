@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.models.institutional;
 
+import ar.edu.itba.paw.models.directory.Directory;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
@@ -15,8 +17,9 @@ public class Subject {
     @Column(name="subject_name")
     private String name;
 
-    @Column(name = "root_directory_id")
-    private UUID rootDirectoryId;
+    @JoinColumn(name = "root_directory_id", referencedColumnName = "directory_id")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    private Directory rootDirectory;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -29,7 +32,6 @@ public class Subject {
     private static final int MIN_YEAR = 1;
     private static final int MAX_YEAR = 10;
 
-    //TODO: filter, dto or subjectcareer?
     @Transient
     private Integer year;
 
@@ -37,23 +39,16 @@ public class Subject {
 
     }
 
-    public Subject(String name, UUID rootDirectoryId) {
+    public Subject(String name, Directory rootDirectory) {
         this.name = name;
-        this.rootDirectoryId = rootDirectoryId;
+        this.rootDirectory = rootDirectory;
     }
 
-    //TODO: for tests, remove?
-    public Subject(UUID subjectId, String name, UUID rootDirectoryId, int year) {
+    //TODO: for tests, remove?!
+    public Subject(UUID subjectId, String name, int year) {
         this.subjectId = subjectId;
         this.name = name;
-        this.rootDirectoryId = rootDirectoryId;
         this.year =year;
-    }
-
-    public Subject(UUID subjectId, String name, UUID rootDirectoryId) {
-        this.subjectId = subjectId;
-        this.name = name;
-        this.rootDirectoryId = rootDirectoryId;
     }
 
     public UUID getSubjectId() {
@@ -74,7 +69,7 @@ public class Subject {
     }
 
     public UUID getRootDirectoryId() {
-        return rootDirectoryId;
+        return rootDirectory.getId();
     }
 
     public void setName(String name) {

@@ -302,7 +302,8 @@
             <table class="table table-hover table-search">
                 <thead>
                 <tr>
-                    <th class="col-md-5"><spring:message code="name"/></th>
+                    <th class="col-md-3"><spring:message code="name"/></th>
+                    <th class="col-md-2"><spring:message code="subject"/></th>
                     <th class="col-md-2"><spring:message code="owner"/></th>
                     <th class="col-md-1"><spring:message code="createdAt"/></th>
 
@@ -359,6 +360,7 @@
                                     <c:out value="${item.name}"/>
                                 </span>
                         </td>
+                        <td><c:out value="${item.subject.name}"/></td>
                         <td><c:out value="${item.user.email}"/></td>
                         <td><spring:message code="date.format"
                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>

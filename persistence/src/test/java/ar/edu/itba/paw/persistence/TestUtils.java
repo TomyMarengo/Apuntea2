@@ -139,7 +139,7 @@ public class TestUtils {
     }
 
     static Subject insertSubject(EntityManager em, String name, UUID rootDirectoryId) {
-        Subject subject = new Subject(name, rootDirectoryId);
+        Subject subject = new Subject(name, em.getReference(Directory.class, rootDirectoryId));
         em.persist(subject);
         em.flush();
         return subject;

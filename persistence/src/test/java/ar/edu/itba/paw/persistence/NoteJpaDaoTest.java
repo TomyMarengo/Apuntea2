@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
@@ -47,6 +48,7 @@ public class NoteJpaDaoTest {
     private User saidmanUser;
     private User carlaAdmin;
     private Note notePublic;
+    private Subject edaSubject;
     private byte[] publicContent;
     private Note notePrivate;
     private byte[] privateContent;
@@ -56,9 +58,10 @@ public class NoteJpaDaoTest {
         pepeUser = em.find(User.class, PEPE_ID);
         saidmanUser = em.find(User.class, SAIDMAN_ID);
         carlaAdmin = em.find(User.class, CARLADMIN_ID);
+        edaSubject = em.find(Subject.class, EDA_ID);
         Note.NoteBuilder builder = new Note.NoteBuilder()
                 .name("public")
-                .subjectId(EDA_ID)
+                .subject(edaSubject)
                 .parentId(EDA_DIRECTORY_ID)
                 .user(pepeUser)
                 .visible(true)
@@ -85,7 +88,7 @@ public class NoteJpaDaoTest {
 
         assertEquals(notePublic, foundNote);
         assertEquals(notePublic.getName(), foundNote.getName());
-        assertEquals(EDA_ID, foundNote.getSubjectId());
+        assertEquals(EDA_ID, foundNote.getSubject().getSubjectId());
         assertEquals(PEPE_ID, foundNote.getUser().getUserId());
         assertEquals(EDA_DIRECTORY_ID, foundNote.getParentId());
         assertEquals("practice".toUpperCase(), foundNote.getCategory().name());
@@ -155,7 +158,7 @@ public class NoteJpaDaoTest {
         for (String name : names) {
             Note note = insertNote(em, new Note.NoteBuilder()
                     .name(name)
-                    .subjectId(EDA_ID)
+                    .subject(edaSubject)
                     .parentId(parent.getId())
                     .user(pepeUser)
                     .visible(true)
@@ -321,7 +324,7 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testGetFavorites() {
-        Note.NoteBuilder nb = new Note.NoteBuilder().category(Category.EXAM).fileType(".jpg").parentId(EDA_DIRECTORY_ID).subjectId(EDA_ID).user(pepeUser).visible(true);
+        Note.NoteBuilder nb = new Note.NoteBuilder().category(Category.EXAM).fileType(".jpg").parentId(EDA_DIRECTORY_ID).subject(edaSubject).user(pepeUser).visible(true);
         Note newNote1 = insertNote(em, nb.name("temp"));
         Note newNote2 = insertNote(em, nb.name("temp2"));
         Note newNote3 = insertNote(em, nb.name("temp3"));
@@ -338,7 +341,7 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testGetFavoritePrivate() {
-        Note.NoteBuilder nb = new Note.NoteBuilder().category(Category.OTHER).fileType(".jpg").parentId(EDA_DIRECTORY_ID).subjectId(EDA_ID);
+        Note.NoteBuilder nb = new Note.NoteBuilder().category(Category.OTHER).fileType(".jpg").parentId(EDA_DIRECTORY_ID).subject(edaSubject);
         Note newNote1 = insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(pepeUser).visible(false));
         Note newNote2 = insertNote(em, nb.name("extern1").parentId(EDA_DIRECTORY_ID).user(saidmanUser).visible(true));
         Note newNote3 = insertNote(em, nb.name("extern2").parentId(EDA_DIRECTORY_ID).user(saidmanUser).visible(true));

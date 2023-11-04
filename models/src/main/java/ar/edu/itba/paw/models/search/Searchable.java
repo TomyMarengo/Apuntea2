@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.models.search;
 
 import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.User;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ public interface Searchable {
 
     UUID getParentId();
 
-    //Subject getSubject();
+    Subject getSubject();
 
     LocalDateTime getCreatedAt();
 
