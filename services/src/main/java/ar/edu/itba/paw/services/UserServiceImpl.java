@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.exceptions.institutional.CareerNotFoundException;
+import ar.edu.itba.paw.models.exceptions.institutional.InvalidCareerException;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.institutional.Career;
@@ -83,18 +83,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void create(String email, String password, UUID careerId, Role role) {
         final String lang = LocaleContextHolder.getLocale().getLanguage();
-        Career career = careerDao.getCareerById(careerId).orElseThrow(CareerNotFoundException::new);
+        Career career = careerDao.getCareerById(careerId).orElseThrow(InvalidCareerException::new);
         userDao.create(email, passwordEncoder.encode(password), career, lang, Collections.singleton(role));
         LOGGER.info("User with email {} created (registered language: {})", email, lang);
     }
 
     @Transactional
     @Override
-    public void updateProfile(String firstName, String lastName, String username, MultipartFile profilePicture) {
+    public void updateProfile(String firstName, String lastName, String username, MultipartFile profilePicture, UUID careerId) {
         User user = securityService.getCurrentUserOrThrow();
+        Career career = careerDao.getCareerById(careerId).orElseThrow(InvalidCareerException::new);
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setUsername(username);
+        user.setCareer(career);
+
         if (profilePicture != null && !profilePicture.isEmpty()) {
             try {
                 userDao.updateProfilePicture(user, new Image(profilePicture.getBytes()));

@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.user.User;
-import ar.edu.itba.paw.services.DirectoryService;
-import ar.edu.itba.paw.services.SecurityService;
-import ar.edu.itba.paw.services.SubjectService;
+import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.user.password.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.forms.user.EditUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
@@ -13,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import ar.edu.itba.paw.services.UserService;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -32,17 +29,20 @@ public class UserController {
     private final DirectoryService directoryService;
     private final SecurityService securityService;
 
+    private final CareerService careerService;
+
     private	static	final Logger LOGGER	= LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private ServletContext context;
 
     @Autowired
-    public UserController(final SubjectService subjectService, final UserService userService, final SecurityService securityService, final DirectoryService directoryService) {
+    public UserController(final SubjectService subjectService, final UserService userService, final SecurityService securityService, final DirectoryService directoryService, final CareerService careerService) {
         this.userService = userService;
         this.securityService = securityService;
         this.directoryService = directoryService;
         this.subjectService = subjectService;
+        this.careerService = careerService;
     }
 
     @RequestMapping(value = "/profile/notes", method = RequestMethod.GET)
@@ -60,18 +60,20 @@ public class UserController {
     public ModelAndView profile(@ModelAttribute final EditUserForm editUserForm,
                                  @ModelAttribute final ChangePasswordForm changePasswordForm) {
         ModelAndView mav = new ModelAndView("profile");
-
+        mav.addObject("careers", ControllerUtils.toSafeJson(careerService.getCareersByCurrentUserInstitution()));
         mav.addObject("user", this.securityService.getCurrentUserOrThrow());
         return mav;
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.POST)
-    public ModelAndView updateSettings(@ModelAttribute final ChangePasswordForm changePasswordForm,
+    public ModelAndView updateProfile(@ModelAttribute final ChangePasswordForm changePasswordForm,
             @Valid @ModelAttribute final EditUserForm editUserForm,
             final BindingResult result) {
         ModelAndView mav = new ModelAndView("profile");
+        mav.addObject("careers", ControllerUtils.toSafeJson(careerService.getCareersByCurrentUserInstitution()));
+
         if(!result.hasErrors()) {
-            userService.updateProfile(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername(), editUserForm.getProfilePicture());
+            userService.updateProfile(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername(), editUserForm.getProfilePicture(), editUserForm.getCareerId());
             mav.addObject(USER_EDITED, true);
         }
         else

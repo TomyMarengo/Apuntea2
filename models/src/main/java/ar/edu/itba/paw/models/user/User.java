@@ -140,6 +140,10 @@ public class User {
         this.status = status;
     }
 
+    public void setCareer(Career career) {
+        this.career = career;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

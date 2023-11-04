@@ -25,6 +25,7 @@
     <link rel="stylesheet" href=<c:url value="/css/sections/navbar.css"/>/>
     <link rel="stylesheet" href="<c:url value="/css/sections/user/profile.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/autocomplete.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -103,9 +104,33 @@
                             <span class="card-text">${user.institution.name}</span>
                         </div>
 
-                        <div class="d-flex flex-column px-3 py-2 gap-1">
+                        <div class="d-flex flex-column px-3 ">
                             <p><strong><spring:message code="career"/></strong></p>
-                            <span class="card-text">${user.career.name}</span>
+                            <div class="">
+                                <label for="careerSelect" class="visually-hidden"></label>
+                                <select id="careerSelect" style="display: none;">
+                                    <option disabled selected value></option>
+                                </select>
+
+                                <form:input path="careerId" id="careerId" style="display: none;" value="${user.career.careerId}"/>
+
+                                <label for="careerAutocomplete" class="visually-hidden"></label>
+                                <div class="input-group">
+                                    <div class="autocomplete">
+                                        <spring:message code="search.career.placeholder" var="placeholderCareer"/>
+                                        <input type="text" id="careerAutocomplete"
+                                               class="form-control bg-bg special-radius dynamic-info"
+                                               placeholder="${placeholderCareer}" autocomplete="off" required disabled value="${user.career.name}"/>
+                                    </div>
+                                    <button type="button" class="input-group-text input-group-icon dynamic-info" id="eraseCareerButton" disabled>
+                                        <img src="<c:url value="/svg/cross.svg"/>"
+                                             alt="<spring:message code="search.sort.image"/>"
+                                             class="icon-xs fill-dark-primary"/>
+                                    </button>
+                                </div>
+
+                                <form:errors path="careerId" cssClass="text-danger" element="p"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -132,7 +157,12 @@
         crossorigin="anonymous"></script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script>
+    const careers = JSON.parse('${careers}');
+</script>
 
+
+<script src="<c:url value="/js/autocomplete.js"/>"></script>
 <script src="<c:url value="/js/profile.js"/>"></script>
 <script src="<c:url value="/js/password.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>

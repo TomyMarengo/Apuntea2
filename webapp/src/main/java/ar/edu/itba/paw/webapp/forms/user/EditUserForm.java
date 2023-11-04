@@ -4,10 +4,13 @@ import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import ar.edu.itba.paw.webapp.validation.MaxFileSize;
 import ar.edu.itba.paw.webapp.validation.UnusedUsername;
 import ar.edu.itba.paw.webapp.validation.ValidFileName;
+import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 public class EditUserForm {
     @Pattern(regexp = RegexUtils.NAME_REGEX)
@@ -26,6 +29,18 @@ public class EditUserForm {
     @ValidFileName(allowedExtensions = {".jpeg", ".png", ".jpg"})
     @MaxFileSize(megabytes = 500, allowEmptyFiles = true)
     private MultipartFile profilePicture;
+
+    @ValidUuid
+    @NotNull
+    private UUID careerId;
+
+    public void setCareerId(UUID careerId) {
+        this.careerId = careerId;
+    }
+
+    public UUID getCareerId() {
+        return careerId;
+    }
 
     public String getFirstName() {
         return firstName;

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.user.InvalidUserException;
 import ar.edu.itba.paw.models.user.User;
+import ar.edu.itba.paw.persistence.CareerDao;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,8 +19,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.services.ServiceTestUtils.mockAdmin;
-import static ar.edu.itba.paw.services.ServiceTestUtils.mockUser;
+import static ar.edu.itba.paw.services.ServiceTestUtils.*;
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 
@@ -29,6 +29,9 @@ public class UserServiceImplTest {
 
     @Mock
     private UserDao userDao;
+
+    @Mock
+    private CareerDao careerDao;
 
     @Mock
     private SecurityService securityService;
@@ -90,7 +93,8 @@ public class UserServiceImplTest {
         CommonsMultipartFile profilePicture = Mockito.mock(CommonsMultipartFile.class);
         Mockito.when(profilePicture.isEmpty()).thenReturn(false);
         given(profilePicture.getBytes()).willAnswer(invocation -> {throw new IOException();});
-        userService.updateProfile("firstName", "lastName", "username", profilePicture);
+        Mockito.when(careerDao.getCareerById(Mockito.any())).thenReturn(Optional.of(mockCareer()));
+        userService.updateProfile("firstName", "lastName", "username", profilePicture, UUID.randomUUID());
         fail();
     }
 

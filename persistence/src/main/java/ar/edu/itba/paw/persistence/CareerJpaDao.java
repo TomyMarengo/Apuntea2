@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,5 +27,13 @@ public class CareerJpaDao implements CareerDao {
                 .setParameter("subjectId", subjectId)
                 .getSingleResult();
         return qty.intValue();
+    }
+
+    @Override
+    public List<Career> getCareersByUserInstitution(User user) {
+        return em.createQuery("SELECT DISTINCT c FROM Career c WHERE c.institution = (SELECT u.career.institution FROM User u WHERE u = :user)", Career.class)
+                .setParameter("user", user)
+                .getResultList();
+
     }
 }

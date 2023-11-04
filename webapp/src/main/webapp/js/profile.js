@@ -48,3 +48,17 @@ cancelEditButton.addEventListener('click', function() {
     selectedImage.classList.remove('layout-image');
 });
 
+let careerSelect = document.getElementById('careerSelect');
+// Initialize an empty array to store the option values
+if (careerSelect && careers) {
+    document.getElementById("eraseCareerButton").addEventListener("click", _ => {
+        document.getElementById("careerAutocomplete").value = "";
+        document.getElementById('careerId').value = "";
+        setupCareer();
+    });
+    autocomplete(document.getElementById("careerAutocomplete"), document.getElementById("careerId"),
+        _ => careers.map(c => ({value: c.careerId , text: c.name})), setupCareer);
+}
+function setupCareer() {
+
+}

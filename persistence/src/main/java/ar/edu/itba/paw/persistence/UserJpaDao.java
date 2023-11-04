@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.exceptions.user.RequiredAdminException;
-import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.user.*;
 import org.slf4j.Logger;
@@ -68,7 +66,7 @@ class UserJpaDao implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return em.createQuery("FROM User WHERE email = :email", User.class)
+        return em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
                 .setParameter("email", email)
                 .getResultList().stream().findFirst();
     }
