@@ -1,10 +1,14 @@
 INSERT INTO Institutions (institution_id, institution_name) VALUES ('10000000-0000-0000-0000-000000000000', 'ITBA');
 INSERT INTO Institutions (institution_id, institution_name) VALUES ('10000000-0000-0000-0000-000000000001', 'UTN');
 
-INSERT INTO Users (user_id, email) VALUES ('00000000-0000-0000-0000-000000000000','pepe@itba.edu.ar');
-INSERT INTO Users (user_id, email) VALUES ('00000000-0000-0000-0000-000000000001','jaimito@itba.edu.ar');
-INSERT INTO Users (user_id, email) VALUES ('00000000-0000-0000-0000-000000000002','carla@itba.edu.ar');
-INSERT INTO Users (user_id, email) VALUES ('00000000-0000-0000-0000-000000000003','saidman@utn.edu.ar');
+INSERT INTO Careers (career_id, career_name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000000', 'Ingenieria Informatica', '10000000-0000-0000-0000-000000000000');
+INSERT INTO Careers (career_id, career_name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000001', 'Ingenieria Mecanica', '10000000-0000-0000-0000-000000000000');
+INSERT INTO Careers (career_id, career_name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000002', 'Ingenieria en Sistemas', '10000000-0000-0000-0000-000000000001');
+
+INSERT INTO Users (user_id, email, career_id) VALUES ('00000000-0000-0000-0000-000000000000','pepe@itba.edu.ar', 'c0000000-0000-0000-0000-000000000000');
+INSERT INTO Users (user_id, email, career_id) VALUES ('00000000-0000-0000-0000-000000000001','jaimito@itba.edu.ar', 'c0000000-0000-0000-0000-000000000000');
+INSERT INTO Users (user_id, email, career_id) VALUES ('00000000-0000-0000-0000-000000000002','carla@itba.edu.ar', 'c0000000-0000-0000-0000-000000000000');
+INSERT INTO Users (user_id, email, career_id) VALUES ('00000000-0000-0000-0000-000000000003','saidman@utn.edu.ar', 'c0000000-0000-0000-0000-000000000002');
 
 INSERT INTO User_Roles (user_id, role_name) VALUES ('00000000-0000-0000-0000-000000000000', 'ROLE_STUDENT');
 INSERT INTO User_Roles (user_id, role_name) VALUES ('00000000-0000-0000-0000-000000000001', 'ROLE_STUDENT');
@@ -29,10 +33,6 @@ INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUE
 
 INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-00000000000c', '12 % 3 = 0', 'd0000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000000');
 INSERT INTO Directories (directory_id, directory_name, parent_id, user_id) VALUES ('d0000000-0000-0000-0000-00000000000d', 'Gr_y', 'd0000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000000');
-
-INSERT INTO Careers (career_id, career_name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000000', 'Ingenieria Informatica', '10000000-0000-0000-0000-000000000000');
-INSERT INTO Careers (career_id, career_name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000001', 'Ingenieria Mecanica', '10000000-0000-0000-0000-000000000000');
-INSERT INTO Careers (career_id, career_name, institution_id) VALUES ('c0000000-0000-0000-0000-000000000002', 'Ingenieria en Sistemas', '10000000-0000-0000-0000-000000000001');
 
 INSERT INTO Subjects (subject_id, subject_name, root_directory_id) VALUES ('50000000-0000-0000-0000-000000000000', 'EDA', 'd0000000-0000-0000-0000-000000000000');
 INSERT INTO Subjects (subject_id, subject_name, root_directory_id) VALUES ('50000000-0000-0000-0000-000000000001', 'PAW', 'd0000000-0000-0000-0000-000000000001');

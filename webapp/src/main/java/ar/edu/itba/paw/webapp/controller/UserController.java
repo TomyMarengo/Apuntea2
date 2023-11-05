@@ -80,7 +80,7 @@ public class UserController {
         ModelAndView mav = new ModelAndView("my-notes");
         User user = securityService.getCurrentUserOrThrow();
         mav.addObject("user", user);
-        mav.addObject("root_directories", subjectService.getSubjectsByCareerGroupByYear());
+        mav.addObject("root_directories", subjectService.getSubjectsByUserIdGroupByYear(user.getUserId()));
         return mav;
     }
 

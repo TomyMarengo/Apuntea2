@@ -70,8 +70,11 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Transactional
     @Override
-    public List<Subject> getSubjectsByUserId(UUID userId) {
-        return subjectDao.getSubjectsByUserId(userId);
+    public Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId) {
+        User user = this.securityService.getCurrentUserOrThrow();
+        Map<Integer, List<Subject>> yearMap = subjectDao.getSubjectsByUser(user).stream().collect(Collectors.groupingBy(Subject::getYear));
+        directoryDao.getFavoriteRootDirectories(user.getUserId()).forEach(rd -> rd.setFavorite(true));
+        return yearMap;
     }
 
     @Override

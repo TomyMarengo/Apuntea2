@@ -7,11 +7,12 @@
 
 <aside class="sidebar right">
     <c:if test="${user ne null}">
-        <a class="btn nav-icon-button" href="${baseUrl}/my-favorites" data-bs-toggle="tooltip"
+
+        <a class="btn nav-icon-button" href="${baseUrl}/my-notes" data-bs-toggle="tooltip"
            data-bs-placement="right"
-           data-bs-title="<spring:message code="profileNotes.directories.favorites"/>" data-bs-trigger="hover">
-            <img src="<c:url value="/svg/filled-heart.svg"/>"
-                 alt="<spring:message code="profileNotes.directories.favorites"/>"
+           data-bs-title="<spring:message code="myNotes.title"/>" data-bs-trigger="hover">
+            <img src="<c:url value="/svg/my-notes.svg"/>"
+                 alt="<spring:message code="myNotes.title"/>"
                  class="icon-m fill-dark-primary"/>
         </a>
 
@@ -23,11 +24,11 @@
                  class="icon-m fill-dark-primary"/>
         </a>
 
-        <a class="btn nav-icon-button" href="${baseUrl}/my-notes" data-bs-toggle="tooltip"
+        <a class="btn nav-icon-button" href="${baseUrl}/my-favorites" data-bs-toggle="tooltip"
            data-bs-placement="right"
-           data-bs-title="<spring:message code="myNotes.title"/>" data-bs-trigger="hover">
-            <img src="<c:url value="/svg/my-notes.svg"/>"
-                 alt="<spring:message code="myNotes.title"/>"
+           data-bs-title="<spring:message code="profileNotes.directories.favorites"/>" data-bs-trigger="hover">
+            <img src="<c:url value="/svg/filled-heart.svg"/>"
+                 alt="<spring:message code="profileNotes.directories.favorites"/>"
                  class="icon-m fill-dark-primary"/>
         </a>
 

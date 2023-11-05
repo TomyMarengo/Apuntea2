@@ -191,7 +191,7 @@ public class SubjectJpaDaoTest {
         insertDirectory(em, new Directory.DirectoryBuilder().name("d1").parentId(PAW_DIRECTORY_ID).user(jaimitoUser));
         insertNote(em, nb.name("n1").subject(em.getReference(Subject.class, MATE_ID)).parentId(MATE_DIRECTORY_ID).user(pepeUser));
 
-        List<Subject> subjects = subjectDao.getSubjectsByUserId(jaimitoUser.getUserId());
+        List<Subject> subjects = subjectDao.getSubjectsByUser(jaimitoUser);
 
         assertEquals(2, subjects.size());
         assertTrue(subjects.stream().anyMatch(s -> s.getSubjectId().equals(EDA_ID)));

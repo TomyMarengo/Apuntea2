@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.institutional.SubjectCareer;
+import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -26,15 +27,10 @@ public class SubjectJpaDao implements SubjectDao {
 
     @Override
     public List<Subject> getSubjectsByCareerId(UUID careerId) {
-        //TODO: optimize
         List<SubjectCareer> subjectsCareers = em.createQuery("SELECT DISTINCT sc FROM SubjectCareer sc WHERE sc.career.careerId = :careerId ORDER BY sc.year", SubjectCareer.class)
                 .setParameter("careerId", careerId)
                 .getResultList();
-        subjectsCareers.forEach(
-                sc -> {
-                    sc.getSubject().setYear(sc.getYear());
-                }
-        );
+        subjectsCareers.forEach(sc -> sc.getSubject().setYear(sc.getYear()));
         return subjectsCareers.stream().map(SubjectCareer::getSubject).collect(Collectors.toList());
     }
 
@@ -55,12 +51,15 @@ public class SubjectJpaDao implements SubjectDao {
     }
 
     @Override
-    public List<Subject> getSubjectsByUserId(UUID userId) {
-        return em.createQuery("SELECT DISTINCT s FROM Subject s JOIN s.rootDirectory rd " +
-                        "WHERE EXISTS(SELECT n FROM Note n WHERE n.parentId = rd.id AND n.user.id = :userId) " +
-                        "OR EXISTS(SELECT d FROM Directory d WHERE d.parent = rd AND d.user.id = :userId)", Subject.class)
-                .setParameter("userId", userId)
+    public List<Subject> getSubjectsByUser(User user) {
+        List<SubjectCareer> subjectsCareers = em.createQuery("SELECT DISTINCT sc FROM SubjectCareer sc JOIN sc.subject s JOIN s.rootDirectory rd " +
+                        "WHERE sc.career.id = :careerId AND (EXISTS(SELECT n FROM Note n WHERE n.parentId = rd.id AND n.user.id = :userId) " +
+                        "OR EXISTS(SELECT d FROM Directory d WHERE d.parent = rd AND d.user.id = :userId))", SubjectCareer.class)
+                .setParameter("userId", user.getUserId())
+                .setParameter("careerId", user.getCareer().getCareerId())
                 .getResultList();
+        subjectsCareers.forEach(sc -> sc.getSubject().setYear(sc.getYear()));
+        return subjectsCareers.stream().map(SubjectCareer::getSubject).collect(Collectors.toList());
     }
 
     @Override

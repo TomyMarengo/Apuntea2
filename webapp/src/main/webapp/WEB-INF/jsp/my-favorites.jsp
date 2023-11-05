@@ -91,7 +91,7 @@
                                         <div class="d-flex flex-column gap-2 align-items-center">
                                             <img src="<c:url value="/svg/folder.svg"/>"
                                                  alt="<spring:message code="folder"/>"
-                                                 class="icon-xxl fill-${sub.iconColor}">
+                                                 class="icon-xxl fill-4986E7">
                                             <!-- max 2 lines-->
                                             <span class="fw-bold flex-wrap justify-content-center folder-name">
                                                 <c:out value="${sub.name}"/>

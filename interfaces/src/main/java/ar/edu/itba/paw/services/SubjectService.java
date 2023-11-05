@@ -12,8 +12,7 @@ public interface SubjectService {
     List<SubjectDto> getSubjectsByCareerComplemented(UUID careerId);
     Map<Integer, List<Subject>> getSubjectsByCareerGroupByYear();
     Map<Integer, List<Subject>> getSubjectsByCareerGroupByYear(UUID careerId);
-
-    List<Subject> getSubjectsByUserId(UUID userId);
+    Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId);
     UUID createSubject(String name, UUID careerId, int year);
     void linkSubjectToCareer(UUID subjectId, UUID careerId, int year);
 

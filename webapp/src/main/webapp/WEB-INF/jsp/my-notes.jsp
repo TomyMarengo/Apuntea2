@@ -43,7 +43,7 @@
     <fragment:navbar user="${user}"/>
 
     <!-- BOTTOM-NAVBAR -->
-    <spring:message code="profileNotes.subjects" var="title"/>
+    <spring:message code="myProfileNotes.title" var="title"/>
     <fragment:bottom-navbar title="./my-notes:${title}"/>
 </header>
 
