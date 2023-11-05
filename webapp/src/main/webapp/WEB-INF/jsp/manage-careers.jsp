@@ -203,23 +203,6 @@
         </c:if>
     </section>
 
-    <!-- SIDEBAR RIGHT -->
-    <aside class="sidebar left">
-        <a class="btn nav-icon-button" href="${baseUrl}/manage/careers" data-bs-toggle="tooltip"
-           data-bs-placement="right"
-           data-bs-title="<spring:message code="manageCareers.title"/>" data-bs-trigger="hover">
-            <img src="<c:url value="/svg/books.svg"/>"
-                 alt="<spring:message code="manageUsers.title"/>"
-                 class="icon-m fill-dark-primary"/>
-        </a>
-        <a class="btn nav-icon-button" href="${baseUrl}/manage/users" data-bs-toggle="tooltip" data-bs-placement="right"
-           data-bs-title="<spring:message code="manageUsers.title"/>" data-bs-trigger="hover">
-            <img src="<c:url value="/svg/user-slash.svg"/>"
-                 alt="<spring:message code="manageUsers.title"/>"
-                 class="icon-m fill-dark-primary"/>
-        </a>
-    </aside>
-
 </main>
 
 <c:if test="${career ne null}">

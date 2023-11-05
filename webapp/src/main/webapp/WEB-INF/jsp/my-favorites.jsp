@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Apuntea | <spring:message code="profileNotes.title"/></title>
+    <title>Apuntea | <spring:message code="myFavorites.title"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
@@ -175,7 +175,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
-
+<script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/color-picker.js"/>"></script>
 <script src="<c:url value="/js/profile-notes.js"/>"></script>
 </body>

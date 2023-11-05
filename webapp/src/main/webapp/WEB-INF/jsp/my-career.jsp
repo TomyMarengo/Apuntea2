@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Apuntea | <spring:message code="profileNotes.title"/></title>
+    <title>Apuntea | <spring:message code="myCareer.title"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
@@ -43,8 +43,8 @@
     <fragment:navbar user="${user}"/>
 
     <!-- BOTTOM-NAVBAR -->
-    <spring:message code="profileNotes.subjects" var="title"/>
-    <fragment:bottom-navbar title="./my-subjects:${title}"/>
+    <spring:message code="myCareer.title" var="title"/>
+    <fragment:bottom-navbar title="./my-career:${title}"/>
 </header>
 
 <main>
@@ -81,7 +81,7 @@
                                             <form:form action="${rd.rootDirectory.favorite ? removeFavorite : addFavorite}"
                                                        method="post" cssClass="align-content-end">
                                                 <input name="redirectUrl"
-                                                       value="/my-subjects?tab=${i.index}"
+                                                       value="/my-career?tab=${i.index}"
                                                        type="hidden"/>
                                                 <button type="submit"
                                                         class="btn nav-icon-button favorite-button"
@@ -117,6 +117,8 @@
 
 <script src="<c:url value="/js/color-picker.js"/>"></script>
 <script src="<c:url value="/js/profile-notes.js"/>"></script>
+<script src="<c:url value="/js/popups.js"/>"></script>
+
 </body>
 
 </html>

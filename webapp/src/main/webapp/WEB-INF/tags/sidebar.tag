@@ -15,11 +15,19 @@
                  class="icon-m fill-dark-primary"/>
         </a>
 
-        <a class="btn nav-icon-button" href="${baseUrl}/my-subjects" data-bs-toggle="tooltip"
+        <a class="btn nav-icon-button" href="${baseUrl}/my-career" data-bs-toggle="tooltip"
            data-bs-placement="right"
-           data-bs-title="<spring:message code="profileNotes.subjects"/>" data-bs-trigger="hover">
+           data-bs-title="<spring:message code="myCareer.title"/>" data-bs-trigger="hover">
             <img src="<c:url value="/svg/book-alt.svg"/>"
-                 alt="<spring:message code="profileNotes.subjects"/>"
+                 alt="<spring:message code="myCareer.title"/>"
+                 class="icon-m fill-dark-primary"/>
+        </a>
+
+        <a class="btn nav-icon-button" href="${baseUrl}/my-notes" data-bs-toggle="tooltip"
+           data-bs-placement="right"
+           data-bs-title="<spring:message code="myNotes.title"/>" data-bs-trigger="hover">
+            <img src="<c:url value="/svg/my-notes.svg"/>"
+                 alt="<spring:message code="myNotes.title"/>"
                  class="icon-m fill-dark-primary"/>
         </a>
 
@@ -27,10 +35,19 @@
             <a class="btn nav-icon-button" href="${baseUrl}/manage/users" data-bs-toggle="tooltip"
                data-bs-placement="right"
                data-bs-title="<spring:message code="manageUsers.title"/>" data-bs-trigger="hover">
-                <img src="<c:url value="/svg/gears.svg"/>"
+                <img src="<c:url value="/svg/user-slash.svg"/>"
                      alt="<spring:message code="manageUsers.title"/>"
                      class="icon-m fill-dark-primary"/>
             </a>
+
+            <a class="btn nav-icon-button" href="${baseUrl}/manage/careers" data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               data-bs-title="<spring:message code="manageCareers.title"/>" data-bs-trigger="hover">
+                <img src="<c:url value="/svg/books.svg"/>"
+                     alt="<spring:message code="manageCareers.title"/>"
+                     class="icon-m fill-dark-primary"/>
+            </a>
+
         </c:if>
     </c:if>
 

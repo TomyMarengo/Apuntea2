@@ -66,15 +66,23 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/my-subjects", method = RequestMethod.GET)
-    public ModelAndView mySubjects() {
-        ModelAndView mav = new ModelAndView("my-subjects");
+    @RequestMapping(value = "/my-career", method = RequestMethod.GET)
+    public ModelAndView myCareer() {
+        ModelAndView mav = new ModelAndView("my-career");
         User user = securityService.getCurrentUserOrThrow();
         mav.addObject("user", user);
         mav.addObject("root_directories", subjectService.getSubjectsByCareerGroupByYear());
         return mav;
     }
 
+    @RequestMapping(value = "/my-notes", method = RequestMethod.GET)
+    public ModelAndView myNotes() {
+        ModelAndView mav = new ModelAndView("my-notes");
+        User user = securityService.getCurrentUserOrThrow();
+        mav.addObject("user", user);
+        mav.addObject("root_directories", subjectService.getSubjectsByCareerGroupByYear());
+        return mav;
+    }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ModelAndView profile(@ModelAttribute final EditUserForm editUserForm,
