@@ -112,7 +112,7 @@
 	height: calc(100vh - var(--nav-height));
 	width: var(--sidebar-width);
 	background-color: var(--dark-bg);
-	padding-top: 2rem;
+	padding-top: 2.5rem;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

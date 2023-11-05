@@ -6,6 +6,10 @@
 	max-width: 600px;
 }
 
+.w-inherit {
+	width: inherit;
+}
+
 .mh-300 {
 	max-height: 100px;
 }

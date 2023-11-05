@@ -47,9 +47,9 @@
 <main>
     <fragment:sidebar user="${user}"/>
 
-    <section class="container-lg d-flex align-self-center justify-content-center mt-5">
-        <div class="card box">
-            <div class="card-body p-3 p-md-5 mx-4">
+    <section class="container d-flex align-self-center justify-content-center align-content-center mt-5">
+        <div class="card box p-3 w-inherit mw-600">
+            <div class="card-body p-3">
                 <c:url var="editUserUrl" value="/profile"/>
                 <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
 
@@ -68,9 +68,10 @@
                         </label>
                         <form:errors path="profilePicture" cssClass="text-danger mt-3 align-self-center" element="p"/>
                     </div>
-                    <div class="mt-3 row row-cols-1 row-cols-md-2">
+
+                    <div class="profile-data-container">
                         <div>
-                            <div class="px-3 py-2">
+                            <div>
                                 <spring:message var="profileFirstName" code="name"/>
                                 <p><strong><spring:message code="name"/></strong></p>
                                 <form:input disabled="true" type="text" id="firstName"
@@ -80,7 +81,7 @@
                                 <form:errors path="firstName" cssClass="text-danger" element="p"/>
                             </div>
 
-                            <div class="px-3 py-2">
+                            <div>
                                 <spring:message var="profileLastName" code="lastName"/>
                                 <p><strong><spring:message code="lastName"/></strong></p>
                                 <form:input disabled="true" type="text" id="lastName"
@@ -89,7 +90,7 @@
                                 <form:errors path="lastName" cssClass="text-danger" element="p"/>
                             </div>
 
-                            <div class="px-3 py-2">
+                            <div>
                                 <spring:message var="profileUsername" code="username"/>
                                 <p><strong><spring:message code="username"/></strong></p>
                                 <form:input disabled="true" type="text" id="username"
@@ -100,45 +101,50 @@
                             </div>
                         </div>
 
-                        <div class="d-flex flex-column justify-content-between">
-                            <div class="d-flex flex-column px-3 py-2 gap-1">
-                                <p><strong><spring:message code="email"/></strong></p>
-                                <span class="card-text">${user.email}</span>
-                            </div>
-
-                            <div class="d-flex flex-column px-3 py-2 gap-1">
-                                <p><strong><spring:message code="institution"/></strong></p>
-                                <span class="card-text">${user.institution.name}</span>
-                            </div>
-
-                            <div class="d-flex flex-column px-3 ">
+                        <div>
+                            <div>
                                 <p><strong><spring:message code="career"/></strong></p>
-                                <div class="">
+                                <div>
                                     <label for="careerSelect" class="visually-hidden"></label>
                                     <select id="careerSelect" style="display: none;">
                                         <option disabled selected value></option>
                                     </select>
-    
-                                    <form:input path="careerId" id="careerId" style="display: none;" value="${user.career.careerId}"/>
-    
+
+                                    <form:input path="careerId" id="careerId" style="display: none;"
+                                                value="${user.career.careerId}"/>
+
                                     <label for="careerAutocomplete" class="visually-hidden"></label>
                                     <div class="input-group">
                                         <div class="autocomplete">
                                             <spring:message code="search.career.placeholder" var="placeholderCareer"/>
                                             <input type="text" id="careerAutocomplete"
                                                    class="form-control bg-bg special-radius dynamic-info"
-                                                   placeholder="${placeholderCareer}" autocomplete="off" required disabled value="${user.career.name}"/>
+                                                   placeholder="${placeholderCareer}" autocomplete="off" required
+                                                   disabled
+                                                   value="${user.career.name}"/>
                                         </div>
-                                        <button type="button" class="input-group-text input-group-icon dynamic-info" id="eraseCareerButton" disabled>
+                                        <button type="button" class="input-group-text input-group-icon dynamic-info"
+                                                id="eraseCareerButton" disabled>
                                             <img src="<c:url value="/svg/cross.svg"/>"
                                                  alt="<spring:message code="search.sort.image"/>"
                                                  class="icon-xs fill-dark-primary"/>
                                         </button>
                                     </div>
-    
+
                                     <form:errors path="careerId" cssClass="text-danger" element="p"/>
                                 </div>
                             </div>
+
+                            <div>
+                                <p><strong><spring:message code="email"/></strong></p>
+                                <span class="card-text">${user.email}</span>
+                            </div>
+
+                            <div>
+                                <p><strong><spring:message code="institution"/></strong></p>
+                                <span class="card-text">${user.institution.name}</span>
+                            </div>
+
                         </div>
                     </div>
 
