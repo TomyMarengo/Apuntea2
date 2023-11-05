@@ -45,13 +45,21 @@ public class UserController {
         this.careerService = careerService;
     }
 
-    @RequestMapping(value = "/profile/notes", method = RequestMethod.GET)
-    public ModelAndView profileNotes() {
-        ModelAndView mav = new ModelAndView("profile-notes");
+    @RequestMapping(value = "/my-favorites", method = RequestMethod.GET)
+    public ModelAndView myFavorites() {
+        ModelAndView mav = new ModelAndView("my-favorites");
+        User user = securityService.getCurrentUserOrThrow();
+        mav.addObject("user", user);
+        mav.addObject("favorites", directoryService.getFavorites());
+        return mav;
+    }
+
+    @RequestMapping(value = "/my-subjects", method = RequestMethod.GET)
+    public ModelAndView mySubjects() {
+        ModelAndView mav = new ModelAndView("my-subjects");
         User user = securityService.getCurrentUserOrThrow();
         mav.addObject("user", user);
         mav.addObject("root_directories", subjectService.getSubjectsByCareerGroupByYear());
-        mav.addObject("favorites", directoryService.getFavorites());
         return mav;
     }
 

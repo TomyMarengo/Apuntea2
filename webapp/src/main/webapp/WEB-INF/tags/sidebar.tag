@@ -7,11 +7,19 @@
 
 <aside class="sidebar right">
     <c:if test="${user ne null}">
-        <a class="btn nav-icon-button" href="${baseUrl}/profile/notes" data-bs-toggle="tooltip"
+        <a class="btn nav-icon-button" href="${baseUrl}/my-favorites" data-bs-toggle="tooltip"
            data-bs-placement="right"
-           data-bs-title="<spring:message code="myProfileNotes.title"/>" data-bs-trigger="hover">
+           data-bs-title="<spring:message code="profileNotes.directories.favorites"/>" data-bs-trigger="hover">
             <img src="<c:url value="/svg/filled-heart.svg"/>"
-                 alt="<spring:message code="myProfileNotes.title"/>"
+                 alt="<spring:message code="profileNotes.directories.favorites"/>"
+                 class="icon-m fill-dark-primary"/>
+        </a>
+
+        <a class="btn nav-icon-button" href="${baseUrl}/my-subjects" data-bs-toggle="tooltip"
+           data-bs-placement="right"
+           data-bs-title="<spring:message code="profileNotes.directories.subjects"/>" data-bs-trigger="hover">
+            <img src="<c:url value="/svg/book-alt.svg"/>"
+                 alt="<spring:message code="profileNotes.directories.subjects"/>"
                  class="icon-m fill-dark-primary"/>
         </a>
 

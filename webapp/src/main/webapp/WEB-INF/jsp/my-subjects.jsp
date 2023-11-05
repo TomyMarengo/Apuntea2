@@ -43,62 +43,18 @@
     <fragment:navbar user="${user}"/>
 
     <!-- BOTTOM-NAVBAR -->
-    <spring:message code="profileNotes.title" var="title"/>
-    <fragment:bottom-navbar title="./notes:${title}"/>
+    <spring:message code="profileNotes.directories.subjects" var="title"/>
+    <fragment:bottom-navbar title="./my-subjects:${title}"/>
 </header>
 
-
-<!-- USER INFO & BUTTONS "VER" -->
 <main>
     <fragment:sidebar user="${user}"/>
 
-    <section class="row row-cols-1 row-cols-xl-2 justify-content-center mt-5">
-        <!-- List of directories -->
-        <!-- FAVORITES AND MY NOTES -->
-        <c:if test="${not empty favorites }"> <!-- TODO: ADD MY NOTES -->
-            <div class="col mb-5 mb-xl-0">
-                <ul class="mini-nav">
-                    <!-- FAVORITES -->
-                    <li class="mini-nav-item">
-                        <button class="btn mini-nav-button favorite-dir text-center active" data-toggle="tab"
-                                role="tab"
-                                aria-selected="true"> <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
-                            <spring:message code="profileNotes.directories.favorites"/>
-                        </button>
-                    </li>
-                </ul>
+    <section class="container mt-5">
+        <!-- ROOT DIRECTORIES -->
+        <c:if test="${not empty root_directories}">
+            <div class="d-flex flex-column mt-5">
 
-                <div class="tab-content bg-bg">
-                    <!-- FAVORITES LIST -->
-                    <div class="tab-pane favorite-dir-list fade active" role="tabpanel">
-                        <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
-                        <div class="file-list gap-5 justify-content-center align-items-center">
-                            <c:forEach items="${favorites}" var="dir">
-                                <a class="align-self-center" href="<c:url value="../directory/${dir.id}"/>">
-                                    <div class="d-flex flex-column gap-2 align-items-center">
-                                        <img src="<c:url value="/svg/folder.svg"/>"
-                                             alt="<spring:message code="folder"/>"
-                                             class="icon-xxl fill-${dir.iconColor}">
-                                        <!-- max 2 lines-->
-                                        <span class="fw-bold flex-wrap justify-content-center folder-name">
-                                                    <c:out value="${dir.name}"/>
-                                                </span>
-                                    </div>
-                                </a>
-                            </c:forEach>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </c:if>
-
-        <c:if test="${not empty favorites}">
-        <div class="col">
-
-            </c:if>
-            <c:if test="${empty favorites}">
-            <div class="col w-75"></c:if>
-                <!-- ROOT DIRECTORIES -->
                 <ul class="mini-nav">
                     <c:forEach items="${root_directories}" var="subjects" varStatus="i">
                         <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
@@ -111,6 +67,7 @@
                         </li>
                     </c:forEach>
                 </ul>
+
                 <div class="tab-content bg-bg">
                     <c:forEach items="${root_directories}" var="subjects" varStatus="i">
                         <div class="tab-pane root-dir-list fade ${i.index eq 0 ? 'active' : ''}" role="tabpanel">
@@ -133,6 +90,7 @@
                     </c:forEach>
                 </div>
             </div>
+        </c:if>
     </section>
 </main>
 
