@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface DirectoryService {
     DirectoryPath getDirectoryPath(UUID directoryId);
     void update(UUID directoryId, String name, boolean visible, String iconColor);
     void delete(UUID[] directoryIds, String reason);
-    List<Directory> getFavorites();
+    DirectoryFavoriteGroups getFavorites();
     void addFavorite(UUID directoryId);
     void removeFavorite(UUID directoryId);
 }

@@ -94,14 +94,14 @@
 
     <c:if test="${title != null}">
         <c:set var="titleData" value="${fn:split(title, ':')}"/>
-        <c:if test="${category ne 'directory' or user.userId ne blob.user.userId}">
+        <c:if test="${category ne 'directory' or user eq null or user.userId ne blob.user.userId}">
             <a href="<c:url value="${titleData[0]}"/>">
                 <div class="bottom-navbar-item bn-title active">
                     <c:out value="${titleData[1]}"/>
                 </div>
             </a>
         </c:if>
-        <c:if test="${category eq 'directory' and user.userId eq blob.user.userId}">
+        <c:if test="${category eq 'directory' and user ne null and user.userId eq blob.user.userId}">
             <div class="btn-group h-100">
                 <button class="bn-dropdown-title-button"
                         data-bs-toggle="dropdown" aria-expanded="false">

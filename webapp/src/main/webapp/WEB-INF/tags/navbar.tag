@@ -47,7 +47,7 @@
                     <img src="<c:url value="/svg/user.svg"/>" alt="${profile}"
                          class="icon-s"/>
                     <img src="<c:url value="/svg/chevron-down.svg"/>" alt="${profile}"
-                         class="icon-s fill-dark-primary mx-1 dropdown-icon"/>
+                         class="icon-s fill-dark-primary dropdown-icon"/>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>

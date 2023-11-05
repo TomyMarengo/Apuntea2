@@ -17,9 +17,9 @@
 
         <a class="btn nav-icon-button" href="${baseUrl}/my-subjects" data-bs-toggle="tooltip"
            data-bs-placement="right"
-           data-bs-title="<spring:message code="profileNotes.directories.subjects"/>" data-bs-trigger="hover">
+           data-bs-title="<spring:message code="profileNotes.subjects"/>" data-bs-trigger="hover">
             <img src="<c:url value="/svg/book-alt.svg"/>"
-                 alt="<spring:message code="profileNotes.directories.subjects"/>"
+                 alt="<spring:message code="profileNotes.subjects"/>"
                  class="icon-m fill-dark-primary"/>
         </a>
 

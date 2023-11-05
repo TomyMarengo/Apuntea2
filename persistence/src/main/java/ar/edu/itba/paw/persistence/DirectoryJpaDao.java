@@ -105,6 +105,13 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
+    public List<Directory> getFavoriteRootDirectories(UUID userId) {
+        return em.createQuery("SELECT d FROM DirectoryFavorite f JOIN f.directory d WHERE f.user.id = :userId AND d.parentId = null AND d.user = null", Directory.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
+    @Override
     public void addFavorite(UUID userId, UUID directoryId) {
         DirectoryFavorite fav = new DirectoryFavorite(em.getReference(User.class, userId), em.getReference(Directory.class, directoryId));
         em.persist(fav);

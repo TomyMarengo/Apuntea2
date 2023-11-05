@@ -20,7 +20,6 @@ public class Subject {
     @JoinColumn(name = "root_directory_id", referencedColumnName = "directory_id")
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private Directory rootDirectory;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "subjects_careers",
@@ -70,6 +69,10 @@ public class Subject {
 
     public UUID getRootDirectoryId() {
         return rootDirectory.getId();
+    }
+
+    public Directory getRootDirectory() {
+        return rootDirectory;
     }
 
     public void setName(String name) {

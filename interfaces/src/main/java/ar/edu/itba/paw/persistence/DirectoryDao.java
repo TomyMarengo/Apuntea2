@@ -24,6 +24,8 @@ public interface DirectoryDao {
 
     List<Directory> getFavorites(UUID userId);
 
+    List<Directory> getFavoriteRootDirectories(UUID userId);
+
     void addFavorite(UUID userId, UUID directoryId);
 
     boolean removeFavorite(UUID userId, UUID directoryId);

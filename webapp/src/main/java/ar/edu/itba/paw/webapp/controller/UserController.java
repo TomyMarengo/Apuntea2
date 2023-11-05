@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.user.password.ChangePasswordForm;
@@ -27,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private final SubjectService subjectService;
     private final DirectoryService directoryService;
+    private final NoteService noteService;
     private final SecurityService securityService;
 
     private final CareerService careerService;
@@ -37,20 +39,30 @@ public class UserController {
     private ServletContext context;
 
     @Autowired
-    public UserController(final SubjectService subjectService, final UserService userService, final SecurityService securityService, final DirectoryService directoryService, final CareerService careerService) {
+    public UserController(final SubjectService subjectService,
+                          final UserService userService,
+                          final SecurityService securityService,
+                          final DirectoryService directoryService,
+                          final CareerService careerService,
+                          final NoteService noteService
+        ) {
         this.userService = userService;
         this.securityService = securityService;
         this.directoryService = directoryService;
         this.subjectService = subjectService;
         this.careerService = careerService;
+        this.noteService = noteService;
     }
 
     @RequestMapping(value = "/my-favorites", method = RequestMethod.GET)
     public ModelAndView myFavorites() {
         ModelAndView mav = new ModelAndView("my-favorites");
         User user = securityService.getCurrentUserOrThrow();
+        DirectoryFavoriteGroups favoriteGroups = directoryService.getFavorites();
         mav.addObject("user", user);
-        mav.addObject("favorites", directoryService.getFavorites());
+        mav.addObject("directoryFavorites", favoriteGroups.getDirectoryList());
+        mav.addObject("subjectFavorites", favoriteGroups.getRootDirectoryList());
+        mav.addObject("noteFavorites", noteService.getFavorites());
         return mav;
     }
 

@@ -15,7 +15,6 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     justify-items: center;
-    align-items: center;
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
@@ -59,15 +58,4 @@
     color: var(--primary);
     background-color: var(--bg);
     border: var(--primary) 1px solid;
-}
-
-.favorite-dir {
-    background-color: #ff5e6d;
-    color: var(--bg);
-}
-
-.favorite-dir:not(.active):hover{
-    color: #ff5e6d;
-    background-color: var(--text);
-    border: #ff5e6d 1px solid;
 }

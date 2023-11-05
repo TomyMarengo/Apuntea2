@@ -70,6 +70,10 @@ public class Directory implements Searchable {
 
     public UUID getId() { return directoryId; }
 
+    public boolean isRootDirectory() {
+        return parentId == null;
+    }
+
     @Override
     public UUID getParentId() {
         return parentId;

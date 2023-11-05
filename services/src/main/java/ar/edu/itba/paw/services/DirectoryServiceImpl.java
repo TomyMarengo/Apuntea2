@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DirectoryServiceImpl implements DirectoryService{
@@ -79,9 +81,10 @@ public class DirectoryServiceImpl implements DirectoryService{
 
     @Transactional
     @Override
-    public List<Directory> getFavorites() {
+    public DirectoryFavoriteGroups getFavorites() {
         UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        return directoryDao.getFavorites(currentUserId);
+        Map<Boolean, List<Directory>> directories = directoryDao.getFavorites(currentUserId).stream().collect(Collectors.partitioningBy(Directory::isRootDirectory));
+        return new DirectoryFavoriteGroups(directories.get(true), directories.get(false));
     }
 
     @Transactional

@@ -1,6 +1,6 @@
 // Selecciona las pestañas y el contenido de las pestañas
-var tabLinks = document.querySelectorAll('.nav-link');
-var tabContents = document.querySelectorAll('.tab-pane');
+const tabLinks = document.querySelectorAll('.nav-link');
+const tabContents = document.querySelectorAll('.tab-pane');
 
 // Agrega un evento de clic a cada pestaña
 tabLinks.forEach(function(tabLink, index) {
