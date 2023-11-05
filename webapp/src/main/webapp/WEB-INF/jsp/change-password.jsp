@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="stylesheet" href=
-            <c:url value="/css/sections/navbar.css"/>/>
+            <c:url value="/css/sections/bars.css"/>/>
     <link rel="stylesheet" href=
             <c:url value="/css/sections/user/profile.css"/>/>
 
@@ -47,56 +47,59 @@
     <fragment:bottom-navbar title="./change-password:${title}"/>
 </header>
 
-<section class="container d-flex justify-content-center  mt-3">
-    <div class="card box change-password-container">
-        <div class="card-body p-3 p-md-5 mx-4">
-            <c:url var="changePasswordUrl" value="/change-password"/>
-            <form:form action="${changePasswordUrl}"
-                       method="post"
-                       modelAttribute="changePasswordForm"
-                       id="changePasswordForm"
+<main>
+    <fragment:sidebar/>
 
-            >
-                <h1><spring:message code="changePassword.title"/></h1>
+    <section class="container d-flex align-self-center justify-content-center">
+        <div class="card box change-password-container">
+            <div class="card-body p-3 p-md-5 mx-4">
+                <c:url var="changePasswordUrl" value="/change-password"/>
+                <form:form action="${changePasswordUrl}"
+                           method="post"
+                           modelAttribute="changePasswordForm"
+                           id="changePasswordForm">
+                    <h1><spring:message code="changePassword.title"/></h1>
 
-                <label for="oldPassword"></label>
-                <p><strong><spring:message code="changePassword.oldPassword"/></strong></p>
-                <div class="input-group">
-                    <spring:message var="oldPassword" code="changePassword.oldPassword"/>
-                    <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
-                                placeholder="${oldPassword}" path="oldPassword" value="" required="true"/>
-                    <button type="button" class="input-group-text input-group-icon" onclick="passwordShowHide()">
-                                                <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
-                                                     class="icon-xs fill-dark-primary"/>
-                                                <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
-                                                     class="d-none icon-xs fill-dark-primary"/>
-                                            </button>
-                </div>
-                <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
+                    <label for="oldPassword"></label>
+                    <p><strong><spring:message code="changePassword.oldPassword"/></strong></p>
+                    <div class="input-group">
+                        <spring:message var="oldPassword" code="changePassword.oldPassword"/>
+                        <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
+                                    placeholder="${oldPassword}" path="oldPassword" value="" required="true"/>
+                        <button type="button" class="input-group-text input-group-icon" onclick="passwordShowHide()">
+                            <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
+                                 class="icon-xs fill-dark-primary"/>
+                            <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
+                                 class="d-none icon-xs fill-dark-primary"/>
+                        </button>
+                    </div>
+                    <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
 
-                <label for="newPassword"></label>
-                <p><strong><spring:message code="changePassword.newPassword"/></strong></p>
-                <div class="input-group">
-                    <spring:message var="newPassword" code="changePassword.newPassword"/>
-                    <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
-                                placeholder="${newPassword}" path="newPassword" value="" required="true"/>
-                    <button type="button" class="input-group-text input-group-icon"
-                          onclick="passwordShowHide('2');">
-                                                <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"
-                                                     class="icon-xs fill-dark-primary"/>
-                                                <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2"
-                                                     class="d-none icon-xs fill-dark-primary"/>
-                                            </button>
-                </div>
-                <form:errors path="newPassword" cssClass="text-danger" element="p"/>
+                    <label for="newPassword"></label>
+                    <p><strong><spring:message code="changePassword.newPassword"/></strong></p>
+                    <div class="input-group">
+                        <spring:message var="newPassword" code="changePassword.newPassword"/>
+                        <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
+                                    placeholder="${newPassword}" path="newPassword" value="" required="true"/>
+                        <button type="button" class="input-group-text input-group-icon"
+                                onclick="passwordShowHide('2');">
+                            <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"
+                                 class="icon-xs fill-dark-primary"/>
+                            <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2"
+                                 class="d-none icon-xs fill-dark-primary"/>
+                        </button>
+                    </div>
+                    <form:errors path="newPassword" cssClass="text-danger" element="p"/>
 
-                <div class="mt-5 d-flex justify-content-center">
-                    <button class="btn rounded-box button-primary"><spring:message code="update"/></button>
-                </div>
-            </form:form>
+                    <div class="mt-5 d-flex justify-content-center">
+                        <button class="btn rounded-box button-primary"><spring:message code="update"/></button>
+                    </div>
+                </form:form>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+</main>
+
 <fragment:custom-toast message=""/>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"

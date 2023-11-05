@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="stylesheet" href=
-            <c:url value="/css/sections/navbar.css"/>/>
+            <c:url value="/css/sections/bars.css"/>/>
     <link rel="stylesheet" href=
             <c:url value="/css/sections/user/profile.css"/>/>
 
@@ -49,89 +49,19 @@
 
 
 <!-- USER INFO & BUTTONS "VER" -->
-<main class="container-fluid px-5 mt-5">
-    <c:if test="${not empty favorites}"><section class="row row-cols-1 row-cols-xl-2"></c:if>
-    <c:if test="${empty favorites}"><section class="row row-cols-1 row-cols-xl-2 justify-content-center"></c:if>
+<main>
+    <fragment:sidebar/>
 
-        <!-- User info column -->
-        <%--        <div class="col-12 col-lg-4 col-xl-3 ">--%>
-        <%--            <div class="card user-card box mb-5 mb-lg-0">--%>
-        <%--                <div class="card-body">--%>
-        <%--                    <!-- Profile picture (visible on large screens) -->--%>
-        <%--                    <div class="d-none d-lg-flex flex-column">--%>
-        <%--                        <div class="profile-picture-small mb-3">--%>
-        <%--                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">--%>
-        <%--                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"--%>
-        <%--                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">--%>
-        <%--                            </div>--%>
-        <%--                        </div>--%>
-
-        <%--                        <!-- User info -->--%>
-        <%--                        <div class="d-flex flex-column gap-2">--%>
-        <%--                            <h4 class="card-title fw-bold">${user.displayName}</h4>--%>
-        <%--                            <c:forEach items="${user.roles}" var="r">--%>
-        <%--                                <span class="card-text">--%>
-        <%--                                <c:choose>--%>
-        <%--                                    <c:when test="${r eq 'ROLE_STUDENT'}">--%>
-        <%--                                        <spring:message code="role.student"/>--%>
-        <%--                                    </c:when>--%>
-        <%--                                    <c:when test="${r eq 'ROLE_MODERATOR'}">--%>
-        <%--                                        <spring:message code="role.moderator"/>--%>
-        <%--                                    </c:when>--%>
-        <%--                                    <c:when test="${r eq 'ROLE_ADMIN'}">--%>
-        <%--                                        <spring:message code="role.admin"/>--%>
-        <%--                                    </c:when>--%>
-        <%--                                </c:choose>--%>
-        <%--                                </span>--%>
-        <%--                            </c:forEach>--%>
-        <%--                            <span class="card-text">${user.institution.name}</span>--%>
-        <%--                            <span class="card-text">${user.career.name}</span>--%>
-        <%--                        </div>--%>
-        <%--                    </div>--%>
-        <%--                    <!-- Profile picture (visible on small screens) -->--%>
-        <%--                    <div class="d-flex d-lg-none justify-content-around align-items-center flex-wrap ">--%>
-        <%--                        <div class="mb-3 mb-md-0 w-100">--%>
-        <%--                            <div class="rounded-circle overflow-hidden d-flex justify-content-center align-items-center">--%>
-        <%--                                <img src="<c:url  value="${baseUrl}/profile/${user.userId}/picture"/>"--%>
-        <%--                                     alt="Profile picture" class="profile-picture border border-2 border-dark-primary">--%>
-        <%--                            </div>--%>
-        <%--                        </div>--%>
-
-        <%--                        <!-- User info -->--%>
-        <%--                        <div class="d-flex flex-column gap-2 w-100">--%>
-        <%--                            <h4 class="card-title fw-bold">${user.email}</h4>--%>
-        <%--                            <c:forEach items="${user.roles}" var="r">--%>
-        <%--                                <span class="card-text">--%>
-        <%--                                <c:choose>--%>
-        <%--                                    <c:when test="${r eq 'ROLE_STUDENT'}">--%>
-        <%--                                        <spring:message code="role.student"/>--%>
-        <%--                                    </c:when>--%>
-        <%--                                    <c:when test="${r eq 'ROLE_MODERATOR'}">--%>
-        <%--                                        <spring:message code="role.moderator"/>--%>
-        <%--                                    </c:when>--%>
-        <%--                                    <c:when test="${r eq 'ROLE_ADMIN'}">--%>
-        <%--                                        <spring:message code="role.admin"/>--%>
-        <%--                                    </c:when>--%>
-        <%--                                </c:choose>--%>
-        <%--                                </span>--%>
-        <%--                            </c:forEach>--%>
-        <%--                            <span class="card-text">${user.institution.name}</span>--%>
-        <%--                            <span class="card-text">${user.career.name}</span>--%>
-        <%--                        </div>--%>
-        <%--                    </div>--%>
-        <%--                </div>--%>
-        <%--            </div>--%>
-        <%--        </div>--%>
-
+    <section class="row row-cols-1 row-cols-xl-2 justify-content-center mt-5">
         <!-- List of directories -->
-
         <!-- FAVORITES AND MY NOTES -->
         <c:if test="${not empty favorites }"> <!-- TODO: ADD MY NOTES -->
             <div class="col mb-5 mb-xl-0">
                 <ul class="mini-nav">
                     <!-- FAVORITES -->
                     <li class="mini-nav-item">
-                        <button class="btn mini-nav-button favorite-dir text-center active" data-toggle="tab" role="tab"
+                        <button class="btn mini-nav-button favorite-dir text-center active" data-toggle="tab"
+                                role="tab"
                                 aria-selected="true"> <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
                             <spring:message code="profileNotes.directories.favorites"/>
                         </button>
@@ -162,10 +92,13 @@
             </div>
         </c:if>
 
+        <c:if test="${not empty favorites}">
+        <div class="col">
 
-        <c:if test="${not empty favorites}"><div class="col"></c:if>
-        <c:if test="${empty favorites}"><div class="col w-75"></c:if>
-            <!-- ROOT DIRECTORIES -->
+            </c:if>
+            <c:if test="${empty favorites}">
+            <div class="col w-75"></c:if>
+                <!-- ROOT DIRECTORIES -->
                 <ul class="mini-nav">
                     <c:forEach items="${root_directories}" var="subjects" varStatus="i">
                         <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
@@ -200,8 +133,6 @@
                     </c:forEach>
                 </div>
             </div>
-
-
     </section>
 </main>
 

@@ -19,6 +19,8 @@
   --dark-secondary: #FCAA6F;
 
   --header-height: 116px;
+  --nav-height: 60px;
+  --sidebar-width: 60px;
 
   --danger: #fa3a4e;
   --filter-light-primary: invert(87%) sepia(17%) saturate(363%) hue-rotate(317deg) brightness(93%) contrast(118%);

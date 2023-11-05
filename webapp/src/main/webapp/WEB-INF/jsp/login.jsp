@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/bars.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/user/register-login.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
@@ -42,95 +42,97 @@
 
 </header>
 
-<section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
+<main>
+    <section class="container d-flex align-self-center">
 
-    <div class="row">
-        <div class="card box">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card-body p-3 p-md-5 mx-4">
+        <div class="row">
+            <div class="card box">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card-body p-3 p-md-5 mx-4">
 
-                        <form action="${loginUrl}" method="post">
-                            <h1><spring:message code="login.title"/></h1>
+                            <form action="${loginUrl}" method="post">
+                                <h1><spring:message code="login.title"/></h1>
 
-                            <div class="">
-                                <spring:message var="loginEmail" code="email"/>
-                                <label for="email"></label>
-                                <input type="text" name="email" id="email" class="form-control bg-bg"
-                                       placeholder="${loginEmail}" required/>
-                            </div>
-
-                            <label for="password"></label>
-                            <div class="input-group">
-                                <spring:message var="loginPassword" code="password"/>
-                                <input type="password" name="password" id="password" class="form-control bg-bg"
-                                       placeholder="${loginPassword}" required/>
-                                <button type="button" class="input-group-text input-group-icon"
-                                      onclick="passwordShowHide()">
-                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
-                                         class="icon-xs fill-dark-primary"/>
-                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
-                                         class="d-none icon-xs fill-dark-primary"/>
-                                </button>
-                            </div>
-
-                            <c:if test="${param.error}">
-                                <div class="text-danger mt-2" role="alert">
-                                    <spring:message code="login.error"/>
+                                <div class="">
+                                    <spring:message var="loginEmail" code="email"/>
+                                    <label for="email"></label>
+                                    <input type="text" name="email" id="email" class="form-control bg-bg"
+                                           placeholder="${loginEmail}" required/>
                                 </div>
-                            </c:if>
-                            <c:if test="${param.banned}">
-                                <div class="text-danger mt-2" role="alert">
-                                    <spring:message code="login.banned"/>
+
+                                <label for="password"></label>
+                                <div class="input-group">
+                                    <spring:message var="loginPassword" code="password"/>
+                                    <input type="password" name="password" id="password" class="form-control bg-bg"
+                                           placeholder="${loginPassword}" required/>
+                                    <button type="button" class="input-group-text input-group-icon"
+                                            onclick="passwordShowHide()">
+                                        <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
+                                             class="icon-xs fill-dark-primary"/>
+                                        <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
+                                             class="d-none icon-xs fill-dark-primary"/>
+                                    </button>
                                 </div>
-                            </c:if>
 
-                            <div class="mt-4 d-flex align-items-center">
-                                <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"/>
-                                <label class="form-check-label mx-1" for="rememberMe"> <spring:message
-                                        code="login.rememberMe"/> </label>
+                                <c:if test="${param.error}">
+                                    <div class="text-danger mt-2" role="alert">
+                                        <spring:message code="login.error"/>
+                                    </div>
+                                </c:if>
+                                <c:if test="${param.banned}">
+                                    <div class="text-danger mt-2" role="alert">
+                                        <spring:message code="login.banned"/>
+                                    </div>
+                                </c:if>
+
+                                <div class="mt-4 d-flex align-items-center">
+                                    <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe"/>
+                                    <label class="form-check-label mx-1" for="rememberMe"> <spring:message
+                                            code="login.rememberMe"/> </label>
+                                </div>
+
+                                <div class="mt-3 d-flex justify-content-center">
+                                    <button class="btn rounded-box button-primary">
+                                        <spring:message code="login.title"/>
+                                    </button>
+                                </div>
+
+                            </form>
+
+                            <div class="d-flex align-items-center justify-content-center mt-4">
+                                <p class="mb-0 me-2"><spring:message code="login.dontHave"/></p>
+                                <a href="./register" class="btn login-register-button box">
+                                    <spring:message code="login.createNew"/>
+                                </a>
                             </div>
 
-                            <div class="mt-3 d-flex justify-content-center">
-                                <button class="btn rounded-box button-primary">
-                                    <spring:message code="login.title"/>
-                                </button>
+                            <div class="d-flex align-items-center justify-content-center mt-4">
+                                <a href="./forgot-password" class="mb-0 me-2 link-info">
+                                    <spring:message code="login.forgotPassword"/>
+                                </a>
                             </div>
 
-                        </form>
-
-                        <div class="d-flex align-items-center justify-content-center mt-4">
-                            <p class="mb-0 me-2"><spring:message code="login.dontHave"/></p>
-                            <a href="./register" class="btn login-register-button box">
-                                <spring:message code="login.createNew"/>
-                            </a>
                         </div>
-
-                        <div class="d-flex align-items-center justify-content-center mt-4">
-                            <a href="./forgot-password" class="mb-0 me-2 link-info">
-                                <spring:message code="login.forgotPassword"/>
-                            </a>
-                        </div>
-
                     </div>
-                </div>
 
-                <div class="col-lg-6 box d-flex align-items-center we-are-more-container">
-                    <div class="text-center px-5 py-5 ">
-                        <div class="text-center mb-5">
-                            <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
-                                 style="width: 40px; height: 40px;">
-                            <h3 class="mt-1 text-bg"><spring:message code="login.weAre"/></h3>
+                    <div class="col-lg-6 box d-flex align-items-center we-are-more-container">
+                        <div class="text-center px-5 py-5 ">
+                            <div class="text-center mb-5">
+                                <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
+                                     style="width: 40px; height: 40px;">
+                                <h3 class="mt-1 text-bg"><spring:message code="login.weAre"/></h3>
+                            </div>
+                            <h4 class="mb-4"><spring:message code="login.weAreMore.title"/></h4>
+                            <p><spring:message code="login.weAreMore.subtitle"/></p>
                         </div>
-                        <h4 class="mb-4"><spring:message code="login.weAreMore.title"/></h4>
-                        <p><spring:message code="login.weAreMore.subtitle"/></p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</section>
+    </section>
+</main>
 
 <fragment:custom-toast message=""/>
 
@@ -144,10 +146,10 @@
 
 <script>
     <c:if test="${success eq true}">
-        displayToast('<spring:message code="toast.register"/>')
+    displayToast('<spring:message code="toast.register"/>')
     </c:if>
     <c:if test="${not empty email}">
-        displayToast('<spring:message code="toast.forgotPassword"/>')
+    displayToast('<spring:message code="toast.forgotPassword"/>')
     </c:if>
 </script>
 

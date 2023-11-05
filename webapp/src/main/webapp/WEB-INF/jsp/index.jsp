@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/sizes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/bars.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/landing/landing.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
@@ -37,8 +37,10 @@
     <fragment:navbar user="${user}"/>
 </header>
 
-<main class="container-fluid mt-5">
-    <div class="d-flex flex-column align-items-center gap-3 text-center">
+<main>
+    <fragment:sidebar/>
+
+    <section class="d-flex flex-column align-items-center gap-3 text-center mt-5">
         <h2><spring:message code="index.title" arguments='<span class="apuntea-title">Apuntea</span>'/></h2>
         <h4><spring:message code="index.subtitle"/></h4>
 
@@ -123,7 +125,7 @@
             </c:if>
 
         </div>
-    </div>
+    </section>
 </main>
 
 

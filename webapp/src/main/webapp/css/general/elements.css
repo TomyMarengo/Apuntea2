@@ -16,6 +16,21 @@ body {
     background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat fixed;
 }
 
+
+main {
+    display: flex;
+    height: calc(100vh - var(--nav-height));
+    width: 100%;
+}
+
+.sidebar.right + section {
+    width: calc(100% - var(--sidebar-width));
+}
+
+.sidebar.right + section.between-sidebars {
+    width: calc(100% - 2*var(--sidebar-width));
+}
+
 button {
     font-weight: 700 !important;
 }

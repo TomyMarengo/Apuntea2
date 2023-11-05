@@ -26,9 +26,8 @@
     <link rel="stylesheet" href="<c:url value="/css/general/color-picker.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/bars.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/search/table-list.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/manage/bar.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,43 +48,147 @@
 
 </header>
 
-<main style="margin-left: 50px !important;">
-
-    <!-- SEARCH -->
-    <div class="container my-5">
-        <c:url var="searchUrl" value="./users"/>
-        <form:form modelAttribute="searchForm"
-                   action="${searchUrl}"
-                   method="get"
-                   id="searchForm">
-            <div class="row row-cols-1 row-cols-lg-2 justify-content-center">
+<main>
+    <fragment:sidebar/>
 
 
-                <div class="col col-lg-5">
-                    <div class="col">
-                        <div class="input-group mb-3">
-                            <spring:message code="searchUserForm.query" var="placeholderQuery"/>
-                            <form:input path="query" type="text" class="form-control bg-bg"
-                                        placeholder="${placeholderQuery}"/>
+    <section class="mt-5 between-sidebars">
+
+        <!-- SEARCH -->
+        <div class="container my-5">
+            <c:url var="searchUrl" value="./users"/>
+            <form:form modelAttribute="searchForm"
+                       action="${searchUrl}"
+                       method="get"
+                       id="searchForm">
+                <div class="row row-cols-1 row-cols-lg-2 justify-content-center">
+
+
+                    <div class="col col-lg-5">
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <spring:message code="searchUserForm.query" var="placeholderQuery"/>
+                                <form:input path="query" type="text" class="form-control bg-bg"
+                                            placeholder="${placeholderQuery}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col col-lg-5 w-25">
+                        <div class="col">
+                            <button type="submit" class="btn button-primary w-100"><spring:message
+                                    code="search.button"/></button>
                         </div>
                     </div>
                 </div>
 
-                <div class="col col-lg-5 w-25">
-                    <div class="col">
-                        <button type="submit" class="btn button-primary w-100"><spring:message
-                                code="search.button"/></button>
-                    </div>
-                </div>
+                <form:hidden path="pageNumber" id="pageNumber" value="1"/>
+
+            </form:form>
+        </div>
+
+        <!-- HORIZONTAL LIST -->
+        <section class="container mt-4 p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-search">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2"><spring:message code="username"/></th>
+                        <th class="col-md-4"><spring:message code="email"/></th>
+                        <th class="col-md-3"><spring:message code="roles"/></th>
+                        <th class="col-md-1"><spring:message code="status"/></th>
+                        <th class="col-md-2"></th> <!-- ACTIONS -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="item" items="${users}">
+                        <tr class="note-found no-select" id="<c:out value="${item.userId}"/>">
+                            <td class="note-found-title">
+                            <span class="card-title align-middle mx-2 note-name">
+                                <c:out value="${item.username}"/>
+                            </span>
+                            </td>
+                            <td><c:out value="${item.email}"/></td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${item.roles[0] eq 'ROLE_STUDENT'}">
+                                        <spring:message code="role.student"/>
+                                    </c:when>
+                                    <c:when test="${item.roles[0] eq 'ROLE_MODERATOR'}">
+                                        <spring:message code="role.moderator"/>
+                                    </c:when>
+                                    <c:when test="${item.roles[0] eq 'ROLE_ADMIN'}">
+                                        <spring:message code="role.admin"/>
+                                    </c:when>
+                                </c:choose>
+                                <c:forEach var="role" items="${item.roles}" begin="1">
+                                    - <c:choose>
+                                    <c:when test="${role eq 'ROLE_STUDENT'}">
+                                        <spring:message code="role.student"/>
+                                    </c:when>
+                                    <c:when test="${role eq 'ROLE_MODERATOR'}">
+                                        <spring:message code="role.moderator"/>
+                                    </c:when>
+                                    <c:when test="${role eq 'ROLE_ADMIN'}">
+                                        <spring:message code="role.admin"/>
+                                    </c:when>
+                                </c:choose>
+                                </c:forEach>
+                            </td>
+                            <td>
+                                <spring:message code="user.status.${item.status.status}"/>
+                            </td>
+
+                            <td class="search-actions">
+                                <div class="d-flex justify-content-end">
+
+                                    <c:if test="${item.status.status eq 'active'}">
+                                        <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                             data-bs-title="<spring:message code="banUser"/>" data-bs-trigger="hover">
+                                            <button class="btn nav-icon-button ban-button"
+                                                    data-email="<c:out value="${item.email}"/>"
+                                                    data-bs-toggle="modal" data-bs-target="#banUserModal"
+                                                    id="<c:out value="${item.userId}"/>.b1">
+                                                <img src="<c:url value="/svg/user-slash.svg"/>"
+                                                     alt="<spring:message code="banUser"/>"
+                                                     class="icon-xs fill-text">
+                                            </button>
+                                        </div>
+                                    </c:if>
+                                    <!-- TODO: Change data-email for data-username or the method to handle all names -->
+                                    <!-- TODO: (Change the modal too) -->
+                                    <c:if test="${item.status.status eq 'banned'}">
+                                        <div data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                             data-bs-title="<spring:message code="unbanUser"/>" data-bs-trigger="hover">
+                                            <button class="btn nav-icon-button unban-button"
+                                                    data-email="<c:out value="${item.email}"/>"
+                                                    data-bs-toggle="modal" data-bs-target="#unbanUserModal"
+                                                    id="<c:out value="${item.userId}"/>.u1">
+                                                <img src="<c:url value="/svg/user-check.svg"/>"
+                                                     alt="<spring:message code="unbanUser"/>"
+                                                     class="icon-xs fill-text">
+                                            </button>
+                                        </div>
+                                    </c:if>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
             </div>
+        </section>
 
-            <form:hidden path="pageNumber" id="pageNumber" value="1"/>
+        <!-- PAGINATION -->
+        <c:if test="${maxPage gt 1}">
+            <fragment:paging maxPage="${maxPage}" pageNumber="${currentPage}"/>
+        </c:if>
+    </section>
 
-        </form:form>
-    </div>
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
+    <!-- SIDEBAR RIGHT -->
+    <aside class="sidebar left">
         <a class="btn nav-icon-button" href="${baseUrl}/manage/careers" data-bs-toggle="tooltip"
            data-bs-placement="right"
            data-bs-title="<spring:message code="manageCareers.title"/>" data-bs-trigger="hover">
@@ -93,112 +196,15 @@
                  alt="<spring:message code="manageUsers.title"/>"
                  class="icon-m fill-dark-primary"/>
         </a>
-
         <a class="btn nav-icon-button" href="${baseUrl}/manage/users" data-bs-toggle="tooltip" data-bs-placement="right"
            data-bs-title="<spring:message code="manageUsers.title"/>" data-bs-trigger="hover">
             <img src="<c:url value="/svg/user-slash.svg"/>"
                  alt="<spring:message code="manageUsers.title"/>"
                  class="icon-m fill-dark-primary"/>
         </a>
+    </aside>
 
-    </div>
 
-    <!-- HORIZONTAL LIST -->
-    <section class="container mt-4 p-0" style="max-height: 500px; overflow-y: scroll">
-        <div class="table-responsive">
-            <table class="table table-hover table-search">
-                <thead>
-                <tr>
-                    <th class="col-md-2"><spring:message code="username"/></th>
-                    <th class="col-md-4"><spring:message code="email"/></th>
-                    <th class="col-md-3"><spring:message code="roles"/></th>
-                    <th class="col-md-1"><spring:message code="status"/></th>
-                    <th class="col-md-2"></th> <!-- ACTIONS -->
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="item" items="${users}">
-                    <tr class="note-found no-select" id="<c:out value="${item.userId}"/>">
-                        <td class="note-found-title">
-                            <span class="card-title align-middle mx-2 note-name">
-                                <c:out value="${item.username}"/>
-                            </span>
-                        </td>
-                        <td><c:out value="${item.email}"/></td>
-                        <td>
-                            <c:choose>
-                                <c:when test="${item.roles[0] eq 'ROLE_STUDENT'}">
-                                    <spring:message code="role.student"/>
-                                </c:when>
-                                <c:when test="${item.roles[0] eq 'ROLE_MODERATOR'}">
-                                    <spring:message code="role.moderator"/>
-                                </c:when>
-                                <c:when test="${item.roles[0] eq 'ROLE_ADMIN'}">
-                                    <spring:message code="role.admin"/>
-                                </c:when>
-                            </c:choose>
-                            <c:forEach var="role" items="${item.roles}" begin="1">
-                                - <c:choose>
-                                <c:when test="${role eq 'ROLE_STUDENT'}">
-                                    <spring:message code="role.student"/>
-                                </c:when>
-                                <c:when test="${role eq 'ROLE_MODERATOR'}">
-                                    <spring:message code="role.moderator"/>
-                                </c:when>
-                                <c:when test="${role eq 'ROLE_ADMIN'}">
-                                    <spring:message code="role.admin"/>
-                                </c:when>
-                            </c:choose>
-                            </c:forEach>
-                        </td>
-                        <td>
-                            <spring:message code="user.status.${item.status.status}"/>
-                        </td>
-
-                        <td class="search-actions">
-                            <div class="d-flex justify-content-end">
-
-                                <c:if test="${item.status.status eq 'active'}">
-                                    <div data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                         data-bs-title="<spring:message code="banUser"/>" data-bs-trigger="hover">
-                                        <button class="btn nav-icon-button ban-button"
-                                                data-email="<c:out value="${item.email}"/>"
-                                                data-bs-toggle="modal" data-bs-target="#banUserModal"
-                                                id="<c:out value="${item.userId}"/>.b1">
-                                            <img src="<c:url value="/svg/user-slash.svg"/>"
-                                                 alt="<spring:message code="banUser"/>"
-                                                 class="icon-xs fill-text">
-                                        </button>
-                                    </div>
-                                </c:if>
-                                <!-- TODO: Change data-email for data-username or the method to handle all names -->
-                                <!-- TODO: (Change the modal too) -->
-                                <c:if test="${item.status.status eq 'banned'}">
-                                    <div data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                         data-bs-title="<spring:message code="unbanUser"/>" data-bs-trigger="hover">
-                                        <button class="btn nav-icon-button unban-button"
-                                                data-email="<c:out value="${item.email}"/>"
-                                                data-bs-toggle="modal" data-bs-target="#unbanUserModal"
-                                                id="<c:out value="${item.userId}"/>.u1">
-                                            <img src="<c:url value="/svg/user-check.svg"/>"
-                                                 alt="<spring:message code="unbanUser"/>"
-                                                 class="icon-xs fill-text">
-                                        </button>
-                                    </div>
-                                </c:if>
-
-                            </div>
-                        </td>
-
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- PAGINATION -->
-    <fragment:paging maxPage="${maxPage}" pageNumber="${currentPage}"/>
 </main>
 
 <!-- BAN USER MODAL -->
@@ -287,7 +293,6 @@
         crossorigin="anonymous"></script>
 
 <script src="<c:url value="/js/popups.js"/>"></script>
-<script src="<c:url value="/js/sidebar.js"/>"></script>
 <c:if test="${not empty users}">
     <script src="<c:url value="/js/ban-unban.js"/>"></script>
 </c:if>

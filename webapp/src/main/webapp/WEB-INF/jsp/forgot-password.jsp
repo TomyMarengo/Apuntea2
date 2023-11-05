@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/bars.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/user/register-login.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
@@ -35,68 +35,65 @@
 <body>
 
 <header>
-    <!-- NAVBAR -->
     <fragment:navbar user="${user}"/>
-
-    <c:url var="forgotUrl" value="/forgot-password"/>
-    <spring:message var="logotype" code="logotype"/>
-
 </header>
 
+<spring:message var="logotype" code="logotype"/>
+<c:url var="forgotUrl" value="/forgot-password"/>
+<main>
+    <section class="container d-flex align-self-center">
+        <div class="row">
+            <div class="card box">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card-body p-3 p-md-5 mx-4">
+                            <form:form modelAttribute="forgotPasswordForm" action="${forgotUrl}" method="post">
+                                <h3><spring:message code="forgotPassword.title"/></h3>
 
-<section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
-
-    <div class="row">
-        <div class="card box">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card-body p-3 p-md-5 mx-4">
-                        <form:form modelAttribute="forgotPasswordForm" action="${forgotUrl}" method="post">
-                            <h3><spring:message code="forgotPassword.title"/></h3>
-
-                            <div>
-                                <spring:message var="emailPlaceholder" code="forgotPassword.email"/>
-                                <label for="email"></label>
-                                <p class="text-sm text-muted mb-2"><spring:message code="forgotPassword.subtitle"/></p>
-                                <form:input path="email" type="email" class="form-control bg-bg mb-2" id="email"
-                                            placeholder="${emailPlaceholder}" required="true"
-                                            autofocus="autofocus"/>
-                                <form:errors path="email" cssClass="text-danger" element="p"/>
-                            </div>
-                            <div class="d-flex flex-row mt-4 justify-content-end">
-                                <div class="d-flex align-items-center justify-content-center"
-                                     style="margin-right: 1em;">
-                                    <a href="./login">
-                                        <button type="button" class="btn login-register-button box"><spring:message
-                                                code="cancel"/></button>
-                                    </a>
+                                <div>
+                                    <spring:message var="emailPlaceholder" code="forgotPassword.email"/>
+                                    <label for="email"></label>
+                                    <p class="text-sm text-muted mb-2"><spring:message
+                                            code="forgotPassword.subtitle"/></p>
+                                    <form:input path="email" type="email" class="form-control bg-bg mb-2" id="email"
+                                                placeholder="${emailPlaceholder}" required="true"
+                                                autofocus="autofocus"/>
+                                    <form:errors path="email" cssClass="text-danger" element="p"/>
                                 </div>
-                                <div class="d-flex justify-content-center">
-                                    <spring:message var="forgotPassword" code="forgotPassword.title"/>
-                                    <input class="btn rounded-box button-primary" type="submit"
-                                           value="${forgotPassword}">
+                                <div class="d-flex flex-row mt-4 justify-content-end">
+                                    <div class="d-flex align-items-center justify-content-center"
+                                         style="margin-right: 1em;">
+                                        <a href="./login">
+                                            <button type="button" class="btn login-register-button box"><spring:message
+                                                    code="cancel"/></button>
+                                        </a>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <spring:message var="forgotPassword" code="forgotPassword.title"/>
+                                        <input class="btn rounded-box button-primary" type="submit"
+                                               value="${forgotPassword}">
+                                    </div>
                                 </div>
-                            </div>
-                        </form:form>
-                    </div>
-                </div>
-
-                <div class="col-lg-6 box d-flex align-items-center we-are-more-container">
-                    <div class="text-center px-5 py-5 ">
-                        <div class="text-center mb-5">
-                            <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
-                                 style="width: 40px; height: 40px;">
-                            <h3 class="mt-1 text-bg"><spring:message code="login.weAre"/></h3>
+                            </form:form>
                         </div>
-                        <h4 class="mb-4"><spring:message code="login.weAreMore.title"/></h4>
-                        <p><spring:message code="login.weAreMore.subtitle"/></p>
+                    </div>
+
+                    <div class="col-lg-6 box d-flex align-items-center we-are-more-container">
+                        <div class="text-center px-5 py-5 ">
+                            <div class="text-center mb-5">
+                                <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
+                                     style="width: 40px; height: 40px;">
+                                <h3 class="mt-1 text-bg"><spring:message code="login.weAre"/></h3>
+                            </div>
+                            <h4 class="mb-4"><spring:message code="login.weAreMore.title"/></h4>
+                            <p><spring:message code="login.weAreMore.subtitle"/></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-</section>
+    </section>
+</main>
 
 <script>
 </script>

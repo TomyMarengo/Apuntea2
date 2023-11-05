@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/buttons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/sections/navbar.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/bars.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/user/register-login.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
@@ -42,141 +42,143 @@
     <spring:message var="logotype" code="logotype"/>
 </header>
 
+<main>
+    <section class="container d-flex align-self-center">
 
-<section class="login-register-container container d-flex flex-column justify-content-center align-items-center">
+        <div class="row">
+            <div class="card box">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card-body p-3 p-md-5 mx-4">
 
-    <div class="row">
-        <div class="card box">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card-body p-3 p-md-5 mx-4">
+                            <form:form modelAttribute="userForm" action="${registerUrl}" method="post">
+                                <h1><spring:message code="register.title"/></h1>
 
-                        <form:form modelAttribute="userForm" action="${registerUrl}" method="post">
-                            <h1><spring:message code="register.title"/></h1>
+                                <div class="">
+                                    <spring:message var="registerEmail" code="email"/>
+                                    <label for="email"></label>
+                                    <form:input path="email" type="email" id="email" class="form-control bg-bg"
+                                                placeholder="${registerEmail}" required="true"/>
+                                    <form:errors path="email" cssClass="text-danger" element="p"/>
+                                </div>
 
-                            <div class="">
-                                <spring:message var="registerEmail" code="email"/>
-                                <label for="email"></label>
-                                <form:input path="email" type="email" id="email" class="form-control bg-bg"
-                                            placeholder="${registerEmail}" required="true"/>
-                                <form:errors path="email" cssClass="text-danger" element="p"/>
-                            </div>
-
-                            <label for="password"></label>
-                            <div class="input-group">
-                                <spring:message var="registerPassword" code="password"/>
-                                <form:input path="password" type="password" id="password" class="form-control bg-bg"
-                                            placeholder="${registerPassword}" required="true"/>
-                                <button type="button" class="input-group-text input-group-icon"
-                                      onclick="passwordShowHide()">
-                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
-                                         class="icon-xs fill-dark-primary"/>
-                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
-                                         class="d-none icon-xs fill-dark-primary"/>
-                                </button>
-                            </div>
-                            <form:errors path="password" cssClass="text-danger" element="p"/>
-
-
-                            <%--                            <div class="">--%>
-                            <%--                                <spring:message var="registerRepeatPassword" code="repeatPassword"/>--%>
-                            <%--                                <label for="password"></label>--%>
-                            <%--                                <form:input path="repeatPassword" type="password" id="password"--%>
-                            <%--                                            class="form-control bg-bg"--%>
-                            <%--                                            placeholder="${registerRepeatPassword}"/>--%>
-                            <%--                                <form:errors path="repeatPassword" cssClass="text-danger" element="p"/>--%>
-                            <%--                            </div>--%>
-
-                            <div class="">
-                                <label for="institutionSelect"></label>
-                                <select id="institutionSelect" style="display: none;">
-                                    <option disabled selected value></option>
-                                </select>
-
-                                <form:input path="institutionId" id="institutionId" style="display: none;"/>
-
-                                <label for="institutionAutocomplete"></label>
+                                <label for="password"></label>
                                 <div class="input-group">
-                                    <div class="autocomplete ">
-                                        <spring:message code="search.institution.placeholder"
-                                                        var="placeholderInstitution"/>
-                                        <input type="text" id="institutionAutocomplete"
-                                               class="form-control bg-bg special-radius"
-                                               placeholder="${placeholderInstitution}" autocomplete="off" required/>
-
-                                    </div>
+                                    <spring:message var="registerPassword" code="password"/>
+                                    <form:input path="password" type="password" id="password" class="form-control bg-bg"
+                                                placeholder="${registerPassword}" required="true"/>
                                     <button type="button" class="input-group-text input-group-icon"
-                                          id="eraseInstitutionButton">
-                                        <img src="<c:url value="/svg/cross.svg"/>"
-                                             alt="<spring:message code="search.sort.image"/>"
+                                            onclick="passwordShowHide()">
+                                        <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
                                              class="icon-xs fill-dark-primary"/>
+                                        <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
+                                             class="d-none icon-xs fill-dark-primary"/>
                                     </button>
                                 </div>
+                                <form:errors path="password" cssClass="text-danger" element="p"/>
 
-                                <form:errors path="institutionId" cssClass="text-danger" element="p"/>
-                            </div>
 
-                            <div class="">
-                                <label for="careerSelect"></label>
-                                <select id="careerSelect" style="display: none;">
-                                    <option disabled selected value></option>
-                                </select>
+                                <%--                            <div class="">--%>
+                                <%--                                <spring:message var="registerRepeatPassword" code="repeatPassword"/>--%>
+                                <%--                                <label for="password"></label>--%>
+                                <%--                                <form:input path="repeatPassword" type="password" id="password"--%>
+                                <%--                                            class="form-control bg-bg"--%>
+                                <%--                                            placeholder="${registerRepeatPassword}"/>--%>
+                                <%--                                <form:errors path="repeatPassword" cssClass="text-danger" element="p"/>--%>
+                                <%--                            </div>--%>
 
-                                <form:input path="careerId" id="careerId" style="display: none;"/>
+                                <div class="">
+                                    <label for="institutionSelect"></label>
+                                    <select id="institutionSelect" style="display: none;">
+                                        <option disabled selected value></option>
+                                    </select>
 
-                                <label for="careerAutocomplete"></label>
-                                <div class="input-group">
-                                    <div class="autocomplete">
-                                        <spring:message code="search.career.placeholder" var="placeholderCareer"/>
-                                        <input type="text" id="careerAutocomplete"
-                                               class="form-control bg-bg special-radius"
-                                               placeholder="${placeholderCareer}" autocomplete="off" required/>
+                                    <form:input path="institutionId" id="institutionId" style="display: none;"/>
+
+                                    <label for="institutionAutocomplete"></label>
+                                    <div class="input-group">
+                                        <div class="autocomplete ">
+                                            <spring:message code="search.institution.placeholder"
+                                                            var="placeholderInstitution"/>
+                                            <input type="text" id="institutionAutocomplete"
+                                                   class="form-control bg-bg special-radius"
+                                                   placeholder="${placeholderInstitution}" autocomplete="off" required/>
+
+                                        </div>
+                                        <button type="button" class="input-group-text input-group-icon"
+                                                id="eraseInstitutionButton">
+                                            <img src="<c:url value="/svg/cross.svg"/>"
+                                                 alt="<spring:message code="search.sort.image"/>"
+                                                 class="icon-xs fill-dark-primary"/>
+                                        </button>
                                     </div>
-                                    <button type="button" class="input-group-text input-group-icon" id="eraseCareerButton">
-                                        <img src="<c:url value="/svg/cross.svg"/>"
-                                             alt="<spring:message code="search.sort.image"/>"
-                                             class="icon-xs fill-dark-primary"/>
+
+                                    <form:errors path="institutionId" cssClass="text-danger" element="p"/>
+                                </div>
+
+                                <div class="">
+                                    <label for="careerSelect"></label>
+                                    <select id="careerSelect" style="display: none;">
+                                        <option disabled selected value></option>
+                                    </select>
+
+                                    <form:input path="careerId" id="careerId" style="display: none;"/>
+
+                                    <label for="careerAutocomplete"></label>
+                                    <div class="input-group">
+                                        <div class="autocomplete">
+                                            <spring:message code="search.career.placeholder" var="placeholderCareer"/>
+                                            <input type="text" id="careerAutocomplete"
+                                                   class="form-control bg-bg special-radius"
+                                                   placeholder="${placeholderCareer}" autocomplete="off" required/>
+                                        </div>
+                                        <button type="button" class="input-group-text input-group-icon"
+                                                id="eraseCareerButton">
+                                            <img src="<c:url value="/svg/cross.svg"/>"
+                                                 alt="<spring:message code="search.sort.image"/>"
+                                                 class="icon-xs fill-dark-primary"/>
+                                        </button>
+                                    </div>
+
+                                    <form:errors path="careerId" cssClass="text-danger" element="p"/>
+                                </div>
+
+
+                                <div class="mt-3 d-flex justify-content-center">
+                                    <button class="btn rounded-box button-primary">
+                                        <spring:message code="register.title"/>
                                     </button>
                                 </div>
 
-                                <form:errors path="careerId" cssClass="text-danger" element="p"/>
+                            </form:form>
+
+                            <div class="d-flex align-items-center justify-content-center mt-3">
+                                <p class="mb-0 me-2"><spring:message code="register.have"/></p>
+                                <a href="./login" class="btn login-register-button box">
+                                    <spring:message code="login.title"/>
+                                </a>
                             </div>
 
-
-                            <div class="mt-3 d-flex justify-content-center">
-                                <button class="btn rounded-box button-primary">
-                                    <spring:message code="register.title"/>
-                                </button>
-                            </div>
-
-                        </form:form>
-
-                        <div class="d-flex align-items-center justify-content-center mt-3">
-                            <p class="mb-0 me-2"><spring:message code="register.have"/></p>
-                            <a href="./login" class="btn login-register-button box">
-                                <spring:message code="login.title"/>
-                            </a>
                         </div>
-
                     </div>
-                </div>
 
-                <div class="col-lg-6 box d-flex align-items-center we-are-more-container">
-                    <div class="text-center px-5 py-5 ">
-                        <div class="text-center mb-5">
-                            <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
-                                 style="width: 40px; height: 40px;">
-                            <h3 class="mt-1 text-bg"><spring:message code="login.weAre"/></h3>
+                    <div class="col-lg-6 box d-flex align-items-center we-are-more-container">
+                        <div class="text-center px-5 py-5 ">
+                            <div class="text-center mb-5">
+                                <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
+                                     style="width: 40px; height: 40px;">
+                                <h3 class="mt-1 text-bg"><spring:message code="login.weAre"/></h3>
+                            </div>
+                            <h4 class="mb-4"><spring:message code="login.weAreMore.title"/></h4>
+                            <p><spring:message code="login.weAreMore.subtitle"/></p>
                         </div>
-                        <h4 class="mb-4"><spring:message code="login.weAreMore.title"/></h4>
-                        <p><spring:message code="login.weAreMore.subtitle"/></p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</section>
+    </section>
+</main>
 
 <script>
     const {institutions, careerMap, subjectMap} = JSON.parse('${institutionData}');

@@ -1,5 +1,5 @@
 .navbar {
-	background-color: transparent;
+	background-color: var(--dark-bg);
 	border: none;
 	height: 60px;
 }
@@ -33,17 +33,17 @@
 }
 
 .bottom-navbar {
+	position: absolute;
+	top: calc(var(--nav-height));
+	left: var(--sidebar-width);
 	display: flex;
 	align-items: center;
 	background-color: var(--primary);
-	border-top-right-radius: 50px;
-	border-bottom-right-radius: 50px;
+	border-radius: 25px 0 25px 0;
 	min-width: 300px;
 	width: fit-content;
 	height: 40px;
 	padding: 0 30px;
-	margin-top: 1rem;
-	margin-bottom: 1rem;
 }
 
 
@@ -82,6 +82,53 @@
 	content: none;
 }
 
+/*************/
+/** Sidebar **/
+/*************/
+
+.sidebar {
+	height: calc(100vh - var(--nav-height));
+	width: var(--sidebar-width);
+	background-color: var(--dark-bg);
+	padding-top: 2rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.5rem;
+}
+
+.sidebar.right::before {
+	content: "";
+	background-color: transparent;
+	top: var(--nav-height);
+	left: 60px;
+	height: 50px;
+	width: 30px;
+	border-top-left-radius: 25px;
+	box-shadow: 0 -25px 0 0 var(--dark-bg); /* This is where the magic happens! */
+
+	position: absolute;
+	z-index: -1;
+}
+
+.sidebar.left::before {
+	content: "";
+	background-color: transparent;
+	top: var(--nav-height);
+	right: 60px;
+	height: 50px;
+	width: 30px;
+	border-top-right-radius: 25px;
+	box-shadow: 0 -25px 0 0 var(--dark-bg); /* This is where the magic happens! */
+
+	position: absolute;
+	z-index: -1;
+}
+
+/*************/
+/** Search ***/
+/*************/
+
 .search-container {
 	position: relative;
 	height: 40px;
@@ -94,6 +141,7 @@
 		display: none;
 	}
 }
+
 
 .search-icon {
 	width: 40px;
@@ -108,9 +156,10 @@
 	padding: 8px 12px;
 	border: none;
 	outline: none;
-	background-color: var(--dark-bg);
+	background-color: rgba(var(--text-rgb), 0.1);
 	transition: width 0.4s ease, padding-left 0.4s ease; /* Transiciones para el ancho y el padding-left */
 	border-radius: 50px;
+	color: var(--dark-text);
 }
 
 .search-container:hover .search-input {
@@ -128,6 +177,10 @@
 	background-color: transparent;
 	z-index: 0;
 }
+
+/**************/
+/** Buttons ***/
+/**************/
 
 .login-register-button {
 	border: 1px solid var(--primary);
@@ -157,6 +210,32 @@
 	border-bottom-right-radius: 0;
 	border-top-right-radius: 0;
 }
+
+.nav-user-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px 12px;
+	margin: 2px 0;
+	background-color: var(--dark-primary); /* Fondo transparente por defecto */
+	border: none; /* Sin borde */
+	border-radius: 50px; /* Hace el botón circular */
+	transition: background-color 0.2s ease;
+	gap: 0.5rem;
+}
+
+.nav-user-button img {
+	filter: var(--filter-bg);
+}
+
+.nav-user-button:hover {
+	background-color: transparent; /* Fondo ligeramente transparente al pasar el mouse */
+}
+
+.nav-user-button:hover img {
+	filter: var(--filter-dark-primary);
+}
+
 
 .dropdown-button-container{
 	cursor: pointer;

@@ -2,10 +2,6 @@ html, body {
     height: 100%;
 }
 
-.login-register-container {
-    margin-top: 7%;
-}
-
 .we-are-more-container {
     background: #fccb90;
     background: linear-gradient(0deg, var(--gradient-primary-top) 0%, var(--gradient-primary-mid) 50%, var(--gradient-primary-bot) 99.99%);
