@@ -145,7 +145,7 @@
 
 
                                 <div class="mt-3 d-flex justify-content-center">
-                                    <button class="btn rounded-box button-primary">
+                                    <button class="btn rounded-box-no-shadow button-primary">
                                         <spring:message code="register.title"/>
                                     </button>
                                 </div>
@@ -154,7 +154,7 @@
 
                             <div class="d-flex align-items-center justify-content-center mt-3">
                                 <p class="mb-0 me-2"><spring:message code="register.have"/></p>
-                                <a href="./login" class="btn login-register-button box">
+                                <a href="./login" class="btn login-register-button rounded-box-no-shadow">
                                     <spring:message code="login.title"/>
                                 </a>
                             </div>

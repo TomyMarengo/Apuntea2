@@ -50,7 +50,7 @@
 
 <!-- USER INFO & BUTTONS "VER" -->
 <main>
-    <fragment:sidebar/>
+    <fragment:sidebar user="${user}"/>
 
     <section class="row row-cols-1 row-cols-xl-2 justify-content-center mt-5">
         <!-- List of directories -->

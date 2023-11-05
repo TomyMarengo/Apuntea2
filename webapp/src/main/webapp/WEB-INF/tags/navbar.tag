@@ -56,18 +56,17 @@
                             <strong><c:out value="${user.displayName}"/></strong>
                         </div>
                     </li>
+
                     <hr class="p-0">
+
                     <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message
                             code="myProfile.title"/></a></li>
-                    <li><a class="dropdown-item" href="${baseUrl}/profile/notes"><spring:message
-                            code="myProfileNotes.title"/></a></li>
+
                     <li><a class="dropdown-item" href="${baseUrl}/change-password"><spring:message
                             code="changePassword.title"/></a></li>
-                    <c:if test="${isAdmin eq true}">
-                        <li><a class="dropdown-item" href="${baseUrl}/manage/careers"><spring:message
-                                code="adminPanel.title"/></a></li>
-                    </c:if>
+
                     <hr class="p-0">
+
                     <li><a class="dropdown-item my-2" href="${baseUrl}/logout"><spring:message
                             code="logout"/></a></li>
                 </ul>
@@ -75,10 +74,10 @@
         </c:if>
 
         <c:if test="${!loggedIn}">
-            <a href="${baseUrl}/login" class="btn rounded-box button-primary mx-2">
+            <a href="${baseUrl}/login" class="btn rounded-box-no-shadow button-primary mx-2">
                 <spring:message code="login"/>
             </a>
-            <a href="${baseUrl}/register" class="btn login-register-button box">
+            <a href="${baseUrl}/register" class="btn rounded-box-no-shadow login-register-button">
                 <spring:message code="register"/>
             </a>
         </c:if>

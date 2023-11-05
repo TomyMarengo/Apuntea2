@@ -38,7 +38,7 @@
 </header>
 
 <main>
-    <fragment:sidebar/>
+    <fragment:sidebar user="${user}"/>
 
     <section class="d-flex flex-column align-items-center gap-3 text-center mt-5">
         <h2><spring:message code="index.title" arguments='<span class="apuntea-title">Apuntea</span>'/></h2>

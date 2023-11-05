@@ -50,7 +50,7 @@
 
         <div class="dropdown d-lg-none d-xl-none d-xxl-none">
             <div class="d-flex justify-content-between align-items-center">
-                <button type="button" class="bottom-navbar-dropdown-button dropdown-toggle nav-icon-button" data-bs-toggle="dropdown"
+                <button type="button" class="bn-dropdown-hierarchy-button dropdown-toggle nav-icon-button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                     <spring:message code="navbar.bottom.middleEllipsis"/>
                 </button>
@@ -102,8 +102,8 @@
             </a>
         </c:if>
         <c:if test="${category eq 'directory' and user.userId eq blob.user.userId}">
-            <div class="btn-group">
-                <button class="dropdown-button-container px-2 py-1 d-flex align-items-center justify-content-center text-bg gap-2"
+            <div class="btn-group h-100">
+                <button class="bn-dropdown-title-button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="d-block bottom-navbar-item bn-title active">
                         <c:out value="${titleData[1]}"/>
@@ -111,6 +111,7 @@
                     <img src="<c:url value="/svg/chevron-down.svg"/>" class="icon-s dropdown-icon fill-bg" alt="dropdown"/>
                 </button>
                 <ul class="dropdown-menu">
+                    <hr class="p-0 m-0">
                     <li>
                         <button class="dropdown-item d-flex gap-2 align-items-center justify-content-center"
                                 data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
@@ -123,6 +124,7 @@
                             <span><spring:message code="editDirectory"/></span>
                         </button>
                     </li>
+                    <hr class="p-0 m-0">
                 </ul>
             </div>
         </c:if>

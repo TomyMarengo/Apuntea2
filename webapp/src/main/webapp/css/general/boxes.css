@@ -10,3 +10,8 @@
 	border-radius: 25px;
 	box-shadow: 10px 10px 10px -5px rgba(48, 42, 36, 0.10);
 }
+
+.rounded-box-no-shadow {
+	border-radius: 50px;
+	border: 0;
+}

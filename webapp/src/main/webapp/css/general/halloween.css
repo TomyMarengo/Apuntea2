@@ -24,7 +24,7 @@
     cursor: url('../../image/knife_auto.cur'), pointer !important;
 }
 
-[data-bs-theme=halloween] .nav-icon-button img, [data-bs-theme=halloween] .dropdown-button-container img {
+[data-bs-theme=halloween] .nav-icon-button img, [data-bs-theme=halloween] .bn-dropdown-title-button img {
     filter: var(--filter-secondary);
 }
 

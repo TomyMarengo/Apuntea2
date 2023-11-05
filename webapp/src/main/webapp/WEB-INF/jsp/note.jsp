@@ -44,7 +44,7 @@
 </header>
 
 <main>
-    <fragment:sidebar/>
+    <fragment:sidebar user="${user}"/>
 
     <section class="container-fluid h-100-navs mt-5">
         <div class="h-100 row row-cols-1 row-cols-lg-2">

@@ -48,7 +48,7 @@
 </header>
 
 <main>
-    <fragment:sidebar/>
+    <fragment:sidebar user="${user}"/>
 
     <section class="container d-flex align-self-center justify-content-center">
         <div class="card box change-password-container">

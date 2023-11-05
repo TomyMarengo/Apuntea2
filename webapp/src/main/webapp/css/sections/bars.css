@@ -69,7 +69,7 @@
 	color: var(--dark-bg);
 }
 
-.bottom-navbar-dropdown-button {
+.bn-dropdown-hierarchy-button {
 	/* Button without anything, only show the text */
 	background-color: transparent;
 	border: none;
@@ -78,9 +78,31 @@
 	color: var(--bg);
 }
 
-.bottom-navbar-dropdown-button::after {
+.bn-dropdown-hierarchy-button::after {
 	content: none;
 }
+
+.bn-dropdown-title-button{
+	border-radius: 25px 0 25px 0;
+	background-color: transparent;
+	border: 0;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	color: var(--bg);
+}
+
+.bn-dropdown-title-button:hover{
+	background-color: var(--dark-primary);
+	transition: background-color 0.2s ease;
+}
+
+.bn-dropdown-title-button:hover .dropdown-icon{
+	filter: var(--filter-bg);
+}
+
 
 /*************/
 /** Sidebar **/
@@ -186,6 +208,7 @@
 	border: 1px solid var(--primary);
 	background-color: transparent;
 	color: var(--primary);
+	border-radius: 50px;
 }
 
 .login-register-button:hover {
@@ -234,23 +257,6 @@
 
 .nav-user-button:hover img {
 	filter: var(--filter-dark-primary);
-}
-
-
-.dropdown-button-container{
-	cursor: pointer;
-	border-radius: 50px;
-	background-color: transparent;
-	border: 0;
-}
-
-.dropdown-button-container:hover{
-	background-color: var(--dark-primary);
-	transition: background-color 0.2s ease;
-}
-
-.dropdown-button-container:hover .dropdown-icon{
-	filter: var(--filter-bg);
 }
 
 .logged-in{

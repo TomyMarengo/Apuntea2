@@ -55,8 +55,7 @@
 
 
 <main>
-    <fragment:sidebar/>
-
+    <fragment:sidebar user="${user}"/>
     <!-- SEARCH -->
     <section>
         <form:form modelAttribute="navigationForm"
@@ -70,6 +69,7 @@
                     <spring:message code="search.word.placeholder" var="placeholderSearch"/>
                     <form:input path="word" type="text" class="form-control bg-bg" placeholder='${placeholderSearch}'/>
                 </div>
+
                 <!-- TODO: Maybe move and add profile info? -->
                 <c:if test="${filterUser ne null}">
                     <form:hidden path="userId" id="userId" value="${filterUser.userId}"/>
@@ -90,16 +90,6 @@
             </div>
 
             <form:hidden path="pageNumber" id="pageNumber" value="1"/>
-
-            <div class="w-50 d-flex flex-column justify-content-center align-items-center">
-                <button type="submit" class="btn button-primary w-50"><spring:message code="search.button"/></button>
-                <c:if test="${filterUser ne null}">
-                    <a class="btn text-dark-primary" href="./${directory.id}?userId=${filterUser.userId}"><spring:message code="search.button.clearAll"/></a>
-                </c:if>
-                <c:if test="${filterUser eq null}">
-                    <a class="btn text-dark-primary" href="./${directory.id}"><spring:message code="search.button.clearAll"/></a>
-                </c:if>
-            </div>
 
             <div class="container mt-5 d-flex justify-content-between p-0">
                 <!-- SEARCH PILL -->
@@ -202,9 +192,9 @@
                                      class="icon-s fill-dark-primary"/>
                             </button>
                             <span class="text-dark-primary d-flex flex-row">
-                        <strong id="selectedCount" class="text-dark-primary mx-1"> 0 </strong>
-                        <spring:message code="search.selected"/>
-                    </span>
+                                <strong id="selectedCount" class="text-dark-primary mx-1"> 0 </strong>
+                                    <spring:message code="search.selected"/>
+                            </span>
 
                             <c:if test="${user ne null and directory.user ne null and (directory.user.userId eq user.userId or directory.user.isAdmin)}">
                                 <div data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -225,9 +215,7 @@
                                 <img src="<c:url value="/svg/download.svg"/>" alt="download"
                                      class="icon-s fill-dark-primary"/>
                             </button>
-
                         </div>
-
 
                         <button type="button" id="selectAllButton" class="btn nav-icon-button" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom"
@@ -245,7 +233,6 @@
                             <img id="searchViewIcon" src="${horizontalViewUrl}" alt="${searchViewImage}"
                                  class="icon-s fill-dark-primary"/>
                         </button>
-
 
                         <c:if test="${user ne null and (directory.user eq null or directory.user.userId eq user.userId)}">
                             <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -272,7 +259,7 @@
                             </a>
                         </c:if>
 
-                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                        <div data-bs-toggle="tooltip" data-bs-placement="right"
                            data-bs-title="<spring:message code="search.button.pageSize"/>"
                            data-bs-trigger="hover">
                             <form:select path="pageSize" class="form-select bg-bg" onchange="submitSearchForm()">
@@ -280,10 +267,11 @@
                                 <form:option value="18">18</form:option>
                                 <form:option value="24">24</form:option>
                                 <c:if test="${navigationForm.pageSize ne 12 and navigationForm.pageSize ne 18 and navigationForm.pageSize ne 24}">
-                                    <form:option value="${navigationForm.pageSize}"><c:out value="${navigationForm.pageSize}"/></form:option>
+                                    <form:option value="${navigationForm.pageSize}"><c:out
+                                            value="${navigationForm.pageSize}"/></form:option>
                                 </c:if>
                             </form:select>
-                        </a>
+                        </div>
                     </div>
                 </c:if>
             </div>
@@ -526,7 +514,7 @@
             </article>
 
             <!-- BOX LIST -->
-            <section class="container mt-4 p-0" id="boxList">
+            <article class="container mt-4 p-0" id="boxList">
 
                 <!-- FOLDERS -->
                 <c:if test="${folders ne ''}">
@@ -767,7 +755,6 @@
                                         </c:if>
                                     </span>
                                             <input type="checkbox" class="select-checkbox d-none"/>
-
                                         </div>
                                     </div>
                                 </div>
@@ -775,7 +762,7 @@
                         </c:forEach>
                     </div>
                 </c:if>
-            </section>
+            </article>
 
             <!-- PAGINATION -->
             <c:if test="${maxPage gt 1}">

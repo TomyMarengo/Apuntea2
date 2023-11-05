@@ -48,9 +48,9 @@
 </header>
 
 <main>
-    <fragment:sidebar/>
+    <fragment:sidebar user="${user}"/>
 
-    <section>
+    <section class="container-fluid">
         <!-- SEARCH -->
         <c:url var="searchUrl" value="./search"/>
         <form:form modelAttribute="searchForm"
@@ -143,14 +143,17 @@
                 <c:if test="${filterUser ne null}">
                     <form:hidden path="userId" id="userId" value="${filterUser.userId}"/>
                 </c:if>
-                
+
                 <div class="w-50 d-flex flex-column justify-content-center align-items-center">
-                    <button type="submit" class="btn button-primary w-50"><spring:message code="search.button"/></button>
+                    <button type="submit" class="btn button-primary w-50"><spring:message
+                            code="search.button"/></button>
                     <c:if test="${filterUser ne null}">
-                        <a class="btn text-dark-primary" href="./search?userId=${filterUser.userId}"><spring:message code="search.button.clearAllFilters"/></a>
+                        <a class="btn text-dark-primary" href="./search?userId=${filterUser.userId}"><spring:message
+                                code="search.button.clearAllFilters"/></a>
                     </c:if>
                     <c:if test="${filterUser eq null}">
-                        <a class="btn text-dark-primary" href="./search"><spring:message code="search.button.clearAllFilters"/></a>
+                        <a class="btn text-dark-primary" href="./search"><spring:message
+                                code="search.button.clearAllFilters"/></a>
                     </c:if>
                 </div>
 
@@ -293,18 +296,19 @@
                                  class="icon-s fill-dark-primary"/>
                         </button>
 
-                        <button href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                        data-bs-title="<spring:message code="search.button.pageSize"/>"
-                        data-bs-trigger="hover">
+                        <div data-bs-toggle="tooltip" data-bs-placement="right"
+                             data-bs-title="<spring:message code="search.button.pageSize"/>"
+                             data-bs-trigger="hover">
                             <form:select path="pageSize" class="form-select bg-bg" onchange="submitSearchForm()">
                                 <form:option value="12">12</form:option>
                                 <form:option value="18">18</form:option>
                                 <form:option value="24">24</form:option>
                                 <c:if test="${searchForm.pageSize ne 12 and searchForm.pageSize ne 18 and searchForm.pageSize ne 24}">
-                                    <form:option value="${searchForm.pageSize}"><c:out value="${searchForm.pageSize}"/></form:option>
+                                    <form:option value="${searchForm.pageSize}"><c:out
+                                            value="${searchForm.pageSize}"/></form:option>
                                 </c:if>
                             </form:select>
-                        </button>
+                        </div>
                     </div>
                 </c:if>
             </div>

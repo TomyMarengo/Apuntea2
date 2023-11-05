@@ -45,7 +45,7 @@
 </header>
 
 <main>
-    <fragment:sidebar/>
+    <fragment:sidebar user="${user}"/>
 
     <section class="container-lg d-flex align-self-center justify-content-center mt-5">
         <div class="card box">

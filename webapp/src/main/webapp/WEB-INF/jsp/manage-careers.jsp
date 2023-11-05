@@ -48,7 +48,7 @@
 </header>
 
 <main>
-    <fragment:sidebar/>
+    <fragment:sidebar user="${user}"/>
 
     <section class="mt-5 between-sidebars">
         <!-- CAREER SELECT -->
