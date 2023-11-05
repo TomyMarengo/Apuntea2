@@ -33,7 +33,7 @@ h4 {
 
 .call-to-action-card:hover {
     transform: scale(1.05);
-    border: var(--primary) solid 2px;
+    outline: var(--primary) solid 2px;
     background: var(--light-primary);
     color: var(--bg);
 }

@@ -27,9 +27,6 @@ main {
     width: calc(100% - var(--sidebar-width));
 }
 
-.sidebar.right + section.between-sidebars {
-    width: calc(100% - 2*var(--sidebar-width));
-}
 
 button {
     font-weight: 700 !important;

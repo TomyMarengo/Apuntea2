@@ -50,7 +50,7 @@
 <main>
     <fragment:sidebar user="${user}"/>
 
-    <section class="mt-5 between-sidebars">
+    <section class="mt-5">
         <!-- CAREER SELECT -->
         <section class="container my-5">
             <div class="row row-cols-1 row-cols-lg-2 justify-content-center">

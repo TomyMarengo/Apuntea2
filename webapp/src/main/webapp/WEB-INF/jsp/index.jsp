@@ -55,9 +55,7 @@
                     <div class="call-to-action-card-title">
                         <h3><spring:message code="index.card2.title"/></h3>
                     </div>
-                    <div class="call-to-action-card-text">
-                        <p><spring:message code="index.card2.body"/></p>
-                    </div>
+                    <p><spring:message code="index.card2.body"/></p>
                 </div>
 
             </a>
@@ -79,9 +77,7 @@
                     <div class="call-to-action-card-title">
                         <h3><spring:message code="index.card3.title"/></h3>
                     </div>
-                    <div class="call-to-action-card-text">
-                        <p><spring:message code="index.card3.body"/></p>
-                    </div>
+                    <p><spring:message code="index.card3.body"/></p>
                 </div>
 
             </a>
@@ -97,9 +93,7 @@
                         <div class="call-to-action-card-title">
                             <h3><spring:message code="index.card1.title.editProfile"/></h3>
                         </div>
-                        <div class="call-to-action-card-text">
-                            <p><spring:message code="index.card1.body.editProfile"/></p>
-                        </div>
+                        <p><spring:message code="index.card1.body.editProfile"/></p>
                     </div>
 
                 </a>
@@ -116,9 +110,7 @@
                         <div class="call-to-action-card-title">
                             <h3><spring:message code="index.card1.title.register"/></h3>
                         </div>
-                        <div class="call-to-action-card-text">
-                            <p><spring:message code="index.card1.body.register"/></p>
-                        </div>
+                        <p><spring:message code="index.card1.body.register"/></p>
                     </div>
 
                 </a>

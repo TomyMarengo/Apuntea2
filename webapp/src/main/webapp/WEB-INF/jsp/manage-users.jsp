@@ -51,7 +51,7 @@
 <main>
     <fragment:sidebar user="${user}"/>
 
-    <section class="mt-5 between-sidebars">
+    <section class="mt-5">
 
         <!-- SEARCH -->
         <div class="container my-5">
