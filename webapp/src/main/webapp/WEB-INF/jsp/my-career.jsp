@@ -96,7 +96,7 @@
                                                             id="<c:out value="${rd.rootDirectoryId}"/>.f1">
                                                         <img src="<c:url value="${ rd.rootDirectory.favorite ? '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
                                                              alt="<spring:message code="favorite"/>"
-                                                             class="icon-m fill-text">
+                                                             class="icon-xs fill-text">
                                                     </button>
                                                 </form:form>
                                             </div>
