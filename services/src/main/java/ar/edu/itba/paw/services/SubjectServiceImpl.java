@@ -97,6 +97,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Transactional
     public void updateSubject(UUID subjectId, String name) {
         Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
+        // TODO: Check if the amount of queries is ok
         subject.setName(name);
     }
 

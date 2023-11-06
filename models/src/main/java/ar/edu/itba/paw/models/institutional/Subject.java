@@ -77,6 +77,7 @@ public class Subject {
 
     public void setName(String name) {
         this.name = name;
+        this.rootDirectory.setName(name);
     }
 
     @Override

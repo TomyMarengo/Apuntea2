@@ -78,7 +78,7 @@
 
                 <div class="tab-content bg-bg">
                     <!-- FAVORITES LIST -->
-                    <div class="tab-pane root-dir-list fade active" role="tabpanel">
+                    <div class="tab-pane root-dir-list fade ${param.tab eq null ? 'active' : (param.tab eq 0 ? 'active' : '')}" role="tabpanel">
                         <c:if test="${empty subjectFavorites}">
                             <c:set var="myCareerUrl" value="./my-career"/>
                             <div class="d-flex flex-column gap-2 p-3 align-items-center">
@@ -133,7 +133,7 @@
                         </c:if>
                     </div>
                     <c:url value="./search" var="searchUrl"/>
-                    <div class="tab-pane root-dir-list fade" role="tabpanel">
+                    <div class="tab-pane root-dir-list fade ${param.tab eq null ? '' : (param.tab eq 1 ? 'active' : '')}" role="tabpanel">
                         <c:if test="${empty directoryFavorites}">
                             <div class="d-flex flex-column gap-2 p-3 align-items-center">
                                 <div class="d-flex">
@@ -176,7 +176,7 @@
 
                                             <div class="d-flex flex-column gap-2 align-items-center blob-container">
                                                 <img src="<c:url value="/svg/folder.svg"/>"
-                                                     alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
+                                                     alt="<spring:message code="folder"/>" class="icon-xxl fill-${dir.iconColor}">
                                                 <!-- max 2 lines-->
                                                 <span class="fw-bold flex-wrap justify-content-center folder-name">
                                                     <c:out value="${dir.name}"/>
@@ -188,7 +188,7 @@
                             </div>
                         </c:if>
                     </div>
-                    <div class="tab-pane root-dir-list fade" role="tabpanel">
+                    <div class="tab-pane root-dir-list fade ${param.tab eq null ? '' : (param.tab eq 2 ? 'active' : '')}" role="tabpanel">
                         <!-- TODO: CHANGE ACTIVE CLASS WHEN ADD MY NOTES -->
                         <c:if test="${empty noteFavorites}">
                             <div class="d-flex flex-column gap-2 p-3 align-items-center">
