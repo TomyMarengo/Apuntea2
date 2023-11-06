@@ -32,6 +32,15 @@
 	outline: none; /* Elimina el borde al hacer clic */
 }
 
+.nav-icon-button.active {
+	background-color: rgba(var(--text-rgb), 0.1);
+	scale: 1.2;
+}
+
+/********************/
+/** Bottom Navbar **/
+/*******************/
+
 .bottom-navbar {
 	position: absolute;
 	top: calc(var(--nav-height));

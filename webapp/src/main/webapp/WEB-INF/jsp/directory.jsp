@@ -418,7 +418,7 @@
                                                            value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}"
                                                            type="hidden"/>
                                                     <button type="submit"
-                                                            class="btn nav-icon-button favorite-button"
+                                                            class="btn nav-icon-button"
                                                             data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom"
                                                             data-bs-title="<spring:message code="favorite"/>"
@@ -556,7 +556,7 @@
                                                                        value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}"
                                                                        type="hidden"/>
                                                                 <button type="submit"
-                                                                        class="btn nav-icon-button favorite-button"
+                                                                        class="btn nav-icon-button"
                                                                         data-bs-toggle="tooltip"
                                                                         data-bs-placement="bottom"
                                                                         data-bs-title="<spring:message code="favorite"/>"
@@ -684,7 +684,7 @@
                                                                        value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}"
                                                                        type="hidden"/>
                                                                 <button type="submit"
-                                                                        class="btn nav-icon-button favorite-button"
+                                                                        class="btn nav-icon-button"
                                                                         data-bs-toggle="tooltip"
                                                                         data-bs-placement="bottom"
                                                                         data-bs-title="<spring:message code="favorite"/>"

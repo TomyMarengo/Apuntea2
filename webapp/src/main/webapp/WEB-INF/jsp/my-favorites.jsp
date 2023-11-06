@@ -48,7 +48,7 @@
 </header>
 
 <main>
-    <fragment:sidebar user="${user}"/>
+    <fragment:sidebar user="${user}" active="my-favorites"/>
 
     <section class="container mt-5">
         <!-- FAVORITES AND MY NOTES -->

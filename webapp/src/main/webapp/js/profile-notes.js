@@ -50,4 +50,3 @@ rootDirs.forEach(function(rootDir, index) {
 // TODO: Change active between favorites and my notes
 const favoriteDirs = document.querySelectorAll('.favorite-dir');
 const favoriteDirLists = document.querySelectorAll('.favorite-dir-list');
-

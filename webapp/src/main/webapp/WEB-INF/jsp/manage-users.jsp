@@ -49,7 +49,7 @@
 </header>
 
 <main>
-    <fragment:sidebar user="${user}"/>
+    <fragment:sidebar user="${user}" active="manage-users"/>
 
     <section class="mt-5">
 
