@@ -2,18 +2,21 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.institutional.dtos.InstitutionDataDto;
 import ar.edu.itba.paw.models.user.Role;
-import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.search.SearchForm;
 import ar.edu.itba.paw.webapp.forms.user.password.ChallengeForm;
 import ar.edu.itba.paw.webapp.forms.user.password.ForgotPasswordForm;
 import ar.edu.itba.paw.webapp.forms.user.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import static ar.edu.itba.paw.webapp.controller.ControllerUtils.toSafeJson;
@@ -60,12 +63,17 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ModelAndView register(@Valid @ModelAttribute("userForm") final UserForm userForm, final BindingResult errors) {
+    public ModelAndView register(@Valid @ModelAttribute("userForm") final UserForm userForm, final BindingResult errors, HttpServletRequest request) {
         if (errors.hasErrors()) {
             return registerForm(userForm);
         }
         userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getCareerId(), Role.ROLE_STUDENT);
-        return new ModelAndView("redirect:/login?success=true");
+
+        // TODO: Check if it is ok to do this here
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userForm.getEmail(), userForm.getPassword());
+        authToken.setDetails(new WebAuthenticationDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping(value = "/forgot-password", method = RequestMethod.GET)
