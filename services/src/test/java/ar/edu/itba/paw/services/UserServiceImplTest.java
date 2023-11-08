@@ -44,8 +44,8 @@ public class UserServiceImplTest {
         final int PAGE_SIZE = 10;
         final int PAGE = 2;
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
-        Mockito.when(userDao.getStudentsQuantity(Mockito.any(), null)).thenReturn(TOTAL_RESULTS);
-        Mockito.when(userDao.getStudents(Mockito.any(), null, Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
+        Mockito.when(userDao.getStudentsQuantity(Mockito.any(), Mockito.isNull())).thenReturn(TOTAL_RESULTS);
+        Mockito.when(userDao.getStudents(Mockito.any(), Mockito.isNull(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
 
         Page<User> results = userService.getStudents(null, "all", PAGE);
 
@@ -60,8 +60,8 @@ public class UserServiceImplTest {
         final int PAGE_SIZE = 10;
         final int PAGE = 6;
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
-        Mockito.when(userDao.getStudentsQuantity(Mockito.any(), null)).thenReturn(TOTAL_RESULTS);
-        Mockito.when(userDao.getStudents(Mockito.any(), null, Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
+        Mockito.when(userDao.getStudentsQuantity(Mockito.any(), Mockito.isNull())).thenReturn(TOTAL_RESULTS);
+        Mockito.when(userDao.getStudents(Mockito.any(), Mockito.isNull(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
 
         Page<User> results = userService.getStudents(null, "all", PAGE);
 
@@ -76,8 +76,8 @@ public class UserServiceImplTest {
         final int PAGE_SIZE = 10;
         final int PAGE = -6;
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
-        Mockito.when(userDao.getStudentsQuantity(Mockito.any(), null)).thenReturn(TOTAL_RESULTS);
-        Mockito.when(userDao.getStudents(Mockito.any(), null, Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
+        Mockito.when(userDao.getStudentsQuantity(Mockito.any(), Mockito.any())).thenReturn(TOTAL_RESULTS);
+        Mockito.when(userDao.getStudents(Mockito.any(), Mockito.any(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
 
         Page<User> results = userService.getStudents(null, "all", PAGE);
 
