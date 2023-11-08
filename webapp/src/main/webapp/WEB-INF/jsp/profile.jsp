@@ -49,118 +49,118 @@
 
     <section class="my-5 d-flex justify-content-center">
         <div class="mt-5 card box p-3 w-inherit mw-600 w-100">
-            <div class="card-body p-3">
-                <c:url var="editUserUrl" value="/profile"/>
-                <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
 
-                <form:form modelAttribute="editUserForm"
-                           action="${editUserUrl}"
-                           method="post"
-                           enctype="multipart/form-data"
-                           class="d-flex flex-column"
-                           id="editUserForm">
-                    <h1><spring:message code="profile.title"/></h1>
-                    <div class="align-items-center d-flex flex-column" id="image-input">
-                        <label for="profilePicture" id="selected-image">
-                            <img src="${userProfilePicture}" alt="Profile Picture" class="picture" id="preview-image">
-                            <span><img src="<c:url value="/svg/pencil.svg"/>" class="d-none" id="hidden-pencil"
-                                       alt="${edit}"></span>
-                        </label>
-                        <form:errors path="profilePicture" cssClass="text-danger mt-3 align-self-center" element="p"/>
-                    </div>
+            <c:url var="editUserUrl" value="/profile"/>
+            <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
 
-                    <div class="profile-data-container">
+            <form:form modelAttribute="editUserForm"
+                       action="${editUserUrl}"
+                       method="post"
+                       enctype="multipart/form-data"
+                       class="card-body p-3 justify-content-between"
+                       id="editUserForm">
+                <h1><spring:message code="profile.title"/></h1>
+                <div class="align-items-center d-flex flex-column" id="image-input">
+                    <label for="profilePicture" id="selected-image">
+                        <img src="${userProfilePicture}" alt="Profile Picture" class="picture" id="preview-image">
+                        <span><img src="<c:url value="/svg/pencil.svg"/>" class="d-none" id="hidden-pencil"
+                                   alt="${edit}"></span>
+                    </label>
+                    <form:errors path="profilePicture" cssClass="text-danger mt-3 align-self-center" element="p"/>
+                </div>
+
+                <div class="profile-data-container">
+                    <div>
                         <div>
-                            <div>
-                                <spring:message var="profileFirstName" code="name"/>
-                                <p><strong><spring:message code="name"/></strong></p>
-                                <form:input disabled="true" type="text" id="firstName"
-                                            class="form-control bg-bg dynamic-info"
-                                            placeholder="${profileFirstName}" path="firstName"
-                                            value="${user.firstName}"/>
-                                <form:errors path="firstName" cssClass="text-danger" element="p"/>
-                            </div>
-
-                            <div>
-                                <spring:message var="profileLastName" code="lastName"/>
-                                <p><strong><spring:message code="lastName"/></strong></p>
-                                <form:input disabled="true" type="text" id="lastName"
-                                            class="form-control bg-bg dynamic-info"
-                                            placeholder="${profileLastName}" path="lastName" value="${user.lastName}"/>
-                                <form:errors path="lastName" cssClass="text-danger" element="p"/>
-                            </div>
-
-                            <div>
-                                <spring:message var="profileUsername" code="username"/>
-                                <p><strong><spring:message code="username"/></strong></p>
-                                <form:input disabled="true" type="text" id="username"
-                                            class="form-control bg-bg dynamic-info"
-                                            placeholder="${profileUsername}" path="username" value="${user.username}"
-                                            required="true"/>
-                                <form:errors path="username" cssClass="text-danger" element="p"/>
-                            </div>
+                            <spring:message var="profileFirstName" code="name"/>
+                            <p><strong><spring:message code="name"/></strong></p>
+                            <form:input disabled="true" type="text" id="firstName"
+                                        class="form-control bg-bg dynamic-info"
+                                        placeholder="${profileFirstName}" path="firstName"
+                                        value="${user.firstName}"/>
+                            <form:errors path="firstName" cssClass="text-danger" element="p"/>
                         </div>
 
                         <div>
+                            <spring:message var="profileLastName" code="lastName"/>
+                            <p><strong><spring:message code="lastName"/></strong></p>
+                            <form:input disabled="true" type="text" id="lastName"
+                                        class="form-control bg-bg dynamic-info"
+                                        placeholder="${profileLastName}" path="lastName" value="${user.lastName}"/>
+                            <form:errors path="lastName" cssClass="text-danger" element="p"/>
+                        </div>
+
+                        <div>
+                            <spring:message var="profileUsername" code="username"/>
+                            <p><strong><spring:message code="username"/></strong></p>
+                            <form:input disabled="true" type="text" id="username"
+                                        class="form-control bg-bg dynamic-info"
+                                        placeholder="${profileUsername}" path="username" value="${user.username}"
+                                        required="true"/>
+                            <form:errors path="username" cssClass="text-danger" element="p"/>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            <p><strong><spring:message code="career"/></strong></p>
                             <div>
-                                <p><strong><spring:message code="career"/></strong></p>
-                                <div>
-                                    <label for="careerSelect" class="visually-hidden"></label>
-                                    <select id="careerSelect" style="display: none;">
-                                        <option disabled selected value></option>
-                                    </select>
+                                <label for="careerSelect" class="visually-hidden"></label>
+                                <select id="careerSelect" style="display: none;">
+                                    <option disabled selected value></option>
+                                </select>
 
-                                    <form:input path="careerId" id="careerId" style="display: none;"
-                                                value="${user.career.careerId}"/>
+                                <form:input path="careerId" id="careerId" style="display: none;"
+                                            value="${user.career.careerId}"/>
 
-                                    <label for="careerAutocomplete" class="visually-hidden"></label>
-                                    <div class="input-group">
-                                        <div class="autocomplete">
-                                            <spring:message code="search.career.placeholder" var="placeholderCareer"/>
-                                            <input type="text" id="careerAutocomplete"
-                                                   class="form-control bg-bg special-radius dynamic-info"
-                                                   placeholder="${placeholderCareer}" autocomplete="off" required
-                                                   disabled
-                                                   value="${user.career.name}"/>
-                                        </div>
-                                        <button type="button" class="input-group-text input-group-icon dynamic-info"
-                                                id="eraseCareerButton" disabled>
-                                            <img src="<c:url value="/svg/cross.svg"/>"
-                                                 alt="<spring:message code="search.sort.image"/>"
-                                                 class="icon-xs fill-dark-primary"/>
-                                        </button>
+                                <label for="careerAutocomplete" class="visually-hidden"></label>
+                                <div class="input-group">
+                                    <div class="autocomplete">
+                                        <spring:message code="search.career.placeholder" var="placeholderCareer"/>
+                                        <input type="text" id="careerAutocomplete"
+                                               class="form-control bg-bg special-radius dynamic-info"
+                                               placeholder="${placeholderCareer}" autocomplete="off" required
+                                               disabled
+                                               value="${user.career.name}"/>
                                     </div>
-
-                                    <form:errors path="careerId" cssClass="text-danger" element="p"/>
+                                    <button type="button" class="input-group-text input-group-icon dynamic-info"
+                                            id="eraseCareerButton" disabled>
+                                        <img src="<c:url value="/svg/cross.svg"/>"
+                                             alt="<spring:message code="search.sort.image"/>"
+                                             class="icon-xs fill-dark-primary"/>
+                                    </button>
                                 </div>
-                            </div>
 
-                            <div>
-                                <p><strong><spring:message code="email"/></strong></p>
-                                <span class="card-text">${user.email}</span>
+                                <form:errors path="careerId" cssClass="text-danger" element="p"/>
                             </div>
-
-                            <div>
-                                <p><strong><spring:message code="institution"/></strong></p>
-                                <span class="card-text">${user.institution.name}</span>
-                            </div>
-
                         </div>
-                    </div>
 
-                    <div class="mt-5 d-flex justify-content-center" id="edit-info-button">
-                        <button type="button" class="btn rounded-box button-primary"><spring:message
-                                code="editInformation"/></button>
-                    </div>
+                        <div>
+                            <p><strong><spring:message code="email"/></strong></p>
+                            <span class="card-text">${user.email}</span>
+                        </div>
 
-                    <div class="mt-5 d-flex justify-content-center d-none" id="update-info">
-                        <button type="button" class="btn rounded-box button-secondary" id="cancel-edit-button">
-                            <spring:message code="close"/></button>
-                        <button class="btn rounded-box button-primary mx-3"><spring:message code="update"/></button>
-                    </div>
+                        <div>
+                            <p><strong><spring:message code="institution"/></strong></p>
+                            <span class="card-text">${user.institution.name}</span>
+                        </div>
 
-                </form:form>
-            </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 d-flex justify-content-center" id="edit-info-button">
+                    <button type="button" class="btn rounded-box button-primary"><spring:message
+                            code="editInformation"/></button>
+                </div>
+
+                <div class="mt-5 d-flex justify-content-center d-none" id="update-info">
+                    <button type="button" class="btn rounded-box button-secondary" id="cancel-edit-button">
+                        <spring:message code="close"/></button>
+                    <button class="btn rounded-box button-primary mx-3"><spring:message code="update"/></button>
+                </div>
+
+            </form:form>
+
         </div>
     </section>
 </main>
