@@ -175,31 +175,66 @@
                         <p class="mb-2"><spring:message code="notes.reviews.noReviews"/></p>
                     </c:if>
 
-                    <c:if test="${note.user.userId ne user.userId}">
-                        <div class="card box p-3">
-                            <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
-                                <div>
-                                    <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
-                                    <form:textarea path="content" class="form-control"
-                                                   placeholder='${placeholderText}'/>
-                                </div>
-                                <form:errors path="content" cssClass="text-danger" element="p"/>
 
-                                <div class="d-flex justify-content-between mt-3">
-                                    <div class="input-group w-75">
-                                        <form:select path="score" class="form-select bg-bg" id="scoreSelect">
-                                            <form:option value="5">⭐⭐⭐⭐⭐</form:option>
-                                            <form:option value="4">⭐⭐⭐⭐</form:option>
-                                            <form:option value="3">⭐⭐⭐</form:option>
-                                            <form:option value="2">⭐⭐</form:option>
-                                            <form:option value="1">⭐</form:option>
-                                        </form:select>
+                    <c:if test="${note.user.userId ne user.userId}">
+
+                        <!-- IF USER HAS ALREADY REVIEWED -->
+                        <c:if test="${not empty reviewContent}">
+                            <div class="card box p-3">
+                                <h5><spring:message code="notes.comments.yourComment"/></h5>
+                                <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
+                                    <div class="mt-2">
+                                        <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
+                                        <form:textarea path="content" class="form-control" disabled="true"
+                                                       placeholder='${placeholderText}'/>
                                     </div>
-                                    <input type="submit" class="btn rounded-box button-primary "
-                                           value="<spring:message code="notes.send.button"/>"/>
-                                </div>
-                            </form:form>
-                        </div>
+                                    <form:errors path="content" cssClass="text-danger" element="p"/>
+
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <div class="input-group w-75">
+                                            <form:select path="score" class="form-select bg-bg" id="scoreSelect" disabled="true">
+                                                <form:option value="5">⭐⭐⭐⭐⭐</form:option>
+                                                <form:option value="4">⭐⭐⭐⭐</form:option>
+                                                <form:option value="3">⭐⭐⭐</form:option>
+                                                <form:option value="2">⭐⭐</form:option>
+                                                <form:option value="1">⭐</form:option>
+                                            </form:select>
+                                        </div>
+                                        <input type="submit" class="btn rounded-box button-primary" id="editReviewButton"
+                                               value="<spring:message code="edit"/>"/>
+                                    </div>
+                                </form:form>
+                            </div>
+                        </c:if>
+
+                        <!-- IF USER NOT REVIEWED YET -->
+                        <c:if test="${empty reviewContent}">
+                            <div class="card box p-3">
+                                <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
+                                    <div>
+                                        <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
+                                        <form:textarea path="content" class="form-control"
+                                                       placeholder='${placeholderText}'/>
+                                    </div>
+                                    <form:errors path="content" cssClass="text-danger" element="p"/>
+
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <div class="input-group w-75">
+                                            <form:select path="score" class="form-select bg-bg" id="scoreSelect">
+                                                <form:option value="5">⭐⭐⭐⭐⭐</form:option>
+                                                <form:option value="4">⭐⭐⭐⭐</form:option>
+                                                <form:option value="3">⭐⭐⭐</form:option>
+                                                <form:option value="2">⭐⭐</form:option>
+                                                <form:option value="1">⭐</form:option>
+                                            </form:select>
+                                        </div>
+                                        <input type="submit" class="btn rounded-box button-primary "
+                                               value="<spring:message code="notes.send.button"/>"/>
+                                    </div>
+                                </form:form>
+                            </div>
+                        </c:if>
+
                     </c:if>
                 </div>
             </article>
@@ -380,6 +415,19 @@
 <script src="<c:url value="/js/crud-buttons.js"/>"></script>
 <script src="<c:url value="/js/popups.js"/>"></script>
 <script src="<c:url value="/js/notes.js"/>"></script>
+
+<script>
+    const editReviewButton = document.getElementById('editReviewButton');
+    editReviewButton.addEventListener('click', () => {
+        if (editReviewButton.value === '<spring:message code="edit"/>') {
+            event.preventDefault();
+            const reviewForm = document.getElementById('reviewForm');
+            reviewForm.querySelectorAll('#content')[0].disabled = false;
+            reviewForm.querySelectorAll('#scoreSelect')[0].disabled = false;
+            editReviewButton.value = '<spring:message code="notes.send.button"/>';
+        }
+    })
+</script>
 
 <c:if test="${user eq null or note.user.userId eq user.userId}">
     <c:if test="${errorsEditNoteForm ne null}">

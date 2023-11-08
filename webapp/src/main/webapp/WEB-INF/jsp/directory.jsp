@@ -91,7 +91,7 @@
 
             <form:hidden path="pageNumber" id="pageNumber" value="1"/>
 
-            <div class="container mt-5 d-flex justify-content-between p-0">
+            <div class="container d-flex justify-content-between p-0">
                 <!-- SEARCH PILL -->
                 <div class="d-flex align-items-center gap-3">
                     <div class="search-pill">

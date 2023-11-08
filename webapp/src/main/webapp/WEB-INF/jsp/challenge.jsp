@@ -43,7 +43,7 @@
 
 </header>
 
-<main>
+<main class="full">
     <section class="container d-flex align-self-center">
         <div class="row">
             <div class="card box">

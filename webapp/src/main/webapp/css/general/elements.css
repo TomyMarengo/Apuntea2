@@ -22,6 +22,10 @@ main {
     width: 100%;
 }
 
+main.full {
+    height: calc(100vh - var(--nav-height));
+}
+
 .sidebar.right + section {
     width: calc(100% - var(--sidebar-width));
 }

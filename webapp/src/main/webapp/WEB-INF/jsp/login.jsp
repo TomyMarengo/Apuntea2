@@ -42,9 +42,8 @@
 
 </header>
 
-<main>
-    <section class="container d-flex align-self-center">
-
+<main class="full">
+    <section class="container d-flex align-self-center my-auto">
         <div class="row">
             <div class="card box">
                 <div class="row">

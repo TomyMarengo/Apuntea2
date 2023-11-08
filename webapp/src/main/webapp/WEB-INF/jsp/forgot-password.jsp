@@ -40,7 +40,8 @@
 
 <spring:message var="logotype" code="logotype"/>
 <c:url var="forgotUrl" value="/forgot-password"/>
-<main>
+
+<main class="full">
     <section class="container d-flex align-self-center">
         <div class="row">
             <div class="card box">
