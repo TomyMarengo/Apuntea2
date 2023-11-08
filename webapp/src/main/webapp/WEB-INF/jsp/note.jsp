@@ -43,7 +43,7 @@
     <fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}" category="note"/>
 </header>
 
-<main>
+<main   >
     <fragment:sidebar user="${user}"/>
 
     <section class="container-fluid h-100-navs mt-5">
@@ -115,7 +115,7 @@
                     <div>
                         <img src="<c:url  value="${baseUrl}/profile/${note.user.userId}/picture"/>"
                              alt="<spring:message code="logotype"/>" class="user-profile-picture">
-                        <span><strong><c:out value="${note.user.displayName}"/></strong></span>
+                        <a href="${baseUrl}/user/${note.user.userId}/note-board"><strong><c:out value="${note.user.displayName}"/></strong></a>
                     </div>
                     <div class="mx-2">
                         <c:set var="date" value="${note.createdAt}"/>

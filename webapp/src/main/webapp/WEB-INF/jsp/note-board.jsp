@@ -48,7 +48,12 @@
 </header>
 
 <main>
-    <fragment:sidebar user="${user}" active="my-notes"/>
+    <c:if test="${empty owner}">
+        <fragment:sidebar user="${user}" active="note-board"/>
+    </c:if>
+    <c:if test="${not empty owner}">
+        <fragment:sidebar user="${user}"/>
+    </c:if>
 
     <section class="container mt-5">
         <!-- ROOT DIRECTORIES -->
@@ -74,8 +79,7 @@
                             <div class="file-list gap-5 justify-content-center align-items-center">
                                 <c:forEach items="${subjects.value}" var="rd">
                                     <a class="align-self-start"
-                                       href="<c:url value="./directory/${rd.rootDirectoryId}"/>">
-
+                                       href="<c:url value="${baseUrl}/directory/${rd.rootDirectoryId}?userId=${ not empty owner ? owner.userId : user.userId}"/>">
                                         <div class="position-relative">
 
                                             <div class="heart-container">

@@ -75,12 +75,14 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/my-notes", method = RequestMethod.GET)
-    public ModelAndView myNotes() {
-        ModelAndView mav = new ModelAndView("my-notes");
+    @RequestMapping(value = "/user/{userId}/note-board", method = RequestMethod.GET)
+    public ModelAndView noteBoard(@PathVariable("userId") @ValidUuid UUID userId) {
+        ModelAndView mav = new ModelAndView("note-board");
         User user = securityService.getCurrentUserOrThrow();
         mav.addObject("user", user);
-        mav.addObject("root_directories", subjectService.getSubjectsByUserIdGroupByYear(user.getUserId()));
+        if (!user.getUserId().equals(userId))
+            mav.addObject("owner", userService.findById(userId).orElseThrow(IllegalArgumentException::new)); //TODO: revisar si está ok
+        mav.addObject("root_directories", subjectService.getSubjectsByUserIdGroupByYear(userId));
         return mav;
     }
 

@@ -9,8 +9,8 @@
 <aside class="sidebar right">
     <c:if test="${user ne null}">
 
-        <c:if test="${active eq 'my-notes'}">
-            <a class="btn nav-icon-button active" href="${baseUrl}/my-notes" data-bs-toggle="tooltip"
+        <c:if test="${active eq 'note-board'}">
+            <a class="btn nav-icon-button active" href="${baseUrl}/user/${user.userId}/note-board" data-bs-toggle="tooltip"
                data-bs-placement="right"
                data-bs-title="<spring:message code="myNotes.title"/>" data-bs-trigger="hover">
                 <img src="<c:url value="/svg/my-notes.svg"/>"
@@ -18,8 +18,8 @@
                      class="icon-m fill-dark-primary"/>
             </a>
         </c:if>
-        <c:if test="${active ne 'my-notes'}">
-            <a class="btn nav-icon-button" href="${baseUrl}/my-notes" data-bs-toggle="tooltip"
+        <c:if test="${active ne 'note-board'}">
+            <a class="btn nav-icon-button" href="${baseUrl}/user/${user.userId}/note-board" data-bs-toggle="tooltip"
                data-bs-placement="right"
                data-bs-title="<spring:message code="myNotes.title"/>" data-bs-trigger="hover">
                 <img src="<c:url value="/svg/my-notes.svg"/>"
