@@ -111,29 +111,64 @@
         <!-- BUTTONS & LIST -->
         <c:if test="${career ne null}">
             <section class="d-flex flex-column container mt-4 justify-content-between p-0">
-                <!-- TOP BUTTONS -->
-                <article class="d-flex">
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                       data-bs-title="<spring:message code="linkSubject"/>"
-                       data-bs-trigger="hover">
-                        <button class="btn" data-bs-toggle="modal" data-bs-target="#linkSubjectModal"
-                                id="newSubjectModalButton">
-                            <img src="<c:url value="/svg/link-horizontal.svg"/>"
-                                 alt="<spring:message code="linkSubject"/>"
-                                 class="icon-m fill-dark-primary"/>
-                        </button>
-                    </a>
-                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
-                       data-bs-title="<spring:message code="createSubject"/>"
-                       data-bs-trigger="hover">
-                        <button class="btn" data-bs-toggle="modal" data-bs-target="#createSubjectModal"
-                                id="createSubjectModalButton">
-                            <img src="<c:url value="/svg/magic-wand.svg"/>"
-                                 alt="<spring:message code="createSubject"/>"
-                                 class="icon-m fill-dark-primary"/>
-                        </button>
-                    </a>
-                </article>
+
+                <div class="container d-flex justify-content-between p-0">
+
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="input-group">
+                            <button class="input-group-text input-group-icon" id="ascDescButton">
+                                <img src="<c:url value="/svg/arrow-down.svg"/>"
+                                     alt="<spring:message code="search.sort.image"/>"
+                                     class="icon-s fill-dark-primary"
+                                     id="arrowImage" title="descending"/>
+                            </button>
+
+                            <select id="sortBySelect" class="form-select bg-bg" style="width: 200px;">
+                                <option value="year" selected><spring:message code="search.sort.year"/></option>
+                                <option value="name"><spring:message code="search.sort.name"/></option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-group-text d-block" for="yearSelect"><spring:message code="year"/></label>
+                            <select id="yearSelect" class="form-select bg-bg" >
+                                <!-- For each different year in ownedSubjects -->
+                                <option value="all" selected><spring:message code="category.all"/></option>
+                                <c:forEach var="item" items="${ownedSubjects}">
+                                    <c:if test="${lastYear eq null || lastYear ne item.year}">
+                                        <option value="<c:out value="${item.year}"/>"><c:out value="${item.year}"/></option>
+                                    </c:if>
+                                    <c:set var="lastYear" value="${item.year}"/> <!-- Save last year -->
+                                </c:forEach>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <!-- TOP BUTTONS -->
+                    <div class="d-flex">
+                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                           data-bs-title="<spring:message code="linkSubject"/>"
+                           data-bs-trigger="hover">
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#linkSubjectModal"
+                                    id="newSubjectModalButton">
+                                <img src="<c:url value="/svg/link-horizontal.svg"/>"
+                                     alt="<spring:message code="linkSubject"/>"
+                                     class="icon-m fill-dark-primary"/>
+                            </button>
+                        </a>
+                        <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                           data-bs-title="<spring:message code="createSubject"/>"
+                           data-bs-trigger="hover">
+                            <button class="btn" data-bs-toggle="modal" data-bs-target="#createSubjectModal"
+                                    id="createSubjectModalButton">
+                                <img src="<c:url value="/svg/magic-wand.svg"/>"
+                                     alt="<spring:message code="createSubject"/>"
+                                     class="icon-m fill-dark-primary"/>
+                            </button>
+                        </a>
+                    </div>
+                </div>
 
                 <!-- HORIZONTAL LIST -->
                 <article class="container mt-4 p-0">
@@ -148,7 +183,7 @@
                             </thead>
                             <tbody id="subjectTable">
                             <c:forEach var="item" items="${ownedSubjects}">
-                                <tr class="note-found no-select"
+                                <tr class="note-found"
                                     id="<c:out value="subject-${item.subjectId}"/>"
                                     data-subject-id="<c:out value="${item.subjectId}"/>"
                                     data-year="<c:out value="${item.year}"/>"
@@ -466,6 +501,7 @@
 </script>
 
 <script src="<c:url value="/js/autocomplete.js"/>"></script>
+<script src="<c:url value="/js/filters-manage.js"/>"></script>
 <script src="<c:url value="/js/ics-autocomplete.js"/>"></script>
 <script src="<c:url value="/js/manage-career.js"/>"></script>
 
