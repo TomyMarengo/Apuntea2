@@ -192,7 +192,7 @@ public class UserJpaDaoTest {
         int currentUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        int results = userDao.getStudentsQuantity("t2000");
+        int results = userDao.getStudentsQuantity("t2000", null);
         assertEquals(0, results);
     }
 
@@ -200,7 +200,7 @@ public class UserJpaDaoTest {
     public void testGetStudents20Count() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        int results = userDao.getStudentsQuantity("t20");
+        int results = userDao.getStudentsQuantity("t20", null);
         assertEquals(1, results);
     }
 
@@ -208,7 +208,7 @@ public class UserJpaDaoTest {
     public void testGetStudents2Count() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        int results = userDao.getStudentsQuantity("t2");
+        int results = userDao.getStudentsQuantity("t2", null);
         assertEquals(2, results);
     }
 
@@ -217,7 +217,7 @@ public class UserJpaDaoTest {
         final int STUDENTS_LENGTH = 20;
         int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
         for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        int results = userDao.getStudentsQuantity("");
+        int results = userDao.getStudentsQuantity("", null);
         assertEquals(oldUsers + STUDENTS_LENGTH, results);
     }
 
@@ -226,7 +226,7 @@ public class UserJpaDaoTest {
         int currentUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        List<User> users = userDao.getStudents("t2000", 1, 10);
+        List<User> users = userDao.getStudents("t2000", null,1, 10);
         assertEquals(0, users.size());
 
     }
@@ -235,7 +235,7 @@ public class UserJpaDaoTest {
     public void testGetStudents20() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        List<User> users = userDao.getStudents("t20", 1, 10);
+        List<User> users = userDao.getStudents("t20", null, 1, 10);
         assertEquals(1, users.size());
         assertEquals("student20@mail.com", users.get(0).getEmail());
     }
@@ -244,7 +244,7 @@ public class UserJpaDaoTest {
     public void testGetStudents2() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        List<User> users = userDao.getStudents("t2", 1, 10);
+        List<User> users = userDao.getStudents("t2", null, 1, 10);
         assertEquals(2, users.size());
         assertEquals("student20@mail.com", users.get(0).getEmail());
         assertEquals("student2@mail.com", users.get(1).getEmail());
@@ -256,7 +256,7 @@ public class UserJpaDaoTest {
         int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         // 100 should be more than enough to get all students, change in the future if necessary
-        List<User> users = userDao.getStudents("", 1, 100);
+        List<User> users = userDao.getStudents("", null, 1, 100);
         assertEquals(oldUsers + STUDENTS_LENGTH, users.size());
 
         for (int i = 0; i < STUDENTS_LENGTH; i++) {

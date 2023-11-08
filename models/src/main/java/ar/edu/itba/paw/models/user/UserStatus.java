@@ -9,6 +9,17 @@ public enum UserStatus {
         this.status = status;
     }
 
+    public static UserStatus fromString(String status) {
+        if (status != null) {
+            for (UserStatus userStatus : UserStatus.values()) {
+                if (status.equalsIgnoreCase(userStatus.status)) {
+                    return userStatus;
+                }
+            }
+        }
+        return null;
+    }
+
     public String getStatus() {
         return status;
     }

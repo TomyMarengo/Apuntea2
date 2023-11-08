@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.user.Image;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
+import ar.edu.itba.paw.models.user.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -20,6 +21,6 @@ public interface UserDao {
     int unbanUsers();
     boolean banUser(User user, User admin, LocalDateTime endDate, String reason);
     boolean unbanUser(User user);
-    List<User> getStudents(String query, int pageNum, int pageSize);
-    int getStudentsQuantity(String query);
+    List<User> getStudents(String query, UserStatus status, int pageNum, int pageSize);
+    int getStudentsQuantity(String query, UserStatus status);
 }

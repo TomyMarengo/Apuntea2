@@ -52,7 +52,7 @@ public class ManageUsersController {
 
         mav.addObject("banUserId", model.get(BAN_USER_ID));
 
-        Page<User> users = userService.getStudents(searchUserForm.getQuery(), searchUserForm.getPageNumber());
+        Page<User> users = userService.getStudents(searchUserForm.getQuery(), searchUserForm.getStatus(), searchUserForm.getPageNumber());
         mav.addObject("maxPage", users.getTotalPages());
         mav.addObject("currentPage", users.getCurrentPage());
         mav.addObject("users", users.getContent());

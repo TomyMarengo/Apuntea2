@@ -11,6 +11,9 @@ public class SearchUserForm {
     @Size(max = 30)
     private String query;
 
+    @Pattern(regexp = "^(all|active|banned)$")
+    private String status = "all";
+
     @Min(1)
     private int pageNumber = 1;
 
@@ -28,5 +31,13 @@ public class SearchUserForm {
 
     public void setPageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

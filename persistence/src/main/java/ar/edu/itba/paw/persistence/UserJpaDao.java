@@ -10,6 +10,7 @@ import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,18 +22,25 @@ class UserJpaDao implements UserDao {
     private EntityManager em;
 
     @Override
-    public List<User> getStudents(String query, int pageNum, int pageSize) {
+    public List<User> getStudents(String query, UserStatus status, int pageNum, int pageSize) {
         String searchWord = escapeLikeString(query);
-        @SuppressWarnings("unchecked")
-        List<UUID> userIds =  ( (List<String>) em.createNativeQuery("SELECT CAST(user_id AS VARCHAR(36)) FROM users u WHERE " +
-                        "NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
-                        "AND (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!') " +
-                        "ORDER BY email")
+        String queryStr = "SELECT CAST(user_id AS VARCHAR(36)) FROM users u " +
+                "WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
+                "AND (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!')";
+        if (status != null) {
+            queryStr += " AND u.status = :status";
+        }
+
+        Query nQuery = em.createNativeQuery(queryStr)
                 .setMaxResults(pageSize)
                 .setFirstResult((pageNum - 1) * pageSize)
-                .setParameter("searchWord", searchWord)
-                .getResultList()
-        ).stream().map(UUID::fromString).collect(Collectors.toList());
+                .setParameter("searchWord", searchWord);
+
+        if (status != null) {
+            nQuery.setParameter("status", status.toString().toUpperCase());
+        }
+        @SuppressWarnings("unchecked")
+        List<UUID> userIds = ((List<String>) nQuery.getResultList()).stream().map(UUID::fromString).collect(Collectors.toList());
 
 
         if (userIds.isEmpty()) return Collections.emptyList();
@@ -42,13 +50,21 @@ class UserJpaDao implements UserDao {
     }
 
     @Override
-    public int getStudentsQuantity(String query) {
+    public int getStudentsQuantity(String query, UserStatus status) {
         String searchWord = escapeLikeString(query);
-        return ((Number) em.createNativeQuery("SELECT COUNT(DISTINCT u.user_id) FROM users u "+
-                        "WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
-                        "AND (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!')")
-                .setParameter("searchWord", searchWord)
-                .getSingleResult()).intValue();
+        String queryStr = "SELECT COUNT(DISTINCT u.user_id) FROM users u " +
+                "WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
+                "AND (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!')";
+        if (status != null) {
+            queryStr += " AND u.status = :status";
+        }
+        Query nQuery = em.createNativeQuery(queryStr)
+                .setParameter("searchWord", searchWord);
+        if (status != null) {
+            nQuery.setParameter("status", status.toString().toUpperCase());
+        }
+        return ((Number) nQuery.getSingleResult()).intValue();
+
     }
 
     @Override

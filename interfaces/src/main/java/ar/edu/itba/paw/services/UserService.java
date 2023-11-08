@@ -20,5 +20,5 @@ public interface UserService {
     void unbanUsers();
     void unbanUser(UUID userId);
     void banUser(UUID userId, String reason);
-    Page<User> getStudents(String query, int pageNum);
+    Page<User> getStudents(String query, String status, int pageNum);
 }

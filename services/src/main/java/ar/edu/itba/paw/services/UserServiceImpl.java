@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.user.Image;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.user.InvalidUserException;
+import ar.edu.itba.paw.models.user.UserStatus;
 import ar.edu.itba.paw.persistence.CareerDao;
 import ar.edu.itba.paw.persistence.UserDao;
 import org.slf4j.Logger;
@@ -71,11 +72,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public Page<User> getStudents(String query, int page) {
+    public Page<User> getStudents(String query, String status, int page) {
         if (query == null) query = "";
-        int countStudents = userDao.getStudentsQuantity(query);
+        UserStatus userStatus = UserStatus.fromString(status);
+        int countStudents = userDao.getStudentsQuantity(query, userStatus);
         int currentPage = Page.getSafePagePosition(page, countStudents, PAGE_SIZE);
-        List<User> users = userDao.getStudents(query, currentPage, PAGE_SIZE);
+        List<User> users = userDao.getStudents(query, userStatus, currentPage, PAGE_SIZE);
         return new Page<>(users, currentPage, PAGE_SIZE, countStudents);
     }
 
