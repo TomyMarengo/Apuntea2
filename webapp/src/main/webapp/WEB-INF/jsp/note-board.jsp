@@ -78,34 +78,15 @@
                              role="tabpanel">
                             <div class="file-list gap-5 justify-content-center align-items-center">
                                 <c:forEach items="${subjects.value}" var="rd">
-                                    <a class="align-self-start"
+                                    <a class="align-self-start blob-container"
                                        href="<c:url value="${baseUrl}/directory/${rd.rootDirectoryId}?userId=${ not empty owner ? owner.userId : user.userId}"/>">
                                         <div class="position-relative">
 
-                                            <div class="heart-container">
-
-                                                <c:set var="addFavorite"
-                                                       value="./directory/${rd.rootDirectoryId}/addfavorite"/>
-                                                <c:set var="removeFavorite"
-                                                       value="./directory/${rd.rootDirectoryId}/removefavorite"/>
-
-                                                <form:form
-                                                        action="${rd.rootDirectory.favorite ? removeFavorite : addFavorite}"
-                                                        method="post" cssClass="align-content-end">
-                                                    <input name="redirectUrl"
-                                                           value="/my-notes?tab=${i.index}"
-                                                           type="hidden"/>
-                                                    <button type="submit"
-                                                            class="btn nav-icon-button"
-                                                            id="<c:out value="${rd.rootDirectoryId}"/>.f1">
-                                                        <img src="<c:url value="${ rd.rootDirectory.favorite ? '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
-                                                             alt="<spring:message code="favorite"/>"
-                                                             class="icon-xs fill-text">
-                                                    </button>
-                                                </form:form>
+                                            <div class="note-count-container">
+                                                <span><strong>9</strong></span>
                                             </div>
 
-                                            <div class="d-flex flex-column gap-2 align-items-center blob-container">
+                                            <div class="d-flex flex-column gap-2 align-items-center">
                                                 <img src="<c:url value="/svg/folder.svg"/>"
                                                      alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
                                                 <!-- max 2 lines-->

@@ -73,7 +73,7 @@
                         <div class="tab-pane root-dir-list fade ${param.tab eq null ? (i.index eq 0 ? 'active' : '') : (i.index eq param.tab ? 'active' : '')}" role="tabpanel">
                             <div class="file-list gap-5 justify-content-center align-items-center">
                                 <c:forEach items="${subjects.value}" var="rd">
-                                    <a class="align-self-start"
+                                    <a class="align-self-start blob-container"
                                        href="<c:url value="./directory/${rd.rootDirectoryId}"/>">
 
                                         <div class="position-relative">
@@ -101,7 +101,7 @@
                                                 </form:form>
                                             </div>
 
-                                            <div class="d-flex flex-column gap-2 align-items-center blob-container">
+                                            <div class="d-flex flex-column gap-2 align-items-center">
                                                 <img src="<c:url value="/svg/folder.svg"/>"
                                                      alt="<spring:message code="folder"/>" class="icon-xxl fill-4986E7">
                                                 <!-- max 2 lines-->

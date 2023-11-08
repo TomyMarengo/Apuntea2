@@ -72,3 +72,21 @@
 .blob-container:hover {
     scale: 1.05;
 }
+
+.note-count-container {
+    position: absolute;
+    top: -15px;
+    right: 30px;
+    border-radius: 80% 0 55% 50%/55% 0 80% 50%;
+    background-color: var(--secondary);
+    height: 25px;
+    width: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: rotateZ(135deg);
+}
+
+.note-count-container span {
+    transform: rotateZ(225deg);
+}
