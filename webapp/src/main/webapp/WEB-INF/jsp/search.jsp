@@ -43,7 +43,7 @@
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="search.title" var="title"/>
-    <fragment:bottom-navbar title="./search:${title}">
+    <fragment:bottom-navbar title="${baseUrl}/search,${title}">
     </fragment:bottom-navbar>
 </header>
 

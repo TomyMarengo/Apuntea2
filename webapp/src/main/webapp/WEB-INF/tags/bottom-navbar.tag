@@ -93,7 +93,7 @@
     </c:if>
 
     <c:if test="${title != null}">
-        <c:set var="titleData" value="${fn:split(title, ':')}"/>
+        <c:set var="titleData" value="${fn:split(title, ',')}"/>
         <c:if test="${category ne 'directory' or user eq null or user.userId ne blob.user.userId}">
             <a href="<c:url value="${titleData[0]}"/>">
                 <div class="bottom-navbar-item bn-title active">

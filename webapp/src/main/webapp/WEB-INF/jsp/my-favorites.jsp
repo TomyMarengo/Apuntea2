@@ -45,7 +45,7 @@
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="profileNotes.directories.favorites" var="title"/>
-    <fragment:bottom-navbar title="./my-favorites:${title}"/>
+    <fragment:bottom-navbar title="${baseUrl}/my-favorites,${title}"/>
 </header>
 
 <main>

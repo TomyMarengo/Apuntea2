@@ -44,7 +44,7 @@
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="changePassword.title" var="title"/>
-    <fragment:bottom-navbar title="./change-password:${title}"/>
+    <fragment:bottom-navbar title="${baseUrl}/change-password,${title}"/>
 </header>
 
 <main>

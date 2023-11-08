@@ -40,7 +40,7 @@
     <!-- NAVBAR -->
     <fragment:navbar user="${user}"/>
 
-    <fragment:bottom-navbar title="./${noteId}:${note.name}" hierarchy="${hierarchy}" category="note"/>
+    <fragment:bottom-navbar title="${baseUrl}/notes/${noteId},${note.name}" hierarchy="${hierarchy}" category="note"/>
 </header>
 
 <main   >

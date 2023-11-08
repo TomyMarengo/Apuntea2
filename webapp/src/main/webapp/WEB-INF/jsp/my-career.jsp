@@ -44,7 +44,7 @@
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="myCareer.title" var="title"/>
-    <fragment:bottom-navbar title="./my-career:${title}"/>
+    <fragment:bottom-navbar title="${baseUrl}/my-career,${title}"/>
 </header>
 
 <main>

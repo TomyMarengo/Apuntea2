@@ -43,7 +43,7 @@
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="manageUsers.title" var="title"/>
-    <fragment:bottom-navbar title="/manage/users:${title}">
+    <fragment:bottom-navbar title="${baseUrl}/manage/users,${title}">
     </fragment:bottom-navbar>
 
 </header>

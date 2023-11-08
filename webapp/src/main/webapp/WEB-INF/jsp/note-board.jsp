@@ -43,8 +43,14 @@
     <fragment:navbar user="${user}"/>
 
     <!-- BOTTOM-NAVBAR -->
-    <spring:message code="myProfileNotes.title" var="title"/>
-    <fragment:bottom-navbar title="./my-notes:${title}"/>
+    <c:if test="${empty owner}">
+        <spring:message code="myProfileNotes.title" var="title"/>
+        <fragment:bottom-navbar title="${baseUrl}/user/${userId}/note-board,${title}"/>
+    </c:if>
+    <c:if test="${not empty owner}">
+        <spring:message code="yourProfileNotes.title" var="title" arguments="${owner.displayName}"/>
+        <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${title}"/>
+    </c:if>
 </header>
 
 <main>
@@ -83,7 +89,7 @@
                                         <div class="position-relative">
 
                                             <div class="note-count-container">
-                                                <span><strong>9</strong></span>
+                                                <span><strong>9</strong></span> <!-- TODO: count notes -->
                                             </div>
 
                                             <div class="d-flex flex-column gap-2 align-items-center">

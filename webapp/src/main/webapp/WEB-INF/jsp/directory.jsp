@@ -43,7 +43,7 @@
     <fragment:navbar user="${user}"/>
 
     <fragment:bottom-navbar
-            title="./${directoryId}:${directory.name}"
+            title="${baseUrl}/directory/${directoryId},${directory.name}"
             hierarchy="${hierarchy}"
             category="directory"
             blob="${directory}"

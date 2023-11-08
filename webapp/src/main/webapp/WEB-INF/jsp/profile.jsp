@@ -41,7 +41,7 @@
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="profile.title" var="title"/>
-    <fragment:bottom-navbar title="./profile:${title}"/>
+    <fragment:bottom-navbar title="${baseUrl}/profile,${title}"/>
 </header>
 
 <main>
