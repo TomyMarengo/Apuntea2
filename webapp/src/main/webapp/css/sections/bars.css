@@ -101,6 +101,7 @@
 	justify-content: center;
 	gap: 0.5rem;
 	color: var(--bg);
+	padding: 0 1rem;
 }
 
 .bn-dropdown-title-button:hover{

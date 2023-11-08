@@ -40,7 +40,7 @@
 <main>
         <fragment:sidebar user="${user}"/>
 
-    <section class="d-flex flex-column justify-content-center align-items-center gap-3 text-center">
+    <section class="container text-center mt-5">
         <h2><spring:message code="index.title" arguments='<span class="apuntea-title">Apuntea</span>'/></h2>
         <h4><spring:message code="index.subtitle"/></h4>
 

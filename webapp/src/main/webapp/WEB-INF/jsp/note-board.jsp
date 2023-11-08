@@ -49,7 +49,7 @@
     </c:if>
     <c:if test="${not empty owner}">
         <spring:message code="yourProfileNotes.title" var="title" arguments="${owner.displayName}"/>
-        <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${title}"/>
+        <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${title}" owner="${owner}"/>
     </c:if>
 </header>
 

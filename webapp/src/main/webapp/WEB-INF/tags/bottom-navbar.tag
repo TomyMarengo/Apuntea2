@@ -6,6 +6,7 @@
 <%@ attribute name="hierarchy" required="false" type="ar.edu.itba.paw.models.directory.DirectoryPath" %>
 <%@ attribute name="category" required="false" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
+<%@ attribute name="owner" required="false" type="ar.edu.itba.paw.models.user.User" %>
 <%@ attribute name="user" required="false" type="ar.edu.itba.paw.models.user.User" %>
 <%@ attribute name="blob" required="false" type="ar.edu.itba.paw.models.directory.Directory" %>
 
@@ -19,13 +20,15 @@
                 </div>
             </a>
             <c:if test="${hierarchy.length gt 3}">
-                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg"
+                     alt="dropdown"/>
                 <div class="bottom-navbar-item">
                     <spring:message code="navbar.bottom.ellipsis"/>
                 </div>
             </c:if>
             <c:if test="${hierarchy.length gt 2}">
-                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg"
+                     alt="dropdown"/>
                 <a href="<c:url value="${baseUrl}/directory/${hierarchy.parentDirectory.id}"/>">
                     <div class="bottom-navbar-item overflow-hidden">
                         <c:out value="${hierarchy.parentDirectory.name}"/>
@@ -34,7 +37,8 @@
             </c:if>
 
             <c:if test="${category ne 'directory' and hierarchy.length gt 1}">
-                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg"
+                     alt="dropdown"/>
                 <a href="<c:url value="${baseUrl}/directory/${hierarchy.currentDirectory.id}"/>">
                     <div class="bottom-navbar-item overflow-hidden">
                         <c:out value="${hierarchy.currentDirectory.name}"/>
@@ -43,21 +47,24 @@
             </c:if>
 
             <c:if test="${title != null}">
-                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg"
+                     alt="dropdown"/>
             </c:if>
 
         </div>
 
         <div class="dropdown d-lg-none d-xl-none d-xxl-none">
             <div class="d-flex justify-content-between align-items-center">
-                <button type="button" class="bn-dropdown-hierarchy-button dropdown-toggle nav-icon-button" data-bs-toggle="dropdown"
+                <button type="button" class="bn-dropdown-hierarchy-button dropdown-toggle nav-icon-button"
+                        data-bs-toggle="dropdown"
                         aria-expanded="false">
                     <spring:message code="navbar.bottom.middleEllipsis"/>
                 </button>
 
                 <div class="dropdown-menu">
                     <li>
-                        <a class="dropdown-item" href="<c:url value="${baseUrl}/directory/${hierarchy.rootDirectory.id}"/>">
+                        <a class="dropdown-item"
+                           href="<c:url value="${baseUrl}/directory/${hierarchy.rootDirectory.id}"/>">
                             <c:out value="${hierarchy.rootDirectory.name}"/>
                         </a>
                     </li>
@@ -79,14 +86,16 @@
 
                     <c:if test="${category ne 'directory' and hierarchy.length gt 1}">
                         <li>
-                            <a class="dropdown-item" href="<c:url value="${baseUrl}/directory/${hierarchy.currentDirectory.id}"/>">
-                                    <c:out value="${hierarchy.currentDirectory.name}"/>
+                            <a class="dropdown-item"
+                               href="<c:url value="${baseUrl}/directory/${hierarchy.currentDirectory.id}"/>">
+                                <c:out value="${hierarchy.currentDirectory.name}"/>
                             </a>
                         </li>
                     </c:if>
                 </div>
 
-                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg" alt="dropdown"/>
+                <img src="<c:url value="/svg/arrow-right.svg"/>" class="mx-2 icon-s dropdown-icon fill-bg"
+                     alt="dropdown"/>
 
             </div>
         </div>
@@ -94,28 +103,34 @@
 
     <c:if test="${title != null}">
         <c:set var="titleData" value="${fn:split(title, ',')}"/>
-        <c:if test="${category ne 'directory' or user eq null or user.userId ne blob.user.userId}">
+
+        <!-- COMMON -->
+        <c:if test="${empty owner and (category ne 'directory' or user eq null or user.userId ne blob.user.userId)}"> <!-- TODO: mejorar estos ifs -->
             <a href="<c:url value="${titleData[0]}"/>">
                 <div class="bottom-navbar-item bn-title active">
                     <c:out value="${titleData[1]}"/>
                 </div>
             </a>
         </c:if>
-        <c:if test="${category eq 'directory' and user ne null and user.userId eq blob.user.userId}">
+
+        <!-- FOR DIRECTORY PAGE -->
+        <c:if test="${empty owner and (category eq 'directory' and user ne null and user.userId eq blob.user.userId)}">
             <div class="btn-group h-100">
                 <button class="bn-dropdown-title-button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="d-block bottom-navbar-item bn-title active">
                         <c:out value="${titleData[1]}"/>
                     </span>
-                    <img src="<c:url value="/svg/chevron-down.svg"/>" class="icon-s dropdown-icon fill-bg" alt="dropdown"/>
+                    <img src="<c:url value="/svg/chevron-down.svg"/>" class="icon-s dropdown-icon fill-bg"
+                         alt="dropdown"/>
                 </button>
                 <ul class="dropdown-menu">
                     <hr class="p-0 m-0">
                     <li>
                         <button class="dropdown-item d-flex gap-2 align-items-center justify-content-center"
                                 data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
-                                onclick="editBNavDirectory('<c:out value="${blob.id}"/>', '<c:out value="${blob.name}"/>',
+                                onclick="editBNavDirectory('<c:out value="${blob.id}"/>', '<c:out
+                                        value="${blob.name}"/>',
                                         '<c:out value="${blob.visible}"/>', '<c:out value="${blob.iconColor}"/>',
                                         '<c:out value="${blob.parentId}"/>')">
                             <img src="<c:url value="/svg/pencil.svg"/>"
@@ -128,5 +143,35 @@
                 </ul>
             </div>
         </c:if>
+
+        <!-- FOR NOTE-BOARD PAGE -->
+        <c:if test="${not empty owner}">
+            <div class="btn-group h-100">
+                <button class="bn-dropdown-title-button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="d-block bottom-navbar-item bn-title active">
+                        <c:out value="${titleData[1]}"/>
+                    </span>
+                    <img src="<c:url value="/svg/chevron-down.svg"/>" class="icon-s dropdown-icon fill-bg"
+                         alt="dropdown"/>
+                </button>
+                <div class="dropdown-menu">
+                    <!-- TODO: quizas poner alguna stat acá también -->
+                    <hr class="p-0 m-0">
+                    <div class="d-flex justify-content-center align-items-center gap-2 p-2">
+                        <c:url var="userProfilePicture" value="${baseUrl}/profile/${owner.userId}/picture"/>
+                        <img src="${userProfilePicture}" class="picture small"
+                             alt="<spring:message code="profile.picture"/>">
+                        <div class="d-flex flex-column">
+                            <span><strong><c:out value="${owner.email}"/></strong></span>
+                            <span><c:out value="${owner.institution.name}"/></span>
+                            <span><c:out value="${owner.career.name}"/></span>
+                        </div>
+                    </div>
+                    <hr class="p-0 m-0">
+                </div>
+            </div>
+        </c:if>
+
     </c:if>
 </div>

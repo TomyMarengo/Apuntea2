@@ -80,7 +80,8 @@
     border-radius: 80% 0 55% 50%/55% 0 80% 50%;
     background-color: var(--secondary);
     height: 25px;
-    width: 25px;
+    min-width: 25px;
+    width: fit-content;
     display: flex;
     justify-content: center;
     align-items: center;
