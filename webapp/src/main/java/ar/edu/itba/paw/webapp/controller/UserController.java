@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.user.password.ChangePasswordForm;
@@ -81,7 +82,8 @@ public class UserController {
         User user = securityService.getCurrentUserOrThrow();
         mav.addObject("user", user);
         if (!user.getUserId().equals(userId))
-            mav.addObject("owner", userService.findById(userId).orElseThrow(IllegalArgumentException::new)); //TODO: revisar si está ok
+            mav.addObject("owner", userService.findById(userId).orElseThrow(UserNotFoundException::new));
+
         mav.addObject("root_directories", subjectService.getSubjectsByUserIdGroupByYear(userId));
         return mav;
     }

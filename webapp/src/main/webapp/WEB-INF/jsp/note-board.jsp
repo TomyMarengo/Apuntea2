@@ -3,6 +3,7 @@
 <%@ taglib prefix="fragment" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
 <!DOCTYPE html>
@@ -11,7 +12,13 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Apuntea | <spring:message code="myNotes.title"/></title>
+    <c:if test="${empty owner}">
+        <title>Apuntea | <spring:message code="myNotes.title"/></title>
+    </c:if>
+    <c:if test="${not empty owner}">
+        <title>Apuntea | <spring:message code="yourProfileNotes.title" arguments="${owner.displayName}"/></title>
+    </c:if>
+
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
@@ -109,6 +116,38 @@
                     </c:forEach>
                 </div>
             </div>
+        </c:if>
+
+        <c:if test="${empty root_directories}">
+            <div class="d-flex flex-column mt-5">
+                <ul class="mini-nav">
+                    <li class="mini-nav-item">
+                        <button class="btn mini-nav-button root-dir text-center active">
+                            <spring:message code="profileNotes.notes"/>
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content bg-bg">
+                    <div class="tab-pane root-dir-list fade active"
+                         role="tabpanel">
+                        <c:set var="myCareerUrl" value="${baseUrl}/my-career"/>
+                        <div class="d-flex flex-column gap-2 p-3 align-items-center">
+                            <div class="d-flex">
+                                <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
+                                <h3><spring:message code="directories.noContent"/></h3>
+                            </div>
+                            <c:if test="${empty owner}">
+                                <div class="d-flex">
+                                    <fmt:message key="profileNotes.notes.noContent.description">
+                                        <fmt:param value="${myCareerUrl}"/>
+                                    </fmt:message>
+                                </div>
+                            </c:if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </c:if>
     </section>
 </main>

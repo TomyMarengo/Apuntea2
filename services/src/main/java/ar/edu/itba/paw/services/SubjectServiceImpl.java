@@ -5,12 +5,10 @@ import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.institutional.dtos.SubjectDto;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.exceptions.institutional.InvalidSubjectException;
 import ar.edu.itba.paw.models.exceptions.institutional.InvalidSubjectCareerException;
-import ar.edu.itba.paw.persistence.CareerDao;
-import ar.edu.itba.paw.persistence.DirectoryDao;
-import ar.edu.itba.paw.persistence.SearchDao;
-import ar.edu.itba.paw.persistence.SubjectDao;
+import ar.edu.itba.paw.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,15 +23,17 @@ import java.util.stream.Collectors;
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectDao subjectDao;
     private final DirectoryDao directoryDao;
+    private final UserDao userDao;
     private final CareerDao careerDao;
     private final SearchDao searchDao;
     private final SecurityService securityService;
 
 
     @Autowired
-    public SubjectServiceImpl(SubjectDao subjectDao, DirectoryDao directoryDao, CareerDao careerDao, SearchDao searchDao, SecurityService securityService) {
+    public SubjectServiceImpl(SubjectDao subjectDao, DirectoryDao directoryDao, UserDao userDao, CareerDao careerDao, SearchDao searchDao, SecurityService securityService) {
         this.subjectDao = subjectDao;
         this.directoryDao = directoryDao;
+        this.userDao = userDao;
         this.careerDao = careerDao;
         this.searchDao = searchDao;
         this.securityService = securityService;
@@ -71,7 +71,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Transactional
     @Override
     public Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId) {
-        User user = this.securityService.getCurrentUserOrThrow();
+        User user = this.userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         Map<Integer, List<Subject>> yearMap = subjectDao.getSubjectsByUser(user).stream().collect(Collectors.groupingBy(Subject::getYear));
         directoryDao.getFavoriteRootDirectories(user.getUserId()).forEach(rd -> rd.setFavorite(true));
         return yearMap;
