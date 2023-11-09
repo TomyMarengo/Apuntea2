@@ -33,5 +33,7 @@ public interface DirectoryDao {
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser, SortArguments sortArgs);
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds);
+
+    void setRootDirsFileQuantity(List<UUID> directoryIds, User userToFilter);
 }
 

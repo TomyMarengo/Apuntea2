@@ -68,13 +68,14 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectDao.getSubjectsByCareerIdComplemented(careerId).stream().map(SubjectDto::new).collect(Collectors.toList());
     }
 
-    @Transactional
     @Override
+    @Transactional
     public Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId) {
         User user = this.userDao.findById(userId).orElseThrow(UserNotFoundException::new);
-        Map<Integer, List<Subject>> yearMap = subjectDao.getSubjectsByUser(user).stream().collect(Collectors.groupingBy(Subject::getYear));
-        directoryDao.getFavoriteRootDirectories(user.getUserId()).forEach(rd -> rd.setFavorite(true));
-        return yearMap;
+//        directoryDao.getFavoriteRootDirectories(user.getUserId()).forEach(rd -> rd.setFavorite(true));
+        List<Subject> subjects = subjectDao.getSubjectsByUser(user);
+        directoryDao.setRootDirsFileQuantity(subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()), user);
+        return subjects.stream().collect(Collectors.groupingBy(Subject::getYear));
     }
 
     @Override

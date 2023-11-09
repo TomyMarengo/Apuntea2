@@ -90,6 +90,12 @@ public class UserController {
         return mav;
     }
 
+    @RequestMapping(value = "/user/note-board", method = RequestMethod.GET)
+    public ModelAndView myNoteBoard() {
+        User user = securityService.getCurrentUserOrThrow();
+        return new ModelAndView("redirect:/user/" + user.getUserId() + "/note-board");
+    }
+
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public ModelAndView profile(@ModelAttribute final EditUserForm editUserForm,
                                  @ModelAttribute final ChangePasswordForm changePasswordForm) {

@@ -46,7 +46,7 @@
 
         <div class="index-cards">
 
-            <a href="${baseUrl}/my-notes" class="call-to-action-card">
+            <a href="${baseUrl}/user/note-board" class="call-to-action-card">
 
                 <img src="<c:url value="/svg/add-document.svg"/>" alt="<spring:message code="search.title"/>"
                      class="fill-dark-text"/>

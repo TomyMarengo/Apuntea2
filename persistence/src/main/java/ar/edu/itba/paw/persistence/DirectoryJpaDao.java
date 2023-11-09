@@ -148,4 +148,15 @@ public class DirectoryJpaDao implements DirectoryDao {
         return findDirectoriesByIds(directoryIds, null, new SortArguments(SortArguments.SortBy.DATE, true));
     }
 
+    @Override
+    public void setRootDirsFileQuantity(List<UUID> directoryIds, User userToFilter) {
+        List<Object[]> list = em.createQuery("SELECT d, (SELECT COUNT(n.noteId) FROM Note n JOIN n.subject s WHERE s.rootDirectory = d AND n.user.id = :userId) as qtyFiles FROM Directory d " +
+                                                     "WHERE d.id IN :directoryIds", Object[].class)
+                .setParameter("directoryIds", directoryIds)
+                .setParameter("userId", userToFilter.getUserId())
+                .getResultList();
+
+        list.forEach(o -> ((Directory) o[0]).setQtyFiles(((Long) o[1]).intValue()));
+    }
+
 }

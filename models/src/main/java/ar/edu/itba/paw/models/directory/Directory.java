@@ -52,8 +52,12 @@ public class Directory implements Searchable {
 
     private Boolean visible;
 
+    // TODO: Should it be just boolean?
     @Transient
     private Boolean favorite = false;
+
+    @Transient
+    private int qtyFiles = 0;
 
     /* package-private */ Directory() {}
 
@@ -152,6 +156,14 @@ public class Directory implements Searchable {
 
     public void setVisible(Boolean visible) {
         this.visible = visible;
+    }
+
+    public int getQtyFiles() {
+        return qtyFiles;
+    }
+
+    public void setQtyFiles(int qtyFiles) {
+        this.qtyFiles = qtyFiles;
     }
 
     public static class DirectoryBuilder {

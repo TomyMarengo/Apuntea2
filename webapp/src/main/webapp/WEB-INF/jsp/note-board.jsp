@@ -61,10 +61,10 @@
 </header>
 
 <main>
-    <c:if test="${empty owner}">
+    <c:if test="${owner eq user}">
         <fragment:sidebar user="${user}" active="note-board"/>
     </c:if>
-    <c:if test="${not empty owner}">
+    <c:if test="${user eq null or owner ne user}">
         <fragment:sidebar user="${user}"/>
     </c:if>
 
@@ -95,9 +95,11 @@
                                        href="<c:url value="${baseUrl}/directory/${rd.rootDirectoryId}?userId=${ not empty owner ? owner.userId : user.userId}"/>">
                                         <div class="position-relative">
 
-                                            <div class="note-count-container">
-                                                <span><strong>9</strong></span> <!-- TODO: count notes -->
-                                            </div>
+<%--                                            <c:if test="${rd.rootDirectory.qtyFiles gt 0}">--%>
+                                                <div class="note-count-container">
+                                                    <span><strong>${rd.rootDirectory.qtyFiles}</strong></span>
+                                                </div>
+<%--                                            </c:if>--%>
 
                                             <div class="d-flex flex-column gap-2 align-items-center">
                                                 <img src="<c:url value="/svg/folder.svg"/>"
