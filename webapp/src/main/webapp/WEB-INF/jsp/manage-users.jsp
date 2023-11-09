@@ -127,7 +127,8 @@
                         </thead>
                         <tbody>
                         <c:forEach var="item" items="${users}">
-                            <tr class="note-found no-select" id="<c:out value="${item.userId}"/>">
+                            <tr class="note-found no-select" id="<c:out value="${item.userId}"/>"
+                                ondblclick="window.location = '${baseUrl}/user/${item.userId}/note-board'">
                                 <td class="note-found-title">
                                 <span class="card-title align-middle mx-2 note-name">
                                     <c:out value="${item.username}"/>

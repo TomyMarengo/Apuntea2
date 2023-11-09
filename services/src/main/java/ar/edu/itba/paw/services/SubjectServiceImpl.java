@@ -74,7 +74,7 @@ public class SubjectServiceImpl implements SubjectService {
         User user = this.userDao.findById(userId).orElseThrow(UserNotFoundException::new);
 //        directoryDao.getFavoriteRootDirectories(user.getUserId()).forEach(rd -> rd.setFavorite(true));
         List<Subject> subjects = subjectDao.getSubjectsByUser(user);
-        directoryDao.setRootDirsFileQuantity(subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()), user);
+        if (!subjects.isEmpty()) directoryDao.setRootDirsFileQuantity(subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()), user);
         return subjects.stream().collect(Collectors.groupingBy(Subject::getYear));
     }
 

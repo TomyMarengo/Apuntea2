@@ -27,12 +27,16 @@ function sortSubjects(sortAscending) {
             if (sortBy === 'name') {
                 return a.dataset.name.localeCompare(b.dataset.name);
             } else if (sortBy === 'year') {
+                if (a.dataset.year === b.dataset.year)
+                    return a.dataset.name.localeCompare(b.dataset.name);
                 return a.dataset.year - b.dataset.year;
             }
         }
         if (sortBy === 'name') {
             return b.dataset.name.localeCompare(a.dataset.name);
         } else if (sortBy === 'year') {
+            if (a.dataset.year === b.dataset.year)
+                return a.dataset.name.localeCompare(b.dataset.name);
             return b.dataset.year - a.dataset.year;
         }
     });
@@ -44,5 +48,16 @@ function sortSubjects(sortAscending) {
     });
 }
 
+sortSubjects(true);
+
 sortBySelect.addEventListener('change', sortSubjects);
-yearSelect.addEventListener('change', sortSubjects);
+yearSelect.addEventListener('change', (sortAscending) => {
+    if (yearSelect.value !== 'all') {
+        // disable sort by select
+        sortBySelect.disabled = true;
+        sortBySelect.value = 'name';
+    } else {
+        sortBySelect.disabled = false;
+    }
+    sortSubjects(sortAscending);
+});

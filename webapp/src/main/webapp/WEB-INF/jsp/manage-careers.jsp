@@ -116,20 +116,6 @@
 
                     <div class="d-flex align-items-center gap-3">
                         <div class="input-group">
-                            <button class="input-group-text input-group-icon" id="ascDescButton">
-                                <img src="<c:url value="/svg/arrow-down.svg"/>"
-                                     alt="<spring:message code="search.sort.image"/>"
-                                     class="icon-s fill-dark-primary"
-                                     id="arrowImage" title="descending"/>
-                            </button>
-
-                            <select id="sortBySelect" class="form-select bg-bg" style="width: 200px;">
-                                <option value="year" selected><spring:message code="search.sort.year"/></option>
-                                <option value="name"><spring:message code="search.sort.name"/></option>
-                            </select>
-                        </div>
-
-                        <div class="input-group">
                             <label class="input-group-text d-block" for="yearSelect"><spring:message code="year"/></label>
                             <select id="yearSelect" class="form-select bg-bg" >
                                 <!-- For each different year in ownedSubjects -->
@@ -140,6 +126,20 @@
                                     </c:if>
                                     <c:set var="lastYear" value="${item.year}"/> <!-- Save last year -->
                                 </c:forEach>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <button class="input-group-text input-group-icon" id="ascDescButton">
+                                <img src="<c:url value="/svg/arrow-down.svg"/>"
+                                     alt="<spring:message code="search.sort.image"/>"
+                                     class="icon-s fill-dark-primary"
+                                     id="arrowImage" title="descending"/>
+                            </button>
+
+                            <select id="sortBySelect" class="form-select bg-bg" style="width: 200px;">
+                                <option value="year" selected><spring:message code="search.sort.year"/></option>
+                                <option value="name"><spring:message code="search.sort.name"/></option>
                             </select>
                         </div>
 
@@ -188,6 +188,7 @@
                                     data-subject-id="<c:out value="${item.subjectId}"/>"
                                     data-year="<c:out value="${item.year}"/>"
                                     data-name="<c:out value="${item.name}"/>"
+                                    ondblclick="window.location.href = '${baseUrl}/directory/${item.rootDirectoryId}'"
                                 >
                                     <td class="note-found-title">
                                 <span class="card-title align-middle mx-2">

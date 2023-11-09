@@ -15,20 +15,16 @@ import java.io.IOException;
 
 @Component
 public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
-
-    @Autowired
-    private UserService userService;
-
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException, ServletException {
+                                        AuthenticationException exception) throws IOException {
         String url;
         if (exception instanceof LockedException) {
             url = "/login?banned=true";
         } else { // UsernameNotFoundException and others
             url = "/login?error=true";
         }
-        super.setDefaultFailureUrl(url);
-        super.onAuthenticationFailure(request, response, exception);
+        //TODO: check if it is OK
+        getRedirectStrategy().sendRedirect(request, response, url);
     }
 }
