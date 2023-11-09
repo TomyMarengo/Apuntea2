@@ -27,6 +27,6 @@ public class SortArguments {
     }
 
     public enum SortBy {
-        NAME, SCORE, DATE;
+        NAME, SCORE, DATE, MODIFIED
     }
 }

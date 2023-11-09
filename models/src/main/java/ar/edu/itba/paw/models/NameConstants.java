@@ -44,7 +44,11 @@ public class NameConstants {
     public static final String LAST_NAME = "last_name";
     public static final String CONTENT = "content";
     public static final String CREATED_AT = "created_at";
+    public static final String CREATED_AT_CAMELCASE = "createdAt";
+    public static final String LAST_MODIFIED_AT = "last_modified_at";
+    public static final String LAST_MODIFIED_AT_CAMELCASE = "lastModifiedAt";
     public static final String AVG_SCORE = "avg_score";
+    public static final String AVG_SCORE_CAMELCASE = "avgScore";
     public static final String VISIBLE = "visible";
     public static final String FILE = "file";
     public static final String IMAGE_ID = "image_id";
@@ -58,7 +62,6 @@ public class NameConstants {
 
     public static final String OWNER_LOCALE = "owner_locale";
     public static final String FAVORITE = "favorite";
-    public static final String LAST_MODIFIED_AT = "last_modified_at";
     public static final String ICON_COLOR = "icon_color";
     public static final String LOCALE = "locale";
     public static final String FILE_TYPE = "file_type";

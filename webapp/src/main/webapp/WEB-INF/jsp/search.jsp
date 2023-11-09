@@ -208,9 +208,10 @@
                             </c:if>
                         </button>
 
-                        <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect" cssStyle="width:270px;"
+                        <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect" cssStyle="width:300px;"
                                      onchange="submitSearchForm()">
-                            <form:option value="date"><spring:message code="search.sort.date"/></form:option>
+                            <form:option value="modified"><spring:message code="search.sort.lastModifiedAt"/></form:option>
+                            <form:option value="date"><spring:message code="search.sort.createdAt"/></form:option>
                             <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
                                 <form:option value="score"><spring:message code="search.sort.score"/></form:option>
                             </c:if>
@@ -333,7 +334,7 @@
                             <th class="col-md-3"><spring:message code="name"/></th>
                             <th class="col-md-3"><spring:message code="subject"/></th>
                             <th class="col-md-2"><spring:message code="owner"/></th>
-                            <th class="col-md-1"><spring:message code="createdAt"/></th>
+                            <th class="col-md-1"><spring:message code="lastModifiedAt"/></th>
                             <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
                                 <th class="col-md-1"><spring:message code="score"/></th>
                             </c:if>
@@ -352,7 +353,7 @@
                                 <c:set var="files" value="${files}${item.id},"/>
                             </c:if>
 
-                            <c:set var="date" value="${item.createdAt}"/>
+                            <c:set var="date" value="${item.lastModifiedAt}"/>
                             <tr class="note-found no-select"
                                 data-category="<c:out value="${item.category.formattedName}"/>"
                                 data-visible="${item.visible}"
@@ -545,7 +546,7 @@
                                             <br>
 
                                             <span class="card-text">
-                                            <strong><spring:message code="createdAt"/></strong>:
+                                            <strong><spring:message code="lastModifiedAt"/></strong>:
                                             <spring:message code="date.format"
                                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
                                         </span>
@@ -641,7 +642,7 @@
                                             <br>
 
                                             <span class="card-text">
-                                            <strong><spring:message code="createdAt"/></strong>:
+                                            <strong><spring:message code="lastModifiedAt"/></strong>:
                                             <spring:message code="date.format"
                                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
                                         </span>

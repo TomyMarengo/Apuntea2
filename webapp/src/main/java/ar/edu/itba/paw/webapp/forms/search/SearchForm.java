@@ -24,8 +24,8 @@ public class SearchForm {
     @Pattern(regexp = "note|directory|theory|practice|exam|other|all")
     private String category = "note";
 
-    @Pattern(regexp = "score|name|date")
-    private String sortBy = "date";
+    @Pattern(regexp = "score|name|date|modified")
+    private String sortBy = "modified";
 
     private boolean ascending = false;
 

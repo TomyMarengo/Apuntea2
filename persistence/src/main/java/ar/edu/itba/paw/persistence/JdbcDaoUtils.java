@@ -11,22 +11,19 @@ import java.util.Optional;
 
 
 public class JdbcDaoUtils {
-
-    // JPA Attributes
-    static final String CAREERS_ATTR = "careers";
-    static final String SUBJECTS_ATTR = "subjects";
-
     static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SortBy.class);
     static{
         SORTBY.put(SortBy.DATE, CREATED_AT);
+        SORTBY.put(SortBy.MODIFIED, LAST_MODIFIED_AT);
         SORTBY.put(SortBy.NAME, NAME);
         SORTBY.put(SortBy.SCORE, AVG_SCORE);
     }
     static final EnumMap<SortBy, String> SORTBY_CAMELCASE = new EnumMap<>(SortBy.class);
     static{
-        SORTBY_CAMELCASE.put(SortBy.DATE, "createdAt");
+        SORTBY_CAMELCASE.put(SortBy.DATE, CREATED_AT_CAMELCASE);
+        SORTBY_CAMELCASE.put(SortBy.MODIFIED, LAST_MODIFIED_AT_CAMELCASE);
         SORTBY_CAMELCASE.put(SortBy.NAME, NAME);
-        SORTBY_CAMELCASE.put(SortBy.SCORE, "avgScore"); // TODO: Change
+        SORTBY_CAMELCASE.put(SortBy.SCORE, AVG_SCORE_CAMELCASE);
     }
     static class QueryCreator {
         private final StringBuilder query;

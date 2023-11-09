@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -139,6 +140,16 @@ public class Directory implements Searchable {
 
     public void setIconColor(String iconColor) {
         this.iconColor = iconColor;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        lastModifiedAt = LocalDateTime.now();
     }
 
     @Override

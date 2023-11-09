@@ -16,8 +16,8 @@ public class NavigationForm {
     @Pattern(regexp = "note|theory|practice|exam|other|directory|all")
     private String category = "all";
 
-    @Pattern(regexp = "score|name|date")
-    private String sortBy = "date";
+    @Pattern(regexp = "score|name|date|modified")
+    private String sortBy = "modified";
 
     private boolean ascending = false;
 
