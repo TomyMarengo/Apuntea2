@@ -154,7 +154,7 @@
 
                             <div class="d-flex align-items-center justify-content-center mt-3">
                                 <p class="mb-0 me-2"><spring:message code="register.have"/></p>
-                                <a href="./login" class="a-hover">
+                                <a href="./login" class="link-info">
                                     <spring:message code="login.title"/>
                                 </a>
                             </div>
