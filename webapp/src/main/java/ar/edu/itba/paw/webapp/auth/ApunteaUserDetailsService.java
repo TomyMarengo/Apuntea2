@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Component
-public class CustomUserDetailsService implements UserDetailsService {
+public class ApunteaUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserService us;
@@ -29,6 +29,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role.getRole()));
         }
 
-        return new CustomUserDetails(user.getEmail(), user.getPassword(), true, true, true, !user.isBanned(), authorities);
+        return new ApunteaUserDetails(user.getEmail(), user.getPassword(), true, true, true, !user.isBanned(), authorities);
     }
 }

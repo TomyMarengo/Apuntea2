@@ -121,7 +121,7 @@ selectOnlyFoldersButton.addEventListener('click', () => {
     if (categorySelect.value !== "directory") {
         categorySelect.value = "directory";
         categorySelectContainer.style.display = 'none';
-        sortBySelect.value = "date";
+        sortBySelect.value = "modified";
         searchForm.submit();
     }
 });
@@ -130,7 +130,7 @@ selectAllCategoriesButton.addEventListener('click', () => {
     if (categorySelect.value !== "all") {
         categorySelect.value = "all";
         categorySelectContainer.style.display = 'none';
-        sortBySelect.value = "date";
+        sortBySelect.value = "modified";
         searchForm.submit();
     }
 });
