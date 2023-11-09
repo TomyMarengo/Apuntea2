@@ -73,3 +73,6 @@ h1 {
     font-size: 2rem !important;
 }
 
+.a-hover:hover {
+    text-decoration: underline;
+}

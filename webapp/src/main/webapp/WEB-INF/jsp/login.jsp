@@ -101,7 +101,7 @@
 
                             <div class="d-flex align-items-center justify-content-center mt-4">
                                 <p class="mb-0 me-2"><spring:message code="login.dontHave"/></p>
-                                <a href="./register" class="btn login-register-button rounded-box-no-shadow">
+                                <a href="./register" class="a-hover">
                                     <spring:message code="login.createNew"/>
                                 </a>
                             </div>

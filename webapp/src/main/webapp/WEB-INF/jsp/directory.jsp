@@ -47,6 +47,8 @@
             hierarchy="${hierarchy}"
             category="directory"
             blob="${directory}"
+            user="${user}"
+            owner="${filterUser}"
     />
 </header>
 
@@ -55,6 +57,7 @@
 
 
 <main>
+    <h1>${filterUser.userId}</h1>
     <fragment:sidebar user="${user}"/>
     <!-- SEARCH -->
     <section>

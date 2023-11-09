@@ -40,11 +40,12 @@
     <!-- NAVBAR -->
     <fragment:navbar user="${user}"/>
 
-    <fragment:bottom-navbar title="${baseUrl}/notes/${noteId},${note.name}" hierarchy="${hierarchy}" category="note"/>
+    <fragment:bottom-navbar title="${baseUrl}/notes/${noteId},${note.name}" hierarchy="${hierarchy}"
+                            category="note" user="${user}" owner="${note.user}"/>
 </header>
 
-<main   >
-    <fragment:sidebar user="${user}"/>
+<main>
+    <fragment:sidebar user="${user}" />
 
     <section class="container-fluid h-100-navs mt-5">
         <div class="h-100 row row-cols-1 row-cols-lg-2">

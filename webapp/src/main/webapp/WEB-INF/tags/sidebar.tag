@@ -31,7 +31,7 @@
         <c:if test="${active eq 'my-career'}">
             <a class="btn nav-icon-button active" href="${baseUrl}/my-career" data-bs-toggle="tooltip"
                data-bs-placement="right"
-               data-bs-title="<spring:message code="myCareer.title"/>" data-bs-trigger="hover">
+               data-bs-title="<c:out value="${user.career.name}"/>" data-bs-trigger="hover">
                 <img src="<c:url value="/svg/book-alt.svg"/>"
                      alt="<spring:message code="myCareer.title"/>"
                      class="icon-m fill-dark-primary"/>
@@ -40,7 +40,7 @@
         <c:if test="${active ne 'my-career'}">
             <a class="btn nav-icon-button" href="${baseUrl}/my-career" data-bs-toggle="tooltip"
                data-bs-placement="right"
-               data-bs-title="<spring:message code="myCareer.title"/>" data-bs-trigger="hover">
+               data-bs-title="<c:out value="${user.career.name}"/>" data-bs-trigger="hover">
                 <img src="<c:url value="/svg/book-alt.svg"/>"
                      alt="<spring:message code="myCareer.title"/>"
                      class="icon-m fill-dark-primary"/>

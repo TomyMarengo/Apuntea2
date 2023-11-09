@@ -79,10 +79,12 @@ public class UserController {
     @RequestMapping(value = "/user/{userId}/note-board", method = RequestMethod.GET)
     public ModelAndView noteBoard(@PathVariable("userId") @ValidUuid UUID userId) {
         ModelAndView mav = new ModelAndView("note-board");
-        User user = securityService.getCurrentUserOrThrow();
+        User user = securityService.getCurrentUser().orElse(null);
         mav.addObject("user", user);
-        if (!user.getUserId().equals(userId))
+        if (user == null || !user.getUserId().equals(userId))
             mav.addObject("owner", userService.findById(userId).orElseThrow(UserNotFoundException::new));
+        else
+            mav.addObject("owner", user);
 
         mav.addObject("root_directories", subjectService.getSubjectsByUserIdGroupByYear(userId));
         return mav;

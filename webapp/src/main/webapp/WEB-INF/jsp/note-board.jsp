@@ -50,14 +50,14 @@
     <fragment:navbar user="${user}"/>
 
     <!-- BOTTOM-NAVBAR -->
-    <c:if test="${empty owner}">
+    <c:if test="${owner.userId eq user.userId}">
         <spring:message code="myProfileNotes.title" var="title"/>
-        <fragment:bottom-navbar title="${baseUrl}/user/${userId}/note-board,${title}"/>
     </c:if>
-    <c:if test="${not empty owner}">
-        <spring:message code="yourProfileNotes.title" var="title" arguments="${owner.displayName}"/>
-        <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${title}" owner="${owner}"/>
+    <c:if test="${owner.userId ne user.userId}">
+        <spring:message code="yourProfileNotes.title" arguments="${owner.displayName}" var="title"/>
     </c:if>
+    <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${title}" user="${user}" owner="${owner}"/>
+
 </header>
 
 <main>
