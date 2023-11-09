@@ -79,26 +79,23 @@ img {
 }
 
 .profile-data-container {
-    margin-top: 1rem;
     display: grid;
+    width: 100%;
+    grid-template-rows: repeat(3, 0.5fr);
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    align-content: start;
+    grid-auto-flow: column;
 }
 
-.profile-data-container > div {
-    display: grid;
-    grid-template-rows: repeat(2, 1fr);
-    gap: 10px;
+.profile-item {
+    padding: 3% 5%;
+    display: flex;
+    flex-direction: column;
 }
 
 @media (max-width: 1024px) {
     .profile-data-container {
-        grid-template-columns: 1fr;
-        gap: 10px;
+        grid-template-rows: repeat(6, 0.5fr);
+        grid-template-columns: repeat(1, 1fr);
     }
-}
-
-.profile-data-container > div > div {
-    display: flex;
-    flex-direction: column;
 }

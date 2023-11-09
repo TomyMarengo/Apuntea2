@@ -1,7 +1,7 @@
-var profilePic = document.getElementById('preview-image');
+let profilePic = document.getElementById('preview-image');
 
 function changeImage() {
-    var reader = new FileReader();
+    let reader = new FileReader();
 
     reader.addEventListener('load', function() {
         profilePic.setAttribute('src', reader.result);
@@ -11,22 +11,22 @@ function changeImage() {
 }
 
 
-var editInfoButton = document.getElementById('edit-info-button');
-var dynamicInfo = document.getElementsByClassName('dynamic-info');
-var updateInfo = document.getElementById('update-info');
-var cancelEditButton = document.getElementById('cancel-edit-button');
-var hiddenPencil = document.getElementById('hidden-pencil');
-var imageInput = document.getElementById('image-input');
-var selectedImage = document.getElementById('selected-image');
+let editInfoButton = document.getElementById('edit-info-button');
+let cancelEditButton = document.getElementById('cancel-edit-button');
+let dynamicInfo = document.getElementsByClassName('dynamic-info');
+let updateInfo = document.getElementById('update-info');
+let hiddenPencil = document.getElementById('hidden-pencil');
+let imageInput = document.getElementById('image-input');
+let selectedImage = document.getElementById('selected-image');
 
 editInfoButton.addEventListener('click', function() {
-    for (var i = 0; i < dynamicInfo.length; i++) {
+    for (let i = 0; i < dynamicInfo.length; i++) {
         dynamicInfo[i].disabled = false;
     }
     editInfoButton.classList.add('d-none');
     updateInfo.classList.remove('d-none');
     hiddenPencil.classList.remove('d-none');
-    var input = document.createElement('input');
+    let input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('name', 'profilePicture');
     input.setAttribute('style', 'display: none');
@@ -38,7 +38,7 @@ editInfoButton.addEventListener('click', function() {
 });
 
 cancelEditButton.addEventListener('click', function() {
-    for (var i = 0; i < dynamicInfo.length; i++) {
+    for (let i = 0; i < dynamicInfo.length; i++) {
         dynamicInfo[i].disabled = true;
     }
     editInfoButton.classList.remove('d-none');
