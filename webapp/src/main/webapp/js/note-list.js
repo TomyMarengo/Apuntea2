@@ -38,7 +38,7 @@ for (let i = 0; i < rows.length ; i++) {
 rows.forEach((row, index) => {
     row.addEventListener('dblclick', () => {
         const {id, category } = content[content.findIndex(item => item.id === row.getAttribute('id').split('.', 1)[0])];
-        window.location.href = `${baseUrl}/${category === 'directory' ? 'directory' : 'notes'}/${id}`;
+        window.location.href = `${baseUrl}/${category === 'directory' ? 'directory' : 'notes'}/${id}${typeof filteredUser !== 'undefined'? '?userId=' + filteredUser : ''}`;
     });
 });
 

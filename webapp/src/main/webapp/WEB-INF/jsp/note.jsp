@@ -41,7 +41,7 @@
     <fragment:navbar user="${user}"/>
 
     <fragment:bottom-navbar title="${baseUrl}/notes/${noteId},${note.name}" hierarchy="${hierarchy}"
-                            category="note" user="${user}" owner="${note.user}"/>
+                            category="note" user="${user}"/>
 </header>
 
 <main>

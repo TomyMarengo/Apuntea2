@@ -36,6 +36,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
 
+
 </head>
 <body>
 
@@ -57,7 +58,6 @@
 
 
 <main>
-    <h1>${filterUser.userId}</h1>
     <fragment:sidebar user="${user}"/>
     <!-- SEARCH -->
     <section>
@@ -237,7 +237,7 @@
                                  class="icon-s fill-dark-primary"/>
                         </button>
 
-                        <c:if test="${user ne null and (directory.user eq null or directory.user.userId eq user.userId)}">
+                        <c:if test="${user ne null and (filterUser eq null or user eq filterUser) and (directory.user eq null or directory.user.userId eq user.userId)}">
                             <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
                                data-bs-title="<spring:message code="uploadNote"/>"
                                data-bs-trigger="hover">
@@ -286,7 +286,7 @@
                     <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
                     <h3><spring:message code="directories.noContent"/></h3>
                 </div>
-                <c:if test="${user ne null and (directory.user eq null or directory.user.userId eq user.userId)}">
+                <c:if test="${user ne null and (filterUser eq null or user eq filterUser) and (directory.user eq null or directory.user.userId eq user.userId)}">
                     <p class="text-muted"><spring:message code="directories.noContent.description"/></p>
                     <div class="d-flex gap-2">
                         <a href="#" data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -1021,7 +1021,7 @@
                 </div>
                 <form:hidden path="id" id="noteId"/>
                 <input type="hidden" name="parentId" value="${directory.id}"/>
-                <input name="redirectUrl" value="/directory/${directory.id}" type="hidden"/>
+                <input name="redirectUrl" value="/directory/${directory.id}?userId=${filterUser.userId}" type="hidden"/>
             </form:form>
         </div>
     </div>
@@ -1100,7 +1100,7 @@
                 </div>
                 <form:hidden path="id" id="directoryId"/>
                 <input type="hidden" name="parentId" id="parentId" value="${directory.id}"/>
-                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+                <input type="hidden" name="redirectUrl" value="/directory/${directoryId}?userId=${filterUser.userId}"/>
             </form:form>
 
         </div>
@@ -1131,7 +1131,7 @@
                     </c:if>
                 </div>
 
-                <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/directory/${directoryId}"/>
+                <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/directory/${directoryId}?userId=${filterUser.userId}"/>
 
                 <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-secondary close-modal"
@@ -1158,6 +1158,11 @@
 <script src="<c:url value="/js/file-control.js"/>"></script>
 <script src="<c:url value="/js/search-buttons.js"/>"></script>
 <c:if test="${not empty results}">
+    <script>
+        <c:if test="${filterUser ne null}">
+            const filteredUser = "<c:out value="${filterUser.userId}"/>";
+        </c:if>
+    </script>
     <script src="<c:url value="/js/note-list.js"/>"></script>
     <script src="<c:url value="/js/crud-buttons.js"/>"></script>
 </c:if>
