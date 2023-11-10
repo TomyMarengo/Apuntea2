@@ -17,7 +17,7 @@
 
 <script>
     (function () {
-        const storedTheme = localStorage.getItem('theme') || 'halloween';
+        const storedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-bs-theme', storedTheme);
         localStorage.setItem('theme', storedTheme);
     })();
@@ -85,34 +85,6 @@
     </div>
 
 </nav>
-
-<div class="halloween">
-    <div class="ghost">
-        <div class="head">
-            <div class="skull">
-                <div class="eyes">
-                    <div class="eye eye-left"></div>
-                    <div class="eye eye-right"></div>
-                </div>
-            </div>
-        </div>
-        <div class="body"></div>
-        <div class="legs"></div>
-    </div>
-
-    <c:forEach begin="0" end="3" step="1" var="count">
-        <div class="spider spider_<c:out value="${count}"/>">
-            <div class="eye left"></div>
-            <div class="eye right"></div>
-            <c:forEach begin="0" end="3" step="1">
-                <span class="leg left"></span>
-            </c:forEach>
-            <c:forEach begin="0" end="3" step="1">
-                <span class="leg right"></span>
-            </c:forEach>
-        </div>
-    </c:forEach>
-</div>
 
 <script src="<c:url value="/js/darkmode.js"/>"></script>
 <script src="<c:url value="/js/global-search.js"/>"></script>

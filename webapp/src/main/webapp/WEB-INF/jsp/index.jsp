@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/bars.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/landing/landing.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/landing/scrolling.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,87 +37,64 @@
     <fragment:navbar user="${user}"/>
 </header>
 
-<main>
-        <fragment:sidebar user="${user}"/>
 
-    <section class="container text-center mt-5">
-        <h2><spring:message code="index.title" arguments='<span class="apuntea-title">Apuntea</span>'/></h2>
-        <h4><spring:message code="index.subtitle"/></h4>
+<main id='main-container'>
 
-        <div class="index-cards">
+    <fragment:sidebar user="${user}"/>
 
-            <a href="${baseUrl}/user/note-board" class="call-to-action-card">
-
-                <img src="<c:url value="/svg/add-document.svg"/>" alt="<spring:message code="search.title"/>"
-                     class="fill-dark-text"/>
-
-                <div class="call-to-action-card-body">
-                    <div class="call-to-action-card-title">
-                        <h3><spring:message code="index.card2.title"/></h3>
-                    </div>
-                    <p><spring:message code="index.card2.body"/></p>
-                </div>
-
-            </a>
-
-            <c:if test="${user ne null}">
-                <c:url var="urlParams" value="${baseUrl}/search?institutionId=${user.institution.institutionId}&careerId=${user.career.careerId}"/>
-            </c:if>
-
-            <c:if test="${user eq null}">
-                <c:url var="urlParams" value="${baseUrl}/search"/>
-            </c:if>
-
-            <a href="${urlParams}" class="call-to-action-card">
-
-                <img src="<c:url value="/svg/search-alt.svg"/>" alt="<spring:message code="search.title"/>"
-                     class="fill-dark-text"/>
-
-                <div class="call-to-action-card-body">
-                    <div class="call-to-action-card-title">
-                        <h3><spring:message code="index.card3.title"/></h3>
-                    </div>
-                    <p><spring:message code="index.card3.body"/></p>
-                </div>
-
-            </a>
-
-            <c:if test="${user != null}">
-                <a href="${baseUrl}/profile" class="call-to-action-card">
-
-                    <img src="<c:url value="/svg/user.svg"/>" alt="<spring:message code="search.title"/>"
-                         class="fill-dark-text"/>
-
-                    <div class="call-to-action-card-body">
-
-                        <div class="call-to-action-card-title">
-                            <h3><spring:message code="index.card1.title.editProfile"/></h3>
-                        </div>
-                        <p><spring:message code="index.card1.body.editProfile"/></p>
-                    </div>
-
-                </a>
-            </c:if>
-
-            <c:if test="${user == null}">
-                <a href="${baseUrl}/register" class="call-to-action-card">
-
-                    <img src="<c:url value="/svg/users.svg"/>" alt="<spring:message code="search.title"/>"
-                         class="fill-dark-text"/>
-
-                    <div class="call-to-action-card-body">
-
-                        <div class="call-to-action-card-title">
-                            <h3><spring:message code="index.card1.title.register"/></h3>
-                        </div>
-                        <p><spring:message code="index.card1.body.register"/></p>
-                    </div>
-
-                </a>
-            </c:if>
-
+    <div class="dot-nav-panel">
+        <div class="navigation-container">
+                <span class="navigator-wrapper">
+                    <span class="navigator dot selected" data-key="1"></span>
+                </span>
+            <span class="navigator-wrapper">
+                    <span class="navigator dot" data-key="2"></span>
+                </span>
+            <span class="navigator-wrapper">
+                    <span class="navigator dot" data-key="3"></span>
+                </span>
+            <span class="navigator-wrapper">
+                    <span class="navigator dot" data-key="4"></span>
+                </span>
         </div>
-    </section>
+    </div>
+
+    <div class="slider-wrapper">
+        <div id="slide1" class="slider-content current" data-key="1">
+            <section class="content-wrapper">
+
+                <div class="mb-5">
+                    <h1><spring:message code="apuntea"/></h1>
+                    <h2><spring:message code="index.subtitle"/></h2>
+                </div>
+
+                <div class="welcome-container">
+                    <img src="image/index-welcome.png">
+                    <div class="welcome-text">
+                        <h3>¡Bienvenido!</h3>
+                        <p>Apuntea es una plataforma de apuntes colaborativa, donde podrás compartir tus apuntes y
+                            conocimientos con otros usuarios, y a su vez, aprender de ellos.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div id="slide2" class="slider-content next" data-key="2">
+            <section class="content-wrapper">
+                <h1 class="heading">Second slide</h1>
+            </section>
+        </div>
+        <div id="slide3" class="slider-content next" data-key="3">
+            <section class="content-wrapper">
+                <h1 class="heading">Third slide</h1>
+            </section>
+        </div>
+        <div id="slide4" class="slider-content next" data-key="4">
+            <section class="content-wrapper">
+                <h1 class="heading">Fourth slide</h1>
+            </section>
+        </div>
+    </div>
+
 </main>
 
 
@@ -126,7 +103,7 @@
         crossorigin="anonymous"></script>
 
 <script src="<c:url value="/js/popups.js"/>"></script>
-
+<script src="<c:url value="/js/index-scrolling.js"/>"></script>
 </body>
 
 </html>

@@ -27,7 +27,6 @@
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/bars.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/notes/note.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -419,15 +418,17 @@
 
 <script>
     const editReviewButton = document.getElementById('editReviewButton');
-    editReviewButton.addEventListener('click', () => {
-        if (editReviewButton.value === '<spring:message code="edit"/>') {
-            event.preventDefault();
-            const reviewForm = document.getElementById('reviewForm');
-            reviewForm.querySelectorAll('#content')[0].disabled = false;
-            reviewForm.querySelectorAll('#scoreSelect')[0].disabled = false;
-            editReviewButton.value = '<spring:message code="notes.send.button"/>';
-        }
-    })
+    if (editReviewButton ) {
+        editReviewButton.addEventListener('click', () => {
+            if (editReviewButton.value === '<spring:message code="edit"/>') {
+                event.preventDefault();
+                const reviewForm = document.getElementById('reviewForm');
+                reviewForm.querySelectorAll('#content')[0].disabled = false;
+                reviewForm.querySelectorAll('#scoreSelect')[0].disabled = false;
+                editReviewButton.value = '<spring:message code="notes.send.button"/>';
+            }
+        })
+    }
 </script>
 
 <c:if test="${user eq null or note.user.userId eq user.userId}">

@@ -1,17 +1,20 @@
 const arrowImage = document.getElementById("arrowImage");
 const ascDescButton = document.getElementById("ascDescButton");
 
-ascDescButton.addEventListener("click", function () {
-    if (arrowImage.getAttribute("title") === "ascending") {
-        arrowImage.src = `${baseUrl}/svg/arrow-down.svg`;
-        arrowImage.setAttribute("title", "descending");
-        sortSubjects(true);
-    } else {
-        arrowImage.src = `${baseUrl}/svg/arrow-up.svg`;
-        arrowImage.setAttribute("title", "ascending");
-        sortSubjects(false);
-    }
-})
+if (ascDescButton) {
+    ascDescButton.addEventListener("click", function () {
+        if (arrowImage.getAttribute("title") === "ascending") {
+            arrowImage.src = `${baseUrl}/svg/arrow-down.svg`;
+            arrowImage.setAttribute("title", "descending");
+            sortSubjects(true);
+        } else {
+            arrowImage.src = `${baseUrl}/svg/arrow-up.svg`;
+            arrowImage.setAttribute("title", "ascending");
+            sortSubjects(false);
+        }
+    })
+}
+
 
 const sortBySelect = document.getElementById('sortBySelect');
 const yearSelect = document.getElementById('yearSelect');
@@ -48,16 +51,19 @@ function sortSubjects(sortAscending) {
     });
 }
 
-sortSubjects(true);
+if (sortBySelect && yearSelect) {
+    sortSubjects(true);
 
-sortBySelect.addEventListener('change', sortSubjects);
-yearSelect.addEventListener('change', (sortAscending) => {
-    if (yearSelect.value !== 'all') {
-        // disable sort by select
-        sortBySelect.disabled = true;
-        sortBySelect.value = 'name';
-    } else {
-        sortBySelect.disabled = false;
-    }
-    sortSubjects(sortAscending);
-});
+    sortBySelect.addEventListener('change', sortSubjects);
+    yearSelect.addEventListener('change', (sortAscending) => {
+        if (yearSelect.value !== 'all') {
+            // disable sort by select
+            sortBySelect.disabled = true;
+            sortBySelect.value = 'name';
+        } else {
+            sortBySelect.disabled = false;
+        }
+        sortSubjects(sortAscending);
+    });
+}
+
