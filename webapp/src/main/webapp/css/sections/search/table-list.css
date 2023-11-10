@@ -10,11 +10,11 @@
 /* HORIZONTAL LIST */
 /*******************/
 
-.search-actions {
+.h-list-actions {
   text-align: right;
 }
 
-.search-actions button {
+.h-list-actions button {
   visibility: hidden;
 }
 
@@ -22,28 +22,63 @@
   background-color: rgba(var(--secondary-rgb), 0.5);
 }
 
-.note-found:hover .search-actions button {
+.note-found:hover .h-list-actions button {
   visibility: visible;
 }
 
-.note-found-title {
+.h-list-name {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 50ch;
+}
+
+.h-list-owner {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 30ch;
 }
 
 @media (max-width: 1024px) {
-    .note-found-title {
+    .h-list-name {
         max-width: 100px;
     }
+}
 
+@media (max-width: 992px) {
+    .h-list-owner {
+        display: none;
+    }
+    .h-list-modified {
+        display: none;
+    }
+    .h-list-score {
+        display: none;
+    }
+    .h-list-roles {
+        display: none;
+    }
+    .h-list-username {
+        display: none;
+
+    }
+}
+
+@media (max-width: 768px) {
+    .h-list-subject {
+        display: none;
+    }
+    .h-list-status {
+        display: none;
+    }
 }
 
 .active-note-found {
   background-color: rgba(var(--secondary-rgb), 0.7);
 }
 
-.active-note-found .search-actions button {
+.active-note-found .h-list-actions button {
   visibility: visible;
 }
 
@@ -55,13 +90,6 @@
 .table td:last-child {
   max-width: 50px; /* Ajusta el valor según tus necesidades */
   white-space: nowrap; /* Evita que el contenido se divida en múltiples líneas */
-}
-
-@media (max-width: 1024px) {
-  .table th:last-child,
-  .table td:last-child{
-    display: none;
-  }
 }
 
 /*******************/

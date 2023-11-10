@@ -94,7 +94,7 @@
 
             <form:hidden path="pageNumber" id="pageNumber" value="1"/>
 
-            <div class="container d-flex justify-content-between p-0">
+            <div class="container d-flex flex-wrap justify-content-between p-0 gap-3">
                 <!-- SEARCH PILL -->
                 <div class="d-flex align-items-center gap-3">
                     <div class="search-pill">
@@ -115,7 +115,7 @@
                         </button>
                     </div>
 
-                    <div class="input-group">
+                    <div class="input-group mw-300">
                         <button class="input-group-text input-group-icon" id="ascDescButton">
                             <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
                             <c:if test="${navigationForm.ascending}">
@@ -132,7 +132,7 @@
                             </c:if>
                         </button>
 
-                        <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect" cssStyle="width:300px;"
+                        <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect"
                                      onchange="submitSearchForm()">
                             <form:option value="modified"><spring:message code="search.sort.lastModifiedAt"/></form:option>
                             <form:option value="date"><spring:message code="search.sort.createdAt"/></form:option>
@@ -143,7 +143,7 @@
                         </form:select>
                     </div>
 
-                    <div class="input-group" id="categorySelectContainer">
+                    <div class="input-group mw-300" id="categorySelectContainer">
                         <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
                             <div class="input-group">
                                 <form:select path="category" class="form-select bg-bg" id="categorySelect"
@@ -328,14 +328,23 @@
                     <table class="table table-hover table-search">
                         <thead>
                         <tr>
-                            <th class="col-md-5"><spring:message code="name"/></th>
-                            <th class="col-md-2"><spring:message code="owner"/></th>
-                            <th class="col-md-1"><spring:message code="lastModifiedAt"/></th>
-                            <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
-                                <th class="col-md-1"><spring:message code="score"/></th>
+                            <th class="h-list-name col-9 col-md-9 col-lg-4"><spring:message code="name"/></th>
+                            <th class="h-list-owner col-lg-3"><spring:message code="owner"/></th>
+
+                            <!-- To sum 12 cols -->
+                            <c:if test="${navigationForm.category eq 'all' or navigationForm.category eq 'directory'}">
+                                <th class="h-list-modified col-lg-2"><spring:message code="lastModifiedAt"/></th>
                             </c:if>
-                            <th class="col-md-2"></th> <!-- ACTIONS -->
-                            <!-- TODO: ADD SIZE OF FILE -->
+                            <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
+                                <th class="h-list-modified col-lg-1"><spring:message code="lastModifiedAt"/></th>
+                            </c:if>
+                            <!--- --->
+
+                            <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
+                                <th class="h-list-score col-lg-1"><spring:message code="score"/></th>
+                            </c:if>
+
+                            <th class="h-list-actions col-3 col-lg-3"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -354,7 +363,7 @@
                                 data-category="<c:out value="${item.category.formattedName}"/>"
                                 data-visible="${item.visible}"
                                 id="<c:out value="${item.id}"/>.1">
-                                <td class="note-found-title">
+                                <td class="h-list-name">
                                     <c:if test="${item.category.formattedName ne 'directory'}">
                                         <c:if test="${item.fileType eq 'pdf'}">
                                             <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-m">
@@ -384,11 +393,12 @@
                                 <c:out value="${item.name}"/>
                             </span>
                                 </td>
-                                <td><c:out value="${item.user.email}"/></td>
-                                <td><spring:message code="date.format"
+                                <td class="h-list-owner"><a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a></td>
+                                <td class="h-list-modified"><spring:message code="date.format"
                                                     arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
+
                                 <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
-                                    <td>
+                                    <td class="h-list-score">
                                         <c:if test="${item.avgScore eq 0}">
                                             <spring:message code="notes.noScore"/>
                                         </c:if>
@@ -400,7 +410,7 @@
                                 </c:if>
 
 
-                                <td class="search-actions">
+                                <td class="h-list-actions">
                                     <div class="d-flex justify-content-end">
                                         <!-- Favorite -->
                                         <c:if test="${user ne null}">
@@ -606,7 +616,7 @@
 
                                             <span class="card-text">
                                         <strong><spring:message code="owner"/></strong>:
-                                        <c:out value="${item.user.email}"/>
+                                        <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a>
                                     </span>
 
                                             <br>
@@ -735,7 +745,7 @@
 
                                             <span class="card-text">
                                         <strong><spring:message code="owner"/></strong>:
-                                        <c:out value="${item.user.email}"/>
+                                        <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a>
                                     </span>
 
                                             <br>

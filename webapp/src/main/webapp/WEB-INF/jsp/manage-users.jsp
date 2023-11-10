@@ -118,24 +118,24 @@
                     <table class="table table-hover table-search">
                         <thead>
                         <tr>
-                            <th class="col-md-2"><spring:message code="username"/></th>
-                            <th class="col-md-4"><spring:message code="email"/></th>
-                            <th class="col-md-3"><spring:message code="roles"/></th>
-                            <th class="col-md-1"><spring:message code="status"/></th>
-                            <th class="col-md-2"></th> <!-- ACTIONS -->
+                            <th class="h-list-username col-lg-2"><spring:message code="username"/></th>
+                            <th class="h-list-email col-8 col-md-4"><spring:message code="email"/></th>
+                            <th class="h-list-roles col-lg-3"><spring:message code="roles"/></th>
+                            <th class="h-list-status col-4 col-md-4 col-lg-3"><spring:message code="status"/></th>
+                            <th class="h-list-actions col-4 col-md-4   "></th> <!-- ACTIONS -->
                         </tr>
                         </thead>
                         <tbody>
                         <c:forEach var="item" items="${users}">
                             <tr class="note-found no-select" id="<c:out value="${item.userId}"/>"
                                 ondblclick="window.location = '${baseUrl}/user/${item.userId}/note-board'">
-                                <td class="note-found-title">
-                                <span class="card-title align-middle mx-2 note-name">
+                                <td class="h-list-username">
+                                    <span class="card-title align-middle mx-2 note-name">
                                     <c:out value="${item.username}"/>
                                 </span>
                                 </td>
-                                <td><c:out value="${item.email}"/></td>
-                                <td>
+                                <td class="h-list-email"><a href="${baseUrl}/user/${item.userId}/note-board"><c:out value="${item.email}"/></a></td>
+                                <td class="h-list-roles">
                                     <c:choose>
                                         <c:when test="${item.roles[0] eq 'ROLE_STUDENT'}">
                                             <spring:message code="role.student"/>
@@ -161,11 +161,11 @@
                                     </c:choose>
                                     </c:forEach>
                                 </td>
-                                <td>
+                                <td class="h-list-status">
                                     <spring:message code="user.status.${item.status.status}"/>
                                 </td>
 
-                                <td class="search-actions">
+                                <td class="h-list-actions">
                                     <div class="d-flex justify-content-end">
 
                                         <c:if test="${item.status.status eq 'active'}">

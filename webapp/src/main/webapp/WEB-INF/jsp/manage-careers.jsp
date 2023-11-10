@@ -112,7 +112,7 @@
         <c:if test="${career ne null}">
             <section class="d-flex flex-column container mt-4 justify-content-between p-0">
 
-                <div class="container d-flex justify-content-between p-0">
+                <div class="container d-flex flex-wrap justify-content-between p-0 gap-3">
 
                     <div class="d-flex align-items-center gap-3">
                         <div class="input-group">
