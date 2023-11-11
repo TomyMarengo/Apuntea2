@@ -20,6 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class NoteJpaDao implements NoteDao {
@@ -95,18 +96,39 @@ public class NoteJpaDao implements NoteDao {
                 .getSingleResult();
     }
 
+
     @Override
-    public List<Review> getReviews(UUID noteId) {
+    public List<Review> getFirstReviews(UUID noteId) {
         // Right now it's not necessary to validate that the current user has visibility enabled
-        List<UUID> userIDs = em.createQuery("SELECT r.user.id FROM Review r WHERE r.note.id = :noteId ORDER BY r.createdAt DESC", UUID.class)
+        @SuppressWarnings("unchecked")
+        List<UUID> userIDs = (List<UUID>) (em.createNativeQuery("SELECT CAST(user_id AS VARCHAR(36)) FROM Reviews WHERE note_id = :noteId ORDER BY created_at DESC")
                 .setParameter("noteId", noteId)
                 .setMaxResults(REVIEW_LIMIT)
-                .getResultList();
+                .getResultList())
+                .stream().map(o -> UUID.fromString((String) o)).collect(Collectors.toList());
         if (userIDs.isEmpty()) return Collections.emptyList();
         return em.createQuery("FROM Review r WHERE r.note.id = :noteId AND r.user.id IN :userIDs ORDER BY r.createdAt DESC", Review.class)
                 .setParameter("noteId", noteId)
                 .setParameter("userIDs", userIDs)
                 .getResultList();
+    }
+
+    @Override
+    public List<Review> getFirstReviews(UUID noteId, UUID currentUserId) {
+        // Right now it's not necessary to validate that the current user has visibility enabled
+        @SuppressWarnings("unchecked")
+        List<UUID> userIDs = ((List<Object[]>)em.createNativeQuery("SELECT CAST(user_id AS VARCHAR(36)), (user_id = :currentUserId) as isCurrent FROM Reviews WHERE note_id = :noteId ORDER BY isCurrent DESC, created_at DESC")
+                .setParameter("noteId", noteId)
+                .setParameter("currentUserId", currentUserId)
+                .setMaxResults(REVIEW_LIMIT)
+                .getResultList())
+                .stream().map(o -> UUID.fromString((String) o[0])).collect(Collectors.toList());
+        if (userIDs.isEmpty()) return Collections.emptyList();
+        return em.createQuery("SELECT r, (r.user.id = :currentUserId) as isCurrent FROM Review r WHERE r.note.id = :noteId AND r.user.id IN :userIDs ORDER BY isCurrent DESC, r.createdAt DESC", Object[].class)
+                .setParameter("noteId", noteId)
+                .setParameter("currentUserId", currentUserId)
+                .setParameter("userIDs", userIDs)
+                .getResultList().stream().map(o -> (Review) o[0]).collect(Collectors.toList());
     }
 
     @Override

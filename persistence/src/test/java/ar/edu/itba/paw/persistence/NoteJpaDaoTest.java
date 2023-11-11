@@ -273,7 +273,7 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testGetReviews() {
-        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
+        List<Review> reviews = noteDao.getFirstReviews(GUIA1EDA_NOTE_ID, null);
         assertEquals(2, reviews.size());
         assertNotNull(reviews.stream().filter(r -> r.getUser().getUserId().equals(PEPE_ID)).findFirst().orElse(null));
     }
@@ -287,12 +287,30 @@ public class NoteJpaDaoTest {
             insertReview(em, guiaEda, trollUser, 1, "malisimo "+i);
         }
 
-        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID);
+        List<Review> reviews = noteDao.getFirstReviews(GUIA1EDA_NOTE_ID, PEPE_ID);
         assertEquals(NoteJpaDao.REVIEW_LIMIT, reviews.size());
-        for (int i=0; i<reviews.size()-2; i++) {
+        for (int i=1; i<reviews.size()-2; i++) {
             assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i+1).getCreatedAt()));
         }
-        assertNull(reviews.stream().filter(r -> r.getUser().getUserId().equals(PEPE_ID)).findFirst().orElse(null));
+        assertEquals(pepeUser.getUserId(), reviews.get(0).getUser().getUserId());
+    }
+
+    @Test
+    public void testLimitReviewsNoCurrentUserReview() {
+        int botCount = 15;
+        Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
+        for (int i=0; i<botCount; i++) {
+            User trollUser = insertStudent(em, "troll" + i + "@mail.com", "new" + i, ING_INF_ID, "es");
+            insertReview(em, guiaEda, trollUser, 1, "malisimo "+i);
+        }
+
+        List<Review> reviews = noteDao.getFirstReviews(GUIA1EDA_NOTE_ID, SAIDMAN_ID);
+        assertEquals(NoteJpaDao.REVIEW_LIMIT, reviews.size());
+        for (int i=1; i<reviews.size()-2; i++) {
+            assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i+1).getCreatedAt()));
+        }
+        assertNotEquals(saidmanUser.getUserId(), reviews.get(0).getUser().getUserId());
+        assertTrue(reviews.stream().noneMatch(r -> r.getUser().getUserId().equals(saidmanUser.getUserId())));
     }
 
 

@@ -106,7 +106,10 @@ public class NoteServiceImpl implements NoteService {
     @Transactional
     @Override
     public List<Review> getReviews(UUID noteId) {
-        return noteDao.getReviews(noteId);
+        Optional<User> maybeUser = securityService.getCurrentUser();
+        if (maybeUser.isPresent())
+            return noteDao.getFirstReviews(noteId, maybeUser.get().getUserId());
+        return noteDao.getFirstReviews(noteId);
     }
 
     @Transactional
