@@ -1,5 +1,64 @@
-const slides = document.querySelectorAll(".slider-content");
-const pageNav = document.querySelectorAll(".navigator.dot");
+let slides = document.querySelectorAll(".slider-content");
+const slidesClones = [...slides];
+let pageNav = document.querySelectorAll(".navigator.dot");
+const dots = document.querySelectorAll(".dot-content");
+
+function removeSlides() {
+    if (!document.getElementById("slide4")) {
+        slides[0].insertAdjacentHTML("afterend", slidesClones[4].outerHTML);
+        dots[1].insertAdjacentHTML("afterend", dots[3].outerHTML);
+    }
+    if (!document.getElementById("slide3")) {
+        slides[0].insertAdjacentHTML("afterend", slidesClones[3].outerHTML);
+        dots[1].insertAdjacentHTML("afterend", dots[2].outerHTML);
+    }
+    if (!document.getElementById("slide2-sm"))
+        slides[0].insertAdjacentHTML("afterend", slidesClones[2].outerHTML);
+    if (!document.getElementById("slide2"))
+        slides[0].insertAdjacentHTML("afterend", slidesClones[1].outerHTML);
+
+    document.getElementById("slide2").remove();
+    document.getElementById("slide2-sm").remove();
+    document.getElementById("slide3").remove();
+    document.getElementById("slide4").remove();
+    document.getElementById("dot3").remove();
+    document.getElementById("dot4").remove();
+
+    if (window.innerWidth < 1024) {
+        slides[0].insertAdjacentHTML("afterend", slidesClones[4].outerHTML);
+        slides[0].insertAdjacentHTML("afterend", slidesClones[3].outerHTML);
+        slides[0].insertAdjacentHTML("afterend", slidesClones[2].outerHTML);
+        dots[1].insertAdjacentHTML("afterend", dots[3].outerHTML);
+        dots[1].insertAdjacentHTML("afterend", dots[2].outerHTML);
+    } else {
+        slides[0].insertAdjacentHTML("afterend", slidesClones[1].outerHTML);
+    }
+
+    pageNav = document.querySelectorAll(".navigator.dot");
+    slides = document.querySelectorAll(".slider-content");
+
+    pageNav.forEach(item =>
+        item.classList.remove("selected")
+    );
+    pageNav[0].classList.add("selected");
+    slides.forEach(item => {
+        item.classList.remove("current");
+        item.classList.remove("prev");
+        item.classList.add("next");
+    })
+    slides[0].classList.add("current");
+    slides[0].classList.remove("next");
+
+    pageNav.forEach(item => item.addEventListener("click", clickNav));
+}
+
+removeSlides();
+
+// Watch for media changes
+const mediaQuery = window.matchMedia("(max-width: 1024px)");
+mediaQuery.addListener(() => {
+    removeSlides();
+});
 
 // handles page up for touch, scroll, mouse swipe
 function pageUp(e) {
@@ -42,9 +101,9 @@ function onScroll(e) {
     // If a slide is found and the wheel event is applicable (not over content)
     if (slide) {
         if (e.wheelDelta < 0) {
-            pageUp({ target: slide });
+            pageUp({target: slide});
         } else {
-            pageDown({ target: slide });
+            pageDown({target: slide});
         }
     }
 }
@@ -152,3 +211,38 @@ document.addEventListener("touchmove", handleTouchMove, false);
 document.addEventListener("mousedown", handleTouchStart, false);
 document.addEventListener("mouseup", handleTouchMove, false);
 pageNav.forEach(item => item.addEventListener("click", clickNav));
+
+
+/** SEARCH **/
+const selectOnlyFoldersButton = document.getElementById('selectOnlyFoldersButton');
+const selectOnlyFilesButton = document.getElementById('selectOnlyFilesButton');
+const selectAllCategoriesButton = document.getElementById('selectAllCategoriesButton');
+const wordInput = document.getElementById('wordInput');
+let category = "all";
+
+selectOnlyFoldersButton.addEventListener('click', () => {
+    category = "directory";
+    selectOnlyFoldersButton.classList.add('active');
+    selectOnlyFilesButton.classList.remove('active');
+    selectAllCategoriesButton.classList.remove('active');
+});
+
+selectOnlyFilesButton.addEventListener('click', () => {
+    category = "note";
+    selectOnlyFoldersButton.classList.remove('active');
+    selectOnlyFilesButton.classList.add('active');
+    selectAllCategoriesButton.classList.remove('active');
+});
+
+selectAllCategoriesButton.addEventListener('click', () => {
+    category = "all";
+    selectOnlyFoldersButton.classList.remove('active');
+    selectOnlyFilesButton.classList.remove('active');
+    selectAllCategoriesButton.classList.add('active');
+});
+
+
+function goToSearch() {
+    /* Go to ./search?category=category&word=word */
+    window.location.href = "./search?category=" + category + "&word=" + wordInput.value;
+}
