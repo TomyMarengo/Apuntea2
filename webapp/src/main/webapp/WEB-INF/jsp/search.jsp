@@ -209,7 +209,8 @@
 
                         <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect"
                                      onchange="submitSearchForm()">
-                            <form:option value="modified"><spring:message code="search.sort.lastModifiedAt"/></form:option>
+                            <form:option value="modified"><spring:message
+                                    code="search.sort.lastModifiedAt"/></form:option>
                             <form:option value="date"><spring:message code="search.sort.createdAt"/></form:option>
                             <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
                                 <form:option value="score"><spring:message code="search.sort.score"/></form:option>
@@ -403,10 +404,11 @@
                                         </a>
                                     </p>
                                 </td>
-                                <td class="h-list-owner"><a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a></td>
+                                <td class="h-list-owner"><a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
+                                        value="${item.user.displayName}"/></a></td>
 
                                 <td class="h-list-modified"><spring:message code="date.format"
-                                                    arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
+                                                                            arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
                                 <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
                                     <td class="h-list-score">
                                         <c:if test="${item.avgScore eq 0}">
@@ -480,6 +482,25 @@
                                                  alt="<spring:message code="copyLink"/>"
                                                  class="icon-xs fill-text">
                                         </button>
+
+                                        <c:if test="${item.category.formattedName ne 'directory'}">
+                                            <div class="btn-group dropup">
+                                                <button type="button" class="btn btn-secondary"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img src="svg/menu-dots.svg" alt="<spring:message code="menu"/>"
+                                                         class="icon-xs fill-text">
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="${baseUrl}/directory/${item.parentId}"
+                                                           class="dropdown-item">
+                                                            <spring:message code="search.openParentFolder"/>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </c:if>
+
                                     </div>
 
                                     <input type="checkbox" class="select-checkbox d-none"/>
@@ -547,6 +568,19 @@
                                                             </form:form>
                                                         </div>
                                                     </c:if>
+
+                                                    <!-- ALL CAN BE COPIED -->
+                                                    <button class="btn nav-icon-button copy-button"
+                                                            id="<c:out value="${item.id}"/>.c1"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            data-bs-title="<spring:message code="copyLink"/>"
+                                                            data-bs-trigger="hover">
+                                                        <img src="<c:url value="/svg/link.svg"/>"
+                                                             alt="<spring:message code="copyLink"/>"
+                                                             class="icon-xs fill-text">
+                                                    </button>
+
                                                 </div>
 
                                             </div>
@@ -562,7 +596,8 @@
 
                                             <span class="card-text">
                                                 <strong><spring:message code="owner"/></strong>:
-                                                <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a>
+                                                <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
+                                                        value="${item.user.displayName}"/></a>
                                             </span>
 
                                             <br>
@@ -570,7 +605,7 @@
                                             <span class="card-text">
                                                 <strong><spring:message code="lastModifiedAt"/></strong>:
                                                 <spring:message code="date.format"
-                                                            arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                                                                arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
                                             </span>
 
                                             <input type="checkbox" class="select-checkbox d-none"/>
@@ -629,7 +664,8 @@
                                                 <div class="d-flex">
                                                     <!-- FAVORITE -->
                                                     <c:if test="${user ne null}">
-                                                        <c:set var="addFavorite" value="./notes/${item.id}/addfavorite"/>
+                                                        <c:set var="addFavorite"
+                                                               value="./notes/${item.id}/addfavorite"/>
                                                         <c:set var="removeFavorite"
                                                                value="./notes/${item.id}/removefavorite"/>
 
@@ -655,6 +691,48 @@
                                                             </form:form>
                                                         </div>
                                                     </c:if>
+
+                                                    <a href="./notes/${item.id}/download" download="${item.name}">
+                                                        <button type="button" class="btn nav-icon-button"
+                                                                data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                                data-bs-title="<spring:message code="download"/>"
+                                                                data-bs-trigger="hover">
+                                                            <img src="<c:url value="/svg/download.svg"/>"
+                                                                 alt="${download}"
+                                                                 class="icon-xs fill-text">
+                                                        </button>
+                                                    </a>
+
+
+                                                    <!-- ALL CAN BE COPIED -->
+                                                    <button class="btn nav-icon-button copy-button"
+                                                            id="<c:out value="${item.id}"/>.c1"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-placement="bottom"
+                                                            data-bs-title="<spring:message code="copyLink"/>"
+                                                            data-bs-trigger="hover">
+                                                        <img src="<c:url value="/svg/link.svg"/>"
+                                                             alt="<spring:message code="copyLink"/>"
+                                                             class="icon-xs fill-text">
+                                                    </button>
+
+                                                    <div class="btn-group dropup">
+                                                        <button type="button" class="btn btn-secondary"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <img src="svg/menu-dots.svg"
+                                                                 alt="<spring:message code="menu"/>"
+                                                                 class="icon-xs fill-text">
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a href="${baseUrl}/directory/${item.parentId}"
+                                                                   class="dropdown-item">
+                                                                    <spring:message code="search.openParentFolder"/>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
                                                 </div>
                                             </div>
 
@@ -669,7 +747,8 @@
 
                                             <span class="card-text">
                                                 <strong><spring:message code="owner"/></strong>:
-                                                <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a>
+                                                <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
+                                                        value="${item.user.displayName}"/></a>
                                             </span>
 
                                             <br>
@@ -677,7 +756,7 @@
                                             <span class="card-text">
                                                 <strong><spring:message code="lastModifiedAt"/></strong>:
                                                 <spring:message code="date.format"
-                                                            arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
+                                                                arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
                                             </span>
 
                                             <br>

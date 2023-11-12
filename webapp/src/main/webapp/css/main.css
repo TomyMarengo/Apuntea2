@@ -3239,8 +3239,8 @@ textarea.form-control-lg {
 
 .dropdown-item:hover,
 .dropdown-item:focus {
-  color: var(--bs-dropdown-link-hover-color);
-  background-color: var(--bs-dropdown-link-hover-bg);
+  color: var(--bg);
+  background-color: var(--primary);
 }
 
 .dropdown-item.active,
