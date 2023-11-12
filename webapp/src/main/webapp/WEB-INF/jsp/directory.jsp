@@ -114,7 +114,7 @@
                         </button>
                     </div>
 
-                    <div class="input-group mw-300">
+                    <div class="input-group min-w-350">
                         <button class="input-group-text input-group-icon" id="ascDescButton">
                             <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
                             <c:if test="${navigationForm.ascending}">
@@ -142,7 +142,7 @@
                         </form:select>
                     </div>
 
-                    <div class="input-group mw-300" id="categorySelectContainer">
+                    <div class="input-group mw-600" id="categorySelectContainer">
                         <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
                             <div class="input-group">
                                 <form:select path="category" class="form-select bg-bg" id="categorySelect"

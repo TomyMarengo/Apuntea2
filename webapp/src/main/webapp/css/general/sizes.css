@@ -6,8 +6,16 @@
 	max-width: 300px;
 }
 
+.min-w-350 {
+	min-width: 350px;
+}
+
 .mw-600 {
 	max-width: 600px;
+}
+
+.mw-700{
+	max-width: 700px;
 }
 
 .w-inherit {

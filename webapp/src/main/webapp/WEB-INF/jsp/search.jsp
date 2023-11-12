@@ -190,7 +190,7 @@
                         </button>
                     </div>
 
-                    <div class="input-group mw-300">
+                    <div class="input-group min-w-350">
                         <button class="input-group-text input-group-icon" id="ascDescButton">
                             <form:checkbox path="ascending" id="ascCheckbox" cssClass="d-none"/>
                             <c:if test="${searchForm.ascending}">

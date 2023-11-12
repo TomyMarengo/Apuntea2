@@ -4,6 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 
@@ -142,7 +143,7 @@
                         </p>
                     </c:if>
 
-                    <c:if test="${(reviews.size() > 1) or (reviews.size() eq 1 and (user eq null or reviews[0].user.userId ne user.userId))}">
+                    <c:if test="${(not empty reviews) or (fn:length(reviews) eq 1 and (user eq null or reviews[0].user.userId ne user.userId))}">
                         <div class="reviews-comments">
                             <c:forEach items="${reviews}" var="review" varStatus="count">
                                 <c:if test="${user eq null or (user ne null and review.user.userId ne user.userId)}">
@@ -188,7 +189,7 @@
                         <!-- IF USER HAS ALREADY REVIEWED -->
                         <c:if test="${not empty reviewContent}">
                             <div class="card box p-3">
-                                <h5><spring:message code="notes.comments.yourComment"/></h5>
+                                <h5><spring:message code="notes.comments.yourReview"/></h5>
                                 <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
                                     <div class="mt-2">
                                         <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
