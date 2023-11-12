@@ -398,7 +398,9 @@
                                 </td>
                                 <td class="h-list-subject">
                                     <p class="subject-name">
-                                        <c:out value="${item.subject.name}"/>
+                                        <a href="${baseUrl}/directory/${item.subject.rootDirectoryId}">
+                                            <c:out value="${item.subject.name}"/>
+                                        </a>
                                     </p>
                                 </td>
                                 <td class="h-list-owner"><a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a></td>
@@ -550,17 +552,26 @@
                                             </div>
 
                                             <span class="card-text">
-                                            <strong><spring:message code="owner"/></strong>:
-                                            <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a>
-                                        </span>
+                                                <strong><spring:message code="subject"/></strong>:
+                                                <a href="${baseUrl}/directory/${item.subject.rootDirectoryId}">
+                                                    <c:out value="${item.subject.name}"/>
+                                                </a>
+                                            </span>
 
                                             <br>
 
                                             <span class="card-text">
-                                            <strong><spring:message code="lastModifiedAt"/></strong>:
-                                            <spring:message code="date.format"
+                                                <strong><spring:message code="owner"/></strong>:
+                                                <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a>
+                                            </span>
+
+                                            <br>
+
+                                            <span class="card-text">
+                                                <strong><spring:message code="lastModifiedAt"/></strong>:
+                                                <spring:message code="date.format"
                                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
-                                        </span>
+                                            </span>
 
                                             <input type="checkbox" class="select-checkbox d-none"/>
                                         </div>
@@ -648,29 +659,40 @@
                                             </div>
 
                                             <span class="card-text">
-                                            <strong><spring:message code="owner"/></strong>:
+                                                <strong><spring:message code="subject"/></strong>:
+                                                <a href="${baseUrl}/directory/${item.subject.rootDirectoryId}">
+                                                    <c:out value="${item.subject.name}"/>
+                                                </a>
+                                            </span>
+
+                                            <br>
+
+                                            <span class="card-text">
+                                                <strong><spring:message code="owner"/></strong>:
                                                 <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a>
-                                        </span>
+                                            </span>
 
                                             <br>
 
                                             <span class="card-text">
-                                            <strong><spring:message code="lastModifiedAt"/></strong>:
-                                            <spring:message code="date.format"
+                                                <strong><spring:message code="lastModifiedAt"/></strong>:
+                                                <spring:message code="date.format"
                                                             arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
-                                        </span>
+                                            </span>
 
                                             <br>
+
                                             <span class="card-text">
-                                            <c:if test="${item.avgScore eq 0}">
-                                                <strong><spring:message code="notes.noScore"/></strong>
-                                            </c:if>
-                                            <c:if test="${item.avgScore ne 0}">
-                                                <strong><spring:message code="score"/></strong>:
-                                                <fmt:formatNumber type="number" maxFractionDigits="1"
-                                                                  value="${item.avgScore}"/>
-                                            </c:if>
-                                        </span>
+                                                <c:if test="${item.avgScore eq 0}">
+                                                    <strong><spring:message code="notes.noScore"/></strong>
+                                                </c:if>
+                                                <c:if test="${item.avgScore ne 0}">
+                                                    <strong><spring:message code="score"/></strong>:
+                                                    <fmt:formatNumber type="number" maxFractionDigits="1"
+                                                                      value="${item.avgScore}"/>
+                                                </c:if>
+                                            </span>
+
                                             <input type="checkbox" class="select-checkbox d-none"/>
                                         </div>
                                     </div>

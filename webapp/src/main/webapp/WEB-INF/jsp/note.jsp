@@ -44,7 +44,7 @@
 </header>
 
 <main>
-    <fragment:sidebar user="${user}" />
+    <fragment:sidebar user="${user}"/>
 
     <section class="container-fluid h-100-navs mt-5">
         <div class="h-100 row row-cols-1 row-cols-lg-2">
@@ -115,7 +115,8 @@
                     <div>
                         <img src="<c:url  value="${baseUrl}/profile/${note.user.userId}/picture"/>"
                              alt="<spring:message code="logotype"/>" class="user-profile-picture">
-                        <a href="${baseUrl}/user/${note.user.userId}/note-board"><strong><c:out value="${note.user.displayName}"/></strong></a>
+                        <a href="${baseUrl}/user/${note.user.userId}/note-board"><strong><c:out
+                                value="${note.user.displayName}"/></strong></a>
                     </div>
                     <div class="mx-2">
                         <c:set var="date" value="${note.createdAt}"/>
@@ -129,43 +130,51 @@
             <article class="h-100 col col-lg-4 mt-5 mt-lg-0">
                 <div class="h-100 d-flex flex-column">
                     <h2 class="text-dark-primary"><spring:message code="notes.reviews.button"/></h2>
+                    <c:if test="${user ne null and reviews[0].user.userId eq user.userId}">
+                        <c:set var="reviewContent" value="${reviews[0].content}"/>
+                        <c:set var="reviewScore" value="${reviews[0].score}"/>
+                    </c:if>
 
                     <c:if test="${not empty reviews}">
-                        <span><spring:message code="score"/>: <fmt:formatNumber type="number" maxFractionDigits="1"
-                                                                                value="${note.avgScore}"/> ⭐</span>
+                        <p class="mb-2">
+                            <spring:message code="score"/>:
+                            <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/> ⭐
+                        </p>
+                    </c:if>
+
+                    <c:if test="${(reviews.size() > 1) or (reviews.size() eq 1 and (user eq null or reviews[0].user.userId ne user.userId))}">
                         <div class="reviews-comments">
                             <c:forEach items="${reviews}" var="review" varStatus="count">
-                                <div class="card box review-card mb-3 p-3 gap-2">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h5 class="card-title overflow-hidden p-0 m-0">
-                                            <c:out value="${review.user.email}"/>
-                                        </h5>
-                                        <c:if test="${user.isAdmin}">
-                                            <span data-bs-toggle="tooltip" data-bs-placement="bottom"
-                                                  data-bs-title="<spring:message code="delete"/>"
-                                                  data-bs-trigger="hover">
-                                                <button class="btn nav-icon-button deleteReviewModalButton d-flex align-items-center justify-content-center"
-                                                        data-bs-toggle="modal"
-                                                        id="deleteReviewModalButton.${count.index}"
-                                                        value="${review.user.userId}"
-                                                        data-bs-target="#deleteReviewModal">
-                                                    <img src="<c:url value="/svg/trash.svg"/>"
-                                                         alt="<spring:message code="delete"/>"
-                                                         class="icon-s fill-text">
-                                                </button>
-                                            </span>
-                                        </c:if>
-                                    </div>
-                                    <span>
-                                    <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
-                                </span>
-                                    <span class="card-text reviews-comment">
-                                        <c:out value="${review.content}"/>
+                                <c:if test="${user eq null or (user ne null and review.user.userId ne user.userId)}">
+                                    <div class="card box review-card mb-3 p-3 gap-2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title overflow-hidden p-0 m-0">
+                                                <c:out value="${review.user.email}"/>
+                                            </h5>
+                                            <c:if test="${user.isAdmin}">
+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                                      data-bs-title="<spring:message code="delete"/>"
+                                                      data-bs-trigger="hover">
+                                                    <button class="btn nav-icon-button deleteReviewModalButton d-flex align-items-center justify-content-center"
+                                                            data-bs-toggle="modal"
+                                                            id="deleteReviewModalButton.${count.index}"
+                                                            value="${review.user.userId}"
+                                                            data-bs-target="#deleteReviewModal">
+                                                        <img src="<c:url value="/svg/trash.svg"/>"
+                                                             alt="<spring:message code="delete"/>"
+                                                             class="icon-s fill-text">
+                                                    </button>
+                                                </span>
+                                            </c:if>
+                                        </div>
+                                        <span>
+                                        <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
                                     </span>
-                                </div>
-                                <c:if test="${user ne null and review.user.userId eq user.userId}">
-                                    <c:set var="reviewContent" value="${review.content}"/>
-                                    <c:set var="reviewScore" value="${review.score}"/>
+                                        <span class="card-text reviews-comment">
+                                            <c:out value="${review.content}"/>
+                                        </span>
+                                    </div>
+
                                 </c:if>
                             </c:forEach>
                         </div>
@@ -175,9 +184,7 @@
                         <p class="mb-2"><spring:message code="notes.reviews.noReviews"/></p>
                     </c:if>
 
-
                     <c:if test="${note.user.userId ne user.userId}">
-
                         <!-- IF USER HAS ALREADY REVIEWED -->
                         <c:if test="${not empty reviewContent}">
                             <div class="card box p-3">
@@ -192,7 +199,8 @@
 
                                     <div class="d-flex justify-content-between mt-3">
                                         <div class="input-group w-75">
-                                            <form:select path="score" class="form-select bg-bg" id="scoreSelect" disabled="true">
+                                            <form:select path="score" class="form-select bg-bg" id="scoreSelect"
+                                                         disabled="true">
                                                 <form:option value="5">⭐⭐⭐⭐⭐</form:option>
                                                 <form:option value="4">⭐⭐⭐⭐</form:option>
                                                 <form:option value="3">⭐⭐⭐</form:option>
@@ -200,7 +208,8 @@
                                                 <form:option value="1">⭐</form:option>
                                             </form:select>
                                         </div>
-                                        <input type="submit" class="btn rounded-box button-primary" id="editReviewButton"
+                                        <input type="submit" class="btn rounded-box button-primary"
+                                               id="editReviewButton"
                                                value="<spring:message code="edit"/>"/>
                                     </div>
                                 </form:form>
@@ -418,7 +427,7 @@
 
 <script>
     const editReviewButton = document.getElementById('editReviewButton');
-    if (editReviewButton ) {
+    if (editReviewButton) {
         editReviewButton.addEventListener('click', () => {
             if (editReviewButton.value === '<spring:message code="edit"/>') {
                 event.preventDefault();
