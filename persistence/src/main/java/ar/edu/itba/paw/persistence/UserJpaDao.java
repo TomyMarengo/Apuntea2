@@ -26,7 +26,7 @@ class UserJpaDao implements UserDao {
         String searchWord = escapeLikeString(query);
         String queryStr = "SELECT CAST(user_id AS VARCHAR(36)) FROM users u " +
                 "WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') " +
-                "AND (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!')";
+                "AND (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!') ORDER BY u.email";
         if (status != null) {
             queryStr += " AND u.status = :status";
         }
