@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href=<c:url value="/css/sections/bars.css"/>/>
     <link rel="stylesheet" href="<c:url value="/css/sections/user/profile.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/general/autocomplete.css"/>"/>
+
 
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>

@@ -55,7 +55,7 @@ public class NoteServiceImpl implements NoteService {
         } catch (IOException e) {
             throw new InvalidFileException();
         }
-        return noteDao.create(name, subjectId, user, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()));
+        return noteDao.create(name, subjectId, user, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
     }
 
     @Transactional

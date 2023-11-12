@@ -133,7 +133,9 @@
                                     <c:out value="${item.username}"/>
                                 </span>
                                 </td>
-                                <td class="h-list-email"><a href="${baseUrl}/user/${item.userId}/note-board"><c:out value="${item.email}"/></a></td>
+                                <td class="h-list-email">
+                                    <c:out value="${item.email}"/>
+                                </td>
                                 <td class="h-list-roles">
                                     <c:choose>
                                         <c:when test="${item.roles[0] eq 'ROLE_STUDENT'}">

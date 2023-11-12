@@ -483,23 +483,33 @@
                                                  class="icon-xs fill-text">
                                         </button>
 
-                                        <c:if test="${item.category.formattedName ne 'directory'}">
-                                            <div class="btn-group dropup">
-                                                <button type="button" class="btn btn-secondary"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img src="svg/menu-dots.svg" alt="<spring:message code="menu"/>"
-                                                         class="icon-xs fill-text">
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <a href="${baseUrl}/directory/${item.parentId}"
-                                                           class="dropdown-item">
-                                                            <spring:message code="search.openParentFolder"/>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </c:if>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn nav-icon-button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                <img src="svg/menu-dots.svg" alt="<spring:message code="menu"/>"
+                                                     class="icon-xs fill-text">
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a href="${baseUrl}/directory/${item.parentId}"
+                                                       class="dropdown-item">
+                                                        <spring:message code="search.openParentFolder"/>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="${baseUrl}/user/${item.user.userId}/note-board"
+                                                       class="dropdown-item">
+                                                        <spring:message code="search.openUserFolder" arguments="${item.user.displayName}"/>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="${baseUrl}/directory/${item.subject.rootDirectoryId}"
+                                                       class="dropdown-item">
+                                                        <spring:message code="search.openSubjectFolder"/>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
 
                                     </div>
 
@@ -581,9 +591,41 @@
                                                              class="icon-xs fill-text">
                                                     </button>
 
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn nav-icon-button"
+                                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <img src="svg/menu-dots.svg"
+                                                                 alt="<spring:message code="menu"/>"
+                                                                 class="icon-xs fill-text">
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li>
+                                                                <a href="${baseUrl}/directory/${item.parentId}"
+                                                                   class="dropdown-item">
+                                                                    <spring:message code="search.openParentFolder"/>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="${baseUrl}/user/${item.user.userId}/note-board"
+                                                                   class="dropdown-item">
+                                                                    <spring:message code="search.openUserFolder" arguments="${item.user.displayName}"/>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="${baseUrl}/directory/${item.subject.rootDirectoryId}"
+                                                                   class="dropdown-item">
+                                                                    <spring:message code="search.openSubjectFolder"/>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
+
                                                 </div>
 
                                             </div>
+
+
 
                                             <span class="card-text">
                                                 <strong><spring:message code="subject"/></strong>:
@@ -716,18 +758,30 @@
                                                              class="icon-xs fill-text">
                                                     </button>
 
-                                                    <div class="btn-group dropup">
-                                                        <button type="button" class="btn btn-secondary"
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn nav-icon-button"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                             <img src="svg/menu-dots.svg"
                                                                  alt="<spring:message code="menu"/>"
                                                                  class="icon-xs fill-text">
                                                         </button>
-                                                        <ul class="dropdown-menu">
+                                                        <ul class="dropdown-menu dropdown-menu-end">
                                                             <li>
                                                                 <a href="${baseUrl}/directory/${item.parentId}"
                                                                    class="dropdown-item">
                                                                     <spring:message code="search.openParentFolder"/>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="${baseUrl}/user/${item.user.userId}/note-board"
+                                                                   class="dropdown-item">
+                                                                    <spring:message code="search.openUserFolder" arguments="${item.user.displayName}"/>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="${baseUrl}/directory/${item.subject.rootDirectoryId}"
+                                                                   class="dropdown-item">
+                                                                    <spring:message code="search.openSubjectFolder"/>
                                                                 </a>
                                                             </li>
                                                         </ul>
