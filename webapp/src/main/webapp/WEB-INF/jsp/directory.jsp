@@ -46,7 +46,7 @@
             title="${baseUrl}/directory/${directoryId},${directory.name}"
             hierarchy="${hierarchy}"
             category="directory"
-            blob="${directory}"
+            directory="${directory}"
             user="${user}"
             owner="${filterUser}"
     />

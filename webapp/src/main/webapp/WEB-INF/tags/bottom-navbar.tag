@@ -8,7 +8,7 @@
 <spring:eval expression="@environment.getProperty('base.url')" var="baseUrl"/>
 <%@ attribute name="user" required="false" type="ar.edu.itba.paw.models.user.User" %>
 <%@ attribute name="owner" required="false" type="ar.edu.itba.paw.models.user.User" %>
-<%@ attribute name="blob" required="false" type="ar.edu.itba.paw.models.directory.Directory" %>
+<%@ attribute name="directory" required="false" type="ar.edu.itba.paw.models.directory.Directory" %>
 <c:if test="${not empty title}">
     <c:set var="titleData" value="${fn:split(title, ',')}"/>
 </c:if>
@@ -116,27 +116,24 @@
 
     <c:if test="${title != null}">
         <!-- COMMON -->
-        <c:if test="${owner eq null or category eq 'note'}">
+        <c:if test="${not (owner ne null and empty category) and category ne 'directory' and directory.parentId eq null}">
             <a href="<c:url value="${titleData[0]}"/>">
                 <div class="bottom-navbar-item bn-title active">
                     <c:out value="${titleData[1]}"/>
                 </div>
             </a>
         </c:if>
-
-        <c:if test="${owner ne null}">
-
             <!-- FOR DIRECTORY PAGE -->
             <c:if test="${category eq 'directory'}">
                 <div class="btn-group h-100">
-                    <c:if test="${user eq null or user.userId ne owner.userId or blob.parentId eq null}">
+                    <c:if test="${directory.parentId eq null or user eq null or user.userId ne directory.user.userId}">
                         <div class="d-none d-lg-flex align-items-center">
                             <span class="d-block bottom-navbar-item bn-title active">
                                 <c:out value="${titleData[1]}"/>
                             </span>
                         </div>
                     </c:if>
-                    <c:if test="${user.userId eq owner.userId and blob.parentId ne null}">
+                    <c:if test="${directory.user ne null and user ne null and user.userId eq directory.user.userId}">
                         <button class="bn-dropdown-title-button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="d-block bottom-navbar-item bn-title active">
@@ -150,10 +147,10 @@
                             <li>
                                 <button class="dropdown-item d-flex gap-2 align-items-center justify-content-center"
                                         data-bs-toggle="modal" data-bs-target="#editDirectoryModal"
-                                        onclick="editBNavDirectory('<c:out value="${blob.id}"/>', '<c:out
-                                                value="${blob.name}"/>',
-                                                '<c:out value="${blob.visible}"/>', '<c:out value="${blob.iconColor}"/>',
-                                                '<c:out value="${blob.parentId}"/>')">
+                                        onclick="editBNavDirectory('<c:out value="${directory.id}"/>', '<c:out
+                                                value="${directory.name}"/>',
+                                                '<c:out value="${directory.visible}"/>', '<c:out value="${directory.iconColor}"/>',
+                                                '<c:out value="${directory.parentId}"/>')">
                                     <img src="<c:url value="/svg/pencil.svg"/>"
                                          alt="<spring:message code="edit"/>"
                                          class="icon-xs fill-text">
@@ -167,7 +164,7 @@
             </c:if>
 
             <!-- FOR NOTE-BOARD PAGE -->
-            <c:if test="${empty category}">
+            <c:if test="${owner ne null and empty category}">
                 <div class="btn-group h-100">
                     <c:if test="${user.userId eq owner.userId}">
                         <div class="d-none d-lg-flex align-items-center">
@@ -204,7 +201,5 @@
                     </c:if>
                 </div>
             </c:if>
-        </c:if>
-
     </c:if>
 </div>
