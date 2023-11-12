@@ -29,6 +29,11 @@ public class SearchForm extends SortedSearchableForm {
     @Size(max = 50)
     private String word;
 
+    public SearchForm() {
+        super();
+        this.setCategory("note");
+    }
+
     public UUID getInstitutionId() {
         return institutionId;
     }

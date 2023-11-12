@@ -21,6 +21,11 @@ public class NavigationForm extends SortedSearchableForm {
     @Size(max = 50)
     private String word;
 
+    public NavigationForm() {
+        super();
+        this.setCategory("all");
+    }
+
     public int getPageNumber() {
         return pageNumber;
     }

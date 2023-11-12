@@ -399,12 +399,12 @@
                                 </td>
                                 <td class="h-list-subject">
                                     <p class="subject-name">
-                                        <a href="${baseUrl}/directory/${item.subject.rootDirectoryId}">
+                                        <a class="link-info" href="${baseUrl}/directory/${item.subject.rootDirectoryId}">
                                             <c:out value="${item.subject.name}"/>
                                         </a>
                                     </p>
                                 </td>
-                                <td class="h-list-owner"><a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
+                                <td class="h-list-owner"><a class="link-info" href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
                                         value="${item.user.displayName}"/></a></td>
 
                                 <td class="h-list-modified"><spring:message code="date.format"

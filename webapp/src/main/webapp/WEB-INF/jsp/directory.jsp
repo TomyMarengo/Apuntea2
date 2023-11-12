@@ -392,7 +392,7 @@
                                 <c:out value="${item.name}"/>
                             </span>
                                 </td>
-                                <td class="h-list-owner"><a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a></td>
+                                <td class="h-list-owner"><a class="link-info" href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a></td>
                                 <td class="h-list-modified"><spring:message code="date.format"
                                                     arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
 

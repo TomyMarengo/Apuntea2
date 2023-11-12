@@ -9,7 +9,7 @@ public class SortedSearchableForm {
     private boolean ascending = false;
 
     @Pattern(regexp = "note|directory|theory|practice|exam|other|all")
-    private String category = "note";
+    private String category;
 
     @Pattern(regexp = "score|name|date|modified")
     private String sortBy = "modified";
