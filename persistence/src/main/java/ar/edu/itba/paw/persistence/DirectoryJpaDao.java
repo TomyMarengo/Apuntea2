@@ -31,7 +31,6 @@ public class DirectoryJpaDao implements DirectoryDao {
                 .user(user)
                 .visible(visible)
                 .iconColor(iconColor)
-                .createdAt(LocalDateTime.now()) // TODO: See if it is possible to remove this
                 .lastModifiedAt(LocalDateTime.now())
                 .build();
 
@@ -44,7 +43,6 @@ public class DirectoryJpaDao implements DirectoryDao {
         Directory directory = new Directory.DirectoryBuilder()
                 .name(name)
                 .visible(true)
-                .createdAt(LocalDateTime.now()) // TODO: See if it is possible to remove this
                 .lastModifiedAt(LocalDateTime.now())
                 .build();
 
@@ -126,16 +124,16 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
-    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser, SortArguments sortArgs) {
+    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, UUID currentUserId, SortArguments sortArgs) {
         // TODO: Reduce amount of joins if necessary
         if (directoryIds.isEmpty()) return Collections.emptyList();
         List<Directory> directories = em.createQuery(String.format("SELECT d FROM Directory d LEFT JOIN d.parent p LEFT JOIN p.subject s LEFT JOIN d.user u WHERE d.id IN :directoryIds ORDER BY d.%s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sortArgs.getSortBy(), NAME), sortArgs.isAscending()? "ASC" : "DESC"), Directory.class)
                 .setParameter("directoryIds", directoryIds)
                 .getResultList();
 
-        if (currentUser != null) {
-            List<Directory> favorites = em.createQuery("SELECT f.directory FROM DirectoryFavorite f WHERE f.user = :user AND f.directory.id IN :directoryIds", Directory.class)
-                    .setParameter("user", currentUser)
+        if (currentUserId != null) {
+            List<Directory> favorites = em.createQuery("SELECT f.directory FROM DirectoryFavorite f WHERE f.user.id = :userId AND f.directory.id IN :directoryIds", Directory.class)
+                    .setParameter("userId", currentUserId)
                     .setParameter("directoryIds", directoryIds)
                     .getResultList();
             favorites.forEach(dir -> dir.setFavorite(true));

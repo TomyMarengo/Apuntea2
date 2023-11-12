@@ -38,7 +38,16 @@ public class Review {
         this.user = user;
         this.content = content;
         this.score = score;
-        this.createdAt = LocalDateTime.now(); // TODO: See if it is possible to remove this
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        createdAt = LocalDateTime.now();
     }
 
     public User getUser() {

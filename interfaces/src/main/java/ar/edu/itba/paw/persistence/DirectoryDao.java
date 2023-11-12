@@ -30,7 +30,7 @@ public interface DirectoryDao {
 
     boolean removeFavorite(UUID userId, UUID directoryId);
 
-    List<Directory> findDirectoriesByIds(List<UUID> directoryIds, User currentUser, SortArguments sortArgs);
+    List<Directory> findDirectoriesByIds(List<UUID> directoryIds, UUID currentUserId, SortArguments sortArgs);
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds);
 

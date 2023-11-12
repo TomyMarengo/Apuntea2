@@ -40,7 +40,6 @@ public class NoteJpaDao implements NoteDao {
                 .visible(visible)
                 .category(Category.valueOf(category.toUpperCase()))
                 .fileType(fileType)
-                .createdAt(LocalDateTime.now()) // TODO: See if it is possible to remove this
                 .lastModifiedAt(LocalDateTime.now())
                 .build();
 
@@ -170,15 +169,15 @@ public class NoteJpaDao implements NoteDao {
 
 
     @Override
-    public List<Note> findNoteByIds(List<UUID> noteIds, User currentUser, SortArguments sa) {
+    public List<Note> findNoteByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa) {
         if (noteIds.isEmpty()) return Collections.emptyList();
         List<Note> notes = em.createQuery(String.format("SELECT n FROM Note n JOIN n.user u WHERE n.id IN :noteIds ORDER BY n.%s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sa.getSortBy(), "avgScore"), sa.isAscending()? "" : "DESC"), Note.class)
                 .setParameter("noteIds", noteIds)
                 .getResultList();
 
-        if (currentUser != null) {
-            List<Note> favorites = em.createQuery("SELECT f.note FROM NoteFavorite f WHERE f.user = :user AND f.note.id IN :noteIds", Note.class)
-                    .setParameter("user", currentUser)
+        if (currentUserId != null) {
+            List<Note> favorites = em.createQuery("SELECT f.note FROM NoteFavorite f WHERE f.user.id = :userId AND f.note.id IN :noteIds", Note.class)
+                    .setParameter("userId", currentUserId)
                     .setParameter("noteIds", noteIds)
                     .getResultList();
             favorites.forEach(note -> note.setFavorite(true));

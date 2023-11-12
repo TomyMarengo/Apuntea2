@@ -27,24 +27,16 @@ public class SearchServiceImpl implements SearchService {
 
     private final DirectoryService directoryService;
 
-    private final NoteDao noteDao;
-
-    private final DirectoryDao directoryDao;
-
     @Autowired
     public SearchServiceImpl(final SearchDao searchDao,
                              final SecurityService securityService,
                              final NoteService noteService,
-                             final DirectoryService directoryService,
-                             final NoteDao noteDao,
-                             final DirectoryDao directoryDao
+                             final DirectoryService directoryService
     ) {
         this.searchDao = searchDao;
         this.securityService = securityService;
         this.noteService = noteService;
         this.directoryService = directoryService;
-        this.noteDao = noteDao;
-        this.directoryDao = directoryDao;
     }
 
     @Transactional
@@ -69,22 +61,9 @@ public class SearchServiceImpl implements SearchService {
 
         sab.page(safePage).pageSize(pageSize);
         SearchArguments sa = sab.build();
-        List<Pair<UUID, Boolean>> ids = searchDao.search(sa);
-        //TODO: optimize?
-        //TODO: Modularize
-        List<UUID> noteIds = ids.stream().filter(Pair::getValue).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
-        List<UUID> directoryIds = ids.stream().filter(p -> !p.getValue()).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
-
-        List<Searchable> results = new ArrayList<>();
-
-        SortArguments sortArgs = sa.getSortArguments();
-        if (!directoryIds.isEmpty())
-            results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null), sortArgs));
-        if (!noteIds.isEmpty())
-            results.addAll(noteDao.findNoteByIds(noteIds, maybeUser.orElse(null), sortArgs));
 
         return new Page<>(
-                results,
+                searchDao.search(sa),
                 sa.getPage(),
                 sa.getPageSize(),
                 countTotalResults
@@ -111,19 +90,8 @@ public class SearchServiceImpl implements SearchService {
         sab.page(safePage).pageSize(pageSize);
         SearchArguments sa = sab.build();
 
-        List<Pair<UUID, Boolean>> ids = searchDao.getNavigationResults(sa, parentId);
-        List<UUID> noteIds = ids.stream().filter(Pair::getValue).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
-        List<UUID> directoryIds = ids.stream().filter(p -> !p.getValue()).map(Pair::getKey).collect(java.util.stream.Collectors.toList());
-
-        List<Searchable> results = new ArrayList<>();
-
-        if (!directoryIds.isEmpty())
-            results.addAll(directoryDao.findDirectoriesByIds(directoryIds, maybeUser.orElse(null), sa.getSortArguments()));
-        if (!noteIds.isEmpty())
-            results.addAll(noteDao.findNoteByIds(noteIds, maybeUser.orElse(null), sa.getSortArguments()));
-
         return new Page<>(
-                results,
+                searchDao.getNavigationResults(sa, parentId),
                 sa.getPage(),
                 sa.getPageSize(),
                 countTotalResults

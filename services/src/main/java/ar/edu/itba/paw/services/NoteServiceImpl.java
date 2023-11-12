@@ -76,7 +76,6 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public void update(UUID noteId, String name, boolean visible, String category) {
         Note note = noteDao.getNoteById(noteId, securityService.getCurrentUserOrThrow().getUserId()).orElseThrow(InvalidNoteException::new);
-        // TODO: Should we move this to the Dao again for testing purposes?
         note.setName(name);
         note.setVisible(visible);
         note.setCategory(Category.valueOf(category.toUpperCase()));

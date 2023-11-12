@@ -69,7 +69,6 @@ public class HomeController {
         }
         userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getCareerId(), Role.ROLE_STUDENT);
 
-        // TODO: Check if it is ok to do this here
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userForm.getEmail(), userForm.getPassword());
         authToken.setDetails(new WebAuthenticationDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authToken);

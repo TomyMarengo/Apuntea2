@@ -2,7 +2,9 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.search.SearchArguments;
+import ar.edu.itba.paw.models.search.Searchable;
 import ar.edu.itba.paw.models.search.SortArguments;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
@@ -20,10 +22,20 @@ public class SearchJpaDao implements SearchDao {
     @PersistenceContext
     private EntityManager em;
 
+    private NoteDao noteDao;
+
+    private DirectoryDao directoryDao;
+
+    @Autowired
+    public SearchJpaDao(NoteDao noteDao, DirectoryDao directoryDao) {
+        this.noteDao = noteDao;
+        this.directoryDao = directoryDao;
+    }
+
     private static final String WORD_CONDITION = "AND LOWER(t.name) LIKE LOWER(:name) ESCAPE '!' ";
 
     @Override
-    public List<Pair<UUID, Boolean>> search(SearchArguments sa) {
+    public List<Searchable> search(SearchArguments sa) {
         SortArguments sortArgs = sa.getSortArguments();
 
         QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
@@ -31,6 +43,11 @@ public class SearchJpaDao implements SearchDao {
                 .append(" FROM Search t WHERE TRUE ");
 
         applyInstitutionFilters(queryCreator, sa);
+        return getSearchResults(queryCreator, sa);
+    }
+
+    private List<Searchable> getSearchResults(QueryCreator queryCreator, SearchArguments sa){
+        SortArguments sortArgs = sa.getSortArguments();
         applyGeneralFilters(queryCreator, sa);
 
         queryCreator.append("ORDER BY isNote ASC, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME)).append(sortArgs.isAscending() ? "" : " DESC ");
@@ -39,11 +56,27 @@ public class SearchJpaDao implements SearchDao {
                 .setFirstResult(sa.getPageSize() * (sa.getPage() - 1))
                 .setMaxResults(sa.getPageSize());
 
-       queryCreator.getParams().forEach(query::setParameter);
-       return ((List<Object[]>) query.getResultList())
-               .stream()
-               .map(o -> new Pair<>(UUID.fromString((String) o[0]), o[1].equals(Boolean.TRUE)))
-               .collect(Collectors.toList());
+        queryCreator.getParams().forEach(query::setParameter);
+
+        List<UUID> noteIds = new ArrayList<>();
+        List<UUID> directoryIds = new ArrayList<>();
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> resultList = query.getResultList();
+        for (Object[] result : resultList) {
+            if (result[1].equals(Boolean.TRUE))
+                noteIds.add(UUID.fromString((String) result[0]));
+            else
+                directoryIds.add(UUID.fromString((String) result[0]));
+        }
+
+        List<Searchable> searchables = new ArrayList<>();
+        if (!noteIds.isEmpty())
+            searchables.addAll(noteDao.findNoteByIds(noteIds, sa.getCurrentUserId().orElse(null), sortArgs));
+
+        if (!directoryIds.isEmpty())
+            searchables.addAll(directoryDao.findDirectoriesByIds(directoryIds, sa.getCurrentUserId().orElse(null), sortArgs));
+       return searchables;
     }
 
     @Override
@@ -60,26 +93,15 @@ public class SearchJpaDao implements SearchDao {
     }
 
     @Override
-    public List<Pair<UUID, Boolean>> getNavigationResults(SearchArguments sa, UUID parentId) {
+    public List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId) {
         SortArguments sortArgs = sa.getSortArguments();
 
         QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
                 .append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Navigation t WHERE t.parent_id = :parentId ");
         queryCreator.addParameter("parentId", parentId);
-        // TODO: Modularize
-        applyGeneralFilters(queryCreator, sa);
-        queryCreator.append("ORDER BY isNote ASC, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME)).append(sortArgs.isAscending() ? "" : " DESC ");
 
-        Query query = em.createNativeQuery(queryCreator.createQuery())
-                .setFirstResult(sa.getPageSize() * (sa.getPage() - 1))
-                .setMaxResults(sa.getPageSize());
-
-        queryCreator.getParams().forEach(query::setParameter);
-        return ((List<Object[]>) query.getResultList())
-                .stream()
-                .map(o -> new Pair<>(UUID.fromString((String) o[0]), o[1].equals(Boolean.TRUE)))
-                .collect(Collectors.toList());
+        return getSearchResults(queryCreator, sa);
     }
 
     @Override

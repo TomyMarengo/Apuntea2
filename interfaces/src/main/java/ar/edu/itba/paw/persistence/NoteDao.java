@@ -40,5 +40,5 @@ public interface NoteDao {
 
     List<Note> findNoteByIds(List<UUID> noteIds);
 
-    List<Note> findNoteByIds(List<UUID> noteIds, User currentUser, SortArguments sa);
+    List<Note> findNoteByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa);
 }

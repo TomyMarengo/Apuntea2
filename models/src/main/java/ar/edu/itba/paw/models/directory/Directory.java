@@ -144,6 +144,7 @@ public class Directory implements Searchable {
 
     @PrePersist
     protected void onCreate() {
+        lastModifiedAt = LocalDateTime.now();
         createdAt = LocalDateTime.now();
     }
 

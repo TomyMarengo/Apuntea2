@@ -112,8 +112,6 @@ public class TestUtils {
     }
 
     static Note insertNote(EntityManager em, Note.NoteBuilder builder, byte [] file) {
-        builder.createdAt(LocalDateTime.now()); // TODO: Remove
-        builder.lastModifiedAt(LocalDateTime.now()); // TODO: Remove
         Note note = builder.build();
         em.persist(note);
         NoteFile nf = new NoteFile(file, note); // Empty file for testing
@@ -124,8 +122,6 @@ public class TestUtils {
     }
 
     static Directory insertDirectory(EntityManager em, Directory.DirectoryBuilder builder) {
-        builder.createdAt(LocalDateTime.now()); // TODO: Remove
-        builder.lastModifiedAt(LocalDateTime.now()); // TODO: Remove
         Directory directory = builder.build();
         em.persist(directory);
         em.flush();
