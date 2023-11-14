@@ -252,3 +252,24 @@ CREATE TABLE IF NOT EXISTS Note_Favorites
     CONSTRAINT "FK_note_favorites_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE
 );
 
+-----------------------------------------------------------------------------------------------------------
+--SPRINT 6
+
+ALTER TABLE Users ADD COLUMN IF NOT EXISTS notifications_enabled boolean DEFAULT true NOT NULL;
+
+CREATE TABLE IF NOT EXISTS Follows
+(
+    follower_id uuid NOT NULL,
+    followed_id uuid NOT NULL,
+    CONSTRAINT "PK_follows" PRIMARY KEY (follower_id, followed_id),
+    CONSTRAINT "FK_follows_users_follower" FOREIGN KEY (follower_id) REFERENCES Users (user_id) ON DELETE CASCADE,
+    CONSTRAINT "FK_follows_users_followed" FOREIGN KEY (followed_id) REFERENCES Users (user_id) ON DELETE CASCADE
+    );
+
+CREATE TABLE IF NOT EXISTS UserNoteInteractions (
+                                                    user_id uuid NOT NULL,
+                                                    note_id uuid NOT NULL,
+                                                    CONSTRAINT "PK_user_note_interactions" PRIMARY KEY (user_id, note_id),
+    CONSTRAINT "FK_user_note_interactions_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE,
+    CONSTRAINT "FK_user_note_interactions_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE
+    );

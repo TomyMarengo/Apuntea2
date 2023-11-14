@@ -43,17 +43,23 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendReviewEmail(Review review) {
-        final Locale ownerLocale = review.getNote().getUser().getLocale();
-        final String to = review.getNote().getUser().getEmail();
+        final User owner = review.getNote().getUser();
+        if (!owner.hasNotificationsEnabled()) {
+            LOGGER.info("User {} has notifications disabled, skipping review email", owner.getEmail());
+            return;
+        }
+
+        final Locale ownerLocale = owner.getLocale();
+        final String to = owner.getEmail();
         final String subject = messageSource.getMessage("email.review.new", new Object[]{review.getNote().getName()}, ownerLocale);
         HashMap<String, Object> data = createReviewEmailMap(review);
         data.put("url", env.getProperty("base.url"));
         try {
-            LOGGER.info("Sending review email to {}", review.getNote().getUser().getEmail());
-            sendMessageUsingThymeleafTemplate(to,subject,"new-review.html", data, ownerLocale);
-            LOGGER.info("Review email sent to {}", review.getNote().getUser().getEmail());
+            LOGGER.info("Sending review email to {}", to);
+            sendMessageUsingThymeleafTemplate(to, subject,"new-review.html", data, ownerLocale);
+            LOGGER.info("Review email sent to {}", to);
         } catch (MessagingException e) {
-            LOGGER.warn("Review email could not be sent to {}",review.getNote().getUser().getEmail());
+            LOGGER.warn("Review email could not be sent to {}", to);
         }
 
     }
@@ -72,56 +78,74 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendDeleteReviewEmail(Review review, String reason) {
-        final Locale ownerLocale = review.getUser().getLocale();
-        final String to = review.getUser().getEmail();
+        final User owner = review.getNote().getUser();
+        if (!owner.hasNotificationsEnabled()) {
+            LOGGER.info("User {} has notifications disabled, skipping delete review email", owner.getEmail());
+            return;
+        }
+
+        final Locale ownerLocale = owner.getLocale();
+        final String to = owner.getEmail();
         final String subject = messageSource.getMessage("email.review.delete", new Object[]{review.getNote().getName()}, ownerLocale);
         HashMap<String, Object> data = createReviewEmailMap(review);
         data.put("reason", reason);
         data.put("url", env.getProperty("base.url"));
         try {
-            LOGGER.info("Sending delete review email to {}", review.getUser().getEmail());
+            LOGGER.info("Sending delete review email to {}", to);
             sendMessageUsingThymeleafTemplate(to,subject,"deleted-review.html", data, ownerLocale);
-            LOGGER.info("Delete review email sent to {}", review.getUser().getEmail());
+            LOGGER.info("Delete review email sent to {}", to);
         } catch (MessagingException e) {
-            LOGGER.warn("Delete review email could not be sent to {}",review.getUser().getEmail());
+            LOGGER.warn("Delete review email could not be sent to {}",to);
         }
     }
 
     @Async
     @Override
     public void sendDeleteNoteEmail(Note note, String reason) {
-        final Locale ownerLocale = note.getUser().getLocale();
-        final String to = note.getUser().getEmail();
+        final User owner = note.getUser();
+        if (!owner.hasNotificationsEnabled()) {
+            LOGGER.info("User {} has notifications disabled, skipping delete note email", owner.getEmail());
+            return;
+        }
+
+        final Locale ownerLocale = owner.getLocale();
+        final String to = owner.getEmail();
         final String subject = messageSource.getMessage("email.note.hasBeenDeleted", new Object[]{note.getName()}, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
         data.put("name", note.getName());
         data.put("url", env.getProperty("base.url"));
         data.put("reason", reason);
         try {
-            LOGGER.info("Sending delete note email to {} for note {}", note.getUser().getEmail(), note.getName());
+            LOGGER.info("Sending delete note email to {} for note {}", to, note.getName());
             sendMessageUsingThymeleafTemplate(to,subject,"deleted-note.html", data, ownerLocale);
-            LOGGER.info("Delete note email sent to {}", note.getUser().getEmail());
+            LOGGER.info("Delete note email sent to {}", to);
         } catch (MessagingException e) {
-            LOGGER.warn("Delete note email could not be sent to {}",note.getUser().getEmail());
+            LOGGER.warn("Delete note email could not be sent to {}", to);
         }
     }
 
     @Async
     @Override
     public void sendDeleteDirectoryEmail(Directory directory, String reason) {
-        final Locale ownerLocale = directory.getUser().getLocale();
-        final String to = directory.getUser().getEmail();
+        final User owner = directory.getUser();
+        if (!owner.hasNotificationsEnabled()) {
+            LOGGER.info("User {} has notifications disabled, skipping delete directory email", owner.getEmail());
+            return;
+        }
+
+        final Locale ownerLocale = owner.getLocale();
+        final String to = owner.getEmail();
         final String subject = messageSource.getMessage("email.directory.hasBeenDeleted", new Object[]{directory.getName()}, ownerLocale);
         final Map<String, Object> data = new HashMap<>();
         data.put("name", directory.getName());
         data.put("url", env.getProperty("base.url"));
         data.put("reason", reason);
         try {
-            LOGGER.info("Sending delete directory email to {} for directory {}", directory.getUser().getEmail(), directory.getName());
+            LOGGER.info("Sending delete directory email to {} for directory {}", to, directory.getName());
             sendMessageUsingThymeleafTemplate(to,subject,"deleted-directory.html", data, ownerLocale);
-            LOGGER.info("Delete directory email sent to {}", directory.getUser().getEmail());
+            LOGGER.info("Delete directory email sent to {}",to);
         } catch (MessagingException e) {
-            LOGGER.warn("Delete directory email could not be sent to {}",directory.getUser().getEmail());
+            LOGGER.warn("Delete directory email could not be sent to {}", to);
         }
     }
 

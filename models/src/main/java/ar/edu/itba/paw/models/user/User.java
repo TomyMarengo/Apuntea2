@@ -35,6 +35,10 @@ public class User {
     private String locale;
     @Enumerated(EnumType.STRING)
     private UserStatus status;
+
+    @Column(name = "notifications_enabled", nullable = false)
+    private Boolean notificationsEnabled;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_picture_id")
     private Image profilePicture;
@@ -53,6 +57,7 @@ public class User {
         this.roles = builder.roles;
         this.locale = builder.locale;
         this.status = builder.status;
+        this.notificationsEnabled = true;
     }
 
     public String getEmail() {
@@ -107,6 +112,10 @@ public class User {
         return career.getInstitution();
     }
 
+    public Boolean hasNotificationsEnabled() {
+        return notificationsEnabled;
+    }
+
     public String getDisplayName() {
         if (username != null) {
             return username;
@@ -144,6 +153,9 @@ public class User {
         this.career = career;
     }
 
+    public void setNotificationsEnabled(Boolean notificationsEnabled) {
+        this.notificationsEnabled = notificationsEnabled;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -157,6 +169,7 @@ public class User {
         return Objects.hash(userId);
     }
 
+    // TODO: Remove
     public static class UserBuilder {
         private UUID userId;
         private String firstName;
