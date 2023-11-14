@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
@@ -17,6 +18,7 @@ public interface NoteService {
     void createOrUpdateReview(UUID noteId, int score, String content);
     void update(UUID noteId, String name, boolean visible, String category);
     void delete(UUID[] noteIds, String reason);
+    Page<Review> getPaginatedReviews(UUID note, int pageNum, int pageSize);
     List<Review> getReviews(UUID noteId);
     void deleteReview(UUID noteId, UUID userId, String reason);
     List<Note> getFavorites();

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -95,14 +96,25 @@ public class NoteJpaDao implements NoteDao {
                 .getSingleResult();
     }
 
+    @Override
+    public int countReviews(UUID noteId) {
+        return ((BigInteger)em.createNativeQuery("SELECT COUNT(*) FROM Reviews WHERE note_id = :noteId")
+                .setParameter("noteId", noteId)
+                .getSingleResult()).intValue();
+    }
 
     @Override
-    public List<Review> getFirstReviews(UUID noteId) {
-        // Right now it's not necessary to validate that the current user has visibility enabled
+    public List<Review> getReviews(UUID noteId, int pageNum) {
+        return getReviews(noteId, pageNum, REVIEW_LIMIT);
+    }
+
+    @Override
+    public List<Review> getReviews(UUID noteId, int pageNum, int pageSize) {
         @SuppressWarnings("unchecked")
         List<UUID> userIDs = (List<UUID>) (em.createNativeQuery("SELECT CAST(user_id AS VARCHAR(36)) FROM Reviews WHERE note_id = :noteId ORDER BY created_at DESC")
                 .setParameter("noteId", noteId)
-                .setMaxResults(REVIEW_LIMIT)
+                .setFirstResult((pageNum - 1) * pageSize)
+                .setMaxResults(pageSize)
                 .getResultList())
                 .stream().map(o -> UUID.fromString((String) o)).collect(Collectors.toList());
         if (userIDs.isEmpty()) return Collections.emptyList();

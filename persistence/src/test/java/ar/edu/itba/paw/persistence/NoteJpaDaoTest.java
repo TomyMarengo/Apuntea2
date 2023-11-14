@@ -190,72 +190,6 @@ public class NoteJpaDaoTest {
         assertFalse(deleted);
     }
 
-//    @Test
-//    public void testUpdateNote() {
-//        String oldName = "oldName";
-//        String newName = "newName";
-//        String oldCategory = "practice";
-//        String newCategory = "theory";
-//        boolean oldVisible = true;
-//        boolean newVisible = false;
-//        UUID parentId = EDA_DIRECTORY_ID;
-//        UUID userId = PEPE_ID;
-//
-//        UUID noteId = jdbcInsertNote(namedParameterJdbcTemplate, parentId, oldName, EDA_ID, userId, oldVisible, new byte[]{1, 2, 3}, oldCategory, "jpg");
-//
-//        Note note = new Note.NoteBuilder()
-//                .id(noteId)
-//                .name(newName)
-//                .visible(newVisible)
-//                .category(Category.valueOf(newCategory.toUpperCase()))
-//                .build();
-//        int oldCountPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "' AND note_name = '" + oldName + "' AND category = '" + oldCategory + "'");
-//        int newCountPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "' AND note_name = '" + newName + "' AND category = '" + newCategory + "'");
-//        boolean success = noteDao.update(note, userId);
-//
-//        int oldCountPost = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "' AND note_name = '" + oldName + "' AND category = '" + oldCategory + "'");
-//        int newCountPost = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "' AND note_name = '" + newName + "' AND category = '" + newCategory + "'");
-//        assertTrue(success);
-//        assertEquals(1, oldCountPrev);
-//        assertEquals(0, newCountPrev);
-//        assertEquals(0, oldCountPost);
-//        assertEquals(1, newCountPost);
-//    }
-//
-//    @Test
-//    public void testUpdateNoteNotOwner() {
-//        UUID adminId = jdbcInsertAdmin(namedParameterJdbcTemplate, "admin@mail.com" , "admin", ING_MEC_ID, "es");
-//        String oldName = "oldName";
-//        String newName = "newName";
-//        String oldCategory = "practice";
-//        String newCategory = "theory";
-//        boolean oldVisible = true;
-//        boolean newVisible = false;
-//        UUID parentId = EDA_DIRECTORY_ID;
-//        UUID userId = PEPE_ID;
-//
-//        UUID noteId = jdbcInsertNote(namedParameterJdbcTemplate, parentId, oldName, EDA_ID, userId, oldVisible, new byte[]{1, 2, 3}, oldCategory, "jpg");
-//
-//        Note note = new Note.NoteBuilder()
-//                .id(noteId)
-//                .name(newName)
-//                .visible(newVisible)
-//                .category(Category.valueOf(newCategory.toUpperCase()))
-//                .build();
-//        int oldCountPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "' AND note_name = '" + oldName + "' AND category = '" + oldCategory + "'");
-//        int newCountPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "' AND note_name = '" + newName + "' AND category = '" + newCategory + "'");
-//
-//        boolean success = noteDao.update(note, adminId);
-//
-//        int oldCountPost = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "' AND note_name = '" + oldName + "' AND category = '" + oldCategory + "'");
-//        int newCountPost = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + noteId + "' AND note_name = '" + newName + "' AND category = '" + newCategory + "'");
-//        assertFalse(success);
-//        assertEquals(1, oldCountPrev);
-//        assertEquals(0, newCountPrev);
-//        assertEquals(1, oldCountPost);
-//        assertEquals(0, newCountPost);
-//    }
-
     @Test
     public void testGetReview() {
         User newUser = insertStudent(em, "new@mail.com", "new", ING_INF_ID, "es");
@@ -270,22 +204,42 @@ public class NoteJpaDaoTest {
         assertEquals("ta ok", review.getContent());
     }
 
+    @Test
+    public void testCountReviews() {
+        int count = noteDao.countReviews(GUIA1EDA_NOTE_ID);
+        assertEquals(2, count);
+    }
 
     @Test
     public void testGetReviews() {
-        List<Review> reviews = noteDao.getFirstReviews(GUIA1EDA_NOTE_ID, null);
+        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID, 1);
         assertEquals(2, reviews.size());
         assertNotNull(reviews.stream().filter(r -> r.getUser().getUserId().equals(PEPE_ID)).findFirst().orElse(null));
     }
 
-    @Test
-    public void testLimitReviews() {
+    private void spamReviews(UUID noteId) {
         int botCount = 15;
-        Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
+        Note guiaEda = em.find(Note.class, noteId);
         for (int i=0; i<botCount; i++) {
             User trollUser = insertStudent(em, "troll" + i + "@mail.com", "new" + i, ING_INF_ID, "es");
             insertReview(em, guiaEda, trollUser, 1, "malisimo "+i);
         }
+    }
+
+    @Test
+    public void testLimitPaginatedReviews() {
+        spamReviews(GUIA1EDA_NOTE_ID);
+        int pageSize = 5;
+        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID, 2, pageSize);
+        assertEquals(pageSize, reviews.size());
+        for (int i=0; i<reviews.size()-2; i++) {
+            assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i+1).getCreatedAt()));
+        }
+    }
+
+    @Test
+    public void testLimitReviews() {
+        spamReviews(GUIA1EDA_NOTE_ID);
 
         List<Review> reviews = noteDao.getFirstReviews(GUIA1EDA_NOTE_ID, PEPE_ID);
         assertEquals(NoteJpaDao.REVIEW_LIMIT, reviews.size());
@@ -297,12 +251,7 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testLimitReviewsNoCurrentUserReview() {
-        int botCount = 15;
-        Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
-        for (int i=0; i<botCount; i++) {
-            User trollUser = insertStudent(em, "troll" + i + "@mail.com", "new" + i, ING_INF_ID, "es");
-            insertReview(em, guiaEda, trollUser, 1, "malisimo "+i);
-        }
+        spamReviews(GUIA1EDA_NOTE_ID);
 
         List<Review> reviews = noteDao.getFirstReviews(GUIA1EDA_NOTE_ID, SAIDMAN_ID);
         assertEquals(NoteJpaDao.REVIEW_LIMIT, reviews.size());

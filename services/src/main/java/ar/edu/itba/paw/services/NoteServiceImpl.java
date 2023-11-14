@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
@@ -30,6 +31,7 @@ public class NoteServiceImpl implements NoteService {
     private final SubjectDao subjectDao;
     private final EmailService emailService;
     private final SecurityService securityService;
+
 
     @Autowired
     public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SubjectDao subjectDao) {
@@ -108,7 +110,22 @@ public class NoteServiceImpl implements NoteService {
         Optional<User> maybeUser = securityService.getCurrentUser();
         if (maybeUser.isPresent())
             return noteDao.getFirstReviews(noteId, maybeUser.get().getUserId());
-        return noteDao.getFirstReviews(noteId);
+        return noteDao.getReviews(noteId, 0);
+    }
+
+    @Transactional
+    @Override
+    public Page<Review> getPaginatedReviews(UUID note, int pageNum, int pageSize) {
+        this.noteDao.getNoteById(note,
+                securityService.getCurrentUser().map(User::getUserId).orElse(null)
+        ).orElseThrow(NoteNotFoundException::new);
+
+        return new Page<>(
+                noteDao.getReviews(note, pageNum, pageSize),
+                noteDao.countReviews(note),
+                pageNum,
+                pageSize
+        );
     }
 
     @Transactional
