@@ -430,7 +430,7 @@
                                                     <input name="redirectUrl"
                                                            value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}"
                                                            type="hidden"/>
-                                                    <button type="submit"
+                                                    <button type="submit" onclick="event.stopPropagation();"
                                                             class="btn nav-icon-button"
                                                             data-bs-toggle="tooltip"
                                                             data-bs-placement="bottom"
@@ -568,7 +568,7 @@
                                                                 <input name="redirectUrl"
                                                                        value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}"
                                                                        type="hidden"/>
-                                                                <button type="submit"
+                                                                <button type="submit" onclick="event.stopPropagation();"
                                                                         class="btn nav-icon-button"
                                                                         data-bs-toggle="tooltip"
                                                                         data-bs-placement="bottom"
@@ -696,7 +696,7 @@
                                                                 <input name="redirectUrl"
                                                                        value="/directory/${item.parentId}?${requestScope['javax.servlet.forward.query_string']}"
                                                                        type="hidden"/>
-                                                                <button type="submit"
+                                                                <button type="submit" onclick="event.stopPropagation();"
                                                                         class="btn nav-icon-button"
                                                                         data-bs-toggle="tooltip"
                                                                         data-bs-placement="bottom"

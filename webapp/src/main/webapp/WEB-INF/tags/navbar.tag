@@ -28,7 +28,8 @@
     <div class="d-flex justify-content-center align-items-center gap-2">
         <div class="search-container">
 
-            <a href="${baseUrl}/search" class="btn nav-icon-button search-icon" id="searchNavButton">
+            <a href="${baseUrl}/search?institutionId=${user.institution.institutionId}&careerId=${user.career.careerId}"
+               class="btn nav-icon-button search-icon" id="searchNavButton">
                 <img src="<c:url value="/svg/search.svg"/>" alt="${search}" class="icon-s fill-dark-primary"/>
             </a>
             <input id="searchNavInput" type="text" class="search-input"

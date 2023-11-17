@@ -51,17 +51,20 @@ function sortSubjects(sortAscending) {
     });
 }
 
+const textYear = sortBySelect.querySelector('option[value="year"]').textContent;
+
 if (sortBySelect && yearSelect) {
     sortSubjects(true);
 
     sortBySelect.addEventListener('change', sortSubjects);
     yearSelect.addEventListener('change', (sortAscending) => {
         if (yearSelect.value !== 'all') {
-            // disable sort by select
-            sortBySelect.disabled = true;
             sortBySelect.value = 'name';
+            sortBySelect.querySelector('option[value="year"]').remove();
         } else {
-            sortBySelect.disabled = false;
+            if (!sortBySelect.querySelector('option[value="year"]')) {
+                sortBySelect.appendChild(new Option(textYear, 'year'));
+            }
         }
         sortSubjects(sortAscending);
     });
