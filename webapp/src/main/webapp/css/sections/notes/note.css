@@ -12,10 +12,8 @@
 }
 
 .reviews-comment {
-    white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200ch;
+    white-space: nowrap;
 }
 
 .note-side-info{

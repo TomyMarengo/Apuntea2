@@ -62,7 +62,7 @@
                     <hr class="p-0">
 
                     <li><a class="dropdown-item" href="${baseUrl}/profile"><spring:message
-                            code="myProfile.title"/></a></li>
+                            code="profile.title"/></a></li>
 
                     <li><a class="dropdown-item" href="${baseUrl}/change-password"><spring:message
                             code="changePassword.title"/></a></li>

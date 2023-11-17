@@ -49,37 +49,16 @@
 
     <section class="container-fluid h-100-navs mt-5">
         <div class="h-100 row row-cols-1 row-cols-lg-2">
-
             <!-- NOTE -->
             <article class="col col-lg-8">
-
-                <c:url var="noteFileUrl" value="${baseUrl}/notes/${noteId}/download"/>
-                <c:choose>
-
-                    <c:when test="${note.fileType eq 'jpeg' or note.fileType eq 'jpg' or note.fileType eq 'png'}">
-                        <div class="container-img-note mh-100-navs">
-                            <img src="${noteFileUrl}" alt="<c:out value="${note.name}"/>"/>
-                        </div>
-                    </c:when>
-
-                    <c:when test="${note.fileType eq 'mp3'}">
-                        <audio controls class="w-100">
-                            <source src="${noteFileUrl}" type="audio/mp3">
-                        </audio>
-                    </c:when>
-
-
-                    <c:otherwise>
-                        <div class="h-100-navs">
-                            <iframe class="h-100 w-100" src="${noteFileUrl}"></iframe>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-
-                <div class="d-flex justify-content-between mt-2">
-                    <h1 class="overflow-hidden">${note.name}</h1>
-
-                    <div class="d-flex">
+                <div class="d-flex mt-2 mb-3 justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <img src="<c:url  value="${baseUrl}/profile/${note.user.userId}/picture"/>"
+                             alt="<spring:message code="logotype"/>" class="user-profile-picture">
+                        <h4 class="m-0"><a href="${baseUrl}/user/${note.user.userId}/note-board"><strong><c:out
+                                value="${note.user.displayName}"/></strong></a></h4>
+                    </div>
+                    <div class="d-flex align-items-center">
                         <c:if test="${user ne null and (note.user.userId eq user.userId)}">
                         <span data-bs-toggle="tooltip" data-bs-placement="bottom"
                               data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">
@@ -111,22 +90,28 @@
                         </c:if>
                     </div>
                 </div>
+                <c:url var="noteFileUrl" value="${baseUrl}/notes/${noteId}/download"/>
+                <c:choose>
 
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div>
-                        <img src="<c:url  value="${baseUrl}/profile/${note.user.userId}/picture"/>"
-                             alt="<spring:message code="logotype"/>" class="user-profile-picture">
-                        <a href="${baseUrl}/user/${note.user.userId}/note-board"><strong><c:out
-                                value="${note.user.displayName}"/></strong></a>
-                    </div>
-                    <div class="mx-2">
-                        <c:set var="date" value="${note.createdAt}"/>
-                        <spring:message code="date.format"
-                                        arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
-                    </div>
-                </div>
+                    <c:when test="${note.fileType eq 'jpeg' or note.fileType eq 'jpg' or note.fileType eq 'png'}">
+                        <div class="container-img-note mh-100-navs">
+                            <img src="${noteFileUrl}" alt="<c:out value="${note.name}"/>"/>
+                        </div>
+                    </c:when>
+
+                    <c:when test="${note.fileType eq 'mp3'}">
+                        <audio controls class="w-100">
+                            <source src="${noteFileUrl}" type="audio/mp3">
+                        </audio>
+                    </c:when>
+
+                    <c:otherwise>
+                        <div class="h-100-navs">
+                            <iframe class="h-100 w-100" src="${noteFileUrl}"></iframe>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </article>
-
             <!-- REVIEWS -->
             <article class="h-100 col col-lg-4 mt-5 mt-lg-0">
                 <div class="h-100 d-flex flex-column">
@@ -147,10 +132,12 @@
                         <div class="reviews-comments">
                             <c:forEach items="${reviews}" var="review" varStatus="count">
                                 <c:if test="${user eq null or (user ne null and review.user.userId ne user.userId)}">
-                                    <div class="card box review-card mb-3 p-3 gap-2">
+                                    <div class="card box mb-3 p-3 gap-2">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h5 class="card-title overflow-hidden p-0 m-0">
-                                                <c:out value="${review.user.email}"/>
+                                                <a class="link-info" href="${baseUrl}/user/${review.user.userId}/note-board">
+                                                    <c:out value="${review.user.email}"/>
+                                                </a>
                                             </h5>
                                             <c:if test="${user.isAdmin}">
                                                 <span data-bs-toggle="tooltip" data-bs-placement="bottom"
@@ -169,13 +156,18 @@
                                             </c:if>
                                         </div>
                                         <span>
-                                        <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
-                                    </span>
-                                        <span class="card-text reviews-comment">
-                                            <c:out value="${review.content}"/>
+                                            <c:forEach begin="1" end="${review.score}">⭐</c:forEach>
                                         </span>
+                                        <div class="card-text reviews-comment overflow-hidden">
+                                            <c:out value="${review.content}"/>
+                                        </div>
+                                        <div class="d-flex justify-content-center">
+                                            <button class="btn nav-icon-button show-hide-content-button">
+                                                <img src="<c:url value="/svg/chevron-down.svg"/>"
+                                                     class="icon-s fill-text">
+                                            </button>
+                                        </div>
                                     </div>
-
                                 </c:if>
                             </c:forEach>
                         </div>
@@ -261,7 +253,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content box bg-bg">
             <div class="modal-header">
-                <h3 class="modal-title fs-5" id="deleteLabel"><spring:message code="delete"/></h3>
+                <h3 class="modal-title fs-5" id="deleteLabel"><spring:message code="deleteNote"/></h3>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                 </button>
@@ -298,7 +290,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content box bg-bg">
                 <div class="modal-header">
-                    <h3 class="modal-title fs-5" id="deleteReviewLabel"><spring:message code="delete"/></h3>
+                    <h3 class="modal-title fs-5" id="deleteReviewLabel"><spring:message code="deleteReview"/></h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close">
                     </button>
