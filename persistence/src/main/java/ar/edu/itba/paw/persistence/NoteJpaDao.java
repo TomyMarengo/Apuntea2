@@ -4,11 +4,8 @@ import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavorite;
 import ar.edu.itba.paw.models.institutional.Subject;
-import ar.edu.itba.paw.models.note.NoteFavorite;
+import ar.edu.itba.paw.models.note.*;
 import ar.edu.itba.paw.models.search.SearchArguments;
-import ar.edu.itba.paw.models.note.Note;
-import ar.edu.itba.paw.models.note.NoteFile;
-import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
@@ -200,6 +197,11 @@ public class NoteJpaDao implements NoteDao {
     @Override
     public List<Note> findNoteByIds(List<UUID> noteIds) {
         return findNoteByIds(noteIds, null, new SortArguments(SortArguments.SortBy.DATE, true));
+    }
+
+    @Override
+    public void addInteractionIfNotExists(UUID userId, UUID noteId) {
+        em.merge(new UserNoteInteraction(em.getReference(User.class, userId), em.getReference(Note.class, noteId)));
     }
 
 }

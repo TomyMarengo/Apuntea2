@@ -89,6 +89,28 @@ class UserJpaDao implements UserDao {
     public Optional<User> findById(UUID userId) {
         return Optional.ofNullable(em.find(User.class, userId));
     }
+
+    @Override
+    public void follow(UUID followerId, UUID followedId) {
+        Follow follow = new Follow(em.getReference(User.class, followerId), em.getReference(User.class, followedId));
+        em.persist(follow);
+    }
+
+    @Override
+    public void unfollow(UUID followerId, UUID followedId) {
+        em.createQuery("DELETE FROM Follow f WHERE f.follower.id = :followerId AND f.followed.id = :followedId")
+                .setParameter("followerId", followerId)
+                .setParameter("followedId", followedId)
+                .executeUpdate();
+    }
+
+    @Override
+    public List<User> getFollows(UUID userId) {
+        return em.createQuery("SELECT u FROM Follow f JOIN f.followed u WHERE f.follower.id = :userId", User.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
     @Override
     public Optional<User> findByUsername(String username) {
         return em.createQuery("FROM User WHERE username = :username", User.class)

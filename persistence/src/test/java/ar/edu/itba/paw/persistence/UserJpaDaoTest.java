@@ -264,5 +264,27 @@ public class UserJpaDaoTest {
             assertTrue(users.stream().anyMatch(u -> u.getEmail().equals("student" + (finalI + 1) + "@mail.com")));
         }
     }
+
+    @Test
+    public void followTest() {
+        User follower1 = insertStudent(em, "student1@mail.com", "", ING_INF_ID, "es");
+        User student = insertStudent(em, "producer@mail.com", "", ING_INF_ID, "es");
+        userDao.follow(follower1.getUserId(), student.getUserId());
+        em.flush();
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
+    }
+
+    @Test
+    public void unfollowTest() {
+        User follower1 = insertStudent(em, "student1@mail.com", "", ING_INF_ID, "es");
+        User student = insertStudent(em, "producer@mail.com", "", ING_INF_ID, "es");
+        insertFollower(em, follower1.getUserId(), student.getUserId());
+        // TODO: Check that the user had been followed
+
+        userDao.unfollow(follower1.getUserId(), student.getUserId());
+        em.flush();
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
+
+    }
 }
 

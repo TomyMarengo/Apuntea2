@@ -83,6 +83,28 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public void follow(UUID followedId) {
+        UUID followerId = securityService.getCurrentUserOrThrow().getUserId();
+        // TODO: Ask if this is should be changed for a many to many relationship
+        userDao.follow(followerId, followedId);
+    }
+
+    @Transactional
+    @Override
+    public void unfollow(UUID followedId) {
+        UUID followerId = securityService.getCurrentUserOrThrow().getUserId();
+        userDao.unfollow(followerId, followedId);
+    }
+
+    @Transactional
+    @Override
+    public List<User> getFollows() {
+        UUID followerId = securityService.getCurrentUserOrThrow().getUserId();
+        return userDao.getFollows(followerId);
+    }
+
+    @Transactional
+    @Override
     public void create(String email, String password, UUID careerId, Role role) {
         final String lang = LocaleContextHolder.getLocale().getLanguage();
         Career career = careerDao.getCareerById(careerId).orElseThrow(InvalidCareerException::new);

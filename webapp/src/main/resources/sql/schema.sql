@@ -271,7 +271,7 @@ CREATE TABLE IF NOT EXISTS Follows
     CONSTRAINT "FK_follows_users_followed" FOREIGN KEY (followed_id) REFERENCES Users (user_id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS UserNoteInteractions (
+CREATE TABLE IF NOT EXISTS User_Note_Interactions (
     user_id uuid NOT NULL,
     note_id uuid NOT NULL,
     CONSTRAINT "PK_user_note_interactions" PRIMARY KEY (user_id, note_id),

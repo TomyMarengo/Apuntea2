@@ -51,4 +51,6 @@ public interface NoteDao {
     List<Note> findNoteByIds(List<UUID> noteIds);
 
     List<Note> findNoteByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa);
+
+    void addInteractionIfNotExists(UUID userId, UUID noteId);
 }

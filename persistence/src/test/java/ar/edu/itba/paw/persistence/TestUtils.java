@@ -146,6 +146,13 @@ public class TestUtils {
         em.flush();
     }
 
+    static void insertFollower(EntityManager em, UUID followerId, UUID followedId) {
+        User follower = em.getReference(User.class, followerId);
+        User followed = em.getReference(User.class, followedId);
+        em.persist(new Follow(follower, followed));
+        em.flush();
+    }
+
     static Subject insertSubject(EntityManager em, String name, UUID rootDirectoryId) {
         Subject subject = new Subject(name, em.getReference(Directory.class, rootDirectoryId));
         em.persist(subject);

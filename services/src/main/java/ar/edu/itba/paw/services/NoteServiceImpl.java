@@ -168,4 +168,11 @@ public class NoteServiceImpl implements NoteService {
         boolean success = noteDao.removeFavorite(currentUserId, noteId);
         if (!success) throw new InvalidNoteException();
     }
+
+    @Transactional
+    @Override
+    public void addInteractionIfNotExists(UUID noteId) {
+        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
+        noteDao.addInteractionIfNotExists(currentUserId, noteId);
+    }
 }

@@ -264,12 +264,12 @@ CREATE TABLE IF NOT EXISTS Follows
     CONSTRAINT "PK_follows" PRIMARY KEY (follower_id, followed_id),
     CONSTRAINT "FK_follows_users_follower" FOREIGN KEY (follower_id) REFERENCES Users (user_id) ON DELETE CASCADE,
     CONSTRAINT "FK_follows_users_followed" FOREIGN KEY (followed_id) REFERENCES Users (user_id) ON DELETE CASCADE
-    );
+);
 
-CREATE TABLE IF NOT EXISTS UserNoteInteractions (
-                                                    user_id uuid NOT NULL,
-                                                    note_id uuid NOT NULL,
-                                                    CONSTRAINT "PK_user_note_interactions" PRIMARY KEY (user_id, note_id),
+CREATE TABLE IF NOT EXISTS User_Note_Interactions (
+    user_id uuid NOT NULL,
+    note_id uuid NOT NULL,
+    CONSTRAINT "PK_user_note_interactions" PRIMARY KEY (user_id, note_id),
     CONSTRAINT "FK_user_note_interactions_users" FOREIGN KEY (user_id) REFERENCES Users (user_id) ON DELETE CASCADE,
     CONSTRAINT "FK_user_note_interactions_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE
-    );
+);
