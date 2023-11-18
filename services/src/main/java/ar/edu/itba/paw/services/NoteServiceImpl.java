@@ -138,7 +138,7 @@ public class NoteServiceImpl implements NoteService {
         Note note = noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
         if (note.getUser().equals(user))
             throw new InvalidReviewException();
-        Review review = noteDao.createOrUpdateReview(noteId, user.getUserId(), score, content);
+        Review review = noteDao.createOrUpdateReview(note, user, score, content);
         emailService.sendReviewEmail(review);
     }
 

@@ -265,7 +265,7 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testCreateReview(){
-        noteDao.createOrUpdateReview(notePublic.getId(), pepeUser.getUserId(), 5, "Muy buen apunte");
+        noteDao.createOrUpdateReview(notePublic, pepeUser, 5, "Muy buen apunte");
         em.flush();
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + notePublic.getId() + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));
     }
@@ -274,7 +274,7 @@ public class NoteJpaDaoTest {
     public void testUpdateReview(){
         Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
         int countScore4 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 4");
-        noteDao.createOrUpdateReview(guiaEda.getId(), pepeUser.getUserId(), 5, "Cacique in the JODA");
+        noteDao.createOrUpdateReview(guiaEda, pepeUser, 5, "Cacique in the JODA");
         em.flush();
         assertEquals(1, countScore4);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));

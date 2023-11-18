@@ -166,8 +166,8 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
-    public Review createOrUpdateReview(UUID noteId, UUID userId, int score, String content) {
-        Review review = new Review(noteId, userId, score, content);
+    public Review createOrUpdateReview(Note note, User user, int score, String content) {
+        Review review = new Review(note, user, score, content);
         em.merge(review);
         return review;
     }

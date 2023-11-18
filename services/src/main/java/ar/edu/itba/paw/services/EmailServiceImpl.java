@@ -78,7 +78,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendDeleteReviewEmail(Review review, String reason) {
-        final User owner = review.getNote().getUser();
+        final User owner = review.getUser();
         if (!owner.hasNotificationsEnabled()) {
             LOGGER.info("User {} has notifications disabled, skipping delete review email", owner.getEmail());
             return;
