@@ -31,8 +31,8 @@ public class UserController {
     private final DirectoryService directoryService;
     private final NoteService noteService;
     private final SecurityService securityService;
-
     private final CareerService careerService;
+    private final SearchService searchService;
 
     private	static	final Logger LOGGER	= LoggerFactory.getLogger(UserController.class);
 
@@ -45,7 +45,8 @@ public class UserController {
                           final SecurityService securityService,
                           final DirectoryService directoryService,
                           final CareerService careerService,
-                          final NoteService noteService
+                          final NoteService noteService,
+                          final SearchService searchService
         ) {
         this.userService = userService;
         this.securityService = securityService;
@@ -53,6 +54,7 @@ public class UserController {
         this.subjectService = subjectService;
         this.careerService = careerService;
         this.noteService = noteService;
+        this.searchService = searchService;
     }
 
     @RequestMapping(value = "/my-favorites", method = RequestMethod.GET)
@@ -102,14 +104,10 @@ public class UserController {
         if (user != null && !user.getUserId().equals(userId))
             mav.addObject("isFollowing", userService.isFollowing(userId));
 
+        mav.addObject("latestNotes", searchService.search(null,null, null, userId, "note",
+                null, "date", false, 1, 10).getContent());
         mav.addObject("root_directories", subjectService.getSubjectsByUserIdGroupByYear(userId));
         return mav;
-    }
-
-    @RequestMapping(value = "/user/note-board", method = RequestMethod.GET)
-    public ModelAndView myNoteBoard() {
-        User user = securityService.getCurrentUserOrThrow();
-        return new ModelAndView("redirect:/user/" + user.getUserId() + "/note-board");
     }
 
     @RequestMapping(value = "/profile", method = RequestMethod.GET)

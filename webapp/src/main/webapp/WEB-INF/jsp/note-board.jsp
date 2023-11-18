@@ -73,7 +73,8 @@
         <c:if test="${owner ne user}">
             <c:url var="userProfilePicture" value="${baseUrl}/profile/${owner.userId}/picture"/>
             <div class="profile-card">
-                <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="50px" height="50px">
+                <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="50px"
+                     height="50px">
                 <div class="d-flex flex-column">
                     <h4 class="mb-0">${owner.displayName}</h4>
                     <span>3⭐</span> <!-- TODO: Add user score -->
@@ -95,10 +96,61 @@
             </div>
         </c:if>
 
+        <c:if test="${not empty latestNotes}">
+
+            <div class="d-flex flex-column mt-5 w-100">
+                <ul class="mini-nav">
+                    <li class="mini-nav-item">
+                        <button class="btn mini-nav-button root-dir text-center active"
+                                data-toggle="tab" role="tab" aria-selected="true">
+                            <spring:message code="latestNotes"/>
+                        </button>
+                    </li>
+                </ul>
+
+
+                <div class="tab-content bg-bg">
+                    <div class="tab-pane root-dir-list fade active"
+                         role="tabpanel">
+                        <div class="file-list gap-5 justify-content-center align-items-center">
+                            <c:forEach items="${latestNotes}" var="note">
+                                <a class="align-self-start w-100" href="<c:url value="${baseUrl}/notes/${note.id}"/>">
+                                    <div class="d-flex flex-column gap-2 align-items-center blob-container">
+                                        <c:if test="${note.fileType eq 'pdf'}">
+                                            <img src="<c:url value="/image/pdf.png"/>" alt="pdf" class="icon-xxl">
+                                        </c:if>
+                                        <c:if test="${note.fileType eq 'jpeg'}">
+                                            <img src="<c:url value="/image/jpeg.png"/>" alt="jpeg" class="icon-xxl">
+                                        </c:if>
+                                        <c:if test="${note.fileType eq 'jpg'}">
+                                            <img src="<c:url value="/image/jpg.png"/>" alt="jpg" class="icon-xxl">
+                                        </c:if>
+                                        <c:if test="${note.fileType eq 'png'}">
+                                            <img src="<c:url value="/image/png.png"/>" alt="png" class="icon-xxl">
+                                        </c:if>
+                                        <c:if test="${note.fileType eq 'mp3'}">
+                                            <img src="<c:url value="/image/mp3.png"/>" alt="mp3" class="icon-xxl">
+                                        </c:if>
+                                        <c:if test="${note.fileType eq 'mp4'}">
+                                            <img src="<c:url value="/image/mp4.png"/>" alt="mp4" class="icon-xxl">
+                                        </c:if>
+                                        <span class="fw-bold flex-wrap justify-content-center user-followed-name">
+                                                <c:out value="${note.name}"/>
+                                            </span>
+                                    </div>
+                                </a>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:if>
+
         <!-- ROOT DIRECTORIES -->
         <c:if test="${not empty root_directories}">
             <div class="d-flex flex-column mt-5 w-100">
                 <ul class="mini-nav">
+
                     <c:forEach items="${root_directories}" var="subjects" varStatus="i">
                         <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
                         <!--TAB-->
@@ -120,13 +172,9 @@
                                     <a class="align-self-start blob-container"
                                        href="<c:url value="${baseUrl}/directory/${rd.rootDirectoryId}?userId=${ not empty owner ? owner.userId : user.userId}"/>">
                                         <div class="position-relative">
-
-                                                <%--                                            <c:if test="${rd.rootDirectory.qtyFiles gt 0}">--%>
                                             <div class="note-count-container">
                                                 <span><strong>${rd.rootDirectory.qtyFiles}</strong></span>
                                             </div>
-                                                <%--                                            </c:if>--%>
-
                                             <div class="d-flex flex-column gap-2 align-items-center">
                                                 <img src="<c:url value="/svg/folder.svg"/>"
                                                      alt="<spring:message code="folder"/>"

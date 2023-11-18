@@ -182,7 +182,7 @@
 
                     <c:if test="${note.user.userId ne user.userId}">
                         <!-- IF USER HAS ALREADY REVIEWED -->
-                        <c:if test="${reviews[0].user.userId eq user.userId}">
+                        <c:if test="${user ne null and reviews[0].user.userId eq user.userId}">
                             <div class="card box p-3">
                                 <h5><spring:message code="notes.comments.yourReview"/></h5>
                                 <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
