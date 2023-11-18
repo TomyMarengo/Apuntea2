@@ -47,8 +47,8 @@
 <main>
     <fragment:sidebar user="${user}"/>
 
-    <section class="my-5 d-flex justify-content-center">
-        <div class="mt-5 card box p-3 w-inherit mw-700 w-100" style="block-size: fit-content">
+    <section class="d-flex justify-content-center" style="margin-top: 5rem;">
+        <div class="card box p-3 w-inherit mw-700 w-100" style="block-size: fit-content">
 
             <c:url var="editUserUrl" value="/profile"/>
             <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>

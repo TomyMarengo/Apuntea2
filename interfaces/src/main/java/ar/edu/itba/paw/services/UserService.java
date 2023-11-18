@@ -26,4 +26,5 @@ public interface UserService {
     void unfollow(UUID followedId);
     List<User> getFollows();
     boolean isFollowing(UUID followedId);
+    void updateNotificationsEnabled(boolean notificationsEnabled);
 }

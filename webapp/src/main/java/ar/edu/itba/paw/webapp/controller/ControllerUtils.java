@@ -36,6 +36,7 @@ public class ControllerUtils {
     static final String CREATE_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.createSubjectForm";
     static final String EDIT_SUBJECT_FORM_BINDING = "org.springframework.validation.BindingResult.editSubjectForm";
     static final String DELETE_WITH_REASON_FORM_BINDING = "org.springframework.validation.BindingResult.deleteWithReasonForm";
+    static final String CHANGE_PASSWORD_FORM_BINDING = "org.springframework.validation.BindingResult.changePasswordForm";
     static final String DELETE_WITH_REASON_REVIEW = "deleteWithReasonReview";
     static final String DELETE_WITH_REASON_NOTE = "deleteWithReasonNote";
     static final String REVIEW_USER_ID = "reviewUserId";
@@ -45,6 +46,8 @@ public class ControllerUtils {
     static final String SUBJECT_UNLINKED = "subjectUnlinked";
     static final String SUBJECT_CREATED = "subjectCreated";
     static final String SUBJECT_EDITED = "subjectEdited";
+    static final String PASSWORD_CHANGED = "passwordChanged";
+
     private	static final Logger LOGGER	= LoggerFactory.getLogger(ControllerUtils.class);
     private ControllerUtils(){}
 

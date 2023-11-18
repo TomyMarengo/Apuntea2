@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>Apuntea | <spring:message code="changePassword.title"/></title>
+    <title>Apuntea | <spring:message code="configuration"/></title>
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
@@ -42,15 +42,15 @@
     <fragment:navbar user="${user}"/>
 
     <!-- BOTTOM-NAVBAR -->
-    <spring:message code="changePassword.title" var="title"/>
-    <fragment:bottom-navbar title="${baseUrl}/change-password,${title}"/>
+    <spring:message code="configuration" var="title"/>
+    <fragment:bottom-navbar title="${baseUrl}/configuration,${title}"/>
 </header>
 
 <main>
     <fragment:sidebar user="${user}"/>
 
-    <section class="my-5 d-flex justify-content-center">
-        <div class="mt-5 card box p-3 w-inherit mw-700 w-100" style="block-size: fit-content">
+    <section class="d-flex justify-content-center column-gap-5 flex-wrap" style="margin-top: 5rem;">
+        <div class="card box p-3 w-inherit mw-500" style="block-size: fit-content">
             <c:url var="changePasswordUrl" value="/change-password"/>
             <form:form action="${changePasswordUrl}"
                        method="post"
@@ -88,13 +88,31 @@
                                      class="d-none icon-xs fill-dark-primary"/>
                             </button>
                         </div>
+                        <form:errors path="newPassword" cssClass="text-danger" element="p"/>
+
                     </div>
 
-                    <form:errors path="newPassword" cssClass="text-danger" element="p"/>
                     <div class="mt-4 d-flex justify-content-center">
                         <button class="btn rounded-box button-primary"><spring:message code="update"/></button>
                     </div>
                 </form:form>
+        </div>
+        <div class="card box p-3 w-inherit mw-500" style="block-size: fit-content">
+            <h1><spring:message code="otherConfigurations.title"/></h1>
+            <div class="form-switch form-check-reverse">
+                <div class="form-check form-switch p-0">
+                    <c:set var="notificationsEnabledUrl" value="${baseUrl}/enable-notifications"/>
+                    <c:set var="notificationsDisabledUrl" value="${baseUrl}/disable-notifications"/>
+                    <form:form action="${notificationsEnabled ? notificationsDisabledUrl : notificationsEnabledUrl}"
+                               method="post" id="changeNotificationsForm">
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="form-check-label" for="receiveMailsSwitch"> <spring:message code="otherConfigurations.receiveMails"/></label>
+                            <input type="checkbox" id="receiveMailsSwitch" class="form-check-input"
+                                   onclick="document.getElementById('changeNotificationsForm').submit()"/>
+                        </div>
+                    </form:form>
+                </div>
+            </div>
         </div>
     </section>
 </main>
@@ -113,7 +131,13 @@
 
 <script>
     <c:if test="${passwordChanged eq true}">
-    displayToast('<spring:message code="toast.changePassword"/>')
+        displayToast('<spring:message code="toast.changePassword"/>')
+    </c:if>
+</script>
+
+<script>
+    <c:if test="${notificationsEnabled eq true}">
+        document.getElementById('receiveMailsSwitch').checked = true;
     </c:if>
 </script>
 </body>

@@ -460,7 +460,6 @@
 <c:if test="${errorsDeleteWithReasonForm ne null and deleteWithReasonReview eq true}">
     <script>
         const userId = "<c:out value="${reviewUserId}"/>";
-        console.log(userId)
         document.getElementById('deleteReviewForm').action = `${baseUrl}/manage/users/` + userId + `/review/${noteId}/delete`;
 
         let deleteReviewModal = new bootstrap.Modal(document.getElementById('deleteReviewModal'), {})

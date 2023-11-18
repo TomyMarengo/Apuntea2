@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
+import ar.edu.itba.paw.webapp.forms.admin.DeleteWithReasonForm;
 import ar.edu.itba.paw.webapp.forms.user.password.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.forms.user.EditUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
@@ -13,16 +14,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.USER_EDITED;
+import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 
 @Controller
 public class UserController {
@@ -149,22 +152,40 @@ public class UserController {
         });
     }
 
-    @RequestMapping(value = "/change-password", method = RequestMethod.GET)
-    public ModelAndView getPassword(@RequestParam(value = "password-changed", required = false) final boolean passwordChanged,
-                                    @ModelAttribute final ChangePasswordForm changePasswordForm) {
+    @RequestMapping(value = "/configuration", method = RequestMethod.GET)
+    public ModelAndView configuration(ModelMap model) {
         User user = securityService.getCurrentUserOrThrow();
-        ModelAndView mav = new ModelAndView("change-password");
+        ModelAndView mav = new ModelAndView("configuration");
         mav.addObject("user", user);
-        mav.addObject("passwordChanged", passwordChanged);
+        mav.addObject("notificationsEnabled", user.hasNotificationsEnabled());
+        addFormOrGetWithErrors(mav, model, CHANGE_PASSWORD_FORM_BINDING, "errorsChangePassword", "changePasswordForm", ChangePasswordForm.class);
+        mav.addObject(PASSWORD_CHANGED, model.getOrDefault(PASSWORD_CHANGED, false));
         return mav;
     }
     @RequestMapping(value = "/change-password", method = RequestMethod.POST)
     public ModelAndView changePassword(@Valid @ModelAttribute final ChangePasswordForm changePasswordForm,
-                                       final BindingResult result) {
-        if(!result.hasErrors()) {
-            userService.updateCurrentUserPassword(changePasswordForm.getNewPassword());
-            return new ModelAndView("redirect:change-password?password-changed=true");
+                                       final BindingResult result, final RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()) {
+            redirectAttributes.addFlashAttribute(CHANGE_PASSWORD_FORM_BINDING, result);
         }
-        return new ModelAndView("change-password").addObject("errorsChangePasswordForm", result.getAllErrors());
+        else{
+            userService.updateCurrentUserPassword(changePasswordForm.getNewPassword());
+            redirectAttributes.addFlashAttribute(PASSWORD_CHANGED, true);
+        }
+        return new ModelAndView("redirect:/configuration");
     }
+
+    @RequestMapping(value = "/enable-notifications", method = RequestMethod.POST)
+    public ModelAndView receiveNotifications() {
+        userService.updateNotificationsEnabled(true);
+        return new ModelAndView("redirect:/configuration");
+    }
+
+    @RequestMapping(value = "/disable-notifications", method = RequestMethod.POST)
+    public ModelAndView dontReceiveNotifications() {
+        userService.updateNotificationsEnabled(false);
+        return new ModelAndView("redirect:/configuration");
+    }
+
+
 }

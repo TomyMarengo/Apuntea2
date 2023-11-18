@@ -205,5 +205,12 @@ public class UserServiceImpl implements UserService {
         emailService.sendBanEmail(user, reason, BAN_DURATION);
     }
 
+    @Transactional
+    @Override
+    public void updateNotificationsEnabled(boolean notificationsEnabled) {
+        User user = securityService.getCurrentUserOrThrow();
+        user.setNotificationsEnabled(notificationsEnabled);
+        LOGGER.info("Notifications enabled updated for user with id: {}, updated to {}", user.getUserId(), user.hasNotificationsEnabled());
+    }
 
 }
