@@ -77,7 +77,7 @@
                      height="50px">
                 <div class="d-flex flex-column">
                     <h4 class="mb-0">${owner.displayName}</h4>
-                    <span>3⭐</span> <!-- TODO: Add user score -->
+                    <span>${ownerScore}⭐</span> <!-- TODO: Add user score -->
                 </div>
                 <c:if test="${user ne null}">
                     <c:set var="followUrl" value="${baseUrl}/user/${owner.userId}/follow"/>

@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.user.Image;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
@@ -65,10 +68,12 @@ public class UserJpaDaoTest {
         String email = "tester@itba.edu.ar";
         UUID studentId = jdbcInsertStudent(namedParameterJdbcTemplate, email, "", ING_INF_ID, "es");
         Optional<User> maybeUser = userDao.findByEmail(email);
-        assertEquals(studentId, maybeUser.get().getUserId());
-        assertEquals(email, maybeUser.get().getEmail());
-        assertEquals(ING_INF_ID, maybeUser.get().getCareer().getCareerId());
-        assertEquals("es", maybeUser.get().getLocale().getLanguage());
+
+        User user = maybeUser.orElseThrow(AssertionError::new);
+        assertEquals(studentId, user.getUserId());
+        assertEquals(email, user.getEmail());
+        assertEquals(ING_INF_ID, user.getCareer().getCareerId());
+        assertEquals("es", user.getLocale().getLanguage());
     }
 
     @Test
@@ -82,13 +87,16 @@ public class UserJpaDaoTest {
     public void testFindUserByUsername() {
         String username = "tester";
         UUID studentId = insertCompleteStudent(namedParameterJdbcTemplate, username, "", ING_INF_ID, "es", username, "Test", "Er");
+
         Optional<User> maybeUser = userDao.findByUsername(username);
-        assertEquals(studentId, maybeUser.get().getUserId());
-        assertEquals(username, maybeUser.get().getUsername());
-        assertEquals(ING_INF_ID, maybeUser.get().getCareer().getCareerId());
-        assertEquals("es", maybeUser.get().getLocale().getLanguage());
-        assertEquals("Test", maybeUser.get().getFirstName());
-        assertEquals("Er", maybeUser.get().getLastName());
+
+        User user = maybeUser.orElseThrow(AssertionError::new);
+        assertEquals(studentId, user.getUserId());
+        assertEquals(username, user.getUsername());
+        assertEquals(ING_INF_ID, user.getCareer().getCareerId());
+        assertEquals("es", user.getLocale().getLanguage());
+        assertEquals("Test", user.getFirstName());
+        assertEquals("Er", user.getLastName());
     }
 
     @Test
@@ -102,11 +110,14 @@ public class UserJpaDaoTest {
     public void testFindUserById(){
         String email = "test@itba.edu.ar";
         UUID studentId = jdbcInsertStudent(namedParameterJdbcTemplate, email, "", ING_INF_ID, "es");
+
         Optional<User> maybeUser = userDao.findById(studentId);
-        assertEquals(studentId, maybeUser.get().getUserId());
-        assertEquals(email, maybeUser.get().getEmail());
-        assertEquals(ING_INF_ID, maybeUser.get().getCareer().getCareerId());
-        assertEquals("es", maybeUser.get().getLocale().getLanguage());
+
+        User user = maybeUser.orElseThrow(AssertionError::new);
+        assertEquals(studentId,user.getUserId());
+        assertEquals(email, user.getEmail());
+        assertEquals(ING_INF_ID, user.getCareer().getCareerId());
+        assertEquals("es", user.getLocale().getLanguage());
     }
 
     @Test
@@ -177,7 +188,7 @@ public class UserJpaDaoTest {
     public void testUpdateProfilePictureHadPicture(){
         User student = insertStudent(em, "student@mail.com", "", ING_INF_ID, "es");
         Image oldImage = new Image(new byte[]{9, 8, 7, 6, 5, 4, 3, 2, 1});
-        Image img = insertImage(em, oldImage, student);
+        insertImage(em, oldImage, student);
         Image newImage = new Image(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9});
         userDao.updateProfilePicture(student, newImage);
         em.flush();
@@ -189,7 +200,6 @@ public class UserJpaDaoTest {
 
     @Test
     public void testGetStudents2000Count() {
-        int currentUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         int results = userDao.getStudentsQuantity("t2000", null);
@@ -223,7 +233,6 @@ public class UserJpaDaoTest {
 
     @Test
     public void testGetStudents2000() {
-        int currentUsers = JdbcTestUtils.countRowsInTable(jdbcTemplate, "users");
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         List<User> users = userDao.getStudents("t2000", null,1, 10);
@@ -286,5 +295,51 @@ public class UserJpaDaoTest {
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
 
     }
+
+    @Test
+    public void testGetAvgScore() {
+        User user = insertStudent(em, "user@itba.edu.ar", "1234", ING_INF_ID, "es");
+        Note.NoteBuilder nb = new Note.NoteBuilder().user(user).parentId(EDA_DIRECTORY_ID).subject(em.getReference(Subject.class, EDA_ID)).category(Category.OTHER).fileType("pdf").visible(true);
+        Note note1 = insertNote(em, nb.name("n1"));
+        Note note2 = insertNote(em, nb.name("n2"));
+        Note note3 = insertNote(em, nb.name("n3"));
+        Note note4 = insertNote(em, nb.name("n4"));
+        insertNote(em, nb.name("n5"));
+        User pepeUser = em.getReference(User.class, PEPE_ID), carlaUser = em.getReference(User.class, CARLADMIN_ID), saidmanUser = em.getReference(User.class, SAIDMAN_ID);
+        insertReview(em, note1, pepeUser, 5, "gud");
+        insertReview(em, note1, carlaUser, 2, "git gud");
+        insertReview(em, note1, saidmanUser, 4, "tabien");
+        insertReview(em, note2, pepeUser, 5, "nice");
+        insertReview(em, note3, pepeUser, 5, "cool");
+        insertReview(em, note4, pepeUser, 5, "bein");
+        float expected = (5 + 2 + 4 + 5 + 5 + 5) *1f / 6;
+
+        float avgScore = userDao.getAvgScore(user.getUserId());
+        em.flush();
+        assertEquals(expected, avgScore, 0.1);
+    }
+
+    @Test
+    public void testGetAvgScoreNoNotes() {
+        User user = insertStudent(em, "user@itba.edu.ar", "1234", ING_INF_ID, "es");
+        float avgScore = userDao.getAvgScore(user.getUserId());
+        em.flush();
+        assertEquals(0, avgScore, 0.0001);
+        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "user_id = '" + user.getUserId() + "'"));
+    }
+
+    @Test
+    public void testGetAvgScoreNoReviews() {
+        User user = insertStudent(em, "user@itba.edu.ar", "1234", ING_INF_ID, "es");
+        Note.NoteBuilder nb = new Note.NoteBuilder().user(user).parentId(EDA_DIRECTORY_ID).subject(em.getReference(Subject.class, EDA_ID)).category(Category.OTHER).fileType("pdf").visible(true);
+        insertNote(em, nb.name("n1"));
+        insertNote(em, nb.name("n2"));
+        float avgScore = userDao.getAvgScore(user.getUserId());
+        em.flush();
+        assertEquals(0, avgScore, 0.0001);
+        assertEquals(2, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "user_id = '" + user.getUserId() + "'"));
+    }
+
+
 }
 

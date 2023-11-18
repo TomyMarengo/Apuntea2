@@ -2,7 +2,6 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.note.Note;
-import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,4 +25,5 @@ public interface NoteService {
     void removeFavorite(UUID noteId);
 
     void addInteractionIfNotExists(UUID noteId);
+
 }

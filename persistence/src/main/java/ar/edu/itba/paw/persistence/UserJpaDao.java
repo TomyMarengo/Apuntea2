@@ -156,4 +156,11 @@ class UserJpaDao implements UserDao {
         em.persist(ban);
         return true;
     }
+
+    @Override
+    public float getAvgScore(UUID userId) {
+        return em.createQuery("SELECT ROUND(COALESCE(AVG(r.score), 0), 1) FROM Review r JOIN r.note n WHERE n.user.id = :userId", Double.class)
+                .setParameter("userId", userId)
+                .getSingleResult().floatValue();
+    }
 }

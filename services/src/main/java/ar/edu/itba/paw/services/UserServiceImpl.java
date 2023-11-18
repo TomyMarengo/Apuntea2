@@ -213,4 +213,19 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("Notifications enabled updated for user with id: {}, updated to {}", user.getUserId(), user.hasNotificationsEnabled());
     }
 
+    @Transactional
+    @Override
+    public float getAvgScore(UUID userId) {
+        return userDao.getAvgScore(userId);
+    }
+
+    @Transactional
+    @Override
+    public User getOwner(UUID userId, User currentUser) {
+        if (currentUser != null && currentUser.getUserId().equals(userId)) {
+            return currentUser;
+        } else {
+            return userDao.findById(userId).orElseThrow(UserNotFoundException::new);
+        }
+    }
 }

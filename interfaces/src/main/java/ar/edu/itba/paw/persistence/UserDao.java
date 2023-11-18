@@ -27,4 +27,5 @@ public interface UserDao {
     boolean unbanUser(User user);
     List<User> getStudents(String query, UserStatus status, int pageNum, int pageSize);
     int getStudentsQuantity(String query, UserStatus status);
+    float getAvgScore(UUID userId);
 }

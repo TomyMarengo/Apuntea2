@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
-import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.admin.DeleteWithReasonForm;
@@ -98,11 +97,10 @@ public class UserController {
     public ModelAndView noteBoard(@PathVariable("userId") @ValidUuid UUID userId) {
         ModelAndView mav = new ModelAndView("note-board");
         User user = securityService.getCurrentUser().orElse(null);
+        User owner =  userService.getOwner(userId, user);
         mav.addObject("user", user);
-        if (user == null || !user.getUserId().equals(userId))
-            mav.addObject("owner", userService.findById(userId).orElseThrow(UserNotFoundException::new));
-        else
-            mav.addObject("owner", user);
+        mav.addObject("owner",owner);
+        mav.addObject("ownerScore", userService.getAvgScore(owner.getUserId()));
 
         if (user != null && !user.getUserId().equals(userId))
             mav.addObject("isFollowing", userService.isFollowing(userId));
