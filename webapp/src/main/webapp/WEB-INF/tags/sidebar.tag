@@ -10,11 +10,12 @@
     <c:if test="${user ne null}">
 
         <c:if test="${active eq 'note-board'}">
-            <a class="btn nav-icon-button active" href="${baseUrl}/user/${user.userId}/note-board" data-bs-toggle="tooltip"
+            <a class="btn nav-icon-button active" href="${baseUrl}/user/${user.userId}/note-board"
+               data-bs-toggle="tooltip"
                data-bs-placement="right"
-               data-bs-title="<spring:message code="myNotes.title"/>" data-bs-trigger="hover">
+               data-bs-title="<spring:message code="myProfileNotes.title"/>" data-bs-trigger="hover">
                 <img src="<c:url value="/svg/my-notes.svg"/>"
-                     alt="<spring:message code="myNotes.title"/>"
+                     alt="<spring:message code="myProfileNotes.title"/>"
                      class="icon-m fill-dark-primary"/>
             </a>
         </c:if>

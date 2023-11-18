@@ -167,7 +167,7 @@
 	overflow: hidden;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 576px) {
 	.search-container {
 		display: none;
 	}

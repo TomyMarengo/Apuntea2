@@ -91,3 +91,62 @@
 .note-count-container span {
     transform: rotateZ(225deg);
 }
+
+.profile-card {
+    min-width: 400px;
+    width: max-content;
+    background-color: var(--bg);
+    padding: 1rem;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.follow-button {
+    background-color: var(--primary);
+    color: var(--bg);
+    border-radius: 25px;
+    padding: 0.5rem 1rem;
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-left: 1rem;
+    width: 140px;
+}
+
+.follow-button.following::after {
+    content: attr(data-following-text);
+}
+
+.follow-button.following:hover::after {
+    content: attr(data-unfollow-text);
+}
+
+.follow-button.not-following::after {
+    content: attr(data-follow-text);
+}
+
+.follow-button.following {
+    background-color: transparent;
+    outline: 1px solid var(--text);
+    color: var(--text);
+}
+
+.follow-button.following:hover {
+    background-color: rgba(var(--secondary-rgb), 0.5);
+    outline: 1px solid var(--text);
+}
+
+.follow-button.not-following:hover {
+    background-color: var(--dark-primary);
+}
+
+.user-followed-name {
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

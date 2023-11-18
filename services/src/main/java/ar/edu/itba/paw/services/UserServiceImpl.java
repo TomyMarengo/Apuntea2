@@ -105,6 +105,15 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public boolean isFollowing(UUID followedId) {
+        UUID followerId = securityService.getCurrentUserOrThrow().getUserId();
+        return userDao.isFollowing(followerId, followedId);
+    }
+
+
+
+    @Transactional
+    @Override
     public void create(String email, String password, UUID careerId, Role role) {
         final String lang = LocaleContextHolder.getLocale().getLanguage();
         Career career = careerDao.getCareerById(careerId).orElseThrow(InvalidCareerException::new);

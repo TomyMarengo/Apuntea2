@@ -64,7 +64,20 @@ public class UserController {
         mav.addObject("directoryFavorites", favoriteGroups.getDirectoryList());
         mav.addObject("subjectFavorites", favoriteGroups.getRootDirectoryList());
         mav.addObject("noteFavorites", noteService.getFavorites());
+        mav.addObject("userFavorites", userService.getFollows());
         return mav;
+    }
+
+    @RequestMapping(value = "/user/{userId}/follow", method = RequestMethod.POST)
+    public ModelAndView followUser(@PathVariable("userId") @ValidUuid UUID userId) {
+        userService.follow(userId);
+        return new ModelAndView("redirect:/user/" + userId + "/note-board");
+    }
+
+    @RequestMapping(value = "/user/{userId}/unfollow", method = RequestMethod.POST)
+    public ModelAndView unfollowUser(@PathVariable("userId") @ValidUuid UUID userId) {
+        userService.unfollow(userId);
+        return new ModelAndView("redirect:/user/" + userId + "/note-board");
     }
 
     @RequestMapping(value = "/my-career", method = RequestMethod.GET)
@@ -85,6 +98,9 @@ public class UserController {
             mav.addObject("owner", userService.findById(userId).orElseThrow(UserNotFoundException::new));
         else
             mav.addObject("owner", user);
+
+        if (user != null && !user.getUserId().equals(userId))
+            mav.addObject("isFollowing", userService.isFollowing(userId));
 
         mav.addObject("root_directories", subjectService.getSubjectsByUserIdGroupByYear(userId));
         return mav;

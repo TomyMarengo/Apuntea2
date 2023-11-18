@@ -25,4 +25,5 @@ public interface UserService {
     void follow(UUID followedId);
     void unfollow(UUID followedId);
     List<User> getFollows();
+    boolean isFollowing(UUID followedId);
 }

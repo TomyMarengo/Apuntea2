@@ -112,6 +112,14 @@ class UserJpaDao implements UserDao {
     }
 
     @Override
+    public boolean isFollowing(UUID followerId, UUID followedId) {
+        return em.createQuery("SELECT COUNT(f) FROM Follow f WHERE f.follower.id = :followerId AND f.followed.id = :followedId", Long.class)
+                .setParameter("followerId", followerId)
+                .setParameter("followedId", followedId)
+                .getSingleResult() > 0;
+    }
+
+    @Override
     public Optional<User> findByUsername(String username) {
         return em.createQuery("FROM User WHERE username = :username", User.class)
                 .setParameter("username", username)

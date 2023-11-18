@@ -55,7 +55,8 @@
     <c:if test="${owner.userId ne user.userId}">
         <spring:message code="yourProfileNotes.title" arguments="${owner.displayName}" var="title"/>
     </c:if>
-    <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${title}" user="${user}" owner="${owner}"/>
+    <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${title}" user="${user}"
+                            owner="${owner}"/>
 
 </header>
 
@@ -67,10 +68,36 @@
         <fragment:sidebar user="${user}"/>
     </c:if>
 
-    <section class="container mt-5">
+    <section class="container mt-5 d-flex flex-column align-items-center">
+        <!-- USER PROFILE -->
+        <c:if test="${owner ne user}">
+            <c:url var="userProfilePicture" value="${baseUrl}/profile/${owner.userId}/picture"/>
+            <div class="profile-card">
+                <img src="${userProfilePicture}" alt="Profile Picture" class="rounded" width="50px" height="50px">
+                <div class="d-flex flex-column">
+                    <h4 class="mb-0">${owner.displayName}</h4>
+                    <span>3⭐</span> <!-- TODO: Add user score -->
+                </div>
+                <c:if test="${user ne null}">
+                    <c:set var="followUrl" value="${baseUrl}/user/${owner.userId}/follow"/>
+                    <c:set var="unfollowUrl" value="${baseUrl}/user/${owner.userId}/unfollow"/>
+
+                    <form:form action="${isFollowing ? unfollowUrl : followUrl}" method="post">
+                        <button type="submit"
+                                class="follow-button ${isFollowing ? 'following' : 'not-following'}"
+                                data-following-text="<spring:message code='following'/>"
+                                data-follow-text="<spring:message code='follow'/>"
+                                data-unfollow-text="<spring:message code='unfollow'/>">
+                        </button>
+                    </form:form>
+
+                </c:if>
+            </div>
+        </c:if>
+
         <!-- ROOT DIRECTORIES -->
         <c:if test="${not empty root_directories}">
-            <div class="d-flex flex-column mt-5">
+            <div class="d-flex flex-column mt-5 w-100">
                 <ul class="mini-nav">
                     <c:forEach items="${root_directories}" var="subjects" varStatus="i">
                         <spring:message code='ordinal.${subjects.key}' var="ordinal"/>
@@ -94,15 +121,16 @@
                                        href="<c:url value="${baseUrl}/directory/${rd.rootDirectoryId}?userId=${ not empty owner ? owner.userId : user.userId}"/>">
                                         <div class="position-relative">
 
-<%--                                            <c:if test="${rd.rootDirectory.qtyFiles gt 0}">--%>
-                                                <div class="note-count-container">
-                                                    <span><strong>${rd.rootDirectory.qtyFiles}</strong></span>
-                                                </div>
-<%--                                            </c:if>--%>
+                                                <%--                                            <c:if test="${rd.rootDirectory.qtyFiles gt 0}">--%>
+                                            <div class="note-count-container">
+                                                <span><strong>${rd.rootDirectory.qtyFiles}</strong></span>
+                                            </div>
+                                                <%--                                            </c:if>--%>
 
                                             <div class="d-flex flex-column gap-2 align-items-center">
                                                 <img src="<c:url value="/svg/folder.svg"/>"
-                                                     alt="<spring:message code="folder"/>" class="icon-xxl fill-primary">
+                                                     alt="<spring:message code="folder"/>"
+                                                     class="icon-xxl fill-primary">
                                                 <!-- max 2 lines-->
                                                 <span class="fw-bold flex-wrap justify-content-center folder-name">
                                                     <c:out value="${rd.rootDirectory.name}"/>
