@@ -76,8 +76,8 @@
                 <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="50px"
                      height="50px">
                 <div class="d-flex flex-column">
-                    <h4 class="mb-0">${owner.displayName}</h4>
-                    <span>${ownerScore}⭐</span> <!-- TODO: Add user score -->
+                    <h4 class="mb-0"><c:out value="${owner.displayName}"/></h4>
+                    <span><c:out value="${ownerScore}"/>⭐</span>
                 </div>
                 <c:if test="${user ne null}">
                     <c:set var="followUrl" value="${baseUrl}/user/${owner.userId}/follow"/>
@@ -170,7 +170,7 @@
                                        href="<c:url value="${baseUrl}/directory/${rd.rootDirectoryId}?userId=${ not empty owner ? owner.userId : user.userId}"/>">
                                         <div class="position-relative">
                                             <div class="note-count-container">
-                                                <span><strong>${rd.rootDirectory.qtyFiles}</strong></span>
+                                                <span><strong><c:out value="${rd.rootDirectory.qtyFiles}"/></strong></span>
                                             </div>
                                             <div class="d-flex flex-column gap-2 align-items-center">
                                                 <img src="<c:url value="/svg/folder.svg"/>"
