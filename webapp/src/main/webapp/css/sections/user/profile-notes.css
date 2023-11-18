@@ -60,6 +60,17 @@
     border: var(--primary) 1px solid;
 }
 
+.root-dir-no-js {
+    background-color: var(--primary);
+    color: var(--bg);
+}
+
+.root-dir-no-js:not(.active):hover{
+    color: var(--primary);
+    background-color: var(--bg);
+    border: var(--primary) 1px solid;
+}
+
 .heart-container {
     position: absolute;
     top: -15px;

@@ -101,17 +101,14 @@
             <div class="d-flex flex-column mt-5 w-100">
                 <ul class="mini-nav">
                     <li class="mini-nav-item">
-                        <button class="btn mini-nav-button root-dir text-center active"
-                                data-toggle="tab" role="tab" aria-selected="true">
+                        <button class="btn mini-nav-button root-dir-no-js text-center active">
                             <spring:message code="latestNotes"/>
                         </button>
                     </li>
                 </ul>
 
-
                 <div class="tab-content bg-bg">
-                    <div class="tab-pane root-dir-list fade active"
-                         role="tabpanel">
+                    <div class="tab-pane active">
                         <div class="file-list gap-5 justify-content-center align-items-center">
                             <c:forEach items="${latestNotes}" var="note">
                                 <a class="align-self-start w-100" href="<c:url value="${baseUrl}/notes/${note.id}"/>">
