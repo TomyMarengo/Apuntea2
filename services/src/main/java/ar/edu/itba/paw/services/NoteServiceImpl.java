@@ -120,11 +120,14 @@ public class NoteServiceImpl implements NoteService {
                 securityService.getCurrentUser().map(User::getUserId).orElse(null)
         ).orElseThrow(NoteNotFoundException::new);
 
+        int countTotalResults = noteDao.countReviews(note);
+        int safePage = Page.getSafePagePosition(pageNum, countTotalResults, pageSize);
+
         return new Page<>(
-                noteDao.getReviews(note, pageNum, pageSize),
-                pageNum,
+                noteDao.getReviews(note, safePage, pageSize),
+                safePage,
                 pageSize,
-                noteDao.countReviews(note)
+                countTotalResults
         );
     }
 
@@ -135,7 +138,7 @@ public class NoteServiceImpl implements NoteService {
         Note note = noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
         if (note.getUser().equals(user))
             throw new InvalidReviewException();
-        Review review = noteDao.createOrUpdateReview(note, user, score, content);
+        Review review = noteDao.createOrUpdateReview(noteId, user.getUserId(), score, content);
         emailService.sendReviewEmail(review);
     }
 

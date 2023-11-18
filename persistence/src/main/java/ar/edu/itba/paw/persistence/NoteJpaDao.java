@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.Pair;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavorite;
 import ar.edu.itba.paw.models.institutional.Subject;
@@ -86,8 +87,33 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
+    public int countReviewsByUser(UUID userId) {
+        return ((BigInteger)em.createNativeQuery("SELECT COUNT(*) FROM Reviews r INNER JOIN Notes n ON r.note_id = n.note_id WHERE n.user_id = :userId")
+                .setParameter("userId", userId)
+                .getSingleResult()).intValue();
+    }
+
+    @Override
+    public List<Review> getReviewsByUser(UUID userId, int pageNum, int pageSize) {
+        List<Review.ReviewKey> keys =  ((List<Object[]>)em.createNativeQuery("SELECT CAST(r.user_id AS VARCHAR(36)), CAST(r.note_id AS VARCHAR(36)) FROM Reviews r INNER JOIN Notes n ON r.note_id = n.note_id WHERE n.user_id = :userId ORDER BY created_at DESC")
+                .setParameter("userId", userId)
+                .setFirstResult((pageNum - 1) * pageSize)
+                .setMaxResults(pageSize)
+                .getResultList()).stream()
+                .map(o -> new Review.ReviewKey(
+                             UUID.fromString((String) o[0]),
+                             UUID.fromString((String) o[1])
+                        )
+                ).collect(Collectors.toList());
+        if (keys.isEmpty()) return Collections.emptyList();
+        return em.createQuery("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.note WHERE r.id IN :keys ORDER BY r.createdAt DESC", Review.class)
+                .setParameter("keys", keys)
+                .getResultList();
+    }
+
+    @Override
     public Review getReview(UUID noteId, UUID userId)  {
-        return em.createQuery("FROM Review r WHERE r.note.id = :noteId AND r.user.id = :userId", Review.class)
+        return em.createQuery("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.note WHERE r.note.id = :noteId AND r.user.id = :userId", Review.class)
                 .setParameter("noteId", noteId)
                 .setParameter("userId", userId)
                 .getSingleResult();
@@ -115,7 +141,7 @@ public class NoteJpaDao implements NoteDao {
                 .getResultList())
                 .stream().map(o -> UUID.fromString((String) o)).collect(Collectors.toList());
         if (userIDs.isEmpty()) return Collections.emptyList();
-        return em.createQuery("FROM Review r WHERE r.note.id = :noteId AND r.user.id IN :userIDs ORDER BY r.createdAt DESC", Review.class)
+        return em.createQuery("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.note WHERE r.note.id = :noteId AND r.user.id IN :userIDs ORDER BY r.createdAt DESC", Review.class)
                 .setParameter("noteId", noteId)
                 .setParameter("userIDs", userIDs)
                 .getResultList();
@@ -132,7 +158,7 @@ public class NoteJpaDao implements NoteDao {
                 .getResultList())
                 .stream().map(o -> UUID.fromString((String) o[0])).collect(Collectors.toList());
         if (userIDs.isEmpty()) return Collections.emptyList();
-        return em.createQuery("SELECT r, (r.user.id = :currentUserId) as isCurrent FROM Review r WHERE r.note.id = :noteId AND r.user.id IN :userIDs ORDER BY isCurrent DESC, r.createdAt DESC", Object[].class)
+        return em.createQuery("SELECT r, (r.user.id = :currentUserId) as isCurrent FROM Review r JOIN FETCH r.user WHERE r.note.id = :noteId AND r.user.id IN :userIDs ORDER BY isCurrent DESC, r.createdAt DESC", Object[].class)
                 .setParameter("noteId", noteId)
                 .setParameter("currentUserId", currentUserId)
                 .setParameter("userIDs", userIDs)
@@ -140,8 +166,8 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
-    public Review createOrUpdateReview(Note note, User user, int score, String content) {
-        Review review = new Review(note, user, score, content);
+    public Review createOrUpdateReview(UUID noteId, UUID userId, int score, String content) {
+        Review review = new Review(noteId, userId, score, content);
         em.merge(review);
         return review;
     }

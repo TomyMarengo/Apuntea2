@@ -139,7 +139,7 @@
 
                     <div class="profile-item">
                         <p><strong><spring:message code="institution"/></strong></p>
-                        <span class="card-text">${user.institution.name}</span>
+                        <span class="card-text">${user.career.institution.name}</span>
                     </div>
                 </div>
 

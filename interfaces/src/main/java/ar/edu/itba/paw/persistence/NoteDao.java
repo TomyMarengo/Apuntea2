@@ -24,6 +24,10 @@ public interface NoteDao {
 
     int countReviews(UUID noteId);
 
+    int countReviewsByUser(UUID userId);
+
+    List<Review> getReviewsByUser(UUID userIda, int pageNum, int pageSize);
+
     List<Review> getReviews(UUID noteId, int pageNum);
 
     List<Review> getReviews(UUID noteId, int pageNum, int pageSize);
@@ -40,7 +44,7 @@ public interface NoteDao {
 
     Review getReview(UUID noteId, UUID userId);
 
-    Review createOrUpdateReview(Note note, User user, int score, String content);
+    Review createOrUpdateReview(UUID noteId, UUID userId, int score, String content);
 
     List<Note> getFavorites(UUID userId);
 

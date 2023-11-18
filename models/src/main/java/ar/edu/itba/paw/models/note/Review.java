@@ -7,25 +7,33 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "reviews")
 @IdClass(Review.ReviewKey.class)
 public class Review {
-    @Id
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false, nullable = false)
     private User user;
+
+    @Id
+    @Column(name = "user_id")
+    private UUID userId;
 
     private String content;
 
     @Column(nullable = false)
     private int score;
 
-    @Id
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "note_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "note_id", insertable = false, updatable = false, nullable = false)
     private Note note;
+
+    // TODO: Ask if this is ok
+    @Id
+    @Column(name = "note_id")
+    private UUID noteId;
 
     @Column(name = "created_at", nullable = false)
     @Convert(converter = LocalDateTimeConverter.class)
@@ -36,6 +44,15 @@ public class Review {
     public Review(Note note, User user, int score, String content) {
         this.note = note;
         this.user = user;
+        this.userId = user.getUserId();
+        this.noteId = note.getId();
+        this.content = content;
+        this.score = score;
+    }
+
+    public Review(UUID noteId, UUID userId, int score, String content) {
+        this.noteId = noteId;
+        this.userId = userId;
         this.content = content;
         this.score = score;
     }
@@ -70,15 +87,31 @@ public class Review {
         return createdAt;
     }
 
+    public UUID getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(UUID noteId) {
+        this.noteId = noteId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
     public static class ReviewKey implements Serializable {
-        private User user;
-        private Note note;
+        private UUID userId;
+        private UUID noteId;
 
         /* package-private */ ReviewKey() {}
 
-        public ReviewKey(User user, Note note) {
-            this.user = user;
-            this.note = note;
+        public ReviewKey(UUID userId, UUID noteId) {
+            this.userId = userId;
+            this.noteId = noteId;
         }
 
         @Override
@@ -86,12 +119,12 @@ public class Review {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             ReviewKey reviewId = (ReviewKey) o;
-            return Objects.equals(user, reviewId.user) && Objects.equals(note, reviewId.note);
+            return Objects.equals(userId, reviewId.userId) && Objects.equals(noteId, reviewId.noteId);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(user, note);
+            return Objects.hash(userId, noteId);
         }
     }
 }

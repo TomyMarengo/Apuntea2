@@ -80,7 +80,7 @@ class UserJpaDao implements UserDao {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+        return em.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email = :email", User.class)
                 .setParameter("email", email)
                 .getResultList().stream().findFirst();
     }

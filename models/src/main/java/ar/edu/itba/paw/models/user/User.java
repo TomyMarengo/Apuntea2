@@ -26,7 +26,7 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "career_id")
     private Career career;
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
@@ -108,8 +108,8 @@ public class User {
         return profilePicture;
     }
 
-    public Institution getInstitution() {
-        return career.getInstitution();
+    public UUID getInstitutionId() {
+        return career.getInstitutionId();
     }
 
     public Boolean hasNotificationsEnabled() {

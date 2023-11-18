@@ -265,7 +265,7 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testCreateReview(){
-        noteDao.createOrUpdateReview(notePublic, pepeUser , 5, "Muy buen apunte");
+        noteDao.createOrUpdateReview(notePublic.getId(), pepeUser.getUserId(), 5, "Muy buen apunte");
         em.flush();
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + notePublic.getId() + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));
     }
@@ -274,7 +274,7 @@ public class NoteJpaDaoTest {
     public void testUpdateReview(){
         Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
         int countScore4 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 4");
-        noteDao.createOrUpdateReview(guiaEda, pepeUser , 5, "Cacique in the JODA");
+        noteDao.createOrUpdateReview(guiaEda.getId(), pepeUser.getUserId(), 5, "Cacique in the JODA");
         em.flush();
         assertEquals(1, countScore4);
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));
@@ -342,6 +342,53 @@ public class NoteJpaDaoTest {
         em.flush();
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + notePublic.getId() + "'"));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + notePublic.getId() + "'"));
+    }
+
+    @Test
+    public void testCountReviewsUser() {
+        int count = noteDao.countReviewsByUser(PEPE_ID);
+        assertEquals(4, count);
+    }
+
+    @Test
+    public void testGetReviewsByUserInterference() {
+        Note newNote = insertNote(em, new Note.NoteBuilder()
+                .name("new")
+                .subject(edaSubject)
+                .parentId(EDA_DIRECTORY_ID)
+                .user(saidmanUser)
+                .visible(true)
+                .category(Category.PRACTICE)
+                .fileType("jpg"));
+        insertReview(em, newNote, carlaAdmin, 4, "ta ok!");
+
+        List<Review> reviews = noteDao.getReviewsByUser(PEPE_ID, 1, 10);
+
+        assertEquals(4, reviews.size());
+        assertEquals(2, reviews.stream().filter(r -> r.getNote().getId().equals(GUIA1EDA_NOTE_ID)).count());
+        assertEquals(1, reviews.stream().filter(r -> r.getNote().getId().equals(LUCENE_NOTE_ID)).count());
+        assertEquals(1, reviews.stream().filter(r -> r.getNote().getId().equals(JAVA_BEANS_NOTE_ID)).count());
+    }
+
+    @Test
+    public void testGetReviewsByUserPagination() {
+        Note newNote = insertNote(em, new Note.NoteBuilder()
+                .name("new")
+                .subject(edaSubject)
+                .parentId(EDA_DIRECTORY_ID)
+                .user(pepeUser)
+                .visible(true)
+                .category(Category.PRACTICE)
+                .fileType("jpg"));
+        insertReview(em, newNote, carlaAdmin, 4, "ta ok!");
+
+        List<Review> reviews = noteDao.getReviewsByUser(PEPE_ID, 1, 4);
+
+        assertEquals(4, reviews.size());
+        assertEquals("new", reviews.get(0).getNote().getName());
+        for (int i=0; i<reviews.size()-2; i++) {
+            assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i+1).getCreatedAt()));
+        }
     }
 
 }

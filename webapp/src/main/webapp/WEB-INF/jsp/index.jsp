@@ -61,7 +61,7 @@
             </a>
 
             <c:if test="${user ne null}">
-                <c:url var="urlParams" value="${baseUrl}/search?institutionId=${user.institution.institutionId}&careerId=${user.career.careerId}"/>
+                <c:url var="urlParams" value="${baseUrl}/search?institutionId=${user.institutionId}&careerId=${user.career.careerId}"/>
             </c:if>
 
             <c:if test="${user eq null}">
