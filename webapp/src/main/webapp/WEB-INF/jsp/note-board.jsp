@@ -73,7 +73,7 @@
         <c:if test="${owner ne user}">
             <c:url var="userProfilePicture" value="${baseUrl}/profile/${owner.userId}/picture"/>
             <div class="profile-card">
-                <img src="${userProfilePicture}" alt="Profile Picture" class="rounded" width="50px" height="50px">
+                <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="50px" height="50px">
                 <div class="d-flex flex-column">
                     <h4 class="mb-0">${owner.displayName}</h4>
                     <span>3⭐</span> <!-- TODO: Add user score -->

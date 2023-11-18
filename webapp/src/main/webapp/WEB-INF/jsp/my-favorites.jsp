@@ -299,7 +299,7 @@
                                    href="<c:url value="${baseUrl}/user/${user.userId}/note-board"/>">
                                     <div class="d-flex flex-column gap-2 align-items-center blob-container">
                                         <img src="${userProfilePicture}"
-                                             alt="<spring:message code="profile.picture"/>" class="icon-xxl">
+                                             alt="<spring:message code="profile.picture"/>" class="icon-xxl rounded-circle">
                                         <span class="fw-bold flex-wrap justify-content-center user-followed-name">
                                                 <c:out value="${user.displayName}"/>
                                             </span>

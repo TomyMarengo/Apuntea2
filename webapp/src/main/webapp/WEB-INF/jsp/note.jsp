@@ -113,14 +113,9 @@
                 </c:choose>
             </article>
             <!-- REVIEWS -->
-            <article class="h-100 col col-lg-4 mt-5 mt-lg-0">
+            <article class="reviews-container col col-lg-4">
                 <div class="h-100 d-flex flex-column">
                     <h2 class="text-dark-primary"><spring:message code="notes.reviews.button"/></h2>
-                    <c:if test="${user ne null and reviews[0].user.userId eq user.userId}">
-                        <c:set var="reviewContent" value="${reviews[0].content}"/>
-                        <c:set var="reviewScore" value="${reviews[0].score}"/>
-                    </c:if>
-
                     <c:if test="${not empty reviews}">
                         <div class="d-flex justify-content-between">
                             <p class="mb-2">
@@ -136,7 +131,7 @@
                         </div>
                     </c:if>
 
-                    <c:if test="${(not empty reviews) or (fn:length(reviews) eq 1 and (user eq null or reviews[0].user.userId ne user.userId))}">
+                    <c:if test="${fn:length(reviews) gt 1 or (fn:length(reviews) eq 1 and (user eq null or reviews[0].user.userId ne user.userId))}">
                         <div class="reviews-comments">
                             <c:forEach items="${reviews}" var="review" varStatus="count">
                                 <c:if test="${user eq null or (user ne null and review.user.userId ne user.userId)}">
@@ -187,16 +182,14 @@
 
                     <c:if test="${note.user.userId ne user.userId}">
                         <!-- IF USER HAS ALREADY REVIEWED -->
-                        <c:if test="${not empty reviewContent}">
+                        <c:if test="${reviews[0].user.userId eq user.userId}">
                             <div class="card box p-3">
                                 <h5><spring:message code="notes.comments.yourReview"/></h5>
                                 <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
                                     <div class="mt-2">
-                                        <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
-                                        <form:textarea path="content" class="form-control" disabled="true"
-                                                       placeholder='${placeholderText}'/>
+                                        <form:textarea path="content" cssClass="form-control" disabled="true"/>
+                                        <form:errors path="content" cssClass="text-danger" element="p"/>
                                     </div>
-                                    <form:errors path="content" cssClass="text-danger" element="p"/>
 
                                     <div class="d-flex justify-content-between mt-3">
                                         <div class="input-group w-75">
@@ -218,12 +211,12 @@
                         </c:if>
 
                         <!-- IF USER NOT REVIEWED YET -->
-                        <c:if test="${empty reviewContent}">
+                        <c:if test="${empty reviews or reviews[0].user.userId ne user.userId}">
                             <div class="card box p-3">
                                 <form:form action="./${note.id}/review" method="post" modelAttribute="reviewForm">
                                     <div>
                                         <spring:message code="notes.review.text.placeholder" var="placeholderText"/>
-                                        <form:textarea path="content" class="form-control"
+                                        <form:textarea path="content" cssClass="form-control"
                                                        placeholder='${placeholderText}'/>
                                     </div>
                                     <form:errors path="content" cssClass="text-danger" element="p"/>
@@ -475,13 +468,14 @@
     </script>
 </c:if>
 
-<c:if test="${reviewScore gt 0}">
+<c:if test="${reviews[0].user.userId eq user.userId}">
     <script>
         const reviewForm = document.getElementById('reviewForm');
-        reviewForm.querySelectorAll('#content')[0].value = "<c:out value="${reviewContent}"/>";
-        reviewForm.querySelectorAll('#scoreSelect')[0].value = "<c:out value="${reviewScore}"/>";
+        reviewForm.querySelectorAll('#content')[0].textContent = `${reviews[0].content}`;
+        reviewForm.querySelectorAll('#scoreSelect')[0].value = ${reviews[0].score};
     </script>
 </c:if>
+
 <script>
     <c:if test="${noteEdited eq true}">
     displayToast('<spring:message code="toast.noteEdited"/>')
