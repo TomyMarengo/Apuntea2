@@ -110,7 +110,7 @@ public class NoteServiceImpl implements NoteService {
         Optional<User> maybeUser = securityService.getCurrentUser();
         if (maybeUser.isPresent())
             return noteDao.getFirstReviews(noteId, maybeUser.get().getUserId());
-        return noteDao.getReviews(noteId, 0);
+        return noteDao.getReviews(noteId, 1);
     }
 
     @Transactional
@@ -122,9 +122,9 @@ public class NoteServiceImpl implements NoteService {
 
         return new Page<>(
                 noteDao.getReviews(note, pageNum, pageSize),
-                noteDao.countReviews(note),
                 pageNum,
-                pageSize
+                pageSize,
+                noteDao.countReviews(note)
         );
     }
 

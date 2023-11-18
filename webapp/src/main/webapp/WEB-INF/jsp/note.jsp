@@ -122,10 +122,18 @@
                     </c:if>
 
                     <c:if test="${not empty reviews}">
-                        <p class="mb-2">
-                            <spring:message code="score"/>:
-                            <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/> ⭐
-                        </p>
+                        <div class="d-flex justify-content-between">
+                            <p class="mb-2">
+                                <spring:message code="score"/>:
+                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/> ⭐
+                            </p>
+                            <c:if test="${fn:length(reviews) ge 5}">
+                                <c:url var="seeMoreReviewsUrl" value="./${note.id}/reviews"/>
+                                <a class="mx-2 link-info" href="${seeMoreReviewsUrl}">
+                                    <spring:message code="notes.reviews.seeMore"/>
+                                </a>
+                            </c:if>
+                        </div>
                     </c:if>
 
                     <c:if test="${(not empty reviews) or (fn:length(reviews) eq 1 and (user eq null or reviews[0].user.userId ne user.userId))}">

@@ -54,6 +54,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                                 "/search",
                                 "/notes/{noteId}",
                                 "/notes/{noteId}/download",
+                                "/notes/{noteId}/reviews",
                                 "/directory/{directoryId}",
                                 "/profile/{userId}/picture",
                                 "/user/{userId}/note-board"

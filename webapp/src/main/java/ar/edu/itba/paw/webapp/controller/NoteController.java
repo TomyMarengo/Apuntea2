@@ -1,8 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
+import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.services.DirectoryService;
@@ -14,6 +15,7 @@ import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
 import ar.edu.itba.paw.webapp.forms.admin.DeleteWithReasonForm;
 import ar.edu.itba.paw.webapp.forms.note.EditNoteForm;
 import ar.edu.itba.paw.webapp.forms.note.ReviewForm;
+import ar.edu.itba.paw.webapp.forms.note.SearchReviewForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import javax.xml.ws.http.HTTPException;
 import java.util.UUID;
 
 
@@ -66,6 +69,22 @@ public class NoteController {
         return mav;
     }
 
+    @RequestMapping(value = "/{noteId}/reviews", method = RequestMethod.GET)
+    public ModelAndView getNoteReviews(@PathVariable("noteId") @ValidUuid UUID noteId,
+                                       @Valid @ModelAttribute("searchForm") final SearchReviewForm searchReviewForm,
+                                        final BindingResult result) {
+        if (result.hasErrors())
+            throw new HTTPException(400);
+        final ModelAndView mav = new ModelAndView("reviews");
+        Note note = noteService.getNoteById(noteId).orElseThrow(NoteNotFoundException::new);
+        Page<Review> reviews = noteService.getPaginatedReviews(noteId, searchReviewForm.getPageNumber(), searchReviewForm.getPageSize()); //TODO: traer tambien los datos del apunte
+        mav.addObject("maxPage", reviews.getTotalPages());
+        mav.addObject("currentPage", reviews.getCurrentPage());
+        mav.addObject("reviews", reviews.getContent());
+        mav.addObject("note", note);
+        return mav;
+    }
+
     @RequestMapping(value = "/{noteId}", method = RequestMethod.POST)
     public ModelAndView editNote(@PathVariable("noteId") @ValidUuid UUID noteId,
                                  @Valid @ModelAttribute final EditNoteForm editNoteForm,
@@ -94,7 +113,6 @@ public class NoteController {
         }
         return mav;
     }
-
 
     @RequestMapping( value = "/{noteId}/download", method = {RequestMethod.GET})
     @ResponseBody
