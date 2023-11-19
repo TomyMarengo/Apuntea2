@@ -38,7 +38,7 @@
 
 <header>
     <!-- NAVBAR -->
-    <fragment:navbar user="${user}"/>
+    <fragment:navbar user="${user}" institutionId="${user.institutionId}" careerId="${user.career.careerId}"/>
 
     <fragment:bottom-navbar title="${baseUrl}/notes/${noteId},${note.name}" hierarchy="${hierarchy}"
                             category="note" user="${user}"/>

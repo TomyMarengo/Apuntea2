@@ -38,7 +38,7 @@
 
 <header>
     <!-- NAVBAR -->
-    <fragment:navbar user="${user}"/>
+    <fragment:navbar user="${user}" institutionId="${user.institutionId}" careerId="${user.career.careerId}"/>
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="manageCareers.title" var="title"/>

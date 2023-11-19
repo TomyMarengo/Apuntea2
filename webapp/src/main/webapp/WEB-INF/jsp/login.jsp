@@ -34,7 +34,7 @@
 
 <header>
     <!-- NAVBAR -->
-    <fragment:navbar user="${user}"/>
+    <fragment:navbar/>
 
     <c:url var="loginUrl" value="/login"/>
     <spring:message var="logotype" code="logotype"/>

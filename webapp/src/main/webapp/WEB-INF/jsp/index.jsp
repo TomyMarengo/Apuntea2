@@ -24,7 +24,6 @@
     <link rel="stylesheet" href="<c:url value="/css/general/icons.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/bars.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/landing/landing.css"/>"/>
-    <link rel="stylesheet" href="<c:url value="/css/general/halloween.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,7 +33,7 @@
 <body>
 
 <header>
-    <fragment:navbar user="${user}"/>
+    <fragment:navbar user="${user}" institutionId="${user.institutionId}" careerId="${user.career.careerId}"/>
 </header>
 
 <main>
@@ -46,7 +45,7 @@
 
         <div class="index-cards">
 
-            <a href="${baseUrl}/user/note-board" class="call-to-action-card">
+            <a href="${baseUrl}/user/${user.userId}/note-board" class="call-to-action-card">
 
                 <img src="<c:url value="/svg/add-document.svg"/>" alt="<spring:message code="search.title"/>"
                      class="fill-dark-text"/>

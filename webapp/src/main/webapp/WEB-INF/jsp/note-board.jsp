@@ -46,7 +46,7 @@
 
 <header>
     <!-- NAVBAR -->
-    <fragment:navbar user="${user}"/>
+    <fragment:navbar user="${user}" institutionId="${user.institutionId}" careerId="${user.career.careerId}"/>
 
     <!-- BOTTOM-NAVBAR -->
     <c:if test="${owner.userId eq user.userId}">

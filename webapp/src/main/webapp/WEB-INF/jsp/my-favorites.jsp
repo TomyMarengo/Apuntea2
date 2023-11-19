@@ -40,7 +40,7 @@
 
 <header>
     <!-- NAVBAR -->
-    <fragment:navbar user="${user}"/>
+    <fragment:navbar user="${user}" institutionId="${user.institutionId}" careerId="${user.career.careerId}"/>
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="profileNotes.directories.favorites" var="title"/>

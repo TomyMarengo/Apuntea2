@@ -34,7 +34,7 @@
 <body>
 
 <header>
-    <fragment:navbar user="${user}"/>
+    <fragment:navbar/>
 </header>
 
 <spring:message var="logotype" code="logotype"/>

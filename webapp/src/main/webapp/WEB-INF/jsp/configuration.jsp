@@ -39,7 +39,7 @@
 
 <header>
     <!-- NAVBAR -->
-    <fragment:navbar user="${user}"/>
+    <fragment:navbar user="${user}" institutionId="${user.institutionId}" careerId="${user.career.careerId}"/>
 
     <!-- BOTTOM-NAVBAR -->
     <spring:message code="configuration" var="title"/>
@@ -50,7 +50,7 @@
     <fragment:sidebar user="${user}"/>
 
     <section class="d-flex justify-content-center column-gap-5 flex-wrap" style="margin-top: 5rem;">
-        <div class="card box p-3 w-inherit mw-500" style="block-size: fit-content">
+        <div class="card box p-3 w-inherit mw-600" style="block-size: fit-content">
             <c:url var="changePasswordUrl" value="/change-password"/>
             <form:form action="${changePasswordUrl}"
                        method="post"
@@ -97,7 +97,7 @@
                     </div>
                 </form:form>
         </div>
-        <div class="card box p-3 w-inherit mw-500" style="block-size: fit-content">
+        <div class="card box p-3 w-inherit mw-600" style="block-size: fit-content">
             <h1><spring:message code="otherConfigurations.title"/></h1>
             <div class="form-switch form-check-reverse">
                 <div class="form-check form-switch p-0">

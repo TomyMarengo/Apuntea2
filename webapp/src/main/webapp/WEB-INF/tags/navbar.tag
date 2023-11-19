@@ -10,6 +10,8 @@
 <spring:message var="darkMode" code="darkMode"/>
 <spring:message var="manage" code="manage"/>
 <%@ attribute name="user" required="false" type="ar.edu.itba.paw.models.user.User" %>
+<%@ attribute name="institutionId" required="false"%>
+<%@ attribute name="careerId" required="false" %>
 <c:set var="loggedIn" value="${user ne null}"/>
 <c:if test="${user ne null}">
     <c:set var="isAdmin" value="${user.isAdmin}"/>
@@ -27,13 +29,19 @@
     <a class="navbar-brand text-dark-primary" href="${baseUrl}">Apuntea</a>
     <div class="d-flex justify-content-center align-items-center gap-2">
         <div class="search-container">
-
-            <a href="${baseUrl}/search?institutionId=${user.institutionId}&careerId=${user.career.careerId}"
-               class="btn nav-icon-button search-icon" id="searchNavButton">
-                <img src="<c:url value="/svg/search.svg"/>" alt="${search}" class="icon-s fill-dark-primary"/>
-            </a>
-            <input id="searchNavInput" type="text" class="search-input"
-                   placeholder="<spring:message code="search.word.placeholder"/>"/>
+            <c:if test="${loggedIn}">
+                <a href="${baseUrl}/search?institutionId=${institutionId}&careerId=${institutionId}"
+                   class="btn nav-icon-button search-icon" id="searchNavButton">
+                    <img src="<c:url value="/svg/search.svg"/>" alt="${search}" class="icon-s fill-dark-primary"/>
+                </a>
+            </c:if>
+            <c:if test="${!loggedIn}">
+                <a href="${baseUrl}/search" class="btn nav-icon-button search-icon" id="searchNavButton">
+                    <img src="<c:url value="/svg/search.svg"/>" alt="${search}" class="icon-s fill-dark-primary"/>
+                </a>
+            </c:if>
+                <input id="searchNavInput" type="text" class="search-input"
+                       placeholder="<spring:message code="search.word.placeholder"/>"/>
         </div>
 
 
