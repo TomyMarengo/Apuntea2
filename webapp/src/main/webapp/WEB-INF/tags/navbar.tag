@@ -30,7 +30,7 @@
     <div class="d-flex justify-content-center align-items-center gap-2">
         <div class="search-container">
             <c:if test="${loggedIn}">
-                <a href="${baseUrl}/search?institutionId=${institutionId}&careerId=${institutionId}"
+                <a href="${baseUrl}/search?institutionId=${institutionId}&careerId=${careerId}"
                    class="btn nav-icon-button search-icon" id="searchNavButton">
                     <img src="<c:url value="/svg/search.svg"/>" alt="${search}" class="icon-s fill-dark-primary"/>
                 </a>
