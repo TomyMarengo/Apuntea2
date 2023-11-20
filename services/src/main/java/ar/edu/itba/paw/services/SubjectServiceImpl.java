@@ -71,10 +71,15 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId) {
+        UUID currentUserId = this.securityService.getCurrentUser().map(User::getUserId).orElse(null);
         User user = this.userDao.findById(userId).orElseThrow(UserNotFoundException::new);
 //        directoryDao.getFavoriteRootDirectories(user.getUserId()).forEach(rd -> rd.setFavorite(true));
         List<Subject> subjects = subjectDao.getSubjectsByUser(user);
-        if (!subjects.isEmpty()) directoryDao.setRootDirsFileQuantity(subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()), user);
+        if (!subjects.isEmpty()) directoryDao.setRootDirsFileQuantity(
+                subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()),
+                user.getUserId(),
+                currentUserId
+        );
         return subjects.stream().collect(Collectors.groupingBy(Subject::getYear));
     }
 
