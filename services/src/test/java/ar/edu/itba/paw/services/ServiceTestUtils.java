@@ -64,6 +64,7 @@ public class ServiceTestUtils {
                 .email(email)
                 .status(status)
                 .roles(roles)
+                .career(mockCareer())
                 .locale(locale).build();
     }
 

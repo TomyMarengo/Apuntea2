@@ -24,7 +24,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
         } else { // UsernameNotFoundException and others
             url = "/login?error=true";
         }
-        //TODO: check if it is OK
+
         getRedirectStrategy().sendRedirect(request, response, url);
     }
 }

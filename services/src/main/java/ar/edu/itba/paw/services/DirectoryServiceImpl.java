@@ -82,23 +82,23 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Transactional
     @Override
     public DirectoryFavoriteGroups getFavorites() {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        Map<Boolean, List<Directory>> directories = directoryDao.getFavorites(currentUserId).stream().collect(Collectors.partitioningBy(Directory::isRootDirectory));
+        User currentUser = securityService.getCurrentUserOrThrow();
+        Map<Boolean, List<Directory>> directories = currentUser.getDirectoryFavorites().stream().collect(Collectors.partitioningBy(Directory::isRootDirectory));
         return new DirectoryFavoriteGroups(directories.get(true), directories.get(false));
     }
 
     @Transactional
     @Override
     public void addFavorite(UUID directoryId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        directoryDao.addFavorite(currentUserId, directoryId);
+        User currentUser = securityService.getCurrentUserOrThrow();
+        directoryDao.addFavorite(currentUser, directoryId);
     }
 
     @Transactional
     @Override
     public void removeFavorite(UUID directoryId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = directoryDao.removeFavorite(currentUserId, directoryId);
+        User currentUser = securityService.getCurrentUserOrThrow();
+        boolean success = directoryDao.removeFavorite(currentUser, directoryId);
         if (!success) throw new InvalidDirectoryException();
     }
 }

@@ -152,23 +152,23 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public List<Note> getFavorites() {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        return noteDao.getFavorites(currentUserId);
+    public Collection<Note> getFavorites() {
+        User currentUser = securityService.getCurrentUserOrThrow();
+        return currentUser.getNoteFavorites();
     }
 
     @Transactional
     @Override
     public void addFavorite(UUID noteId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        noteDao.addFavorite(currentUserId, noteId);
+        User currentUser = securityService.getCurrentUserOrThrow();
+        noteDao.addFavorite(currentUser, noteId);
     }
 
     @Transactional
     @Override
     public void removeFavorite(UUID noteId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        boolean success = noteDao.removeFavorite(currentUserId, noteId);
+        User currentUser = securityService.getCurrentUserOrThrow();
+        boolean success = noteDao.removeFavorite(currentUser, noteId);
         if (!success) throw new InvalidNoteException();
     }
 

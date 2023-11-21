@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.institutional.Subject;
-import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.directory.DirectoryFavorite;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
@@ -96,49 +93,32 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
-    public List<Directory> getFavorites(UUID userId) {
-        return em.createQuery("SELECT d FROM DirectoryFavorite f JOIN f.directory d LEFT JOIN d.user u WHERE f.user.id = :userId AND (d.visible = true OR u.id = :userId)", Directory.class)
-                .setParameter("userId", userId)
-                .getResultList();
+    public void addFavorite(User user, UUID directoryId) {
+        user.getDirectoryFavorites().add(em.getReference(Directory.class, directoryId));
     }
 
     @Override
-    public List<Directory> getFavoriteRootDirectories(UUID userId) {
-        return em.createQuery("SELECT d FROM DirectoryFavorite f JOIN f.directory d WHERE f.user.id = :userId AND d.parentId = null AND d.user = null", Directory.class)
-                .setParameter("userId", userId)
-                .getResultList();
-    }
-
-    @Override
-    public void addFavorite(UUID userId, UUID directoryId) {
-        DirectoryFavorite fav = new DirectoryFavorite(em.getReference(User.class, userId), em.getReference(Directory.class, directoryId));
-        em.persist(fav);
-    }
-
-    @Override
-    public boolean removeFavorite(UUID userId, UUID directoryId) {
-        return em.createQuery("DELETE FROM DirectoryFavorite f WHERE f.user.id = :userId AND f.directory.id = :directoryId")
-                .setParameter("userId", userId)
-                .setParameter("directoryId", directoryId)
-                .executeUpdate() == 1;
+    public boolean removeFavorite(User user, UUID directoryId) {
+        return user.getDirectoryFavorites().remove(em.getReference(Directory.class,directoryId));
     }
 
     @Override
     public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, UUID currentUserId, SortArguments sortArgs) {
         // TODO: Reduce amount of joins if necessary
         if (directoryIds.isEmpty()) return Collections.emptyList();
-        List<Directory> directories = em.createQuery(String.format("SELECT d FROM Directory d LEFT JOIN d.parent p LEFT JOIN p.subject s LEFT JOIN d.user u WHERE d.id IN :directoryIds ORDER BY d.%s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sortArgs.getSortBy(), NAME), sortArgs.isAscending()? "ASC" : "DESC"), Directory.class)
+        return em.createQuery(String.format("SELECT d FROM Directory d LEFT JOIN d.parent p LEFT JOIN p.subject s LEFT JOIN d.user u WHERE d.id IN :directoryIds ORDER BY d.%s %s", JdbcDaoUtils.SORTBY_CAMELCASE.getOrDefault(sortArgs.getSortBy(), NAME), sortArgs.isAscending()? "ASC" : "DESC"), Directory.class)
                 .setParameter("directoryIds", directoryIds)
                 .getResultList();
+    }
 
-        if (currentUserId != null) {
-            List<Directory> favorites = em.createQuery("SELECT f.directory FROM DirectoryFavorite f WHERE f.user.id = :userId AND f.directory.id IN :directoryIds", Directory.class)
-                    .setParameter("userId", currentUserId)
-                    .setParameter("directoryIds", directoryIds)
-                    .getResultList();
-            favorites.forEach(dir -> dir.setFavorite(true));
-        }
-        return directories;
+    @Override
+    public void setDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId) {
+        if (currentUserId == null) return;
+        List<Directory> favorites = em.createQuery("SELECT d FROM User u JOIN u.directoryFavorites d WHERE d.directoryId IN :directoryIds AND u.userId = :userId", Directory.class)
+                .setParameter("userId", currentUserId)
+                .setParameter("directoryIds", directoryIds)
+                .getResultList();
+        favorites.forEach(dir -> dir.setFavorite(true));
     }
 
     @Override

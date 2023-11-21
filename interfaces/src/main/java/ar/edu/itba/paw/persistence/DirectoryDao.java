@@ -22,17 +22,16 @@ public interface DirectoryDao {
 
     boolean delete(List<UUID> directoryId); // Strong delete
 
-    List<Directory> getFavorites(UUID userId);
 
-    List<Directory> getFavoriteRootDirectories(UUID userId);
+    void addFavorite(User user, UUID directoryId);
 
-    void addFavorite(UUID userId, UUID directoryId);
-
-    boolean removeFavorite(UUID userId, UUID directoryId);
+    boolean removeFavorite(User user, UUID directoryId);
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds, UUID currentUserId, SortArguments sortArgs);
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds);
+
+    void setDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId);
 
     void setRootDirsFileQuantity(List<UUID> directoryIds, UUID userToFilterId, UUID currentUserId);
 }

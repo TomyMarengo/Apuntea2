@@ -5,7 +5,7 @@ import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,7 +38,7 @@ public interface UserService {
 
     void unfollow(UUID followedId);
 
-    List<User> getFollows();
+    Collection<User> getFollows();
 
     boolean isFollowing(UUID followedId);
     

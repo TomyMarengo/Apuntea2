@@ -91,32 +91,13 @@ class UserJpaDao implements UserDao {
     }
 
     @Override
-    public void follow(UUID followerId, UUID followedId) {
-        Follow follow = new Follow(em.getReference(User.class, followerId), em.getReference(User.class, followedId));
-        em.persist(follow);
+    public void follow(User follower, UUID followedId) {
+        follower.getUsersFollowing().add(em.getReference(User.class, followedId));
     }
 
     @Override
-    public void unfollow(UUID followerId, UUID followedId) {
-        em.createQuery("DELETE FROM Follow f WHERE f.follower.id = :followerId AND f.followed.id = :followedId")
-                .setParameter("followerId", followerId)
-                .setParameter("followedId", followedId)
-                .executeUpdate();
-    }
-
-    @Override
-    public List<User> getFollows(UUID userId) {
-        return em.createQuery("SELECT u FROM Follow f JOIN f.followed u WHERE f.follower.id = :userId", User.class)
-                .setParameter("userId", userId)
-                .getResultList();
-    }
-
-    @Override
-    public boolean isFollowing(UUID followerId, UUID followedId) {
-        return em.createQuery("SELECT COUNT(f) FROM Follow f WHERE f.follower.id = :followerId AND f.followed.id = :followedId", Long.class)
-                .setParameter("followerId", followerId)
-                .setParameter("followedId", followedId)
-                .getSingleResult() > 0;
+    public void unfollow(User follower, UUID followedId) {
+        follower.getUsersFollowing().remove(em.getReference(User.class, followedId));
     }
 
     @Override

@@ -25,7 +25,8 @@ public class SearchServiceImpl implements SearchService {
 
     private final NoteService noteService;
 
-    private final DirectoryService directoryService;
+    private final DirectoryService
+            directoryService;
 
     @Autowired
     public SearchServiceImpl(final SearchDao searchDao,

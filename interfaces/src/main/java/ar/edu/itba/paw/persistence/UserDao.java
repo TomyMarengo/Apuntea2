@@ -18,10 +18,8 @@ public interface UserDao {
     Optional<User> findByUsername(String username);
     Optional<User> findById(UUID userId);
     void updateProfilePicture(User user, Image img);
-    boolean isFollowing(UUID followerId, UUID followedId);
-    List<User> getFollows(UUID userId);
-    void follow(UUID followerId, UUID followedId);
-    void unfollow(UUID followerId, UUID followedId);
+    void follow(User follower, UUID followedId);
+    void unfollow(User follower, UUID followedId);
     int unbanUsers();
     boolean banUser(User user, User admin, LocalDateTime endDate, String reason);
     boolean unbanUser(User user);

@@ -1,12 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Category;
-import ar.edu.itba.paw.models.Pair;
-import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.directory.DirectoryFavorite;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.*;
-import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
@@ -180,26 +176,14 @@ public class NoteJpaDao implements NoteDao {
                 .executeUpdate() == 1;
     }
 
-
     @Override
-    public List<Note> getFavorites(UUID userId) {
-        return em.createQuery("SELECT n FROM NoteFavorite f JOIN f.note n LEFT JOIN n.user u WHERE f.user.id = :userId AND (n.visible = true OR u.id = :userId)", Note.class)
-                .setParameter("userId", userId)
-                .getResultList();
+    public void addFavorite(User user, UUID noteId) {
+        user.getNoteFavorites().add(em.getReference(Note.class, noteId));
     }
 
     @Override
-    public void addFavorite(UUID userId, UUID noteId) {
-        NoteFavorite fav = new NoteFavorite(em.getReference(User.class, userId), em.getReference(Note.class, noteId));
-        em.persist(fav);
-    }
-
-    @Override
-    public boolean removeFavorite(UUID userId, UUID noteId) {
-        return em.createQuery("DELETE FROM NoteFavorite f WHERE f.user.id = :userId AND f.note.id = :noteId")
-                .setParameter("userId", userId)
-                .setParameter("noteId", noteId)
-                .executeUpdate() == 1;
+    public boolean removeFavorite(User user, UUID noteId) {
+       return user.getNoteFavorites().remove(em.getReference(Note.class, noteId));
     }
 
 
@@ -210,15 +194,20 @@ public class NoteJpaDao implements NoteDao {
                 .setParameter("noteIds", noteIds)
                 .getResultList();
 
-        if (currentUserId != null) {
-            List<Note> favorites = em.createQuery("SELECT f.note FROM NoteFavorite f WHERE f.user.id = :userId AND f.note.id IN :noteIds", Note.class)
+        return notes;
+    }
+
+    @Override
+    public void setNoteFavorites(List<UUID> noteIds, UUID currentUserId) {
+        if (currentUserId == null) return;
+        List<Note> favorites = em.createQuery("SELECT n FROM User u JOIN u.noteFavorites n WHERE n.noteId IN :noteIds AND u.userId = :userId", Note.class)
                     .setParameter("userId", currentUserId)
                     .setParameter("noteIds", noteIds)
                     .getResultList();
             favorites.forEach(note -> note.setFavorite(true));
-        }
-        return notes;
     }
+
+
 
     @Override
     public List<Note> findNoteByIds(List<UUID> noteIds) {

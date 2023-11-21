@@ -71,11 +71,15 @@ public class SearchJpaDao implements SearchDao {
         }
 
         List<Searchable> searchables = new ArrayList<>();
-        if (!noteIds.isEmpty())
+        if (!noteIds.isEmpty()) {
             searchables.addAll(noteDao.findNoteByIds(noteIds, sa.getCurrentUserId().orElse(null), sortArgs));
-
-        if (!directoryIds.isEmpty())
+            sa.getCurrentUserId().ifPresent(uId -> noteDao.setNoteFavorites(noteIds, uId));
+        }
+        if (!directoryIds.isEmpty()){
             searchables.addAll(directoryDao.findDirectoriesByIds(directoryIds, sa.getCurrentUserId().orElse(null), sortArgs));
+            sa.getCurrentUserId().ifPresent(uId -> directoryDao.setDirectoryFavorites(directoryIds, uId));
+        }
+
        return searchables;
     }
 

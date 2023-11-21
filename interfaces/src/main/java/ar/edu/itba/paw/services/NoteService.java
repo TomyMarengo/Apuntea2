@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,7 +21,7 @@ public interface NoteService {
     Page<Review> getPaginatedReviews(UUID note, int pageNum, int pageSize);
     List<Review> getReviews(UUID noteId);
     void deleteReview(UUID noteId, UUID userId, String reason);
-    List<Note> getFavorites();
+    Collection<Note> getFavorites();
     void addFavorite(UUID noteId);
     void removeFavorite(UUID noteId);
 

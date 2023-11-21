@@ -278,7 +278,7 @@ public class UserJpaDaoTest {
     public void followTest() {
         User follower1 = insertStudent(em, "student1@mail.com", "", ING_INF_ID, "es");
         User student = insertStudent(em, "producer@mail.com", "", ING_INF_ID, "es");
-        userDao.follow(follower1.getUserId(), student.getUserId());
+        userDao.follow(follower1, student.getUserId());
         em.flush();
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
     }
@@ -287,10 +287,10 @@ public class UserJpaDaoTest {
     public void unfollowTest() {
         User follower1 = insertStudent(em, "student1@mail.com", "", ING_INF_ID, "es");
         User student = insertStudent(em, "producer@mail.com", "", ING_INF_ID, "es");
-        insertFollower(em, follower1.getUserId(), student.getUserId());
+        insertFollower(em, follower1, student);
         // TODO: Check that the user had been followed
 
-        userDao.unfollow(follower1.getUserId(), student.getUserId());
+        userDao.unfollow(follower1, student.getUserId());
         em.flush();
         assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
 

@@ -84,30 +84,32 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void follow(UUID followedId) {
-        UUID followerId = securityService.getCurrentUserOrThrow().getUserId();
+        User currentUser = securityService.getCurrentUserOrThrow();
         // TODO: Ask if this is should be changed for a many to many relationship
-        userDao.follow(followerId, followedId);
+        userDao.follow(currentUser, followedId);
+
     }
 
     @Transactional
     @Override
     public void unfollow(UUID followedId) {
-        UUID followerId = securityService.getCurrentUserOrThrow().getUserId();
-        userDao.unfollow(followerId, followedId);
+        User currentUser = securityService.getCurrentUserOrThrow();
+        userDao.unfollow(currentUser, followedId);
     }
 
     @Transactional
     @Override
-    public List<User> getFollows() {
-        UUID followerId = securityService.getCurrentUserOrThrow().getUserId();
-        return userDao.getFollows(followerId);
+    public Collection<User> getFollows() {
+        User currentUser = securityService.getCurrentUserOrThrow();
+        return currentUser.getUsersFollowing();
     }
 
     @Transactional
     @Override
     public boolean isFollowing(UUID followedId) {
-        UUID followerId = securityService.getCurrentUserOrThrow().getUserId();
-        return userDao.isFollowing(followerId, followedId);
+        User currentUser = securityService.getCurrentUserOrThrow();
+        User followed = userDao.findById(followedId).orElseThrow(UserNotFoundException::new);
+        return currentUser.getUsersFollowing().contains(followed);
     }
 
 
