@@ -58,38 +58,39 @@
                        id="changePasswordForm"
                        class="card-body p-3">
                     <h1><spring:message code="changePassword.title"/></h1>
-                    <div class="px-3">
-                        <label for="oldPassword"></label>
-                        <p><strong><spring:message code="changePassword.oldPassword"/></strong></p>
-                        <div class="input-group">
-                            <spring:message var="oldPassword" code="changePassword.oldPassword"/>
-                            <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
-                                        placeholder="${oldPassword}" path="oldPassword" value="" required="true"/>
-                            <button type="button" class="input-group-text input-group-icon" onclick="passwordShowHide()">
-                                <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
-                                     class="icon-xs fill-dark-primary"/>
-                                <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
-                                     class="d-none icon-xs fill-dark-primary"/>
-                            </button>
+                    <div class="d-flex flex-column mt-3 px-3 gap-3">
+                        <div class="d-flex flex-column gap-2">
+                            <label for="oldPassword"><strong><spring:message code="changePassword.oldPassword"/></strong></label>
+                            <div class="input-group">
+                                <spring:message var="oldPassword" code="changePassword.oldPassword"/>
+                                <form:input type="password" name="oldPassword" id="password" class="form-control bg-bg"
+                                            placeholder="${oldPassword}" path="oldPassword" value="" required="true"/>
+                                <button type="button" class="input-group-text input-group-icon" onclick="passwordShowHide()">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye"
+                                         class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye"
+                                         class="d-none icon-xs fill-dark-primary"/>
+                                </button>
+                            </div>
+                            <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
                         </div>
-                        <form:errors path="oldPassword" cssClass="text-danger" element="p"/>
 
-                        <label for="newPassword"></label>
-                        <p><strong><spring:message code="changePassword.newPassword"/></strong></p>
-                        <div class="input-group">
-                            <spring:message var="newPassword" code="changePassword.newPassword"/>
-                            <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
-                                        placeholder="${newPassword}" path="newPassword" value="" required="true"/>
-                            <button type="button" class="input-group-text input-group-icon"
-                                    onclick="passwordShowHide('2');">
-                                <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"
-                                     class="icon-xs fill-dark-primary"/>
-                                <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2"
-                                     class="d-none icon-xs fill-dark-primary"/>
-                            </button>
+                        <div class="d-flex flex-column gap-1">
+                            <label for="newPassword"><strong><spring:message code="changePassword.newPassword"/></strong></label>
+                            <div class="input-group">
+                                <spring:message var="newPassword" code="changePassword.newPassword"/>
+                                <form:input type="password" name="newPassword" id="password2" class="form-control bg-bg"
+                                            placeholder="${newPassword}" path="newPassword" value="" required="true"/>
+                                <button type="button" class="input-group-text input-group-icon"
+                                        onclick="passwordShowHide('2');">
+                                    <img src="<c:url value="/svg/eye.svg"/>" alt="" id="show_eye2"
+                                         class="icon-xs fill-dark-primary"/>
+                                    <img src="<c:url value="/svg/eye-crossed.svg"/>" alt="" id="hide_eye2"
+                                         class="d-none icon-xs fill-dark-primary"/>
+                                </button>
+                            </div>
+                            <form:errors path="newPassword" cssClass="text-danger" element="p"/>
                         </div>
-                        <form:errors path="newPassword" cssClass="text-danger" element="p"/>
-
                     </div>
 
                     <div class="mt-4 d-flex justify-content-center">
@@ -97,22 +98,18 @@
                     </div>
                 </form:form>
         </div>
-        <div class="card box p-3 w-inherit mw-600" style="block-size: fit-content">
-            <h1><spring:message code="otherConfigurations.title"/></h1>
-            <div class="form-switch form-check-reverse">
-                <div class="form-check form-switch p-0">
-                    <c:set var="notificationsEnabledUrl" value="${baseUrl}/enable-notifications"/>
-                    <c:set var="notificationsDisabledUrl" value="${baseUrl}/disable-notifications"/>
-                    <form:form action="${notificationsEnabled ? notificationsDisabledUrl : notificationsEnabledUrl}"
-                               method="post" id="changeNotificationsForm">
-                        <div class="d-flex align-items-center gap-2">
-                            <label class="form-check-label" for="receiveMailsSwitch"> <spring:message code="otherConfigurations.receiveMails"/></label>
-                            <input type="checkbox" id="receiveMailsSwitch" class="form-check-input"
-                                   onclick="document.getElementById('changeNotificationsForm').submit()"/>
-                        </div>
-                    </form:form>
-                </div>
-            </div>
+        <div class="card box p-3 w-inherit mw-500" style="block-size: fit-content">
+                <c:set var="notificationsEnabledUrl" value="${baseUrl}/enable-notifications"/>
+                <c:set var="notificationsDisabledUrl" value="${baseUrl}/disable-notifications"/>
+                <form:form action="${notificationsEnabled ? notificationsDisabledUrl : notificationsEnabledUrl}"
+                           method="post" id="changeNotificationsForm" cssClass="card-body p-3">
+                    <h1><spring:message code="otherConfigurations.title"/></h1>
+                    <div class="form-check form-switch px-3 mt-3">
+                        <label class="form-check-label" for="receiveMailsSwitch"><spring:message code="otherConfigurations.receiveMails"/></label>
+                        <input type="checkbox" id="receiveMailsSwitch" class="form-check-input" style="width: 3rem; height: 1.3rem;"
+                               onclick="document.getElementById('changeNotificationsForm').submit()"/>
+                    </div>
+                </form:form>
         </div>
     </section>
 </main>

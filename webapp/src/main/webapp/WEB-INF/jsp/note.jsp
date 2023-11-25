@@ -55,13 +55,30 @@
                     <div class="d-flex align-items-center">
                         <img src="<c:url  value="${baseUrl}/profile/${note.user.userId}/picture"/>"
                              alt="<spring:message code="logotype"/>" class="user-profile-picture">
-                        <h4 class="m-0"><a href="${baseUrl}/user/${note.user.userId}/note-board"><strong><c:out
-                                value="${note.user.displayName}"/></strong></a></h4>
-                        <h4 class="my-0 mx-3">
-                            <spring:message code="views" arguments="${note.interactions}"/>
-                        </h4>
+                        <div>
+                            <h4 class="m-0"><a href="${baseUrl}/user/${note.user.userId}/note-board"><strong><c:out
+                                    value="${note.user.displayName}"/></strong></a></h4>
+                            <p><spring:message code="views" arguments="${note.interactions}"/></p>
+                        </div>
                     </div>
                     <div class="d-flex align-items-center">
+                        <c:set var="addFavorite" value="${baseUrl}/notes/${noteId}/addfavorite"/>
+                        <c:set var="removeFavorite" value="${baseUrl}/notes/${noteId}/removefavorite"/>
+                        <form:form
+                                action="${note.favorite ? removeFavorite : addFavorite}"
+                                method="post">
+                            <input name="redirectUrl"
+                                   value="${baseUrl}/notes/${noteId}"
+                                   type="hidden"/>
+                            <span data-bs-toggle="tooltip" data-bs-placement="bottom"
+                              data-bs-title="<spring:message code="favorite"/>" data-bs-trigger="hover">
+                                <button type="submit" class="btn nav-icon-button">
+                                    <img src="<c:url value="${ note.favorite ? '/svg/filled-heart.svg' : '/svg/heart.svg'}"/>"
+                                         alt="<spring:message code="favorite"/>"
+                                         class="icon-s fill-text">
+                                </button>
+                            </span>
+                        </form:form>
                         <c:if test="${user ne null and (note.user.userId eq user.userId)}">
                         <span data-bs-toggle="tooltip" data-bs-placement="bottom"
                               data-bs-title="<spring:message code="edit"/>" data-bs-trigger="hover">

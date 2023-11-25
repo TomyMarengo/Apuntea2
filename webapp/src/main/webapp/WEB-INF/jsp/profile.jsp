@@ -80,7 +80,7 @@
                                     value="${user.firstName}"/>
                         <form:errors path="firstName" cssClass="text-danger" element="p"/>
 
-                        <span class="card-text static-info">${user.firstName}</span>
+                        <span class="card-text static-info text-info">${user.firstName}</span>
                     </div>
 
                     <div class="profile-item">
@@ -93,7 +93,7 @@
                                     value="${user.lastName}"/>
                         <form:errors path="lastName" cssClass="text-danger" element="p"/>
 
-                        <span class="card-text static-info">${user.lastName}</span>
+                        <span class="card-text static-info text-info">${user.lastName}</span>
                     </div>
 
                     <div class="profile-item">
@@ -106,7 +106,7 @@
                                     required="true"/>
                         <form:errors path="username" cssClass="text-danger" element="p"/>
 
-                        <span class="card-text static-info">${user.username}</span>
+                        <span class="card-text static-info text-info">${user.username}</span>
                     </div>
 
                     <div class="profile-item">
@@ -139,18 +139,18 @@
 
                             <form:errors path="careerId" cssClass="text-danger" element="p"/>
                         </div>
-                        <span class="card-text static-info">${user.career.name}</span>
+                        <span class="card-text static-info text-info">${user.career.name}</span>
 
                     </div>
 
                     <div class="profile-item">
                         <p><strong><spring:message code="email"/></strong></p>
-                        <span class="card-text">${user.email}</span>
+                        <span class="card-text text-info" style="margin-top: 0.1rem">${user.email}</span>
                     </div>
 
                     <div class="profile-item">
                         <p><strong><spring:message code="institution"/></strong></p>
-                        <span class="card-text">${user.career.institution.name}</span>
+                        <span class="card-text text-info">${user.career.institution.name}</span>
                     </div>
                 </div>
 
