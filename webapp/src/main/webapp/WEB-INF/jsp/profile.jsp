@@ -48,7 +48,7 @@
     <fragment:sidebar user="${user}"/>
 
     <section class="d-flex justify-content-center" style="margin-top: 5rem;">
-        <div class="card box p-3 w-inherit mw-700 w-100" style="block-size: fit-content">
+        <div class="card box p-3 w-inherit mw-600 w-100" style="block-size: fit-content">
 
             <c:url var="editUserUrl" value="/profile"/>
             <c:url var="userProfilePicture" value="${baseUrl}/profile/${user.userId}/picture"/>
@@ -80,7 +80,14 @@
                                     value="${user.firstName}"/>
                         <form:errors path="firstName" cssClass="text-danger" element="p"/>
 
-                        <span class="card-text static-info text-info">${user.firstName}</span>
+                        <c:if test="${not empty user.firstName}">
+                            <span class="card-text static-info text-info">${user.firstName}</span>
+                        </c:if>
+                        <c:if test="${empty user.firstName}">
+                            <span class="card-text static-info text-info" style="opacity: 50%">
+                                <spring:message code="name"/>
+                            </span>
+                        </c:if>
                     </div>
 
                     <div class="profile-item">
@@ -93,7 +100,15 @@
                                     value="${user.lastName}"/>
                         <form:errors path="lastName" cssClass="text-danger" element="p"/>
 
-                        <span class="card-text static-info text-info">${user.lastName}</span>
+                        <c:if test="${not empty user.lastName}">
+                            <span class="card-text static-info text-info">${user.lastName}</span>
+                        </c:if>
+                        <c:if test="${empty user.lastName}">
+                            <span class="card-text static-info text-info" style="opacity: 50%">
+                                <spring:message code="lastName"/>
+                            </span>
+                        </c:if>
+
                     </div>
 
                     <div class="profile-item">
@@ -106,7 +121,14 @@
                                     required="true"/>
                         <form:errors path="username" cssClass="text-danger" element="p"/>
 
-                        <span class="card-text static-info text-info">${user.username}</span>
+                        <c:if test="${not empty user.username}">
+                            <span class="card-text static-info text-info">${user.username}</span>
+                        </c:if>
+                        <c:if test="${empty user.username}">
+                            <span class="card-text static-info text-info" style="opacity: 50%">
+                                <spring:message code="username"/>
+                            </span>
+                        </c:if>
                     </div>
 
                     <div class="profile-item">
