@@ -37,7 +37,9 @@
 </header>
 
 <main>
-    <fragment:sidebar user="${user}"/>
+    <c:if test="${user ne null}">
+        <fragment:sidebar user="${user}"/>
+    </c:if>
 
     <section class="container text-center mt-5">
         <h2><spring:message code="index.title" arguments='<span class="apuntea-title">Apuntea</span>'/></h2>

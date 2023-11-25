@@ -99,3 +99,8 @@ img {
         grid-template-columns: repeat(1, 1fr);
     }
 }
+
+.static-info{
+    padding: 0.385rem 0.75rem 0.385rem 0;
+    margin-top: 0.1rem;
+}

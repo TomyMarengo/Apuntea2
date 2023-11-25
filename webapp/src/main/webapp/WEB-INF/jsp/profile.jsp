@@ -73,30 +73,40 @@
                     <div class="profile-item">
                         <spring:message var="profileFirstName" code="name"/>
                         <p><strong><spring:message code="name"/></strong></p>
-                        <form:input disabled="true" type="text" id="firstName"
-                                    class="form-control bg-bg dynamic-info"
+
+                        <form:input type="text" id="firstName"
+                                    class="form-control bg-bg dynamic-info d-none"
                                     placeholder="${profileFirstName}" path="firstName"
                                     value="${user.firstName}"/>
                         <form:errors path="firstName" cssClass="text-danger" element="p"/>
+
+                        <span class="card-text static-info">${user.firstName}</span>
                     </div>
 
                     <div class="profile-item">
                         <spring:message var="profileLastName" code="lastName"/>
                         <p><strong><spring:message code="lastName"/></strong></p>
-                        <form:input disabled="true" type="text" id="lastName"
-                                    class="form-control bg-bg dynamic-info"
-                                    placeholder="${profileLastName}" path="lastName" value="${user.lastName}"/>
+
+                        <form:input type="text" id="lastName"
+                                    class="form-control bg-bg dynamic-info d-none"
+                                    placeholder="${profileLastName}" path="lastName"
+                                    value="${user.lastName}"/>
                         <form:errors path="lastName" cssClass="text-danger" element="p"/>
+
+                        <span class="card-text static-info">${user.lastName}</span>
                     </div>
 
                     <div class="profile-item">
                         <spring:message var="profileUsername" code="username"/>
                         <p><strong><spring:message code="username"/></strong></p>
-                        <form:input disabled="true" type="text" id="username"
-                                    class="form-control bg-bg dynamic-info"
+
+                        <form:input type="text" id="username"
+                                    class="form-control bg-bg dynamic-info d-none"
                                     placeholder="${profileUsername}" path="username" value="${user.username}"
                                     required="true"/>
                         <form:errors path="username" cssClass="text-danger" element="p"/>
+
+                        <span class="card-text static-info">${user.username}</span>
                     </div>
 
                     <div class="profile-item">
@@ -104,7 +114,7 @@
                         <div>
                             <label for="careerSelect" class="visually-hidden"></label>
                             <select id="careerSelect" style="display: none;">
-                                <option disabled selected value></option>
+                                <option selected value></option>
                             </select>
 
                             <form:input path="careerId" id="careerId" style="display: none;"
@@ -115,13 +125,12 @@
                                 <div class="autocomplete">
                                     <spring:message code="search.career.placeholder" var="placeholderCareer"/>
                                     <input type="text" id="careerAutocomplete"
-                                           class="form-control bg-bg special-radius dynamic-info"
+                                           class="form-control bg-bg special-radius dynamic-info d-none"
                                            placeholder="${placeholderCareer}" autocomplete="off" required
-                                           disabled
                                            value="${user.career.name}"/>
                                 </div>
-                                <button type="button" class="input-group-text input-group-icon dynamic-info"
-                                        id="eraseCareerButton" disabled>
+                                <button type="button" class="input-group-text input-group-icon dynamic-info d-none"
+                                        id="eraseCareerButton">
                                     <img src="<c:url value="/svg/cross.svg"/>"
                                          alt="<spring:message code="search.sort.image"/>"
                                          class="icon-xs fill-dark-primary"/>
@@ -130,6 +139,8 @@
 
                             <form:errors path="careerId" cssClass="text-danger" element="p"/>
                         </div>
+                        <span class="card-text static-info">${user.career.name}</span>
+
                     </div>
 
                     <div class="profile-item">
@@ -180,6 +191,14 @@
 <script>
     <c:if test="${userEdited ne null and userEdited eq true}">
     displayToast('<spring:message code="toast.changeInfo"/>')
+    </c:if>
+</script>
+
+<script>
+    <c:if test="${errorsEditUserForm ne null}">
+        document.getElementById('edit-info-button').click();
+        document.getElementById('cancel-edit-button').disabled = true;
+        document.getElementById('cancel-edit-button').style.pointerEvents = 'none';
     </c:if>
 </script>
 </body>

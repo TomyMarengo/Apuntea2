@@ -14,6 +14,7 @@ function changeImage() {
 let editInfoButton = document.getElementById('edit-info-button');
 let cancelEditButton = document.getElementById('cancel-edit-button');
 let dynamicInfo = document.getElementsByClassName('dynamic-info');
+let staticInfo = document.getElementsByClassName('static-info');
 let updateInfo = document.getElementById('update-info');
 let hiddenPencil = document.getElementById('hidden-pencil');
 let imageInput = document.getElementById('image-input');
@@ -21,7 +22,10 @@ let selectedImage = document.getElementById('selected-image');
 
 editInfoButton.addEventListener('click', function() {
     for (let i = 0; i < dynamicInfo.length; i++) {
-        dynamicInfo[i].disabled = false;
+        dynamicInfo[i].classList.remove('d-none');
+    }
+    for (let i = 0; i < staticInfo.length; i++) {
+        staticInfo[i].classList.add('d-none');
     }
     editInfoButton.classList.add('d-none');
     updateInfo.classList.remove('d-none');
@@ -39,7 +43,10 @@ editInfoButton.addEventListener('click', function() {
 
 cancelEditButton.addEventListener('click', function() {
     for (let i = 0; i < dynamicInfo.length; i++) {
-        dynamicInfo[i].disabled = true;
+        dynamicInfo[i].classList.add('d-none');
+    }
+    for (let i = 0; i < staticInfo.length; i++) {
+        staticInfo[i].classList.remove('d-none');
     }
     editInfoButton.classList.remove('d-none');
     updateInfo.classList.add('d-none');
