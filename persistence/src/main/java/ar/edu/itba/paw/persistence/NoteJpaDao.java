@@ -199,7 +199,7 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
-    public void setNoteFavorites(List<UUID> noteIds, UUID currentUserId) {
+    public void loadNoteFavorites(List<UUID> noteIds, UUID currentUserId) {
         if (currentUserId == null) return;
         List<Note> favorites = em.createQuery("SELECT n FROM User u JOIN u.noteFavorites n WHERE n.noteId IN :noteIds AND u.userId = :userId", Note.class)
                     .setParameter("userId", currentUserId)

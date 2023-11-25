@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
@@ -54,7 +53,7 @@ public interface NoteDao {
 
     List<Note> findNoteByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa);
 
-    void setNoteFavorites(List<UUID> noteIds, UUID currentUserId);
+    void loadNoteFavorites(List<UUID> noteIds, UUID currentUserId);
 
     void addInteractionIfNotExists(User user, Note note);
 }

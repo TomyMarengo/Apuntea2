@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
 import static ar.edu.itba.paw.models.NameConstants.*;
@@ -73,7 +72,7 @@ public class SearchJpaDao implements SearchDao {
         List<Searchable> searchables = new ArrayList<>();
         if (!noteIds.isEmpty()) {
             searchables.addAll(noteDao.findNoteByIds(noteIds, sa.getCurrentUserId().orElse(null), sortArgs));
-            sa.getCurrentUserId().ifPresent(uId -> noteDao.setNoteFavorites(noteIds, uId));
+            sa.getCurrentUserId().ifPresent(uId -> noteDao.loadNoteFavorites(noteIds, uId));
         }
         if (!directoryIds.isEmpty()){
             searchables.addAll(directoryDao.findDirectoriesByIds(directoryIds, sa.getCurrentUserId().orElse(null), sortArgs));

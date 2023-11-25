@@ -65,8 +65,10 @@ public class NoteServiceImpl implements NoteService {
     public Optional<Note> getNoteById(UUID noteId) {
         final Optional<User> maybeUser = securityService.getCurrentUser();
         Optional<Note> note = noteDao.getNoteById(noteId, maybeUser.map(User::getUserId).orElse(null));
-        if (note.isPresent() && maybeUser.isPresent())
+        if (note.isPresent() && maybeUser.isPresent()) {
+            noteDao.loadNoteFavorites(Collections.singletonList(note.get().getId()), maybeUser.get().getUserId());
             noteDao.addInteractionIfNotExists(maybeUser.get(), note.get());
+        }
         return note;
     }
 
