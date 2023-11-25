@@ -24,7 +24,4 @@ public interface NoteService {
     Collection<Note> getFavorites();
     void addFavorite(UUID noteId);
     void removeFavorite(UUID noteId);
-
-    void addInteractionIfNotExists(UUID noteId);
-
 }

@@ -215,8 +215,8 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
-    public void addInteractionIfNotExists(UUID userId, UUID noteId) {
-        em.merge(new UserNoteInteraction(em.getReference(User.class, userId), em.getReference(Note.class, noteId)));
+    public void addInteractionIfNotExists(User user, Note note) {
+        em.merge(new UserNoteInteraction(user, note));
     }
 
 }

@@ -57,6 +57,9 @@
                              alt="<spring:message code="logotype"/>" class="user-profile-picture">
                         <h4 class="m-0"><a href="${baseUrl}/user/${note.user.userId}/note-board"><strong><c:out
                                 value="${note.user.displayName}"/></strong></a></h4>
+                        <h4 class="my-0 mx-3">
+                            <spring:message code="views" arguments="${note.interactions}"/>
+                        </h4>
                     </div>
                     <div class="d-flex align-items-center">
                         <c:if test="${user ne null and (note.user.userId eq user.userId)}">

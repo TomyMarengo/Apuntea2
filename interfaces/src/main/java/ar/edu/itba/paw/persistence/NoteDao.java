@@ -56,5 +56,5 @@ public interface NoteDao {
 
     void setNoteFavorites(List<UUID> noteIds, UUID currentUserId);
 
-    void addInteractionIfNotExists(UUID userId, UUID noteId);
+    void addInteractionIfNotExists(User user, Note note);
 }

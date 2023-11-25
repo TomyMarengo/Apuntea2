@@ -63,8 +63,11 @@ public class NoteServiceImpl implements NoteService {
     @Transactional
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
-        final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
-        return noteDao.getNoteById(noteId, userId);
+        final Optional<User> maybeUser = securityService.getCurrentUser();
+        Optional<Note> note = noteDao.getNoteById(noteId, maybeUser.map(User::getUserId).orElse(null));
+        if (note.isPresent() && maybeUser.isPresent())
+            noteDao.addInteractionIfNotExists(maybeUser.get(), note.get());
+        return note;
     }
 
     @Transactional
@@ -170,12 +173,5 @@ public class NoteServiceImpl implements NoteService {
         User currentUser = securityService.getCurrentUserOrThrow();
         boolean success = noteDao.removeFavorite(currentUser, noteId);
         if (!success) throw new InvalidNoteException();
-    }
-
-    @Transactional
-    @Override
-    public void addInteractionIfNotExists(UUID noteId) {
-        UUID currentUserId = securityService.getCurrentUserOrThrow().getUserId();
-        noteDao.addInteractionIfNotExists(currentUserId, noteId);
     }
 }
