@@ -82,8 +82,8 @@ public class VerificationCodeJpaDaoTest {
 
     @Test
     public void testVerifyForgotPasswordExpired() {
-        VerificationCode code = new VerificationCode(DEFAULT_CODE, user, LocalDateTime.now().minusMinutes(10));
-        jdbcInsertVerificationCode(namedParameterJdbcTemplate, code);
+//        VerificationCode code = new VerificationCode(DEFAULT_CODE, user, LocalDateTime.now().minusMinutes(10));
+        VerificationCode code = insertVerificationCode(em, DEFAULT_CODE, user, LocalDateTime.now().minusMinutes(10));
         boolean success = verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), DEFAULT_CODE);
         assertFalse(success);
     }

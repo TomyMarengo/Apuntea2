@@ -2,7 +2,9 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.institutional.Institution;
 import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.institutional.SubjectCareer;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
@@ -15,6 +17,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import javax.persistence.EntityManager;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,9 +32,7 @@ public class TestUtils {
 
     // Careers
     static UUID ING_INF_ID = UUID.fromString("c0000000-0000-0000-0000-000000000000");
-    static Career ING_INF = new Career(ING_INF_ID, "");
     static UUID ING_MEC_ID = UUID.fromString("c0000000-0000-0000-0000-000000000001");
-    static Career ING_MEC = new Career(ING_MEC_ID, "");
 
     // Subjects
     static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
@@ -71,11 +72,11 @@ public class TestUtils {
     private TestUtils() {}
 
     static User insertStudent(EntityManager em, String email, String password, UUID careerId, String locale) {
-        return insertUser(em, email, password, careerId, locale, Role.ROLE_STUDENT);
+        return insertUser(em, new User.UserBuilder().email(email).password(password).career(em.find(Career.class, careerId)).locale(locale).roles(Collections.singleton(Role.ROLE_STUDENT)));
     }
 
     static User insertAdmin(EntityManager em, String email, String password, UUID careerId, String locale) {
-        return insertUser(em, email, password, careerId, locale, Role.ROLE_ADMIN);
+        return insertUser(em, new User.UserBuilder().email(email).password(password).career(em.find(Career.class, careerId)).locale(locale).roles(Collections.singleton(Role.ROLE_ADMIN)));
     }
 
     static void banUser(EntityManager em, User user, User admin, String reason, LocalDateTime endDate) {
@@ -85,19 +86,18 @@ public class TestUtils {
         em.flush();
     }
 
-    private static User insertUser(EntityManager em, String email, String password, UUID careerId, String locale, Role role) {
-        Career career = em.find(Career.class, careerId);
-        User user = new User.UserBuilder()
-                .email(email)
-                .password(password)
-                .career(career)
-                .locale(locale)
-                .status(UserStatus.ACTIVE)
-                .roles(Collections.singleton(role))
-                .build();
+    static User insertUser(EntityManager em, User.UserBuilder builder) {
+        User user =  builder.status(UserStatus.ACTIVE).build();
         em.persist(user);
         em.flush();
         return user;
+    }
+
+    static Image insertImage(EntityManager em, Image image, User user) {
+        em.persist(image);
+        user.setProfilePicture(image);
+        em.flush();
+        return image;
     }
 
     static VerificationCode insertVerificationCode(EntityManager em, String code, User user, LocalDateTime expirationDate) {
@@ -156,225 +156,36 @@ public class TestUtils {
         return subject;
     }
 
+    static Career insertCareer(EntityManager em, String careerName, UUID institutionId) {
+        Career career = new Career(careerName, em.getReference(Institution.class, institutionId));
+        em.persist(career);
+        em.flush();
+        return career;
+    }
+
+    static Institution insertInstitution(EntityManager em, String institutionName) {
+        Institution institution = new Institution(institutionName);
+        em.persist(institution);
+        em.flush();
+        return institution;
+    }
+
+    static void insertSubjectCareer(EntityManager em, UUID subjectId, UUID careerId, int year) {
+        SubjectCareer subjectCareer = new SubjectCareer(
+                em.getReference(Subject.class, subjectId),
+                em.getReference(Career.class, careerId),
+                year
+        );
+        em.persist(subjectCareer);
+        em.flush();
+    }
+
+    static int countSearchResults(EntityManager em, String condition) {
+        return ((BigInteger) em.createNativeQuery("SELECT COUNT(DISTINCT id) FROM Search WHERE (visible = TRUE) " + (condition != null ? "AND " + condition : ""))
+                .getSingleResult()).intValue();
+    }
+
     /*----------------------------------------------------------------------------------------------------*/
 
-    static UUID jdbcInsertStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
-        return jdbcInsertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_STUDENT);
-    }
-
-    static UUID jdbcInsertLegacyUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(EMAIL, email);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Users (email) VALUES (:email)",
-                args, keyHolder, new String[]{USER_ID});
-        return (UUID) keyHolder.getKeys().get(USER_ID);
-    }
-
-    static UUID jdbcInsertAdmin(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale) {
-        return jdbcInsertUser(namedParameterJdbcTemplate, email, password, careerId, locale, Role.ROLE_ADMIN);
-    }
-
-    private static UUID jdbcInsertUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale, Role role) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(EMAIL, email);
-        args.addValue(PASSWORD, password);
-        args.addValue(CAREER_ID, careerId);
-        args.addValue(LOCALE, locale);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Users (email, password, career_id, locale) VALUES (:email, :password, :career_id, :locale)",
-                args, keyHolder, new String[]{USER_ID});
-        UUID newUserId = (UUID) keyHolder.getKeys().get(USER_ID);
-
-        args = new MapSqlParameterSource().addValue(USER_ID, newUserId).addValue(ROLE_NAME, role.getRole());
-        namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
-        return (UUID) keyHolder.getKeys().get(USER_ID);
-    }
-
-    static Image insertImage(EntityManager em, Image image, User user) {
-        em.persist(image);
-        user.setProfilePicture(image);
-        em.flush();
-        return image;
-    }
-
-    static UUID jdbcInsertImage(NamedParameterJdbcTemplate namedParameterJdbcTemplate, byte[] image, UUID userId) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(IMAGE, image);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Images (image) VALUES (:image)",
-                args, keyHolder, new String[]{IMAGE_ID});
-
-        if(userId != null) {
-            args = new MapSqlParameterSource().addValue(USER_ID, userId).addValue(IMAGE_ID, keyHolder.getKeys().get(IMAGE_ID));
-            namedParameterJdbcTemplate.update("UPDATE Users SET profile_picture_id = :image_id WHERE user_id = :user_id", args);
-        }
-
-        return (UUID) keyHolder.getKeys().get(IMAGE_ID);
-
-    }
-
-
-    static void jdbcBanUser(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID userId, UUID adminId, LocalDateTime endDate) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(USER_ID, userId);
-        args.addValue(ADMIN_ID, adminId);
-        args.addValue(END_DATE, endDate);
-        namedParameterJdbcTemplate.update("INSERT INTO Bans (user_id, admin_id, end_date) VALUES (:user_id, :admin_id, :end_date)", args);
-
-        args = new MapSqlParameterSource();
-        args.addValue(USER_ID, userId);
-        namedParameterJdbcTemplate.update("UPDATE Users SET status = 'BANNED' WHERE user_id = :user_id", args);
-    }
-
-
-    static UUID insertCompleteStudent(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String email, String password, UUID careerId, String locale,
-                                      String username, String firstName, String lastName) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(EMAIL, email);
-        args.addValue(PASSWORD, password);
-        args.addValue(CAREER_ID, careerId);
-        args.addValue(LOCALE, locale);
-        args.addValue(USERNAME, username);
-        args.addValue(FIRST_NAME, firstName);
-        args.addValue(LAST_NAME, lastName);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Users (email, password, career_id, locale, username, first_name, last_name) VALUES (:email, :password, :career_id, :locale, :username, :first_name, :last_name)",
-                args, keyHolder, new String[]{USER_ID});
-        UUID newUserId = (UUID) keyHolder.getKeys().get(USER_ID);
-
-        args = new MapSqlParameterSource().addValue(USER_ID, newUserId).addValue(ROLE_NAME, Role.ROLE_STUDENT.getRole());
-        namedParameterJdbcTemplate.update("INSERT INTO User_Roles (user_id, role_name) VALUES (:user_id, :role_name)", args);
-        return (UUID) keyHolder.getKeys().get(USER_ID);
-    }
-
-    static UUID jdbcInsertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible, String iconColor) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(DIRECTORY_NAME, directoryName);
-        args.addValue(USER_ID, userId);
-        args.addValue(PARENT_ID, parentId);
-        args.addValue(VISIBLE, visible);
-        args.addValue(ICON_COLOR, iconColor);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Directories (directory_name, user_id, parent_id, visible, icon_color) VALUES (:directory_name, :user_id, :parent_id, :visible, :icon_color)",
-                args, keyHolder, new String[]{DIRECTORY_ID});
-        return (UUID) keyHolder.getKeys().get(DIRECTORY_ID);
-    }
-
-    static UUID jdbcInsertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId, boolean visible) {
-        return jdbcInsertDirectory(namedParameterJdbcTemplate, directoryName, userId, parentId, visible, "BBBBBB");
-    }
-
-    static UUID jdbcInsertDirectory(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String directoryName, UUID userId, UUID parentId) {
-        return jdbcInsertDirectory(namedParameterJdbcTemplate, directoryName, userId, parentId, true);
-    }
-
-    static UUID jdbcInsertNote(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID parentId, String name, UUID subjectId, UUID userId, boolean visible, byte[] file, String category, String fileType) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(NOTE_NAME, name);
-        args.addValue(SUBJECT_ID, subjectId);
-        args.addValue(USER_ID, userId);
-        args.addValue(PARENT_ID, parentId);
-        args.addValue(VISIBLE, visible);
-        args.addValue(CATEGORY, category.toLowerCase());
-        args.addValue(FILE_TYPE, fileType);
-        KeyHolder holder = new GeneratedKeyHolder();
-        // TODO: Fix this, and don't forget to add the file
-        namedParameterJdbcTemplate.update("INSERT INTO Notes (note_name, subject_id, user_id, parent_id, visible, category, file_type)  " +
-                        "SELECT :note_name, :subject_id, :user_id, d.directory_id, :visible, :category, :file_type FROM Directories d " +
-                        "WHERE d.directory_id = :parent_id AND (d.user_id = :user_id OR d.parent_id IS NULL)"
-                , args, holder, new String[]{NOTE_ID});
-        return (UUID) holder.getKeys().get(NOTE_ID);
-    }
-
-
-    static void jdbcInsertReview(NamedParameterJdbcTemplate namedParameterJdbcTemplate, UUID noteId, UUID userId, int score, String content) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(NOTE_ID, noteId);
-        args.addValue(USER_ID, userId);
-        args.addValue(SCORE, score);
-        args.addValue(CONTENT, content);
-
-        namedParameterJdbcTemplate.update("INSERT INTO Reviews (note_id, user_id, score, content) VALUES (:note_id, :user_id, :score, :content)",
-                args);
-    }
-
-    static void jdbcInsertFavorite(SimpleJdbcInsert jdbcFavoriteInsert, UUID directoryId, UUID userId) {
-        jdbcFavoriteInsert.execute(new HashMap<String, Object>(){{
-            put(DIRECTORY_ID, directoryId);
-            put(USER_ID, userId);
-        }});
-    }
-
-    static void jdbcInsertVerificationCode(NamedParameterJdbcTemplate namedParameterJdbcTemplate, VerificationCode verificationCode) {
-        namedParameterJdbcTemplate.update(
-                "INSERT INTO Verification_Codes(user_id, code, expires_at) values(" +
-                        "(SELECT user_id FROM Users WHERE email = :email), " +
-                        ":code, :expires_at)",
-                new MapSqlParameterSource()
-                        .addValue("email", verificationCode.getEmail())
-                        .addValue("code", verificationCode.getCode())
-                        .addValue("expires_at", verificationCode.getExpirationDate()));
-    }
-    static UUID jdbcInsertSubject(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String subjectName, UUID rootDirectoryId) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(SUBJECT_NAME, subjectName);
-        args.addValue(ROOT_DIRECTORY_ID, rootDirectoryId);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Subjects (subject_name, root_directory_id) VALUES (:subject_name, :root_directory_id)",
-                args, keyHolder, new String[]{SUBJECT_ID});
-        return (UUID) keyHolder.getKeys().get(SUBJECT_ID);
-    }
-
-    static UUID insertCareer(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String careerName, UUID institutionId) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(CAREER_NAME, careerName);
-        args.addValue(INSTITUTION_ID, institutionId);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Careers (career_name, institution_id) VALUES (:career_name, :institution_id)",
-                args, keyHolder, new String[]{CAREER_ID});
-        return (UUID) keyHolder.getKeys().get(CAREER_ID);
-    }
-
-    static UUID insertInstitution(NamedParameterJdbcTemplate namedParameterJdbcTemplate, String institutionName) {
-        MapSqlParameterSource args = new MapSqlParameterSource();
-        args.addValue(INSTITUTION_NAME, institutionName);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedParameterJdbcTemplate.update("INSERT INTO Institutions (institution_name) VALUES (:institution_name)",
-                args, keyHolder, new String[]{INSTITUTION_ID});
-        return (UUID) keyHolder.getKeys().get(INSTITUTION_ID);
-    }
-
-    static void insertSubjectCareer(SimpleJdbcInsert jdbcSubjectsCareersInsert, UUID subjectId, UUID careerId, int year) {
-        jdbcSubjectsCareersInsert.execute(new HashMap<String, Object>(){{
-            put(SUBJECT_ID, subjectId);
-            put(CAREER_ID, careerId);
-            put(YEAR, year);
-        }});
-    }
-
-    static int countSearchResults(JdbcTemplate jdbcTemplate, String condition) {
-        String query = "SELECT COUNT(DISTINCT id) FROM Search WHERE visible = TRUE";
-        if (condition != null) {
-            query += " AND " + condition;
-        }
-        return jdbcTemplate.queryForObject(query, Integer.class);
-    }
-
-    static int countNavigationResults(JdbcTemplate jdbcTemplate, String condition) {
-        String query = "SELECT COUNT(DISTINCT id) FROM Navigation WHERE visible = TRUE";
-        if (condition != null) {
-            query += " AND " + condition;
-        }
-        return jdbcTemplate.queryForObject(query, Integer.class);
-    }
 
 }

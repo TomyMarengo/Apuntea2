@@ -2,8 +2,10 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.*;
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.search.Searchable;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -22,8 +23,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,6 +43,9 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = TestConfig.class)
 @Rollback
 public class SearchJpaDaoTest {
+    @PersistenceContext
+    private EntityManager em;
+
     @Autowired
     private DataSource ds;
 
@@ -66,7 +71,7 @@ public class SearchJpaDaoTest {
         namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
         jdbcFavoriteInsert = new SimpleJdbcInsert(ds)
                 .withTableName(FAVORITES);
-        allResultsPageSize = countSearchResults(jdbcTemplate, null);
+        allResultsPageSize = countSearchResults(em, null);
 
         Mockito.when(noteDao.findNoteByIds(Mockito.any(), Mockito.any(), Mockito.any())).thenAnswer(
                 invocation -> {
@@ -90,7 +95,7 @@ public class SearchJpaDaoTest {
 
     @Test
     public void testCountSearchResultsWithFilters() {
-        int expectedResults = countSearchResults(jdbcTemplate, " institution_id = '" + ITBA_ID + "' AND career_id = '" + ING_INF_ID + "' AND subject_id = '" + EDA_ID + "' AND category = '" + Category.PRACTICE.name() + "'");
+        int expectedResults = countSearchResults(em, " institution_id = '" + ITBA_ID + "' AND career_id = '" + ING_INF_ID + "' AND subject_id = '" + EDA_ID + "' AND category = '" + Category.PRACTICE.name() + "'");
 
         int searchResults = searchDao.countSearchResults(new SearchArgumentsBuilder().institutionId(ITBA_ID).careerId(ING_INF_ID).subjectId(EDA_ID).category(Category.PRACTICE.name()).build());
 
@@ -266,19 +271,36 @@ public class SearchJpaDaoTest {
         private final UUID grandchild11Id;
 
         private TestCountChildrenObject() {
-            rootDirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "root", null, null);
-            child1Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "child1", PEPE_ID, rootDirId);
-            child2Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "child2", PEPE_ID, rootDirId);
-            child3Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "child3", PEPE_ID, rootDirId);
-            child4Id = jdbcInsertNote(namedParameterJdbcTemplate, rootDirId,"child4", EDA_ID,PEPE_ID, true, new byte[]{0}, "other", "pdf");
+            Directory.DirectoryBuilder dbuilder = new Directory.DirectoryBuilder();
 
-            grandchild11Id = jdbcInsertDirectory(namedParameterJdbcTemplate, "grandchild11", PEPE_ID, child1Id);
-            jdbcInsertDirectory(namedParameterJdbcTemplate, "grandchild12", PEPE_ID, child1Id);
+            rootDirId = insertDirectory(em, dbuilder.name("root")).getId();
+            dbuilder.user(em.getReference(User.class, PEPE_ID))
+                    .parent(em.getReference(Directory.class, rootDirId));
+            child1Id = insertDirectory(em, dbuilder.name("child1")).getId();
+            child2Id = insertDirectory(em, dbuilder.name("child2")).getId();
+            child3Id = insertDirectory(em, dbuilder.name("child3")).getId();
+            child4Id = insertNote(em, new Note.NoteBuilder()
+                            .parentId(rootDirId)
+                            .name("child4")
+                            .subject(em.getReference(Subject.class, EDA_ID))
+                            .user(em.getReference(User.class, PEPE_ID))
+                            .visible(true)
+                            .category(Category.OTHER)
+                            .fileType("pdf")).getId();
 
-            jdbcInsertNote(namedParameterJdbcTemplate, child2Id, "grandchild21", EDA_ID, PEPE_ID, true, new byte[]{0}, "other", "pdf");
-            jdbcInsertNote(namedParameterJdbcTemplate, child2Id, "grandchild22", EDA_ID, PEPE_ID, true, new byte[]{0}, "other", "pdf");
+            grandchild11Id = insertDirectory(em, dbuilder.name("grandchild11").user(em.getReference(User.class, PEPE_ID)).parent(em.getReference(Directory.class, child1Id))).getId();
+            insertDirectory(em, dbuilder.name("grandchild12").user(em.getReference(User.class, PEPE_ID)).parent(em.getReference(Directory.class, child1Id)));
+            Note.NoteBuilder nb = new Note.NoteBuilder()
+                    .parentId(child2Id)
+                    .subject(em.getReference(Subject.class, EDA_ID))
+                    .user(em.getReference(User.class, PEPE_ID))
+                    .visible(true)
+                    .category(Category.OTHER)
+                    .fileType("pdf");
+            insertNote(em, nb.name("grandchild21"));
+            insertNote(em, nb.name("grandchild22"));
 
-            jdbcInsertDirectory(namedParameterJdbcTemplate, "ggchild111", PEPE_ID, grandchild11Id);
+            insertDirectory(em, dbuilder.name("ggchild111").user(em.getReference(User.class, PEPE_ID)).parent(em.getReference(Directory.class, grandchild11Id)));
         }
     }
 

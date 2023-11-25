@@ -41,6 +41,11 @@ public class Career {
         this.name = name;
     }
 
+    public Career(String name, Institution institution) {
+        this.name = name;
+        this.institution = institution;
+    }
+
     public UUID getCareerId() {
         return careerId;
     }

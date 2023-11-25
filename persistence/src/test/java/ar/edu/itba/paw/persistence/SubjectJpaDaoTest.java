@@ -90,13 +90,13 @@ public class SubjectJpaDaoTest {
         final UUID subject1Id, subject2Id, subject12Id, subject3Id, floatingSubjectId;
 
         private TestSubjectsCareersInserts() {
-            i1Id = insertInstitution(namedParameterJdbcTemplate, "i1");
+            i1Id = insertInstitution(em, "i1").getInstitutionId();
 
-            UUID i2Id = insertInstitution(namedParameterJdbcTemplate, "i2");
+            UUID i2Id = insertInstitution(em, "i2").getInstitutionId();
 
-            career1Id = insertCareer(namedParameterJdbcTemplate, "career1", i1Id);
-            career2Id = insertCareer(namedParameterJdbcTemplate, "career2", i1Id);
-            career3Id = insertCareer(namedParameterJdbcTemplate, "career3", i2Id);
+            career1Id = insertCareer(em, "career1", i1Id).getCareerId();
+            career2Id = insertCareer(em, "career2", i1Id).getCareerId();
+            career3Id = insertCareer(em, "career3", i2Id).getCareerId();
 
             UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
 
@@ -106,11 +106,11 @@ public class SubjectJpaDaoTest {
             subject3Id = insertSubject(em, "subject3", dirId).getSubjectId();
             floatingSubjectId = insertSubject(em, "floating subject", dirId).getSubjectId();
 
-            insertSubjectCareer(jdbcSubjectsCareersInsert, subject1Id, career1Id, 1);
-            insertSubjectCareer(jdbcSubjectsCareersInsert, subject2Id, career2Id, 1);
-            insertSubjectCareer(jdbcSubjectsCareersInsert, subject12Id, career1Id, 1);
-            insertSubjectCareer(jdbcSubjectsCareersInsert, subject12Id, career2Id, 1);
-            insertSubjectCareer(jdbcSubjectsCareersInsert, subject3Id, career3Id, 1);
+            insertSubjectCareer(em, subject1Id, career1Id, 1);
+            insertSubjectCareer(em, subject2Id, career2Id, 1);
+            insertSubjectCareer(em, subject12Id, career1Id, 1);
+            insertSubjectCareer(em, subject12Id, career2Id, 1);
+            insertSubjectCareer(em, subject3Id, career3Id, 1);
         }
     }
 
@@ -241,15 +241,15 @@ public class SubjectJpaDaoTest {
 
     @Test
     public void testLinkSubjectToCareerOtherInstitution() {
-        UUID institution1Id = insertInstitution(namedParameterJdbcTemplate, "i1");
-        UUID institution2Id = insertInstitution(namedParameterJdbcTemplate, "i2");
+        UUID institution1Id = insertInstitution(em, "i1").getInstitutionId();
+        UUID institution2Id = insertInstitution(em, "i2").getInstitutionId();
 
-        UUID career1Id = insertCareer(namedParameterJdbcTemplate, "career1", institution1Id);
-        UUID career2Id = insertCareer(namedParameterJdbcTemplate, "career2", institution2Id);
+        UUID career1Id = insertCareer(em, "career1", institution1Id).getCareerId();
+        UUID career2Id = insertCareer(em, "career2", institution2Id).getCareerId();
 
         UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
         Subject subject = insertSubject(em, "subject1", dirId);
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subject.getSubjectId(), career1Id, 1);
+        insertSubjectCareer(em, subject.getSubjectId(), career1Id, 1);
 
         boolean success = subjectDao.linkSubjectToCareer(subject, career2Id, 1);
 
@@ -259,12 +259,12 @@ public class SubjectJpaDaoTest {
 
     @Test
     public void testUpdateSubjectCareer(){
-        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = jdbcInsertSubject(namedParameterJdbcTemplate, "subject1", dirId);
+        UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
+        UUID subjectId = insertSubject(em, "subject1", dirId).getSubjectId();
         UUID careerId = ING_INF_ID;
         int oldYear = 3;
         int newYear = 4;
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, oldYear);
+        insertSubjectCareer(em, subjectId, careerId, oldYear);
         int oldCount = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+oldYear);
 
         boolean result = subjectDao.updateSubjectCareer(subjectId, careerId, newYear);
@@ -278,11 +278,12 @@ public class SubjectJpaDaoTest {
 
     @Test
     public void testUnlinkSubjectFromCareer(){
-        UUID dirId = jdbcInsertDirectory(namedParameterJdbcTemplate, "dir1", null, null);
-        UUID subjectId = jdbcInsertSubject(namedParameterJdbcTemplate, "trash", dirId);
+        Directory dir = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1").user(null).parent(null));
+
+        UUID subjectId = insertSubject(em, "trash", dir.getId()).getSubjectId();
         UUID careerId = ING_INF_ID;
         int year = 3;
-        insertSubjectCareer(jdbcSubjectsCareersInsert, subjectId, careerId, year);
+        insertSubjectCareer(em, subjectId, careerId, year);
         boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = " + year) == 1;
 
         boolean result = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);

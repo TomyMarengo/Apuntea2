@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.user.Image;
@@ -56,7 +57,7 @@ public class UserJpaDaoTest {
     @Test
     public void testCreate() {
         String userEmail = "user@mail.com";
-        userDao.create(userEmail, "", ING_INF, "es", Collections.singleton(Role.ROLE_STUDENT));
+        userDao.create(userEmail, "", em.getReference(Career.class, ING_INF_ID), "es", Collections.singleton(Role.ROLE_STUDENT));
         em.flush();
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "email = '" + userEmail + "'"));
         assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "email = '" + userEmail + "' AND career_id = '" + ING_INF_ID + "' AND locale = 'es'"));
@@ -66,11 +67,11 @@ public class UserJpaDaoTest {
     @Test
     public void testFindUserByEmail() {
         String email = "tester@itba.edu.ar";
-        UUID studentId = jdbcInsertStudent(namedParameterJdbcTemplate, email, "", ING_INF_ID, "es");
+        User student = insertStudent(em, email, "", ING_INF_ID, "es");
         Optional<User> maybeUser = userDao.findByEmail(email);
 
         User user = maybeUser.orElseThrow(AssertionError::new);
-        assertEquals(studentId, user.getUserId());
+        assertEquals(student.getUserId(), user.getUserId());
         assertEquals(email, user.getEmail());
         assertEquals(ING_INF_ID, user.getCareer().getCareerId());
         assertEquals("es", user.getLocale().getLanguage());
@@ -86,12 +87,20 @@ public class UserJpaDaoTest {
     @Test
     public void testFindUserByUsername() {
         String username = "tester";
-        UUID studentId = insertCompleteStudent(namedParameterJdbcTemplate, username, "", ING_INF_ID, "es", username, "Test", "Er");
+        User student = insertUser(em, new User.UserBuilder()
+                .email("tester@itba.edu.ar")
+                .username(username)
+                .password("")
+                .career(em.find(Career.class, ING_INF_ID))
+                .locale("es")
+                .roles(Collections.singleton(Role.ROLE_STUDENT))
+                .firstName("Test")
+                .lastName("Er"));
 
         Optional<User> maybeUser = userDao.findByUsername(username);
 
         User user = maybeUser.orElseThrow(AssertionError::new);
-        assertEquals(studentId, user.getUserId());
+        assertEquals(student.getUserId(), user.getUserId());
         assertEquals(username, user.getUsername());
         assertEquals(ING_INF_ID, user.getCareer().getCareerId());
         assertEquals("es", user.getLocale().getLanguage());
@@ -109,12 +118,12 @@ public class UserJpaDaoTest {
     @Test
     public void testFindUserById(){
         String email = "test@itba.edu.ar";
-        UUID studentId = jdbcInsertStudent(namedParameterJdbcTemplate, email, "", ING_INF_ID, "es");
+        User student = insertStudent(em, email, "", ING_INF_ID, "es");
 
-        Optional<User> maybeUser = userDao.findById(studentId);
+        Optional<User> maybeUser = userDao.findById(student.getUserId());
 
         User user = maybeUser.orElseThrow(AssertionError::new);
-        assertEquals(studentId,user.getUserId());
+        assertEquals(student, user);
         assertEquals(email, user.getEmail());
         assertEquals(ING_INF_ID, user.getCareer().getCareerId());
         assertEquals("es", user.getLocale().getLanguage());
@@ -201,7 +210,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudents2000Count() {
         final int STUDENTS_LENGTH = 20;
-        for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         int results = userDao.getStudentsQuantity("t2000", null);
         assertEquals(0, results);
     }
@@ -209,7 +218,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudents20Count() {
         final int STUDENTS_LENGTH = 20;
-        for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         int results = userDao.getStudentsQuantity("t20", null);
         assertEquals(1, results);
     }
@@ -217,7 +226,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudents2Count() {
         final int STUDENTS_LENGTH = 20;
-        for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         int results = userDao.getStudentsQuantity("t2", null);
         assertEquals(2, results);
     }
@@ -226,7 +235,7 @@ public class UserJpaDaoTest {
     public void testGetStudentsAllCount() {
         final int STUDENTS_LENGTH = 20;
         int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
-        for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         int results = userDao.getStudentsQuantity("", null);
         assertEquals(oldUsers + STUDENTS_LENGTH, results);
     }
@@ -234,7 +243,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudents2000() {
         final int STUDENTS_LENGTH = 20;
-        for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         List<User> users = userDao.getStudents("t2000", null,1, 10);
         assertEquals(0, users.size());
 
@@ -243,7 +252,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudents20() {
         final int STUDENTS_LENGTH = 20;
-        for (int i = 0; i < STUDENTS_LENGTH; i++) jdbcInsertStudent(namedParameterJdbcTemplate, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         List<User> users = userDao.getStudents("t20", null, 1, 10);
         assertEquals(1, users.size());
         assertEquals("student20@mail.com", users.get(0).getEmail());

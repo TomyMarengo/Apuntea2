@@ -24,6 +24,9 @@ public class Institution {
 
     }
 
+    public Institution(String name) {
+        this.name = name;
+    }
     public UUID getInstitutionId() {
         return institutionId;
     }
