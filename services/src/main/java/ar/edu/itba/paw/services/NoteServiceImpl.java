@@ -136,6 +136,20 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
+    public Page<Review> getPaginatedReviewsByUser(UUID user, int pageNum, int pageSize) {
+        int countTotalResults = noteDao.countReviewsByUser(user);
+        int safePage = Page.getSafePagePosition(pageNum, countTotalResults, pageSize);
+
+        return new Page<>(
+                noteDao.getReviewsByUser(user, safePage, pageSize),
+                safePage,
+                pageSize,
+                countTotalResults
+        );
+    }
+
+    @Transactional
+    @Override
     public void createOrUpdateReview(UUID noteId, int score, String content) {
         User user = securityService.getCurrentUserOrThrow();
         Note note = noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);

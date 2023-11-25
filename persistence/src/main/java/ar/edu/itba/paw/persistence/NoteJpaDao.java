@@ -91,7 +91,8 @@ public class NoteJpaDao implements NoteDao {
 
     @Override
     public List<Review> getReviewsByUser(UUID userId, int pageNum, int pageSize) {
-        List<Review.ReviewKey> keys =  ((List<Object[]>)em.createNativeQuery("SELECT CAST(r.user_id AS VARCHAR(36)), CAST(r.note_id AS VARCHAR(36)) FROM Reviews r INNER JOIN Notes n ON r.note_id = n.note_id WHERE n.user_id = :userId ORDER BY created_at DESC")
+        List<Review.ReviewKey> keys =  ((List<Object[]>)em.createNativeQuery("SELECT CAST(r.user_id AS VARCHAR(36)), " +
+                        "CAST(r.note_id AS VARCHAR(36)) FROM Reviews r INNER JOIN Notes n ON r.note_id = n.note_id WHERE n.user_id = :userId ORDER BY r.created_at DESC")
                 .setParameter("userId", userId)
                 .setFirstResult((pageNum - 1) * pageSize)
                 .setMaxResults(pageSize)

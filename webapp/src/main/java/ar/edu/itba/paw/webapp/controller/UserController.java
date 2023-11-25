@@ -1,9 +1,14 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
+import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
+import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.admin.DeleteWithReasonForm;
+import ar.edu.itba.paw.webapp.forms.note.SearchReviewForm;
 import ar.edu.itba.paw.webapp.forms.user.password.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.forms.user.EditUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
@@ -21,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.ServletContext;
 import javax.validation.Valid;
+import javax.xml.ws.http.HTTPException;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -155,6 +161,24 @@ public class UserController {
             }
         });
     }
+
+    @RequestMapping(value = "/my-reviews", method = RequestMethod.GET)
+    public ModelAndView getReviews(@Valid @ModelAttribute("searchForm") final SearchReviewForm searchReviewForm,
+                                   final BindingResult result) {
+        if (result.hasErrors())
+            throw new HTTPException(400);
+
+        final ModelAndView mav = new ModelAndView("reviews");
+        User user = securityService.getCurrentUserOrThrow();
+        Page<Review> reviews = noteService.getPaginatedReviewsByUser(user.getUserId(), searchReviewForm.getPageNumber(), searchReviewForm.getPageSize()); //TODO: traer tambien los datos del apunte
+        mav.addObject("maxPage", reviews.getTotalPages());
+        mav.addObject("currentPage", reviews.getCurrentPage());
+        mav.addObject("reviews", reviews.getContent());
+        mav.addObject("user", user);
+        mav.addObject("userScore", userService.getAvgScore(user.getUserId()));
+        return mav;
+    }
+
 
     @RequestMapping(value = "/configuration", method = RequestMethod.GET)
     public ModelAndView configuration(ModelMap model) {

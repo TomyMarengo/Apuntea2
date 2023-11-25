@@ -19,6 +19,7 @@ public interface NoteService {
     void update(UUID noteId, String name, boolean visible, String category);
     void delete(UUID[] noteIds, String reason);
     Page<Review> getPaginatedReviews(UUID note, int pageNum, int pageSize);
+    Page<Review> getPaginatedReviewsByUser(UUID userId, int pageNum, int pageSize);
     List<Review> getReviews(UUID noteId);
     void deleteReview(UUID noteId, UUID userId, String reason);
     Collection<Note> getFavorites();

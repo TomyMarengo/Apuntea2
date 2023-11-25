@@ -70,14 +70,14 @@
 
     <section class="container mt-5 d-flex flex-column align-items-center">
         <!-- USER PROFILE -->
+        <c:url var="userProfilePicture" value="${baseUrl}/profile/${owner.userId}/picture"/>
         <c:if test="${owner ne user}">
-            <c:url var="userProfilePicture" value="${baseUrl}/profile/${owner.userId}/picture"/>
             <div class="profile-card">
                 <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="50px"
                      height="50px">
                 <div class="d-flex flex-column">
                     <h4 class="mb-0"><c:out value="${owner.displayName}"/></h4>
-                    <span><c:out value="${ownerScore}"/>⭐</span>
+                    <span><spring:message code="profileNotes.averageScore"/>: <c:out value="${ownerScore}"/>⭐</span>
                 </div>
                 <c:if test="${user ne null}">
                     <c:set var="followUrl" value="${baseUrl}/user/${owner.userId}/follow"/>
@@ -93,6 +93,18 @@
                     </form:form>
 
                 </c:if>
+            </div>
+        </c:if>
+        <c:if test="${user ne null and owner eq user}">
+            <div class="profile-card">
+                <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="50px"
+                     height="50px">
+                <div class="d-flex flex-column">
+                    <h4 class="mb-0"><c:out value="${owner.displayName}"/></h4>
+                    <span><spring:message code="profileNotes.averageScore"/>: <c:out value="${ownerScore}"/>⭐</span>
+                </div>
+                <a href="${baseUrl}/my-reviews" class="btn button-primary"><spring:message code="profileNotes.myReviews"/>
+                </a>
             </div>
         </c:if>
 
@@ -170,7 +182,8 @@
                                        href="<c:url value="${baseUrl}/directory/${rd.rootDirectoryId}?userId=${ not empty owner ? owner.userId : user.userId}"/>">
                                         <div class="position-relative">
                                             <div class="note-count-container">
-                                                <span><strong><c:out value="${rd.rootDirectory.qtyFiles}"/></strong></span>
+                                                <span><strong><c:out
+                                                        value="${rd.rootDirectory.qtyFiles}"/></strong></span>
                                             </div>
                                             <div class="d-flex flex-column gap-2 align-items-center">
                                                 <img src="<c:url value="/svg/folder.svg"/>"
