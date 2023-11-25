@@ -12,17 +12,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 
 import static ar.edu.itba.paw.persistence.TestUtils.*;
 import static ar.edu.itba.paw.models.NameConstants.*;
@@ -40,18 +36,12 @@ import java.util.UUID;
 @Rollback
 public class UserJpaDaoTest {
     @Autowired
-    private DataSource ds;
-    @Autowired
     private UserJpaDao userDao;
     @PersistenceContext
     private EntityManager em;
-    private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Before
     public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
     }
 
     @Test
@@ -59,9 +49,9 @@ public class UserJpaDaoTest {
         String userEmail = "user@mail.com";
         userDao.create(userEmail, "", em.getReference(Career.class, ING_INF_ID), "es", Collections.singleton(Role.ROLE_STUDENT));
         em.flush();
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "email = '" + userEmail + "'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "email = '" + userEmail + "' AND career_id = '" + ING_INF_ID + "' AND locale = 'es'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "user_roles", "user_id = (SELECT user_id FROM users WHERE email = '" + userEmail + "') AND role_name = 'ROLE_STUDENT'"));
+        assertEquals(1, countRows(em, "users", "email = '" + userEmail + "'"));
+        assertEquals(1, countRows(em, "users", "email = '" + userEmail + "' AND career_id = '" + ING_INF_ID + "' AND locale = 'es'"));
+        assertEquals(1, countRows(em, "user_roles", "user_id = (SELECT user_id FROM users WHERE email = '" + userEmail + "') AND role_name = 'ROLE_STUDENT'"));
     }
 
     @Test
@@ -142,25 +132,25 @@ public class UserJpaDaoTest {
         User admin = insertAdmin(em, "admin@mail.com", "", ING_INF_ID, "es");
         userDao.banUser(student, admin, LocalDateTime.now().plusDays(10), "Se porto mal");
         em.flush();
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + student.getUserId() + "' AND status = 'BANNED'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "bans", "user_id = '" + student.getUserId() + "' AND admin_id = '" + admin.getUserId() + "'"));
+        assertEquals(1, countRows(em, "users", "user_id = '" + student.getUserId() + "' AND status = 'BANNED'"));
+        assertEquals(1, countRows(em, "bans", "user_id = '" + student.getUserId() + "' AND admin_id = '" + admin.getUserId() + "'"));
     }
 
     @Test
     public void testUnbanUser() {
         User student = insertStudent(em, "student@mail.com", "", ING_INF_ID, "es");
         User admin = insertAdmin(em, "admin@mail.com", "", ING_INF_ID, "es");
-        int firstQtyBanned = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED' AND user_id = '" + student.getUserId() + "'");
+        int firstQtyBanned = countRows(em, "users", "status = 'BANNED' AND user_id = '" + student.getUserId() + "'");
         banUser(em, student, admin, "", LocalDateTime.now().plusDays(10));
-        int secondQtyBanned = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED' AND user_id = '" + student.getUserId() + "'");
+        int secondQtyBanned = countRows(em, "users", "status = 'BANNED' AND user_id = '" + student.getUserId() + "'");
         userDao.unbanUser(student);
         em.flush();
-        int thirdQtyBanned = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED' AND user_id = '" + student.getUserId() + "'");
+        int thirdQtyBanned = countRows(em, "users", "status = 'BANNED' AND user_id = '" + student.getUserId() + "'");
         assertEquals(0, firstQtyBanned);
         assertEquals(1, secondQtyBanned);
         assertEquals(0, thirdQtyBanned);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + student.getUserId() + "' AND status = 'BANNED'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "bans", "user_id = '" + student.getUserId() + "' AND admin_id = '" + admin.getUserId() + "'"));
+        assertEquals(0, countRows(em, "users", "user_id = '" + student.getUserId() + "' AND status = 'BANNED'"));
+        assertEquals(1, countRows(em, "bans", "user_id = '" + student.getUserId() + "' AND admin_id = '" + admin.getUserId() + "'"));
     }
 
     @Test
@@ -173,14 +163,14 @@ public class UserJpaDaoTest {
         }
         students[5] = insertStudent(em, "student5@mail.com", "", ING_INF_ID, "es");
         banUser(em, students[5], admin, "", LocalDateTime.now().plusDays(10));
-        int oldQtyBanned = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED'");
+        int oldQtyBanned = countRows(em, "users", "status = 'BANNED'");
         userDao.unbanUsers();
         em.flush();
         assertEquals(6, oldQtyBanned);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "status = 'BANNED'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + students[5].getUserId() + "' AND status = 'BANNED'"));
+        assertEquals(1, countRows(em, "users", "status = 'BANNED'"));
+        assertEquals(1, countRows(em, "users", "user_id = '" + students[5].getUserId() + "' AND status = 'BANNED'"));
         for (int i = 0; i < 5; i++)
-            assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + students[i].getUserId() + "' AND status = 'ACTIVE'"));
+            assertEquals(1, countRows(em, "users", "user_id = '" + students[i].getUserId() + "' AND status = 'ACTIVE'"));
     }
 
 
@@ -190,7 +180,7 @@ public class UserJpaDaoTest {
         Image newImage = new Image(new byte[]{9, 8, 7, 6, 5, 4, 3, 2, 1});
         userDao.updateProfilePicture(student, newImage);
         em.flush();
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + student.getUserId() + "' AND profile_picture_id = '" + newImage.getImageId() + "'"));
+        assertEquals(1, countRows(em, "users", "user_id = '" + student.getUserId() + "' AND profile_picture_id = '" + newImage.getImageId() + "'"));
     }
 
     @Test
@@ -201,10 +191,10 @@ public class UserJpaDaoTest {
         Image newImage = new Image(new byte[]{1, 2, 3, 4, 5, 6, 7, 8, 9});
         userDao.updateProfilePicture(student, newImage);
         em.flush();
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + student.getUserId() + "' AND profile_picture_id = '" + oldImage.getImageId() + "'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "users", "user_id = '" + student.getUserId() + "' AND profile_picture_id IS NOT NULL"));
-        assertEquals(1,JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "images", "image_id = '" + newImage.getImageId() + "'"));
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "images", "image_id = '" + oldImage.getImageId() + "'"));
+        assertEquals(0, countRows(em, "users", "user_id = '" + student.getUserId() + "' AND profile_picture_id = '" + oldImage.getImageId() + "'"));
+        assertEquals(1, countRows(em, "users", "user_id = '" + student.getUserId() + "' AND profile_picture_id IS NOT NULL"));
+        assertEquals(1,countRows(em, "images", "image_id = '" + newImage.getImageId() + "'"));
+        assertEquals(0, countRows(em, "images", "image_id = '" + oldImage.getImageId() + "'"));
     }
 
     @Test
@@ -234,7 +224,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudentsAllCount() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
+        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         int results = userDao.getStudentsQuantity("", null);
         assertEquals(oldUsers + STUDENTS_LENGTH, results);
@@ -271,7 +261,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudentsAll() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
+        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         // 100 should be more than enough to get all students, change in the future if necessary
         List<User> users = userDao.getStudents("", null, 1, 100);
@@ -289,7 +279,7 @@ public class UserJpaDaoTest {
         User student = insertStudent(em, "producer@mail.com", "", ING_INF_ID, "es");
         userDao.follow(follower1, student.getUserId());
         em.flush();
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
+        assertEquals(1, countRows(em, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
     }
 
     @Test
@@ -301,7 +291,7 @@ public class UserJpaDaoTest {
 
         userDao.unfollow(follower1, student.getUserId());
         em.flush();
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
+        assertEquals(0, countRows(em, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
 
     }
 
@@ -334,7 +324,7 @@ public class UserJpaDaoTest {
         float avgScore = userDao.getAvgScore(user.getUserId());
         em.flush();
         assertEquals(0, avgScore, 0.0001);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "user_id = '" + user.getUserId() + "'"));
+        assertEquals(0, countRows(em, "notes", "user_id = '" + user.getUserId() + "'"));
     }
 
     @Test
@@ -346,7 +336,7 @@ public class UserJpaDaoTest {
         float avgScore = userDao.getAvgScore(user.getUserId());
         em.flush();
         assertEquals(0, avgScore, 0.0001);
-        assertEquals(2, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "user_id = '" + user.getUserId() + "'"));
+        assertEquals(2, countRows(em, "notes", "user_id = '" + user.getUserId() + "'"));
     }
 
 

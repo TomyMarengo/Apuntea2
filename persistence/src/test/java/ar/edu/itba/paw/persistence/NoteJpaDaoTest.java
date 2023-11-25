@@ -12,12 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import static ar.edu.itba.paw.persistence.TestUtils.*;
@@ -25,7 +22,6 @@ import static ar.edu.itba.paw.models.NameConstants.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 
 import java.util.*;
 
@@ -39,11 +35,7 @@ public class NoteJpaDaoTest {
     @PersistenceContext
     private EntityManager em;
     @Autowired
-    private DataSource ds;
-    @Autowired
     private NoteJpaDao noteDao;
-    private JdbcTemplate jdbcTemplate;
-
     private User pepeUser;
     private User saidmanUser;
     private User carlaAdmin;
@@ -54,7 +46,6 @@ public class NoteJpaDaoTest {
     private byte[] privateContent;
     @Before
     public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
         pepeUser = em.find(User.class, PEPE_ID);
         saidmanUser = em.find(User.class, SAIDMAN_ID);
         carlaAdmin = em.find(User.class, CARLADMIN_ID);
@@ -78,8 +69,8 @@ public class NoteJpaDaoTest {
     public void testCreateNoteInDirectory() {
         UUID noteId = noteDao.create("RBT", EDA_ID, pepeUser, EDA_DIRECTORY_ID,true, new byte[]{1, 2, 3}, "PRACTICE", "jpg");
         em.flush();
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'PRACTICE'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "note_files", "note_id = '" + noteId + "'"));
+        assertEquals(1, countRows(em, "notes", "note_name = 'RBT' AND user_id = '" + PEPE_ID + "' AND subject_id = '" + EDA_ID + "' AND category = 'PRACTICE'"));
+        assertEquals(1, countRows(em, "note_files", "note_id = '" + noteId + "'"));
     }
 
     @Test
@@ -166,19 +157,19 @@ public class NoteJpaDaoTest {
                     .fileType("jpg"));
             noteIds.add(note.getId());
         }
-        int countInserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parent.getId() + "'");
+        int countInserted = countRows(em, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parent.getId() + "'");
         noteDao.delete(noteIds, PEPE_ID);
         em.flush();
-        int countPostDelete = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parent.getId() + "'");
+        int countPostDelete = countRows(em, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parent.getId() + "'");
         assertEquals(4, countInserted);
         assertEquals(0, countPostDelete);
     }
 
     @Test
     public void testDeleteNote() {
-        int countPrev = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, NOTES, "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'");
+        int countPrev = countRows(em, NOTES, "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'");
         boolean deleted = noteDao.delete(Collections.singletonList(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID), PEPE_ID);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
+        assertEquals(0, countRows(em, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
         assertEquals(1, countPrev);
         assertTrue(deleted);
     }
@@ -186,7 +177,7 @@ public class NoteJpaDaoTest {
     @Test
     public void testCannotDeleteNote() {
         boolean deleted = noteDao.delete(Collections.singletonList(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID), SAIDMAN_ID);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
+        assertEquals(1, countRows(em, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
         assertFalse(deleted);
     }
 
@@ -267,34 +258,34 @@ public class NoteJpaDaoTest {
     public void testCreateReview(){
         noteDao.createOrUpdateReview(notePublic, pepeUser, 5, "Muy buen apunte");
         em.flush();
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + notePublic.getId() + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));
+        assertEquals(1, countRows(em, "reviews", "note_id = '" + notePublic.getId() + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));
     }
 
     @Test
     public void testUpdateReview(){
         Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
-        int countScore4 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 4");
+        int countScore4 = countRows(em, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 4");
         noteDao.createOrUpdateReview(guiaEda, pepeUser, 5, "Cacique in the JODA");
         em.flush();
         assertEquals(1, countScore4);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));
+        assertEquals(1, countRows(em, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + pepeUser.getUserId() + "' AND score = 5"));
     }
 
     @Test
     public void testDeleteReview(){
-        int countReview = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 4");
+        int countReview = countRows(em, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 4");
         noteDao.deleteReview(GUIA1EDA_NOTE_ID, PEPE_ID);
         em.flush();
         assertEquals(1, countReview);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 4"));
+        assertEquals(0, countRows(em, "reviews", "note_id = '" + GUIA1EDA_NOTE_ID + "' AND user_id = '" + PEPE_ID + "' AND score = 4"));
     }
 
     @Test
     public void testAddFavorite() {
         noteDao.addFavorite(em.getReference(User.class, PEPE_ID), MVC_NOTE_ID);
         em.flush();
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
+        assertEquals(1, countRows(em, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
+        assertEquals(0, countRows(em, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
     }
 
     @Test
@@ -303,8 +294,8 @@ public class NoteJpaDaoTest {
         insertFavoriteNote(em, notePublic.getId(), SAIDMAN_ID);
         noteDao.removeFavorite(em.getReference(User.class, PEPE_ID), notePublic.getId());
         em.flush();
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + notePublic.getId() + "'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + notePublic.getId() + "'"));
+        assertEquals(0, countRows(em, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + notePublic.getId() + "'"));
+        assertEquals(1, countRows(em, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + notePublic.getId() + "'"));
     }
 
     @Test

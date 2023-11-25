@@ -15,9 +15,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -25,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,9 +42,6 @@ public class SearchJpaDaoTest {
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    private DataSource ds;
-
     @Mock
     private NoteDao noteDao;
 
@@ -59,18 +52,10 @@ public class SearchJpaDaoTest {
     @Autowired
     private SearchJpaDao searchDao;
 
-    private JdbcTemplate jdbcTemplate;
-    private SimpleJdbcInsert jdbcFavoriteInsert;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     private int allResultsPageSize;
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        jdbcTemplate = new JdbcTemplate(ds);
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
-        jdbcFavoriteInsert = new SimpleJdbcInsert(ds)
-                .withTableName(FAVORITES);
         allResultsPageSize = countSearchResults(em, null);
 
         Mockito.when(noteDao.findNoteByIds(Mockito.any(), Mockito.any(), Mockito.any())).thenAnswer(

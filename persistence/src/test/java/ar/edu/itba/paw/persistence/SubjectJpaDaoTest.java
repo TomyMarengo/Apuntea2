@@ -10,18 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 import static ar.edu.itba.paw.models.NameConstants.*;
 import static ar.edu.itba.paw.persistence.TestUtils.*;
 
@@ -40,25 +35,13 @@ public class SubjectJpaDaoTest {
     private EntityManager em;
     
     @Autowired
-    private DataSource ds;
-    @Autowired
     private SubjectJpaDao subjectDao;
-
-    private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    private SimpleJdbcInsert jdbcSubjectsCareersInsert;
 
     private User jaimitoUser;
     private User pepeUser;
 
     @Before
     public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
-        jdbcSubjectsCareersInsert = new SimpleJdbcInsert(ds)
-                .withTableName(SUBJECTS_CAREERS)
-                .usingColumns(SUBJECT_ID, CAREER_ID, YEAR);
         jaimitoUser = em.find(User.class, JAIMITO_ID);
         pepeUser = em.find(User.class, PEPE_ID);
     }
@@ -207,7 +190,7 @@ public class SubjectJpaDaoTest {
         Subject newSubject = subjectDao.create("subject1", dirId);
         em.flush();
 
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + newSubject.getSubjectId() + "' AND subject_name = 'subject1' AND root_directory_id = '" + dirId + "'"));
+        assertEquals(1, countRows(em, SUBJECTS, "subject_id = '" + newSubject.getSubjectId() + "' AND subject_name = 'subject1' AND root_directory_id = '" + dirId + "'"));
     }
 
     @Test
@@ -215,8 +198,8 @@ public class SubjectJpaDaoTest {
         UUID dirId = insertDirectory(em, new Directory.DirectoryBuilder().name("dir1")).getId();
         Subject subject = insertSubject(em, "subject", dirId);
         Subject subject2 = insertSubject(em, "subject2", dirId);
-        boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject.getSubjectId() + "'") == 1;
-        boolean inserted2 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject2.getSubjectId() + "'") == 1;
+        boolean inserted = countRows(em, SUBJECTS, "subject_id = '" + subject.getSubjectId() + "'") == 1;
+        boolean inserted2 = countRows(em, SUBJECTS, "subject_id = '" + subject2.getSubjectId() + "'") == 1;
 
         boolean result = subjectDao.delete(subject.getSubjectId());
         em.flush();
@@ -224,8 +207,8 @@ public class SubjectJpaDaoTest {
         assertTrue(result);
         assertTrue(inserted);
         assertTrue(inserted2);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject.getSubjectId() + "'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subject2.getSubjectId() + "'"));
+        assertEquals(0, countRows(em, SUBJECTS, "subject_id = '" + subject.getSubjectId() + "'"));
+        assertEquals(1, countRows(em, SUBJECTS, "subject_id = '" + subject2.getSubjectId() + "'"));
     }
 
     @Test
@@ -236,7 +219,7 @@ public class SubjectJpaDaoTest {
         int year = 4;
         subjectDao.linkSubjectToCareer(subject, careerId, year);
         em.flush();
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subject.getSubjectId() + "' AND career_id = '" + careerId + "' AND year = " + year));
+        assertEquals(1, countRows(em, SUBJECTS_CAREERS, "subject_id = '" + subject.getSubjectId() + "' AND career_id = '" + careerId + "' AND year = " + year));
     }
 
     @Test
@@ -254,7 +237,7 @@ public class SubjectJpaDaoTest {
         boolean success = subjectDao.linkSubjectToCareer(subject, career2Id, 1);
 
         assertFalse(success);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subject.getSubjectId() + "' AND career_id = '" + career2Id + "'"));
+        assertEquals(0, countRows(em, SUBJECTS_CAREERS, "subject_id = '" + subject.getSubjectId() + "' AND career_id = '" + career2Id + "'"));
     }
 
     @Test
@@ -265,15 +248,15 @@ public class SubjectJpaDaoTest {
         int oldYear = 3;
         int newYear = 4;
         insertSubjectCareer(em, subjectId, careerId, oldYear);
-        int oldCount = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+oldYear);
+        int oldCount = countRows(em, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+oldYear);
 
         boolean result = subjectDao.updateSubjectCareer(subjectId, careerId, newYear);
         em.flush();
 
         assertTrue(result);
         assertEquals(1, oldCount);
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+newYear));
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+oldYear));
+        assertEquals(1, countRows(em, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+newYear));
+        assertEquals(0, countRows(em, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = "+oldYear));
     }
 
     @Test
@@ -284,15 +267,15 @@ public class SubjectJpaDaoTest {
         UUID careerId = ING_INF_ID;
         int year = 3;
         insertSubjectCareer(em, subjectId, careerId, year);
-        boolean inserted = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = " + year) == 1;
+        boolean inserted = countRows(em, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "' AND year = " + year) == 1;
 
         boolean result = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
         em.flush();
 
         assertTrue(result);
         assertTrue(inserted);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "'"));
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, SUBJECTS, "subject_id = '" + subjectId + "'"));
+        assertEquals(0, countRows(em, SUBJECTS_CAREERS, "subject_id = '" + subjectId + "' AND career_id = '" + careerId + "'"));
+        assertEquals(1, countRows(em, SUBJECTS, "subject_id = '" + subjectId + "'"));
     }
 
 }

@@ -13,7 +13,7 @@ import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.util.*;
 
-import static ar.edu.itba.paw.persistence.JdbcDaoUtils.*;
+import static ar.edu.itba.paw.persistence.DaoUtils.*;
 import static ar.edu.itba.paw.models.NameConstants.*;
 
 @Repository
@@ -38,7 +38,7 @@ public class SearchJpaDao implements SearchDao {
         SortArguments sortArgs = sa.getSortArguments();
 
         QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
-                .append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
+                .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Search t WHERE TRUE ");
 
         applyInstitutionFilters(queryCreator, sa);
@@ -49,7 +49,7 @@ public class SearchJpaDao implements SearchDao {
         SortArguments sortArgs = sa.getSortArguments();
         applyGeneralFilters(queryCreator, sa);
 
-        queryCreator.append("ORDER BY isNote ASC, ").append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME)).append(sortArgs.isAscending() ? "" : " DESC ");
+        queryCreator.append("ORDER BY isNote ASC, ").append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME)).append(sortArgs.isAscending() ? "" : " DESC ");
 
         Query query = em.createNativeQuery(queryCreator.createQuery())
                 .setFirstResult(sa.getPageSize() * (sa.getPage() - 1))
@@ -100,7 +100,7 @@ public class SearchJpaDao implements SearchDao {
         SortArguments sortArgs = sa.getSortArguments();
 
         QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
-                .append(JdbcDaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
+                .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Navigation t WHERE t.parent_id = :parentId ");
         queryCreator.addParameter("parentId", parentId);
 

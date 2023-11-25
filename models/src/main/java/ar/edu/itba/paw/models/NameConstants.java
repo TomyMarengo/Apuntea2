@@ -11,7 +11,9 @@ public class NameConstants {
 
     public static final String SUBJECTS_CAREERS = "Subjects_Careers";
     public static final String DIRECTORIES = "Directories";
-    public static final String FAVORITES = "Favorites";
+    public static final String NOTES_FAVORITES = "Note_Favorites";
+    public static final String DIRECTORY_FAVORITES = "Directory_Favorites";
+
     public static final String USERS = "Users";
     public static final String USER_ROLES = "User_Roles";
     public static final String VERIFICATION_CODES = "Verification_Codes";

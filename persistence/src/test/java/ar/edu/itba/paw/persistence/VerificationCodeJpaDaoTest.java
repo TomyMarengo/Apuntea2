@@ -7,8 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -16,40 +14,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
 import java.time.LocalDateTime;
 
 import static ar.edu.itba.paw.persistence.TestUtils.*;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.*;
 
-import org.springframework.test.jdbc.JdbcTestUtils;
-
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
 @Rollback
 public class VerificationCodeJpaDaoTest {
-
-    @Autowired
-    private DataSource ds;
-
     @Autowired
     private VerificationCodeJpaDao verificationCodeDao;
 
     @PersistenceContext
     private EntityManager em;
 
-    private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     private User user;
 
     @Before
     public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(ds);
-
         user = insertStudent(em, VERIFICATION_EMAIL, "", ING_INF_ID, "es");
     }
 
@@ -57,7 +42,7 @@ public class VerificationCodeJpaDaoTest {
     public void testSaveVerificationCode() {
         verificationCodeDao.saveVerificationCode("123456", user, LocalDateTime.now().plusMinutes(10));
         em.flush();
-        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "user_id = '" + user.getUserId() + "' AND code = '123456' AND expires_at > NOW()"));
+        assertEquals(1, countRows(em, "verification_codes", "user_id = '" + user.getUserId() + "' AND code = '123456' AND expires_at > NOW()"));
     }
 
     @Test
@@ -96,12 +81,12 @@ public class VerificationCodeJpaDaoTest {
         }
         VerificationCode code = new VerificationCode(DEFAULT_CODE, otherUser, LocalDateTime.now().plusMinutes(10));
         insertVerificationCode(em, DEFAULT_CODE, otherUser, LocalDateTime.now().plusMinutes(10));
-        int oldQty = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + VERIFICATION_EMAIL + "')");
+        int oldQty = countRows(em, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + VERIFICATION_EMAIL + "')");
         boolean success = verificationCodeDao.deleteVerificationCodes(VERIFICATION_EMAIL);
         assertTrue(success);
         assertEquals(10, oldQty);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + VERIFICATION_EMAIL + "')"));
-        assertEquals(1, JdbcTestUtils.countRowsInTable(jdbcTemplate, "verification_codes"));
+        assertEquals(0, countRows(em, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + VERIFICATION_EMAIL + "')"));
+        assertEquals(1, countRows(em, "verification_codes"));
     }
 
     @Test
@@ -111,13 +96,13 @@ public class VerificationCodeJpaDaoTest {
         for (int i = 0; i < 10; i++) {
             insertVerificationCode(em, "12345" + i, i % 2 == 0? user : otherUser, LocalDateTime.now().minusMinutes(10));
         }
-        int oldQty1 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + VERIFICATION_EMAIL + "')");
-        int oldQty2 = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + otherMail + "')");
-        int oldQty = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "expires_at < NOW()");
+        int oldQty1 = countRows(em, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + VERIFICATION_EMAIL + "')");
+        int oldQty2 = countRows(em, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + otherMail + "')");
+        int oldQty = countRows(em, "verification_codes", "expires_at < NOW()");
         verificationCodeDao.removeExpiredCodes();
         assertEquals(5, oldQty1);
         assertEquals(5, oldQty2);
         assertEquals(10, oldQty);
-        assertEquals(0, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "verification_codes", "expires_at < NOW()"));
+        assertEquals(0, countRows(em, "verification_codes", "expires_at < NOW()"));
     }
  }

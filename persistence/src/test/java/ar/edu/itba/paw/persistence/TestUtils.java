@@ -9,21 +9,12 @@ import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.*;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 
 import javax.persistence.EntityManager;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.UUID;
-
-import static ar.edu.itba.paw.models.NameConstants.*;
 
 public class TestUtils {
     // Institutions
@@ -185,7 +176,12 @@ public class TestUtils {
                 .getSingleResult()).intValue();
     }
 
-    /*----------------------------------------------------------------------------------------------------*/
+    static int countRows(EntityManager em, String table)  {
+        return countRows(em, table, null);
+    }
 
-
+    static int countRows(EntityManager em, String table, String condition) {
+        return ((BigInteger) em.createNativeQuery("SELECT COUNT(*) FROM " + table + (condition != null ? " WHERE " + condition : ""))
+                .getSingleResult()).intValue();
+    }
 }

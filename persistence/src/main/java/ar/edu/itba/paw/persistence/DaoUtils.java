@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.search.SearchArguments;
-
 import static ar.edu.itba.paw.models.search.SortArguments.*;
 import static ar.edu.itba.paw.models.NameConstants.*;
 
@@ -10,7 +8,7 @@ import java.util.HashMap;
 import java.util.Optional;
 
 
-public class JdbcDaoUtils {
+public class DaoUtils {
     static final EnumMap<SortBy, String> SORTBY = new EnumMap<>(SortBy.class);
     static{
         SORTBY.put(SortBy.DATE, CREATED_AT);
@@ -71,5 +69,5 @@ public class JdbcDaoUtils {
                 + "%";
     }
 
-    private JdbcDaoUtils() {} // Make class non-instantiable
+    private DaoUtils() {} // Make class non-instantiable
 }
