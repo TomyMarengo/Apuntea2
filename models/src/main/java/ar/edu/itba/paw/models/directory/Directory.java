@@ -27,12 +27,8 @@ public class Directory implements Searchable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "parent_id")
-    private UUID parentId;
-
-    // TODO: Ask if this is ok
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id", insertable = false, updatable = false)
+    @JoinColumn(name = "parent_id")
     private Directory parent;
 
     @OneToOne(mappedBy = "rootDirectory", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -51,11 +47,10 @@ public class Directory implements Searchable {
     @Column(name = "icon_color")
     private String iconColor;
 
-    private Boolean visible;
+    private boolean visible = true;
 
-    // TODO: Should it be just boolean?
     @Transient
-    private Boolean favorite = false;
+    private boolean favorite = false;
 
     @Transient
     private int qtyFiles = 0;
@@ -66,7 +61,7 @@ public class Directory implements Searchable {
         this.directoryId = builder.directoryId;
         this.name = builder.name;
         this.user = builder.user;
-        this.parentId = builder.parentId;
+        this.parent = builder.parent;
         this.createdAt = builder.createdAt;
         this.lastModifiedAt = builder.lastModifiedAt;
         this.visible = builder.visible;
@@ -76,12 +71,13 @@ public class Directory implements Searchable {
     public UUID getId() { return directoryId; }
 
     public boolean isRootDirectory() {
-        return parentId == null;
+        return parent == null;
     }
 
     @Override
     public UUID getParentId() {
-        return parentId;
+        if (parent == null) return null;
+        return parent.getId();
     }
 
     @Override
@@ -90,7 +86,7 @@ public class Directory implements Searchable {
     }
     @Override
     public Subject getSubject() {
-        return parentId == null ? subject : parent.getSubject();
+        return parent == null ? subject : parent.getSubject();
     }
     @Override
     public String getName() {
@@ -142,6 +138,18 @@ public class Directory implements Searchable {
         this.iconColor = iconColor;
     }
 
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public int getQtyFiles() {
+        return qtyFiles;
+    }
+
+    public void setQtyFiles(int qtyFiles) {
+        this.qtyFiles = qtyFiles;
+    }
+
     @PrePersist
     protected void onCreate() {
         lastModifiedAt = LocalDateTime.now();
@@ -166,23 +174,11 @@ public class Directory implements Searchable {
         return Objects.hash(directoryId);
     }
 
-    public void setVisible(Boolean visible) {
-        this.visible = visible;
-    }
-
-    public int getQtyFiles() {
-        return qtyFiles;
-    }
-
-    public void setQtyFiles(int qtyFiles) {
-        this.qtyFiles = qtyFiles;
-    }
-
     public static class DirectoryBuilder {
         private UUID directoryId;
         private String name;
         private User user;
-        private UUID parentId;
+        private Directory parent;
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
         private String iconColor = "000000";
@@ -203,8 +199,8 @@ public class Directory implements Searchable {
             return this;
         }
 
-        public DirectoryBuilder parentId(UUID parentId) {
-            this.parentId = parentId;
+        public DirectoryBuilder parent(Directory parent) {
+            this.parent = parent;
             return this;
         }
 

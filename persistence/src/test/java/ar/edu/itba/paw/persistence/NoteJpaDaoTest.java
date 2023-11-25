@@ -152,7 +152,7 @@ public class NoteJpaDaoTest {
         String[] names = {"tmp1", "tmp2", "tmp3", "tmp4"};
         Directory parent = insertDirectory(em, new Directory.DirectoryBuilder()
                 .name("tmpParent")
-                .parentId(EDA_DIRECTORY_ID)
+                .parent(em.getReference(Directory.class, EDA_DIRECTORY_ID))
                 .user(pepeUser)
         );
         for (String name : names) {

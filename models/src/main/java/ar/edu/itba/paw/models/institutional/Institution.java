@@ -24,11 +24,6 @@ public class Institution {
 
     }
 
-    // TODO: Remove
-    public Institution(UUID institutionId, String name) {
-        this.institutionId = institutionId;
-        this.name = name;
-    }
     public UUID getInstitutionId() {
         return institutionId;
     }

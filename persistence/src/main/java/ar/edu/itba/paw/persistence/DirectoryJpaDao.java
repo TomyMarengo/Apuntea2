@@ -24,7 +24,7 @@ public class DirectoryJpaDao implements DirectoryDao {
     public Directory create(String name, UUID parentId, User user, boolean visible, String iconColor) {
         Directory directory = new Directory.DirectoryBuilder()
                 .name(name)
-                .parentId(parentId)
+                .parent(em.getReference(Directory.class, parentId))
                 .user(user)
                 .visible(visible)
                 .iconColor(iconColor)

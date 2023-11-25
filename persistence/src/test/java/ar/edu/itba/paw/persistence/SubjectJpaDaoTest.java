@@ -51,6 +51,7 @@ public class SubjectJpaDaoTest {
 
     private User jaimitoUser;
     private User pepeUser;
+
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
@@ -188,7 +189,7 @@ public class SubjectJpaDaoTest {
                 .category(Category.PRACTICE)
                 .fileType("jpg");
         insertNote(em, nb.name("n1").subject(em.getReference(Subject.class, EDA_ID)).parentId(EDA_DIRECTORY_ID).user(jaimitoUser));
-        insertDirectory(em, new Directory.DirectoryBuilder().name("d1").parentId(PAW_DIRECTORY_ID).user(jaimitoUser));
+        insertDirectory(em, new Directory.DirectoryBuilder().name("d1").parent(em.getReference(Directory.class, PAW_DIRECTORY_ID)).user(jaimitoUser));
         insertNote(em, nb.name("n1").subject(em.getReference(Subject.class, MATE_ID)).parentId(MATE_DIRECTORY_ID).user(pepeUser));
 
         List<Subject> subjects = subjectDao.getSubjectsByUser(jaimitoUser);
