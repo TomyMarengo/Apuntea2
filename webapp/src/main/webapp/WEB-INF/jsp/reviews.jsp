@@ -59,101 +59,116 @@
     <fragment:sidebar user="${user}"/>
     <section class="mt-5">
 
-        <!-- HORIZONTAL LIST -->
-        <section class="container mt-4 p-0">
-            <c:url var="searchUrl" value="./reviews"/>
-            <form:form modelAttribute="searchForm"
-                       action="${searchUrl}"
-                       method="get"
-                       id="searchForm">
-                <form:hidden path="pageNumber" id="pageNumber" value="1"/>
+        <c:if test="${empty reviews}">
+            <section class="mt-4 p-0 d-flex justify-content-center">
+                <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
+                <h3><spring:message code="directories.noContent"/></h3>
+            </section>
+        </c:if>
 
+        <c:if test="${not empty reviews}">
+            <!-- HORIZONTAL LIST -->
+            <section class="container mt-4 p-0">
                 <c:if test="${note eq null}">
-                    <h1>
-                        <c:out value="${myReviewsTitle}"/>
-                    </h1>
+                    <c:url var="searchUrl" value="./my-reviews"/>
                 </c:if>
                 <c:if test="${note ne null}">
-                    <h1>
-                        <spring:message code="reviews.title" arguments="${note.name}"/>
-                    </h1>
+                    <c:url var="searchUrl" value="./reviews"/>
                 </c:if>
 
-                <div class="d-flex justify-content-between my-2">
+                <form:form modelAttribute="searchForm"
+                           action="${searchUrl}"
+                           method="get"
+                           id="searchForm">
+                    <form:hidden path="pageNumber" id="pageNumber" value="1"/>
+
                     <c:if test="${note eq null}">
-                        <h4>
-                            <spring:message code="profileNotes.averageScore"/>: <c:out value="${userScore}"/>⭐
-                        </h4>
+                        <h1>
+                            <c:out value="${myReviewsTitle}"/>
+                        </h1>
                     </c:if>
                     <c:if test="${note ne null}">
-                        <h4>
-                            <spring:message code="score"/>:
-                            <fmt:formatNumber type="number" maxFractionDigits="1" value="${userScore}"/> ⭐
-                        </h4>
+                        <h1>
+                            <spring:message code="reviews.title" arguments="${note.name}"/>
+                        </h1>
                     </c:if>
 
-                    <div data-bs-toggle="tooltip" data-bs-placement="right"
-                         data-bs-title="<spring:message code="search.button.pageSize"/>"
-                         data-bs-trigger="hover">
-                        <form:select path="pageSize" class="form-select bg-bg"
-                                     onchange="document.getElementById('searchForm').submit()">
-                            <form:option value="5">5</form:option>
-                            <form:option value="10">10</form:option>
-                            <form:option value="15">15</form:option>
-                            <c:if test="${searchForm.pageSize ne 5 and searchForm.pageSize ne 10 and searchForm.pageSize ne 15}">
-                                <form:option value="${searchForm.pageSize}"><c:out
-                                        value="${searchForm.pageSize}"/></form:option>
-                            </c:if>
-                        </form:select>
-                    </div>
-                </div>
-            </form:form>
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
+                    <div class="d-flex justify-content-between my-2">
                         <c:if test="${note eq null}">
-                            <th class="col-3"><spring:message code="note"/></th>
-                            <th class="col-3"><spring:message code="username"/></th>
-                            <th class="col-1"><spring:message code="score"/></th>
-                            <th class="col-5"><spring:message code="reviews.comment"/></th>
+                            <h4>
+                                <spring:message code="profileNotes.averageScore"/>: <c:out value="${userScore}"/>⭐
+                            </h4>
                         </c:if>
                         <c:if test="${note ne null}">
-                            <th class="col-3"><spring:message code="username"/></th>
-                            <th class="col-1"><spring:message code="score"/></th>
-                            <th class="col-8"><spring:message code="reviews.comment"/></th>
+                            <h4>
+                                <spring:message code="score"/>:
+                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${userScore}"/> ⭐
+                            </h4>
                         </c:if>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="review" items="${reviews}">
-                        <tr class="note-found no-select" id="<c:out value="${review.user.userId}"/>">
+
+                        <div data-bs-toggle="tooltip" data-bs-placement="right"
+                             data-bs-title="<spring:message code="search.button.pageSize"/>"
+                             data-bs-trigger="hover">
+                            <form:select path="pageSize" class="form-select bg-bg"
+                                         onchange="document.getElementById('searchForm').submit()">
+                                <form:option value="5">5</form:option>
+                                <form:option value="10">10</form:option>
+                                <form:option value="15">15</form:option>
+                                <c:if test="${searchForm.pageSize ne 5 and searchForm.pageSize ne 10 and searchForm.pageSize ne 15}">
+                                    <form:option value="${searchForm.pageSize}"><c:out
+                                            value="${searchForm.pageSize}"/></form:option>
+                                </c:if>
+                            </form:select>
+                        </div>
+                    </div>
+                </form:form>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
                             <c:if test="${note eq null}">
+                                <th class="col-3"><spring:message code="note"/></th>
+                                <th class="col-3"><spring:message code="username"/></th>
+                                <th class="col-1"><spring:message code="score"/></th>
+                                <th class="col-5"><spring:message code="reviews.comment"/></th>
+                            </c:if>
+                            <c:if test="${note ne null}">
+                                <th class="col-3"><spring:message code="username"/></th>
+                                <th class="col-1"><spring:message code="score"/></th>
+                                <th class="col-8"><spring:message code="reviews.comment"/></th>
+                            </c:if>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="review" items="${reviews}">
+                            <tr class="note-found no-select" id="<c:out value="${review.user.userId}"/>">
+                                <c:if test="${note eq null}">
+                                    <td>
+                                        <a class="link-info" href="${baseUrl}/notes/${review.note.id}">
+                                            <c:out value="${review.note.name}"/>
+                                        </a>
+                                    </td>
+                                </c:if>
                                 <td>
-                                    <a class="link-info" href="${baseUrl}/notes/${review.note.id}">
-                                        <c:out value="${review.note.name}"/>
+                                    <a class="link-info" href="${baseUrl}/user/${review.user.userId}/note-board">
+                                        <c:out value="${review.user.displayName}"/>
                                     </a>
                                 </td>
-                            </c:if>
-                            <td>
-                                <a class="link-info" href="${baseUrl}/user/${review.user.userId}/note-board">
-                                    <c:out value="${review.user.displayName}"/>
-                                </a>
-                            </td>
-                            <td>
-                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${userScore}"/> ⭐
-                            </td>
-                            <td>
-                                    <span style="white-space: initial; overflow-wrap: break-word">
-                                        <c:out value="${review.content}"/>
-                                    </span>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+                                <td>
+                                    <fmt:formatNumber type="number" maxFractionDigits="1" value="${userScore}"/> ⭐
+                                </td>
+                                <td>
+                                        <span style="white-space: initial; overflow-wrap: break-word">
+                                            <c:out value="${review.content}"/>
+                                        </span>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </c:if>
         <!-- PAGINATION -->
         <c:if test="${maxPage gt 1}">
             <fragment:paging maxPage="${maxPage}" pageNumber="${currentPage}"/>
