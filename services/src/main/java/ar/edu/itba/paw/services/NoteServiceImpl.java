@@ -103,7 +103,7 @@ public class NoteServiceImpl implements NoteService {
             if (!noteDao.delete(noteIdsList, currentUser.getUserId()))
                 throw new InvalidNoteException();
         } else {
-            List<Note> notes = noteDao.findNoteByIds(noteIdsList);
+            List<Note> notes = noteDao.findNotesByIds(noteIdsList);
             if (notes.size() != noteIdsList.size() || !noteDao.delete(noteIdsList)) throw new InvalidNoteException();
             notes.forEach(n -> emailService.sendDeleteNoteEmail(n, reason));
         }

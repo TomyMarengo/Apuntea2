@@ -26,12 +26,12 @@ public interface DirectoryDao {
 
     boolean removeFavorite(User user, UUID directoryId);
 
-    List<Directory> findDirectoriesByIds(List<UUID> directoryIds, UUID currentUserId, SortArguments sortArgs);
+    List<Directory> findDirectoriesByIds(List<UUID> directoryIds, SortArguments sortArgs);
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds);
 
     void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId);
 
-    void setRootDirsFileQuantity(List<UUID> directoryIds, UUID userToFilterId, UUID currentUserId);
+    void loadRootDirsFileQuantity(List<UUID> directoryIds, UUID userToFilterId, UUID currentUserId);
 }
 

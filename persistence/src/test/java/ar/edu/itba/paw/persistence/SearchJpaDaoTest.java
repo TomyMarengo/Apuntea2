@@ -57,13 +57,13 @@ public class SearchJpaDaoTest {
         MockitoAnnotations.initMocks(this);
         allResultsPageSize = countSearchResults(em, null);
 
-        Mockito.when(noteDao.findNoteByIds(Mockito.any(), Mockito.any(), Mockito.any())).thenAnswer(
+        Mockito.when(noteDao.findNotesByIds(Mockito.any(), Mockito.any(), Mockito.any())).thenAnswer(
                 invocation -> {
                     List<UUID> ids = invocation.getArgument(0);
                     return ids.stream().map(id -> new Note.NoteBuilder().id(id).build()).collect(Collectors.toList());
                 }
         );
-        Mockito.when(directoryDao.findDirectoriesByIds(Mockito.any(), Mockito.any(), Mockito.any())).thenAnswer(
+        Mockito.when(directoryDao.findDirectoriesByIds(Mockito.any(), Mockito.any())).thenAnswer(
                 invocation -> {
                     List<UUID> ids = invocation.getArgument(0);
                     return ids.stream().map(id -> new Directory.DirectoryBuilder().id(id).build()).collect(Collectors.toList());
@@ -136,32 +136,6 @@ public class SearchJpaDaoTest {
         assertTrue(results.stream().allMatch(d -> d instanceof Directory));
     }
 
-//    @Test
-//    public void testSearchOrderByName(){
-//        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().sortBy(SearchArguments.SortBy.NAME.name()).ascending(true).pageSize(allResultsPageSize);
-//        List<Pair<UUID, Boolean>> results = searchDao.search(sab.build());
-//        for (int i = 0; i < results.size() - 2; i++) {
-//            assertTrue(results.get(i).getName().toUpperCase().compareTo(results.get(i + 1).getName().toUpperCase()) <= 0);
-//        }
-//    }
-//    @Test
-//    public void testSearchOrderByScore(){
-//        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().sortBy(SearchArguments.SortBy.SCORE.name()).ascending(true).pageSize(allResultsPageSize);
-//        List<Searchable> results = searchDao.search(sab.build());
-//        for (int i = 0; i < results.size() - 2; i++) {
-//            assertTrue(results.get(i).getAvgScore() <= results.get(i + 1).getAvgScore());
-//        }
-//    }
-
-//    @Test
-//    public void testSearchOrderByDate(){
-//        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().sortBy(SearchArguments.SortBy.DATE.name()).ascending(false);
-//        List<Searchable> results = searchDao.search(sab.build());
-//        for (int i = 0; i < results.size() - 2; i++) {
-//            assertFalse(results.get(i).getCreatedAt().isBefore(results.get(i + 1).getCreatedAt()));
-//        }
-//    }
-
     @Test
     public void testByPage() {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder().page(1).pageSize(2);
@@ -201,6 +175,28 @@ public class SearchJpaDaoTest {
     }
 
     @Test
+    public void testPrivacyMine() {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().currentUserId(JAIMITO_ID).userId(JAIMITO_ID);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(1, results.size());
+    }
+
+    @Test
+    public void testPrivacyOthers() {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().currentUserId(PEPE_ID).userId(JAIMITO_ID);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(0, results.size());
+    }
+
+    @Test
+    public void testPrivacyIncognito() {
+        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().userId(JAIMITO_ID);
+        List<Searchable> results = searchDao.search(sab.build());
+        assertEquals(0, results.size());
+    }
+
+
+    @Test
     public void testNavigation() {
         List<Searchable> results = searchDao.getNavigationResults(new SearchArgumentsBuilder().build(), EDA_DIRECTORY_ID);
         assertEquals(4, results.size());
@@ -227,27 +223,6 @@ public class SearchJpaDaoTest {
         int searchResults = searchDao.countNavigationResults(new SearchArgumentsBuilder().build(), EDA_DIRECTORY_ID);
         assertEquals(4, searchResults);
     }
-
-    /*@Test
-    public void testSearchListWithFavorites() {
-        UUID newDir1 = insertDirectory(namedParameterJdbcTemplate, "temp", PEPE_ID, EDA_DIRECTORY_ID);
-        UUID newDir2 = insertDirectory(namedParameterJdbcTemplate, "temp2", PEPE_ID, EDA_DIRECTORY_ID);
-        UUID newDir3 = insertDirectory(namedParameterJdbcTemplate, "temp3", PEPE_ID, EDA_DIRECTORY_ID);
-        insertFavorite(jdbcFavoriteInsert, newDir1, PEPE_ID);
-        insertFavorite(jdbcFavoriteInsert, newDir2, SAIDMAN_ID);
-        insertFavorite(jdbcFavoriteInsert, newDir3, PEPE_ID);
-
-        SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.DIRECTORY.toString()).currentUserId(PEPE_ID);
-        List<Searchable> directories = searchDao.search(sab.build());
-        Searchable d1 = directories.stream().filter(d -> d.getId().equals(newDir1)).findAny().orElseThrow(AssertionError::new);
-        Searchable d2 = directories.stream().filter(d -> d.getId().equals(newDir2)).findAny().orElseThrow(AssertionError::new);
-        Searchable d3 = directories.stream().filter(d -> d.getId().equals(newDir3)).findAny().orElseThrow(AssertionError::new);
-        assertEquals(newDir1, d1.getId());
-        assertTrue(d1.getFavorite());
-        assertTrue(d3.getFavorite());
-        assertFalse(d2.getFavorite());
-    }*/
-
 
     private class TestCountChildrenObject {
         private final UUID rootDirId;

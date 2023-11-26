@@ -49,9 +49,9 @@ public interface NoteDao {
 
     boolean removeFavorite(User user, UUID noteId);
 
-    List<Note> findNoteByIds(List<UUID> noteIds);
+    List<Note> findNotesByIds(List<UUID> noteIds);
 
-    List<Note> findNoteByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa);
+    List<Note> findNotesByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa);
 
     void loadNoteFavorites(List<UUID> noteIds, UUID currentUserId);
 

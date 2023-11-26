@@ -103,7 +103,7 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
-    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, UUID currentUserId, SortArguments sortArgs) {
+    public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, SortArguments sortArgs) {
         // TODO: Reduce amount of joins if necessary
         if (directoryIds.isEmpty()) return Collections.emptyList();
         return em.createQuery(String.format("SELECT d FROM Directory d LEFT JOIN d.parent p LEFT JOIN p.subject s LEFT JOIN d.user u WHERE d.id IN :directoryIds ORDER BY d.%s %s", DaoUtils.SORTBY_CAMELCASE.getOrDefault(sortArgs.getSortBy(), NAME), sortArgs.isAscending()? "ASC" : "DESC"), Directory.class)
@@ -123,11 +123,11 @@ public class DirectoryJpaDao implements DirectoryDao {
 
     @Override
     public List<Directory> findDirectoriesByIds(List<UUID> directoryIds) {
-        return findDirectoriesByIds(directoryIds, null, new SortArguments(SortArguments.SortBy.DATE, true));
+        return findDirectoriesByIds(directoryIds, new SortArguments(SortArguments.SortBy.DATE, true));
     }
 
     @Override
-    public void setRootDirsFileQuantity(List<UUID> directoryIds, UUID userToFilterId, UUID currentUserId) {
+    public void loadRootDirsFileQuantity(List<UUID> directoryIds, UUID userToFilterId, UUID currentUserId) {
         List<Object[]> list = em.createQuery("SELECT d, (SELECT COUNT(n.noteId) FROM Note n JOIN n.subject s WHERE (n.user.id = :currentUserId OR n.visible = true) AND s.rootDirectory = d AND n.user.id = :userId) as qtyFiles FROM Directory d WHERE d.id IN :directoryIds", Object[].class)
                 .setParameter("directoryIds", directoryIds)
                 .setParameter("userId", userToFilterId)

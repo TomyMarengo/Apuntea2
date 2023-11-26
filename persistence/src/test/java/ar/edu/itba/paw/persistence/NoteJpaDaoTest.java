@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
@@ -181,6 +182,29 @@ public class NoteJpaDaoTest {
         assertEquals(1, countRows(em, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
         assertFalse(deleted);
     }
+
+    @Test
+    public void testDeleteForcedMany() {
+        Note.NoteBuilder nb = new Note.NoteBuilder()
+                    .subject(edaSubject)
+                    .parentId(EDA_DIRECTORY_ID)
+                    .visible(true)
+                    .category(Category.PRACTICE)
+                    .fileType("jpg");
+        Note notePepe = insertNote(em, nb.name("notePepe").user(pepeUser));
+        Note noteSaidman = insertNote(em, nb.name("noteSaidman").user(saidmanUser));
+        Note noteCarla = insertNote(em, nb.name("noteCarla").user(carlaAdmin));
+        List<UUID> noteIds = Arrays.asList(new UUID[]{notePepe.getId(), noteSaidman.getId(), noteCarla.getId()});
+        int prevCount = countRows(em, NOTES, "note_id IN ('" + notePepe.getId() + "', '" + noteSaidman.getId() + "', '" + noteCarla.getId() + "')");
+
+        boolean success = noteDao.delete(noteIds);
+        em.flush();
+
+        assertTrue(success);
+        assertEquals(3, prevCount);
+        assertEquals(0, countRows(em, NOTES, "note_id IN ('" + notePepe.getId() + "', '" + noteSaidman.getId() + "', '" + noteCarla.getId() + "')"));
+    }
+
 
     @Test
     public void testGetReview() {
@@ -369,4 +393,64 @@ public class NoteJpaDaoTest {
         assertFalse(nofaved.isFavorite());
     }
 
+    @Test
+    public void testAddInteraction() {
+        int oldCount = countRows(em, USER_NOTE_INTERACTIONS,  "note_id = '" + notePublic.getId() + "'");
+        insertInteraction(em, SAIDMAN_ID, notePublic.getId());
+
+        noteDao.addInteractionIfNotExists(pepeUser, notePublic);
+        em.flush();
+
+        assertEquals(0, oldCount);
+        assertEquals(1, countRows(em, USER_NOTE_INTERACTIONS, "user_id = '" + PEPE_ID + "' AND note_id = '" + notePublic.getId() + "'"));
+        assertEquals(1, countRows(em, USER_NOTE_INTERACTIONS, "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + notePublic.getId() + "'"));
+        assertEquals(2, countRows(em, USER_NOTE_INTERACTIONS,   "note_id = '" + notePublic.getId() + "'"));
+    }
+
+    @Test
+    public void testAddInteractionIdempotent() {
+        int oldCount = countRows(em, USER_NOTE_INTERACTIONS,  "note_id = '" + notePublic.getId() + "'");
+        insertInteraction(em, SAIDMAN_ID, notePublic.getId());
+        insertInteraction(em, PEPE_ID, notePublic.getId());
+
+        noteDao.addInteractionIfNotExists(pepeUser, notePublic);
+        em.flush();
+
+        assertEquals(0, oldCount);
+        assertEquals(1, countRows(em, USER_NOTE_INTERACTIONS, "user_id = '" + PEPE_ID + "' AND note_id = '" + notePublic.getId() + "'"));
+        assertEquals(1, countRows(em, USER_NOTE_INTERACTIONS, "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + notePublic.getId() + "'"));
+        assertEquals(2, countRows(em, USER_NOTE_INTERACTIONS,   "note_id = '" + notePublic.getId() + "'"));
+    }
+
+    @Test
+    public void testFindNotesByIds(){
+        UUID[] ids = {TVM_ID, JAVA_BEANS_NOTE_ID, MVC_NOTE_ID, PEPE_ID};
+        List<Note> notes = noteDao.findNotesByIds(Arrays.asList(ids), PEPE_ID, new SortArguments(SortArguments.SortBy.DATE, true));
+
+        assertTrue(notes.stream().anyMatch(note -> note.getId().equals(TVM_ID)));
+        assertTrue(notes.stream().anyMatch(note -> note.getId().equals(JAVA_BEANS_NOTE_ID)));
+        assertTrue(notes.stream().anyMatch(note -> note.getId().equals(MVC_NOTE_ID)));
+        assertTrue(notes.stream().noneMatch(note -> note.getId().equals(LUCENE_NOTE_ID)));
+        assertTrue(notes.stream().noneMatch(note -> note.getId().equals(PEPE_ID)));
+    }
+
+    @Test
+    public void testFindNotesByIdsOrderDateAsc(){
+        UUID[] ids = {TVM_ID, JAVA_BEANS_NOTE_ID, MVC_NOTE_ID, LUCENE_NOTE_ID};
+        List<Note> notes = noteDao.findNotesByIds(Arrays.asList(ids), PEPE_ID, new SortArguments(SortArguments.SortBy.DATE, true));
+
+        assertEquals(4, notes.size());
+        for (int i=0; i< notes.size()-2 ; i++)
+            assertFalse(notes.get(i).getCreatedAt().isAfter(notes.get(i+1).getCreatedAt()));
+    }
+
+    @Test
+    public void testFindNotesByIdsOrderNameDesc(){
+        UUID[] ids = {TVM_ID, JAVA_BEANS_NOTE_ID, MVC_NOTE_ID, LUCENE_NOTE_ID};
+        List<Note> notes = noteDao.findNotesByIds(Arrays.asList(ids), PEPE_ID, new SortArguments(SortArguments.SortBy.NAME, false));
+
+        assertEquals(4, notes.size());
+        for (int i=0; i< notes.size()-2 ; i++)
+            assertTrue(notes.get(i).getName().compareToIgnoreCase(notes.get(i+1).getName()) >= 0);
+    }
 }

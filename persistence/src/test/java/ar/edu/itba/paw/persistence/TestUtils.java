@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.institutional.SubjectCareer;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.note.UserNoteInteraction;
 import ar.edu.itba.paw.models.user.*;
 
 import javax.persistence.EntityManager;
@@ -134,6 +135,11 @@ public class TestUtils {
 
     static void insertFavoriteNote(EntityManager em, UUID noteId, UUID userId) {
         em.find(User.class, userId).getNoteFavorites().add(em.find(Note.class, noteId));
+        em.flush();
+    }
+
+    static void insertInteraction(EntityManager em, UUID userId, UUID noteId) {
+        em.persist(new UserNoteInteraction(em.getReference(User.class, userId), em.getReference(Note.class, noteId)));
         em.flush();
     }
 

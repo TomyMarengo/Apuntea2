@@ -189,7 +189,7 @@ public class NoteJpaDao implements NoteDao {
 
 
     @Override
-    public List<Note> findNoteByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa) {
+    public List<Note> findNotesByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa) {
         if (noteIds.isEmpty()) return Collections.emptyList();
         List<Note> notes = em.createQuery(String.format("SELECT n FROM Note n JOIN n.user u WHERE n.id IN :noteIds ORDER BY n.%s %s", DaoUtils.SORTBY_CAMELCASE.getOrDefault(sa.getSortBy(), "avgScore"), sa.isAscending()? "" : "DESC"), Note.class)
                 .setParameter("noteIds", noteIds)
@@ -211,8 +211,8 @@ public class NoteJpaDao implements NoteDao {
 
 
     @Override
-    public List<Note> findNoteByIds(List<UUID> noteIds) {
-        return findNoteByIds(noteIds, null, new SortArguments(SortArguments.SortBy.DATE, true));
+    public List<Note> findNotesByIds(List<UUID> noteIds) {
+        return findNotesByIds(noteIds, null, new SortArguments(SortArguments.SortBy.DATE, true));
     }
 
     @Override

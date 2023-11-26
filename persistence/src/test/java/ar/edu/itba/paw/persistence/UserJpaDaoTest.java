@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.user.Image;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
+import ar.edu.itba.paw.models.user.UserStatus;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -166,7 +167,7 @@ public class UserJpaDaoTest {
         int oldQtyBanned = countRows(em, "users", "status = 'BANNED'");
         userDao.unbanUsers();
         em.flush();
-        assertEquals(6, oldQtyBanned);
+        assertEquals(7, oldQtyBanned);
         assertEquals(1, countRows(em, "users", "status = 'BANNED'"));
         assertEquals(1, countRows(em, "users", "user_id = '" + students[5].getUserId() + "' AND status = 'BANNED'"));
         for (int i = 0; i < 5; i++)
@@ -231,6 +232,12 @@ public class UserJpaDaoTest {
     }
 
     @Test
+    public void testGetStudentsBannedCount() {
+        int results = userDao.getStudentsQuantity("", UserStatus.BANNED);
+        assertEquals(1, results);
+    }
+
+    @Test
     public void testGetStudents2000() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
@@ -266,6 +273,21 @@ public class UserJpaDaoTest {
         // 100 should be more than enough to get all students, change in the future if necessary
         List<User> users = userDao.getStudents("", null, 1, 100);
         assertEquals(oldUsers + STUDENTS_LENGTH, users.size());
+
+        for (int i = 0; i < STUDENTS_LENGTH; i++) {
+            final int finalI = i;
+            assertTrue(users.stream().anyMatch(u -> u.getEmail().equals("student" + (finalI + 1) + "@mail.com")));
+        }
+    }
+
+    @Test
+    public void testGetStudentsActive() {
+        final int STUDENTS_LENGTH = 20;
+        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
+        for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
+        // 100 should be more than enough to get all students, change in the future if necessary
+        List<User> users = userDao.getStudents("", UserStatus.ACTIVE, 1, 100);
+        assertEquals(oldUsers - 1 + STUDENTS_LENGTH, users.size()); // oldUsers - 1, because there is a banned student
 
         for (int i = 0; i < STUDENTS_LENGTH; i++) {
             final int finalI = i;

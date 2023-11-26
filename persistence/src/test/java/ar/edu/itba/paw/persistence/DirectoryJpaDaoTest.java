@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
+import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
@@ -264,7 +265,7 @@ public class DirectoryJpaDaoTest {
         Note.NoteBuilder nb = new Note.NoteBuilder().category(Category.EXAM).fileType(".jpg").parentId(EDA_DIRECTORY_ID).subject(em.getReference(Subject.class, EDA_ID)).user(pepeUser).visible(true);
         insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(pepeUser).visible(false));
         insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(saidmanUser).visible(true));
-        directoryDao.setRootDirsFileQuantity(Collections.singletonList(EDA_DIRECTORY_ID), PEPE_ID, PEPE_ID);
+        directoryDao.loadRootDirsFileQuantity(Collections.singletonList(EDA_DIRECTORY_ID), PEPE_ID, PEPE_ID);
         assertEquals(3, edaDir.getQtyFiles()); // 2 previously loaded notes + newNoteP
     }
 
@@ -274,7 +275,7 @@ public class DirectoryJpaDaoTest {
         Note.NoteBuilder nb = new Note.NoteBuilder().category(Category.EXAM).fileType(".jpg").parentId(EDA_DIRECTORY_ID).subject(em.getReference(Subject.class, EDA_ID)).user(pepeUser).visible(true);
         insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(pepeUser).visible(false));
         insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(saidmanUser).visible(true));
-        directoryDao.setRootDirsFileQuantity(Collections.singletonList(EDA_DIRECTORY_ID), PEPE_ID, SAIDMAN_ID);
+        directoryDao.loadRootDirsFileQuantity(Collections.singletonList(EDA_DIRECTORY_ID), PEPE_ID, SAIDMAN_ID);
         assertEquals(2, edaDir.getQtyFiles()); // only the 2 previously loaded notes
     }
 
@@ -301,5 +302,37 @@ public class DirectoryJpaDaoTest {
         assertFalse(wasFaved1);
         assertFalse(wasFaved2);
 
+    }
+
+    @Test
+    public void testFindDirectoriesByIds(){
+        UUID[] ids = {GUIAS_DIRECTORY_ID, THEORY_DIRECTORY_ID, MVC_DIRECTORY_ID, PEPE_ID};
+        List<Directory> directories = directoryDao.findDirectoriesByIds(Arrays.asList(ids), new SortArguments(SortArguments.SortBy.DATE, true));
+
+        assertTrue(directories.stream().anyMatch(directory -> directory.getId().equals(GUIAS_DIRECTORY_ID)));
+        assertTrue(directories.stream().anyMatch(directory -> directory.getId().equals(THEORY_DIRECTORY_ID)));
+        assertTrue(directories.stream().anyMatch(directory -> directory.getId().equals(MVC_DIRECTORY_ID)));
+        assertTrue(directories.stream().noneMatch(directory -> directory.getId().equals(MATE_DIRECTORY_ID)));
+        assertTrue(directories.stream().noneMatch(directory -> directory.getId().equals(PEPE_ID)));
+    }
+
+    @Test
+    public void testFindNotesByIdsOrderDateAsc(){
+        UUID[] ids = {GUIAS_DIRECTORY_ID, THEORY_DIRECTORY_ID, MVC_DIRECTORY_ID, MATE_DIRECTORY_ID};
+        List<Directory> directories = directoryDao.findDirectoriesByIds(Arrays.asList(ids), new SortArguments(SortArguments.SortBy.DATE, true));
+
+        assertEquals(4, directories.size());
+        for (int i=0; i< directories.size()-2 ; i++)
+            assertFalse(directories.get(i).getCreatedAt().isAfter(directories.get(i+1).getCreatedAt()));
+    }
+
+    @Test
+    public void testFindNotesByIdsOrderNameDesc(){
+        UUID[] ids = {GUIAS_DIRECTORY_ID, THEORY_DIRECTORY_ID, MVC_DIRECTORY_ID, MATE_DIRECTORY_ID};
+        List<Directory> directories = directoryDao.findDirectoriesByIds(Arrays.asList(ids), new SortArguments(SortArguments.SortBy.NAME, false));
+
+        assertEquals(4, directories.size());
+        for (int i=0; i< directories.size()-2 ; i++)
+            assertTrue(directories.get(i).getName().compareToIgnoreCase(directories.get(i+1).getName()) >= 0);
     }
 }

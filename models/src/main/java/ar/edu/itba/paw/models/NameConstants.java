@@ -5,6 +5,8 @@ import java.util.EnumMap;
 public class NameConstants {
     public static final String NOTES = "Notes";
     public static final String REVIEWS = "Reviews";
+
+    public static final String USER_NOTE_INTERACTIONS = "User_Note_Interactions";
     public static final String INSTITUTIONS = "Institutions";
     public static final String CAREERS = "Careers";
     public static final String SUBJECTS = "Subjects";
