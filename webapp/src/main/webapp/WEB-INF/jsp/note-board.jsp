@@ -19,7 +19,7 @@
         <title>Apuntea | <spring:message code="yourProfileNotes.title" arguments="${owner.displayName}"/></title>
     </c:if>
 
-    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/apuntea-icon.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
@@ -73,11 +73,17 @@
         <c:url var="userProfilePicture" value="${baseUrl}/profile/${owner.userId}/picture"/>
         <c:if test="${owner ne user}">
             <div class="profile-card">
-                <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="50px"
-                     height="50px">
+                <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="60px"
+                     height="60px">
                 <div class="d-flex flex-column">
                     <h4 class="mb-0"><c:out value="${owner.displayName}"/></h4>
-                    <span><spring:message code="profileNotes.averageScore"/>: <c:out value="${ownerScore}"/>⭐</span>
+                    <c:if test="${ownerScore ne 0}">
+                        <span><spring:message code="profileNotes.averageScore"/>: <c:out value="${ownerScore}"/>⭐</span>
+                        <a href="${baseUrl}/user/${owner.userId}/reviews" class="link-info"><spring:message code="reviews.read"/></a>
+                    </c:if>
+                    <c:if test="${ownerScore eq 0}">
+                        <span><spring:message code="reviews.userNoReviews"/></span>
+                    </c:if>
                 </div>
                 <c:if test="${user ne null}">
                     <c:set var="followUrl" value="${baseUrl}/user/${owner.userId}/follow"/>
@@ -93,18 +99,6 @@
                     </form:form>
 
                 </c:if>
-            </div>
-        </c:if>
-        <c:if test="${user ne null and owner eq user}">
-            <div class="profile-card">
-                <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="50px"
-                     height="50px">
-                <div class="d-flex flex-column">
-                    <h4 class="mb-0"><c:out value="${owner.displayName}"/></h4>
-                    <span><spring:message code="profileNotes.averageScore"/>: <c:out value="${ownerScore}"/>⭐</span>
-                </div>
-                <a href="${baseUrl}/my-reviews" class="btn button-primary"><spring:message code="profileNotes.myReviews"/>
-                </a>
             </div>
         </c:if>
 
@@ -206,7 +200,7 @@
         </c:if>
 
         <c:if test="${empty root_directories}">
-            <div class="d-flex flex-column mt-5">
+            <div class="d-flex flex-column mt-5 w-100">
                 <ul class="mini-nav">
                     <li class="mini-nav-item">
                         <button class="btn mini-nav-button root-dir text-center active">

@@ -29,6 +29,27 @@
             </a>
         </c:if>
 
+        <c:if test="${active eq 'reviews'}">
+            <a class="btn nav-icon-button active" href="${baseUrl}/user/${user.userId}/reviews"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               data-bs-title="<spring:message code="reviews"/>" data-bs-trigger="hover">
+                <img src="<c:url value="/svg/review.svg"/>"
+                     alt="<spring:message code="reviews"/>"
+                     class="icon-m fill-dark-primary"/>
+            </a>
+        </c:if>
+        <c:if test="${active ne 'reviews'}">
+            <a class="btn nav-icon-button" href="${baseUrl}/user/${user.userId}/reviews"
+               data-bs-toggle="tooltip"
+               data-bs-placement="right"
+               data-bs-title="<spring:message code="reviews"/>" data-bs-trigger="hover">
+                <img src="<c:url value="/svg/review.svg"/>"
+                     alt="<spring:message code="reviews"/>"
+                     class="icon-m fill-dark-primary"/>
+            </a>
+        </c:if>
+
         <c:if test="${active eq 'my-career'}">
             <a class="btn nav-icon-button active" href="${baseUrl}/my-career" data-bs-toggle="tooltip"
                data-bs-placement="right"

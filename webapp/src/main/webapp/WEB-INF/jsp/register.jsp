@@ -11,7 +11,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Apuntea | <spring:message code="register.title"/></title>
-    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/apuntea-icon.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
@@ -165,9 +165,7 @@
                     <div class="col-lg-6 box d-flex align-items-center we-are-more-container">
                         <div class="text-center px-5 py-5 ">
                             <div class="text-center mb-5">
-                                <img src="<c:url value="/image/teacher.png"/>" alt="${logotype}"
-                                     style="width: 40px; height: 40px;">
-                                <h3 class="mt-1 text-bg"><spring:message code="login.weAre"/></h3>
+                                <h2 class="mt-1 text-bg"><spring:message code="login.weAre"/></h2>
                             </div>
                             <h4 class="mb-4"><spring:message code="login.weAreMore.title"/></h4>
                             <p><spring:message code="login.weAreMore.subtitle"/></p>

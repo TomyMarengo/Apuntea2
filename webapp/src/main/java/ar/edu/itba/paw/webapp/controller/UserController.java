@@ -162,20 +162,23 @@ public class UserController {
         });
     }
 
-    @RequestMapping(value = "/my-reviews", method = RequestMethod.GET)
-    public ModelAndView getReviews(@Valid @ModelAttribute("searchForm") final SearchReviewForm searchReviewForm,
+    @RequestMapping(value = "/user/{userId}/reviews", method = RequestMethod.GET)
+    public ModelAndView getReviews(@PathVariable("userId") @ValidUuid UUID userId,
+                                   @Valid @ModelAttribute("searchForm") final SearchReviewForm searchReviewForm,
                                    final BindingResult result) {
         if (result.hasErrors())
             throw new HTTPException(400);
 
         final ModelAndView mav = new ModelAndView("reviews");
-        User user = securityService.getCurrentUserOrThrow();
-        Page<Review> reviews = noteService.getPaginatedReviewsByUser(user.getUserId(), searchReviewForm.getPageNumber(), searchReviewForm.getPageSize()); //TODO: traer tambien los datos del apunte
+        User user = securityService.getCurrentUser().orElse(null);
+        User owner =  userService.getOwner(userId, user);
+        mav.addObject("user", user);
+        mav.addObject("owner",owner);
+        mav.addObject("ownerScore", userService.getAvgScore(owner.getUserId()));
+        Page<Review> reviews = noteService.getPaginatedReviewsByUser(userId, searchReviewForm.getPageNumber(), searchReviewForm.getPageSize()); //TODO: traer tambien los datos del apunte
         mav.addObject("maxPage", reviews.getTotalPages());
         mav.addObject("currentPage", reviews.getCurrentPage());
         mav.addObject("reviews", reviews.getContent());
-        mav.addObject("user", user);
-        mav.addObject("userScore", userService.getAvgScore(user.getUserId()));
         return mav;
     }
 

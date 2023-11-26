@@ -13,7 +13,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Apuntea | <spring:message code="myFavorites.title"/></title>
-    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/apuntea-icon.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
@@ -97,11 +97,11 @@
                                 <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
                                 <h3><spring:message code="directories.noContent"/></h3>
                             </div>
-                            <div class="d-flex">
+                            <p>
                                 <fmt:message key="myFavorites.subjects.noContent.description">
                                     <fmt:param value="${myCareerUrl}"/>
                                 </fmt:message>
-                            </div>
+                            </p>
                         </div>
                     </c:if>
                     <c:if test="${not empty subjectFavorites}">
@@ -154,11 +154,11 @@
                                 <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
                                 <h3><spring:message code="directories.noContent"/></h3>
                             </div>
-                            <div class="d-flex">
+                            <p>
                                 <fmt:message key="myFavorites.directories.noContent.description">
                                     <fmt:param value="${searchUrl}"/>
                                 </fmt:message>
-                            </div>
+                            </p>
                         </div>
                     </c:if>
                     <c:if test="${not empty directoryFavorites}">
@@ -214,11 +214,11 @@
                                 <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
                                 <h3><spring:message code="directories.noContent"/></h3>
                             </div>
-                            <div class="d-flex">
+                            <p>
                                 <fmt:message key="myFavorites.notes.noContent.description">
                                     <fmt:param value="${searchUrl}"/>
                                 </fmt:message>
-                            </div>
+                            </p>
                         </div>
                     </c:if>
                     <c:if test="${not empty noteFavorites}">
@@ -284,9 +284,9 @@
                                 <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
                                 <h3><spring:message code="follows.noContent"/></h3>
                             </div>
-                            <div class="d-flex">
+                            <p>
                                 <spring:message code="follows.noContent.description"/>
-                            </div>
+                            </p>
                         </div>
                     </c:if>
                     <c:if test="${not empty userFavorites}">

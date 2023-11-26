@@ -14,12 +14,12 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <c:if test="${note eq null}">
-        <title> Apuntea | <spring:message code="profileNotes.myReviews"/></title>
+        <title> Apuntea | <spring:message code="reviews"/></title>
     </c:if>
     <c:if test="${note ne null}">
         <title> Apuntea | <c:out value="${note.name}"/></title>
     </c:if>
-    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/teacher.png"/>">
+    <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/image/apuntea-icon.png"/>">
 
     <link rel="stylesheet" href="<c:url value="/css/main.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/general/elements.css"/>"/>
@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="<c:url value="/css/general/boxes.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/bars.css"/>"/>
     <link rel="stylesheet" href="<c:url value="/css/sections/search/table-list.css"/>"/>
+    <link rel="stylesheet" href="<c:url value="/css/sections/user/profile-notes.css"/>"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,31 +50,40 @@
     </c:if>
 
     <c:if test="${note eq null}">
-        <spring:message code="profileNotes.myReviews" var="myReviewsTitle"/>
-        <fragment:bottom-navbar title="${baseUrl}/notes,${myReviewsTitle}" user="${user}"/>
+        <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${owner.displayName}" user="${user}"/>
     </c:if>
 
 </header>
 
 <main>
-    <fragment:sidebar user="${user}"/>
-    <section class="mt-5">
-
+    <c:if test="${owner.userId ne user.userId}">
+        <fragment:sidebar user="${user}"/>
+    </c:if>
+    <c:if test="${owner.userId eq user.userId}">
+        <fragment:sidebar user="${user}" active="reviews"/>
+    </c:if>
+    <section class="container mt-5">
         <c:if test="${empty reviews}">
-            <section class="mt-4 p-0 d-flex justify-content-center">
-                <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
-                <h3><spring:message code="directories.noContent"/></h3>
-            </section>
+            <div class="card box mt-4 gap-2 p-4 d-flex flex-column justify-content-center align-items-center">
+                <div class="d-flex">
+                    <img src="<c:url value="/image/no-task.png"/>" alt="Empty Folder" class="icon-xl"/>
+                    <h3><spring:message code="directories.noContent"/></h3>
+                </div>
+                <p>
+                    <spring:message code="reviews.noContent.description"/>
+                </p>
+            </div>
+
         </c:if>
 
         <c:if test="${not empty reviews}">
             <!-- HORIZONTAL LIST -->
             <section class="container mt-4 p-0">
                 <c:if test="${note eq null}">
-                    <c:url var="searchUrl" value="./my-reviews"/>
+                    <c:url var="searchUrl" value="${baseUrl}/user/${userId}/reviews"/>
                 </c:if>
                 <c:if test="${note ne null}">
-                    <c:url var="searchUrl" value="./reviews"/>
+                    <c:url var="searchUrl" value="${baseUrl}/notes/${note.id}/reviews"/>
                 </c:if>
 
                 <form:form modelAttribute="searchForm"
@@ -83,27 +93,27 @@
                     <form:hidden path="pageNumber" id="pageNumber" value="1"/>
 
                     <c:if test="${note eq null}">
-                        <h1>
-                            <c:out value="${myReviewsTitle}"/>
-                        </h1>
+                        <h3>
+                            <spring:message code="reviews.user.title" arguments="${owner.displayName}"/>
+                        </h3>
                     </c:if>
                     <c:if test="${note ne null}">
-                        <h1>
-                            <spring:message code="reviews.title" arguments="${note.name}"/>
-                        </h1>
+                        <h3>
+                            <spring:message code="reviews.note.title" arguments="${note.name}"/>
+                        </h3>
                     </c:if>
 
                     <div class="d-flex justify-content-between my-2">
                         <c:if test="${note eq null}">
-                            <h4>
-                                <spring:message code="profileNotes.averageScore"/>: <c:out value="${userScore}"/>⭐
-                            </h4>
+                            <h6>
+                                <spring:message code="profileNotes.averageScore"/>: <c:out value="${ownerScore}"/>⭐
+                            </h6>
                         </c:if>
                         <c:if test="${note ne null}">
-                            <h4>
+                            <h6>
                                 <spring:message code="score"/>:
-                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${userScore}"/> ⭐
-                            </h4>
+                                <fmt:formatNumber type="number" maxFractionDigits="1" value="${note.avgScore}"/> ⭐
+                            </h6>
                         </c:if>
 
                         <div data-bs-toggle="tooltip" data-bs-placement="right"
@@ -155,12 +165,12 @@
                                     </a>
                                 </td>
                                 <td>
-                                    <fmt:formatNumber type="number" maxFractionDigits="1" value="${userScore}"/> ⭐
+                                    <fmt:formatNumber type="number" maxFractionDigits="1" value="${review.score}"/> ⭐
                                 </td>
                                 <td>
-                                        <span style="white-space: initial; overflow-wrap: break-word">
-                                            <c:out value="${review.content}"/>
-                                        </span>
+                                    <span style="white-space: initial; overflow-wrap: break-word">
+                                        <c:out value="${review.content}"/>
+                                    </span>
                                 </td>
                             </tr>
                         </c:forEach>

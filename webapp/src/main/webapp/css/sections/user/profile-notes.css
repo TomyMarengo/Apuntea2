@@ -104,7 +104,7 @@
 }
 
 .profile-card {
-    min-width: 400px;
+    min-width: 300px;
     width: max-content;
     background-color: var(--bg);
     padding: 1rem;
