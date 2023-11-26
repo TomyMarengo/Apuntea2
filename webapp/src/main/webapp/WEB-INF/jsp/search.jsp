@@ -499,7 +499,7 @@
                                                  class="icon-xs fill-text">
                                         </button>
 
-                                        <div class="btn-group">
+                                        <div class="btn-group dropup">
                                             <button type="button" class="btn nav-icon-button"
                                                     data-bs-toggle="dropdown" aria-expanded="false">
                                                 <img src="svg/menu-dots.svg" alt="<spring:message code="menu"/>"
@@ -524,6 +524,20 @@
                                                        class="dropdown-item">
                                                         <spring:message code="search.openSubjectFolder"/>
                                                     </a>
+                                                </li>
+                                                <li>
+                                                    <c:if test="${item.category.type eq 'directory'}">
+                                                        <a href="${baseUrl}/directory/${item.id}" target="_blank"
+                                                           class="dropdown-item">
+                                                            <spring:message code="search.openInOtherTab"/>
+                                                        </a>
+                                                    </c:if>
+                                                    <c:if test="${item.category.type ne 'directory'}">
+                                                        <a href="${baseUrl}/notes/${item.id}" target="_blank"
+                                                           class="dropdown-item">
+                                                            <spring:message code="search.openInOtherTab"/>
+                                                        </a>
+                                                    </c:if>
                                                 </li>
                                             </ul>
                                         </div>
@@ -608,7 +622,7 @@
                                                              class="icon-xs fill-text">
                                                     </button>
 
-                                                    <div class="btn-group">
+                                                    <div class="btn-group dropup">
                                                         <button type="button" class="btn nav-icon-button"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                             <img src="svg/menu-dots.svg"
@@ -635,12 +649,15 @@
                                                                     <spring:message code="search.openSubjectFolder"/>
                                                                 </a>
                                                             </li>
+                                                            <li>
+                                                                <a href="${baseUrl}/directory/${item.id}" target="_blank"
+                                                                   class="dropdown-item">
+                                                                    <spring:message code="search.openInOtherTab"/>
+                                                                </a>
+                                                            </li>
                                                         </ul>
                                                     </div>
-
-
                                                 </div>
-
                                             </div>
 
 
@@ -781,7 +798,7 @@
                                                              class="icon-xs fill-text">
                                                     </button>
 
-                                                    <div class="btn-group">
+                                                    <div class="btn-group dropup">
                                                         <button type="button" class="btn nav-icon-button"
                                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                             <img src="svg/menu-dots.svg"
@@ -806,6 +823,12 @@
                                                                 <a href="${baseUrl}/directory/${item.subject.rootDirectoryId}"
                                                                    class="dropdown-item">
                                                                     <spring:message code="search.openSubjectFolder"/>
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="${baseUrl}/notes/${item.id}" target="_blank"
+                                                                   class="dropdown-item">
+                                                                    <spring:message code="search.openInOtherTab"/>
                                                                 </a>
                                                             </li>
                                                         </ul>

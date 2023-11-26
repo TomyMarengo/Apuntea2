@@ -21,6 +21,10 @@
 	color: var(--bg)
 }
 
+.text-dark-bg {
+	color: var(--dark-bg)
+}
+
 .text-s {
 	font-size: 14px;
 }

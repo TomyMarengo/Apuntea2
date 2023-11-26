@@ -164,7 +164,7 @@
                         </thead>
                         <tbody>
                         <c:forEach var="review" items="${reviews}">
-                            <tr class="note-found no-select" id="<c:out value="${review.user.userId}"/>">
+                            <tr class="note-found no-select" id="<c:out value="${review.user.userId}"/>" style="height: 57px;">
                                 <c:if test="${note eq null}">
                                     <td>
                                         <a class="link-info" href="${baseUrl}/notes/${review.note.id}">

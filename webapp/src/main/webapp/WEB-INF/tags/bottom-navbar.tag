@@ -169,15 +169,15 @@
 
         <!-- FOR NOTE-BOARD PAGE -->
         <c:if test="${owner ne null and empty category}">
-            <a href="<c:url value="${titleData[0]}"/>">
-                <div class="bottom-navbar-item bn-title active">
-                    <c:if test="${not empty reviewsSection}">
-                        <spring:message code="reviews"/>
-                        <img src='${baseUrl}/svg/arrow-right.svg' alt="<spring:message code="separator"/>" class='mx-2 icon-s dropdown-icon fill-bg'/>
-                    </c:if>
-                    ${titleData[1]}
-                </div>
-            </a>
+            <div class="bottom-navbar-item bn-title active d-flex align-items-center">
+                <a href="<c:url value="${titleData[0]}"/>" class="text-dark-bg">
+                        ${titleData[1]}
+                </a>
+                <c:if test="${not empty reviewsSection}">
+                    <img src='${baseUrl}/svg/vertical-line.svg' alt="<spring:message code="separator"/>" class='icon-m dropdown-icon fill-bg'/>
+                    <spring:message code="reviews"/>
+                </c:if>
+            </div>
         </c:if>
 
     </c:if>
