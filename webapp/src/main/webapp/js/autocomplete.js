@@ -1,4 +1,4 @@
-function autocomplete(inp, sel, getArr, onCompletion) {
+function autocomplete(inp, inpNext, sel, getArr, onCompletion) {
     /*the autocomplete function takes four arguments,
     the hidden input with the form data,
     the text field element for autocompletion,
@@ -9,7 +9,7 @@ function autocomplete(inp, sel, getArr, onCompletion) {
 
     /*execute a function when someone writes in the text field:*/
     function performAutocomplete() {
-        var arr = getArr();
+        let arr = getArr();
         let a, b, i, val = this.value;
         /*close any already open lists of autocompleted values*/
         closeAllLists();
@@ -51,6 +51,7 @@ function autocomplete(inp, sel, getArr, onCompletion) {
                     (or any other open lists of autocompleted values:*/
                     closeAllLists();
                     onCompletion();
+                    if (inpNext) inpNext.focus();
                 });
                 a.appendChild(b);
             }
@@ -71,6 +72,10 @@ function autocomplete(inp, sel, getArr, onCompletion) {
     inp.addEventListener("click", function () {
         performAutocomplete.call(this);
     });
+    inp.addEventListener("focus", function () {
+        performAutocomplete.call(this);
+    });
+
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function (e) {
         let x = document.getElementById(this.id + "-autocomplete-list");
@@ -125,7 +130,6 @@ function autocomplete(inp, sel, getArr, onCompletion) {
             }
         }
     }
-
 }
 
 function textNormalize(text) {

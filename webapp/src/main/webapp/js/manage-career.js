@@ -12,7 +12,7 @@ if (linkSubjectSelect && unownedSubjects) {
         document.getElementById('linkSubjectId').value = "";
         setupLinkSubject();
     });
-    autocomplete(document.getElementById("linkSubjectAutocomplete"), document.getElementById("linkSubjectId"),
+    autocomplete(document.getElementById("linkSubjectAutocomplete"), null, document.getElementById("linkSubjectId"),
             _ => unownedSubjects.map(s => ({value: s.subjectId , text: s.name})), setupLinkSubject);
 }
 

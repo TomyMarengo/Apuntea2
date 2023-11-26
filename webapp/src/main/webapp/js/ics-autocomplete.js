@@ -29,7 +29,8 @@ if (selectElement && institutions) {
         loadFields(false);
     });
     // Initialize an empty array to store the option values
-    autocomplete(document.getElementById("institutionAutocomplete"), document.getElementById("institutionId"),
+    autocomplete(document.getElementById("institutionAutocomplete"), document.getElementById("careerAutocomplete"),
+        document.getElementById("institutionId"),
         () => institutions.map(i => ({value: i.institutionId, text: i.name}))
         , loadFields);
 }
@@ -44,7 +45,7 @@ if (selectElement && careerMap) {
         clearCareer();
         loadFields(false);
     });
-    autocomplete(document.getElementById("careerAutocomplete"), document.getElementById("careerId"), _ => {
+    autocomplete(document.getElementById("careerAutocomplete"), document.getElementById("subjectAutocomplete"), document.getElementById("careerId"), _ => {
         const institutionId = document.getElementById('institutionId').value;
         return careerMap[institutionId].map(c => ({value: c.careerId, text: c.name}));}
         , loadFields);
@@ -59,7 +60,7 @@ if (selectElement && subjectMap) {
         clearSubject();
         loadFields(false);
     });
-    autocomplete(document.getElementById("subjectAutocomplete"), document.getElementById("subjectId"), _ => {
+    autocomplete(document.getElementById("subjectAutocomplete"), null, document.getElementById("subjectId"), _ => {
         const careerId = document.getElementById('careerId').value;
         return subjectMap[careerId].map(s => ({value: s.subjectId, text: s.name}));}
         , loadFields);

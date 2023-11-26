@@ -63,7 +63,7 @@ if (careerSelect && careers) {
         document.getElementById('careerId').value = "";
         setupCareer();
     });
-    autocomplete(document.getElementById("careerAutocomplete"), document.getElementById("careerId"),
+    autocomplete(document.getElementById("careerAutocomplete"), null, document.getElementById("careerId"),
         _ => careers.map(c => ({value: c.careerId , text: c.name})), setupCareer);
 }
 function setupCareer() {
