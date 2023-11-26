@@ -133,7 +133,8 @@
 
                         <form:select path="sortBy" class="form-select bg-bg" id="sortBySelect"
                                      onchange="submitSearchForm()">
-                            <form:option value="modified"><spring:message code="search.sort.lastModifiedAt"/></form:option>
+                            <form:option value="modified"><spring:message
+                                    code="search.sort.lastModifiedAt"/></form:option>
                             <form:option value="date"><spring:message code="search.sort.createdAt"/></form:option>
                             <c:if test="${navigationForm.isNote}">
                                 <form:option value="score"><spring:message code="search.sort.score"/></form:option>
@@ -263,8 +264,8 @@
                         </c:if>
 
                         <div data-bs-toggle="tooltip" data-bs-placement="right"
-                           data-bs-title="<spring:message code="search.button.pageSize"/>"
-                           data-bs-trigger="hover">
+                             data-bs-title="<spring:message code="search.button.pageSize"/>"
+                             data-bs-trigger="hover">
                             <form:select path="pageSize" class="form-select bg-bg" onchange="submitSearchForm()">
                                 <form:option value="12">12</form:option>
                                 <form:option value="18">18</form:option>
@@ -332,10 +333,20 @@
 
                             <!-- To sum 12 cols -->
                             <c:if test="${navigationForm.category eq 'all' or navigationForm.category eq 'directory'}">
-                                <th class="h-list-modified col-lg-2"><spring:message code="lastModifiedAt"/></th>
+                                <c:if test="${navigationForm.sortBy eq 'date'}">
+                                    <th class="h-list-modified col-lg-2"><spring:message code="createdAt"/></th>
+                                </c:if>
+                                <c:if test="${navigationForm.sortBy ne 'date'}">
+                                    <th class="h-list-modified col-lg-2"><spring:message code="lastModifiedAt"/></th>
+                                </c:if>
                             </c:if>
                             <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
-                                <th class="h-list-modified col-lg-1"><spring:message code="lastModifiedAt"/></th>
+                                <c:if test="${navigationForm.sortBy eq 'date'}">
+                                    <th class="h-list-modified col-lg-1"><spring:message code="createdAt"/></th>
+                                </c:if>
+                                <c:if test="${navigationForm.sortBy ne 'date'}">
+                                    <th class="h-list-modified col-lg-1"><spring:message code="lastModifiedAt"/></th>
+                                </c:if>
                             </c:if>
                             <!--- --->
 
@@ -358,6 +369,10 @@
                             </c:if>
 
                             <c:set var="date" value="${item.lastModifiedAt}"/>
+                            <c:if test="${navigationForm.sortBy eq 'date'}">
+                                <c:set var="date" value="${item.createdAt}"/>
+                            </c:if>
+
                             <tr class="note-found no-select"
                                 data-category="<c:out value="${item.category.formattedName}"/>"
                                 data-visible="${item.visible}"
@@ -392,9 +407,11 @@
                                 <c:out value="${item.name}"/>
                             </span>
                                 </td>
-                                <td class="h-list-owner"><a class="link-info" href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a></td>
+                                <td class="h-list-owner"><a class="link-info"
+                                                            href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
+                                        value="${item.user.displayName}"/></a></td>
                                 <td class="h-list-modified"><spring:message code="date.format"
-                                                    arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
+                                                                            arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/></td>
 
                                 <c:if test="${navigationForm.category ne 'all' and navigationForm.category ne 'directory'}">
                                     <td class="h-list-score">
@@ -615,13 +632,19 @@
 
                                             <span class="card-text">
                                         <strong><spring:message code="owner"/></strong>:
-                                        <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a>
+                                        <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
+                                                value="${item.user.displayName}"/></a>
                                     </span>
 
                                             <br>
 
                                             <span class="card-text">
-                                        <strong><spring:message code="lastModifiedAt"/></strong>:
+                                        <c:if test="${navigationForm.sortBy eq 'date'}">
+                                            <strong><spring:message code="createdAt"/></strong>:
+                                        </c:if>
+                                                <c:if test="${navigationForm.sortBy ne 'date'}">
+                                                    <strong><spring:message code="lastModifiedAt"/></strong>:
+                                                </c:if>
                                         <spring:message code="date.format"
                                                         arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
                                     </span>
@@ -744,13 +767,19 @@
 
                                             <span class="card-text">
                                         <strong><spring:message code="owner"/></strong>:
-                                        <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out value="${item.user.displayName}"/></a>
+                                        <a href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
+                                                value="${item.user.displayName}"/></a>
                                     </span>
 
                                             <br>
 
                                             <span class="card-text">
-                                        <strong><spring:message code="lastModifiedAt"/></strong>:
+                                        <c:if test="${navigationForm.sortBy eq 'date'}">
+                                            <strong><spring:message code="createdAt"/></strong>:
+                                        </c:if>
+                                        <c:if test="${navigationForm.sortBy ne 'date'}">
+                                            <strong><spring:message code="lastModifiedAt"/></strong>:
+                                        </c:if>
                                         <spring:message code="date.format"
                                                         arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
                                     </span>
@@ -1141,7 +1170,8 @@
                     </c:if>
                 </div>
 
-                <form:input path="redirectUrl" type="hidden" name="redirectUrl" value="/directory/${directoryId}?userId=${filterUser.userId}"/>
+                <form:input path="redirectUrl" type="hidden" name="redirectUrl"
+                            value="/directory/${directoryId}?userId=${filterUser.userId}"/>
 
                 <div class="modal-footer mt-4">
                     <button type="button" class="btn rounded-box button-secondary close-modal"
@@ -1170,7 +1200,7 @@
 <c:if test="${not empty results}">
     <script>
         <c:if test="${filterUser ne null}">
-            const filteredUser = "<c:out value="${filterUser.userId}"/>";
+        const filteredUser = "<c:out value="${filterUser.userId}"/>";
         </c:if>
     </script>
     <script src="<c:url value="/js/note-list.js"/>"></script>

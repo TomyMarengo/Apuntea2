@@ -337,10 +337,20 @@
 
                             <!-- To sum 12 cols -->
                             <c:if test="${searchForm.category eq 'all' or searchForm.category eq 'directory'}">
-                                <th class="h-list-modified col-lg-2"><spring:message code="lastModifiedAt"/></th>
+                                <c:if test="${searchForm.sortBy eq 'date'}">
+                                    <th class="h-list-modified col-lg-2"><spring:message code="createdAt"/></th>
+                                </c:if>
+                                <c:if test="${searchForm.sortBy ne 'date'}">
+                                    <th class="h-list-modified col-lg-2"><spring:message code="lastModifiedAt"/></th>
+                                </c:if>
                             </c:if>
                             <c:if test="${searchForm.category ne 'all' and searchForm.category ne 'directory'}">
-                                <th class="h-list-modified col-lg-1"><spring:message code="lastModifiedAt"/></th>
+                                <c:if test="${searchForm.sortBy eq 'date'}">
+                                    <th class="h-list-modified col-lg-1"><spring:message code="createdAt"/></th>
+                                </c:if>
+                                <c:if test="${searchForm.sortBy ne 'date'}">
+                                    <th class="h-list-modified col-lg-1"><spring:message code="lastModifiedAt"/></th>
+                                </c:if>
                             </c:if>
                             <!--- --->
 
@@ -362,6 +372,10 @@
                             </c:if>
 
                             <c:set var="date" value="${item.lastModifiedAt}"/>
+                            <c:if test="${searchForm.sortBy eq 'date'}">
+                                <c:set var="date" value="${item.createdAt}"/>
+                            </c:if>
+
 
                             <tr class="note-found no-select"
                                 data-category="<c:out value="${item.category.formattedName}"/>"
@@ -399,12 +413,14 @@
                                 </td>
                                 <td class="h-list-subject">
                                     <p class="subject-name">
-                                        <a class="link-info" href="${baseUrl}/directory/${item.subject.rootDirectoryId}">
+                                        <a class="link-info"
+                                           href="${baseUrl}/directory/${item.subject.rootDirectoryId}">
                                             <c:out value="${item.subject.name}"/>
                                         </a>
                                     </p>
                                 </td>
-                                <td class="h-list-owner"><a class="link-info" href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
+                                <td class="h-list-owner"><a class="link-info"
+                                                            href="${baseUrl}/user/${item.user.userId}/note-board"><c:out
                                         value="${item.user.displayName}"/></a></td>
 
                                 <td class="h-list-modified"><spring:message code="date.format"
@@ -499,7 +515,8 @@
                                                 <li>
                                                     <a href="${baseUrl}/user/${item.user.userId}/note-board"
                                                        class="dropdown-item">
-                                                        <spring:message code="search.openUserFolder" arguments="${item.user.displayName}"/>
+                                                        <spring:message code="search.openUserFolder"
+                                                                        arguments="${item.user.displayName}"/>
                                                     </a>
                                                 </li>
                                                 <li>
@@ -608,7 +625,8 @@
                                                             <li>
                                                                 <a href="${baseUrl}/user/${item.user.userId}/note-board"
                                                                    class="dropdown-item">
-                                                                    <spring:message code="search.openUserFolder" arguments="${item.user.displayName}"/>
+                                                                    <spring:message code="search.openUserFolder"
+                                                                                    arguments="${item.user.displayName}"/>
                                                                 </a>
                                                             </li>
                                                             <li>
@@ -624,7 +642,6 @@
                                                 </div>
 
                                             </div>
-
 
 
                                             <span class="card-text">
@@ -645,7 +662,13 @@
                                             <br>
 
                                             <span class="card-text">
-                                                <strong><spring:message code="lastModifiedAt"/></strong>:
+                                                <c:if test="${searchForm.sortBy eq 'date'}">
+                                                    <strong><spring:message code="createdAt"/></strong>:
+                                                </c:if>
+                                                <c:if test="${searchForm.sortBy ne 'date'}">
+                                                    <strong><spring:message code="lastModifiedAt"/></strong>:
+                                                </c:if>
+
                                                 <spring:message code="date.format"
                                                                 arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
                                             </span>
@@ -775,7 +798,8 @@
                                                             <li>
                                                                 <a href="${baseUrl}/user/${item.user.userId}/note-board"
                                                                    class="dropdown-item">
-                                                                    <spring:message code="search.openUserFolder" arguments="${item.user.displayName}"/>
+                                                                    <spring:message code="search.openUserFolder"
+                                                                                    arguments="${item.user.displayName}"/>
                                                                 </a>
                                                             </li>
                                                             <li>
@@ -808,7 +832,12 @@
                                             <br>
 
                                             <span class="card-text">
-                                                <strong><spring:message code="lastModifiedAt"/></strong>:
+                                                <c:if test="${searchForm.sortBy eq 'date'}">
+                                                    <strong><spring:message code="createdAt"/></strong>:
+                                                </c:if>
+                                                <c:if test="${searchForm.sortBy ne 'date'}">
+                                                    <strong><spring:message code="lastModifiedAt"/></strong>:
+                                                </c:if>
                                                 <spring:message code="date.format"
                                                                 arguments="${date.year},${date.monthValue},${date.dayOfMonth}"/>
                                             </span>
