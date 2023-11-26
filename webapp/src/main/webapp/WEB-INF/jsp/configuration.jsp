@@ -104,9 +104,9 @@
                 <form:form action="${notificationsEnabled ? notificationsDisabledUrl : notificationsEnabledUrl}"
                            method="post" id="changeNotificationsForm" cssClass="card-body p-3">
                     <h1><spring:message code="otherConfigurations.title"/></h1>
-                    <div class="form-check form-switch px-3 mt-3">
+                    <div class="form-check form-switch px-3 mt-3 pe-">
                         <label class="form-check-label" for="receiveMailsSwitch"><spring:message code="otherConfigurations.receiveMails"/></label>
-                        <input type="checkbox" id="receiveMailsSwitch" class="form-check-input" style="width: 3rem; height: 1.3rem;"
+                        <input type="checkbox" role='button' id="receiveMailsSwitch" class="form-check-input" style="width: 3rem; height: 1.3rem;"
                                onclick="document.getElementById('changeNotificationsForm').submit()"/>
                     </div>
                 </form:form>

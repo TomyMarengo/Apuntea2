@@ -9,6 +9,9 @@
 <%@ attribute name="user" required="false" type="ar.edu.itba.paw.models.user.User" %>
 <%@ attribute name="owner" required="false" type="ar.edu.itba.paw.models.user.User" %>
 <%@ attribute name="directory" required="false" type="ar.edu.itba.paw.models.directory.Directory" %>
+<%@ attribute name="reviewsSection" required="false"%>
+
+
 <c:if test="${not empty title}">
     <c:set var="titleData" value="${fn:split(title, ',')}"/>
 </c:if>
@@ -168,7 +171,11 @@
         <c:if test="${owner ne null and empty category}">
             <a href="<c:url value="${titleData[0]}"/>">
                 <div class="bottom-navbar-item bn-title active">
-                    <c:out value="${titleData[1]}"/>
+                    <c:if test="${not empty reviewsSection}">
+                        <spring:message code="reviews"/>
+                        <img src='${baseUrl}/svg/arrow-right.svg' alt="<spring:message code="separator"/>" class='mx-2 icon-s dropdown-icon fill-bg'/>
+                    </c:if>
+                    ${titleData[1]}
                 </div>
             </a>
         </c:if>

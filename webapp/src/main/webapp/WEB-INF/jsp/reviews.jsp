@@ -50,7 +50,13 @@
     </c:if>
 
     <c:if test="${note eq null}">
-        <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${owner.displayName}" user="${user}"/>
+        <c:if test="${owner.userId ne user.userId}">
+            <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${owner.displayName}" reviewsSection="${true}" user="${user}"/>
+        </c:if>
+        <c:if test="${owner.userId eq user.userId}">
+            <spring:message code="reviews" var="myReviewsBn"/>
+            <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${myReviewsBn}" user="${user}"/>
+        </c:if>
     </c:if>
 
 </header>
@@ -94,7 +100,14 @@
 
                     <c:if test="${note eq null}">
                         <h3>
-                            <spring:message code="reviews.user.title" arguments="${owner.displayName}"/>
+                            <c:if test="${owner.userId ne user.userId}">
+                                <spring:message code="reviews.user.title" arguments="${owner.displayName}"/>
+                            </c:if>
+                            <c:if test="${owner.userId eq user.userId}">
+                                <spring:message code="reviews.myReviews"/>
+                            </c:if>
+
+
                         </h3>
                     </c:if>
                     <c:if test="${note ne null}">
