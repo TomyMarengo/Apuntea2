@@ -225,7 +225,7 @@
             <form:form id="banUserForm" method="POST" action="${banUrl}"
                        modelAttribute="banUserForm">
                 <div class="modal-header">
-                    <h3 class="modal-title fs-5" id="banUserLabel"><spring:message code="banUser"/> :
+                    <h3 class="modal-title fs-5" id="banUserLabel"><spring:message code="banUser"/>:
                         <span id="banUserName"></span></h3>
 
                     <button type="button" class="btn-close close-modal" data-bs-dismiss="modal"
@@ -268,7 +268,7 @@
             <form:form id="unbanUserForm" method="POST" action="${unbanUrl}"
                        modelAttribute="unbanUserForm">
                 <div class="modal-header">
-                    <h3 class="modal-title fs-5" id="unbanUserLabel"><spring:message code="unbanUser"/> :
+                    <h3 class="modal-title fs-5" id="unbanUserLabel"><spring:message code="unbanUser"/>:
                         <span id="unbanUserName"></span></h3>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                             aria-label="Close">

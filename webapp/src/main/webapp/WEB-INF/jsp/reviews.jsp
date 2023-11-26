@@ -50,12 +50,12 @@
     </c:if>
 
     <c:if test="${note eq null}">
+        <spring:message code="reviews" var="myReviewsBn"/>
         <c:if test="${owner.userId ne user.userId}">
             <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${owner.displayName}" reviewsSection="${true}" user="${user}"/>
         </c:if>
         <c:if test="${owner.userId eq user.userId}">
-            <spring:message code="reviews" var="myReviewsBn"/>
-            <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/note-board,${myReviewsBn}" user="${user}"/>
+            <fragment:bottom-navbar title="${baseUrl}/user/${owner.userId}/reviews,${myReviewsBn}" user="${user}"/>
         </c:if>
     </c:if>
 

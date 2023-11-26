@@ -263,6 +263,8 @@
                     </div>
                     <div class="modal-body pb-0">
                         <div class="d-flex flex-column gap-2">
+                            <p><spring:message code="linkSubject.explanation" arguments="${career.name}, ${career.institution.name}"/></p>
+                            <p class="mb-2"><spring:message code="linkSubject.explanation2" arguments="${career.name}, ${career.institution.name}"/></p>
                             <select id="linkSubjectSelect" style="display: none;">
                                 <option disabled selected value></option>
                             </select>
@@ -327,6 +329,7 @@
                     </div>
                     <div class="modal-body pb-0">
                         <div class="d-flex flex-column gap-2">
+                            <p class="mb-2"><spring:message code="createSubject.explanation" arguments="${career.name}, ${career.institution.name}"/></p>
                             <div class="input-group">
                                 <spring:message code="name" var="placeholderName"/>
                                 <label class="input-group-text" for="createName"><spring:message code="name"/></label>

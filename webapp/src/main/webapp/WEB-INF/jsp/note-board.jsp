@@ -74,7 +74,7 @@
         <c:if test="${owner ne user}">
             <div class="profile-card">
                 <img src="${userProfilePicture}" alt="Profile Picture" class="rounded-circle" width="60px"
-                     height="60px">
+                     height="60px" style="object-fit: cover">
                 <div class="d-flex flex-column">
                     <h4 class="mb-0"><c:out value="${owner.displayName}"/></h4>
                     <c:if test="${ownerScore ne 0}">
