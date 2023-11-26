@@ -38,10 +38,6 @@ public class DaoUtils {
             });
         }
 
-        void addOrderCriteria(final String field, final boolean ascending) {
-            query.append(" ORDER BY ").append(field).append(ascending ? " ASC " : " DESC ");
-        }
-
         String createQuery() {
             return query.toString();
         }

@@ -8,7 +8,6 @@ import ar.edu.itba.paw.models.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -122,7 +121,7 @@ public class Directory implements Searchable {
     }
 
     @Override
-    public boolean getFavorite() {
+    public boolean isFavorite() {
         return favorite;
     }
 

@@ -25,6 +25,8 @@ public class TestUtils {
     static UUID ING_INF_ID = UUID.fromString("c0000000-0000-0000-0000-000000000000");
     static UUID ING_MEC_ID = UUID.fromString("c0000000-0000-0000-0000-000000000001");
 
+    static UUID ING_SIS_ID = UUID.fromString("c0000000-0000-0000-0000-000000000002");
+
     // Subjects
     static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
     static UUID PAW_ID = UUID.fromString("50000000-0000-0000-0000-000000000001");

@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.models.Pair;
 import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.search.Searchable;
 

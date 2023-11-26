@@ -32,7 +32,7 @@ public interface Searchable {
 
     String getIconColor();
 
-    boolean getFavorite();
+    boolean isFavorite();
 
     default boolean isDirectory() {
         return this.getCategory() == Category.DIRECTORY;

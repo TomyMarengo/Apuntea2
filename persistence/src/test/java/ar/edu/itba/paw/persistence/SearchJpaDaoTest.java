@@ -31,7 +31,6 @@ import ar.edu.itba.paw.models.search.SearchArguments.SearchArgumentsBuilder;
 
 import static ar.edu.itba.paw.persistence.TestUtils.*;
 import static ar.edu.itba.paw.persistence.TestUtils.EDA_ID;
-import static ar.edu.itba.paw.models.NameConstants.*;
 import static org.junit.Assert.*;
 
 @Transactional
@@ -126,7 +125,7 @@ public class SearchJpaDaoTest {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.NOTE.toString()).pageSize(allResultsPageSize);
         List<Searchable> results = searchDao.search(sab.build());
         assertEquals(8, results.size());
-//        assertTrue(results.stream().allMatch(Pair::getValue));
+        assertTrue(results.stream().allMatch(n -> n instanceof Note));
     }
 
     @Test
@@ -134,7 +133,7 @@ public class SearchJpaDaoTest {
         SearchArgumentsBuilder sab = new SearchArgumentsBuilder().category(Category.DIRECTORY.toString()).pageSize(allResultsPageSize);
         List<Searchable> results = searchDao.search(sab.build());
         assertEquals(6, results.size());
-//        assertTrue(results.stream().noneMatch(Pair::getValue));
+        assertTrue(results.stream().allMatch(d -> d instanceof Directory));
     }
 
 //    @Test

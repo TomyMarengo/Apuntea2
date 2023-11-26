@@ -21,9 +21,9 @@ public class SearchJpaDao implements SearchDao {
     @PersistenceContext
     private EntityManager em;
 
-    private NoteDao noteDao;
+    private final NoteDao noteDao;
 
-    private DirectoryDao directoryDao;
+    private final DirectoryDao directoryDao;
 
     @Autowired
     public SearchJpaDao(NoteDao noteDao, DirectoryDao directoryDao) {
@@ -76,7 +76,7 @@ public class SearchJpaDao implements SearchDao {
         }
         if (!directoryIds.isEmpty()){
             searchables.addAll(directoryDao.findDirectoriesByIds(directoryIds, sa.getCurrentUserId().orElse(null), sortArgs));
-            sa.getCurrentUserId().ifPresent(uId -> directoryDao.setDirectoryFavorites(directoryIds, uId));
+            sa.getCurrentUserId().ifPresent(uId -> directoryDao.loadDirectoryFavorites(directoryIds, uId));
         }
 
        return searchables;

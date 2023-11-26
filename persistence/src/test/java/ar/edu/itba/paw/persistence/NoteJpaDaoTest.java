@@ -24,6 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -343,6 +344,29 @@ public class NoteJpaDaoTest {
         for (int i=0; i<reviews.size()-2; i++) {
             assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i+1).getCreatedAt()));
         }
+    }
+
+    @Test
+    public void testLoadNoteFavorites() {
+        Note.NoteBuilder nb = new Note.NoteBuilder()
+                .subject(edaSubject)
+                .parentId(EDA_DIRECTORY_ID)
+                .user(pepeUser)
+                .visible(true)
+                .category(Category.PRACTICE)
+                .fileType("jpg");
+        Note faved1 = insertNote(em, nb.name("faved1"));
+        Note faved2 = insertNote(em, nb.name("faved2"));
+        Note nofaved = insertNote(em, nb.name("nofaved"));
+        Note[] notes = {faved1, faved2};
+        insertFavoriteNote(em, faved1.getId(), SAIDMAN_ID);
+        insertFavoriteNote(em, faved2.getId(), SAIDMAN_ID);
+
+        noteDao.loadNoteFavorites(Arrays.stream(notes).map(Note::getId).collect(Collectors.toList()), SAIDMAN_ID);
+
+        assertTrue(faved1.isFavorite());
+        assertTrue(faved2.isFavorite());
+        assertFalse(nofaved.isFavorite());
     }
 
 }

@@ -34,6 +34,5 @@ public class CareerJpaDao implements CareerDao {
         return em.createQuery("SELECT DISTINCT c FROM Career c WHERE c.institution = (SELECT u.career.institution FROM User u WHERE u = :user)", Career.class)
                 .setParameter("user", user)
                 .getResultList();
-
     }
 }

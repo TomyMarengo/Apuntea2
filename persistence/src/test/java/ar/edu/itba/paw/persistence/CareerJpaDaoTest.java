@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.config.TestConfig;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -97,5 +98,14 @@ public class CareerJpaDaoTest {
         int qtyBySubject3 = careerDao.countCareersBySubjectId(test.subject3Id);
 
         assertEquals(0, qtyBySubject3);
+    }
+
+    @Test
+    public void testGetCareersByUserInstitution() {
+        List<Career> careers = careerDao.getCareersByUserInstitution(em.getReference(User.class, PEPE_ID));
+
+        assertTrue(careers.contains(em.getReference(Career.class, ING_INF_ID)));
+        assertTrue(careers.contains(em.getReference(Career.class, ING_MEC_ID)));
+        assertFalse(careers.contains(em.getReference(Career.class, ING_SIS_ID)));
     }
 }
