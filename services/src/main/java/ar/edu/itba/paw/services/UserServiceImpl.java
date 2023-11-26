@@ -211,6 +211,9 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("Notifications enabled updated for user with id: {}, updated to {}", user.getUserId(), user.hasNotificationsEnabled());
     }
 
+    /* Function to avoid using formula inside User,
+     * since formulas are not lazy,
+     * and users are fetched constantly */
     @Transactional
     @Override
     public float getAvgScore(UUID userId) {
@@ -219,7 +222,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public User getOwner(UUID userId, User currentUser) {
+    public User getNoteOwner(UUID userId, User currentUser) {
         if (currentUser != null && currentUser.getUserId().equals(userId)) {
             return currentUser;
         } else {

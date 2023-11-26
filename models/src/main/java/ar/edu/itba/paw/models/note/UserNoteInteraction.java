@@ -22,7 +22,7 @@ public class UserNoteInteraction {
     @MapsId
     private Note note;
 
-    // TODO?: Create enum for different interaction types
+    // Create enum for different interaction types
     // private InteractionType type;
 
     /* package-private */ UserNoteInteraction() {}

@@ -66,7 +66,6 @@ public class SubjectServiceImpl implements SubjectService {
     public Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId) {
         UUID currentUserId = this.securityService.getCurrentUser().map(User::getUserId).orElse(null);
         User user = this.userDao.findById(userId).orElseThrow(UserNotFoundException::new);
-//        directoryDao.getFavoriteRootDirectories(user.getUserId()).forEach(rd -> rd.setFavorite(true));
         List<Subject> subjects = subjectDao.getSubjectsByUser(user);
         if (!subjects.isEmpty()) directoryDao.loadRootDirsFileQuantity(
                 subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()),
@@ -96,7 +95,6 @@ public class SubjectServiceImpl implements SubjectService {
     @Transactional
     public void updateSubject(UUID subjectId, String name) {
         Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
-        // TODO: Check if the amount of queries is ok
         subject.setName(name);
     }
 

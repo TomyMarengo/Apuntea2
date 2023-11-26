@@ -46,5 +46,5 @@ public interface UserService {
 
     float getAvgScore(UUID userId);
 
-    User getOwner(UUID userId, User currentUser);
+    User getNoteOwner(UUID userId, User currentUser);
 }

@@ -67,6 +67,7 @@ public class Directory implements Searchable {
         this.iconColor = builder.iconColor;
     }
 
+    @Override
     public UUID getId() { return directoryId; }
 
     public boolean isRootDirectory() {
@@ -125,6 +126,10 @@ public class Directory implements Searchable {
         return favorite;
     }
 
+    public int getQtyFiles() {
+        return qtyFiles;
+    }
+
     public void setFavorite(boolean favorite) {
         this.favorite = favorite;
     }
@@ -139,10 +144,6 @@ public class Directory implements Searchable {
 
     public void setVisible(Boolean visible) {
         this.visible = visible;
-    }
-
-    public int getQtyFiles() {
-        return qtyFiles;
     }
 
     public void setQtyFiles(int qtyFiles) {

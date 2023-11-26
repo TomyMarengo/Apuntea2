@@ -15,7 +15,6 @@ import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
-import ar.edu.itba.paw.persistence.SubjectDao;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,30 +29,24 @@ import java.util.*;
 public class NoteServiceImpl implements NoteService {
     private final NoteDao noteDao;
     private final DirectoryDao directoryDao;
-    private final SubjectDao subjectDao;
     private final EmailService emailService;
     private final SecurityService securityService;
 
 
     @Autowired
-    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SubjectDao subjectDao) {
+    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService) {
         this.noteDao = noteDao;
         this.securityService = securityService;
         this.emailService = emailService;
         this.directoryDao = directoryDao;
-        this.subjectDao = subjectDao;
     }
 
     @Transactional
     @Override
     public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
         User user = securityService.getCurrentUserOrThrow();
-//        List<UUID> directoryPathIds = directoryDao.getDirectoryPathIds(parentId);
-//        if (directoryPathIds.isEmpty()) throw new InvalidDirectoryException();
-//        UUID rootDirectoryId = directoryPathIds.get(0);
         Directory rootDir = directoryDao.getDirectoryRoot(parentId).orElseThrow(InvalidDirectoryException::new);
 
-//        UUID subjectId = subjectDao.getSubjectByRootDirectoryId(rootDirectoryId);
         byte[] fileBytes;
         try {
             fileBytes = file.getBytes();

@@ -44,7 +44,7 @@ public class User {
     @JoinColumn(name = "profile_picture_id")
     private Image profilePicture;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "Note_Favorites",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -52,7 +52,7 @@ public class User {
     )
     private Set<Note> noteFavorites = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "Directory_Favorites",
             joinColumns = { @JoinColumn(name = "user_id") },
@@ -60,7 +60,7 @@ public class User {
     )
     private Set<Directory> directoryFavorites = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "Follows",
             joinColumns = { @JoinColumn(name = "follower_id") },

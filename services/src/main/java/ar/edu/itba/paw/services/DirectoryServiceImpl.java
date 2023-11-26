@@ -51,8 +51,10 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Override
     public void update(UUID directoryId, String name, boolean visible, String iconColor) {
         User currentUser = securityService.getCurrentUserOrThrow();
-        Directory directory = directoryDao.getDirectoryById(directoryId, currentUser.getUserId()).orElseThrow(InvalidDirectoryException::new);
-        if (!directory.getUser().equals(currentUser)) throw new InvalidDirectoryException(); // TODO: Forbidden exception
+        Directory directory = directoryDao
+                .getDirectoryById(directoryId, currentUser.getUserId())
+                .filter(d -> d.getUser().equals(currentUser))
+                .orElseThrow(InvalidDirectoryException::new);
         directory.setName(name);
         directory.setVisible(visible);
         directory.setIconColor(iconColor);
@@ -63,8 +65,7 @@ public class DirectoryServiceImpl implements DirectoryService{
     public void delete(UUID[] directoryIds, String reason) {
         if (directoryIds.length == 0) return;
 
-        // TODO: Propagate this to the Controller?
-        List<UUID> directoryIdsList = Collections.unmodifiableList(Arrays.asList(directoryIds));
+        List<UUID> directoryIdsList = Arrays.asList(directoryIds);
 
         User currentUser = securityService.getCurrentUserOrThrow();
         if (!currentUser.getIsAdmin()) {

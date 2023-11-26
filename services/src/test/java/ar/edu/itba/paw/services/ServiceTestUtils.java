@@ -69,11 +69,19 @@ public class ServiceTestUtils {
                 .locale(locale).build();
     }
 
+    static Directory mockRootDirectory(String name) {
+        return new Directory.DirectoryBuilder()
+                .id(UUID.randomUUID())
+                .name(name)
+                .visible(true)
+                .build();
+    }
+
     static Directory mockDirectory(String name) {
         return new Directory.DirectoryBuilder()
                 .id(UUID.randomUUID())
                 .name(name)
-//                .parentId(EDA_DIRECTORY_ID)
+                .parent(mockRootDirectory("rd"))
                 .visible(true)
                 .build();
     }
@@ -83,7 +91,7 @@ public class ServiceTestUtils {
     }
 
     static Subject mockSubject() {
-        return new Subject(UUID.randomUUID(), "mock subject", null);
+        return new Subject(UUID.randomUUID(), "mock subject", null, mockRootDirectory("mock subject directory"));
     }
 
 }

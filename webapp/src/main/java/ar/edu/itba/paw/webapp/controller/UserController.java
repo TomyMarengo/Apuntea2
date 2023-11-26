@@ -2,12 +2,9 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
-import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
-import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
-import ar.edu.itba.paw.webapp.forms.admin.DeleteWithReasonForm;
 import ar.edu.itba.paw.webapp.forms.note.SearchReviewForm;
 import ar.edu.itba.paw.webapp.forms.user.password.ChangePasswordForm;
 import ar.edu.itba.paw.webapp.forms.user.EditUserForm;
@@ -103,7 +100,7 @@ public class UserController {
     public ModelAndView noteBoard(@PathVariable("userId") @ValidUuid UUID userId) {
         ModelAndView mav = new ModelAndView("note-board");
         User user = securityService.getCurrentUser().orElse(null);
-        User owner =  userService.getOwner(userId, user);
+        User owner =  userService.getNoteOwner(userId, user);
         mav.addObject("user", user);
         mav.addObject("owner",owner);
         mav.addObject("ownerScore", userService.getAvgScore(owner.getUserId()));
@@ -171,7 +168,7 @@ public class UserController {
 
         final ModelAndView mav = new ModelAndView("reviews");
         User user = securityService.getCurrentUser().orElse(null);
-        User owner =  userService.getOwner(userId, user);
+        User owner =  userService.getNoteOwner(userId, user);
         mav.addObject("user", user);
         mav.addObject("owner",owner);
         mav.addObject("ownerScore", userService.getAvgScore(owner.getUserId()));

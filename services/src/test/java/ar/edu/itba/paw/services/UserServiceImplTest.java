@@ -3,6 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.user.InvalidUserException;
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.CareerDao;
 import ar.edu.itba.paw.persistence.UserDao;
@@ -98,7 +99,6 @@ public class UserServiceImplTest {
         fail();
     }
 
-    // TODO: Test user not found
     @Test(expected = InvalidUserException.class)
     public void testBanUserError() {
         Mockito.when(userDao.findById(Mockito.any())).thenReturn(Optional.of(mockUser()));
@@ -108,12 +108,20 @@ public class UserServiceImplTest {
         fail();
     }
 
-    // TODO: Test user not found
     @Test(expected = InvalidUserException.class)
     public void testUnbanUserError() {
         Mockito.when(userDao.findById(Mockito.any())).thenReturn(Optional.of(mockUser()));
         Mockito.when(userDao.unbanUser(Mockito.any())).thenReturn(false);
         userService.unbanUser(UUID.randomUUID());
+        fail();
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void testGetProfilePictureUserNotFound() {
+        Mockito.when(userDao.findById(Mockito.any())).thenReturn(Optional.empty());
+
+        userService.getProfilePicture(UUID.randomUUID());
+
         fail();
     }
 

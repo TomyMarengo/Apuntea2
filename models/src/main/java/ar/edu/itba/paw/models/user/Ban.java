@@ -48,11 +48,11 @@ public class Ban {
 
     @Embeddable
     private static class BanId implements Serializable {
-        @ManyToOne(fetch = FetchType.EAGER)
+        @ManyToOne
         @JoinColumn(name = "user_id", nullable = false)
         private User user;
 
-        @ManyToOne(fetch = FetchType.EAGER)
+        @ManyToOne
         @JoinColumn(name = "admin_id", referencedColumnName = "user_id", nullable = false)
         private User admin;
 

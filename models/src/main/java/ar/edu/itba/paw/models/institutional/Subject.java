@@ -43,10 +43,11 @@ public class Subject {
         this.rootDirectory = rootDirectory;
     }
 
-    public Subject(UUID subjectId, String name, Integer year) {
+    public Subject(UUID subjectId, String name, Integer year, Directory rootDirectory) {
         this.subjectId = subjectId;
         this.name = name;
         this.year =year;
+        this.rootDirectory = rootDirectory;
     }
 
     public UUID getSubjectId() {

@@ -30,7 +30,6 @@ public class Review {
     @JoinColumn(name = "note_id", insertable = false, updatable = false, nullable = false)
     private Note note;
 
-    // TODO: Ask if this is ok
     @Id
     @Column(name = "note_id")
     private UUID noteId;
