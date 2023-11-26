@@ -43,8 +43,7 @@ public class Subject {
         this.rootDirectory = rootDirectory;
     }
 
-    //TODO: for tests, remove?!
-    public Subject(UUID subjectId, String name, int year) {
+    public Subject(UUID subjectId, String name, Integer year) {
         this.subjectId = subjectId;
         this.name = name;
         this.year =year;

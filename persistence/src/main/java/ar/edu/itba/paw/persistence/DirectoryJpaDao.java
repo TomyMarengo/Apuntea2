@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
@@ -60,10 +61,10 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
-    public List<UUID> getDirectoryPathIds(UUID directoryId) {
+    public List<Directory> getDirectoryPath(UUID directoryId) {
         // Right now no user validation is needed, might change later
-
-        return ((List<String>) em.createNativeQuery(
+        @SuppressWarnings("unchecked")
+        List<UUID> directoryIds = ((List<String>) em.createNativeQuery(
                 "WITH RECURSIVE Ancestors(directory_id, parent_id, level) AS ( " +
                         "SELECT d.directory_id, d.parent_id, 0 as level FROM Directories d WHERE d.directory_id = :directoryId " +
                         "UNION " +
@@ -73,6 +74,24 @@ public class DirectoryJpaDao implements DirectoryDao {
                 .setMaxResults(RECURSION_LIMIT)
                 .getResultList()
         ).stream().map(UUID::fromString).collect(Collectors.toList());
+        return findDirectoriesByIds(directoryIds);
+    }
+
+    @Override
+    public Optional<Directory> getDirectoryRoot(UUID directoryId) {
+        // Right now no user validation is needed, might change later
+        @SuppressWarnings("unchecked")
+        Optional<UUID> maybeRootDirId = ((Optional<String>) em.createNativeQuery(
+                        "WITH RECURSIVE Ancestors(directory_id, parent_id) AS ( " +
+                                "SELECT d.directory_id, d.parent_id FROM Directories d WHERE d.directory_id = :directoryId " +
+                                "UNION " +
+                                "SELECT d.directory_id, d.parent_id FROM Ancestors a INNER JOIN Directories d ON a.parent_id = d.directory_id " +
+                                ") SELECT CAST(directory_id AS VARCHAR(36)) FROM Ancestors WHERE parent_id IS NULL")
+                .setParameter("directoryId", directoryId)
+                .setMaxResults(RECURSION_LIMIT)
+                .getResultList().stream().findFirst()
+        ).map(UUID::fromString);
+        return maybeRootDirId.map(id -> em.find(Directory.class, id));
     }
 
     @Override

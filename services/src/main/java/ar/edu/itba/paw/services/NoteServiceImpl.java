@@ -2,11 +2,13 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Page;
+import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
+import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
@@ -46,18 +48,20 @@ public class NoteServiceImpl implements NoteService {
     @Override
     public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
         User user = securityService.getCurrentUserOrThrow();
-        List<UUID> directoryPathIds = directoryDao.getDirectoryPathIds(parentId);
-        if (directoryPathIds.isEmpty()) throw new InvalidDirectoryException();
-        UUID rootDirectoryId = directoryPathIds.get(0);
+//        List<UUID> directoryPathIds = directoryDao.getDirectoryPathIds(parentId);
+//        if (directoryPathIds.isEmpty()) throw new InvalidDirectoryException();
+//        UUID rootDirectoryId = directoryPathIds.get(0);
+        Directory rootDir = directoryDao.getDirectoryRoot(parentId).orElseThrow(InvalidDirectoryException::new);
 
-        UUID subjectId = subjectDao.getSubjectByRootDirectoryId(rootDirectoryId);
+//        UUID subjectId = subjectDao.getSubjectByRootDirectoryId(rootDirectoryId);
         byte[] fileBytes;
         try {
             fileBytes = file.getBytes();
         } catch (IOException e) {
             throw new InvalidFileException();
         }
-        return noteDao.create(name, subjectId, user, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
+        Subject subject = rootDir.getSubject();
+        return noteDao.create(name, subject.getSubjectId(), user, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
     }
 
     @Transactional

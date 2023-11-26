@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.UserStatus;
@@ -79,6 +80,10 @@ public class ServiceTestUtils {
 
     static Career mockCareer() {
         return new Career(UUID.randomUUID(), "mock career");
+    }
+
+    static Subject mockSubject() {
+        return new Subject(UUID.randomUUID(), "mock subject", null);
     }
 
 }

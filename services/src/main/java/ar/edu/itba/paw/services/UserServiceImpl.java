@@ -85,9 +85,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void follow(UUID followedId) {
         User currentUser = securityService.getCurrentUserOrThrow();
-        // TODO: Ask if this is should be changed for a many to many relationship
         userDao.follow(currentUser, followedId);
-
     }
 
     @Transactional
@@ -111,8 +109,6 @@ public class UserServiceImpl implements UserService {
         User followed = userDao.findById(followedId).orElseThrow(UserNotFoundException::new);
         return currentUser.getUsersFollowing().contains(followed);
     }
-
-
 
     @Transactional
     @Override

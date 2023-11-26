@@ -108,45 +108,6 @@ public class DirectoryJpaDaoTest {
         assertEquals(privateDir.getName(), directory.getName());
     }
 
-    @Test
-    public void testDirectoryPathLength1() {
-        List<UUID> path = directoryDao.getDirectoryPathIds(EDA_DIRECTORY_ID);
-
-        assertEquals(EDA_DIRECTORY_ID, path.get(0));
-        assertEquals(1, path.size());
-    }
-
-    @Test
-    public void testDirectoryPathLength2() {
-        List<UUID> path = directoryDao.getDirectoryPathIds(GUIAS_DIRECTORY_ID);
-        assertEquals(2, path.size());
-        assertEquals(EDA_DIRECTORY_ID, path.get(0));
-        assertEquals(GUIAS_DIRECTORY_ID, path.get(1));
-    }
-
-    @Test
-    public void testDirectoryPathLength3() {
-        List<UUID> path = directoryDao.getDirectoryPathIds(MVC_DIRECTORY_ID);
-
-        assertEquals(3, path.size());
-        assertEquals(PAW_DIRECTORY_ID, path.get(0));
-        assertEquals(THEORY_DIRECTORY_ID, path.get(1));
-        assertEquals(MVC_DIRECTORY_ID, path.get(2));
-    }
-
-    @Test
-    public void testDirectoryPathLengthGreaterThan3() {
-        UUID[] directoryIds = new UUID[5];
-        insertDirectoryRec(5, 1, EDA_DIRECTORY_ID, directoryIds);
-
-        List<UUID> path = directoryDao.getDirectoryPathIds(directoryIds[4]);
-
-        assertEquals(6, path.size());
-        assertEquals(EDA_DIRECTORY_ID, path.get(0));
-        for (int i = 1; i < 6; i++)
-            assertEquals(directoryIds[i - 1], path.get(i));
-    }
-
     private void insertDirectoryRec(final int maxLevel, final int currLevel, final UUID parentId, final UUID[] directoryIds)  {
         if (currLevel > maxLevel) return;
         Directory newDirId = insertDirectory(em, new Directory.DirectoryBuilder()
@@ -334,5 +295,27 @@ public class DirectoryJpaDaoTest {
         assertEquals(4, directories.size());
         for (int i=0; i< directories.size()-2 ; i++)
             assertTrue(directories.get(i).getName().compareToIgnoreCase(directories.get(i+1).getName()) >= 0);
+    }
+
+    @Test
+    public void testFindRootDirectoryById() {
+        Optional<Directory> maybeRoot = directoryDao.getDirectoryRoot(MVC_DIRECTORY_ID);
+
+        assertTrue(maybeRoot.isPresent());
+        assertEquals(PAW_DIRECTORY_ID, maybeRoot.get().getId());
+    }
+
+    @Test
+    public void testFindRootDirectoryByIdNonExistent() {
+        Optional<Directory> maybeRoot = directoryDao.getDirectoryRoot(PEPE_ID);
+        assertFalse(maybeRoot.isPresent());
+    }
+
+    @Test
+    public void testFindRootDirIfRootDir() {
+        Optional<Directory> maybeRoot = directoryDao.getDirectoryRoot(PAW_DIRECTORY_ID);
+
+        assertTrue(maybeRoot.isPresent());
+        assertEquals(PAW_DIRECTORY_ID, maybeRoot.get().getId());
     }
 }

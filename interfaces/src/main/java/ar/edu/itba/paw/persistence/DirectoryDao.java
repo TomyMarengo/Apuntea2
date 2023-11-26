@@ -15,7 +15,9 @@ public interface DirectoryDao {
 
     Optional<Directory> getDirectoryById(UUID directoryId, UUID currentUserId);
 
-    List<UUID> getDirectoryPathIds(UUID directoryId);
+    List<Directory> getDirectoryPath(UUID directoryId);
+
+    Optional<Directory> getDirectoryRoot(UUID directoryId);
 
     boolean delete(List<UUID> directoryIds, UUID currentUserId);
 

@@ -43,9 +43,7 @@ public class DirectoryServiceImpl implements DirectoryService{
     @Transactional
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
-        // TODO: Group both methods in one
-        List<UUID> directoryPathIds =  directoryDao.getDirectoryPathIds(directoryId);
-        List<Directory> directories = directoryDao.findDirectoriesByIds(directoryPathIds);
+        List<Directory> directories =  directoryDao.getDirectoryPath(directoryId);
         return new DirectoryPath(directories);
     }
 
