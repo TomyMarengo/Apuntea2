@@ -137,7 +137,7 @@
                                         <c:if test="${note.fileType eq 'mp4'}">
                                             <img src="<c:url value="/image/mp4.png"/>" alt="mp4" class="icon-xxl">
                                         </c:if>
-                                        <span class="fw-bold flex-wrap justify-content-center user-followed-name">
+                                        <span class="fw-bold flex-wrap justify-content-center folder-name">
                                                 <c:out value="${note.name}"/>
                                             </span>
                                     </div>

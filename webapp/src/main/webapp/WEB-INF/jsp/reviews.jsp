@@ -151,14 +151,16 @@
                         <tr>
                             <c:if test="${note eq null}">
                                 <th class="col-3"><spring:message code="note"/></th>
-                                <th class="col-3"><spring:message code="username"/></th>
+                                <th class="col-2"><spring:message code="username"/></th>
                                 <th class="col-1"><spring:message code="score"/></th>
+                                <th class="col-1"><spring:message code="date"/></th>
                                 <th class="col-5"><spring:message code="reviews.comment"/></th>
                             </c:if>
                             <c:if test="${note ne null}">
                                 <th class="col-3"><spring:message code="username"/></th>
                                 <th class="col-1"><spring:message code="score"/></th>
-                                <th class="col-8"><spring:message code="reviews.comment"/></th>
+                                <th class="col-1"><spring:message code="date"/></th>
+                                <th class="col-7"><spring:message code="reviews.comment"/></th>
                             </c:if>
                         </tr>
                         </thead>
@@ -179,6 +181,9 @@
                                 </td>
                                 <td>
                                     <fmt:formatNumber type="number" maxFractionDigits="1" value="${review.score}"/> ⭐
+                                </td>
+                                <td class="h-list-modified"><spring:message code="date.format"
+                                                                            arguments="${review.createdAt.year},${review.createdAt.monthValue},${review.createdAt.dayOfMonth}"/>
                                 </td>
                                 <td>
                                     <span style="white-space: initial; overflow-wrap: break-word">
