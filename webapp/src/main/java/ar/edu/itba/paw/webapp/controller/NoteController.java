@@ -77,7 +77,7 @@ public class NoteController {
             throw new HTTPException(400);
         final ModelAndView mav = new ModelAndView("reviews");
         Note note = noteService.getNoteById(noteId).orElseThrow(NoteNotFoundException::new);
-        Page<Review> reviews = noteService.getPaginatedReviews(noteId, searchReviewForm.getPageNumber(), searchReviewForm.getPageSize()); //TODO: traer tambien los datos del apunte
+        Page<Review> reviews = noteService.getPaginatedReviews(noteId, searchReviewForm.getPageNumber(), searchReviewForm.getPageSize());
         mav.addObject("maxPage", reviews.getTotalPages());
         mav.addObject("currentPage", reviews.getCurrentPage());
         mav.addObject("reviews", reviews.getContent());

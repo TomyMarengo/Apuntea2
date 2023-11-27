@@ -25,7 +25,7 @@ public class User {
     @Column(nullable = false)
     private String password;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "career_id")
+    @JoinColumn(name = "career_id", nullable = false)
     private Career career;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -38,7 +38,7 @@ public class User {
     private UserStatus status;
 
     @Column(name = "notifications_enabled", nullable = false)
-    private Boolean notificationsEnabled;
+    private boolean notificationsEnabled = true;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_picture_id")
@@ -140,7 +140,7 @@ public class User {
         return career.getInstitutionId();
     }
 
-    public Boolean hasNotificationsEnabled() {
+    public boolean hasNotificationsEnabled() {
         return notificationsEnabled;
     }
 
@@ -181,7 +181,7 @@ public class User {
         this.career = career;
     }
 
-    public void setNotificationsEnabled(Boolean notificationsEnabled) {
+    public void setNotificationsEnabled(boolean notificationsEnabled) {
         this.notificationsEnabled = notificationsEnabled;
     }
     @Override
@@ -209,7 +209,6 @@ public class User {
         return Objects.hash(userId);
     }
 
-    // TODO: Remove
     public static class UserBuilder {
         private UUID userId;
         private String firstName;

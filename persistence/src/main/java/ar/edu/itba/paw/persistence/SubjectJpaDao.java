@@ -76,7 +76,6 @@ public class SubjectJpaDao implements SubjectDao {
                 .executeUpdate() == 1;
     }
 
-    //TODO: validate repeated relation
     @Override
     public boolean linkSubjectToCareer(Subject subject, UUID careerId, int year) {
         int count = ((BigInteger) em.createNativeQuery("SELECT COUNT(*) as n FROM Subjects_Careers sc " +

@@ -31,6 +31,7 @@ public class Subject {
     private static final int MIN_YEAR = 1;
     private static final int MAX_YEAR = 10;
 
+    // loaded only when related with a career
     @Transient
     private Integer year;
 

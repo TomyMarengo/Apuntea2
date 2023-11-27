@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
@@ -123,7 +122,6 @@ public class DirectoryJpaDao implements DirectoryDao {
 
     @Override
     public List<Directory> findDirectoriesByIds(List<UUID> directoryIds, SortArguments sortArgs) {
-        // TODO: Reduce amount of joins if necessary
         if (directoryIds.isEmpty()) return Collections.emptyList();
         return em.createQuery(String.format("SELECT d FROM Directory d LEFT JOIN d.parent p LEFT JOIN p.subject s LEFT JOIN d.user u WHERE d.id IN :directoryIds ORDER BY d.%s %s", DaoUtils.SORTBY_CAMELCASE.getOrDefault(sortArgs.getSortBy(), NAME), sortArgs.isAscending()? "ASC" : "DESC"), Directory.class)
                 .setParameter("directoryIds", directoryIds)

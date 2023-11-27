@@ -2,9 +2,6 @@ package ar.edu.itba.paw.webapp.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -171,7 +168,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
         final Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
-        properties.setProperty("hibernate.hbm2ddl.auto", "none"); // TODO: Check if update is better than none
+        properties.setProperty("hibernate.hbm2ddl.auto", "none");
 
         // TODO: REMOVE THIS PLEASE IN PRODUCTION AHHHHHHHHHHHHHHHHHHHHHHHHHHH
          properties.setProperty("hibernate.show_sql", "true");

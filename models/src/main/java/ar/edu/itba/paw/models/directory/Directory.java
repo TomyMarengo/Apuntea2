@@ -142,7 +142,7 @@ public class Directory implements Searchable {
         this.iconColor = iconColor;
     }
 
-    public void setVisible(Boolean visible) {
+    public void setVisible(boolean visible) {
         this.visible = visible;
     }
 
@@ -182,7 +182,7 @@ public class Directory implements Searchable {
         private LocalDateTime createdAt;
         private LocalDateTime lastModifiedAt;
         private String iconColor = "000000";
-        private Boolean visible = true;
+        private boolean visible = true;
 
         public DirectoryBuilder id(UUID directoryId) {
             this.directoryId = directoryId;
@@ -214,7 +214,7 @@ public class Directory implements Searchable {
             return this;
         }
 
-        public DirectoryBuilder visible(Boolean visible) {
+        public DirectoryBuilder visible(boolean visible) {
             this.visible = visible;
             return this;
         }

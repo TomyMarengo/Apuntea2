@@ -225,7 +225,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudentsAllCount() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
+        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'");
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         int results = userDao.getStudentsQuantity("", null);
         assertEquals(oldUsers + STUDENTS_LENGTH, results);
@@ -268,7 +268,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudentsAll() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
+        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'");
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         // 100 should be more than enough to get all students, change in the future if necessary
         List<User> users = userDao.getStudents("", null, 1, 100);
@@ -283,7 +283,7 @@ public class UserJpaDaoTest {
     @Test
     public void testGetStudentsActive() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'"); // TODO: Change for admin students
+        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'");
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         // 100 should be more than enough to get all students, change in the future if necessary
         List<User> users = userDao.getStudents("", UserStatus.ACTIVE, 1, 100);
@@ -309,12 +309,12 @@ public class UserJpaDaoTest {
         User follower1 = insertStudent(em, "student1@mail.com", "", ING_INF_ID, "es");
         User student = insertStudent(em, "producer@mail.com", "", ING_INF_ID, "es");
         insertFollower(em, follower1, student);
-        // TODO: Check that the user had been followed
+        boolean prevFollowed = countRows(em, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'") == 1;
 
         userDao.unfollow(follower1, student.getUserId());
         em.flush();
+        assertTrue(prevFollowed);
         assertEquals(0, countRows(em, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
-
     }
 
     @Test

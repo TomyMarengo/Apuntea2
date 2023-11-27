@@ -108,17 +108,6 @@ public class DirectoryJpaDaoTest {
         assertEquals(privateDir.getName(), directory.getName());
     }
 
-    private void insertDirectoryRec(final int maxLevel, final int currLevel, final UUID parentId, final UUID[] directoryIds)  {
-        if (currLevel > maxLevel) return;
-        Directory newDirId = insertDirectory(em, new Directory.DirectoryBuilder()
-                        .name("d" + currLevel)
-                        .parent(em.getReference(Directory.class, parentId))
-                        .user(pepeUser));
-        em.flush();
-        directoryIds[currLevel - 1] = newDirId.getId();
-        insertDirectoryRec(maxLevel, currLevel + 1, newDirId.getId(), directoryIds);
-    }
-
     @Test
     public void testDelete() {
         int qtyBasuraPrev = countRows(em, DIRECTORIES, "directory_name LIKE " + "'%Basura%'");
@@ -278,7 +267,7 @@ public class DirectoryJpaDaoTest {
     }
 
     @Test
-    public void testFindNotesByIdsOrderDateAsc(){
+    public void testFindDirectoriesByIdsOrderDateAsc(){
         UUID[] ids = {GUIAS_DIRECTORY_ID, THEORY_DIRECTORY_ID, MVC_DIRECTORY_ID, MATE_DIRECTORY_ID};
         List<Directory> directories = directoryDao.findDirectoriesByIds(Arrays.asList(ids), new SortArguments(SortArguments.SortBy.DATE, true));
 
@@ -288,7 +277,7 @@ public class DirectoryJpaDaoTest {
     }
 
     @Test
-    public void testFindNotesByIdsOrderNameDesc(){
+    public void testFindDirectoriesByIdsOrderNameDesc(){
         UUID[] ids = {GUIAS_DIRECTORY_ID, THEORY_DIRECTORY_ID, MVC_DIRECTORY_ID, MATE_DIRECTORY_ID};
         List<Directory> directories = directoryDao.findDirectoriesByIds(Arrays.asList(ids), new SortArguments(SortArguments.SortBy.NAME, false));
 

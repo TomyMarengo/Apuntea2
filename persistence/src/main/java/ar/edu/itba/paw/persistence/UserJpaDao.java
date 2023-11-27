@@ -131,7 +131,7 @@ class UserJpaDao implements UserDao {
 
     @Override
     public boolean banUser(User user, User admin, LocalDateTime endDate, String reason) {
-        if (user.isBanned()) return false; // TODO: check that the user is not disabled
+        if (user.isBanned()) return false;
         user.setStatus(UserStatus.BANNED);
         Ban ban = new Ban(user, admin, reason, endDate);
         em.persist(ban);

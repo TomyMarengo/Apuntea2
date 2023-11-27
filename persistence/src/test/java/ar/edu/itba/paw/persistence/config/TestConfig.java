@@ -72,9 +72,9 @@ public class TestConfig {
 
         final Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-        properties.setProperty("hibernate.hbm2ddl.auto", "none"); // TODO: Check if update is better than none
+        properties.setProperty("hibernate.hbm2ddl.auto", "none");
 
-        // TODO: REMOVE
+        // TODO: REMOVE in production
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);

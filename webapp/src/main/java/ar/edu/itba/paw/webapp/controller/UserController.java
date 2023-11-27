@@ -172,7 +172,7 @@ public class UserController {
         mav.addObject("user", user);
         mav.addObject("owner",owner);
         mav.addObject("ownerScore", userService.getAvgScore(owner.getUserId()));
-        Page<Review> reviews = noteService.getPaginatedReviewsByUser(userId, searchReviewForm.getPageNumber(), searchReviewForm.getPageSize()); //TODO: traer tambien los datos del apunte
+        Page<Review> reviews = noteService.getPaginatedReviewsByUser(userId, searchReviewForm.getPageNumber(), searchReviewForm.getPageSize());
         mav.addObject("maxPage", reviews.getTotalPages());
         mav.addObject("currentPage", reviews.getCurrentPage());
         mav.addObject("reviews", reviews.getContent());
