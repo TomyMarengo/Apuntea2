@@ -171,8 +171,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         properties.setProperty("hibernate.hbm2ddl.auto", "none");
 
         // TODO: REMOVE THIS PLEASE IN PRODUCTION AHHHHHHHHHHHHHHHHHHHHHHHHHHH
-         properties.setProperty("hibernate.show_sql", "true");
-         properties.setProperty("format_sql", "true");
+//         properties.setProperty("hibernate.show_sql", "true");
+//         properties.setProperty("format_sql", "true");
 
         factoryBean.setJpaProperties(properties);
 
