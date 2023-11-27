@@ -171,7 +171,7 @@
         <c:if test="${owner ne null and empty category}">
             <div class="bottom-navbar-item bn-title active d-flex align-items-center">
                 <a href="<c:url value="${titleData[0]}"/>" class="bottom-navbar-item bn-title">
-                        ${titleData[1]}
+                        <c:out value="${titleData[1]}"/>
                 </a>
                 <c:if test="${not empty reviewsSection}">
                     <img src='${baseUrl}/svg/vertical-line.svg' alt="<spring:message code="separator"/>" class='icon-m dropdown-icon fill-bg'/>

@@ -487,7 +487,7 @@
     </script>
 </c:if>
 
-<c:if test="${reviews[0].user.userId eq user.userId}">
+<c:if test="${fn:length(reviews) ne 0 and reviews[0].user.userId eq user.userId}">
     <script>
         const reviewForm = document.getElementById('reviewForm');
         reviewForm.querySelectorAll('#content')[0].textContent = `${reviews[0].content}`;

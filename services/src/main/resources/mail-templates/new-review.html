@@ -97,7 +97,7 @@
                 <h2 th:text="#{email.review.createdReview(${reviewer}, ${name})}"/>
 
                 <div class="review">
-                    <p th:text="${content}" style="font-size: 20px; margin-top: 0"/>
+                    <p th:if="${not #strings.isEmpty(content)}" th:text="${content}" style="font-size: 20px; margin-top: 0"/>
                     <div style="margin-top: 10px; font-size: 18px">
                         <th:block th:each="i : ${#numbers.sequence(1, score, 1)}">⭐</th:block>
                     </div>

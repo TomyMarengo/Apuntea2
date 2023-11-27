@@ -81,7 +81,7 @@
                         <form:errors path="firstName" cssClass="text-danger" element="p"/>
 
                         <c:if test="${not empty user.firstName}">
-                            <span class="card-text static-info text-info">${user.firstName}</span>
+                            <span class="card-text static-info text-info"><c:out value="${user.firstName}"/></span>
                         </c:if>
                         <c:if test="${empty user.firstName}">
                             <span class="card-text static-info text-info" style="opacity: 50%">
@@ -101,7 +101,7 @@
                         <form:errors path="lastName" cssClass="text-danger" element="p"/>
 
                         <c:if test="${not empty user.lastName}">
-                            <span class="card-text static-info text-info">${user.lastName}</span>
+                            <span class="card-text static-info text-info"><c:out value="${user.lastName}"/></span>
                         </c:if>
                         <c:if test="${empty user.lastName}">
                             <span class="card-text static-info text-info" style="opacity: 50%">
@@ -122,7 +122,7 @@
                         <form:errors path="username" cssClass="text-danger" element="p"/>
 
                         <c:if test="${not empty user.username}">
-                            <span class="card-text static-info text-info">${user.username}</span>
+                            <span class="card-text static-info text-info"><c:out value="${user.username}"/></span>
                         </c:if>
                         <c:if test="${empty user.username}">
                             <span class="card-text static-info text-info" style="opacity: 50%">
@@ -161,18 +161,18 @@
 
                             <form:errors path="careerId" cssClass="text-danger" element="p"/>
                         </div>
-                        <span class="card-text static-info text-info">${user.career.name}</span>
+                        <span class="card-text static-info text-info"><c:out value="${user.career.name}"/></span>
 
                     </div>
 
                     <div class="profile-item">
                         <p><strong><spring:message code="email"/></strong></p>
-                        <span class="card-text text-info" style="margin-top: 0.1rem">${user.email}</span>
+                        <span class="card-text text-info" style="margin-top: 0.1rem"><c:out value="${user.email}"/></span>
                     </div>
 
                     <div class="profile-item">
                         <p><strong><spring:message code="institution"/></strong></p>
-                        <span class="card-text text-info">${user.career.institution.name}</span>
+                        <span class="card-text text-info"><c:out value="${user.career.institution.name}"/></span>
                     </div>
                 </div>
 
