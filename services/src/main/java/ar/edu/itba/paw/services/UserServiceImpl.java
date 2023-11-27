@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public Optional<User> findById(UUID userId) {
+        if (userId == null) return Optional.empty();
         return userDao.findById(userId);
     }
 

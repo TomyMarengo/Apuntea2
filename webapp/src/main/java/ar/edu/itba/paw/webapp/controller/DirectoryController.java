@@ -73,9 +73,7 @@ public class DirectoryController {
         mav.addObject("deleteDirectoryIds", toSafeJson(model.get(DELETE_DIRECTORY_IDS)));
         loadToastFlashAttributes(mav, model);
 
-
-        if (navigationForm.getUserId() != null)
-            userService.findById(navigationForm.getUserId()).ifPresent(u -> mav.addObject("filterUser", u));
+        userService.findById(navigationForm.getUserId()).ifPresent(u -> mav.addObject("filterUser", u));
 
         Directory directory = directoryService.getDirectoryById(directoryId).orElseThrow(DirectoryNotFoundException::new);
 

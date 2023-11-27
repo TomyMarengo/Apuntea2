@@ -47,8 +47,7 @@ public class SearchController {
 
         final ModelAndView mav = new ModelAndView("search");
 
-        if (searchForm.getUserId() != null)
-            userService.findById(searchForm.getUserId()).ifPresent(u -> mav.addObject("filterUser", u));
+        userService.findById(searchForm.getUserId()).ifPresent(u -> mav.addObject("filterUser", u));
 
         Page<Searchable> pageResult = searchService.search(
                     searchForm.getInstitutionId(),
