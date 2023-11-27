@@ -209,7 +209,7 @@ public class UserServiceImpl implements UserService {
     public void updateNotificationsEnabled(boolean notificationsEnabled) {
         User user = securityService.getCurrentUserOrThrow();
         user.setNotificationsEnabled(notificationsEnabled);
-        LOGGER.info("Notifications enabled updated for user with id: {}, updated to {}", user.getUserId(), user.hasNotificationsEnabled());
+        LOGGER.info("Notifications enabled updated for user with email: {}, updated to {}", user.getEmail(), user.hasNotificationsEnabled());
     }
 
     /* Function to avoid using formula inside User,

@@ -1,6 +1,6 @@
 
-# Trabajo Práctico PAW - Primera entrega
-En esta primera entrega del trabajo práctico de la materia Proyecto de Aplicaciones Web, se comenzará con el diseño y desarrollo de Apuntea, un organizador de apuntes y carpetas para alumnos universitarios.
+# Trabajo Práctico PAW - Segunda entrega
+En esta segunda entrega del trabajo práctico de la materia Proyecto de Aplicaciones Web, se comenzará con el diseño y desarrollo de Apuntea, un organizador de apuntes y carpetas para alumnos universitarios.
 
 ## Instrucciones de configuración e instalación
 1. Instalar [Tomcat 7.0.76](https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.76/)
@@ -36,7 +36,7 @@ En esta primera entrega del trabajo práctico de la materia Proyecto de Aplicaci
 * Wischñevsky, David 62494
 
 ## Acerca de
-Este trabajo fue realizado como primera entrega del Trabajo Práctico de la materia Proyecto de Aplicaciones Web, en el tercer año de la carrera de Ingeniería Informática en el ITBA.
+Este trabajo fue realizado como segunda entrega del Trabajo Práctico de la materia Proyecto de Aplicaciones Web, en el tercer año de la carrera de Ingeniería Informática en el ITBA.
 
 
 ### Profesores
