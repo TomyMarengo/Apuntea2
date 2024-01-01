@@ -102,6 +102,4 @@ public class HomeController {
         return new ModelAndView("challenge").addObject("invalidCode", true)
                 .addObject("email", challengeForm.getEmail());
     }
-
-
 }

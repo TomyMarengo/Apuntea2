@@ -23,8 +23,9 @@ dist/
 target/
 dist/
 
-# JetBrains IDE
+# IDES
 .idea/
+.vscode/
 
 # Unit test reports
 TEST*.xml
@@ -57,3 +58,4 @@ webapp/src/main/resources/rememberme.key
 qodana.yaml
 
 models.iml
+
