@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.institutional.Institution;
-import ar.edu.itba.paw.models.institutional.dtos.InstitutionDataDto;
 import ar.edu.itba.paw.persistence.InstitutionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +16,18 @@ public class InstitutionServiceImpl implements InstitutionService{
     @Autowired
     public InstitutionServiceImpl(InstitutionDao institutionDao) { this.institutionDao = institutionDao; }
 
+//    @Transactional
+//    @Override
+//    public InstitutionDataDto getInstitutionData() {
+//        Collection<Institution> institutions = institutionDao.getInstitutions();
+//        InstitutionDataDto institutionDataDto = new InstitutionDataDto();
+//        institutions.forEach(institutionDataDto::addInstitution);
+//        return institutionDataDto;
+//    }
+
     @Transactional
     @Override
-    public InstitutionDataDto getInstitutionData() {
-        Collection<Institution> institutions = institutionDao.getInstitutions();
-        InstitutionDataDto institutionDataDto = new InstitutionDataDto();
-        institutions.forEach(institutionDataDto::addInstitution);
-        return institutionDataDto;
+    public Collection<Institution> getInstitutions() {
+        return institutionDao.getInstitutions();
     }
-
-
 }

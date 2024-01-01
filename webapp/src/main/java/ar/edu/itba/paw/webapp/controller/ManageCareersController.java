@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.models.institutional.Career;
-import ar.edu.itba.paw.models.institutional.dtos.InstitutionDataDto;
 import ar.edu.itba.paw.models.institutional.Subject;
-import ar.edu.itba.paw.models.institutional.dtos.SubjectDto;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.institutional.CareerNotFoundException;
 import ar.edu.itba.paw.services.*;
@@ -43,41 +41,41 @@ public class ManageCareersController {
         this.careerService = careerService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView manageCareers (){
-        final ModelAndView mav = new ModelAndView("manage-careers");
-        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
-        mav.addObject("institutionData", toSafeJson(institutionDataDto));
-        return mav;
-    }
+//    @RequestMapping(method = RequestMethod.GET)
+//    public ModelAndView manageCareers (){
+//        final ModelAndView mav = new ModelAndView("manage-careers");
+//        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
+//        mav.addObject("institutionData", toSafeJson(institutionDataDto));
+//        return mav;
+//    }
 
-    @RequestMapping(value = "{careerId}", method = RequestMethod.GET)
-    public ModelAndView listCareer(@PathVariable("careerId") @ValidUuid UUID careerId, final ModelMap model){
-        final ModelAndView mav = new ModelAndView("manage-careers");
-
-        addFormOrGetWithErrors(mav, model, LINK_SUBJECT_FORM_BINDING, "errorsLinkSubjectForm", "linkSubjectForm", LinkSubjectForm.class);
-        addFormOrGetWithErrors(mav, model, UNLINK_SUBJECT_FORM_BINDING, "errorsUnlinkSubjectForm", "unlinkSubjectForm", UnlinkSubjectForm.class);
-        addFormOrGetWithErrors(mav, model, CREATE_SUBJECT_FORM_BINDING, "errorsCreateSubjectForm", "createSubjectForm", CreateSubjectForm.class);
-        addFormOrGetWithErrors(mav, model, EDIT_SUBJECT_FORM_BINDING, "errorsEditSubjectForm", "editSubjectForm", EditSubjectForm.class);
-
-        mav.addObject(SUBJECT_LINKED, model.getOrDefault(SUBJECT_LINKED, false));
-        mav.addObject(SUBJECT_UNLINKED, model.getOrDefault(SUBJECT_UNLINKED, false));
-        mav.addObject(SUBJECT_CREATED, model.getOrDefault(SUBJECT_CREATED, false));
-        mav.addObject(SUBJECT_EDITED, model.getOrDefault(SUBJECT_EDITED, false));
-
-        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
-        mav.addObject("institutionData", toSafeJson(institutionDataDto));
-
-        Career career = careerService.getCareerById(careerId).orElseThrow(CareerNotFoundException::new);
-        mav.addObject("career", career);
-
-        List<Subject> ownedSubjects = subjectService.getSubjectsByCareer(careerId);
-        mav.addObject("ownedSubjects", ownedSubjects);
-
-        List<SubjectDto> unownedSubjects = subjectService.getSubjectsByCareerComplemented(careerId);
-        mav.addObject("unownedSubjects", toSafeJson(unownedSubjects));
-        return mav;
-    }
+//    @RequestMapping(value = "{careerId}", method = RequestMethod.GET)
+//    public ModelAndView listCareer(@PathVariable("careerId") @ValidUuid UUID careerId, final ModelMap model){
+//        final ModelAndView mav = new ModelAndView("manage-careers");
+//
+//        addFormOrGetWithErrors(mav, model, LINK_SUBJECT_FORM_BINDING, "errorsLinkSubjectForm", "linkSubjectForm", LinkSubjectForm.class);
+//        addFormOrGetWithErrors(mav, model, UNLINK_SUBJECT_FORM_BINDING, "errorsUnlinkSubjectForm", "unlinkSubjectForm", UnlinkSubjectForm.class);
+//        addFormOrGetWithErrors(mav, model, CREATE_SUBJECT_FORM_BINDING, "errorsCreateSubjectForm", "createSubjectForm", CreateSubjectForm.class);
+//        addFormOrGetWithErrors(mav, model, EDIT_SUBJECT_FORM_BINDING, "errorsEditSubjectForm", "editSubjectForm", EditSubjectForm.class);
+//
+//        mav.addObject(SUBJECT_LINKED, model.getOrDefault(SUBJECT_LINKED, false));
+//        mav.addObject(SUBJECT_UNLINKED, model.getOrDefault(SUBJECT_UNLINKED, false));
+//        mav.addObject(SUBJECT_CREATED, model.getOrDefault(SUBJECT_CREATED, false));
+//        mav.addObject(SUBJECT_EDITED, model.getOrDefault(SUBJECT_EDITED, false));
+//
+//        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
+//        mav.addObject("institutionData", toSafeJson(institutionDataDto));
+//
+//        Career career = careerService.getCareerById(careerId).orElseThrow(CareerNotFoundException::new);
+//        mav.addObject("career", career);
+//
+//        List<Subject> ownedSubjects = subjectService.getSubjects(careerId);
+//        mav.addObject("ownedSubjects", ownedSubjects);
+//
+//        List<SubjectDto> unownedSubjects = subjectService.getSubjectsByCareerComplemented(careerId);
+//        mav.addObject("unownedSubjects", toSafeJson(unownedSubjects));
+//        return mav;
+//    }
 
 
     @RequestMapping(value = "/{careerId}/linkSubject", method = RequestMethod.POST)

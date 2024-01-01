@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.models.institutional.dtos.InstitutionDataDto;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.search.SearchForm;
@@ -57,16 +56,16 @@ public class HomeController {
     @RequestMapping(value = "/register")
     public ModelAndView registerForm(@ModelAttribute("userForm") final UserForm userForm) {
         ModelAndView mav = new ModelAndView("register");
-        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
-        mav.addObject("institutionData", toSafeJson(institutionDataDto));
+//        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
+//        mav.addObject("institutionData", toSafeJson(institutionDataDto));
         return mav;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ModelAndView register(@Valid @ModelAttribute("userForm") final UserForm userForm, final BindingResult errors, HttpServletRequest request) {
-        if (errors.hasErrors()) {
-            return registerForm(userForm);
-        }
+//        if (errors.hasErrors()) {
+//            return registerForm(userForm);
+//        }
         userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getCareerId(), Role.ROLE_STUDENT);
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userForm.getEmail(), userForm.getPassword());

@@ -51,6 +51,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(anonymousPaths).anonymous()
                     .antMatchers(HttpMethod.GET,
                                 "/",
+                                "/institutions",
                                 "/search",
                                 "/notes/{noteId}",
                                 "/notes/{noteId}/download",

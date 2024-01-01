@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.institutional.Institution;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.CharArrayReader;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,6 +22,13 @@ public class CareerJpaDao implements CareerDao {
     @Override
     public Optional<Career> getCareerById(UUID careerId) {
         return Optional.ofNullable(em.find(Career.class, careerId));
+    }
+
+    @Override
+    public Collection<Career> getCareers(UUID institutionId) {
+        return em.createQuery("SELECT c FROM Career c WHERE c.institution.institutionId = :institutionId", Career.class)
+                .setParameter("institutionId", institutionId)
+                .getResultList();
     }
 
     @Override

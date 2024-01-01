@@ -2,7 +2,6 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Subject;
-import ar.edu.itba.paw.models.institutional.dtos.SubjectDto;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
@@ -42,7 +41,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional
-    public List<Subject> getSubjectsByCareer(UUID careerId) {
+    public List<Subject> getSubjects(UUID careerId) {
         return subjectDao.getSubjectsByCareerId(careerId);
     }
 
@@ -55,11 +54,11 @@ public class SubjectServiceImpl implements SubjectService {
         return subjects.stream().collect(Collectors.groupingBy(Subject::getYear));
     }
 
-    @Override
-    @Transactional
-    public List<SubjectDto> getSubjectsByCareerComplemented(UUID careerId) {
-        return subjectDao.getSubjectsByCareerIdComplemented(careerId).stream().map(SubjectDto::new).collect(Collectors.toList());
-    }
+//    @Override
+//    @Transactional
+//    public List<SubjectDto> getSubjectsByCareerComplemented(UUID careerId) {
+//        return subjectDao.getSubjectsByCareerIdComplemented(careerId).stream().map(SubjectDto::new).collect(Collectors.toList());
+//    }
 
     @Override
     @Transactional

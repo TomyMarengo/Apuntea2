@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.institutional.Career;
-import ar.edu.itba.paw.models.institutional.dtos.CareerDto;
 import ar.edu.itba.paw.persistence.CareerDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,17 +42,4 @@ public class CareerServiceImplTest {
         Optional<Career> maybeCareer = careerService.getCareerById(Mockito.any());
         assertFalse(maybeCareer.isPresent());
     }
-
-    @Test
-    public void testGetCareersByCurrentUserInstitution() {
-        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        List<Career> careers = Arrays.asList(new Career[]{mockCareer(), mockCareer(), mockCareer()});
-
-        Mockito.when(careerDao.getCareersByUserInstitution(Mockito.any())).thenReturn(careers);
-
-        List<CareerDto> careerDtos = careerService.getCareersByCurrentUserInstitution();
-
-        assertEquals(careers.size(), careerDtos.size());
-    }
-
 }

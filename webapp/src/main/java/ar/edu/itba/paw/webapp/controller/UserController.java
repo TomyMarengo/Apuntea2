@@ -124,7 +124,7 @@ public class UserController {
     public ModelAndView profile(@ModelAttribute final EditUserForm editUserForm,
                                  @ModelAttribute final ChangePasswordForm changePasswordForm) {
         ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("careers", ControllerUtils.toSafeJson(careerService.getCareersByCurrentUserInstitution()));
+//        mav.addObject("careers", ControllerUtils.toSafeJson(careerService.getCareersByCurrentUserInstitution()));
         mav.addObject("user", this.securityService.getCurrentUserOrThrow());
         return mav;
     }
@@ -134,7 +134,7 @@ public class UserController {
             @Valid @ModelAttribute final EditUserForm editUserForm,
             final BindingResult result) {
         ModelAndView mav = new ModelAndView("profile");
-        mav.addObject("careers", ControllerUtils.toSafeJson(careerService.getCareersByCurrentUserInstitution()));
+//        mav.addObject("careers", ControllerUtils.toSafeJson(careerService.getCareersByCurrentUserInstitution()));
 
         if(!result.hasErrors()) {
             userService.updateProfile(editUserForm.getFirstName(), editUserForm.getLastName(), editUserForm.getUsername(), editUserForm.getProfilePicture(), editUserForm.getCareerId());

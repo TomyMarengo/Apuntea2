@@ -24,12 +24,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
@@ -44,11 +38,10 @@ import java.util.Properties;
 //@EnableCaching
 @EnableScheduling
 @EnableTransactionManagement
-@EnableWebMvc
 @ComponentScan({"ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence"})
 @PropertySource("classpath:application.properties")
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig {
 
     @Value("classpath:sql/schema.sql")
     private Resource schemaSql;
@@ -70,15 +63,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return dbp;
     }
 
-
-    @Bean
-    public ViewResolver viewResolver() {
-        final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-        viewResolver.setViewClass(JstlView.class);
-        viewResolver.setPrefix("/WEB-INF/jsp/");
-        viewResolver.setSuffix(".jsp");
-        return viewResolver;
-    }
 
     @Bean
     public CommonsMultipartResolver multipartResolver() {
@@ -104,16 +88,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         messageSource.setDefaultEncoding(StandardCharsets.ISO_8859_1.displayName());
         messageSource.setCacheSeconds(5);
         return messageSource;
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        super.addResourceHandlers(registry);
-
-        registry.addResourceHandler("/css/**").addResourceLocations("/css/");
-        registry.addResourceHandler("/svg/**").addResourceLocations("/svg/");
-        registry.addResourceHandler("/js/**").addResourceLocations("/js/");
-        registry.addResourceHandler("/image/**").addResourceLocations("/image/");
     }
 
     @Bean

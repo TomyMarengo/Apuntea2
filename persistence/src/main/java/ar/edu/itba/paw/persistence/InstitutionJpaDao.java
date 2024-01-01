@@ -17,7 +17,8 @@ public class InstitutionJpaDao implements InstitutionDao{
 
     @Override
     public Collection<Institution> getInstitutions() {
-        final TypedQuery<Institution> query = em.createQuery("SELECT DISTINCT i FROM Institution i JOIN FETCH i.careers c JOIN FETCH c.subjects s", Institution.class);
-        return query.getResultList();
+//        final TypedQuery<Institution> query = em.createQuery("SELECT DISTINCT i FROM Institution i JOIN FETCH i.careers c JOIN FETCH c.subjects s", Institution.class);
+//        return query.getResultList();
+        return em.createQuery("SELECT i FROM Institution i", Institution.class).getResultList();
     }
 }
