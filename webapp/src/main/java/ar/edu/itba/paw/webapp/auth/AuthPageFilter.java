@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// TODO: Remove
 public class AuthPageFilter extends GenericFilterBean {
     private	static final Logger LOGGER = LoggerFactory.getLogger(AuthPageFilter.class);
 

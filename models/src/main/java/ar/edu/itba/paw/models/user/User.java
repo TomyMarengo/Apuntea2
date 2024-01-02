@@ -204,6 +204,11 @@ public class User {
         return usersFollowing;
     }
 
+    public boolean hasProfilePicture() {
+        // TODO: Check efficiency
+        return profilePicture != null;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(userId);

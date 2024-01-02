@@ -1,8 +1,17 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.models.user.Role;
-import ar.edu.itba.paw.webapp.auth.AuthPageFilter;
-import ar.edu.itba.paw.webapp.auth.LoginFailureHandler;
+import ar.edu.itba.paw.webapp.auth.ApunteaAuthenticationEntryPoint;
+import ar.edu.itba.paw.webapp.auth.filters.AbstractAuthFilter;
+import ar.edu.itba.paw.webapp.auth.filters.CorsFilter;
+import ar.edu.itba.paw.webapp.auth.handlers.AuthFailureHandler;
+import ar.edu.itba.paw.webapp.auth.handlers.AuthSuccessHandler;
+import ar.edu.itba.paw.webapp.auth.jwt.JwtAuthProvider;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,22 +19,24 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter;
-import org.springframework.util.StreamUtils;
-
-import java.nio.charset.StandardCharsets;
-import java.util.concurrent.TimeUnit;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @ComponentScan({"ar.edu.itba.paw.webapp.auth"})
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
@@ -36,13 +47,56 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private LoginFailureHandler loginFailureHandler;
+    private AuthSuccessHandler authSuccessHandler;
+
+    @Autowired
+    private AuthFailureHandler authFailureHandler;
+
+    @Autowired
+    private ApunteaAuthenticationEntryPoint authEntryPoint;
+
+    @Autowired
+    private JwtAuthProvider jwtAuthProvider;
+
+    @Autowired
+    private CorsFilter corsFilter;
 
     @Autowired
     private Environment env;
-    private final static String[] anonymousPaths = {"/login", "/forgot-password", "/challenge", "/register"};
+//    private final static String[] anonymousPaths = {"/login", "/forgot-password", "/challenge", "/register"};
 
+
+    @Bean
     @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        // TODO
+        return null;
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper objectMapper = jacksonMessageConverter.getObjectMapper();
+
+        objectMapper.registerModule(new Jdk8Module());
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(new ParameterNamesModule());
+
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        return jacksonMessageConverter.getObjectMapper();
+    }
+
+    /*@Override
     public void configure(final HttpSecurity http) throws Exception {
         http.addFilterBefore(new AuthPageFilter(env.getProperty("base.root"), anonymousPaths), DefaultLoginPageGeneratingFilter.class)
                 .sessionManagement()
@@ -88,6 +142,38 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().headers().frameOptions().sameOrigin()
 
                 .and().csrf().disable();
+    }*/
+
+    @Bean
+    public AbstractAuthFilter abstractAuthFilter() throws Exception {
+        AbstractAuthFilter abstractAuthFilter = new AbstractAuthFilter();
+        abstractAuthFilter.setAuthenticationManager(authenticationManagerBean());
+        abstractAuthFilter.setAuthenticationSuccessHandler(authSuccessHandler);
+        abstractAuthFilter.setAuthenticationFailureHandler(authFailureHandler);
+        return abstractAuthFilter;
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        return new CorsFilter();
+    }
+
+    @Override
+    protected void configure(final HttpSecurity http) throws Exception {
+        http.addFilterBefore(corsFilter, ChannelProcessingFilter.class)
+            .csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(authEntryPoint).and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            // TODO
+//                .accessDeniedHandler(accessDeniedHandler()).and()
+            .headers().cacheControl().disable().and().authorizeRequests()
+            .and().authorizeRequests()
+            // TODO?
+//                .antMatchers(...).access("hasRole('ADMIN')")
+            .antMatchers("/**")
+            .permitAll()
+            .and().addFilterBefore(abstractAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Override
@@ -98,6 +184,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+        auth.authenticationProvider(jwtAuthProvider);
     }
 
     @Bean

@@ -15,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -78,73 +76,73 @@ public class ManageCareersController {
 //    }
 
 
-    @RequestMapping(value = "/{careerId}/linkSubject", method = RequestMethod.POST)
-    public ModelAndView linkSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
-                                   @Valid @ModelAttribute final LinkSubjectForm linkSubjectForm,
-                                   final BindingResult result,
-                                   final RedirectAttributes redirectAttributes
-    ){
-        if(result.hasErrors()) {
-            redirectAttributes.addFlashAttribute(LINK_SUBJECT_FORM_BINDING, result);
-            return new ModelAndView("redirect:/manage/careers/"+careerId);
-        }
-        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
-        subjectService.linkSubjectToCareer(linkSubjectForm.getSubjectId(), careerId, linkSubjectForm.getYear());
-        redirectAttributes.addFlashAttribute(SUBJECT_LINKED, true);
-        return mav;
-    }
-
-    @RequestMapping(value = "/{careerId}/unlinkSubject", method = RequestMethod.POST)
-    public ModelAndView unlinkSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
-                                      @Valid @ModelAttribute final UnlinkSubjectForm unlinkSubjectForm,
-                                     final BindingResult result,
-                                     final RedirectAttributes redirectAttributes
-    ){
-        if(result.hasErrors()) {
-            redirectAttributes.addFlashAttribute(UNLINK_SUBJECT_FORM_BINDING, result);
-            return new ModelAndView("redirect:/manage/careers/"+careerId);
-        }
-        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
-        subjectService.unlinkSubjectFromCareer(unlinkSubjectForm.getSubjectId(), careerId);
-        redirectAttributes.addFlashAttribute(SUBJECT_UNLINKED, true);
-        return mav;
-    }
-
-
-    @RequestMapping(value = "/{careerId}/createSubject", method = RequestMethod.POST)
-    public ModelAndView createSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
-                                    @Valid @ModelAttribute final CreateSubjectForm createSubjectForm,
-                                    final BindingResult result,
-                                    final RedirectAttributes redirectAttributes
-    ){
-        if(result.hasErrors()) {
-            redirectAttributes.addFlashAttribute(CREATE_SUBJECT_FORM_BINDING, result);
-            return new ModelAndView("redirect:/manage/careers/"+careerId);
-        }
-        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
-        subjectService.createSubject(createSubjectForm.getName(), careerId, createSubjectForm.getYear());
-        redirectAttributes.addFlashAttribute(SUBJECT_CREATED, true);
-        return mav;
-    }
-
-    @RequestMapping(value = "/{careerId}/editSubject", method = RequestMethod.POST)
-    public ModelAndView editSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
-                                    @Valid @ModelAttribute final EditSubjectForm editSubjectForm,
-                                    final BindingResult result,
-                                    final RedirectAttributes redirectAttributes
-    ){
-        if(result.hasErrors()) {
-            redirectAttributes.addFlashAttribute(EDIT_SUBJECT_FORM_BINDING, result);
-            return new ModelAndView("redirect:/manage/careers/"+careerId);
-        }
-        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
-        subjectService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
-        redirectAttributes.addFlashAttribute(SUBJECT_EDITED, true);
-        return mav;
-    }
-
-    @ModelAttribute("user")
-    public User getCurrentUser() {
-        return this.securityService.getCurrentUser().orElse(null);
-    }
+//    @RequestMapping(value = "/{careerId}/linkSubject", method = RequestMethod.POST)
+//    public ModelAndView linkSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
+//                                   @Valid @ModelAttribute final LinkSubjectForm linkSubjectForm,
+//                                   final BindingResult result,
+//                                   final RedirectAttributes redirectAttributes
+//    ){
+//        if(result.hasErrors()) {
+//            redirectAttributes.addFlashAttribute(LINK_SUBJECT_FORM_BINDING, result);
+//            return new ModelAndView("redirect:/manage/careers/"+careerId);
+//        }
+//        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
+//        subjectService.linkSubjectToCareer(linkSubjectForm.getSubjectId(), careerId, linkSubjectForm.getYear());
+//        redirectAttributes.addFlashAttribute(SUBJECT_LINKED, true);
+//        return mav;
+//    }
+//
+//    @RequestMapping(value = "/{careerId}/unlinkSubject", method = RequestMethod.POST)
+//    public ModelAndView unlinkSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
+//                                      @Valid @ModelAttribute final UnlinkSubjectForm unlinkSubjectForm,
+//                                     final BindingResult result,
+//                                     final RedirectAttributes redirectAttributes
+//    ){
+//        if(result.hasErrors()) {
+//            redirectAttributes.addFlashAttribute(UNLINK_SUBJECT_FORM_BINDING, result);
+//            return new ModelAndView("redirect:/manage/careers/"+careerId);
+//        }
+//        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
+//        subjectService.unlinkSubjectFromCareer(unlinkSubjectForm.getSubjectId(), careerId);
+//        redirectAttributes.addFlashAttribute(SUBJECT_UNLINKED, true);
+//        return mav;
+//    }
+//
+//
+//    @RequestMapping(value = "/{careerId}/createSubject", method = RequestMethod.POST)
+//    public ModelAndView createSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
+//                                    @Valid @ModelAttribute final CreateSubjectForm createSubjectForm,
+//                                    final BindingResult result,
+//                                    final RedirectAttributes redirectAttributes
+//    ){
+//        if(result.hasErrors()) {
+//            redirectAttributes.addFlashAttribute(CREATE_SUBJECT_FORM_BINDING, result);
+//            return new ModelAndView("redirect:/manage/careers/"+careerId);
+//        }
+//        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
+//        subjectService.createSubject(createSubjectForm.getName(), careerId, createSubjectForm.getYear());
+//        redirectAttributes.addFlashAttribute(SUBJECT_CREATED, true);
+//        return mav;
+//    }
+//
+//    @RequestMapping(value = "/{careerId}/editSubject", method = RequestMethod.POST)
+//    public ModelAndView editSubject(@PathVariable("careerId") @ValidUuid UUID careerId,
+//                                    @Valid @ModelAttribute final EditSubjectForm editSubjectForm,
+//                                    final BindingResult result,
+//                                    final RedirectAttributes redirectAttributes
+//    ){
+//        if(result.hasErrors()) {
+//            redirectAttributes.addFlashAttribute(EDIT_SUBJECT_FORM_BINDING, result);
+//            return new ModelAndView("redirect:/manage/careers/"+careerId);
+//        }
+//        final ModelAndView mav = new ModelAndView("redirect:/manage/careers/"+careerId);
+//        subjectService.updateSubjectCareer(editSubjectForm.getSubjectId(), editSubjectForm.getName(), careerId, editSubjectForm.getYear());
+//        redirectAttributes.addFlashAttribute(SUBJECT_EDITED, true);
+//        return mav;
+//    }
+//
+//    @ModelAttribute("user")
+//    public User getCurrentUser() {
+//        return this.securityService.getCurrentUser().orElse(null);
+//    }
 }

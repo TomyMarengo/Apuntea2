@@ -16,7 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import javax.xml.ws.http.HTTPException;
@@ -40,39 +39,39 @@ public class SearchController {
         this.userService = userService;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView search(@Valid @ModelAttribute("searchForm") final SearchForm searchForm, final BindingResult result, final ModelMap model){
-        if (result.hasErrors())
-            throw new HTTPException(400);
-
-        final ModelAndView mav = new ModelAndView("search");
-
-        userService.findById(searchForm.getUserId()).ifPresent(u -> mav.addObject("filterUser", u));
-
-        Page<Searchable> pageResult = searchService.search(
-                    searchForm.getInstitutionId(),
-                    searchForm.getCareerId(),
-                    searchForm.getSubjectId(),
-                    searchForm.getUserId(),
-                    searchForm.getNormalizedCategory(),
-                    searchForm.getWord(),
-                    searchForm.getSortBy(),
-                    searchForm.getAscending(),
-                    searchForm.getPageNumber(),
-                    searchForm.getPageSize()
-        );
-
-        mav.addObject("maxPage", pageResult.getTotalPages());
-        mav.addObject("currentPage", pageResult.getCurrentPage());
-        mav.addObject("results", pageResult.getContent());
-        mav.addObject(FAVORITE_ADDED, model.getOrDefault(FAVORITE_ADDED, false));
-        mav.addObject(FAVORITE_REMOVED, model.getOrDefault(FAVORITE_REMOVED, false));
-//        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
-
-//        String data = toSafeJson(institutionDataDto);
-//        mav.addObject("institutionData", data);
-        return mav;
-    }
+//    @RequestMapping(method = RequestMethod.GET)
+//    public ModelAndView search(@Valid @ModelAttribute("searchForm") final SearchForm searchForm, final BindingResult result, final ModelMap model){
+//        if (result.hasErrors())
+//            throw new HTTPException(400);
+//
+//        final ModelAndView mav = new ModelAndView("search");
+//
+//        userService.findById(searchForm.getUserId()).ifPresent(u -> mav.addObject("filterUser", u));
+//
+//        Page<Searchable> pageResult = searchService.search(
+//                    searchForm.getInstitutionId(),
+//                    searchForm.getCareerId(),
+//                    searchForm.getSubjectId(),
+//                    searchForm.getUserId(),
+//                    searchForm.getNormalizedCategory(),
+//                    searchForm.getWord(),
+//                    searchForm.getSortBy(),
+//                    searchForm.getAscending(),
+//                    searchForm.getPageNumber(),
+//                    searchForm.getPageSize()
+//        );
+//
+//        mav.addObject("maxPage", pageResult.getTotalPages());
+//        mav.addObject("currentPage", pageResult.getCurrentPage());
+//        mav.addObject("results", pageResult.getContent());
+//        mav.addObject(FAVORITE_ADDED, model.getOrDefault(FAVORITE_ADDED, false));
+//        mav.addObject(FAVORITE_REMOVED, model.getOrDefault(FAVORITE_REMOVED, false));
+////        InstitutionDataDto institutionDataDto = institutionService.getInstitutionData();
+//
+////        String data = toSafeJson(institutionDataDto);
+////        mav.addObject("institutionData", data);
+//        return mav;
+//    }
 
     @ModelAttribute("user")
     public User getCurrentUser() {

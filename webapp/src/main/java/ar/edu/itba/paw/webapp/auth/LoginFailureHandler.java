@@ -13,18 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
-public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
-    @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException {
-        String url;
-        if (exception instanceof LockedException) {
-            url = "/login?banned=true";
-        } else { // UsernameNotFoundException and others
-            url = "/login?error=true";
-        }
-
-        getRedirectStrategy().sendRedirect(request, response, url);
-    }
-}
+//@Component
+//public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+//    @Override
+//    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+//                                        AuthenticationException exception) throws IOException {
+//        String url;
+//        if (exception instanceof LockedException) {
+//            url = "/login?banned=true";
+//        } else { // UsernameNotFoundException and others
+//            url = "/login?error=true";
+//        }
+//
+//        getRedirectStrategy().sendRedirect(request, response, url);
+//    }
+//}

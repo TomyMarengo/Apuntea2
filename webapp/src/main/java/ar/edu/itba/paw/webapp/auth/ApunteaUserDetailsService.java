@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.UUID;
 
 @Component
 public class ApunteaUserDetailsService implements UserDetailsService {
@@ -29,6 +30,8 @@ public class ApunteaUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(role.getRole()));
         }
 
-        return new ApunteaUserDetails(user.getEmail(), user.getPassword(), true, true, true, !user.isBanned(), authorities);
+        return new ApunteaUserDetails(user.getUserId(), user.getEmail(), user.getPassword(),
+                                true, true, true, !user.isBanned(),
+                                       authorities, user.hasProfilePicture());
     }
 }

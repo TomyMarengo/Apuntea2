@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.models.institutional;
 
-import com.google.gson.annotations.Expose;
+//import com.google.gson.annotations.Expose;
 
 import javax.persistence.*;
 import java.io.Serializable;

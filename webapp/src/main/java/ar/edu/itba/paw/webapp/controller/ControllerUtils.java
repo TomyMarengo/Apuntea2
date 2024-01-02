@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+//import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.ModelMap;
@@ -50,23 +49,23 @@ public class ControllerUtils {
     private	static final Logger LOGGER	= LoggerFactory.getLogger(ControllerUtils.class);
     private ControllerUtils(){}
 
-    static void addFormOrGetWithErrors(ModelAndView mav, ModelMap model, String attribute, String errorName, String formName, Class<?> form) {
-        if(model.containsAttribute(attribute)) {
-            mav.addObject(errorName, ((BindingResult) model.get(attribute)).getAllErrors());
-        } else {
-            try {
-                mav.addObject(formName, form.newInstance());
-            } catch (InstantiationException ex) {
-                LOGGER.error("Instantiation exception creating form {}", formName);
-            } catch (IllegalAccessException ex) {
-                LOGGER.error("Illegal access exception creating form {}", formName);
-            }
-        }
-    }
+//    static void addFormOrGetWithErrors(ModelAndView mav, ModelMap model, String attribute, String errorName, String formName, Class<?> form) {
+//        if(model.containsAttribute(attribute)) {
+//            mav.addObject(errorName, ((BindingResult) model.get(attribute)).getAllErrors());
+//        } else {
+//            try {
+//                mav.addObject(formName, form.newInstance());
+//            } catch (InstantiationException ex) {
+//                LOGGER.error("Instantiation exception creating form {}", formName);
+//            } catch (IllegalAccessException ex) {
+//                LOGGER.error("Illegal access exception creating form {}", formName);
+//            }
+//        }
+//    }
 
-    static String toSafeJson(Object object) {
-        return new GsonBuilder().create().toJson(object);
-    }
+//    static String toSafeJson(Object object) {
+//        return new GsonBuilder().create().toJson(object);
+//    }
 }
 
 
