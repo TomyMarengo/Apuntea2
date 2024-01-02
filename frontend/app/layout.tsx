@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'Apuntea',
+  title: "Apuntea",
   description: "Apuntea is a note-sharing app for students.",
 };
 

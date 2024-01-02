@@ -8,15 +8,29 @@
     "start": "next start",
     "lint": "eslint '*/**/*.{js,ts,tsx,jsx,json}' --quiet --fix",
     "format": "prettier --write .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "clsx": "^2.1.0",
     "next": "14.0.4",
+    "next-auth": "^5.0.0-beta.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@storybook/addon-essentials": "^7.6.7",
+    "@storybook/addon-interactions": "^7.6.7",
+    "@storybook/addon-links": "^7.6.7",
+    "@storybook/addon-onboarding": "^1.0.10",
+    "@storybook/blocks": "^7.6.7",
+    "@storybook/nextjs": "^7.6.7",
+    "@storybook/react": "^7.6.7",
+    "@storybook/test": "^7.6.7",
+    "@types/node": "^20.10.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^6.17.0",
@@ -24,8 +38,10 @@
     "eslint": "^8",
     "eslint-config-next": "14.0.4",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-storybook": "^0.6.15",
     "postcss": "^8",
     "prettier": "^3.1.1",
+    "storybook": "^7.6.7",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }
