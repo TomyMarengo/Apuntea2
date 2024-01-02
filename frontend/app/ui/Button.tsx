@@ -1,18 +1,35 @@
+import clsx from "clsx";
+
 interface ButtonProps {
   primary?: boolean;
+  outlined?: boolean;
   label: string;
+  className?: string;
   onClick?: () => void;
 }
 
-export const Button = ({ primary = false, label, ...props }: ButtonProps) => {
-  const mode = primary ? "bg-blue-500" : "bg-gray-500";
+const Button = ({
+  primary = false,
+  outlined = true,
+  className,
+  label,
+  ...props
+}: ButtonProps) => {
   return (
     <button
       type="button"
-      className={["rounded-lg p-4", mode].join(" ")}
+      className={clsx(
+        outlined && "border-2 bg-opacity-0",
+        primary ? "bg-primary border-primary" : "bg-secondary border-secondary",
+        outlined && (primary ? "text-primary" : "text-secondary"),
+        "rounded-3xl px-4 py-2 min-w-32 text-white",
+        className
+      )}
       {...props}
     >
       {label}
     </button>
   );
 };
+
+export default Button;

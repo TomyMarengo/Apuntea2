@@ -5,14 +5,12 @@ import { z } from "zod";
 import type { User } from "@/lib/definitions";
 import bcrypt from "bcrypt";
 
-async function getUser(email: string, password: string): Promise<User | undefined> {
-  try {
-    const user = await sql<User>`SELECT * FROM users WHERE email=${email}`;
-    return user.rows[0];
-  } catch (error) {
-    console.error("Failed to fetch user:", error);
-    throw new Error("Failed to fetch user.");
-  }
+async function getUser(
+  email: string,
+  password: string
+): Promise<User | undefined> {
+  /* TODO: Devolver el JWT y el User*/
+  return undefined;
 }
 
 export const { auth, signIn, signOut } = NextAuth({
