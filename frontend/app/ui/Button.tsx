@@ -1,11 +1,12 @@
 import clsx from "clsx";
 
+
 interface ButtonProps {
   primary?: boolean;
   outlined?: boolean;
   label: string;
   className?: string;
-  onClick?: () => void;
+  onClick?: () => void; 
 }
 
 const Button = ({
@@ -13,6 +14,7 @@ const Button = ({
   outlined = true,
   className,
   label,
+  onClick,
   ...props
 }: ButtonProps) => {
   return (
@@ -25,6 +27,7 @@ const Button = ({
         "rounded-3xl px-4 py-2 min-w-32 text-white",
         className
       )}
+      onClick={onClick}
       {...props}
     >
       {label}
