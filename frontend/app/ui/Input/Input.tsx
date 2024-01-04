@@ -1,12 +1,11 @@
 import clsx from "clsx";
-import React, { useState } from "react";
-import Image from "next/image";
+import styles from "./Input.module.css";
 
 interface InputProps {
   type?: string;
+  initialValue?: string;
   placeholder?: string;
   className?: string;
-  initialValue?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -15,43 +14,19 @@ const Input = ({
   initialValue = "",
   placeholder,
   className,
-  onChange = (_) => {},
+  onChange = () => {},
   ...props
 }: InputProps) => {
-  const [hidden, setHidden] = useState(true);
-
   return (
-    <>
-      <input
-        type={hidden ? type : "text"}
-        className={clsx("form-input px-4 py-3 rounded-md", className)}
-        onChange={onChange}
-        placeholder={placeholder}
-        required
-        {...props}
-      />
-      {type === "password" && (
-        <button type="button" className="" onClick={() => setHidden(!hidden)}>
-          {hidden ? (
-            <Image
-              width="20"
-              height="20"
-              src="svg/eye.svg"
-              alt=""
-              className="icon-s"
-            />
-          ) : (
-            <Image
-              width="20"
-              height="20"
-              src="svg/eye-crossed.svg"
-              alt=""
-              className="icon-s"
-            />
-          )}
-        </button>
-      )}
-    </>
+    <input
+      type={type}
+      defaultValue={initialValue}
+      placeholder={placeholder}
+      className={clsx(styles.input, className)}
+      onChange={(e) => onChange(e)}
+      required
+      {...props}
+    />
   );
 };
 

@@ -19,6 +19,10 @@ const config: Config = {
         secondary: "#fdc286",
         "dark-primary": "#cc6252",
         "dark-secondary": "#fcaa6f",
+        "text": "#5a5044",
+        "bg": "#fefefefe",
+        "dark-text": "#302a24",
+        "dark-bg": "#f9f1e7"
       },
     },
   },

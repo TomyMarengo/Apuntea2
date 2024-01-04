@@ -1,0 +1,14 @@
+.input {
+  @apply block w-full px-4 py-2 text-text bg-bg border border-gray-300 rounded-md transition-all duration-150 ease-in-out focus:border-primary focus:ring-4 focus:ring-primary/25 focus:outline-none;
+}
+
+button + .input {
+  @apply rounded-r-none;
+}
+.password {
+  @apply border border-gray-300 bg-gray-50 px-3 rounded-r-md;
+}
+
+.icon {
+  @apply w-5 h-5 fill-dark-primary;
+}
