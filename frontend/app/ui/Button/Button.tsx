@@ -1,17 +1,17 @@
 import clsx from "clsx";
-
+import styles from "./button.module.css";
 
 interface ButtonProps {
   primary?: boolean;
   outlined?: boolean;
   label: string;
   className?: string;
-  onClick?: () => void; 
+  onClick?: () => void;
 }
 
 const Button = ({
-  primary = false,
-  outlined = true,
+  primary = true,
+  outlined = false,
   className,
   label,
   onClick,
@@ -24,7 +24,8 @@ const Button = ({
         outlined && "border-2 bg-opacity-0",
         primary ? "bg-primary border-primary" : "bg-secondary border-secondary",
         outlined && (primary ? "text-primary" : "text-secondary"),
-        "rounded-3xl px-4 py-2 min-w-32 text-white",
+        { "text-white": !outlined },
+        styles.button,
         className
       )}
       onClick={onClick}
