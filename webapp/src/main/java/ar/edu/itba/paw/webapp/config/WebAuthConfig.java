@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.ApunteaAuthenticationEntryPoint;
 import ar.edu.itba.paw.webapp.auth.filters.AbstractAuthFilter;
-import ar.edu.itba.paw.webapp.auth.filters.CorsFilter;
+import ar.edu.itba.paw.webapp.auth.handlers.ApunteaAccessDeniedHandler;
 import ar.edu.itba.paw.webapp.auth.handlers.AuthFailureHandler;
 import ar.edu.itba.paw.webapp.auth.handlers.AuthSuccessHandler;
 import ar.edu.itba.paw.webapp.auth.jwt.JwtAuthProvider;
@@ -32,8 +32,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -59,9 +64,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthProvider jwtAuthProvider;
 
     @Autowired
-    private CorsFilter corsFilter;
-
-    @Autowired
     private Environment env;
 //    private final static String[] anonymousPaths = {"/login", "/forgot-password", "/challenge", "/register"};
 
@@ -74,8 +76,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
-        // TODO
-        return null;
+        return new ApunteaAccessDeniedHandler();
     }
 
     @Bean
@@ -154,26 +155,36 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public CorsFilter corsFilter() {
-        return new CorsFilter();
+    public CorsConfigurationSource corsConfigurationSource() {
+        final CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowedOrigins(Collections.singletonList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
+        config.setAllowCredentials(true);
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
+        config.setExposedHeaders(Arrays.asList("access-token","refresh-token", "authorization", "X-Total-Pages", "Content-Disposition", "Link","Authorization", "Cache-Control", "Content-Type", "Location"));
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
     }
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.addFilterBefore(corsFilter, ChannelProcessingFilter.class)
-            .csrf().disable()
-            .exceptionHandling().authenticationEntryPoint(authEntryPoint).and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-            // TODO
-//                .accessDeniedHandler(accessDeniedHandler()).and()
-            .headers().cacheControl().disable().and().authorizeRequests()
-            .and().authorizeRequests()
-            // TODO?
-//                .antMatchers(...).access("hasRole('ADMIN')")
-            .antMatchers("/**")
-            .permitAll()
-            .and().addFilterBefore(abstractAuthFilter(), UsernamePasswordAuthenticationFilter.class);
-
+        http.cors().and().csrf().disable()
+                .exceptionHandling()
+                .authenticationEntryPoint(authEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler()).and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().headers().cacheControl().disable()
+                .and().authorizeRequests()
+                .antMatchers("/tokens")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and().addFilterBefore(abstractAuthFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
