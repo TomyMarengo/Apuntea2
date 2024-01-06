@@ -9,7 +9,10 @@ interface InputPasswordProps extends InputHTMLAttributes<HTMLInputElement> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputPassword = ({ onChange = () => {} }: InputPasswordProps) => {
+const InputPassword = ({
+  onChange = () => {},
+  ...props
+}: InputPasswordProps) => {
   const [hidden, setHidden] = useState(true);
 
   return (
@@ -26,9 +29,8 @@ const InputPassword = ({ onChange = () => {} }: InputPasswordProps) => {
         )}
       </button>
       <Input
-        label="password"
+        {...props}
         type={hidden ? "password" : "text"}
-        placeholder="Escribe tu contraseña"
         onChange={onChange}
         required
       />

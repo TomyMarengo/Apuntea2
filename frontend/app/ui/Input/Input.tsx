@@ -27,13 +27,13 @@ const Input: FC<InputProps> = ({
   };
 
   return (
-    <div className="flex flex-row-reverse">
+    <>
       {erasable && (
         <button type="button" className={styles.button} onClick={handleClick}>
           <CrossIcon className={styles.icon} />
         </button>
       )}
-      <label htmlFor={props.id}>
+      <label htmlFor={props.id} className="w-full">
         <input
           {...props}
           type={props.type || "text"}
@@ -45,7 +45,7 @@ const Input: FC<InputProps> = ({
           className={clsx(styles.input, props.className)}
         />
       </label>
-    </div>
+    </>
   );
 };
 

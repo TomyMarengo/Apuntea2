@@ -16,11 +16,7 @@ const LoginForm = () => {
         placeholder="apuntea@apuntea.com"
         required
       />
-      <InputPassword
-        id="password"
-        name="password"
-        placeholder="Enter password"
-      />
+      <InputPassword id="password" name="password" placeholder="Apuntea1234@" />
       <LoginButton />
       <div
         className="flex h-8 items-end space-x-1"
@@ -40,7 +36,11 @@ const LoginForm = () => {
 const LoginButton = () => {
   const { pending } = useFormStatus();
 
-  return <Button aria-disabled={pending}>Log in</Button>;
+  return (
+    <Button type="submit" aria-disabled={pending}>
+      Log in
+    </Button>
+  );
 };
 
 export default LoginForm;
