@@ -16,7 +16,7 @@ public class InstitutionDto {
         institutionDto.name = institution.getName();
         UriBuilder builder = uriInfo.getBaseUriBuilder();
 
-        institutionDto.self = builder.path("institutions").path(String.valueOf(institution.getInstitutionId())).build();
+        institutionDto.self = builder.path("institutions").path(institution.getInstitutionId().toString()).build();
         institutionDto.careers = builder.path("careers").build();
         return institutionDto;
     }
