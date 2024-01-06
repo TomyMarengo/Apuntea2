@@ -1,39 +1,53 @@
 import clsx from "clsx";
 import styles from "./Button.module.css";
+import Link from "next/link";
+import { useMemo, ButtonHTMLAttributes, AnchorHTMLAttributes } from "react";
 
-interface ButtonProps {
+type ButtonPropsCommon = {
+  children: React.ReactNode;
   primary?: boolean;
   outlined?: boolean;
-  label: string;
-  className?: string;
-  onClick?: () => void;
-}
+};
+
+type ButtonProps =
+  | (ButtonPropsCommon & ButtonHTMLAttributes<HTMLButtonElement>)
+  | (ButtonPropsCommon & {
+      href: string;
+    } & AnchorHTMLAttributes<HTMLAnchorElement>);
 
 const Button = ({
   primary = true,
   outlined = false,
-  className,
-  label,
-  onClick,
+  children,
   ...props
 }: ButtonProps) => {
-  return (
-    <button
-      type="button"
-      className={clsx(
-        outlined && "border-2 bg-opacity-0",
+  const classes = useMemo(
+    () =>
+      clsx(
+        outlined && "border bg-opacity-0",
         primary ? "bg-primary border-primary" : "bg-secondary border-secondary",
         outlined && (primary ? "text-primary" : "text-secondary"),
         { "text-white": !outlined },
         styles.button,
-        className
-      )}
-      onClick={onClick}
-      {...props}
-    >
-      {label}
-    </button>
+        props.className
+      ),
+    [outlined, primary, props.className]
   );
+
+  if ("href" in props) {
+    const { href, ...anchorProps } = props;
+    return (
+      <Link href={href} className={classes} {...anchorProps}>
+        {children}
+      </Link>
+    );
+  } else {
+    return (
+      <button type="button" className={classes} {...props}>
+        {children}
+      </button>
+    );
+  }
 };
 
 export default Button;

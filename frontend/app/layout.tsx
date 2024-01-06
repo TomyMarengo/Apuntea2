@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Lato } from "next/font/google";
 import "./globals.css";
+import Navbar from "./ui/Navbar/Navbar";
 
-const inter = Inter({ subsets: ["latin"] });
+const lato = Lato({ weight: ["400", "700", "900"], subsets: ["latin-ext"] });
 
 export const metadata: Metadata = {
-  title: "Apuntea",
+  title: {
+    template: "%s | Apuntea",
+    default: "Apuntea",
+  },
   description: "Apuntea is a note-sharing app for students.",
 };
 
@@ -16,7 +20,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={lato.className}>
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }

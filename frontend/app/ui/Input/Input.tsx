@@ -1,24 +1,17 @@
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FC, InputHTMLAttributes } from "react";
 import styles from "./Input.module.css";
-
+import InputPassword from "./InputPassword";
+import InputAutocomplete from "./InputAutocomplete";
 import { CrossIcon } from "../Icons";
 
-export interface InputProps {
-  type?: string;
-  defaultValue?: string;
-  placeholder?: string;
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   erasable?: boolean;
-  className?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({
-  type = "text",
-  defaultValue = "",
-  placeholder,
+const Input: FC<InputProps> = ({
   erasable = false,
-  className,
   onChange = () => {},
   ...props
 }: InputProps) => {
@@ -40,18 +33,22 @@ const Input = ({
           <CrossIcon className={styles.icon} />
         </button>
       )}
-      <input
-        type={type}
-        value={message}
-        defaultValue={defaultValue}
-        placeholder={placeholder}
-        className={clsx(styles.input, className)}
-        onChange={handleChange}
-        required
-        {...props}
-      />
+      <label htmlFor={props.id}>
+        <input
+          {...props}
+          type={props.type || "text"}
+          defaultValue={props.defaultValue || ""}
+          placeholder={props.placeholder}
+          required={props.required}
+          onChange={handleChange}
+          value={message}
+          className={clsx(styles.input, props.className)}
+        />
+      </label>
     </div>
   );
 };
 
 export default Input;
+
+export { InputPassword, InputAutocomplete };

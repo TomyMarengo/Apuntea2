@@ -17,14 +17,30 @@ export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
-      async authorize(credentials) {
+      name: "credentials",
+      id: "credentials",
+      credentials: {
+        email: {},
+        password: {},
+      },
+      async authorize(credentials, req) {
         const parsedCredentials = z
           .object({ email: z.string().email(), password: z.string().min(6) })
           .safeParse(credentials);
 
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
-          const user = await getUser(email, bcrypt.hashSync(password, 10));
+          const response = await fetch(
+            "http://localhost:8080/paw-2023b-12/tokens",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, password }),
+            }
+          );
+          const data = await response.json();
           if (!user) return null;
           return user;
         }
@@ -34,4 +50,12 @@ export const { auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    async jwt({ token, user, account, profile }) {
+      return token;
+    },
+  },
 });
