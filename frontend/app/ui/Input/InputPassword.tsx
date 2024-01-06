@@ -16,7 +16,7 @@ const InputPassword = ({ onChange = () => {} }: InputPasswordProps) => {
     <div className="flex flex-row-reverse">
       <button
         type="button"
-        className={styles.password}
+        className={styles.button}
         onClick={() => setHidden(!hidden)}
       >
         {hidden ? (

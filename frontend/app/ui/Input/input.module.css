@@ -1,14 +1,29 @@
 .input {
-  @apply block w-full px-4 py-2 text-text bg-bg border border-gray-300 rounded-md transition-all duration-150 ease-in-out focus:border-primary focus:ring-4 focus:ring-primary/25 focus:outline-none;
+  @apply block w-full px-4 py-2 text-text bg-bg border border-gray-300 rounded-md transition-all duration-150 ease-in-out 
+  focus:border-primary focus:ring-4 focus:ring-primary/25 focus:outline-none;
 }
 
-button + .input {
+.button + .input {
   @apply rounded-r-none;
 }
-.password {
+
+.button + div > .input {
+  @apply rounded-r-none;
+}
+
+.button {
   @apply border border-gray-300 bg-gray-50 px-3 rounded-r-md;
 }
 
 .icon {
   @apply w-5 h-5 fill-dark-primary;
+}
+
+.control {
+  @apply px-2 py-1 rounded-md border-gray-300 hover:shadow-none
+  focus:border-primary focus:ring-4 focus:ring-primary/25 focus:outline-none !important;
+}
+
+.placeholder {
+  @apply text-gray-400 !important;
 }
