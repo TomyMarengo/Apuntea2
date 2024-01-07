@@ -16,7 +16,7 @@ public interface UserService {
 
     Optional<User> findByUsername(String username);
 
-    void create(String email, String password, UUID careerId, Role role);
+    UUID create(String email, String password, UUID careerId, Role role);
 
     void updateProfile(String firstName, String lastName, String username, MultipartFile multipartFile, UUID careerId);
 

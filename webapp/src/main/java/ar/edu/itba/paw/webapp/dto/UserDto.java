@@ -6,6 +6,7 @@ import ar.edu.itba.paw.models.user.User;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.UUID;
 
 public class UserDto {
     private String email;
@@ -15,6 +16,11 @@ public class UserDto {
     private String username;
     private String status;
     private boolean notificationsEnabled;
+
+    // creation properties
+    private String password;
+    private UUID careerId;
+
     // TODO: Add roles?
     private URI self;
     private URI career;
@@ -37,7 +43,7 @@ public class UserDto {
         userDto.username = user.getUsername();
         userDto.status = user.getStatus().toString();
         userDto.notificationsEnabled = user.hasNotificationsEnabled();
-        userDto.self = uriInfo.getBaseUriBuilder().path("users").path(user.getEmail()).build();
+        userDto.self = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).build();
 
         UriBuilder builder = uriInfo.getBaseUriBuilder();
 
@@ -49,10 +55,10 @@ public class UserDto {
         userDto.noteFavorites = uriInfo.getBaseUriBuilder().path("notes").queryParam("favBy", user.getUserId()).build();
         userDto.directoryFavorites = uriInfo.getBaseUriBuilder().path("directories").queryParam("favBy", user.getUserId()).build();
         userDto.subjectFavorites = uriInfo.getBaseUriBuilder().path("subjects").queryParam("favBy", user.getUserId()).build();
-        userDto.following = uriInfo.getBaseUriBuilder().path("users").path(user.getEmail()).path("following").build();
-        userDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("owner", user.getEmail()).build();
-        userDto.noteGroups = uriInfo.getBaseUriBuilder().path("notes").queryParam("owner", user.getEmail()).queryParam("grouped").build();
-        userDto.reviewsReceived = uriInfo.getBaseUriBuilder().path("users").path(user.getEmail()).path("reviews").build();
+        userDto.following = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).path("following").build();
+        userDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("owner", user.getUserId().toString()).build();
+        userDto.noteGroups = uriInfo.getBaseUriBuilder().path("notes").queryParam("owner", user.getUserId().toString()).queryParam("grouped").build();
+        userDto.reviewsReceived = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).path("reviews").build();
         return userDto;
     }
 
@@ -199,4 +205,20 @@ public class UserDto {
     public URI getReviewsReceived() {
         return reviewsReceived;
     }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setCareerId(UUID careerId) {
+        this.careerId = careerId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    public UUID getCareerId() {
+        return careerId;
+    }
 }
+

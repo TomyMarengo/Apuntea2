@@ -66,7 +66,7 @@ class UserJpaDao implements UserDao {
     }
 
     @Override
-    public void create(final String email, final String password, final Career career, final String lang, final Collection<Role> roles){
+    public UUID create(final String email, final String password, final Career career, final String lang, final Collection<Role> roles){
         User user = new User.UserBuilder()
                 .email(email)
                 .password(password)
@@ -76,6 +76,7 @@ class UserJpaDao implements UserDao {
                 .status(UserStatus.ACTIVE)
                 .build();
         em.persist(user);
+        return user.getUserId();
     }
 
     @Override

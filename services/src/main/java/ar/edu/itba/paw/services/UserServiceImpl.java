@@ -113,11 +113,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void create(String email, String password, UUID careerId, Role role) {
+    public UUID create(String email, String password, UUID careerId, Role role) {
         final String lang = LocaleContextHolder.getLocale().getLanguage();
         Career career = careerDao.getCareerById(careerId).orElseThrow(InvalidCareerException::new);
-        userDao.create(email, passwordEncoder.encode(password), career, lang, Collections.singleton(role));
+        UUID userId = userDao.create(email, passwordEncoder.encode(password), career, lang, Collections.singleton(role));
         LOGGER.info("User with email {} created (registered language: {})", email, lang);
+        return userId;
     }
 
     @Transactional

@@ -180,7 +180,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
-                .antMatchers("/tokens")
+                .antMatchers("/tokens", "/users") // TODO: Change
                 .permitAll()
                 .anyRequest()
                 .authenticated()
