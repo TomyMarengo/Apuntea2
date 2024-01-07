@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserDao {
-    void create(String email, String password, Career career, String lang, Collection<Role> role);
+    UUID create(String email, String password, Career career, String lang, Collection<Role> role);
     Optional<User> findByEmail(String email);
     Optional<User> findByUsername(String username);
     Optional<User> findById(UUID userId);

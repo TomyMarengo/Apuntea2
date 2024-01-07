@@ -40,10 +40,8 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     private static final String AUTHORITIES_CLAIM = "authorities";
     private static final String TOKEN_TYPE_CLAIM = "tokenType";
     private static final String IS_ADMIN_CLAIM = "isAdmin";
-    private static final String USERNAME_CLAIM = "username";
+    private static final String EMAIL_CLAIM = "email";
     private static final String USER_ID_CLAIM = "userId";
-    private static final String IMAGE_LINK_CLAIM = "imageLink";
-
 
     public JwtTokenServiceImpl(Environment environment) {
         this.jwtSecret = environment.getRequiredProperty("jwt.secret");
@@ -73,16 +71,9 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .withIssuer(jwtIssuer)
                 .withClaim(TOKEN_TYPE_CLAIM, tokenType.getType())
                 .withClaim(IS_ADMIN_CLAIM , roles.contains(Role.ROLE_ADMIN.getRole()))
-                .withClaim(USERNAME_CLAIM, userDetails.getUsername())
+                .withClaim(EMAIL_CLAIM, userDetails.getUsername())
                 .withClaim(USER_ID_CLAIM, userDetails.getUserId().toString());
 
-        // TODO: Check if this is needed
-//        if (userDetails.hasImage()) {
-//            token.withClaim(IMAGE_LINK_CLAIM, new URL(environment.getRequiredProperty("url.schema"),
-//                    environment.getRequiredProperty("url.domain"),
-//                    Integer.parseInt(environment.getRequiredProperty("url.port")),
-//                    environment.getRequiredProperty("url.baseDir") + "users/" + userDetails.getUserId() + "/image").toString());
-//        }
         return token.sign(Algorithm.HMAC256(jwtSecret.getBytes()));
 
     }

@@ -32,6 +32,7 @@ public class ApunteaUserDetailsService implements UserDetailsService {
 
         return new ApunteaUserDetails(user.getUserId(), user.getEmail(), user.getPassword(),
                                 true, true, true, !user.isBanned(),
-                                       authorities, user.hasProfilePicture());
+                                       authorities);
+
     }
 }
