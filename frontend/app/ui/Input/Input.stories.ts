@@ -18,6 +18,14 @@ type Story = StoryObj<typeof meta>;
 export const Base: Story = {
   args: {
     type: "text",
-    initialValue: "Hello, world!",
+    placeholder: "Write here",
+  },
+};
+
+export const Erasable: Story = {
+  args: {
+    type: "text",
+    placeholder: "Write here",
+    erasable: true,
   },
 };

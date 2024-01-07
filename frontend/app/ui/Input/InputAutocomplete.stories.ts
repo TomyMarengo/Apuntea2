@@ -4,7 +4,7 @@ import InputAutocomplete from "./InputAutocomplete";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: "InputPassword",
+  title: "InputAutocomplete",
   component: InputAutocomplete,
   parameters: {
     layout: "centered",
@@ -15,6 +15,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Autocomplete: Story = {
-  args: {},
+const institutions = [
+  { label: "ITBA", value: "ITBA" },
+  { label: "UBA", value: "UBA" },
+];
+
+export const Base: Story = {
+  args: {
+    placeholder: "Enter your password",
+    items: institutions,
+  },
 };
