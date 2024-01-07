@@ -4,7 +4,7 @@ import Input from "./Input";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: "Input",
+  title: "Input/Input",
   component: Input,
   parameters: {
     layout: "centered",

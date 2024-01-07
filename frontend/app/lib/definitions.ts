@@ -5,7 +5,31 @@ export type User = {
   password: string;
 };
 
+export type Note = {
+  self: string;
+  name?: string;
+  fileType: string;
+  category?: string;
+  visible?: boolean;
+  interactions?: number;
+  createdAt?: Date;
+  lastModifiedAt?: Date;
+  subject?: string;
+  parent?: string;
+  createdBy?: string;
+  file?: string;
+};
+
 export interface Option {
   readonly label: string;
   readonly value: string;
+}
+
+export enum FileType {
+  JPG = "jpg",
+  JPEG = "jpeg",
+  PNG = "png",
+  PDF = "pdf",
+  MP3 = "mp3",
+  MP4 = "mp4",
 }
