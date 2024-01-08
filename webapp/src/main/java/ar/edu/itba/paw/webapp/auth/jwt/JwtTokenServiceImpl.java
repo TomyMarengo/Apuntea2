@@ -48,7 +48,6 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         this.jwtIssuer = environment.getRequiredProperty("jwt.issuer");
     }
 
-
     @Override
     public String createAccessToken(final ApunteaUserDetails userDetails) throws MalformedURLException {
         return createToken(new Date(System.currentTimeMillis() + ACCESS_TOKEN_DURATION_SECS * 1000), userDetails, JwtTokenType.ACCESS);
@@ -64,15 +63,13 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
         final JWTCreator.Builder token =  JWT.create()
                 .withJWTId(generateTokenIdentifier())
-                .withSubject(userDetails.getUsername())
-                .withClaim(AUTHORITIES_CLAIM, roles)
+                .withSubject(userDetails.getUserId().toString())
                 .withIssuedAt(new Date())
                 .withExpiresAt(expiresAt)
                 .withIssuer(jwtIssuer)
+                .withClaim(AUTHORITIES_CLAIM, roles)
                 .withClaim(TOKEN_TYPE_CLAIM, tokenType.getType())
-                .withClaim(IS_ADMIN_CLAIM , roles.contains(Role.ROLE_ADMIN.getRole()))
-                .withClaim(EMAIL_CLAIM, userDetails.getUsername())
-                .withClaim(USER_ID_CLAIM, userDetails.getUserId().toString());
+                .withClaim(EMAIL_CLAIM, userDetails.getUsername());
 
         return token.sign(Algorithm.HMAC256(jwtSecret.getBytes()));
 
