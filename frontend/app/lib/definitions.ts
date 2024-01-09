@@ -20,6 +20,18 @@ export type Note = {
   file?: string;
 };
 
+export type Directory = {
+  self: string;
+  name?: string;
+  visible?: boolean;
+  iconColor?: string;
+  createdAt?: Date;
+  lastModifiedAt?: Date;
+  subject?: string;
+  parent?: string;
+  createdBy?: string;
+};
+
 export interface Option {
   readonly label: string;
   readonly value: string;
