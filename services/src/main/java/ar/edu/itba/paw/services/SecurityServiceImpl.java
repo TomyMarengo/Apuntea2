@@ -36,11 +36,11 @@ public class SecurityServiceImpl implements SecurityService{
     @Transactional
     @Override
     public Optional<User> getCurrentUser() {
-        final Optional<String> mayBeEmail = getCurrentUserEmail();
-        if (!mayBeEmail.isPresent()){
+        final Optional<String> maybeEmail = getCurrentUserEmail();
+        if (!maybeEmail.isPresent()){
             return Optional.empty();
         }
-        return userDao.findByEmail(mayBeEmail.get());
+        return userDao.findByEmail(maybeEmail.get());
     }
 
     @Transactional

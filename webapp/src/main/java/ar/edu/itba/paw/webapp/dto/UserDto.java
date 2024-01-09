@@ -15,7 +15,7 @@ public class UserDto {
     private String locale;
     private String username;
     private String status;
-    private boolean notificationsEnabled;
+    private Boolean notificationsEnabled;
 
     // creation properties
     private String password;
@@ -42,16 +42,19 @@ public class UserDto {
         userDto.locale = user.getLocale().toString();
         userDto.username = user.getUsername();
         userDto.status = user.getStatus().toString();
-        userDto.notificationsEnabled = user.hasNotificationsEnabled();
+        userDto.notificationsEnabled = user.setNotificationsEnabled();
         userDto.self = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).build();
 
         UriBuilder builder = uriInfo.getBaseUriBuilder();
 
         final Career career = user.getCareer();
-        userDto.institution = builder.path("institutions").path(career.getInstitutionId().toString()).build();
-        userDto.career = builder.path("careers").path(career.getCareerId().toString()).build();
+        if (career != null) {
+            userDto.institution = builder.path("institutions").path(career.getInstitutionId().toString()).build();
+            userDto.career = builder.path("careers").path(career.getCareerId().toString()).build();
+        }
         // TODO: Check if this is efficient
-        userDto.picture = uriInfo.getBaseUriBuilder().path("pictures").path(user.getProfilePicture().getImageId().toString()).build();
+        if (user.getProfilePicture() != null)
+            userDto.picture = uriInfo.getBaseUriBuilder().path("pictures").path(user.getProfilePicture().getImageId().toString()).build();
         userDto.noteFavorites = uriInfo.getBaseUriBuilder().path("notes").queryParam("favBy", user.getUserId()).build();
         userDto.directoryFavorites = uriInfo.getBaseUriBuilder().path("directories").queryParam("favBy", user.getUserId()).build();
         userDto.subjectFavorites = uriInfo.getBaseUriBuilder().path("subjects").queryParam("favBy", user.getUserId()).build();
@@ -86,7 +89,7 @@ public class UserDto {
         this.status = status;
     }
 
-    public void setNotificationsEnabled(boolean notificationsEnabled) {
+    public void setNotificationsEnabled(Boolean notificationsEnabled) {
         this.notificationsEnabled = notificationsEnabled;
     }
 
@@ -158,7 +161,7 @@ public class UserDto {
         return status;
     }
 
-    public boolean isNotificationsEnabled() {
+    public Boolean getNotificationsEnabled() {
         return notificationsEnabled;
     }
 

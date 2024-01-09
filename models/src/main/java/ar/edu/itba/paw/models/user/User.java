@@ -140,7 +140,7 @@ public class User {
         return career.getInstitutionId();
     }
 
-    public boolean hasNotificationsEnabled() {
+    public boolean setNotificationsEnabled() {
         return notificationsEnabled;
     }
 

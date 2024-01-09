@@ -20,6 +20,14 @@ public class Page<T>{
         return content;
     }
 
+    public int getPreviousPage()  {
+        return currentPage == 1? currentPage : currentPage - 1;
+    }
+
+    public int getNextPage()  {
+        return currentPage == getTotalPages()? currentPage : currentPage + 1;
+    }
+
     public int getCurrentPage() {
         return currentPage;
     }

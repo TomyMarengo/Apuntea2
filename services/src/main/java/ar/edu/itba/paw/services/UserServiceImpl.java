@@ -125,11 +125,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateProfile(String firstName, String lastName, String username, MultipartFile profilePicture, UUID careerId) {
         User user = securityService.getCurrentUserOrThrow();
-        Career career = careerDao.getCareerById(careerId).orElseThrow(InvalidCareerException::new);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setUsername(username);
-        user.setCareer(career);
+        if (firstName != null) user.setFirstName(firstName);
+        if (lastName != null) user.setLastName(lastName);
+        if (username != null) user.setUsername(username);
+        if (careerId != null) {
+            Career career = careerDao.getCareerById(careerId).orElseThrow(InvalidCareerException::new);
+            user.setCareer(career);
+        }
 
         if (profilePicture != null && !profilePicture.isEmpty()) {
             try {
@@ -210,7 +212,7 @@ public class UserServiceImpl implements UserService {
     public void updateNotificationsEnabled(boolean notificationsEnabled) {
         User user = securityService.getCurrentUserOrThrow();
         user.setNotificationsEnabled(notificationsEnabled);
-        LOGGER.info("Notifications enabled updated for user with email: {}, updated to {}", user.getEmail(), user.hasNotificationsEnabled());
+        LOGGER.info("Notifications enabled updated for user with email: {}, updated to {}", user.getEmail(), user.setNotificationsEnabled());
     }
 
     /* Function to avoid using formula inside User,
