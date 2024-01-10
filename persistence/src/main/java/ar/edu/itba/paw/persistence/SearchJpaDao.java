@@ -31,22 +31,22 @@ public class SearchJpaDao implements SearchDao {
         this.directoryDao = directoryDao;
     }
 
-    private static final String WORD_CONDITION = "AND LOWER(t.name) LIKE LOWER(:name) ESCAPE '!' ";
 
     @Override
     public List<Searchable> search(SearchArguments sa) {
-        SortArguments sortArgs = sa.getSortArguments();
+        /*SortArguments sortArgs = sa.getSortArguments();
 
         QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
                 .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Search t WHERE TRUE ");
 
         applyInstitutionFilters(queryCreator, sa);
-        return getSearchResults(queryCreator, sa);
+        return getSearchResults(queryCreator, sa);*/
+        return null;
     }
 
     private List<Searchable> getSearchResults(QueryCreator queryCreator, SearchArguments sa){
-        SortArguments sortArgs = sa.getSortArguments();
+        /*SortArguments sortArgs = sa.getSortArguments();
         applyGeneralFilters(queryCreator, sa);
 
         queryCreator.append("ORDER BY isNote ASC, ").append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME)).append(sortArgs.isAscending() ? "" : " DESC ");
@@ -79,12 +79,13 @@ public class SearchJpaDao implements SearchDao {
             sa.getCurrentUserId().ifPresent(uId -> noteDao.loadNoteFavorites(noteIds, uId));
         }
 
-       return searchables;
+       return searchables;*/
+        return null;
     }
 
     @Override
     public int countSearchResults(SearchArguments sa) {
-        QueryCreator queryCreator = new QueryCreator("SELECT COUNT(DISTINCT t.id) FROM Search t WHERE TRUE ");
+        /*QueryCreator queryCreator = new QueryCreator("SELECT COUNT(DISTINCT t.id) FROM Search t WHERE TRUE ");
 
         applyInstitutionFilters(queryCreator, sa);
         applyGeneralFilters(queryCreator, sa);
@@ -92,24 +93,26 @@ public class SearchJpaDao implements SearchDao {
         Query query = em.createNativeQuery(queryCreator.createQuery());
         queryCreator.getParams().forEach(query::setParameter);
 
-        return ((BigInteger)query.getSingleResult()).intValue();
+        return ((BigInteger)query.getSingleResult()).intValue();*/
+        return 0;
     }
 
     @Override
     public List<Searchable> getNavigationResults(SearchArguments sa, UUID parentId) {
-        SortArguments sortArgs = sa.getSortArguments();
+        /*SortArguments sortArgs = sa.getSortArguments();
 
         QueryCreator queryCreator = new QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)), (category != 'DIRECTORY') as isNote, ")
                 .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Navigation t WHERE t.parent_id = :parentId ");
         queryCreator.addParameter("parentId", parentId);
 
-        return getSearchResults(queryCreator, sa);
+        return getSearchResults(queryCreator, sa);*/
+        return null;
     }
 
     @Override
     public int countNavigationResults(SearchArguments sa, UUID parentId){
-        QueryCreator queryCreator = new QueryCreator("SELECT COUNT(DISTINCT t.id) FROM Navigation t WHERE t.parent_id = :parentId ");
+        /*QueryCreator queryCreator = new QueryCreator("SELECT COUNT(DISTINCT t.id) FROM Navigation t WHERE t.parent_id = :parentId ");
         queryCreator.addParameter("parentId", parentId);
 
         applyGeneralFilters(queryCreator, sa);
@@ -117,7 +120,8 @@ public class SearchJpaDao implements SearchDao {
         Query query = em.createNativeQuery(queryCreator.createQuery());
         queryCreator.getParams().forEach(query::setParameter);
 
-        return ((BigInteger)query.getSingleResult()).intValue();
+        return ((BigInteger)query.getSingleResult()).intValue();*/
+        return 0;
     }
 
     @Override
@@ -136,38 +140,6 @@ public class SearchJpaDao implements SearchDao {
         return ((BigInteger)em.createNativeQuery("SELECT COUNT(*) FROM Navigation WHERE parent_id = :parentId")
                 .setParameter("parentId", parentId)
                 .getSingleResult()).intValue();
-    }
-
-    private void applyInstitutionFilters(QueryCreator queryCreator, SearchArguments sa) {
-        queryCreator.addConditionIfPresent(INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
-        queryCreator.addConditionIfPresent(CAREER_ID, "=", "AND", sa.getCareerId());
-        queryCreator.addConditionIfPresent(SUBJECT_ID, "=", "AND", sa.getSubjectId());
-    }
-
-    private void applyGeneralFilters(QueryCreator queryCreator, SearchArguments sa) {
-        sa.getCategory().ifPresent(c -> {
-            if (c == Category.NOTE) {
-                queryCreator.addConditionIfPresent(CATEGORY, "!=", "AND", Optional.of(Category.DIRECTORY.toString()));
-            } else {
-                queryCreator.addConditionIfPresent(CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString));
-            }
-        });
-
-        queryCreator.addConditionIfPresent(USER_ID, "=", "AND", sa.getUserId());
-
-        sa.getWord().ifPresent(w -> {
-                    String searchWord = escapeLikeString(w);
-                    queryCreator.append(WORD_CONDITION);
-                    queryCreator.addParameter(NAME, searchWord);
-                }
-        );
-
-        if (sa.getCurrentUserId().isPresent()) {
-            queryCreator.append("AND (t.visible OR t.user_id = :currentUserId) ");
-            queryCreator.addParameter(CURRENT_USER_ID, sa.getCurrentUserId().get());
-        } else {
-            queryCreator.append("AND t.visible ");
-        }
     }
 
 }

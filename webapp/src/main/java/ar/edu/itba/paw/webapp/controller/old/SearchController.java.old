@@ -8,7 +8,7 @@ import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
-import ar.edu.itba.paw.webapp.forms.search.SearchForm;
+import ar.edu.itba.paw.webapp.forms.search.NoteForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,7 +50,7 @@ public class SearchController {
         userService.findById(searchForm.getUserId()).ifPresent(u -> mav.addObject("filterUser", u));
 
         Page<Searchable> pageResult = searchService.search(
-                    searchForm.getInstitutionId(),
+                    searchForm.getInstitutionId()2,
                     searchForm.getCareerId(),
                     searchForm.getSubjectId(),
                     searchForm.getUserId(),

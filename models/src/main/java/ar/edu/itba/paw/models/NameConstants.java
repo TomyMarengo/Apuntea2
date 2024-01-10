@@ -59,6 +59,7 @@ public class NameConstants {
     public static final String IMAGE = "image";
     public static final String PARENT_ID = "parent_id";
     public static final String DIRECTORY_ID = "directory_id";
+    public static final String FAV_BY = "favBy";
     public static final String SCORE = "score";
     public static final String ROOT_DIRECTORY_ID = "root_directory_id";
     public static final String OWNER_ID = "owner_id";

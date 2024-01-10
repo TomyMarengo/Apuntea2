@@ -279,4 +279,19 @@ CREATE TABLE IF NOT EXISTS User_Note_Interactions (
     CONSTRAINT "FK_user_note_interactions_notes" FOREIGN KEY (note_id) REFERENCES Notes (note_id) ON DELETE CASCADE
 );
 
+-----------------------------------------------------------------------------------------------------------
+--FINAL
 
+CREATE OR REPLACE VIEW Normalized_Directories AS (
+    SELECT d.directory_id as id, d.directory_name as name, d.parent_id, d.user_id, d.created_at, d.last_modified_at, d.visible
+    FROM Directories d
+);
+
+CREATE OR REPLACE VIEW Normalized_Notes AS (
+    SELECT n.note_id as id, n.note_name as name, n.parent_id, n.user_id, n.subject_id, n.category, n.created_at, n.last_modified_at, n.visible
+    FROM Notes n
+);
+
+DROP VIEW IF EXISTS Navigation;
+DROP VIEW IF EXISTS Search;
+DROP VIEW IF EXISTS InstitutionData;

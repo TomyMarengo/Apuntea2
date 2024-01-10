@@ -1,44 +1,57 @@
 package ar.edu.itba.paw.webapp.forms.search;
 
-import ar.edu.itba.paw.webapp.validation.ValidSortParams;
+import ar.edu.itba.paw.webapp.validation.ValidUuid;
+import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.QueryParam;
+import java.util.UUID;
 
-@ValidSortParams
-public class SortedSearchableForm {
-    private boolean ascending = false;
+public class SortedSearchableForm { //TODO: Add error messages
+    @DefaultValue("true")
+    @QueryParam("asc")
+    private boolean ascending;
 
-    @Pattern(regexp = "note|directory|theory|practice|exam|other|all")
-    private String category;
+    @ValidUuid
+    @QueryParam("userId")
+    private UUID userId;
 
-    @Pattern(regexp = "score|name|date|modified")
-    private String sortBy = "modified";
+    @Min(1)
+    @QueryParam("page")
+    @DefaultValue("1")
+    private int page;
 
-    public String getCategory() {
-        return category;
-    }
+    @Range(min = 4, max = 24)
+    @QueryParam("pageSize")
+    @DefaultValue("12")
+    private int pageSize;
 
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    @Size(max = 50)
+    @QueryParam("word")
+    private String word;
 
-    public String getSortBy() {
-        return sortBy;
-    }
+    @ValidUuid
+    @QueryParam("institutionId")
+    private UUID institutionId;
 
-    public void setSortBy(String sortBy) {
-        this.sortBy = sortBy;
-    }
+    @ValidUuid
+    @QueryParam("careerId")
+    private UUID careerId;
 
-    public String getNormalizedCategory() {
-        if (category.equals("all"))
-            return null;
-        return category;
-    }
+    @ValidUuid
+    @QueryParam("subjectId")
+    private UUID subjectId;
 
-    public boolean getIsNote() {
-        return !category.equals("all") && !category.equals("directory");
-    }
+    @ValidUuid
+    @QueryParam("parentId")
+    private UUID parentId;
+
+    @ValidUuid
+    @QueryParam("favBy")
+    private UUID favBy;
+
 
     public boolean getAscending() {
         return ascending;
@@ -47,5 +60,82 @@ public class SortedSearchableForm {
     public void setAscending(boolean ascending) {
         this.ascending = ascending;
     }
+
+    public int getPageNumber() {
+        return page;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.page = pageNumber;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public void setWord(String word) {
+        this.word = word;
+    }
+
+
+    public UUID getInstitutionId() {
+        return institutionId;
+    }
+
+    public void setInstitutionId(UUID institutionId) {
+        this.institutionId = institutionId;
+    }
+
+    public UUID getCareerId() {
+        return careerId;
+    }
+
+    public void setCareerId(UUID careerId) {
+        this.careerId = careerId;
+    }
+
+    public UUID getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(UUID subjectId) {
+        this.subjectId = subjectId;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public UUID getParentId() {
+        return parentId;
+    }
+
+    public SortedSearchableForm setParentId(UUID parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
+
+    public UUID getFavBy() {
+        return favBy;
+    }
+
+    public SortedSearchableForm setFavBy(UUID favBy) {
+        this.favBy = favBy;
+        return this;
+    }
+
 
 }

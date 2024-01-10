@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.search.SearchArguments;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,5 +19,6 @@ public interface DirectoryService {
     DirectoryFavoriteGroups getFavorites();
     void addFavorite(UUID directoryId);
     void removeFavorite(UUID directoryId);
+    Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, String sortBy, boolean ascending, int page, int pageSize);
 }
 

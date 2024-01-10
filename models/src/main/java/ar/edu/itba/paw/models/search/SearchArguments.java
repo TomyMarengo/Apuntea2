@@ -13,6 +13,8 @@ public class SearchArguments {
     private String word;
     private UUID userId;
     private UUID currentUserId;
+    private UUID parentId;
+    private UUID favBy;
     private SortArguments sortArgs;
     private int page;
     private int pageSize;
@@ -25,6 +27,8 @@ public class SearchArguments {
         this.word = builder.word;
         this.userId = builder.userId;
         this.currentUserId = builder.currentUserId;
+        this.parentId = builder.parentId;
+        this.favBy = builder.favBy;
         this.sortArgs = builder.sortArgs;
         this.page = builder.page;
         this.pageSize = builder.pageSize;
@@ -57,7 +61,16 @@ public class SearchArguments {
         return Optional.ofNullable(currentUserId);
     }
 
+    public Optional<UUID> getParentId() {
+        return Optional.ofNullable(parentId);
+    }
+
+    public Optional<UUID> getFavBy() {
+        return Optional.ofNullable(favBy);
+    }
+
     public SortArguments getSortArguments() { return sortArgs; }
+
 
     public int getPage() {
         return page;
@@ -75,6 +88,8 @@ public class SearchArguments {
         private String word;
         private UUID userId;
         private UUID currentUserId;
+        private UUID parentId;
+        private UUID favBy;
         private SortArguments sortArgs;
         private int page;
         private int pageSize;
@@ -121,6 +136,11 @@ public class SearchArguments {
             return this;
         }
 
+        public SearchArgumentsBuilder parentId(UUID parentId) {
+            this.parentId = parentId;
+            return this;
+        }
+
         public SearchArgumentsBuilder sortBy(String sortBy) {
             if (sortBy != null && !sortBy.isEmpty())
                 this.sortArgs.setSortBy(SortArguments.SortBy.valueOf(sortBy.toUpperCase()));
@@ -139,6 +159,11 @@ public class SearchArguments {
 
         public SearchArgumentsBuilder pageSize(int pageSize) {
             this.pageSize = pageSize;
+            return this;
+        }
+
+        public SearchArgumentsBuilder favBy(UUID favBy) {
+            this.favBy = favBy;
             return this;
         }
 

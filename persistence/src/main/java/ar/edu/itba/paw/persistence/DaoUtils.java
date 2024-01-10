@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.search.SearchArguments;
+
 import static ar.edu.itba.paw.models.search.SortArguments.*;
 import static ar.edu.itba.paw.models.NameConstants.*;
 
@@ -42,6 +45,12 @@ public class DaoUtils {
             return query.toString();
         }
 
+        <T> QueryCreator appendIfPresent(Optional<T> opt, final String suffix) {
+            if (opt.isPresent())
+                query.append(suffix);
+            return this;
+        }
+
         QueryCreator append(final String suffix) {
             query.append(suffix);
             return this;
@@ -66,4 +75,37 @@ public class DaoUtils {
     }
 
     private DaoUtils() {} // Make class non-instantiable
+
+
+    static void applyInstitutionalFilters(final QueryCreator queryCreator, final SearchArguments sa) {
+        queryCreator.addConditionIfPresent(INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
+        queryCreator.addConditionIfPresent(CAREER_ID, "=", "AND", sa.getCareerId());
+        queryCreator.addConditionIfPresent(SUBJECT_ID, "=", "AND", sa.getSubjectId());
+    }
+
+    /**
+     * Applies the category, user_id and word filters to the queryCreator
+     * Warning: This method assumes that the queryCreator already has the "WHERE TRUE" clause, also it assumes that the tuple is named 't'
+     * @param queryCreator The queryCreator to which the filters will be applied
+     * @param sa The search arguments
+     */
+    static void applyGeneralFilters(final QueryCreator queryCreator, final SearchArguments sa) {
+        queryCreator.addConditionIfPresent(CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString));
+
+        queryCreator.addConditionIfPresent(USER_ID, "=", "AND", sa.getUserId());
+
+        sa.getWord().ifPresent(w -> {
+                    String searchWord = escapeLikeString(w);
+                    queryCreator.append("AND LOWER(t.name) LIKE LOWER(:name) ESCAPE '!' ")
+                                .addParameter(NAME, searchWord);
+                }
+        );
+
+        if (sa.getCurrentUserId().isPresent()) {
+            queryCreator.append("AND (t.visible OR t.user_id = :currentUserId) ");
+            queryCreator.addParameter(CURRENT_USER_ID, sa.getCurrentUserId().get());
+        } else {
+            queryCreator.append("AND t.visible ");
+        }
+    }
 }

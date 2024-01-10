@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 
@@ -35,5 +36,11 @@ public interface DirectoryDao {
     void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId);
 
     void loadRootDirsFileQuantity(List<UUID> directoryIds, UUID userToFilterId, UUID currentUserId);
+
+    List<Directory> search(SearchArguments sa);
+    List<Directory> navigate(SearchArguments sa);
+
+    int countSearchResults(SearchArguments sa);
+    int countNavigationResults(SearchArguments sa);
 }
 

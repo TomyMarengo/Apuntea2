@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.services;
 
+import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.persistence.DirectoryDao;
@@ -14,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class DirectoryServiceImpl implements DirectoryService{
+public class DirectoryServiceImpl implements DirectoryService {
     private final DirectoryDao directoryDao;
     private final SecurityService securityService;
     private final EmailService emailService;
@@ -45,6 +47,36 @@ public class DirectoryServiceImpl implements DirectoryService{
     public DirectoryPath getDirectoryPath(UUID directoryId) {
         List<Directory> directories =  directoryDao.getDirectoryPath(directoryId);
         return new DirectoryPath(directories);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, String sortBy, boolean ascending, int page, int pageSize) {
+        SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
+                .userId(userId)
+                .parentId(parentId)
+                .favBy(favBy)
+                .word(word)
+                .sortBy(sortBy)
+                .ascending(ascending);
+        Optional<User> maybeUser = securityService.getCurrentUser();
+        maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
+
+        boolean navigate = parentId != null || favBy != null; // Maybe this should be an additional parameter
+
+        SearchArguments searchArgumentsWithoutPaging = sab.build();
+        int countTotalResults = navigate? directoryDao.countNavigationResults(searchArgumentsWithoutPaging) : directoryDao.countSearchResults(searchArgumentsWithoutPaging);
+        int safePage = Page.getSafePagePosition(page, countTotalResults, pageSize);
+
+        sab.page(safePage).pageSize(pageSize);
+        SearchArguments sa = sab.build();
+
+        return new Page<>(
+                navigate? directoryDao.navigate(sa) : directoryDao.search(sa),
+                sa.getPage(),
+                sa.getPageSize(),
+                countTotalResults
+        );
     }
 
     @Transactional

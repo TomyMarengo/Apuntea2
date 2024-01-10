@@ -10,6 +10,8 @@ public class ApunteaMediaType {
     public static final String CAREER_COLLECTION_V1 = "application/vnd.apuntea.career-collection-v1.0+json";
     public static final String SUBJECT_V1 = "application/vnd.apuntea.subject-v1.0+json";
     public static final String SUBJECT_COLLECTION_V1 = "application/vnd.apuntea.subject-collection-v1.0+json";
+    public static final String DIRECTORY_V1 = "application/vnd.apuntea.directory-v1.0+json";
+    public static final String DIRECTORY_COLLECTION_V1 = "application/vnd.apuntea.directory-collection-v1.0+json";
 
     private ApunteaMediaType() {
     }

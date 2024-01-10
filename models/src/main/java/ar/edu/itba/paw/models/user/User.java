@@ -85,7 +85,7 @@ public class User {
         this.roles = builder.roles;
         this.locale = builder.locale;
         this.status = builder.status;
-        this.notificationsEnabled = true;
+//        this.notificationsEnabled = true;
     }
 
     public String getEmail() {
@@ -140,7 +140,7 @@ public class User {
         return career.getInstitutionId();
     }
 
-    public boolean setNotificationsEnabled() {
+    public boolean getNotificationsEnabled() {
         return notificationsEnabled;
     }
 
@@ -181,7 +181,7 @@ public class User {
         this.career = career;
     }
 
-    public void setNotificationsEnabled(boolean notificationsEnabled) {
+    public void getNotificationsEnabled(boolean notificationsEnabled) {
         this.notificationsEnabled = notificationsEnabled;
     }
     @Override

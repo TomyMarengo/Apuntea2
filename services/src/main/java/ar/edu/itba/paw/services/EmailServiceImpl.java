@@ -44,7 +44,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendReviewEmail(Review review) {
         final User owner = review.getNote().getUser();
-        if (!owner.setNotificationsEnabled()) {
+        if (!owner.getNotificationsEnabled()) {
             LOGGER.info("User {} has notifications disabled, skipping review email", owner.getEmail());
             return;
         }
@@ -79,7 +79,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendDeleteReviewEmail(Review review, String reason) {
         final User owner = review.getUser();
-        if (!owner.setNotificationsEnabled()) {
+        if (!owner.getNotificationsEnabled()) {
             LOGGER.info("User {} has notifications disabled, skipping delete review email", owner.getEmail());
             return;
         }
@@ -103,7 +103,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendDeleteNoteEmail(Note note, String reason) {
         final User owner = note.getUser();
-        if (!owner.setNotificationsEnabled()) {
+        if (!owner.getNotificationsEnabled()) {
             LOGGER.info("User {} has notifications disabled, skipping delete note email", owner.getEmail());
             return;
         }
@@ -128,7 +128,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendDeleteDirectoryEmail(Directory directory, String reason) {
         final User owner = directory.getUser();
-        if (!owner.setNotificationsEnabled()) {
+        if (!owner.getNotificationsEnabled()) {
             LOGGER.info("User {} has notifications disabled, skipping delete directory email", owner.getEmail());
             return;
         }

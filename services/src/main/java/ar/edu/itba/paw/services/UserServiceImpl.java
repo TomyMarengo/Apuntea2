@@ -211,8 +211,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateNotificationsEnabled(boolean notificationsEnabled) {
         User user = securityService.getCurrentUserOrThrow();
-        user.setNotificationsEnabled(notificationsEnabled);
-        LOGGER.info("Notifications enabled updated for user with email: {}, updated to {}", user.getEmail(), user.setNotificationsEnabled());
+        user.getNotificationsEnabled(notificationsEnabled);
+        LOGGER.info("Notifications enabled updated for user with email: {}, updated to {}", user.getEmail(), user.getNotificationsEnabled());
     }
 
     /* Function to avoid using formula inside User,
