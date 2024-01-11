@@ -1,0 +1,11 @@
+{
+  "login": {
+    "title": "Iniciar sesión",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "login": "Iniciar sesión",
+    "forgot": "¿Olvidaste tu contraseña?",
+    "register": "Registrarse",
+    "error": "Correo electrónico o contraseña inválidos"
+  }
+}

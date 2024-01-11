@@ -1,0 +1,263 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+#root,
+#docs-root {
+  --gradient-top: #fffcfc;
+  --gradient-mid: #f5f1e7;
+  --gradient-bot: #f8ebca;
+
+  --gradient-top-dark: #3b4148;
+  --gradient-mid-dark: #212529;
+  --gradient-bot-dark: #101214;
+
+  --bg: #fefefe;
+  --bg-rgb: 254, 254, 254;
+  --dark-bg: #f9f1e7;
+  --dark-bg-rgb: 249, 241, 231;
+  --text: #5a5044;
+  --text-rgb: 90, 80, 68;
+  --dark-text: #302a24;
+  --dark-text-rgb: 48, 42, 36;
+
+  --bg-dark: #454d55;
+  --bg-dark-rgb: 69, 77, 85;
+  --dark-bg-dark: #0a0b10;
+  --dark-bg-dark-rgb: 10, 11, 16;
+  --text-dark: #fefefe;
+  --text-dark-rgb: 254, 254, 254;
+  --dark-text-dark: #f9f1e7;
+  --dark-text-dark-rgb: 249, 241, 231;
+
+  --light-primary: #ffddd8;
+  --light-primary-rgb: 255, 221, 216;
+  --primary: #ef7765;
+  --primary-rgb: 239, 119, 101;
+  --dark-primary: #cc6252;
+  --dark-primary-rgb: 204, 98, 82;
+  --secondary: #fdc286;
+  --secondary-rgb: 253, 194, 134;
+  --dark-secondary: #fcaa6f;
+  --dark-secondary-rgb: 252, 170, 111;
+
+  --light-primary-dark: #e9ffe6;
+  --light-primary-dark-rgb: 233, 255, 230;
+  --primary-dark: #b3e8c3;
+  --primary-dark-rgb: 179, 232, 195;
+  --dark-primary-dark: #7fb58f;
+  --dark-primary-dark-rgb: 127, 181, 143;
+  --secondary-dark: #50c4ec;
+  --secondary-dark-rgb: 80, 196, 236;
+  --dark-secondary-dark: #2f9cbb;
+  --dark-secondary-dark-rgb: 47, 156, 187;
+}
+
+html.dark .root,
+html.dark #root,
+html.dark #docs-root {
+  --gradient-top: var(--gradient-top-dark);
+  --gradient-mid: var(--gradient-mid-dark);
+  --gradient-bot: var(--gradient-bot-dark);
+  --bg: var(--bg-dark);
+  --bg-rgb: var(--bg-dark-rgb);
+  --dark-bg: var(--dark-bg-dark);
+  --dark-bg-rgb: var(--dark-bg-dark-rgb);
+  --text: var(--text-dark);
+  --text-rgb: var(--text-dark-rgb);
+  --dark-text: var(--dark-text-dark);
+  --dark-text-rgb: var(--dark-text-dark-rgb);
+  --light-primary: var(--light-primary-dark);
+  --light-primary-rgb: var(--light-primary-dark-rgb);
+  --primary: var(--primary-dark);
+  --primary-rgb: var(--primary-dark-rgb);
+  --dark-primary: var(--dark-primary-dark);
+  --dark-primary-rgb: var(--dark-primary-dark-rgb);
+  --secondary: var(--secondary-dark);
+  --secondary-rgb: var(--secondary-dark-rgb);
+  --dark-secondary: var(--dark-secondary-dark);
+  --dark-secondary-rgb: var(--dark-secondary-dark-rgb);
+}
+
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+  color: var(--text);
+}
+
+/* Prevent font size inflation */
+html {
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+/* Remove default margin in favour of better control in authored CSS */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin-block-end: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  line-height: 1.5;
+  background-size: cover;
+  background-blend-mode: lighten;
+  background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat fixed;
+}
+
+html.dark>body {
+  background: linear-gradient(180deg, var(--gradient-top-dark) 0%, var(--gradient-mid-dark) 42.19%, var(--gradient-bot-dark) 99.99%) no-repeat fixed;
+
+}
+
+/* Set shorter line heights on headings and interactive elements */
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
+  line-height: 1.1;
+}
+
+/* Balance text wrapping on headings */
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+  color: currentColor;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Make sure textareas without a rows attribute are not tiny */
+textarea:not([rows]) {
+  min-height: 10em;
+}
+
+/* Anything that has been anchored to should have extra scroll margin */
+:target {
+  scroll-margin-block: 5ex;
+}
+
+input {
+  @apply text-text bg-bg border-text/20 focus:border-pri focus:ring-light-pri dark:focus:ring-light-pri/50;
+  @apply block w-full px-4 py-2 border rounded-md focus:ring-4 focus:outline-none;
+}
+
+input::placeholder {
+  @apply text-dark-text/50;
+}
+
+.button {
+  @apply rounded-3xl px-4 py-2 min-w-32 max-h-9 max-w-40 text-center text-lg flex justify-center items-center;
+}
+
+.icon {
+  @apply fill-dark-pri;
+  @apply w-5 h-5;
+}
+
+.icon-xs {
+  @apply fill-dark-pri;
+  @apply w-4 h-4;
+}
+
+.icon-button {
+  @apply bg-transparent hover:bg-text/10;
+  @apply border-none rounded-full p-3 focus:outline-none;
+}
+
+.input-button {
+  @apply bg-text/10 border-text/20;
+  @apply px-3 py-2 border-l-0 border rounded-r-md;
+}
+
+.max-container {
+  @apply max-w-3xl mx-auto sm:p-16 pb-12 px-8 min-h-[calc(100vh-60px)];
+}
+
+.max-container.center {
+  @apply flex flex-col justify-center;
+}
+
+.dropdown {
+  @apply relative;
+}
+
+.dropdown-menu {
+  @apply absolute rounded-xl border border-text/10 py-4 min-w-36 bg-dark-bg;
+}
+
+.dropdown-menu.right {
+  @apply right-0;
+}
+
+.dropdown-menu.left {
+  @apply left-0;
+}
+
+.dropdown-menu>li {
+  @apply bg-transparent;
+}
+
+.dropdown-menu>li>button,
+.dropdown-menu>li>a {
+  @apply w-full h-full bg-transparent m-0 text-text rounded-none flex justify-start;
+  font: inherit;
+}
+
+.dropdown-menu>li>button:hover,
+.dropdown-menu>li>a:hover {
+  @apply bg-pri text-bg;
+}
+
+.dropdown-menu>li>br {
+  @apply border-t border-text/10 my-2;
+}
+
+.dropdown-divider {
+  @apply border-t border-text/10 my-3;
+}
