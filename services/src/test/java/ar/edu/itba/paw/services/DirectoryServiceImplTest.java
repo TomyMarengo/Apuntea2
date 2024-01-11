@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
+import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
@@ -34,7 +35,7 @@ public class DirectoryServiceImplTest {
     @InjectMocks
     private DirectoryServiceImpl directoryService;
 
-    @Test(expected = InvalidDirectoryException.class)
+    @Test(expected = DirectoryNotFoundException.class)
     public void testUpdateDirectoryInvalid() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Directory mockdir = mockDirectory("dir");
@@ -42,7 +43,7 @@ public class DirectoryServiceImplTest {
         Assert.fail();
     }
 
-    @Test(expected = InvalidDirectoryException.class)
+    @Test(expected = DirectoryNotFoundException.class)
     public void testDeleteAdminInvalidIds() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
         directoryService.delete(EDA_DIRECTORY_ID, "lol");
