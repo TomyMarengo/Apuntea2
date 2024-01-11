@@ -425,7 +425,7 @@ public class NoteJpaDaoTest {
     @Test
     public void testFindNotesByIds(){
         UUID[] ids = {TVM_ID, JAVA_BEANS_NOTE_ID, MVC_NOTE_ID, PEPE_ID};
-        List<Note> notes = noteDao.findNotesByIds(Arrays.asList(ids), PEPE_ID, new SortArguments(SortArguments.SortBy.DATE, true));
+        List<Note> notes = noteDao.findNotesByIds(Arrays.asList(ids), new SortArguments(SortArguments.SortBy.DATE, true));
 
         assertTrue(notes.stream().anyMatch(note -> note.getId().equals(TVM_ID)));
         assertTrue(notes.stream().anyMatch(note -> note.getId().equals(JAVA_BEANS_NOTE_ID)));
@@ -437,7 +437,7 @@ public class NoteJpaDaoTest {
     @Test
     public void testFindNotesByIdsOrderDateAsc(){
         UUID[] ids = {TVM_ID, JAVA_BEANS_NOTE_ID, MVC_NOTE_ID, LUCENE_NOTE_ID};
-        List<Note> notes = noteDao.findNotesByIds(Arrays.asList(ids), PEPE_ID, new SortArguments(SortArguments.SortBy.DATE, true));
+        List<Note> notes = noteDao.findNotesByIds(Arrays.asList(ids), new SortArguments(SortArguments.SortBy.DATE, true));
 
         assertEquals(4, notes.size());
         for (int i=0; i< notes.size()-2 ; i++)
@@ -447,7 +447,7 @@ public class NoteJpaDaoTest {
     @Test
     public void testFindNotesByIdsOrderNameDesc(){
         UUID[] ids = {TVM_ID, JAVA_BEANS_NOTE_ID, MVC_NOTE_ID, LUCENE_NOTE_ID};
-        List<Note> notes = noteDao.findNotesByIds(Arrays.asList(ids), PEPE_ID, new SortArguments(SortArguments.SortBy.NAME, false));
+        List<Note> notes = noteDao.findNotesByIds(Arrays.asList(ids), new SortArguments(SortArguments.SortBy.NAME, false));
 
         assertEquals(4, notes.size());
         for (int i=0; i< notes.size()-2 ; i++)

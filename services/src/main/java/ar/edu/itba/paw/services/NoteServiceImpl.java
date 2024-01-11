@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.exceptions.InvalidFileException;
+import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
@@ -12,6 +13,7 @@ import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
@@ -57,7 +59,7 @@ public class NoteServiceImpl implements NoteService {
         return noteDao.create(name, subject.getSubjectId(), user, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
         final Optional<User> maybeUser = securityService.getCurrentUser();
@@ -69,21 +71,59 @@ public class NoteServiceImpl implements NoteService {
         return note;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<NoteFile> getNoteFileById(UUID noteId) {
         final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
         return noteDao.getNoteFileById(noteId, userId);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Page<Note> getNotes(UUID parentId, UUID userId, UUID favBy, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
+        final SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
+                .userId(userId)
+                .parentId(parentId)
+                .favBy(favBy)
+                .category(category)
+                .word(word)
+                .sortBy(sortBy)
+                .ascending(ascending);
+        final Optional<User> maybeUser = securityService.getCurrentUser();
+        maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
+
+        boolean navigate = parentId != null || favBy != null; // Maybe this should be an additional parameter
+
+        SearchArguments searchArgumentsWithoutPaging = sab.build();
+        int countTotalResults = navigate? noteDao.countNavigationResults(searchArgumentsWithoutPaging) : noteDao.countSearchResults(searchArgumentsWithoutPaging);
+        int safePage = Page.getSafePagePosition(page, countTotalResults, pageSize);
+
+        sab.page(safePage).pageSize(pageSize);
+        SearchArguments sa = sab.build();
+
+        return new Page<>(
+                navigate? noteDao.navigate(sa) : noteDao.search(sa),
+                sa.getPage(),
+                sa.getPageSize(),
+                countTotalResults
+        );
+    }
+
+
+
     @Transactional
     @Override
-    public void update(UUID noteId, String name, boolean visible, String category) {
-        Note note = noteDao.getNoteById(noteId, securityService.getCurrentUserOrThrow().getUserId()).orElseThrow(InvalidNoteException::new);
-        note.setName(name);
-        note.setVisible(visible);
-        note.setCategory(Category.valueOf(category.toUpperCase()));
-        note.setLastModifiedAt(LocalDateTime.now());
+    public void update(UUID noteId, String name, Boolean visible, String category) {
+        User currentUser = securityService.getCurrentUserOrThrow();
+        Note note = noteDao.getNoteById(noteId, securityService.getCurrentUserOrThrow().getUserId()).orElseThrow(NoteNotFoundException::new);
+        if (!currentUser.equals(note.getUser()))
+            throw new UserNotOwnerException();
+        if (name != null)
+            note.setName(name);
+        if (visible != null)
+            note.setVisible(visible);
+        if (category != null)
+            note.setCategory(Category.valueOf(category.toUpperCase()));
     }
 
 

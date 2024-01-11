@@ -15,8 +15,9 @@ public interface NoteService {
     UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category);
     Optional<Note> getNoteById(UUID noteId);
     Optional<NoteFile> getNoteFileById(UUID noteId);
+    Page<Note> getNotes(UUID parentId, UUID userId, UUID favBy, String category, String word, String sortBy, boolean ascending, int page, int pageSize);
     void createOrUpdateReview(UUID noteId, int score, String content);
-    void update(UUID noteId, String name, boolean visible, String category);
+    void update(UUID noteId, String name, Boolean visible, String category);
     void delete(UUID[] noteIds, String reason);
     Page<Review> getPaginatedReviews(UUID note, int pageNum, int pageSize);
     Page<Review> getPaginatedReviewsByUser(UUID userId, int pageNum, int pageSize);

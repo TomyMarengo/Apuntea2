@@ -35,8 +35,15 @@ public class DaoUtils {
         }
 
         void addConditionIfPresent(final String field, final String compareOp, final String logicOp, final Optional<?> value) {
+            addConditionIfPresent(null, field, compareOp, logicOp, value);
+        }
+
+        void addConditionIfPresent(final String entityAlias, final String field, final String compareOp, final String logicOp, final Optional<?> value) {
             value.ifPresent(val -> {
-                query.append(logicOp).append(" ").append(field).append(" ").append(compareOp).append(" :").append(field).append(" ");
+                query.append(logicOp).append(" ");
+                if (entityAlias != null)
+                    query.append(entityAlias).append(".");
+                query.append(field).append(" ").append(compareOp).append(" :").append(field).append(" ");
                 params.put(field, val);
             });
         }
@@ -92,7 +99,7 @@ public class DaoUtils {
     static void applyGeneralFilters(final QueryCreator queryCreator, final SearchArguments sa) {
         queryCreator.addConditionIfPresent(CATEGORY, "=", "AND", sa.getCategory().map(Enum::toString));
 
-        queryCreator.addConditionIfPresent(USER_ID, "=", "AND", sa.getUserId());
+        queryCreator.addConditionIfPresent("t", USER_ID, "=", "AND", sa.getUserId());
 
         sa.getWord().ifPresent(w -> {
                     String searchWord = escapeLikeString(w);

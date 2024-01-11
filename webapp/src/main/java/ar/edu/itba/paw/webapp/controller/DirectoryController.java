@@ -23,22 +23,12 @@ import java.util.stream.Collectors;
 public class DirectoryController {
 
     private final DirectoryService directoryService;
-    private final NoteService noteService;
-    private final SecurityService securityService;
-    private final UserService userService;
-
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public DirectoryController(final DirectoryService directoryService,
-                               final NoteService noteService,
-                               final SecurityService securityService,
-                               final UserService userService) {
+    public DirectoryController(final DirectoryService directoryService) {
         this.directoryService = directoryService;
-        this.noteService = noteService;
-        this.securityService = securityService;
-        this.userService = userService;
     }
 
     @GET

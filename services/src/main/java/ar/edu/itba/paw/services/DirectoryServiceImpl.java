@@ -37,14 +37,14 @@ public class DirectoryServiceImpl implements DirectoryService {
         return directoryDao.create(name, parentId, user, visible, iconColor).getId();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<Directory> getDirectoryById(UUID directoryId) {
         UUID currentUserId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
         return directoryDao.getDirectoryById(directoryId, currentUserId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
         List<Directory> directories =  directoryDao.getDirectoryPath(directoryId);
@@ -54,14 +54,14 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Transactional(readOnly = true)
     @Override
     public Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, String sortBy, boolean ascending, int page, int pageSize) {
-        SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
+        final SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
                 .userId(userId)
                 .parentId(parentId)
                 .favBy(favBy)
                 .word(word)
                 .sortBy(sortBy)
                 .ascending(ascending);
-        Optional<User> maybeUser = securityService.getCurrentUser();
+        final Optional<User> maybeUser = securityService.getCurrentUser();
         maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
 
         boolean navigate = parentId != null || favBy != null; // Maybe this should be an additional parameter
@@ -88,7 +88,7 @@ public class DirectoryServiceImpl implements DirectoryService {
         Directory directory = directoryDao
                 .getDirectoryById(directoryId, currentUser.getUserId())
                 .orElseThrow(DirectoryNotFoundException::new);
-        if ((directory.getUser() == null && !currentUser.getIsAdmin()) || !currentUser.equals(directory.getUser()))
+        if (!currentUser.equals(directory.getUser()))
             throw new UserNotOwnerException();
         if (name != null)
             directory.setName(name);

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 
@@ -51,9 +52,15 @@ public interface NoteDao {
 
     List<Note> findNotesByIds(List<UUID> noteIds);
 
-    List<Note> findNotesByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa);
+    List<Note> findNotesByIds(List<UUID> noteIds, SortArguments sa);
 
     void loadNoteFavorites(List<UUID> noteIds, UUID currentUserId);
 
     void addInteractionIfNotExists(User user, Note note);
+
+    List<Note> search(SearchArguments sa);
+    List<Note> navigate(SearchArguments sa);
+
+    int countSearchResults(SearchArguments sa);
+    int countNavigationResults(SearchArguments sa);
 }

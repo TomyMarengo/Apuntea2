@@ -29,6 +29,7 @@ public interface DirectoryDao {
 
     boolean removeFavorite(User user, UUID directoryId);
 
+    // Warning, this method does not check visibility!
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds, SortArguments sortArgs);
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds);
