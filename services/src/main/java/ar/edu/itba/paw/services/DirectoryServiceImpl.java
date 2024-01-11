@@ -4,6 +4,8 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
+import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
 import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
@@ -81,32 +83,33 @@ public class DirectoryServiceImpl implements DirectoryService {
 
     @Transactional
     @Override
-    public void update(UUID directoryId, String name, boolean visible, String iconColor) {
+    public void update(UUID directoryId, String name, Boolean visible, String iconColor) {
         User currentUser = securityService.getCurrentUserOrThrow();
         Directory directory = directoryDao
                 .getDirectoryById(directoryId, currentUser.getUserId())
-                .filter(d -> d.getUser().equals(currentUser))
-                .orElseThrow(InvalidDirectoryException::new);
-        directory.setName(name);
-        directory.setVisible(visible);
-        directory.setIconColor(iconColor);
+                .orElseThrow(DirectoryNotFoundException::new);
+        if ((directory.getUser() == null && !currentUser.getIsAdmin()) || !currentUser.equals(directory.getUser()))
+            throw new UserNotOwnerException();
+        if (name != null)
+            directory.setName(name);
+        if (visible != null)
+            directory.setVisible(visible);
+        if (iconColor != null)
+            directory.setIconColor(iconColor);
     }
 
     @Transactional
     @Override
-    public void delete(UUID[] directoryIds, String reason) {
-        if (directoryIds.length == 0) return;
-
-        List<UUID> directoryIdsList = Arrays.asList(directoryIds);
-
+    public void delete(UUID directoryId, String reason) {
         User currentUser = securityService.getCurrentUserOrThrow();
         if (!currentUser.getIsAdmin()) {
-            if (!directoryDao.delete(directoryIdsList, currentUser.getUserId()))
+            if (!directoryDao.delete(directoryId, currentUser.getUserId()))
                 throw new InvalidDirectoryException();
         } else {
-            List<Directory> directories = directoryDao.findDirectoriesByIds(directoryIdsList);
-            if (directories.size() != directoryIdsList.size() || !directoryDao.delete(directoryIdsList)) throw new InvalidDirectoryException();
-            directories.forEach(d -> emailService.sendDeleteDirectoryEmail(d, reason));
+            Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(directoryId, currentUser.getUserId());
+            if (!maybeDirectory.isPresent()) throw new DirectoryNotFoundException();
+            if (!directoryDao.delete(directoryId)) throw new InvalidDirectoryException();
+            emailService.sendDeleteDirectoryEmail(maybeDirectory.get(), reason);
         }
     }
 

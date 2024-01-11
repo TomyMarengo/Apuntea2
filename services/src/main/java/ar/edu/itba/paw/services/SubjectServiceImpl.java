@@ -118,7 +118,7 @@ public class SubjectServiceImpl implements SubjectService {
             success = subjectDao.delete(subjectId);
             if (!success)
                 throw new InvalidSubjectException();
-            success = directoryDao.delete(Collections.singletonList(subject.getRootDirectoryId()));
+            success = directoryDao.delete(subject.getRootDirectoryId());
             if (!success)
                 throw new InvalidDirectoryException();
         }

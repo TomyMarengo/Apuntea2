@@ -5,20 +5,27 @@ import ar.edu.itba.paw.models.directory.Directory;
 import javax.ws.rs.core.UriInfo;
 import java.time.LocalDateTime;
 import java.net.URI;
+import java.util.UUID;
 
 public class DirectoryDto {
+    private UUID id;
     private String name;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
     private String iconColor;
     private Boolean visible;
 
+    //creation properties
+    private UUID parentId;
+
+    //URIS
     private URI self;
     private URI owner;
     private URI parent;
 
     public static DirectoryDto fromDirectory(Directory directory, UriInfo uriInfo){
         final DirectoryDto directoryDto = new DirectoryDto();
+        directoryDto.id = directory.getId();
         directoryDto.name = directory.getName();
         directoryDto.createdAt = directory.getCreatedAt();
         directoryDto.lastModifiedAt = directory.getLastModifiedAt();
@@ -30,6 +37,21 @@ public class DirectoryDto {
         if(directory.getParentId() != null)
             directoryDto.parent = uriInfo.getBaseUriBuilder().path("directories").path(directory.getParentId().toString()).build();
         return directoryDto;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+    public UUID getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(UUID parentId) {
+        this.parentId = parentId;
     }
 
     public String getName() {

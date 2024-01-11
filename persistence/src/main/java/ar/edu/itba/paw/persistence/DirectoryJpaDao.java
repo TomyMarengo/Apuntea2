@@ -99,20 +99,18 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
-    public boolean delete(List<UUID> directoryIds, UUID currentUserId) {
-        if (directoryIds.isEmpty()) return false;
-        return em.createQuery("DELETE FROM Directory d WHERE d.id IN :directoryIds AND d.user.id = :currentUserId")
-                .setParameter("directoryIds", directoryIds)
+    public boolean delete(UUID directoryId, UUID currentUserId) {
+        return em.createQuery("DELETE FROM Directory d WHERE d.id = :directoryId AND d.user.id = :currentUserId")
+                .setParameter("directoryId", directoryId)
                 .setParameter("currentUserId", currentUserId)
-                .executeUpdate() == directoryIds.size();
+                .executeUpdate() == 1;
     }
 
     @Override
-    public boolean delete(List<UUID> directoryIds) {
-        if (directoryIds.isEmpty()) return false;
-        return em.createQuery("DELETE FROM Directory d WHERE d.id IN :directoryIds")
-                .setParameter("directoryIds", directoryIds)
-                .executeUpdate() == directoryIds.size();
+    public boolean delete(UUID directoryId) {
+        return em.createQuery("DELETE FROM Directory d WHERE d.id = :directoryId")
+                .setParameter("directoryId", directoryId)
+                .executeUpdate() == 1;
     }
 
     @Override

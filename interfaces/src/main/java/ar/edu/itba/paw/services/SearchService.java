@@ -11,5 +11,4 @@ public interface SearchService {
     Page<Searchable> getNavigationResults(UUID parentId, UUID userId, String category, String word, String sortBy, boolean ascending, int page, int pageSize);
     Optional<UUID> findByName(UUID parentId, String name);
 
-    void delete(UUID[] noteIds, UUID[] directoryIds, String reason);
 }

@@ -67,21 +67,19 @@ public class UserController {
         return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{id}")
     @PreAuthorize("@userPermissions.isCurrentUser(#id)")
     @Consumes(value = { MediaType.APPLICATION_JSON })
     public Response updateUser(@PathParam("id") final UUID id, @Valid final UserDto userDto) {
-        try {
-            userService.updateProfile(userDto.getFirstName(), userDto.getLastName(), userDto.getUsername(), null, userDto.getCareerId());
-            // TODO: Profile picture
-            if (userDto.getPassword() != null)
-                userService.updateCurrentUserPassword(userDto.getPassword());
-            if (userDto.getNotificationsEnabled() != null)
-                userService.updateNotificationsEnabled(userDto.getNotificationsEnabled());
-        } catch (UserNotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+
+        userService.updateProfile(userDto.getFirstName(), userDto.getLastName(), userDto.getUsername(), null, userDto.getCareerId());
+        // TODO: Profile picture
+        if (userDto.getPassword() != null)
+            userService.updateCurrentUserPassword(userDto.getPassword());
+        if (userDto.getNotificationsEnabled() != null)
+            userService.updateNotificationsEnabled(userDto.getNotificationsEnabled());
+
         return Response.noContent().build();
     }
 }

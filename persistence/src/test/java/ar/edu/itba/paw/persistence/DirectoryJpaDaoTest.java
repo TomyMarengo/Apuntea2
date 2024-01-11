@@ -111,37 +111,18 @@ public class DirectoryJpaDaoTest {
     @Test
     public void testDelete() {
         int qtyBasuraPrev = countRows(em, DIRECTORIES, "directory_name LIKE " + "'%Basura%'");
-        directoryDao.delete(Collections.singletonList(BASURA_ID), PEPE_ID);
+        directoryDao.delete(BASURA_ID, PEPE_ID);
         em.flush();
         assertEquals(2, qtyBasuraPrev);
         assertEquals(0, countRows(em, DIRECTORIES, "directory_name LIKE " + "'%Basura%'"));
     }
 
-    @Test
-    public void testDeleteMany() {
-        List<UUID> directoryIds = new ArrayList<>();
-        String[] names = {"tmp1", "tmp2", "tmp3", "tmp4"};
-        Directory parent = insertDirectory(em, new Directory.DirectoryBuilder().name("tmpParent").user(em.getReference(User.class, PEPE_ID)).parent(em.getReference(Directory.class, EDA_DIRECTORY_ID)));
-        for (String name : names) {
-            Directory newDir = insertDirectory(em, new Directory.DirectoryBuilder().name(name).user(em.getReference(User.class, PEPE_ID)).parent(parent));
-            directoryIds.add(newDir.getId());
-        }
-
-        int countInserted = countRows(em, DIRECTORIES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parent.getId() + "'");
-
-        directoryDao.delete(directoryIds, PEPE_ID);
-
-        int countPostDelete = countRows(em, DIRECTORIES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parent.getId() + "'");
-
-        assertEquals(4, countInserted);
-        assertEquals(0, countPostDelete);
-    }
 
     @Test
     public void testUserTriesToDeleteDirectory() {
         Directory newDir = insertDirectory(em, new Directory.DirectoryBuilder().name("temp").user(em.getReference(User.class, PEPE_ID)).parent(em.getReference(Directory.class, EDA_DIRECTORY_ID)));
         int countInserted = countRows(em, DIRECTORIES, "directory_id = '" + newDir.getId() + "'");
-        boolean success = directoryDao.delete(Collections.singletonList(newDir.getId()), SAIDMAN_ID);
+        boolean success = directoryDao.delete(newDir.getId(), SAIDMAN_ID);
         assertFalse(success);
         assertEquals(1, countInserted);
         assertEquals(1, countRows(em, DIRECTORIES, "directory_id = '" + newDir.getId() + "'"));
@@ -150,21 +131,13 @@ public class DirectoryJpaDaoTest {
     @Test
     public void testAdminDeletesDirectory() {
         Directory newDir = insertDirectory(em, new Directory.DirectoryBuilder().name("temp").user(em.getReference(User.class, PEPE_ID)).parent(em.getReference(Directory.class, EDA_DIRECTORY_ID)));
-        Directory newDir2 = insertDirectory(em, new Directory.DirectoryBuilder().name("temp2").user(em.getReference(User.class, PEPE_ID)).parent(em.getReference(Directory.class, EDA_DIRECTORY_ID)));
-        Directory newDir3 = insertDirectory(em, new Directory.DirectoryBuilder().name("temp3").user(em.getReference(User.class, PEPE_ID)).parent(em.getReference(Directory.class, EDA_DIRECTORY_ID)));
 
-        int countInserted = countRows(em, DIRECTORIES, "directory_id = '" + newDir.getId() + "' OR directory_id = '" + newDir2.getId() + "' OR directory_id = '" + newDir3.getId() + "'");
-        List<UUID> ids = new ArrayList<>();
-        ids.add(newDir.getId());
-        ids.add(newDir2.getId());
-        ids.add(newDir3.getId());
+        int countInserted = countRows(em, DIRECTORIES, "directory_id = '" + newDir.getId() + "'");
 
-        boolean success = directoryDao.delete(ids);
+        boolean success = directoryDao.delete(newDir.getId());
         assertTrue(success);
-        assertEquals(3, countInserted);
+        assertEquals(1, countInserted);
         assertEquals(0, countRows(em, DIRECTORIES, "directory_id = '" + newDir.getId() + "'"));
-        assertEquals(0, countRows(em, DIRECTORIES, "directory_id = '" + newDir2.getId() + "'"));
-        assertEquals(0, countRows(em, DIRECTORIES, "directory_id = '" + newDir3.getId() + "'"));
     }
 
     @Test
@@ -173,7 +146,7 @@ public class DirectoryJpaDaoTest {
         Directory rootDir = insertDirectory(em, new Directory.DirectoryBuilder().name("root"));
         Directory rootDir2 = insertDirectory(em, new Directory.DirectoryBuilder().name("root2"));
         int countInserted = countRows(em, DIRECTORIES, "directory_id = '" + rootDir.getId() + "'");
-        boolean success = directoryDao.delete(Collections.singletonList(rootDir.getId()));
+        boolean success = directoryDao.delete(rootDir.getId());
         assertTrue(success);
         assertEquals(1, countInserted);
         assertEquals(0, countRows(em, DIRECTORIES, "directory_id = '" + rootDir.getId() + "'"));
@@ -183,7 +156,7 @@ public class DirectoryJpaDaoTest {
     @Test
     public void testDeleteDirectoryNonExistent() {
         UUID id = UUID.randomUUID();
-        boolean success = directoryDao.delete(Collections.singletonList(id));
+        boolean success = directoryDao.delete(id);
         assertFalse(success);
     }
 

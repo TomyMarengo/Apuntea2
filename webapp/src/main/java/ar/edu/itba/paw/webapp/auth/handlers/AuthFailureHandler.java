@@ -30,7 +30,7 @@ public class AuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 //            apiErrorDto = new ApiErrorDto(ApiErrorCode.UNAUTHORIZED, authException.getMessage());
 //        }
         // TODO: Improve
-        apiErrorDto = new ApiErrorDto(403, authException.getMessage());
+        apiErrorDto = new ApiErrorDto(authException.getMessage());
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(ApunteaMediaType.ERROR_V1);

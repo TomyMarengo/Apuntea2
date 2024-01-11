@@ -45,7 +45,7 @@ public class DirectoryServiceImplTest {
     @Test(expected = InvalidDirectoryException.class)
     public void testDeleteAdminInvalidIds() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
-        directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID}, "lol");
+        directoryService.delete(EDA_DIRECTORY_ID, "lol");
         Assert.fail();
     }
 
@@ -53,7 +53,7 @@ public class DirectoryServiceImplTest {
     public void testDeleteNotAdminInvalidIds() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(directoryDao.delete(Mockito.any(), Mockito.any())).thenReturn(false); // The deletion failed
-        directoryService.delete(new UUID[]{EDA_DIRECTORY_ID, MVC_DIRECTORY_ID}, null);
+        directoryService.delete(EDA_DIRECTORY_ID, null);
         Assert.fail();
     }
 

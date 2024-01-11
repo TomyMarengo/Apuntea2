@@ -3,15 +3,13 @@ package ar.edu.itba.paw.webapp.dto;
 import javax.validation.ConstraintViolation;
 
 public class ApiErrorDto {
-    private int code;
     private String message;
 
 
     public ApiErrorDto()  {
     }
 
-    public ApiErrorDto(int code, String message) {
-        this.code = code;
+    public ApiErrorDto( String message) {
         this.message = message;
     }
 
@@ -29,11 +27,4 @@ public class ApiErrorDto {
         this.message = message;
     }
 
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
 }

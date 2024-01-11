@@ -24,7 +24,7 @@ public class ApunteaAuthenticationEntryPoint implements AuthenticationEntryPoint
             throws IOException, ServletException {
 
         // TODO: Improve
-        ApiErrorDto apiErrorDto = new ApiErrorDto(403, authException.getMessage());
+        ApiErrorDto apiErrorDto = new ApiErrorDto(authException.getMessage());
 //
 //        if (authException instanceof ApiErrorExceptionInt) {
 //            apiErrorDto = ApiErrorDto.fromApiErrorException((ApiErrorExceptionInt) authException);

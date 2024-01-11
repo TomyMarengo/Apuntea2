@@ -106,12 +106,4 @@ public class SearchServiceImpl implements SearchService {
         return searchDao.findByName(parentId, name, currentUserId);
     }
 
-    @Transactional
-    @Override
-    public void delete(UUID[] noteIds, UUID[] directoryIds, String reason) {
-        if(noteIds.length > 0)
-            noteService.delete(noteIds, reason);
-        if(directoryIds.length > 0)
-            directoryService.delete(directoryIds, reason);
-    }
 }

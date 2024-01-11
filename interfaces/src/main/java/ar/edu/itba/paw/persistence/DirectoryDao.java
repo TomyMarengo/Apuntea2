@@ -20,9 +20,9 @@ public interface DirectoryDao {
 
     Optional<Directory> getDirectoryRoot(UUID directoryId);
 
-    boolean delete(List<UUID> directoryIds, UUID currentUserId);
+    boolean delete(UUID directoryId, UUID currentUserId);
 
-    boolean delete(List<UUID> directoryId); // Strong delete
+    boolean delete(UUID directoryId); // Strong delete
 
 
     void addFavorite(User user, UUID directoryId);

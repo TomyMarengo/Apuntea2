@@ -180,6 +180,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
+                // Set correctly PATCH and POST methods!
                 .antMatchers("/tokens", "/users/**", "/directories/**") // TODO: Change
                 .permitAll()
                 .anyRequest()

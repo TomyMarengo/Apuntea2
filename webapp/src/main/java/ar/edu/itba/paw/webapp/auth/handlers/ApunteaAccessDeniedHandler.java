@@ -25,7 +25,7 @@ public class ApunteaAccessDeniedHandler implements AccessDeniedHandler {
                        AccessDeniedException e) throws IOException, ServletException {
 
         // TODO: improve
-        ApiErrorDto apiErrorDto = new ApiErrorDto(401, e.getMessage());
+        ApiErrorDto apiErrorDto = new ApiErrorDto(e.getMessage());
 
 //        if (e instanceof ApiErrorExceptionInt) {
 //            apiErrorDto = ApiErrorDto.fromApiErrorException((ApiErrorExceptionInt) e);

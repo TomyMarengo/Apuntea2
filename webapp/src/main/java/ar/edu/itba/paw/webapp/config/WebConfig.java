@@ -23,6 +23,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -84,7 +85,7 @@ public class WebConfig {
     @Bean
     public MessageSource messageSource() {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:i18n/messages", "classpath:i18n/email_messages");
+        messageSource.setBasenames("classpath:i18n/messages", "classpath:i18n/exceptions", "classpath:i18n/email_messages");
         messageSource.setDefaultEncoding(StandardCharsets.ISO_8859_1.displayName());
         messageSource.setCacheSeconds(5);
         return messageSource;
@@ -157,4 +158,9 @@ public class WebConfig {
 //    public CacheManager cacheManager() {
 //        return new ConcurrentMapCacheManager("currentUser");
 //    }
+
+    @Bean
+    public RequestContextListener requestContextListener() {
+        return new RequestContextListener();
+    }
 }
