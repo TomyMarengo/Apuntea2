@@ -18,9 +18,9 @@ public interface NoteDao {
 
     Optional<Note> getNoteById(UUID noteId, UUID currentUserId);
 
-    boolean delete(List<UUID> noteId);
+    boolean delete(UUID noteId);
 
-    boolean delete(List<UUID> noteIds, UUID currentUserId);
+    boolean delete(UUID noteId, UUID currentUserId);
 
     int countReviews(UUID noteId);
 

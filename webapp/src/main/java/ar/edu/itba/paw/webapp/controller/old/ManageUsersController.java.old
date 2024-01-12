@@ -22,7 +22,7 @@ import javax.validation.Valid;
 import javax.xml.ws.http.HTTPException;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
+import static ar.edu.itba.paw.webapp.controller.utils.ControllerUtils.*;
 
 @Controller
 @RequestMapping("/manage/users")

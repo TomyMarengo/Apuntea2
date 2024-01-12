@@ -292,6 +292,5 @@ CREATE OR REPLACE VIEW Normalized_Notes AS (
     FROM Notes n
 );
 
-DROP VIEW IF EXISTS Navigation;
 DROP VIEW IF EXISTS Search;
 DROP VIEW IF EXISTS InstitutionData;

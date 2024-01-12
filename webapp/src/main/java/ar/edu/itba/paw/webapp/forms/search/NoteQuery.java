@@ -3,7 +3,7 @@ package ar.edu.itba.paw.webapp.forms.search;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.QueryParam;
 
-public class NoteForm extends SortedSearchableForm {
+public class NoteQuery extends SearchableQuery {
     @QueryParam("category")
     @Pattern(regexp = "note|directory|theory|practice|exam|other|all")
     private String category;
@@ -12,7 +12,7 @@ public class NoteForm extends SortedSearchableForm {
     @Pattern(regexp = "score|name|date|modified")
     private String sortBy = "modified";
 
-    public NoteForm() {
+    public NoteQuery() {
     }
 
     public String getCategory() {

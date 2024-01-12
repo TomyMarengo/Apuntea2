@@ -1,11 +1,10 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.controller.user;
 
 import ar.edu.itba.paw.models.Page;
-import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.UserService;
-import ar.edu.itba.paw.webapp.dto.UserDto;
+import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;

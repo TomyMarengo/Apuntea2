@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.dto;
+package ar.edu.itba.paw.webapp.controller.note.dtos;
 
 import ar.edu.itba.paw.models.note.Note;
 
@@ -7,7 +7,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class NoteDto {
+public class NoteResponseDto {
     private UUID id;
     private String name;
     private LocalDateTime createdAt;
@@ -16,29 +16,28 @@ public class NoteDto {
 
     private String category;
 
-    private Long interactions = 0L;
+    private Long interactions;
 
     private String fileType;
 
-    private Float avgScore = 0.0f;
+    private Float avgScore;
 
     //creation properties
     private UUID parentId;
 
     private UUID subjectId;
 
-
     //URIS
     private URI self;
     private URI owner;
     private URI parent;
-
     private URI subject;
+    private URI file;
 
-    public NoteDto() {
+    public NoteResponseDto() {
     }
-    public static NoteDto fromNote(Note note, UriInfo uriInfo){
-        final NoteDto noteDto = new NoteDto();
+    public static NoteResponseDto fromNote(Note note, UriInfo uriInfo){
+        final NoteResponseDto noteDto = new NoteResponseDto();
         noteDto.id = note.getId();
         noteDto.name = note.getName();
         noteDto.createdAt = note.getCreatedAt();
@@ -52,6 +51,7 @@ public class NoteDto {
         noteDto.subject = uriInfo.getBaseUriBuilder().path("subjects").path(note.getSubject().getSubjectId().toString()).build();
 
         noteDto.self = uriInfo.getBaseUriBuilder().path("notes").path(note.getId().toString()).build();
+        noteDto.file = uriInfo.getBaseUriBuilder().path("notes").path(note.getId().toString()).path("file").build();
         if (note.getUser() != null)
             noteDto.owner = uriInfo.getBaseUriBuilder().path("users").path(note.getUser().getUserId().toString()).build();
         if(note.getParentId() != null)
@@ -176,5 +176,13 @@ public class NoteDto {
 
     public void setSubject(URI subject) {
         this.subject = subject;
+    }
+
+    public URI getFile() {
+        return file;
+    }
+
+    public void setFile(URI file) {
+        this.file = file;
     }
 }

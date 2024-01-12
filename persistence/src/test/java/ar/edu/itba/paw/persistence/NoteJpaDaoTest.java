@@ -139,38 +139,11 @@ public class NoteJpaDaoTest {
         assertArrayEquals(privateContent, file.getContent());
     }
 
-    @Test
-    public void testDeleteMany() {
-        List<UUID> noteIds = new ArrayList<>();
-        String[] names = {"tmp1", "tmp2", "tmp3", "tmp4"};
-        Directory parent = insertDirectory(em, new Directory.DirectoryBuilder()
-                .name("tmpParent")
-                .parent(em.getReference(Directory.class, EDA_DIRECTORY_ID))
-                .user(pepeUser)
-        );
-        for (String name : names) {
-            Note note = insertNote(em, new Note.NoteBuilder()
-                    .name(name)
-                    .subject(edaSubject)
-                    .parentId(parent.getId())
-                    .user(pepeUser)
-                    .visible(true)
-                    .category(Category.PRACTICE)
-                    .fileType("jpg"));
-            noteIds.add(note.getId());
-        }
-        int countInserted = countRows(em, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parent.getId() + "'");
-        noteDao.delete(noteIds, PEPE_ID);
-        em.flush();
-        int countPostDelete = countRows(em, NOTES, "user_id = '" + PEPE_ID + "' AND parent_id = '" + parent.getId() + "'");
-        assertEquals(4, countInserted);
-        assertEquals(0, countPostDelete);
-    }
 
     @Test
     public void testDeleteNote() {
         int countPrev = countRows(em, NOTES, "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'");
-        boolean deleted = noteDao.delete(Collections.singletonList(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID), PEPE_ID);
+        boolean deleted = noteDao.delete(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID, PEPE_ID);
         assertEquals(0, countRows(em, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
         assertEquals(1, countPrev);
         assertTrue(deleted);
@@ -178,13 +151,13 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testCannotDeleteNote() {
-        boolean deleted = noteDao.delete(Collections.singletonList(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID), SAIDMAN_ID);
+        boolean deleted = noteDao.delete(PARCIAL_DINAMICA_FLUIDOS_NOTE_ID, SAIDMAN_ID);
         assertEquals(1, countRows(em, "notes", "note_id = '" + PARCIAL_DINAMICA_FLUIDOS_NOTE_ID + "'"));
         assertFalse(deleted);
     }
 
     @Test
-    public void testDeleteForcedMany() {
+    public void testDeleteForced() {
         Note.NoteBuilder nb = new Note.NoteBuilder()
                     .subject(edaSubject)
                     .parentId(EDA_DIRECTORY_ID)
@@ -197,12 +170,12 @@ public class NoteJpaDaoTest {
         List<UUID> noteIds = Arrays.asList(new UUID[]{notePepe.getId(), noteSaidman.getId(), noteCarla.getId()});
         int prevCount = countRows(em, NOTES, "note_id IN ('" + notePepe.getId() + "', '" + noteSaidman.getId() + "', '" + noteCarla.getId() + "')");
 
-        boolean success = noteDao.delete(noteIds);
+        boolean success = noteDao.delete(notePepe.getId());
         em.flush();
 
         assertTrue(success);
         assertEquals(3, prevCount);
-        assertEquals(0, countRows(em, NOTES, "note_id IN ('" + notePepe.getId() + "', '" + noteSaidman.getId() + "', '" + noteCarla.getId() + "')"));
+        assertEquals(2, countRows(em, NOTES, "note_id IN ('" + notePepe.getId() + "', '" + noteSaidman.getId() + "', '" + noteCarla.getId() + "')"));
     }
 
 

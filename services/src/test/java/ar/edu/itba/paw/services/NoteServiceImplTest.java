@@ -47,16 +47,16 @@ public class NoteServiceImplTest {
     private NoteServiceImpl noteService;
 
 
-    @Test(expected = InvalidFileException.class)
-    public void testCreateNoteInvalidFile() {
-        Directory dirToReturn = Mockito.mock(Directory.class);
-        Mockito.when(directoryDao.getDirectoryRoot(Mockito.any())).thenReturn(Optional.of(dirToReturn));
-        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        CommonsMultipartFile noteFile = Mockito.mock(CommonsMultipartFile.class);
-        given(noteFile.getBytes()).willAnswer(invocation -> {throw new IOException();});
-        noteService.createNote("new", UUID.randomUUID(), true, noteFile , Category.EXAM.getFormattedName());
-        fail();
-    }
+//    @Test(expected = InvalidFileException.class)
+//    public void testCreateNoteInvalidFile() {
+//        Directory dirToReturn = Mockito.mock(Directory.class);
+//        Mockito.when(directoryDao.getDirectoryRoot(Mockito.any())).thenReturn(Optional.of(dirToReturn));
+//        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
+//        CommonsMultipartFile noteFile = Mockito.mock(CommonsMultipartFile.class);
+//        given(noteFile.getBytes()).willAnswer(invocation -> {throw new IOException();});
+//        noteService.createNote("new", UUID.randomUUID(), true, noteFile , Category.EXAM.getFormattedName());
+//        fail();
+//    }
 
     @Test
     public void testCreateNote() {
@@ -70,7 +70,7 @@ public class NoteServiceImplTest {
         Mockito.when(noteFile.getBytes()).thenReturn(new byte[]{1});
         UUID expectedNoteId = UUID.randomUUID();
         Mockito.when(noteDao.create(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyBoolean(), Mockito.any(), Mockito.anyString(), Mockito.anyString())).thenReturn(expectedNoteId);
-        UUID noteId = noteService.createNote("new", UUID.randomUUID(), true, noteFile , Category.EXAM.getFormattedName());
+        UUID noteId = noteService.createNote("new", UUID.randomUUID(), true, new byte[0], "" , Category.EXAM.getFormattedName());
         assertEquals(expectedNoteId, noteId);
     }
 
@@ -84,7 +84,7 @@ public class NoteServiceImplTest {
     @Test(expected = InvalidNoteException.class)
     public void testDeleteNoteFailureAdmin() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
-        noteService.delete(new UUID[]{UUID.randomUUID()}, "reason");
+        noteService.delete(UUID.randomUUID(), "reason");
         fail();
     }
 
@@ -92,7 +92,7 @@ public class NoteServiceImplTest {
     public void testDeleteNoteFailure() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(noteDao.delete(Mockito.any(), Mockito.any())).thenReturn(false);
-        noteService.delete(new UUID[]{UUID.randomUUID()}, "reason");
+        noteService.delete(UUID.randomUUID(), "reason");
         fail();
     }
 

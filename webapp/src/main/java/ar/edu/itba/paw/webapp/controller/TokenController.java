@@ -14,6 +14,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+// TODO: Remove as soon as possible
 @Path("tokens")
 @Component
 public class TokenController {

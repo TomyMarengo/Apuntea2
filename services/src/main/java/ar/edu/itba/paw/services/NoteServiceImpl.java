@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class NoteServiceImpl implements NoteService {
+public class  NoteServiceImpl implements NoteService {
     private final NoteDao noteDao;
     private final DirectoryDao directoryDao;
     private final EmailService emailService;
@@ -45,18 +45,12 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
+    public UUID createNote(final String name, final UUID parentId, final boolean visible, final byte[] file, final String mimeType, final String category) {
         User user = securityService.getCurrentUserOrThrow();
         Directory rootDir = directoryDao.getDirectoryRoot(parentId).orElseThrow(InvalidDirectoryException::new);
 
-        byte[] fileBytes;
-        try {
-            fileBytes = file.getBytes();
-        } catch (IOException e) {
-            throw new InvalidFileException();
-        }
         Subject subject = rootDir.getSubject();
-        return noteDao.create(name, subject.getSubjectId(), user, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
+        return noteDao.create(name, subject.getSubjectId(), user, parentId, visible, file, category, mimeType);
     }
 
     @Transactional(readOnly = true)
@@ -126,22 +120,17 @@ public class NoteServiceImpl implements NoteService {
             note.setCategory(Category.valueOf(category.toUpperCase()));
     }
 
-
     @Transactional
     @Override
-    public void delete(UUID[] noteIds, String reason) {
-        if (noteIds.length == 0) return;
-
-        List<UUID> noteIdsList = Arrays.asList(noteIds);
-
+    public void delete(UUID noteId, String reason) {
         User currentUser = securityService.getCurrentUserOrThrow();
+        Note note = noteDao.getNoteById(noteId, currentUser.getUserId()).orElseThrow(NoteNotFoundException::new);
         if (!currentUser.getIsAdmin()) {
-            if (!noteDao.delete(noteIdsList, currentUser.getUserId()))
+            if (!noteDao.delete(noteId, currentUser.getUserId()))
                 throw new InvalidNoteException();
         } else {
-            List<Note> notes = noteDao.findNotesByIds(noteIdsList);
-            if (notes.size() != noteIdsList.size() || !noteDao.delete(noteIdsList)) throw new InvalidNoteException();
-            notes.forEach(n -> emailService.sendDeleteNoteEmail(n, reason));
+            if (!noteDao.delete(noteId)) throw new InvalidNoteException();
+            emailService.sendDeleteNoteEmail(note, reason);
         }
     }
 

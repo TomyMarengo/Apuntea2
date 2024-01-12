@@ -3,12 +3,12 @@ package ar.edu.itba.paw.webapp.forms.search;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.QueryParam;
 
-public class DirectoryForm extends  SortedSearchableForm {
+public class DirectoryQuery extends SearchableQuery {
     @Pattern(regexp = "name|date|modified")
     @QueryParam("sortBy")
     private String sortBy = "modified";
 
-    public DirectoryForm() {
+    public DirectoryQuery() {
     }
 
     public String getSortBy() {

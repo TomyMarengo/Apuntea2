@@ -1,11 +1,12 @@
-package ar.edu.itba.paw.webapp.controller;
+package ar.edu.itba.paw.webapp.controller.directory;
 
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.dto.DirectoryDto;
-import ar.edu.itba.paw.webapp.forms.search.DirectoryForm;
+import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
+import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryDto;
+import ar.edu.itba.paw.webapp.forms.search.DirectoryQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +45,7 @@ public class DirectoryController {
 
     @GET
     @Produces(value = { ApunteaMediaType.DIRECTORY_COLLECTION_V1 }) // TODO: Add versions
-    public Response listDirectories(@Valid @BeanParam DirectoryForm directoryForm) {
+    public Response listDirectories(@Valid @BeanParam DirectoryQuery directoryForm) {
         final Page<Directory> directoryPage = directoryService.getDirectories(
                 directoryForm.getParentId(),
                 directoryForm.getUserId(),

@@ -71,20 +71,18 @@ public class NoteJpaDao implements NoteDao {
 
 
     @Override
-    public boolean delete(List<UUID> noteIds) {
-        if (noteIds.isEmpty()) return false;
-        return em.createQuery("DELETE FROM Note n WHERE n.id IN :noteIds")
-                .setParameter("noteIds", noteIds)
-                .executeUpdate() == noteIds.size();
+    public boolean delete(UUID noteId) {
+        return em.createQuery("DELETE FROM Note n WHERE n.id = :noteId")
+                .setParameter("noteId", noteId)
+                .executeUpdate() == 1;
     }
 
     @Override
-    public boolean delete(List<UUID> noteIds, UUID currentUserId) {
-        if (noteIds.isEmpty()) return false;
-        return em.createQuery("DELETE FROM Note n WHERE n.id IN :noteIds AND n.user.id = :currentUserId")
-                .setParameter("noteIds", noteIds)
+    public boolean delete(UUID noteId, UUID currentUserId) {
+        return em.createQuery("DELETE FROM Note n WHERE n.id = :noteId AND n.user.id = :currentUserId")
+                .setParameter("noteId", noteId)
                 .setParameter("currentUserId", currentUserId)
-                .executeUpdate() == noteIds.size();
+                .executeUpdate() == 1;
     }
 
     @Override
