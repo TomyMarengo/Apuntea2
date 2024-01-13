@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut, selectCurrentUser } from '../store/slices/authSlice';
 
-import { UserIcon, ChevronDown } from './Icons';
+import { UserIcon, ChevronDownIcon } from './Icons';
 import { Button, Dropdown } from '.';
 
 const ProfileButton = () => {
@@ -22,7 +22,7 @@ const ProfileButton = () => {
       trigger={
         <Button className="flex justify-between items-center icon-button">
           <UserIcon className="icon" />
-          <ChevronDown className="icon" />
+          <ChevronDownIcon className="icon" />
         </Button>
       }
       menu={[
