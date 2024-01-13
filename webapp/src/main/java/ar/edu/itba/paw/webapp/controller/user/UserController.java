@@ -4,6 +4,9 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.webapp.controller.user.dto.UserCreationDto;
+import ar.edu.itba.paw.webapp.controller.user.dto.UserResponseDto;
+import ar.edu.itba.paw.webapp.controller.user.dto.UserUpdateDto;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,10 +40,10 @@ public class UserController {
     @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
     public Response getUser(@PathParam("id") final UUID id) {
         final Optional<User> maybeUser = userService.findById(id);
-        final Optional<UserDto> userDto = maybeUser.map(u -> UserDto.fromUser(u, uriInfo));
+        final Optional<UserResponseDto> userDto = maybeUser.map(u -> UserResponseDto.fromUser(u, uriInfo));
         if (!userDto.isPresent())
             return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.ok(new GenericEntity<UserDto>(userDto.get()){}).build();
+        return Response.ok(new GenericEntity<UserResponseDto>(userDto.get()){}).build();
     }
 
     @GET
@@ -49,11 +52,11 @@ public class UserController {
                               @QueryParam("status") String status,
                               @QueryParam("page") @DefaultValue("1") int page) {
         final Page<User> userPage = userService.getStudents(query, status, page);
-        final Collection<UserDto> dtoUsers = userPage.getContent()
+        final Collection<UserResponseDto> dtoUsers = userPage.getContent()
                 .stream()
-                .map(u -> UserDto.fromUser(u, uriInfo))
+                .map(u -> UserResponseDto.fromUser(u, uriInfo))
                 .collect(Collectors.toList());
-        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<UserDto>>(dtoUsers) {}),
+        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<UserResponseDto>>(dtoUsers) {}),
                 uriInfo.getBaseUriBuilder().path("users"),
                 userPage).build();
     }
@@ -61,7 +64,7 @@ public class UserController {
 
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response createUser(@Valid final UserDto userDto) {
+    public Response createUser(@Valid @BeanParam final UserCreationDto userDto) {
         final UUID userId = userService.create(userDto.getEmail(), userDto.getPassword(), userDto.getCareerId(), Role.ROLE_STUDENT);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
     }
@@ -69,16 +72,15 @@ public class UserController {
     @PATCH
     @Path("/{id}")
     @PreAuthorize("@userPermissions.isCurrentUser(#id)")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response updateUser(@PathParam("id") final UUID id, @Valid final UserDto userDto) {
-
-        userService.updateProfile(userDto.getFirstName(), userDto.getLastName(), userDto.getUsername(), null, userDto.getCareerId());
+    @Consumes(value = { MediaType.MULTIPART_FORM_DATA })
+    public Response updateUser(@PathParam("id") final UUID id, @Valid @BeanParam final UserUpdateDto userDto) {
+        userService.updateProfile(userDto.getFirstName(), userDto.getLastName(), userDto.getUsername(), userDto.getProfilePictureBytes(), userDto.getCareerId());
         // TODO: Profile picture
         if (userDto.getPassword() != null)
             userService.updateCurrentUserPassword(userDto.getPassword());
         if (userDto.getNotificationsEnabled() != null)
             userService.updateNotificationsEnabled(userDto.getNotificationsEnabled());
-
         return Response.noContent().build();
     }
+
 }

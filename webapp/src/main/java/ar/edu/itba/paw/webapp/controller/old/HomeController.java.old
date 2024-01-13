@@ -5,7 +5,7 @@ import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.search.NoteQuery;
 import ar.edu.itba.paw.webapp.forms.user.password.ChallengeForm;
 import ar.edu.itba.paw.webapp.forms.user.password.ForgotPasswordForm;
-import ar.edu.itba.paw.webapp.forms.user.UserForm;
+import ar.edu.itba.paw.webapp.controller.user.dto.UserForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

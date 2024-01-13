@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.user;
+package ar.edu.itba.paw.webapp.controller.user.dto;
 
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.user.User;
@@ -6,9 +6,8 @@ import ar.edu.itba.paw.models.user.User;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.UUID;
 
-public class UserDto {
+public class UserResponseDto {
     private String email;
     private String firstName;
     private String lastName;
@@ -17,9 +16,6 @@ public class UserDto {
     private String status;
     private Boolean notificationsEnabled;
 
-    // creation properties
-    private String password;
-    private UUID careerId;
 
     // TODO: Add roles?
     private URI self;
@@ -34,8 +30,8 @@ public class UserDto {
     private URI noteGroups;
     private URI reviewsReceived;
 
-    public static UserDto fromUser(final User user, final UriInfo uriInfo) {
-        final UserDto userDto = new UserDto();
+    public static UserResponseDto fromUser(final User user, final UriInfo uriInfo) {
+        final UserResponseDto userDto = new UserResponseDto();
         userDto.email = user.getEmail();
         userDto.firstName = user.getFirstName();
         userDto.lastName = user.getLastName();
@@ -210,19 +206,5 @@ public class UserDto {
         return reviewsReceived;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setCareerId(UUID careerId) {
-        this.careerId = careerId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    public UUID getCareerId() {
-        return careerId;
-    }
 }
 

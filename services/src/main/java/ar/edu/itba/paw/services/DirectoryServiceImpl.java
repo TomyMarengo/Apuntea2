@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.exceptions.UnavailableNameException;
 import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
 import ar.edu.itba.paw.models.search.SearchArguments;
@@ -22,18 +23,21 @@ public class DirectoryServiceImpl implements DirectoryService {
     private final DirectoryDao directoryDao;
     private final SecurityService securityService;
     private final EmailService emailService;
+    private final SearchService searchService;
 
     @Autowired
-    public DirectoryServiceImpl(DirectoryDao directoryDao, SecurityService securityService, EmailService emailService) {
+    public DirectoryServiceImpl(DirectoryDao directoryDao, SecurityService securityService, EmailService emailService, SearchService searchService) {
         this.directoryDao = directoryDao;
         this.securityService = securityService;
         this.emailService = emailService;
+        this.searchService = searchService;
     }
 
     @Transactional
     @Override
     public UUID create(String name, UUID parentId, boolean visible, String iconColor) {
         User user = securityService.getCurrentUserOrThrow();
+        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
         return directoryDao.create(name, parentId, user, visible, iconColor).getId();
     }
 
@@ -90,8 +94,10 @@ public class DirectoryServiceImpl implements DirectoryService {
                 .orElseThrow(DirectoryNotFoundException::new);
         if (!currentUser.equals(directory.getUser()))
             throw new UserNotOwnerException();
-        if (name != null)
+        if (name != null) {
+            if (searchService.findByName(directory.getParentId(), name).isPresent()) throw new UnavailableNameException();
             directory.setName(name);
+        }
         if (visible != null)
             directory.setVisible(visible);
         if (iconColor != null)

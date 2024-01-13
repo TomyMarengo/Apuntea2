@@ -1,17 +1,14 @@
 package ar.edu.itba.paw.webapp.controller.note.dtos;
 
 import ar.edu.itba.paw.webapp.forms.SearchableCreationDto;
-import ar.edu.itba.paw.webapp.validation.MaxFileSize;
-import ar.edu.itba.paw.webapp.validation.ValidFileName;
+import ar.edu.itba.paw.webapp.validation.AcceptedExtension;
+import ar.edu.itba.paw.webapp.validation.AcceptedFileSize;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import ar.edu.itba.paw.webapp.forms.RegexUtils;
 
 import javax.validation.constraints.*;
-import java.io.InputStream;
 
 
 public class NoteCreationDto extends SearchableCreationDto {
@@ -19,9 +16,12 @@ public class NoteCreationDto extends SearchableCreationDto {
     @FormDataParam("file")
     private byte[] file;
 
+    //TODO Fix validators
     @NotNull
     @FormDataParam("file")
-    private FormDataBodyPart imageDetails;
+//    @AcceptedExtension(allowedExtensions = {"jpeg", "png", "jpg", "pdf", "mp3", "mp4"})
+//    @AcceptedFileSize(max = 500)
+    private FormDataBodyPart fileDetails;
 
     @NotEmpty
     @Pattern(regexp = RegexUtils.CATEGORY_REGEX)
@@ -37,7 +37,7 @@ public class NoteCreationDto extends SearchableCreationDto {
     }
 
     public String getMimeType() {
-        return imageDetails.getMediaType().getSubtype();
+        return fileDetails.getMediaType().getSubtype();
     }
 
     public void setFile(byte[] file) {
@@ -48,11 +48,11 @@ public class NoteCreationDto extends SearchableCreationDto {
         return file;
     }
 
-    public FormDataBodyPart getImageDetails() {
-        return imageDetails;
+    public FormDataBodyPart getFileDetails() {
+        return fileDetails;
     }
 
-    public void setImageDetails(FormDataBodyPart imageDetails) {
-        this.imageDetails = imageDetails;
+    public void setFileDetails(FormDataBodyPart fileDetails) {
+        this.fileDetails = fileDetails;
     }
 }

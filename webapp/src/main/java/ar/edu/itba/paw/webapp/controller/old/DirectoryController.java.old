@@ -10,8 +10,8 @@ import ar.edu.itba.paw.services.*;
 import static ar.edu.itba.paw.webapp.controller.utils.ControllerUtils.*;
 
 import ar.edu.itba.paw.webapp.forms.admin.DeleteWithReasonForm;
-import ar.edu.itba.paw.webapp.forms.directory.DirectoryCreationDto;
-import ar.edu.itba.paw.webapp.forms.directory.DirectoryUpdateDto;
+import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryCreationDto;
+import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryUpdateDto;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteCreationDto;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteUpdateDto;
 import ar.edu.itba.paw.webapp.forms.search.NavigationForm;

@@ -3,7 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.exceptions.InvalidFileException;
+import ar.edu.itba.paw.models.exceptions.UnavailableNameException;
 import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
@@ -17,14 +17,10 @@ import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -34,21 +30,24 @@ public class  NoteServiceImpl implements NoteService {
     private final EmailService emailService;
     private final SecurityService securityService;
 
+    private final SearchService searchService;
 
     @Autowired
-    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService) {
+    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SearchService searchService) {
         this.noteDao = noteDao;
         this.securityService = securityService;
         this.emailService = emailService;
         this.directoryDao = directoryDao;
+        this.searchService = searchService;
     }
 
     @Transactional
     @Override
     public UUID createNote(final String name, final UUID parentId, final boolean visible, final byte[] file, final String mimeType, final String category) {
         User user = securityService.getCurrentUserOrThrow();
-        Directory rootDir = directoryDao.getDirectoryRoot(parentId).orElseThrow(InvalidDirectoryException::new);
+        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
 
+        Directory rootDir = directoryDao.getDirectoryRoot(parentId).orElseThrow(InvalidDirectoryException::new);
         Subject subject = rootDir.getSubject();
         return noteDao.create(name, subject.getSubjectId(), user, parentId, visible, file, category, mimeType);
     }
@@ -112,8 +111,10 @@ public class  NoteServiceImpl implements NoteService {
         Note note = noteDao.getNoteById(noteId, securityService.getCurrentUserOrThrow().getUserId()).orElseThrow(NoteNotFoundException::new);
         if (!currentUser.equals(note.getUser()))
             throw new UserNotOwnerException();
-        if (name != null)
+        if (name != null) {
+            if (searchService.findByName(note.getParentId(), name).isPresent()) throw new UnavailableNameException();
             note.setName(name);
+        }
         if (visible != null)
             note.setVisible(visible);
         if (category != null)

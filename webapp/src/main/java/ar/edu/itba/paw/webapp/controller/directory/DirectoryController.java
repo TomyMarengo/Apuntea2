@@ -4,8 +4,10 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
+import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryCreationDto;
+import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryUpdateDto;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
-import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryDto;
+import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryResponseDto;
 import ar.edu.itba.paw.webapp.forms.search.DirectoryQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -39,36 +41,36 @@ public class DirectoryController {
         final Optional<Directory> maybeDirectory = directoryService.getDirectoryById(id);
         if (!maybeDirectory.isPresent())
             return Response.status(Response.Status.NOT_FOUND).build();
-        final DirectoryDto directoryDto = DirectoryDto.fromDirectory(maybeDirectory.get(), uriInfo);
-        return Response.ok(new GenericEntity<DirectoryDto>(directoryDto){}).build();
+        final DirectoryResponseDto directoryDto = DirectoryResponseDto.fromDirectory(maybeDirectory.get(), uriInfo);
+        return Response.ok(new GenericEntity<DirectoryResponseDto>(directoryDto){}).build();
     }
 
     @GET
     @Produces(value = { ApunteaMediaType.DIRECTORY_COLLECTION_V1 }) // TODO: Add versions
-    public Response listDirectories(@Valid @BeanParam DirectoryQuery directoryForm) {
+    public Response listDirectories(@Valid @BeanParam DirectoryQuery directoryQuery) {
         final Page<Directory> directoryPage = directoryService.getDirectories(
-                directoryForm.getParentId(),
-                directoryForm.getUserId(),
-                directoryForm.getFavBy(),
-                directoryForm.getWord(),
-                directoryForm.getSortBy(),
-                directoryForm.getAscending(),
-                directoryForm.getPageNumber(),
-                directoryForm.getPageSize()
+                directoryQuery.getParentId(),
+                directoryQuery.getUserId(),
+                directoryQuery.getFavBy(),
+                directoryQuery.getWord(),
+                directoryQuery.getSortBy(),
+                directoryQuery.getAscending(),
+                directoryQuery.getPageNumber(),
+                directoryQuery.getPageSize()
         );
-        final Collection<DirectoryDto> dtoDirectories = directoryPage.getContent()
+        final Collection<DirectoryResponseDto> dtoDirectories = directoryPage.getContent()
                 .stream()
-                .map(d -> DirectoryDto.fromDirectory(d, uriInfo))
+                .map(d -> DirectoryResponseDto.fromDirectory(d, uriInfo))
                 .collect(Collectors.toList());
 
-        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<DirectoryDto>>(dtoDirectories) {}),
+        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<DirectoryResponseDto>>(dtoDirectories) {}),
                 uriInfo.getBaseUriBuilder().path("directories"),
                 directoryPage).build();
     }
 
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response createDirectory(@Valid  final DirectoryDto directoryDto) {
+    public Response createDirectory(@Valid  final DirectoryCreationDto directoryDto) {
         final UUID DirectoryId = directoryService.create(
             directoryDto.getName(),
             directoryDto.getParentId(),
@@ -81,7 +83,7 @@ public class DirectoryController {
     @PATCH
     @Path("/{id}")
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response updateDirectory(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final DirectoryDto directoryDto) {
+    public Response updateDirectory(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final DirectoryUpdateDto directoryDto) {
         directoryService.update(id, directoryDto.getName(), directoryDto.getVisible(), directoryDto.getIconColor());
         return Response.noContent().build();
     }

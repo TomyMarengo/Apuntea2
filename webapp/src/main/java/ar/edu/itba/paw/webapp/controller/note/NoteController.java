@@ -13,8 +13,6 @@ import ar.edu.itba.paw.webapp.controller.note.dtos.NoteUpdateDto;
 import ar.edu.itba.paw.webapp.forms.search.NoteQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -51,17 +49,17 @@ public class NoteController {
 
     @GET
     @Produces(value = { ApunteaMediaType.NOTE_COLLECTION_V1 }) // TODO: Add versions
-    public Response listNotes(@Valid @BeanParam NoteQuery noteForm) {
+    public Response listNotes(@Valid @BeanParam NoteQuery noteQuery) {
         final Page<Note> notePage = noteService.getNotes(
-                noteForm.getParentId(),
-                noteForm.getUserId(),
-                noteForm.getFavBy(),
-                noteForm.getCategory(),
-                noteForm.getWord(),
-                noteForm.getSortBy(),
-                noteForm.getAscending(),
-                noteForm.getPageNumber(),
-                noteForm.getPageSize()
+                noteQuery.getParentId(),
+                noteQuery.getUserId(),
+                noteQuery.getFavBy(),
+                noteQuery.getCategory(),
+                noteQuery.getWord(),
+                noteQuery.getSortBy(),
+                noteQuery.getAscending(),
+                noteQuery.getPageNumber(),
+                noteQuery.getPageSize()
         );
         final Collection<NoteResponseDto> noteDtos = notePage.getContent()
                 .stream()

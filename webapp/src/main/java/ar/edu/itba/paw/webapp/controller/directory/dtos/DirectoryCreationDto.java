@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.forms.directory;
+package ar.edu.itba.paw.webapp.controller.directory.dtos;
 
 import ar.edu.itba.paw.webapp.forms.SearchableCreationDto;
 import ar.edu.itba.paw.webapp.forms.RegexUtils;
@@ -8,13 +8,13 @@ import javax.validation.constraints.Pattern;
 public class DirectoryCreationDto extends SearchableCreationDto {
     @Pattern(regexp = RegexUtils.AVAILABLE_FOLDER_COLORS_REGEX)
 
-    private String color = "BBBBBB";
+    private String iconColor = "BBBBBB";
 
-    public String getColor() {
-        return color;
+    public String getIconColor() {
+        return iconColor;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setIconColor(String iconColor) {
+        this.iconColor = iconColor;
     }
 }
