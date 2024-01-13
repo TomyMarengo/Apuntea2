@@ -45,6 +45,7 @@ public class AbstractAuthFilter extends AbstractAuthenticationProcessingFilter {
                 new AntPathRequestMatcher("/directories/**", HttpMethod.POST),
                 new AntPathRequestMatcher("/directories/**", HttpMethod.PATCH),
                 new AntPathRequestMatcher("/directories/**", HttpMethod.DELETE),
+                new AntPathRequestMatcher("/reviews", HttpMethod.GET),
                 new AntPathRequestMatcher("/tokens", HttpMethod.POST) // TODO: Remove
         ));
     }

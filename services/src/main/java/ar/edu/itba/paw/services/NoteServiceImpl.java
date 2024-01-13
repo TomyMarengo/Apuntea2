@@ -145,17 +145,15 @@ public class  NoteServiceImpl implements NoteService {
     }
 
     @Transactional
-    @Override
-    public Page<Review> getPaginatedReviews(UUID note, int pageNum, int pageSize) {
-        this.noteDao.getNoteById(note,
-                securityService.getCurrentUser().map(User::getUserId).orElse(null)
-        ).orElseThrow(NoteNotFoundException::new);
+    public Page<Review> getReviews(UUID noteId, int pageNum, int pageSize) {
+        if (noteId != null)
+            this.noteDao.getNoteById(noteId, securityService.getCurrentUser().map(User::getUserId).orElse(null)).orElseThrow(NoteNotFoundException::new);
 
-        int countTotalResults = noteDao.countReviews(note);
+        int countTotalResults = noteDao.countReviews(noteId);
         int safePage = Page.getSafePagePosition(pageNum, countTotalResults, pageSize);
 
         return new Page<>(
-                noteDao.getReviews(note, safePage, pageSize),
+                noteDao.getReviews(noteId, safePage, pageSize),
                 safePage,
                 pageSize,
                 countTotalResults
@@ -164,7 +162,7 @@ public class  NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public Page<Review> getPaginatedReviewsByUser(UUID user, int pageNum, int pageSize) {
+    public Page<Review> getReviewsDoneToUser(UUID user, int pageNum, int pageSize) {
         int countTotalResults = noteDao.countReviewsByUser(user);
         int safePage = Page.getSafePagePosition(pageNum, countTotalResults, pageSize);
 

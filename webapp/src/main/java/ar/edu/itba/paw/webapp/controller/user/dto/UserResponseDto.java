@@ -55,7 +55,7 @@ public class UserResponseDto {
         userDto.directoryFavorites = uriInfo.getBaseUriBuilder().path("directories").queryParam("favBy", user.getUserId()).build();
         userDto.subjectFavorites = uriInfo.getBaseUriBuilder().path("subjects").queryParam("favBy", user.getUserId()).build();
         userDto.following = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).path("following").build();
-        userDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("owner", user.getUserId().toString()).build();
+        userDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("userId", user.getUserId().toString()).build();
         userDto.noteGroups = uriInfo.getBaseUriBuilder().path("notes").queryParam("owner", user.getUserId().toString()).queryParam("grouped").build();
         // TODO: Change
         userDto.reviewsReceived = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).path("reviews").build();

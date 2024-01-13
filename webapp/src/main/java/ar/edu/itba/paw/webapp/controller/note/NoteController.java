@@ -10,7 +10,7 @@ import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteCreationDto;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteResponseDto;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteUpdateDto;
-import ar.edu.itba.paw.webapp.forms.search.NoteQuery;
+import ar.edu.itba.paw.webapp.forms.queries.NoteQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ public class NoteController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = { ApunteaMediaType.NOTE_V1 }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.NOTE_V1 })
     public Response getNote(@PathParam("id") final UUID id) {
         final Optional<Note> maybeNote = noteService.getNoteById(id);
         if (!maybeNote.isPresent())
@@ -48,7 +48,7 @@ public class NoteController {
     }
 
     @GET
-    @Produces(value = { ApunteaMediaType.NOTE_COLLECTION_V1 }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.NOTE_COLLECTION_V1 })
     public Response listNotes(@Valid @BeanParam NoteQuery noteQuery) {
         final Page<Note> notePage = noteService.getNotes(
                 noteQuery.getParentId(),

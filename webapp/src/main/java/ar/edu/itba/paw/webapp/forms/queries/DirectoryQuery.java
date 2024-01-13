@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.forms.search;
+package ar.edu.itba.paw.webapp.forms.queries;
 
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.QueryParam;

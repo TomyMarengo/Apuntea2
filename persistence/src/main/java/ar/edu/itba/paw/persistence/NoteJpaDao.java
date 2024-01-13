@@ -121,9 +121,11 @@ public class NoteJpaDao implements NoteDao {
 
     @Override
     public int countReviews(UUID noteId) {
-        return ((BigInteger)em.createNativeQuery("SELECT COUNT(*) FROM Reviews WHERE note_id = :noteId")
-                .setParameter("noteId", noteId)
-                .getSingleResult()).intValue();
+        final StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(*) FROM Reviews r ");
+        if (noteId != null) queryBuilder.append("WHERE r.note_id = :noteId");
+        final Query q = em.createNativeQuery(queryBuilder.toString());
+        if (noteId != null) q.setParameter("noteId", noteId);
+        return ((BigInteger)q.getSingleResult()).intValue();
     }
 
     @Override
@@ -131,20 +133,35 @@ public class NoteJpaDao implements NoteDao {
         return getReviews(noteId, pageNum, REVIEW_LIMIT);
     }
 
+    // TODO: Check if all those join fetch are necessary
     @Override
     public List<Review> getReviews(UUID noteId, int pageNum, int pageSize) {
+        StringBuilder queryBuilder = new StringBuilder("SELECT CAST(user_id AS VARCHAR(36)) FROM Reviews ");
+        if (noteId != null) queryBuilder.append("WHERE note_id = :noteId ");
+        queryBuilder.append("ORDER BY created_at DESC");
+
+        Query q = em.createNativeQuery(queryBuilder.toString());
+        if (noteId != null) q.setParameter("noteId", noteId);
+
         @SuppressWarnings("unchecked")
-        List<UUID> userIDs = (List<UUID>) (em.createNativeQuery("SELECT CAST(user_id AS VARCHAR(36)) FROM Reviews WHERE note_id = :noteId ORDER BY created_at DESC")
-                .setParameter("noteId", noteId)
-                .setFirstResult((pageNum - 1) * pageSize)
-                .setMaxResults(pageSize)
-                .getResultList())
+        final List<UUID> userIDs = (List<UUID>) (
+                               q.setFirstResult((pageNum - 1) * pageSize)
+                                .setMaxResults(pageSize)
+                                .getResultList())
                 .stream().map(o -> UUID.fromString((String) o)).collect(Collectors.toList());
+
         if (userIDs.isEmpty()) return Collections.emptyList();
-        return em.createQuery("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.note WHERE r.note.id = :noteId AND r.user.id IN :userIDs ORDER BY r.createdAt DESC", Review.class)
-                .setParameter("noteId", noteId)
-                .setParameter("userIDs", userIDs)
-                .getResultList();
+
+        queryBuilder = new StringBuilder("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.note WHERE r.user.id IN :userIDs ");
+        if (noteId != null) queryBuilder.append("AND r.note.id = :noteId ");
+        queryBuilder.append("ORDER BY r.createdAt DESC");
+
+        q = em.createQuery(queryBuilder.toString(), Review.class)
+                .setParameter("userIDs", userIDs);
+
+        if (noteId != null) q.setParameter("noteId", noteId);
+
+        return q.getResultList();
     }
 
     @Override

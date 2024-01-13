@@ -8,7 +8,7 @@ import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SearchService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
-import ar.edu.itba.paw.webapp.forms.search.NoteQuery;
+import ar.edu.itba.paw.webapp.forms.queries.NoteQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

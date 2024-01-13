@@ -3,7 +3,6 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.institutional.Subject;
@@ -12,7 +11,6 @@ import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
-import ar.edu.itba.paw.persistence.SubjectDao;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -21,7 +19,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -123,7 +120,7 @@ public class NoteServiceImplTest {
         Mockito.when(noteDao.getReviews(Mockito.any(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
         Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.ofNullable(new Note.NoteBuilder().build()));
 
-        Page<Review> results = noteService.getPaginatedReviews(UUID.randomUUID(), PAGE, PAGE_SIZE);
+        Page<Review> results = noteService.getReviews(UUID.randomUUID(), PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -140,7 +137,7 @@ public class NoteServiceImplTest {
         Mockito.when(noteDao.getReviews(Mockito.any(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
         Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.ofNullable(new Note.NoteBuilder().build()));
 
-        Page<Review> results = noteService.getPaginatedReviews(UUID.randomUUID(), PAGE, PAGE_SIZE);
+        Page<Review> results = noteService.getReviews(UUID.randomUUID(), PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -157,7 +154,7 @@ public class NoteServiceImplTest {
         Mockito.when(noteDao.getReviews(Mockito.any(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
         Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.ofNullable(new Note.NoteBuilder().build()));
 
-        Page<Review> results = noteService.getPaginatedReviews(UUID.randomUUID(), PAGE, PAGE_SIZE);
+        Page<Review> results = noteService.getReviews(UUID.randomUUID(), PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -174,7 +171,7 @@ public class NoteServiceImplTest {
         Mockito.when(noteDao.countReviewsByUser(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(noteDao.getReviewsByUser(Mockito.any(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
 
-        Page<Review> results = noteService.getPaginatedReviewsByUser(UUID.randomUUID(), PAGE, PAGE_SIZE);
+        Page<Review> results = noteService.getReviewsDoneToUser(UUID.randomUUID(), PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -190,7 +187,7 @@ public class NoteServiceImplTest {
         Mockito.when(noteDao.countReviewsByUser(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(noteDao.getReviewsByUser(Mockito.any(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
 
-        Page<Review> results = noteService.getPaginatedReviewsByUser(UUID.randomUUID(), PAGE, PAGE_SIZE);
+        Page<Review> results = noteService.getReviewsDoneToUser(UUID.randomUUID(), PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -206,7 +203,7 @@ public class NoteServiceImplTest {
         Mockito.when(noteDao.countReviewsByUser(Mockito.any())).thenReturn(TOTAL_RESULTS);
         Mockito.when(noteDao.getReviewsByUser(Mockito.any(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
 
-        Page<Review> results = noteService.getPaginatedReviewsByUser(UUID.randomUUID(), PAGE, PAGE_SIZE);
+        Page<Review> results = noteService.getReviewsDoneToUser(UUID.randomUUID(), PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());

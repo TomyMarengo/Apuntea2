@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.forms.search;
+package ar.edu.itba.paw.webapp.forms.queries;
 
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.Range;

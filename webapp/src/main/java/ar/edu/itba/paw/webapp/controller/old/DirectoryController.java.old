@@ -14,7 +14,7 @@ import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryCreationDto;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryUpdateDto;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteCreationDto;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteUpdateDto;
-import ar.edu.itba.paw.webapp.forms.search.NavigationForm;
+import ar.edu.itba.paw.webapp.forms.queries.NavigationForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

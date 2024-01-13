@@ -8,7 +8,7 @@ import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryCreationDto;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryUpdateDto;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryResponseDto;
-import ar.edu.itba.paw.webapp.forms.search.DirectoryQuery;
+import ar.edu.itba.paw.webapp.forms.queries.DirectoryQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
