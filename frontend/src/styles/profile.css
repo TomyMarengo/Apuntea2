@@ -1,0 +1,28 @@
+.profile-form {
+  display: grid;
+  grid-template-areas: 'header' 'main' 'footer';
+  justify-items: center;
+}
+.profile-picture {
+  grid-area: header;
+}
+
+.profile-inputs {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  grid-auto-flow: column;
+  width: 100%;
+  column-gap: 2rem;
+  row-gap: 1rem;
+}
+
+.profile-footer {
+  grid-area: footer;
+  max-width: 3rem;
+}
+
+.profile-item {
+  gap: 1rem;
+}

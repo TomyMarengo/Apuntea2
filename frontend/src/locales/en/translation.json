@@ -2,6 +2,9 @@
   "placeholders": {
     "email": "apuntea@apuntea.com",
     "password": "Apuntea1234@",
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "johndoe",
     "institutionId": "Massachusetts Institute of Technology",
     "careerId": "Software Engineering"
   },

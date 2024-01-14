@@ -2,6 +2,9 @@
   "placeholders": {
     "email": "apuntea@apuntea.com",
     "password": "Apuntea1234@",
+    "firstName": "Juan",
+    "lastName": "Pérez",
+    "username": "juanperez",
     "institutionId": "Instituto Tecnológico de Buenos Aires",
     "careerId": "Ingeniería Informática"
   },

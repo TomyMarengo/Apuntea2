@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { NavLink } from 'react-router-dom';
 
 const Button = ({ primary = true, outlined = false, children, ...props }) => {
+  const { className, ...restProps } = props;
   const classes = useMemo(
     () =>
       clsx(
@@ -11,13 +12,13 @@ const Button = ({ primary = true, outlined = false, children, ...props }) => {
         outlined && (primary ? 'text-pri hover:bg-pri' : 'text-sec hover:bg-sec'),
         { 'text-bg': !outlined },
         'button',
-        props.className
+        className
       ),
-    [outlined, primary, props.className]
+    [outlined, primary, className]
   );
 
   if ('to' in props) {
-    const { to, ...anchorProps } = props;
+    const { to, ...anchorProps } = restProps;
     return (
       <NavLink to={to} className={classes} {...anchorProps}>
         {children}
@@ -25,7 +26,7 @@ const Button = ({ primary = true, outlined = false, children, ...props }) => {
     );
   } else {
     return (
-      <button type="button" className={classes} {...props}>
+      <button type="button" className={classes} {...restProps}>
         {children}
       </button>
     );

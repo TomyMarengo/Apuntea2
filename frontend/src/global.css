@@ -2,6 +2,7 @@
 @import url('./styles/dropdown.css');
 @import url('./styles/home.css');
 @import url('./styles/navbar.css');
+@import url('./styles/profile.css');
 
 @tailwind base;
 @tailwind components;
@@ -132,7 +133,8 @@ body {
   line-height: 1.5;
   background-size: cover;
   background-blend-mode: lighten;
-  background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat fixed;
+  background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%)
+    no-repeat fixed;
 }
 
 nav {
@@ -144,11 +146,14 @@ main>section {
 }
 
 
-html.dark>body {
-  background: linear-gradient(180deg,
+html.dark > body {
+  background: linear-gradient(
+      180deg,
       var(--gradient-top-dark) 0%,
       var(--gradient-mid-dark) 42.19%,
-      var(--gradient-bot-dark) 99.99%) no-repeat fixed;
+      var(--gradient-bot-dark) 99.99%
+    )
+    no-repeat fixed;
 }
 
 /* Set shorter line heights on headings and interactive elements */
@@ -253,7 +258,6 @@ input::placeholder {
 .max-container.center {
   @apply flex flex-col justify-center;
 }
-
 
 .link {
   @apply text-dark-pri hover:text-pri focus:text-pri focus:underline;
