@@ -1,4 +1,4 @@
-import { useState, cloneElement } from 'react';
+import { useState, cloneElement, useEffect } from 'react';
 import clsx from 'clsx';
 import { Button } from '.';
 
@@ -9,10 +9,30 @@ const Dropdown = ({ trigger, menu, ...props }) => {
     setOpen(!open);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    const handleDocumentClick = (event) => {
+      // Verifica si el clic fue dentro del dropdown o en el propio botón de activación
+      if (!event.target.closest('.dropdown') && !event.target.closest('.dropdown-trigger')) {
+        handleClose();
+      }
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+
+    return () => {
+      document.removeEventListener('click', handleDocumentClick);
+    };
+  }, []);
+
   return (
     <div className="dropdown">
       {cloneElement(trigger, {
         onClick: handleOpen,
+        className: clsx(trigger.props.className, 'dropdown-trigger'),
       })}
       {open ? (
         <ul className={clsx('dropdown-menu', props.className)}>
@@ -23,7 +43,7 @@ const Dropdown = ({ trigger, menu, ...props }) => {
                   menuItem.type === Button
                     ? (event) => {
                         if (menuItem.props.onClick) menuItem.props.onClick(event);
-                        setOpen(false);
+                        handleClose();
                       }
                     : undefined,
               })}

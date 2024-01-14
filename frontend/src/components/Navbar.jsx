@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken} from '../store/slices/authSlice';
+import { selectCurrentUser } from '../store/slices/authSlice';
 
 import { Button, DarkMode, ProfileButton } from '.';
 
 const Navbar = () => {
-  const token = useSelector(selectCurrentToken);
+  const user = useSelector(selectCurrentUser);
 
   return (
     <nav className="min-h-[60px] flex justify-between bg-dark-bg items-center px-4">
@@ -14,14 +14,14 @@ const Navbar = () => {
       </NavLink>
       <div className="flex items-center gap-4">
         <DarkMode />
-        {token ? (
+        {user ? (
           <>
-            <ProfileButton/>
+            <ProfileButton />
           </>
         ) : (
           <>
             <Button to="/login">Log In</Button>
-            <Button to="/signup" outlined>
+            <Button to="/register" outlined>
               Sign up
             </Button>
           </>

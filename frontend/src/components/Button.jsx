@@ -6,9 +6,9 @@ const Button = ({ primary = true, outlined = false, children, ...props }) => {
   const classes = useMemo(
     () =>
       clsx(
-        outlined && 'border bg-transparent',
-        primary ? 'bg-pri border-pri' : 'bg-sec border-sec',
-        outlined && (primary ? 'text-pri' : 'text-sec'),
+        outlined && 'border bg-transparent hover:text-bg',
+        primary ? 'bg-pri border-pri hover:bg-dark-pri' : 'bg-sec border-sec',
+        outlined && (primary ? 'text-pri hover:bg-pri' : 'text-sec hover:bg-sec'),
         { 'text-bg': !outlined },
         'button',
         props.className

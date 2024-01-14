@@ -1,5 +1,5 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { Home, Profile, Login, RequireAuth } from './pages';
+import { Home, Profile, Login, Register, RequireAuth } from './pages';
 import Navbar from './components/Navbar.jsx';
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
           {/* Public Routes */}
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           {/* Protected Routes */}
           <Route element={<RequireAuth />}>

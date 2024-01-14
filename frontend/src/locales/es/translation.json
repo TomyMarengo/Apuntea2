@@ -1,11 +1,15 @@
 {
-  "login": {
-    "title": "Iniciar sesión",
-    "email": "Correo electrónico",
-    "password": "Contraseña",
-    "login": "Iniciar sesión",
-    "forgot": "¿Olvidaste tu contraseña?",
-    "register": "Registrarse",
-    "error": "Correo electrónico o contraseña inválidos"
+  "placeholders": {
+    "email": "apuntea@apuntea.com",
+    "password": "Apuntea1234@",
+    "password_confirmation": "Apuntea1234@"
+  },
+  "errors": {
+    "email": "El correo electrónico es obligatorio",
+    "password": "La contraseña es obligatoria, debe tener al menos 8 caracteres y debe contener al menos una letra mayúscula, una letra minúscula y un número",
+    "password_confirmation": "La confirmación de contraseña es obligatoria, debe tener al menos 8 caracteres y debe contener al menos una letra mayúscula, una letra minúscula y un número"
+  },
+  "loginForm": {
+    "title": "Iniciar sesión"
   }
 }

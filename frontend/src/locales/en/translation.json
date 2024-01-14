@@ -1,11 +1,15 @@
 {
-  "login": {
-    "title": "Login",
-    "email": "Email",
-    "password": "Password",
-    "login": "Login",
-    "forgot": "Forgot Password?",
-    "register": "Register",
-    "error": "Invalid email or password"
+  "placeholders": {
+    "email": "apuntea@apuntea.com",
+    "password": "Apuntea1234@",
+    "passwordConfirmation": "Apuntea1234@"
+  },
+  "errors": {
+    "email": "Email is required",
+    "password": "Password is required, must be at least 8 characters long, and must contain at least one uppercase letter, one lowercase letter, and one number",
+    "passwordConfirmation": "Password confirmation is required, must be at least 8 characters long, and must contain at least one uppercase letter, one lowercase letter, and one number"
+  },
+  "loginForm": {
+    "title": "Login"
   }
 }

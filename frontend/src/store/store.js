@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from './slices/apiSlice.js';
 import authReducer from './slices/authSlice.js';
 
-/* // Function to save state to localStorage
+// Function to save state to localStorage
 function saveToLocalStorage(state) {
   try {
     const serializedState = JSON.stringify(state);
@@ -27,21 +27,20 @@ function loadFromLocalStorage() {
 // Middleware function
 const localStorageMiddleware = (store) => (next) => (action) => {
   const result = next(action);
-  saveToLocalStorage(store.getState()); //TODO: remove token before saving to localStorage
+  saveToLocalStorage(store.getState()); //TODO: remove token before saving to localStorage OR NOT?
   return result;
 };
 
-const preloadedState = loadFromLocalStorage(); */
+const preloadedState = loadFromLocalStorage();
 
 const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
   },
-  /* middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware).concat(localStorageMiddleware), */
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware).concat(localStorageMiddleware),
   devTools: true, //TODO: remove this in production
-  /* preloadedState, */
+  preloadedState,
 });
 
 export default store;
