@@ -22,25 +22,21 @@ const LoginForm = () => {
 
   return (
     <div className="flex flex-col w-full gap-5">
-      <h1 className="text-3xl">{t('loginForm.title')}</h1>
+      <h1 className="text-3xl">{t('login.title')}</h1>
       <div className="flex flex-col gap-5 items-center w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 items-center w-full">
           <p className={error ? 'errmsg' : 'offscreen'} aria-live="assertive">
             {error}
           </p>
-          <Input {...loginInputs.find((input) => input.name === 'email')} value={form.email} onChange={handleChange} />
-          <Input
-            password
-            {...loginInputs.find((input) => input.name === 'password')}
-            value={form.password}
-            onChange={handleChange}
-          />
+          {loginInputs.map((input) => (
+            <Input key={input.name} {...input} value={form[input.name]} onChange={handleChange} />
+          ))}
           <Button type="submit">Log In</Button>
         </form>
         <span>
-          ¿No tienes una cuenta?{' '}
+          {t('login.dontHaveAccount')}
           <NavLink to="/register" className="link">
-            Crear una
+            {t('login.register')}
           </NavLink>
         </span>
       </div>

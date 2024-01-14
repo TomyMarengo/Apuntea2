@@ -2,7 +2,8 @@
   "placeholders": {
     "email": "apuntea@apuntea.com",
     "password": "Apuntea1234@",
-    "password_confirmation": "Apuntea1234@"
+    "institutionId": "Instituto Tecnológico de Buenos Aires",
+    "careerId": "Ingeniería Informática"
   },
   "apuntea": "Apuntea",
   "verbs": {
@@ -118,22 +119,20 @@
     "subtitle": "Conecta tu conocimiento, amplía tus horizontes",
     "cards": [
       {
-        "title": {
-          "editProfile": "Edita tu perfil",
-          "register": "Regístrate"
-        },
-        "body": {
-          "editProfile": "Cambia tu imagen, nombre y más",
-          "register": "Crea una cuenta y comienza a compartir tus apuntes"
-        }
+        "title": "Registrarse",
+        "subtitle": "Crea una cuenta y comienza a compartir tus apuntes"
       },
       {
-        "title": "Organiza tus apuntes",
-        "body": "Crea carpetas y organiza tus apuntes"
+        "title": "Sube tus apuntes",
+        "subtitle": "Sube tus apuntes y compártelos con otros estudiantes"
       },
       {
         "title": "Encuentra apuntes",
-        "body": "Busca apuntes de otras personas, compártelos, descárgalos y resáltalos"
+        "subtitle": "Encuentra apuntes de otros estudiantes, compártelos, descárgalos y califícalos"
+      },
+      {
+        "title": "Organiza tus apuntes",
+        "subtitle": "Crea carpetas y organiza tus apuntes por materia"
       }
     ]
   },
@@ -277,27 +276,18 @@
   },
   "login": {
     "title": "Iniciar Sesión",
-    "rememberMe": "Recordarme",
-    "weAre": "Somos Apuntea",
-    "email": "Dirección de email",
-    "dontHave": "¿No tienes una cuenta?",
-    "createNew": "Crear una",
-    "forgotPassword": "¿Olvidaste tu contraseña?",
-    "weAreMore": {
-      "title": "Somos más que una plataforma de apuntes",
-      "subtitle": "Somos una comunidad de estudiantes que comparten sus apuntes para ayudar a otros estudiantes. ¡Únete!"
-    },
-    "error": "El email o la contraseña son incorrectos",
-    "banned": "Tu cuenta ha sido suspendida por un administrador"
+    "dontHaveAccount": "¿No tienes una cuenta? ",
+    "register": "Crear una",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
   },
   "register": {
     "title": "Registrarse",
-    "have": "¿Ya tienes una cuenta?"
+    "haveAccount": "¿Ya tienes una cuenta? ",
+    "login": "Inicia sesión"
   },
   "forgotPassword": {
     "title": "Restablecer contraseña",
     "subtitle": "Ingresa tu email para restablecer tu contraseña",
-    "email": "Dirección de email",
     "back": "Volver a Iniciar sesión",
     "login": "Iniciar sesión",
     "code": "Código de verificación",

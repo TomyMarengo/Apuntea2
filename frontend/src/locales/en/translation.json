@@ -2,7 +2,8 @@
   "placeholders": {
     "email": "apuntea@apuntea.com",
     "password": "Apuntea1234@",
-    "passwordConfirmation": "Apuntea1234@"
+    "institutionId": "Massachusetts Institute of Technology",
+    "careerId": "Software Engineering"
   },
   "apuntea": "Apuntea",
   "verbs": {
@@ -118,22 +119,20 @@
     "subtitle": "Connect your knowledge, expand your horizons",
     "cards": [
       {
-        "title": {
-          "editProfile": "Edit your profile",
-          "register": "Register"
-        },
-        "body": {
-          "editProfile": "Change your profile picture, name and more",
-          "register": "Create an account and start uploading your notes"
-        }
+        "title": "Register",
+        "subtitle": "Create an account and start sharing your notes"
       },
       {
-        "title": "Organize your notes",
-        "body": "Create folders and organize your notes by subject"
+        "title": "Upload your notes",
+        "subtitle": "Upload your notes and share them with other students"
       },
       {
         "title": "Find notes",
-        "body": "Find notes from other students, share, download and rate them"
+        "subtitle": "Find notes from other students, share, download and rate them"
+      },
+      {
+        "title": "Organize your notes",
+        "subtitle": "Create folders and organize your notes by subject"
       }
     ]
   },
@@ -275,27 +274,18 @@
   },
   "login": {
     "title": "Log In",
-    "rememberMe": "Remember me",
-    "weAre": "We are Apuntea",
-    "email": "Email address",
-    "dontHave": "Don't have an account?",
-    "createNew": "Create new",
-    "forgotPassword": "Forgot password?",
-    "weAreMore": {
-      "title": "We are more than a website",
-      "subtitle": "We are a community of students who share their notes and help each other to study. Join us!"
-    },
-    "error": "Incorrect email or password",
-    "banned": "Your account has been banned by an administrator"
+    "dontHaveAccount": "Don't have an account? ",
+    "register": "Create one",
+    "forgotPassword": "Forgot password?"
   },
   "register": {
     "title": "Register",
-    "have": "Already have an account?"
+    "haveAccount": "Already have an account? ",
+    "login": "Log in"
   },
   "forgotPassword": {
     "title": "Forgot password",
     "subtitle": "Enter your email address and we will send you a link to reset your password.",
-    "email": "Email address",
     "back": "Back to log in",
     "login": "Log in",
     "code": "Verification code",

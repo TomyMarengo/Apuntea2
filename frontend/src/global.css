@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+@import url('./styles/dropdown.css');
 
 @tailwind base;
 @tailwind components;
@@ -135,8 +136,7 @@ body {
   line-height: 1.5;
   background-size: cover;
   background-blend-mode: lighten;
-  background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%)
-    no-repeat fixed;
+  background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat fixed;
 }
 
 nav {
@@ -150,14 +150,12 @@ aside {
 main {
   grid-area: main;
 }
-html.dark > body {
-  background: linear-gradient(
-      180deg,
+
+html.dark>body {
+  background: linear-gradient(180deg,
       var(--gradient-top-dark) 0%,
       var(--gradient-mid-dark) 42.19%,
-      var(--gradient-bot-dark) 99.99%
-    )
-    no-repeat fixed;
+      var(--gradient-bot-dark) 99.99%) no-repeat fixed;
 }
 
 /* Set shorter line heights on headings and interactive elements */
@@ -263,44 +261,6 @@ input::placeholder {
   @apply flex flex-col justify-center;
 }
 
-.dropdown {
-  @apply relative;
-}
-
-.dropdown-menu {
-  @apply absolute rounded-xl border border-text/10 py-4 min-w-36 bg-dark-bg;
-}
-
-.dropdown-menu.right {
-  @apply right-0;
-}
-
-.dropdown-menu.left {
-  @apply left-0;
-}
-
-.dropdown-menu > li {
-  @apply bg-transparent;
-}
-
-.dropdown-menu > li > button,
-.dropdown-menu > li > a {
-  @apply w-full h-full bg-transparent m-0 text-text rounded-none flex justify-start;
-  font: inherit;
-}
-
-.dropdown-menu > li > button:hover,
-.dropdown-menu > li > a:hover {
-  @apply bg-pri text-bg;
-}
-
-.dropdown-menu > li > br {
-  @apply border-t border-text/10 my-2;
-}
-
-.dropdown-divider {
-  @apply border-t border-text/10 my-3;
-}
 
 .link {
   @apply text-dark-pri hover:text-pri focus:text-pri focus:underline;
@@ -314,7 +274,8 @@ input::placeholder {
   height: 50px;
   width: 30px;
   border-top-left-radius: 25px;
-  box-shadow: 0 -25px 0 0 var(--dark-bg); /* This is where the magic happens! */
+  box-shadow: 0 -25px 0 0 var(--dark-bg);
+  /* This is where the magic happens! */
 
   position: absolute;
   z-index: -1;

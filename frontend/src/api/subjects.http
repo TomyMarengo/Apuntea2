@@ -1,0 +1,2 @@
+GET http://localhost:8080/paw-2023b-12/institutions/6ca3ce29-2440-455e-a874-1d66d0e96939/careers/0c5717e6-98f2-486c-8e8e-bf33f8d75017/subjects HTTP/1.1
+Content-Type: application/json
