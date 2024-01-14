@@ -4,12 +4,405 @@
     "password": "Apuntea1234@",
     "password_confirmation": "Apuntea1234@"
   },
+  "apuntea": "Apuntea",
+  "verbs": {
+    "following": "Siguiendo",
+    "follow": "Seguir",
+    "unfollow": "Dejar de seguir",
+    "manage": "Administrar",
+    "share": "Compartir",
+    "download": "Descargar",
+    "create": "Crear",
+    "edit": "Editar",
+    "favorite": "Favorito",
+    "favorites": "Favoritos",
+    "delete": "Eliminar",
+    "logout": "Cerrar sesión",
+    "login": "Iniciar sesión",
+    "cancel": "Cancelar",
+    "register": "Registrarse",
+    "views": "Visualizaciones: <0>{{views}}</0>",
+    "upload": "Subir",
+    "update": "Actualizar",
+    "editInformation": "Editar información",
+    "close": "Cerrar",
+    "copyLink": "Copiar enlace",
+    "send": "Enviar",
+    "repeatPassword": "Repetir contraseña"
+  },
+  "specificVerbs": {
+    "uploadNote": "Subir apunte",
+    "editNote": "Editar apunte",
+    "editDirectory": "Editar carpeta",
+    "createDirectory": "Crear carpeta",
+    "createSubject": "Crear una nueva materia",
+    "linkSubject": "Añadir materia de otra carrera",
+    "link": "Vincular",
+    "unlink": "Desvincular",
+    "unlinkSubject": "Desvincular materia",
+    "editSubject": "Modificar materia",
+    "banUser": "Suspender usuario",
+    "unbanUser": "Reintegrar usuario",
+    "deleteNote": "Eliminar apunte",
+    "deleteReview": "Eliminar reseña"
+  },
+  "data": {
+    "separator": "Separador",
+    "note": "Apunte",
+    "notes": "Apuntes",
+    "users": "Usuarios",
+    "menu": "Menú",
+    "name": "Nombre",
+    "lastName": "Apellido",
+    "username": "Nombre de usuario",
+    "roles": "Roles",
+    "status": "Estado",
+    "file": "Archivo",
+    "files": "Archivos",
+    "folder": "Carpeta",
+    "folders": "Carpetas",
+    "email": "Email",
+    "institution": "Institución",
+    "career": "Carrera",
+    "subject": "Materia",
+    "category": "Categoría",
+    "owner": "Propietario",
+    "score": "Puntaje",
+    "createdAt": "Fecha de creación",
+    "lastModifiedAt": "Fecha de modificación",
+    "logotype": "Logotipo",
+    "notifications": "Notificaciones",
+    "private": "Privado",
+    "public": "Público",
+    "color": "Color",
+    "privacy": "Privacidad",
+    "year": "Año",
+    "latestNotes": "Más recientes",
+    "configuration": "Configuración",
+    "review": "Reseña",
+    "reviews": "Reseñas",
+    "date": "Fecha",
+    "password": "Contraseña",
+    "darkMode": "Modo oscuro"
+  },
+  "category": {
+    "folder": "Carpeta",
+    "theory": "Teoría",
+    "practice": "Práctica",
+    "exam": "Examen",
+    "other": "Otro",
+    "all": "Todos"
+  },
+  "roles": {
+    "student": "Estudiante",
+    "admin": "Administrador",
+    "moderator": "Moderador"
+  },
+  "ordinal": {
+    "1": "1er",
+    "2": "2do",
+    "3": "3er",
+    "4": "4to",
+    "5": "5to",
+    "6": "6to",
+    "7": "7mo",
+    "8": "8vo",
+    "9": "9no",
+    "10": "10mo"
+  },
+  "date": {
+    "format": "<2>{{year}}</2>/<1>{{month}}</1>/<0>{{day}}</0>"
+  },
+  "index": {
+    "title": "Bienvenido a <0>{{pageName}}</0>",
+    "subtitle": "Conecta tu conocimiento, amplía tus horizontes",
+    "cards": [
+      {
+        "title": {
+          "editProfile": "Edita tu perfil",
+          "register": "Regístrate"
+        },
+        "body": {
+          "editProfile": "Cambia tu imagen, nombre y más",
+          "register": "Crea una cuenta y comienza a compartir tus apuntes"
+        }
+      },
+      {
+        "title": "Organiza tus apuntes",
+        "body": "Crea carpetas y organiza tus apuntes"
+      },
+      {
+        "title": "Encuentra apuntes",
+        "body": "Busca apuntes de otras personas, compártelos, descárgalos y resáltalos"
+      }
+    ]
+  },
+  "search": {
+    "title": "Búsqueda",
+    "category": {
+      "all": "Todas las categorías"
+    },
+    "sort": {
+      "placeholder": "Sin ordenar",
+      "image": "Imagen de ordenamiento",
+      "name": "Ordenar por nombre",
+      "score": "Ordenar por puntaje",
+      "createdAt": "Ordenar por fecha de creación",
+      "lastModifiedAt": "Ordenar por fecha de modificación",
+      "asc": "Ascendente",
+      "desc": "Descendente"
+    },
+    "word": {
+      "placeholder": "Buscar por nombre"
+    },
+    "button": {
+      "clearAllFilters": "Limpiar filtros",
+      "boxView": "Vista de grilla",
+      "listView": "Vista de lista",
+      "pageSize": "Tamaño de página",
+      "deselectAll": "Deseleccionar todo",
+      "selectAll": "Seleccionar todo"
+    },
+    "toggleView": "Cambiar vista",
+    "selected": "seleccionado/s",
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente"
+    },
+    "openParentFolder": "Abrir carpeta contenedora",
+    "openUserFolder": "Abrir apuntes de <0>{{user}}</0>",
+    "openSubjectFolder": "Abrir carpeta de la materia",
+    "openInOtherTab": "Abrir en otra pestaña",
+    "noNotes": "No hay apuntes con los filtros seleccionados.",
+    "noScore": "Sin puntaje"
+  },
+  "notes": {
+    "currentScore": "Puntaje actual:",
+    "comments": {
+      "button": "Comentarios",
+      "yourReview": "Tu reseña",
+      "noComments": "Este apunte no tiene comentarios aún."
+    },
+    "review": {
+      "text": {
+        "placeholder": "Escribe tu reseña aquí..."
+      }
+    },
+    "reviews": {
+      "noReviews": "Este apunte no tiene reseñas aún.",
+      "seeMore": "Ver más reseñas"
+    },
+    "file": {
+      "tooHeavy": "El archivo es demasiado pesado para ser cargado."
+    }
+  },
+  "reviews": {
+    "comment": "Comentario",
+    "note": {
+      "title": "Reseñas del apunte <0>{{note}}</0>"
+    },
+    "read": "Leer reseñas",
+    "userNoReviews": "Sin reseñas",
+    "user": {
+      "title": "Reseñas a <0>{{user}}</0>"
+    },
+    "noContent": {
+      "description": "No hay reseñas aún. Cuando un usuario te haga una reseña, aparecerá aquí."
+    },
+    "myReviews": "Reseñas que me hicieron"
+  },
+  "directories": {
+    "noContent": {
+      "description": "Crea una nueva carpeta o sube un apunte."
+    }
+  },
+  "follows": {
+    "noContent": {
+      "description": "Sigue a otros usuarios para ver sus apuntes rápidamente."
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "changePassword": {
+      "title": "Cambiar contraseña",
+      "newPassword": "Nueva contraseña",
+      "oldPassword": "Contraseña actual"
+    },
+    "otherConfigurations": {
+      "title": "Otras configuraciones",
+      "receiveMails": "Recibir correos electrónicos"
+    }
+  },
+  "profile": {
+    "title": "Perfil",
+    "picture": "Foto de perfil"
+  },
+  "noteBoard": {
+    "myNoteBoard": {
+      "title": "Mis apuntes"
+    },
+    "yourNoteBoard": {
+      "title": "Apuntes de <0>{{user}}</0>"
+    },
+    "directories": {
+      "year": "{0} Año"
+    },
+    "notes": {
+      "noContent": {
+        "description": "Ir a <a class=\"mx-1\" href={0}>Mi Carrera</a> para agregar apuntes."
+      }
+    },
+    "averageScore": "Puntaje promedio",
+    "myReviews": "Mis reseñas"
+  },
+  "myFavorites": {
+    "notes": {
+      "noContent": {
+        "description": "Ir a la <a class=\"mx-1\" href={0}>Búsqueda</a> para agregar favoritos."
+      }
+    },
+    "directories": {
+      "noContent": {
+        "description": "Ir a la <a class=\"mx-1\" href={0}>Búsqueda</a> para agregar favoritos."
+      }
+    },
+    "subjects": {
+      "noContent": {
+        "description": "Ir a <a class=\"mx-1\" href={0}>Mi Carrera</a> para agregar favoritos."
+      }
+    }
+  },
+  "myCareer": {
+    "title": "Mi carrera"
+  },
+  "login": {
+    "title": "Iniciar Sesión",
+    "rememberMe": "Recordarme",
+    "weAre": "Somos Apuntea",
+    "email": "Dirección de email",
+    "dontHave": "¿No tienes una cuenta?",
+    "createNew": "Crear una",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "weAreMore": {
+      "title": "Somos más que una plataforma de apuntes",
+      "subtitle": "Somos una comunidad de estudiantes que comparten sus apuntes para ayudar a otros estudiantes. ¡Únete!"
+    },
+    "error": "El email o la contraseña son incorrectos",
+    "banned": "Tu cuenta ha sido suspendida por un administrador"
+  },
+  "register": {
+    "title": "Registrarse",
+    "have": "¿Ya tienes una cuenta?"
+  },
+  "forgotPassword": {
+    "title": "Restablecer contraseña",
+    "subtitle": "Ingresa tu email para restablecer tu contraseña",
+    "email": "Dirección de email",
+    "back": "Volver a Iniciar sesión",
+    "login": "Iniciar sesión",
+    "code": "Código de verificación",
+    "newPassword": "Nueva contraseña",
+    "challenge": {
+      "title": "El código de verificación ha sido enviado a tu email"
+    }
+  },
+  "manageUsers": {
+    "title": "Administrar usuarios",
+    "user": {
+      "status": {
+        "active": "Activo",
+        "banned": "Baneado"
+      }
+    },
+    "ban": {
+      "confirm": "Se suspenderá al usuario por 3 días"
+    },
+    "unban": {
+      "confirm": "Se reintegrará al usuario"
+    },
+    "searchUserForm": {
+      "query": "Buscar por nombre de usuario o email",
+      "noContent": "No se encontraron usuarios con los filtros seleccionados."
+    },
+    "banUserForm": {
+      "explain": "Explique la razón de la suspensión del usuario..."
+    }
+  },
+  "manageCareers": {
+    "title": "Administrar carreras",
+    "explanation": "Para comenzar a administrar las materias, seleccione una institución y una carrera de la lista.",
+    "explanation2": "Luego, podrá crear, editar, vincular, desvincular y eliminar materias.",
+    "sort": {
+      "year": "Ordenar por año"
+    },
+    "linkSubject": {
+      "explanation": "Vincula una materia de otra carrera a <0>{{career}}</0> <1>{{institution}}</1>.",
+      "explanation2": "Esto incluirá la materia en <0>{{career}}</0> <1>{{institution}}</1>."
+    },
+    "createSubject": {
+      "explanation": "Crea una nueva materia en <0>{{career}}</0> <1>{{institution}}</1>."
+    },
+    "unlinkForm": {
+      "description": "Desvinculando",
+      "confirm": "¿Estás seguro que deseas desvincular la materia con <0>{{career}}</0>? No se eliminará de otras carreras."
+    },
+    "linkForm": {
+      "subject": {
+        "placeholder": "Materia de otra carrera"
+      }
+    }
+  },
+  "navbar": {
+    "loggedIn": "Se ha iniciado sesión como",
+    "bottom": {
+      "separator": ">",
+      "ellipsis": "...",
+      "middleEllipsis": "���"
+    }
+  },
   "errors": {
+    "400": {
+      "title": "Solicitud inválida",
+      "message": "Se realizó una solicitud inválida"
+    },
+    "403": {
+      "title": "Acceso denegado",
+      "message": "No tienes permisos para acceder a esta página"
+    },
+    "404": {
+      "title": "Página no encontrada",
+      "message": "Lo sentimos, la página que buscas no existe"
+    },
+    "500": {
+      "title": "Error interno del servidor",
+      "message": "Lo sentimos, ha ocurrido un error interno del servidor"
+    },
     "email": "El correo electrónico es obligatorio",
     "password": "La contraseña es obligatoria, debe tener al menos 8 caracteres y debe contener al menos una letra mayúscula, una letra minúscula y un número",
     "password_confirmation": "La confirmación de contraseña es obligatoria, debe tener al menos 8 caracteres y debe contener al menos una letra mayúscula, una letra minúscula y un número"
   },
-  "loginForm": {
-    "title": "Iniciar sesión"
+  "toast": {
+    "linkCopied": "Enlace copiado al portapapeles",
+    "maxSizeExceeded": "El archivo es demasiado grande",
+    "register": "Registro exitoso",
+    "reviewUploaded": "Reseña cargada en el apunte",
+    "forgotPassword": "Contraseña cambiada exitosamente",
+    "changePassword": "Contraseña cambiada exitosamente",
+    "changeInfo": "Información cambiada exitosamente",
+    "noteEdited": "Apunte editado exitosamente",
+    "noteDeleted": "Apunte eliminado exitosamente",
+    "directoryCreated": "Carpeta creada exitosamente",
+    "directoryDeleted": "Carpeta eliminada exitosamente",
+    "directoryEdited": "Carpeta editada exitosamente",
+    "addFavorite": "Agregado a favoritos",
+    "removeFavorite": "Eliminado de favoritos",
+    "userBanned": "Usuario suspendido exitosamente",
+    "userUnbanned": "Usuario reintegrado exitosamente",
+    "reviewDeleted": "Reseña eliminada exitosamente",
+    "subjectCreated": "Materia creada exitosamente",
+    "subjectEdited": "Materia editada exitosamente",
+    "subjectLinked": "Materia vinculada exitosamente",
+    "subjectUnlinked": "Materia desvinculada exitosamente",
+    "itemsDeleted": "Borrado realizado exitosamente"
   }
 }

@@ -1,12 +1,17 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { Home, Profile, Login, Register, RequireAuth } from './pages';
 import Navbar from './components/Navbar.jsx';
+import Sidebar from './components/Sidebar.jsx';
+import { useSelector } from 'react-redux';
+import { selectCurrentToken } from './store/slices/authSlice';
 
 function App() {
+  const token = useSelector(selectCurrentToken);
   return (
-    <main className="min-h-[100vh]">
-      <Router>
-        <Navbar />
+    <Router>
+      <Navbar />
+      {token && <Sidebar />}
+      <main>
         <Routes>
           {/* Public Routes */}
           <Route index element={<Home />} />
@@ -18,8 +23,8 @@ function App() {
             <Route path="/profile" element={<Profile />} />
           </Route>
         </Routes>
-      </Router>
-    </main>
+      </main>
+    </Router>
   );
 }
 
