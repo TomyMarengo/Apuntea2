@@ -182,7 +182,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
                 // Set correctly PATCH and POST methods!
-                .antMatchers(HttpMethod.GET, "/tokens", "/users/**", "/directories/**", "/notes/**", "/reviews") // TODO: Change
+                .antMatchers(HttpMethod.GET, "/tokens", "/users/**", "/directories/**", "/notes/**", "/reviews", "/institutions/**") // TODO: Change
                 .permitAll()
                 .anyRequest()
                 .authenticated()
