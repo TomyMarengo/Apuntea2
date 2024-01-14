@@ -129,7 +129,10 @@ public class TestUtils {
     }
 
     static void insertFavoriteDirectory(EntityManager em, UUID directoryId, UUID userId) {
-        em.find(User.class, userId).getDirectoryFavorites().add(em.find(Directory.class, directoryId));
+        em.createNativeQuery("INSERT INTO directory_favorites (user_id, directory_id) VALUES (?, ?)")
+                .setParameter(1, userId)
+                .setParameter(2, directoryId)
+                .executeUpdate();
         em.flush();
     }
 

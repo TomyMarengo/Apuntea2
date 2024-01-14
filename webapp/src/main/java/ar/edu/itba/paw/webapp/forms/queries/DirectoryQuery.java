@@ -8,6 +8,9 @@ public class DirectoryQuery extends SearchableQuery {
     @QueryParam("sortBy")
     private String sortBy = "modified";
 
+    @QueryParam("rdir")
+    private boolean rdir = false;
+
     public DirectoryQuery() {
     }
 
@@ -17,5 +20,13 @@ public class DirectoryQuery extends SearchableQuery {
 
     public void setSortBy(String sortBy) {
         this.sortBy = sortBy;
+    }
+
+    public boolean isRdir() {
+        return rdir;
+    }
+
+    public void setRdir(boolean rdir) {
+        this.rdir = rdir;
     }
 }

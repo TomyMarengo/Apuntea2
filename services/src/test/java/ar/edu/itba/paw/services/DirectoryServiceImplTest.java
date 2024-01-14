@@ -65,18 +65,4 @@ public class DirectoryServiceImplTest {
         directoryService.removeFavorite(EDA_DIRECTORY_ID);
         Assert.fail();
     }
-
-    @Test
-    public void testGroupFavoriteDirectories() {
-        Set<Directory> directories = new HashSet<>(Arrays.asList(mockDirectory("dir1"), mockDirectory("dir2"), mockRootDirectory("rd")));
-        User user = Mockito.mock(User.class);
-        given(user.getDirectoryFavorites()).willAnswer(t -> directories);
-        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(user);
-
-        DirectoryFavoriteGroups favorites = directoryService.getFavorites();
-        assertEquals(2, favorites.getDirectoryList().size());
-        assertEquals(1, favorites.getRootDirectoryList().size());
-        assertTrue(favorites.getDirectoryList().stream().noneMatch(Directory::isRootDirectory));
-        assertTrue(favorites.getRootDirectoryList().stream().allMatch(Directory::isRootDirectory));
-    }
 }

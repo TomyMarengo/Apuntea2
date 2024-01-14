@@ -162,7 +162,7 @@ public class DirectoryJpaDaoTest {
 
     @Test
     public void testAddFavorite() {
-        directoryDao.addFavorite(em.getReference(User.class, PEPE_ID), EDA_DIRECTORY_ID);
+        directoryDao.addFavorite(PEPE_ID, EDA_DIRECTORY_ID);
         em.flush();
         assertEquals(1, countRows(em, DIRECTORY_FAVORITES, "user_id = '" + PEPE_ID + "' AND directory_id = '" + EDA_DIRECTORY_ID + "'"));
         assertEquals(0, countRows(em, DIRECTORY_FAVORITES, "user_id = '" + SAIDMAN_ID + "' AND directory_id = '" + EDA_DIRECTORY_ID + "'"));
@@ -176,7 +176,7 @@ public class DirectoryJpaDaoTest {
         );
         insertFavoriteDirectory(em, newDir.getId(), PEPE_ID);
         insertFavoriteDirectory(em, newDir.getId(), SAIDMAN_ID);
-        directoryDao.removeFavorite(em.getReference(User.class, PEPE_ID), newDir.getId());
+        directoryDao.removeFavorite(PEPE_ID, newDir.getId());
         em.flush();
         assertEquals(0, countRows(em, DIRECTORY_FAVORITES, "user_id = '" + PEPE_ID + "' AND directory_id = '" + newDir.getId() + "'"));
         assertEquals(1, countRows(em, DIRECTORY_FAVORITES, "user_id = '" + SAIDMAN_ID + "' AND directory_id = '" + newDir.getId() + "'"));

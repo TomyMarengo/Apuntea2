@@ -16,9 +16,9 @@ public interface DirectoryService {
     DirectoryPath getDirectoryPath(UUID directoryId);
     void update(UUID directoryId, String name, Boolean visible, String iconColor);
     void delete(UUID directoryId, String reason);
-    DirectoryFavoriteGroups getFavorites();
-    void addFavorite(UUID directoryId);
-    void removeFavorite(UUID directoryId);
-    Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, String sortBy, boolean ascending, int page, int pageSize);
+//    DirectoryFavoriteGroups getFavorites();
+    boolean addFavorite(UUID directoryId);
+    boolean removeFavorite(UUID directoryId);
+    Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, boolean isRdir, String sortBy, boolean ascending, int page, int pageSize);
 }
 

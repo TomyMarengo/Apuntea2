@@ -19,19 +19,23 @@ public class UserCreationDto {
     @UnusedEmail
     private String email;
 
-    @NotNull
-    @NotBlank
+//    @NotNull
+//    @NotBlank
     @Size(min = 4, max = 50)
     @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
     private String password;
 
-    @NotNull
+    // TODO: Remove
+//    @NotNull
     @ValidUuid
     private UUID institutionId;
 
     @NotNull
     @ValidUuid
     private UUID careerId;
+
+    public UserCreationDto() {
+    }
 
     public String getEmail() {
         return email;

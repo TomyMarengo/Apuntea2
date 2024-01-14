@@ -53,14 +53,14 @@ public class User {
     )
     private Set<Note> noteFavorites = new HashSet<>();
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    /*@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("name ASC")
     @JoinTable(
             name = "Directory_Favorites",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "directory_id" )}
     )
-    private Set<Directory> directoryFavorites = new HashSet<>();
+    private Set<Directory> directoryFavorites = new HashSet<>();*/
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("email ASC")
@@ -194,10 +194,6 @@ public class User {
 
     public Set<Note> getNoteFavorites() {
         return noteFavorites;
-    }
-
-    public Set<Directory> getDirectoryFavorites() {
-        return directoryFavorites;
     }
 
     public Set<User> getUsersFollowing() {
