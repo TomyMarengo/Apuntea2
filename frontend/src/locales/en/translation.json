@@ -117,24 +117,24 @@
   "index": {
     "title": "Welcome to <0>{{pageName}}</0>",
     "subtitle": "Connect your knowledge, expand your horizons",
-    "cards": [
-      {
+    "cards": {
+      "0": {
         "title": "Register",
-        "subtitle": "Create an account and start sharing your notes"
+        "description": "Create an account and start sharing your notes"
       },
-      {
-        "title": "Upload your notes",
-        "subtitle": "Upload your notes and share them with other students"
-      },
-      {
+      "1": {
         "title": "Find notes",
-        "subtitle": "Find notes from other students, share, download and rate them"
+        "description": "Find notes from other students, share, download and rate them"
       },
-      {
+      "2": {
         "title": "Organize your notes",
-        "subtitle": "Create folders and organize your notes by subject"
+        "description": "Create folders and organize your notes by subject"
+      },
+      "3": {
+        "title": "Edit your profile",
+        "description": "Add a profile picture and edit your information"
       }
-    ]
+    }
   },
   "search": {
     "title": "Search",

@@ -10,8 +10,8 @@ function App() {
   return (
     <Router>
       <Navbar />
-      {token && <Sidebar />}
-      <main>
+      <main className="min-h-[calc(100vh-60px)] flex">
+        {token && <Sidebar />}
         <Routes>
           {/* Public Routes */}
           <Route index element={<Home />} />

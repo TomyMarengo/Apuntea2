@@ -117,24 +117,24 @@
   "index": {
     "title": "Bienvenido a <0>{{pageName}}</0>",
     "subtitle": "Conecta tu conocimiento, amplía tus horizontes",
-    "cards": [
-      {
-        "title": "Registrarse",
-        "subtitle": "Crea una cuenta y comienza a compartir tus apuntes"
+    "cards": {
+      "0": {
+        "title": "Regístrate",
+        "description": "Crea una cuenta y comienza a compartir tus apuntes"
       },
-      {
-        "title": "Sube tus apuntes",
-        "subtitle": "Sube tus apuntes y compártelos con otros estudiantes"
+      "1": {
+        "title": "Busca apuntes",
+        "description": "Encuentra apuntes de otros estudiantes, compártelos, descárgalos y califícalos"
       },
-      {
-        "title": "Encuentra apuntes",
-        "subtitle": "Encuentra apuntes de otros estudiantes, compártelos, descárgalos y califícalos"
-      },
-      {
+      "2": {
         "title": "Organiza tus apuntes",
-        "subtitle": "Crea carpetas y organiza tus apuntes por materia"
+        "description": "Crea carpetas y organiza tus apuntes por materia"
+      },
+      "3": {
+        "title": "Edita tu perfil",
+        "description": "Cambia tu imagen, nombre y más"
       }
-    ]
+    }
   },
   "search": {
     "title": "Búsqueda",

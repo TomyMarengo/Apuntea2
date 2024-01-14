@@ -6,19 +6,19 @@ import { useLocation } from 'react-router-dom';
 const Sidebar = () => {
   const options = useMemo(
     () => [
-      { icon: <MyNotesIcon className="fill-dark-pri icon-s" key="0" />, link: '/notes' },
+      { icon: <MyNotesIcon className="fill-dark-pri icon-s" key="0" />, link: '/noteboard' },
       { icon: <ReviewIcon className="fill-dark-pri icon-s" key="1" />, link: '/reviews' },
-      { icon: <OpenBookIcon className="fill-dark-pri icon-s" key="2" />, link: '/books' },
+      { icon: <OpenBookIcon className="fill-dark-pri icon-s" key="2" />, link: '/career' },
       { icon: <FilledHeartIcon className="fill-dark-pri icon-s" key="3" />, link: '/favorites' },
-      { icon: <UserSlashIcon className="fill-dark-pri icon-s" key="4" />, link: '/blocked' },
-      { icon: <BooksIcon className="fill-dark-pri icon-s" key="5" />, link: '/genres' },
+      { icon: <UserSlashIcon className="fill-dark-pri icon-s" key="4" />, link: '/manage-users' },
+      { icon: <BooksIcon className="fill-dark-pri icon-s" key="5" />, link: '/manage-careers' },
     ],
     []
   );
   const location = useLocation();
 
   return (
-    <aside className="bg-dark-bg min-w-[60px] h-screen flex flex-col items-center gap-3 pt-4 sidebar">
+    <aside className="bg-dark-bg min-w-[60px] min-h-[calc(100vh-60px)] flex flex-col items-center gap-3 pt-4 sidebar">
       {options.map(({ icon, link }, i) => (
         <NavLink
           to={link}

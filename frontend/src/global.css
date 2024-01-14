@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
 @import url('./styles/dropdown.css');
+@import url('./styles/home.css');
 
 @tailwind base;
 @tailwind components;
@@ -55,12 +56,6 @@
   --secondary-dark-rgb: 80, 196, 236;
   --dark-secondary-dark: #2f9cbb;
   --dark-secondary-dark-rgb: 47, 156, 187;
-
-  --nav-height: 60px;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: 60px 1fr;
-  grid-template-areas: 'header header' 'sidebar main';
 }
 
 html.dark .root,
@@ -88,6 +83,7 @@ html.dark #docs-root {
   --dark-secondary: var(--dark-secondary-dark);
   --dark-secondary-rgb: var(--dark-secondary-dark-rgb);
 }
+
 
 /* Box sizing rules */
 *,
@@ -131,8 +127,6 @@ ol[role='list'] {
 
 /* Set core body defaults */
 body {
-  min-height: 100vh;
-  min-width: 100vw;
   line-height: 1.5;
   background-size: cover;
   background-blend-mode: lighten;
@@ -140,16 +134,13 @@ body {
 }
 
 nav {
-  grid-area: header;
+  min-height: 60px;
 }
 
-aside {
-  grid-area: sidebar;
+main>section {
+  width: 100%;
 }
 
-main {
-  grid-area: main;
-}
 
 html.dark>body {
   background: linear-gradient(180deg,
@@ -269,7 +260,7 @@ input::placeholder {
 .sidebar::before {
   content: '';
   background-color: transparent;
-  top: var(--nav-height);
+  top: 60px;
   left: 60px;
   height: 50px;
   width: 30px;
