@@ -10,10 +10,10 @@ import ar.edu.itba.paw.services.DirectoryService;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SecurityService;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
+import static ar.edu.itba.paw.webapp.controller.utils.ControllerUtils.*;
 
 import ar.edu.itba.paw.webapp.forms.admin.DeleteWithReasonForm;
-import ar.edu.itba.paw.webapp.forms.note.EditNoteForm;
+import ar.edu.itba.paw.webapp.controller.note.dtos.NoteUpdateDto;
 import ar.edu.itba.paw.webapp.forms.note.ReviewForm;
 import ar.edu.itba.paw.webapp.forms.note.SearchReviewForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;

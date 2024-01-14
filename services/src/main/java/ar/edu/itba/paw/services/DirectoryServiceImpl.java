@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.exceptions.UnavailableNameException;
 import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
 import ar.edu.itba.paw.models.search.SearchArguments;
@@ -22,29 +23,32 @@ public class DirectoryServiceImpl implements DirectoryService {
     private final DirectoryDao directoryDao;
     private final SecurityService securityService;
     private final EmailService emailService;
+    private final SearchService searchService;
 
     @Autowired
-    public DirectoryServiceImpl(DirectoryDao directoryDao, SecurityService securityService, EmailService emailService) {
+    public DirectoryServiceImpl(DirectoryDao directoryDao, SecurityService securityService, EmailService emailService, SearchService searchService) {
         this.directoryDao = directoryDao;
         this.securityService = securityService;
         this.emailService = emailService;
+        this.searchService = searchService;
     }
 
     @Transactional
     @Override
     public UUID create(String name, UUID parentId, boolean visible, String iconColor) {
         User user = securityService.getCurrentUserOrThrow();
+        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
         return directoryDao.create(name, parentId, user, visible, iconColor).getId();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<Directory> getDirectoryById(UUID directoryId) {
         UUID currentUserId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
         return directoryDao.getDirectoryById(directoryId, currentUserId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public DirectoryPath getDirectoryPath(UUID directoryId) {
         List<Directory> directories =  directoryDao.getDirectoryPath(directoryId);
@@ -54,14 +58,14 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Transactional(readOnly = true)
     @Override
     public Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, String sortBy, boolean ascending, int page, int pageSize) {
-        SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
+        final SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
                 .userId(userId)
                 .parentId(parentId)
                 .favBy(favBy)
                 .word(word)
                 .sortBy(sortBy)
                 .ascending(ascending);
-        Optional<User> maybeUser = securityService.getCurrentUser();
+        final Optional<User> maybeUser = securityService.getCurrentUser();
         maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
 
         boolean navigate = parentId != null || favBy != null; // Maybe this should be an additional parameter
@@ -88,10 +92,12 @@ public class DirectoryServiceImpl implements DirectoryService {
         Directory directory = directoryDao
                 .getDirectoryById(directoryId, currentUser.getUserId())
                 .orElseThrow(DirectoryNotFoundException::new);
-        if ((directory.getUser() == null && !currentUser.getIsAdmin()) || !currentUser.equals(directory.getUser()))
+        if (!currentUser.equals(directory.getUser()))
             throw new UserNotOwnerException();
-        if (name != null)
+        if (name != null) {
+            if (searchService.findByName(directory.getParentId(), name).isPresent()) throw new UnavailableNameException();
             directory.setName(name);
+        }
         if (visible != null)
             directory.setVisible(visible);
         if (iconColor != null)

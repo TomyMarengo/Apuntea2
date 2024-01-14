@@ -126,13 +126,13 @@ public class SearchJpaDao implements SearchDao {
 
     @Override
     public Optional<UUID> findByName(UUID parentId, String name, UUID currentUserId) {
-        return (em.createNativeQuery("SELECT CAST(n.id AS VARCHAR(36)) FROM Navigation n WHERE n.name = :name AND n.parent_id = :parentId AND n.user_id = :currentUserId")
+        Query q = (em.createNativeQuery("SELECT CAST(n.id AS VARCHAR(36)) FROM Navigation n WHERE n.name = :name AND n.parent_id = :parentId AND n.user_id = :currentUserId")
                 .setParameter("name", name)
                 .setParameter("parentId", parentId)
-                .setParameter("currentUserId", currentUserId)
-                .getResultList()
+                .setParameter("currentUserId", currentUserId));
+        return q.getResultList()
                 .stream()
-                .findFirst()).map(o -> UUID.fromString((String) o));
+                .findFirst().map(o -> UUID.fromString((String) o));
     }
 
     @Override

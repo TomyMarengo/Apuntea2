@@ -3,7 +3,6 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -18,9 +17,11 @@ public interface UserService {
 
     UUID create(String email, String password, UUID careerId, Role role);
 
-    void updateProfile(String firstName, String lastName, String username, MultipartFile multipartFile, UUID careerId);
+    void updateProfile(String firstName, String lastName, String username, byte[] profilePictureBytes, UUID careerId);
 
-    Optional<byte[]> getProfilePicture(UUID userId);
+    Optional<byte[]> getProfilePictureByUserId(UUID userId);
+
+    Optional<byte[]> getProfilePictureById(UUID pictureId);
 
     void updateCurrentUserPassword(String password);
 

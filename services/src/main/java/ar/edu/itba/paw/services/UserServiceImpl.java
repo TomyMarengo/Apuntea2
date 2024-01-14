@@ -6,7 +6,6 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.user.Image;
 import ar.edu.itba.paw.models.user.Role;
-import ar.edu.itba.paw.models.exceptions.InvalidFileException;
 import ar.edu.itba.paw.models.exceptions.user.InvalidUserException;
 import ar.edu.itba.paw.models.user.UserStatus;
 import ar.edu.itba.paw.persistence.CareerDao;
@@ -18,13 +17,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import ar.edu.itba.paw.models.user.User;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @Service
@@ -123,7 +120,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateProfile(String firstName, String lastName, String username, MultipartFile profilePicture, UUID careerId) {
+    public void updateProfile(String firstName, String lastName, String username, byte[] profilePictureBytes, UUID careerId) {
         User user = securityService.getCurrentUserOrThrow();
         if (firstName != null) user.setFirstName(firstName);
         if (lastName != null) user.setLastName(lastName);
@@ -132,26 +129,31 @@ public class UserServiceImpl implements UserService {
             Career career = careerDao.getCareerById(careerId).orElseThrow(InvalidCareerException::new);
             user.setCareer(career);
         }
-
-        if (profilePicture != null && !profilePicture.isEmpty()) {
-            try {
-                userDao.updateProfilePicture(user, new Image(profilePicture.getBytes()));
-            } catch (IOException e) {
-                LOGGER.error("Error while updating profile picture for user with id: {}", user.getUserId());
-                throw new InvalidFileException();
-            }
+        if (profilePictureBytes != null) {
+//            try {
+            userDao.updateProfilePicture(user, new Image(profilePictureBytes));
+//            } catch (IOException e) {
+//                LOGGER.error("Error while updating profile picture for user with id: {}", user.getUserId());
+//                throw new InvalidFileException();
+//            }
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
-    public Optional<byte[]> getProfilePicture(UUID userId) {
+    public Optional<byte[]> getProfilePictureByUserId(UUID userId) {
         Optional<User> maybeUser = userDao.findById(userId);
         if (!maybeUser.isPresent()) {
             LOGGER.warn("Error while getting profile picture for user with id: {}", userId);
             throw new UserNotFoundException();
         }
         return maybeUser.map(User::getProfilePicture).map(Image::getPicture);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<byte[]> getProfilePictureById(UUID pictureId) {
+        return userDao.getProfilePicture(pictureId);
     }
 
     @Transactional

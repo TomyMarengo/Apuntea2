@@ -3,6 +3,7 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.*;
+import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
 import org.springframework.stereotype.Repository;
@@ -12,10 +13,14 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static ar.edu.itba.paw.models.NameConstants.*;
+import static ar.edu.itba.paw.models.NameConstants.NAME;
 
 @Repository
 public class NoteJpaDao implements NoteDao {
@@ -66,20 +71,18 @@ public class NoteJpaDao implements NoteDao {
 
 
     @Override
-    public boolean delete(List<UUID> noteIds) {
-        if (noteIds.isEmpty()) return false;
-        return em.createQuery("DELETE FROM Note n WHERE n.id IN :noteIds")
-                .setParameter("noteIds", noteIds)
-                .executeUpdate() == noteIds.size();
+    public boolean delete(UUID noteId) {
+        return em.createQuery("DELETE FROM Note n WHERE n.id = :noteId")
+                .setParameter("noteId", noteId)
+                .executeUpdate() == 1;
     }
 
     @Override
-    public boolean delete(List<UUID> noteIds, UUID currentUserId) {
-        if (noteIds.isEmpty()) return false;
-        return em.createQuery("DELETE FROM Note n WHERE n.id IN :noteIds AND n.user.id = :currentUserId")
-                .setParameter("noteIds", noteIds)
+    public boolean delete(UUID noteId, UUID currentUserId) {
+        return em.createQuery("DELETE FROM Note n WHERE n.id = :noteId AND n.user.id = :currentUserId")
+                .setParameter("noteId", noteId)
                 .setParameter("currentUserId", currentUserId)
-                .executeUpdate() == noteIds.size();
+                .executeUpdate() == 1;
     }
 
     @Override
@@ -118,9 +121,11 @@ public class NoteJpaDao implements NoteDao {
 
     @Override
     public int countReviews(UUID noteId) {
-        return ((BigInteger)em.createNativeQuery("SELECT COUNT(*) FROM Reviews WHERE note_id = :noteId")
-                .setParameter("noteId", noteId)
-                .getSingleResult()).intValue();
+        final StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(*) FROM Reviews r ");
+        if (noteId != null) queryBuilder.append("WHERE r.note_id = :noteId");
+        final Query q = em.createNativeQuery(queryBuilder.toString());
+        if (noteId != null) q.setParameter("noteId", noteId);
+        return ((BigInteger)q.getSingleResult()).intValue();
     }
 
     @Override
@@ -128,20 +133,35 @@ public class NoteJpaDao implements NoteDao {
         return getReviews(noteId, pageNum, REVIEW_LIMIT);
     }
 
+    // TODO: Check if all those join fetch are necessary
     @Override
     public List<Review> getReviews(UUID noteId, int pageNum, int pageSize) {
+        StringBuilder queryBuilder = new StringBuilder("SELECT CAST(user_id AS VARCHAR(36)) FROM Reviews ");
+        if (noteId != null) queryBuilder.append("WHERE note_id = :noteId ");
+        queryBuilder.append("ORDER BY created_at DESC");
+
+        Query q = em.createNativeQuery(queryBuilder.toString());
+        if (noteId != null) q.setParameter("noteId", noteId);
+
         @SuppressWarnings("unchecked")
-        List<UUID> userIDs = (List<UUID>) (em.createNativeQuery("SELECT CAST(user_id AS VARCHAR(36)) FROM Reviews WHERE note_id = :noteId ORDER BY created_at DESC")
-                .setParameter("noteId", noteId)
-                .setFirstResult((pageNum - 1) * pageSize)
-                .setMaxResults(pageSize)
-                .getResultList())
+        final List<UUID> userIDs = (List<UUID>) (
+                               q.setFirstResult((pageNum - 1) * pageSize)
+                                .setMaxResults(pageSize)
+                                .getResultList())
                 .stream().map(o -> UUID.fromString((String) o)).collect(Collectors.toList());
+
         if (userIDs.isEmpty()) return Collections.emptyList();
-        return em.createQuery("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.note WHERE r.note.id = :noteId AND r.user.id IN :userIDs ORDER BY r.createdAt DESC", Review.class)
-                .setParameter("noteId", noteId)
-                .setParameter("userIDs", userIDs)
-                .getResultList();
+
+        queryBuilder = new StringBuilder("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.note WHERE r.user.id IN :userIDs ");
+        if (noteId != null) queryBuilder.append("AND r.note.id = :noteId ");
+        queryBuilder.append("ORDER BY r.createdAt DESC");
+
+        q = em.createQuery(queryBuilder.toString(), Review.class)
+                .setParameter("userIDs", userIDs);
+
+        if (noteId != null) q.setParameter("noteId", noteId);
+
+        return q.getResultList();
     }
 
     @Override
@@ -189,13 +209,11 @@ public class NoteJpaDao implements NoteDao {
 
 
     @Override
-    public List<Note> findNotesByIds(List<UUID> noteIds, UUID currentUserId, SortArguments sa) {
+    public List<Note> findNotesByIds(List<UUID> noteIds, SortArguments sa) {
         if (noteIds.isEmpty()) return Collections.emptyList();
-        List<Note> notes = em.createQuery(String.format("SELECT n FROM Note n JOIN n.user u WHERE n.id IN :noteIds ORDER BY n.%s %s", DaoUtils.SORTBY_CAMELCASE.getOrDefault(sa.getSortBy(), "avgScore"), sa.isAscending()? "" : "DESC"), Note.class)
+        return em.createQuery(String.format("SELECT n FROM Note n JOIN n.user u WHERE n.id IN :noteIds ORDER BY n.%s %s", DaoUtils.SORTBY_CAMELCASE.getOrDefault(sa.getSortBy(), "avgScore"), sa.isAscending()? "" : "DESC"), Note.class)
                 .setParameter("noteIds", noteIds)
                 .getResultList();
-
-        return notes;
     }
 
     @Override
@@ -212,7 +230,7 @@ public class NoteJpaDao implements NoteDao {
 
     @Override
     public List<Note> findNotesByIds(List<UUID> noteIds) {
-        return findNotesByIds(noteIds, null, new SortArguments(SortArguments.SortBy.DATE, true));
+        return findNotesByIds(noteIds, new SortArguments(SortArguments.SortBy.DATE, true));
     }
 
     @Override
@@ -220,4 +238,90 @@ public class NoteJpaDao implements NoteDao {
         em.merge(new UserNoteInteraction(user, note));
     }
 
+    @Override
+    public List<Note> search(SearchArguments sa) {
+        SortArguments sortArgs = sa.getSortArguments();
+
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36))")
+                .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
+                .append(" FROM Normalized_Notes t ")
+                .append("INNER JOIN Subjects s ON t.subject_id = s.subject_id ")
+                .append("INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id ")
+                .append("INNER JOIN Careers c ON sc.career_id = c.career_id ")
+                .append("INNER JOIN Institutions i ON c.institution_id = i.institution_id ")
+                .append("INNER JOIN Users u ON t.user_id = u.user_id ")
+                .append("WHERE TRUE ");
+        DaoUtils.applyInstitutionalFilters(queryCreator, sa);
+        return getSearchResults(queryCreator, sa);
+    }
+
+    @Override
+    public int countSearchResults(SearchArguments sa) {
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT COUNT(DISTINCT id) FROM Normalized_Notes t ")
+                .append("INNER JOIN Subjects s ON t.subject_id = s.subject_id ")
+                .append("INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id ")
+                .append("INNER JOIN Careers c ON sc.career_id = c.career_id ")
+                .append("INNER JOIN Institutions i ON c.institution_id = i.institution_id ")
+                .append("INNER JOIN Users u ON t.user_id = u.user_id ")
+                .append("WHERE TRUE ");
+        DaoUtils.applyInstitutionalFilters(queryCreator, sa);
+        DaoUtils.applyGeneralFilters(queryCreator, sa);
+
+        Query query = em.createNativeQuery(queryCreator.createQuery());
+        queryCreator.getParams().forEach(query::setParameter);
+
+        return ((BigInteger)query.getSingleResult()).intValue();
+    }
+
+    @Override
+    public List<Note> navigate(SearchArguments sa) {
+        SortArguments sortArgs = sa.getSortArguments();
+
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) ")
+                .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
+                .append(" FROM Normalized_Notes t ")
+                .appendIfPresent(sa.getFavBy(), "INNER JOIN Note_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
+                .append("INNER JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");
+        queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
+        sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));
+        return getSearchResults(queryCreator, sa);
+    }
+
+    @Override
+    public int countNavigationResults(SearchArguments sa) {
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT COUNT(DISTINCT CAST(id as VARCHAR(36))) ")
+                .append(" FROM Normalized_Notes t ")
+                .appendIfPresent(sa.getFavBy(), "INNER JOIN Note_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
+                .append("INNER JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");
+        queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
+        sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));
+
+        DaoUtils.applyGeneralFilters(queryCreator, sa);
+
+        Query query = em.createNativeQuery(queryCreator.createQuery());
+        queryCreator.getParams().forEach(query::setParameter);
+
+        return ((BigInteger)query.getSingleResult()).intValue();
+    }
+
+
+    private List<Note> getSearchResults(DaoUtils.QueryCreator queryCreator, SearchArguments sa){
+        SortArguments sortArgs = sa.getSortArguments();
+        DaoUtils.applyGeneralFilters(queryCreator, sa);
+
+        queryCreator.append("ORDER BY ").append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME)).append(sortArgs.isAscending() ? "" : " DESC ");
+
+        Query query = em.createNativeQuery(queryCreator.createQuery())
+                .setFirstResult(sa.getPageSize() * (sa.getPage() - 1))
+                .setMaxResults(sa.getPageSize());
+
+        queryCreator.getParams().forEach(query::setParameter);
+
+        @SuppressWarnings("unchecked")
+        List<UUID> noteIds = ((List<String>) query.getResultList()).stream().map(UUID::fromString).collect(Collectors.toList());
+
+        return findNotesByIds(noteIds, sortArgs);
+        // TODO: Polemicardo in the bar
+        // sa.getCurrentUserId().ifPresent(uId -> directoryDao.loadDirectoryFavorites(directoryIds, uId));
+    }
 }

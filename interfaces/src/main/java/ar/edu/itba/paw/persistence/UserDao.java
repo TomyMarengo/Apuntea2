@@ -26,4 +26,7 @@ public interface UserDao {
     List<User> getStudents(String query, UserStatus status, int pageNum, int pageSize);
     int getStudentsQuantity(String query, UserStatus status);
     float getAvgScore(UUID userId);
+
+    Optional<byte[]> getProfilePicture(UUID pictureId);
+
 }

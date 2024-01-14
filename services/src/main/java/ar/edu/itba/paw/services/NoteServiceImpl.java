@@ -3,7 +3,8 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.exceptions.InvalidFileException;
+import ar.edu.itba.paw.models.exceptions.UnavailableNameException;
+import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
@@ -12,52 +13,46 @@ import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
+import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class NoteServiceImpl implements NoteService {
+public class  NoteServiceImpl implements NoteService {
     private final NoteDao noteDao;
     private final DirectoryDao directoryDao;
     private final EmailService emailService;
     private final SecurityService securityService;
 
+    private final SearchService searchService;
 
     @Autowired
-    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService) {
+    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SearchService searchService) {
         this.noteDao = noteDao;
         this.securityService = securityService;
         this.emailService = emailService;
         this.directoryDao = directoryDao;
+        this.searchService = searchService;
     }
 
     @Transactional
     @Override
-    public UUID createNote(String name, UUID parentId, boolean visible, MultipartFile file, String category) {
+    public UUID createNote(final String name, final UUID parentId, final boolean visible, final byte[] file, final String mimeType, final String category) {
         User user = securityService.getCurrentUserOrThrow();
-        Directory rootDir = directoryDao.getDirectoryRoot(parentId).orElseThrow(InvalidDirectoryException::new);
+        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
 
-        byte[] fileBytes;
-        try {
-            fileBytes = file.getBytes();
-        } catch (IOException e) {
-            throw new InvalidFileException();
-        }
+        Directory rootDir = directoryDao.getDirectoryRoot(parentId).orElseThrow(InvalidDirectoryException::new);
         Subject subject = rootDir.getSubject();
-        return noteDao.create(name, subject.getSubjectId(), user, parentId, visible, fileBytes, category, FilenameUtils.getExtension(file.getOriginalFilename()).toLowerCase());
+        return noteDao.create(name, subject.getSubjectId(), user, parentId, visible, file, category, mimeType);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
         final Optional<User> maybeUser = securityService.getCurrentUser();
@@ -69,39 +64,74 @@ public class NoteServiceImpl implements NoteService {
         return note;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<NoteFile> getNoteFileById(UUID noteId) {
         final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
         return noteDao.getNoteFileById(noteId, userId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
-    public void update(UUID noteId, String name, boolean visible, String category) {
-        Note note = noteDao.getNoteById(noteId, securityService.getCurrentUserOrThrow().getUserId()).orElseThrow(InvalidNoteException::new);
-        note.setName(name);
-        note.setVisible(visible);
-        note.setCategory(Category.valueOf(category.toUpperCase()));
-        note.setLastModifiedAt(LocalDateTime.now());
+    public Page<Note> getNotes(UUID parentId, UUID userId, UUID favBy, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
+        final SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
+                .userId(userId)
+                .parentId(parentId)
+                .favBy(favBy)
+                .category(category)
+                .word(word)
+                .sortBy(sortBy)
+                .ascending(ascending);
+        final Optional<User> maybeUser = securityService.getCurrentUser();
+        maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
+
+        boolean navigate = parentId != null || favBy != null; // Maybe this should be an additional parameter
+
+        SearchArguments searchArgumentsWithoutPaging = sab.build();
+        int countTotalResults = navigate? noteDao.countNavigationResults(searchArgumentsWithoutPaging) : noteDao.countSearchResults(searchArgumentsWithoutPaging);
+        int safePage = Page.getSafePagePosition(page, countTotalResults, pageSize);
+
+        sab.page(safePage).pageSize(pageSize);
+        SearchArguments sa = sab.build();
+
+        return new Page<>(
+                navigate? noteDao.navigate(sa) : noteDao.search(sa),
+                sa.getPage(),
+                sa.getPageSize(),
+                countTotalResults
+        );
     }
 
 
+
     @Transactional
     @Override
-    public void delete(UUID[] noteIds, String reason) {
-        if (noteIds.length == 0) return;
-
-        List<UUID> noteIdsList = Arrays.asList(noteIds);
-
+    public void update(UUID noteId, String name, Boolean visible, String category) {
         User currentUser = securityService.getCurrentUserOrThrow();
+        Note note = noteDao.getNoteById(noteId, securityService.getCurrentUserOrThrow().getUserId()).orElseThrow(NoteNotFoundException::new);
+        if (!currentUser.equals(note.getUser()))
+            throw new UserNotOwnerException();
+        if (name != null) {
+            if (searchService.findByName(note.getParentId(), name).isPresent()) throw new UnavailableNameException();
+            note.setName(name);
+        }
+        if (visible != null)
+            note.setVisible(visible);
+        if (category != null)
+            note.setCategory(Category.valueOf(category.toUpperCase()));
+    }
+
+    @Transactional
+    @Override
+    public void delete(UUID noteId, String reason) {
+        User currentUser = securityService.getCurrentUserOrThrow();
+        Note note = noteDao.getNoteById(noteId, currentUser.getUserId()).orElseThrow(NoteNotFoundException::new);
         if (!currentUser.getIsAdmin()) {
-            if (!noteDao.delete(noteIdsList, currentUser.getUserId()))
+            if (!noteDao.delete(noteId, currentUser.getUserId()))
                 throw new InvalidNoteException();
         } else {
-            List<Note> notes = noteDao.findNotesByIds(noteIdsList);
-            if (notes.size() != noteIdsList.size() || !noteDao.delete(noteIdsList)) throw new InvalidNoteException();
-            notes.forEach(n -> emailService.sendDeleteNoteEmail(n, reason));
+            if (!noteDao.delete(noteId)) throw new InvalidNoteException();
+            emailService.sendDeleteNoteEmail(note, reason);
         }
     }
 
@@ -115,17 +145,15 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Transactional
-    @Override
-    public Page<Review> getPaginatedReviews(UUID note, int pageNum, int pageSize) {
-        this.noteDao.getNoteById(note,
-                securityService.getCurrentUser().map(User::getUserId).orElse(null)
-        ).orElseThrow(NoteNotFoundException::new);
+    public Page<Review> getReviews(UUID noteId, int pageNum, int pageSize) {
+        if (noteId != null)
+            this.noteDao.getNoteById(noteId, securityService.getCurrentUser().map(User::getUserId).orElse(null)).orElseThrow(NoteNotFoundException::new);
 
-        int countTotalResults = noteDao.countReviews(note);
+        int countTotalResults = noteDao.countReviews(noteId);
         int safePage = Page.getSafePagePosition(pageNum, countTotalResults, pageSize);
 
         return new Page<>(
-                noteDao.getReviews(note, safePage, pageSize),
+                noteDao.getReviews(noteId, safePage, pageSize),
                 safePage,
                 pageSize,
                 countTotalResults
@@ -134,7 +162,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public Page<Review> getPaginatedReviewsByUser(UUID user, int pageNum, int pageSize) {
+    public Page<Review> getReviewsDoneToUser(UUID user, int pageNum, int pageSize) {
         int countTotalResults = noteDao.countReviewsByUser(user);
         int safePage = Page.getSafePagePosition(pageNum, countTotalResults, pageSize);
 

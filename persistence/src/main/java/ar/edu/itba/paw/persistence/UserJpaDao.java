@@ -145,4 +145,12 @@ class UserJpaDao implements UserDao {
                 .setParameter("userId", userId)
                 .getSingleResult().floatValue();
     }
+
+    @Override
+    public Optional<byte[]> getProfilePicture(UUID pictureId) {
+        return em.createQuery("SELECT i.picture FROM Image i WHERE i.imageId = :pictureId", byte[].class)
+                .setParameter("pictureId", pictureId)
+                .getResultList().stream().findFirst();
+    }
+
 }

@@ -7,7 +7,7 @@ import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.forms.note.SearchReviewForm;
 import ar.edu.itba.paw.webapp.forms.user.password.ChangePasswordForm;
-import ar.edu.itba.paw.webapp.forms.user.EditUserForm;
+import ar.edu.itba.paw.webapp.controller.user.dto.EditUserForm;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ import javax.xml.ws.http.HTTPException;
 import java.io.IOException;
 import java.util.UUID;
 
-import static ar.edu.itba.paw.webapp.controller.ControllerUtils.*;
+import static ar.edu.itba.paw.webapp.controller.utils.ControllerUtils.*;
 
 @Controller
 public class UserController {
