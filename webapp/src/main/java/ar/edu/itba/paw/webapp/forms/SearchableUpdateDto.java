@@ -1,14 +1,13 @@
 package ar.edu.itba.paw.webapp.forms;
 
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
-import com.sun.istack.internal.Nullable;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public abstract class SearchableUpdateDto {
-    @Nullable
+
     @Size(min = 2, max = 50)
     @Pattern(regexp = RegexUtils.FILE_REGEX)
     private String name;

@@ -23,6 +23,6 @@ public interface NoteService {
     List<Review> getReviews(UUID noteId);
     void deleteReview(UUID noteId, UUID userId, String reason);
     Collection<Note> getFavorites();
-    void addFavorite(UUID noteId);
-    void removeFavorite(UUID noteId);
+    boolean addFavorite(UUID noteId);
+    boolean removeFavorite(UUID noteId);
 }

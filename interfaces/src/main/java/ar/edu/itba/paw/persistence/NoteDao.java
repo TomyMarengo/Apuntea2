@@ -46,9 +46,9 @@ public interface NoteDao {
 
     Review createOrUpdateReview(Note note, User user, int score, String content);
 
-    void addFavorite(User user, UUID noteId);
+    boolean addFavorite(UUID userId, UUID noteId);
 
-    boolean removeFavorite(User user, UUID noteId);
+    boolean removeFavorite(UUID userId, UUID noteId);
 
     List<Note> findNotesByIds(List<UUID> noteIds);
 

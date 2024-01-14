@@ -18,9 +18,9 @@ public abstract class SearchableCreationDto {
     @FormDataParam("name")
     private String name;
 
+    @ExistingDirectory
     @ValidUuid
     @FormDataParam("parentId")
-    @ExistingDirectory
     private UUID parentId;
 
     @FormDataParam("visible")
