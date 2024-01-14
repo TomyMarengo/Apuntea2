@@ -9,21 +9,31 @@ import java.util.UUID;
 
 
 public class CareerDto {
+    private UUID id;
     private String name;
     private URI self;
-    private URI institution;
+//    private URI institution;
     private URI subjects;
 
 
     public static CareerDto fromCareer(final Career career, final UriInfo uriInfo, final UUID institutionId){
         final CareerDto careerDto = new CareerDto();
+        careerDto.id = career.getCareerId();
         careerDto.name = career.getName();
         UriBuilder builder = uriInfo.getBaseUriBuilder();
 
-        careerDto.institution = builder.path("institution").path(institutionId.toString()).build();
+//        careerDto.institution = builder.path("institution").path(institutionId.toString()).build();
         careerDto.self = builder.path("careers").path(career.getCareerId().toString()).build();
         careerDto.subjects = builder.path("subjects").build();
         return careerDto;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName(){
@@ -40,14 +50,6 @@ public class CareerDto {
 
     public void setSelf(URI self){
         this.self = self;
-    }
-
-    public URI getInstitution() {
-        return institution;
-    }
-
-    public void setInstitution(URI institution) {
-        this.institution = institution;
     }
 
     public URI getSubjects() {
