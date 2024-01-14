@@ -6,8 +6,10 @@ import debounce from 'just-debounce-it';
 
 const Input = ({ password = false, list, ...props }) => {
   const inputRef = useRef(null);
-  const [hidden, setHidden] = useState(true);
+  const inputHiddenRef = useRef(null);
+  const [hidden, setHidden] = useState(password);
   const [open, setOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [showError, setShowError] = useState(false);
   const { errorMessage, onChange, ...inputProps } = props;
   const { t } = useTranslation();
@@ -31,11 +33,13 @@ const Input = ({ password = false, list, ...props }) => {
   const handleChange = (e) => {
     onChange(e);
     debouncedShowError();
+    setSelectedIndex(-1);
   };
 
   const handleClear = () => {
     if (inputRef.current) {
       inputRef.current.value = '';
+      if (inputHiddenRef.current) inputHiddenRef.current.value = '';
       handleChange({ target: { name: props.name, value: '' } });
     }
   };
@@ -62,8 +66,41 @@ const Input = ({ password = false, list, ...props }) => {
     };
   }, []);
 
+  const handleInputKeyDown = (e) => {
+    const listItems = list.filter((item) => item.name.toLowerCase().startsWith(inputRef.current.value.toLowerCase()));
+
+    switch (e.key) {
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedIndex((prevIndex) => (prevIndex !== null ? Math.max(prevIndex - 1, 0) : listItems.length - 1));
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedIndex((prevIndex) => (prevIndex !== null ? Math.min(prevIndex + 1, listItems.length - 1) : 0));
+        break;
+      case 'Enter':
+        if (selectedIndex !== null && listItems[selectedIndex]) {
+          handleDropdownClick(listItems[selectedIndex]);
+        }
+        break;
+      default:
+        break;
+    }
+
+    const selectedLi = document.querySelector('.selected');
+    if (selectedLi) {
+      const container = document.querySelector('.dropdown-autocomplete');
+      const scrollOffset = selectedLi.offsetTop - container.offsetTop;
+      container.scrollTop = scrollOffset;
+    }
+  };
+
   const commonInputProps = {
     ...inputProps,
+    value: list ? inputRef.current?.value : props.value,
+    pattern: list ? undefined : props.pattern,
+    name: list ? undefined : props.name,
+    onKeyDown: list ? handleInputKeyDown : undefined,
     placeholder: t(props.placeholder),
     required: props.required,
     onChange: handleChange,
@@ -90,13 +127,35 @@ const Input = ({ password = false, list, ...props }) => {
           </button>
         )}
         {open && list && (
-          <ul className="dropdown-list">
-            {list.map((item) => (
-              <li key={item.name} onClick={() => handleDropdownClick(item)}>
-                {item.name}
-              </li>
-            ))}
+          <ul className="dropdown-autocomplete">
+            {list
+              .filter((item) => item.name.toLowerCase().startsWith(inputRef.current.value.toLowerCase()))
+              .map((item, index) => {
+                const matchIndex = item.name.toLowerCase().indexOf(inputRef.current.value.toLowerCase());
+                const prefix = item.name.substring(0, matchIndex);
+                const match = item.name.substring(matchIndex, matchIndex + inputRef.current.value.length);
+                const suffix = item.name.substring(matchIndex + inputRef.current.value.length);
+
+                const isSelected = index === selectedIndex;
+
+                return (
+                  <li
+                    key={item.name}
+                    onClick={() => handleDropdownClick(item)}
+                    className={clsx(isSelected && 'selected')}
+                  >
+                    {prefix}
+                    <span className={clsx(isSelected && 'font-bold')} tabIndex="0">
+                      {match}
+                    </span>
+                    {suffix}
+                  </li>
+                );
+              })}
           </ul>
+        )}
+        {list && (
+          <input type="hidden" ref={inputHiddenRef} value={props.value} pattern={props.pattern} name={props.name} />
         )}
       </div>
       {showError && <span className="error">{t(errorMessage)}</span>}

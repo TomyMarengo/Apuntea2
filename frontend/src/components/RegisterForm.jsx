@@ -4,12 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { setCredentials } from '../store/slices/authSlice';
 import { Input, Button } from './index';
 import { registerInputs } from '../constants/forms';
-import { useForm, useAuth, useInstitutionData } from '../hooks/index';
+import { useForm, useInstitutionData } from '../hooks/index';
 import { useRegisterMutation } from '../store/slices/authApiSlice';
+import { isUuid } from '../functions/validation';
 
 const RegisterForm = () => {
   const [register, { isLoading }] = useRegisterMutation();
   const { t } = useTranslation();
+
+  const { institutions, setInstitutionId, careers, setCareerId } = useInstitutionData({ skipSubjects: true });
 
   const { form, error, handleChange, handleSubmit } = useForm(
     {
@@ -22,7 +25,6 @@ const RegisterForm = () => {
     setCredentials,
     '/'
   );
-  const { institutions, setInstitutions } = useInstitutionData();
 
   return (
     <div className="flex flex-col w-full gap-5">
@@ -45,13 +47,22 @@ const RegisterForm = () => {
           <Input
             {...registerInputs.find((input) => input.name === 'institutionId')}
             value={form.institutionId}
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              if (isUuid(e.target.value) || e.target.value === '') setInstitutionId(e.target.value);
+            }}
             list={institutions}
+            autoComplete="off"
           />
           <Input
             {...registerInputs.find((input) => input.name === 'careerId')}
             value={form.careerId}
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              if (isUuid(e.target.value) || e.target.value === '') setCareerId(e.target.value);
+            }}
+            list={careers}
+            autoComplete="off"
           />
           <Button type="submit">Log In</Button>
         </form>

@@ -11,7 +11,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5 // 5 seconds
     }),
     getSubjects: builder.query({
-      query: (institutionId, careerId) => `/institutions/${institutionId}/careers/${careerId}/subjects`,
+      query: ({ institutionId, careerId }) => `/institutions/${institutionId}/careers/${careerId}/subjects`,
       keepUnusedDataFor: 5 // 5 seconds
     }),
   })

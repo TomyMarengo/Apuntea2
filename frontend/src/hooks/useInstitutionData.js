@@ -1,47 +1,37 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   useGetInstitutionsQuery,
   useGetCareersQuery,
   useGetSubjectsQuery,
 } from '../store/slices/institutionsApiSlice';
 
-const useInstitutionData = () => {
-  const [institutions, setInstitutions] = useState(null);
+const useInstitutionData = ({ skipCareers = false, skipSubjects = false }) => {
+  const [institutionId, setInstitutionId] = useState(null);
+  const [careerId, setCareerId] = useState(null);
 
-  // Queries
   const {
-    data: institutionsFetched,
-    isSuccess: institutionsSuccess,
+    data: institutions,
   } = useGetInstitutionsQuery();
 
-  useEffect(() => {
-    if (institutionsSuccess) {
-      setInstitutions(institutionsFetched);
-    }
-  }, [institutionsSuccess, institutionsFetched]);
-
-  /* const {
+  const {
     data: careers,
-    error: careersError,
-    isLoading: careersLoading,
-    isSuccess: careersSuccess,
-  } = useGetCareersQuery(selectedInstitutionId, {
-    skip: !selectedInstitutionId || !institutionsSuccess,
-    refetchOnReconnect: true,
+  } = useGetCareersQuery(institutionId, {
+    skip: !institutionId || skipCareers,
   });
 
   const {
     data: subjects,
-    error: subjectsError,
-    isLoading: subjectsLoading,
-  } = useGetSubjectsQuery(selectedInstitutionId, selectedCareerId, {
-    skip: !selectedCareerId || !careersSuccess,
-    refetchOnReconnect: true,
-  }); */
+  } = useGetSubjectsQuery({ institutionId, careerId }, {
+    skip: !institutionId || !careerId || skipSubjects,
+  });
+
 
   return {
     institutions,
-    setInstitutions,
+    careers,
+    subjects,
+    setInstitutionId,
+    setCareerId,
   };
 };
 

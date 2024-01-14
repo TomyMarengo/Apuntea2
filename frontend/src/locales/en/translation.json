@@ -367,7 +367,9 @@
     },
     "email": "Email is required",
     "password": "Password is required, must be at least 8 characters long, and must contain at least one uppercase letter, one lowercase letter, and one number",
-    "passwordConfirmation": "Password confirmation is required, must be at least 8 characters long, and must contain at least one uppercase letter, one lowercase letter, and one number"
+    "passwordConfirmation": "Password confirmation is required, must be at least 8 characters long, and must contain at least one uppercase letter, one lowercase letter, and one number",
+    "careerId": "Career is required",
+    "institutionId": "Institution is required"
   },
   "toast": {
     "linkCopied": "Link copied to clipboard",

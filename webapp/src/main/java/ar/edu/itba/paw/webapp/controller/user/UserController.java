@@ -64,7 +64,7 @@ public class UserController {
 
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response createUser(@Valid @BeanParam final UserCreationDto userDto) {
+    public Response createUser(@Valid final UserCreationDto userDto) {
         final UUID userId = userService.create(userDto.getEmail(), userDto.getPassword(), userDto.getCareerId(), Role.ROLE_STUDENT);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
     }

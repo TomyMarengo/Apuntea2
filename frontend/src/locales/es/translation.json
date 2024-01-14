@@ -369,7 +369,9 @@
     },
     "email": "El correo electrónico es obligatorio",
     "password": "La contraseña es obligatoria, debe tener al menos 8 caracteres y debe contener al menos una letra mayúscula, una letra minúscula y un número",
-    "password_confirmation": "La confirmación de contraseña es obligatoria, debe tener al menos 8 caracteres y debe contener al menos una letra mayúscula, una letra minúscula y un número"
+    "password_confirmation": "La confirmación de contraseña es obligatoria, debe tener al menos 8 caracteres y debe contener al menos una letra mayúscula, una letra minúscula y un número",
+    "careerId": "Se requiere una carrera",
+    "institutionId": "Se requiere una institución"
   },
   "toast": {
     "linkCopied": "Enlace copiado al portapapeles",
