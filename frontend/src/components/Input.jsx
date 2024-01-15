@@ -123,7 +123,7 @@ const Input = ({ password = false, list, ...props }) => {
         </label>
         {password && (
           <button tabIndex="-1" className="input-button" type="button" onClick={() => setHidden((hidden) => !hidden)}>
-            {hidden ? <EyeIcon className="icon-xs" /> : <EyeCrossedIcon className="icon-xs" />}
+            {hidden ? <EyeIcon className="icon-s fill-pri" /> : <EyeCrossedIcon className="icon-s fill-pri" />}
           </button>
         )}
         {open && list && (

@@ -10,7 +10,7 @@ const NavSearchButton = () => {
   return (
     <div class="search-container">
       <NavLink to="/search" className="icon-button search-icon">
-        <SearchIcon className="icon fill-dark-pri" />
+        <SearchIcon className="icon-s fill-dark-pri" />
       </NavLink>
       <input type="text" className="search-input" placeholder={t('search.word.placeholder')} />
     </div>

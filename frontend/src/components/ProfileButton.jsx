@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logOut, selectCurrentUser } from '../store/slices/authSlice';
 
 import { UserIcon, ChevronDownIcon } from './Icons';
-import { Button, Dropdown } from '.';
+import { Button, Dropdown } from './index';
 
 const ProfileButton = () => {
   const dispatch = useDispatch();
@@ -20,10 +20,13 @@ const ProfileButton = () => {
       className="right"
       open={open}
       trigger={
-        <Button className="flex justify-between items-center icon-button">
-          <UserIcon className="icon" />
-          <ChevronDownIcon className="icon" />
-        </Button>
+        <button
+          type="button"
+          className="nav-profile-button flex justify-between items-center gap-2 py-2 px-4 bg-dark-pri rounded-3xl hover:bg-transparent transition-all duration-300"
+        >
+          <UserIcon className="icon-s fill-bg" />
+          <ChevronDownIcon className="icon-s fill-bg" />
+        </button>
       }
       menu={[
         <div className="flex flex-col px-4" key="User">

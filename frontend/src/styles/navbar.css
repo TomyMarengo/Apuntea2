@@ -52,3 +52,7 @@
   background-color: transparent;
   z-index: 0;
 }
+
+.nav-profile-button:hover>* {
+  @apply fill-dark-pri;
+}

@@ -133,8 +133,7 @@ body {
   line-height: 1.5;
   background-size: cover;
   background-blend-mode: lighten;
-  background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%)
-    no-repeat fixed;
+  background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat fixed;
 }
 
 nav {
@@ -146,14 +145,11 @@ main>section {
 }
 
 
-html.dark > body {
-  background: linear-gradient(
-      180deg,
+html.dark>body {
+  background: linear-gradient(180deg,
       var(--gradient-top-dark) 0%,
       var(--gradient-mid-dark) 42.19%,
-      var(--gradient-bot-dark) 99.99%
-    )
-    no-repeat fixed;
+      var(--gradient-bot-dark) 99.99%) no-repeat fixed;
 }
 
 /* Set shorter line heights on headings and interactive elements */
@@ -227,18 +223,16 @@ input::placeholder {
   @apply rounded-3xl px-4 py-2 min-w-32 max-h-9 text-center text-lg flex justify-center items-center;
 }
 
-.icon {
-  @apply fill-dark-pri;
-  @apply w-5 h-5;
-}
-
 .icon-xs {
-  @apply fill-dark-pri;
   @apply w-4 h-4;
 }
 
 .icon-s {
-  @apply w-6 h-6;
+  @apply w-5 h-5;
+}
+
+.icon-md {
+  @apply w-5 h-5;
 }
 
 .icon-button {
