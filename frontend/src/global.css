@@ -93,6 +93,7 @@ html.dark #docs-root {
   box-sizing: border-box;
   font-family: 'Lato', sans-serif;
   color: var(--text);
+  user-select: none;
 }
 
 *:focus {
