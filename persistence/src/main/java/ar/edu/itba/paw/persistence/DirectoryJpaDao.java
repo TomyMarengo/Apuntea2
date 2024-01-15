@@ -2,9 +2,10 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.search.SearchArguments;
-import ar.edu.itba.paw.models.search.Searchable;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -24,6 +25,8 @@ public class DirectoryJpaDao implements DirectoryDao {
     private EntityManager em;
 
     private static final int RECURSION_LIMIT = 20;
+
+    private	static final Logger LOGGER = LoggerFactory.getLogger(DirectoryJpaDao.class);
 
     @Override
     public Directory create(String name, UUID parentId, User user, boolean visible, String iconColor) {
@@ -114,13 +117,19 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
-    public void addFavorite(User user, UUID directoryId) {
-        user.getDirectoryFavorites().add(em.getReference(Directory.class, directoryId));
+    public boolean addFavorite(UUID userId, UUID directoryId) {
+        return em.createNativeQuery("INSERT INTO Directory_Favorites (user_id, directory_id) SELECT :userId, :directoryId WHERE NOT EXISTS (SELECT 1 FROM Directory_Favorites WHERE user_id = :userId AND directory_id = :directoryId)")
+                .setParameter("userId", userId)
+                .setParameter("directoryId", directoryId)
+                .executeUpdate() == 1;
     }
 
     @Override
-    public boolean removeFavorite(User user, UUID directoryId) {
-        return user.getDirectoryFavorites().remove(em.getReference(Directory.class,directoryId));
+    public boolean removeFavorite(UUID userId, UUID directoryId) {
+        return em.createNativeQuery("DELETE FROM Directory_Favorites WHERE user_id = :userId AND directory_id = :directoryId")
+                .setParameter("userId", userId)
+                .setParameter("directoryId", directoryId)
+                .executeUpdate() == 1;
     }
 
     @Override
@@ -131,7 +140,7 @@ public class DirectoryJpaDao implements DirectoryDao {
         return query.getResultList();
     }
 
-    @Override
+    /*@Override
     public void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId) {
         if (currentUserId == null) return;
         List<Directory> favorites = em.createQuery("SELECT d FROM User u JOIN u.directoryFavorites d WHERE d.directoryId IN :directoryIds AND u.userId = :userId", Directory.class)
@@ -139,7 +148,7 @@ public class DirectoryJpaDao implements DirectoryDao {
                 .setParameter("directoryIds", directoryIds)
                 .getResultList();
         favorites.forEach(dir -> dir.setFavorite(true));
-    }
+    }*/
 
     @Override
     public List<Directory> findDirectoriesByIds(List<UUID> directoryIds) {
@@ -193,25 +202,25 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
-    public List<Directory> navigate(SearchArguments sa) {
+    public List<Directory> navigate(SearchArguments sa, boolean isRdir) {
         SortArguments sortArgs = sa.getSortArguments();
 
         DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) ")
                 .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Directories t ")
                 .appendIfPresent(sa.getFavBy(), "INNER JOIN Directory_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
-                .append("INNER JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");
+                .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
         queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
         sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));
         return getSearchResults(queryCreator, sa);
     }
 
     @Override
-    public int countNavigationResults(SearchArguments sa) {
+    public int countNavigationResults(SearchArguments sa, boolean isRdir) {
         DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT COUNT(DISTINCT CAST(id as VARCHAR(36))) ")
                 .append(" FROM Normalized_Directories t ")
                 .appendIfPresent(sa.getFavBy(), "INNER JOIN Directory_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
-                .append("INNER JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");
+                .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
         queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
         sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));
 

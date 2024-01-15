@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller.directory;
 
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryCreationDto;
@@ -53,9 +54,10 @@ public class DirectoryController {
                 directoryQuery.getUserId(),
                 directoryQuery.getFavBy(),
                 directoryQuery.getWord(),
+                directoryQuery.isRdir(),
                 directoryQuery.getSortBy(),
                 directoryQuery.getAscending(),
-                directoryQuery.getPageNumber(),
+                directoryQuery.getPage(),
                 directoryQuery.getPageSize()
         );
         final Collection<DirectoryResponseDto> dtoDirectories = directoryPage.getContent()
@@ -70,7 +72,7 @@ public class DirectoryController {
 
     @POST
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response createDirectory(@Valid  final DirectoryCreationDto directoryDto) {
+    public Response createDirectory(@Valid final DirectoryCreationDto directoryDto) {
         final UUID DirectoryId = directoryService.create(
             directoryDto.getName(),
             directoryDto.getParentId(),
@@ -95,4 +97,26 @@ public class DirectoryController {
         directoryService.delete(id, reason);
         return Response.noContent().build();
     }
+
+    @POST
+    @Path("/{id}/favorites")
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    public Response addFavorite(@PathParam("id") final UUID id){
+        if (directoryService.addFavorite(id))
+            return Response.noContent().build();
+        throw new ConflictResponseException("error.favorite.alreadyExists");
+    }
+
+    // TODO: Check if the user id is required
+    @DELETE
+    @Path("/{id}/favorites")
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    public Response deleteFavorite(@PathParam("id") final UUID id) {
+        if (directoryService.removeFavorite(id))
+            return Response.noContent().build();
+        throw new ConflictResponseException("error.favorite.notFound");
+    }
+
+
 }
+

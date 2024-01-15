@@ -25,23 +25,23 @@ public interface DirectoryDao {
     boolean delete(UUID directoryId); // Strong delete
 
 
-    void addFavorite(User user, UUID directoryId);
+    boolean addFavorite(UUID userId, UUID directoryId);
 
-    boolean removeFavorite(User user, UUID directoryId);
+    boolean removeFavorite(UUID userId, UUID directoryId);
 
     // Warning, this method does not check visibility!
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds, SortArguments sortArgs);
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds);
 
-    void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId);
+    //void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId);
 
     void loadRootDirsFileQuantity(List<UUID> directoryIds, UUID userToFilterId, UUID currentUserId);
 
     List<Directory> search(SearchArguments sa);
-    List<Directory> navigate(SearchArguments sa);
+    List<Directory> navigate(SearchArguments sa, boolean isRdir);
 
     int countSearchResults(SearchArguments sa);
-    int countNavigationResults(SearchArguments sa);
+    int countNavigationResults(SearchArguments sa, boolean isRdir);
 }
 

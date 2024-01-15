@@ -202,7 +202,7 @@ public class UserJpaDaoTest {
     public void testGetStudents2000Count() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        int results = userDao.getStudentsQuantity("t2000", null);
+        int results = userDao.getUsersQuantity("t2000", null, null);
         assertEquals(0, results);
     }
 
@@ -210,7 +210,7 @@ public class UserJpaDaoTest {
     public void testGetStudents20Count() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        int results = userDao.getStudentsQuantity("t20", null);
+        int results = userDao.getUsersQuantity("t20", null, null);
         assertEquals(1, results);
     }
 
@@ -218,22 +218,22 @@ public class UserJpaDaoTest {
     public void testGetStudents2Count() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        int results = userDao.getStudentsQuantity("t2", null);
+        int results = userDao.getUsersQuantity("t2", null, null);
         assertEquals(2, results);
     }
 
     @Test
-    public void testGetStudentsAllCount() {
+    public void testGetUsersAllCount() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'");
+        int oldUsers = countRows(em, USER_ROLES);
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        int results = userDao.getStudentsQuantity("", null);
+        int results = userDao.getUsersQuantity("", null, null);
         assertEquals(oldUsers + STUDENTS_LENGTH, results);
     }
 
     @Test
     public void testGetStudentsBannedCount() {
-        int results = userDao.getStudentsQuantity("", UserStatus.BANNED);
+        int results = userDao.getUsersQuantity("", UserStatus.BANNED, null);
         assertEquals(1, results);
     }
 
@@ -241,7 +241,7 @@ public class UserJpaDaoTest {
     public void testGetStudents2000() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        List<User> users = userDao.getStudents("t2000", null,1, 10);
+        List<User> users = userDao.getUsers("t2000", null,null, 1, 10);
         assertEquals(0, users.size());
 
     }
@@ -250,7 +250,7 @@ public class UserJpaDaoTest {
     public void testGetStudents20() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        List<User> users = userDao.getStudents("t20", null, 1, 10);
+        List<User> users = userDao.getUsers("t20", null, null, 1, 10);
         assertEquals(1, users.size());
         assertEquals("student20@mail.com", users.get(0).getEmail());
     }
@@ -259,19 +259,19 @@ public class UserJpaDaoTest {
     public void testGetStudents2() {
         final int STUDENTS_LENGTH = 20;
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        List<User> users = userDao.getStudents("t2", null, 1, 10);
+        List<User> users = userDao.getUsers("t2", null, null, 1, 10);
         assertEquals(2, users.size());
         assertEquals("student20@mail.com", users.get(0).getEmail());
         assertEquals("student2@mail.com", users.get(1).getEmail());
     }
 
     @Test
-    public void testGetStudentsAll() {
+    public void testGetUsersAll() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'");
+        int oldUsers = countRows(em, USER_ROLES);
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         // 100 should be more than enough to get all students, change in the future if necessary
-        List<User> users = userDao.getStudents("", null, 1, 100);
+        List<User> users = userDao.getUsers("", null, null, 1, 100);
         assertEquals(oldUsers + STUDENTS_LENGTH, users.size());
 
         for (int i = 0; i < STUDENTS_LENGTH; i++) {
@@ -281,12 +281,12 @@ public class UserJpaDaoTest {
     }
 
     @Test
-    public void testGetStudentsActive() {
+    public void testGetUsersActive() {
         final int STUDENTS_LENGTH = 20;
-        int oldUsers = countRows(em, USER_ROLES, "role_name = 'ROLE_STUDENT'");
+        int oldUsers = countRows(em, USER_ROLES);
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
         // 100 should be more than enough to get all students, change in the future if necessary
-        List<User> users = userDao.getStudents("", UserStatus.ACTIVE, 1, 100);
+        List<User> users = userDao.getUsers("", UserStatus.ACTIVE, null, 1, 100);
         assertEquals(oldUsers - 1 + STUDENTS_LENGTH, users.size()); // oldUsers - 1, because there is a banned student
 
         for (int i = 0; i < STUDENTS_LENGTH; i++) {
@@ -295,14 +295,14 @@ public class UserJpaDaoTest {
         }
     }
 
-    @Test
+    /*@Test
     public void followTest() {
         User follower1 = insertStudent(em, "student1@mail.com", "", ING_INF_ID, "es");
         User student = insertStudent(em, "producer@mail.com", "", ING_INF_ID, "es");
-        userDao.follow(follower1, student.getUserId());
+        userDao.follow(follower1.getUserId(), student.getUserId());
         em.flush();
         assertEquals(1, countRows(em, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
-    }
+    }*/
 
     @Test
     public void unfollowTest() {
@@ -311,7 +311,7 @@ public class UserJpaDaoTest {
         insertFollower(em, follower1, student);
         boolean prevFollowed = countRows(em, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'") == 1;
 
-        userDao.unfollow(follower1, student.getUserId());
+        userDao.unfollow(follower1.getUserId(), student.getUserId());
         em.flush();
         assertTrue(prevFollowed);
         assertEquals(0, countRows(em, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));

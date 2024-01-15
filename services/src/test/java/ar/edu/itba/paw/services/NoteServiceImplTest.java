@@ -3,8 +3,11 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.exceptions.UnavailableNameException;
+import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
+import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.Review;
@@ -40,47 +43,74 @@ public class NoteServiceImplTest {
     @Mock
     private SecurityService securityService;
 
+    @Mock
+    private SearchService searchService;
+
     @InjectMocks
     private NoteServiceImpl noteService;
-
-
-//    @Test(expected = InvalidFileException.class)
-//    public void testCreateNoteInvalidFile() {
-//        Directory dirToReturn = Mockito.mock(Directory.class);
-//        Mockito.when(directoryDao.getDirectoryRoot(Mockito.any())).thenReturn(Optional.of(dirToReturn));
-//        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-//        CommonsMultipartFile noteFile = Mockito.mock(CommonsMultipartFile.class);
-//        given(noteFile.getBytes()).willAnswer(invocation -> {throw new IOException();});
-//        noteService.createNote("new", UUID.randomUUID(), true, noteFile , Category.EXAM.getFormattedName());
-//        fail();
-//    }
 
     @Test
     public void testCreateNote() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        CommonsMultipartFile noteFile = Mockito.mock(CommonsMultipartFile.class);
         Directory dirToReturn = Mockito.mock(Directory.class);
         Subject subject = mockSubject();
         given(dirToReturn.getSubject()).willAnswer(invocation -> subject);
         Mockito.when(directoryDao.getDirectoryRoot(Mockito.any())).thenReturn(Optional.of(dirToReturn));
-        Mockito.when(noteFile.getOriginalFilename()).thenReturn("test.pdf");
-        Mockito.when(noteFile.getBytes()).thenReturn(new byte[]{1});
         UUID expectedNoteId = UUID.randomUUID();
         Mockito.when(noteDao.create(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyBoolean(), Mockito.any(), Mockito.anyString(), Mockito.anyString())).thenReturn(expectedNoteId);
+        Mockito.when(searchService.findByName(Mockito.any(), Mockito.anyString())).thenReturn(Optional.empty());
         UUID noteId = noteService.createNote("new", UUID.randomUUID(), true, new byte[0], "" , Category.EXAM.getFormattedName());
         assertEquals(expectedNoteId, noteId);
     }
 
-    @Test(expected = InvalidNoteException.class)
-    public void testUpdateNoteFailure() {
+    @Test(expected = UnavailableNameException.class)
+    public void testCreateNoteNameUsed() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
+        UUID expectedNoteId = UUID.randomUUID();
+        Mockito.when(searchService.findByName(Mockito.any(), Mockito.anyString())).thenReturn(Optional.of(UUID.randomUUID()));
+        noteService.createNote("new", UUID.randomUUID(), true, new byte[0], "" , Category.EXAM.getFormattedName());
+        fail();
+    }
+
+    @Test(expected = NoteNotFoundException.class)
+    public void testUpdateNoteNotFound() {
+        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
+        Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
         noteService.update(UUID.randomUUID(), "new", true, Category.EXAM.getFormattedName());
+        fail();
+    }
+
+    @Test(expected = UserNotOwnerException.class)
+    public void testUpdateNoteUserNotOwner() {
+        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(
+                new User.UserBuilder().userId(SAIDMAN_ID).build()
+        );
+        Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Note.NoteBuilder().user(mockUser()).build()));
+        noteService.update(UUID.randomUUID(), "new", true, Category.EXAM.getFormattedName());
+        fail();
+    }
+
+    @Test(expected = UnavailableNameException.class)
+    public void testUpdateNoteUnavailableName() {
+        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
+        Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Note.NoteBuilder().user(mockUser()).build()));
+        Mockito.when(searchService.findByName(Mockito.any(), Mockito.anyString())).thenReturn(Optional.of(UUID.randomUUID()));
+        noteService.update(UUID.randomUUID(), "new", true, Category.EXAM.getFormattedName());
+        fail();
+    }
+
+    @Test(expected = NoteNotFoundException.class)
+    public void testDeleteNoteFailureNotFound() {
+        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
+        Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
+        noteService.delete(UUID.randomUUID(), "reason");
         fail();
     }
 
     @Test(expected = InvalidNoteException.class)
     public void testDeleteNoteFailureAdmin() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
+        Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.ofNullable(new Note.NoteBuilder().build()));
         noteService.delete(UUID.randomUUID(), "reason");
         fail();
     }
@@ -88,6 +118,7 @@ public class NoteServiceImplTest {
     @Test(expected = InvalidNoteException.class)
     public void testDeleteNoteFailure() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
+        Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.ofNullable(new Note.NoteBuilder().build()));
         Mockito.when(noteDao.delete(Mockito.any(), Mockito.any())).thenReturn(false);
         noteService.delete(UUID.randomUUID(), "reason");
         fail();
@@ -211,10 +242,9 @@ public class NoteServiceImplTest {
         assertEquals(5, results.getTotalPages());
     }
 
-    @Test(expected = InvalidNoteException.class)
+    @Test(expected = NoteNotFoundException.class)
     public void testRemoveFavoriteInvalid() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        Mockito.when(noteDao.removeFavorite(Mockito.any(), Mockito.any())).thenReturn(false);
         noteService.removeFavorite(UUID.randomUUID());
         fail();
     }

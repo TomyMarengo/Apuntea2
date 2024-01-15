@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.forms;
 
+import ar.edu.itba.paw.webapp.validation.ExistingDirectory;
 import ar.edu.itba.paw.webapp.validation.NonExistingCreateSearchable;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -17,6 +18,7 @@ public abstract class SearchableCreationDto {
     @FormDataParam("name")
     private String name;
 
+    @ExistingDirectory
     @ValidUuid
     @FormDataParam("parentId")
     private UUID parentId;

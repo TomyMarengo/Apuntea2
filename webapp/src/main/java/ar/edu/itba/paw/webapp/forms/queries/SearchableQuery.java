@@ -1,15 +1,12 @@
 package ar.edu.itba.paw.webapp.forms.queries;
 
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
-import org.hibernate.validator.constraints.Range;
-
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
-public class SearchableQuery { //TODO: Add error messages
+public class SearchableQuery extends PageableQuery { //TODO: Add error messages
     @DefaultValue("true")
     @QueryParam("asc")
     private boolean ascending;
@@ -17,16 +14,6 @@ public class SearchableQuery { //TODO: Add error messages
     @ValidUuid
     @QueryParam("userId")
     private UUID userId;
-
-    @Min(1)
-    @QueryParam("page")
-    @DefaultValue("1")
-    private int page;
-
-    @Range(min = 4, max = 24)
-    @QueryParam("pageSize")
-    @DefaultValue("12")
-    private int pageSize;
 
     @Size(max = 50)
     @QueryParam("word")
@@ -59,22 +46,6 @@ public class SearchableQuery { //TODO: Add error messages
 
     public void setAscending(boolean ascending) {
         this.ascending = ascending;
-    }
-
-    public int getPageNumber() {
-        return page;
-    }
-
-    public void setPageNumber(int pageNumber) {
-        this.page = pageNumber;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
     }
 
     public String getWord() {
@@ -122,9 +93,8 @@ public class SearchableQuery { //TODO: Add error messages
         return parentId;
     }
 
-    public SearchableQuery setParentId(UUID parentId) {
+    public void setParentId(UUID parentId) {
         this.parentId = parentId;
-        return this;
     }
 
 
@@ -132,9 +102,8 @@ public class SearchableQuery { //TODO: Add error messages
         return favBy;
     }
 
-    public SearchableQuery setFavBy(UUID favBy) {
+    public void setFavBy(UUID favBy) {
         this.favBy = favBy;
-        return this;
     }
 
 

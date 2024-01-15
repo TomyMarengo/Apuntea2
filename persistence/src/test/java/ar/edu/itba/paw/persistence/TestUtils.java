@@ -129,12 +129,18 @@ public class TestUtils {
     }
 
     static void insertFavoriteDirectory(EntityManager em, UUID directoryId, UUID userId) {
-        em.find(User.class, userId).getDirectoryFavorites().add(em.find(Directory.class, directoryId));
+        em.createNativeQuery("INSERT INTO directory_favorites (user_id, directory_id) VALUES (?, ?)")
+                .setParameter(1, userId)
+                .setParameter(2, directoryId)
+                .executeUpdate();
         em.flush();
     }
 
     static void insertFavoriteNote(EntityManager em, UUID noteId, UUID userId) {
-        em.find(User.class, userId).getNoteFavorites().add(em.find(Note.class, noteId));
+        em.createNativeQuery("INSERT INTO note_favorites (user_id, note_id) VALUES (?, ?)")
+                .setParameter(1, userId)
+                .setParameter(2, noteId)
+                .executeUpdate();
         em.flush();
     }
 
@@ -144,7 +150,10 @@ public class TestUtils {
     }
 
     static void insertFollower(EntityManager em, User follower, User followed) {
-        follower.getUsersFollowing().add(followed);
+        em.createNativeQuery("INSERT INTO follows (follower_id, followed_id) VALUES (?, ?)")
+                .setParameter(1, follower.getUserId())
+                .setParameter(2, followed.getUserId())
+                .executeUpdate();
         em.flush();
     }
 

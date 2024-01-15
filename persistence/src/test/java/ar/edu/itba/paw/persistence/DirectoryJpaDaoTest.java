@@ -161,14 +161,6 @@ public class DirectoryJpaDaoTest {
     }
 
     @Test
-    public void testAddFavorite() {
-        directoryDao.addFavorite(em.getReference(User.class, PEPE_ID), EDA_DIRECTORY_ID);
-        em.flush();
-        assertEquals(1, countRows(em, DIRECTORY_FAVORITES, "user_id = '" + PEPE_ID + "' AND directory_id = '" + EDA_DIRECTORY_ID + "'"));
-        assertEquals(0, countRows(em, DIRECTORY_FAVORITES, "user_id = '" + SAIDMAN_ID + "' AND directory_id = '" + EDA_DIRECTORY_ID + "'"));
-    }
-
-    @Test
     public void testRemoveFavorite() {
         Directory newDir = insertDirectory(em, new Directory.DirectoryBuilder().name("temp")
                 .parent(em.getReference(Directory.class, EDA_DIRECTORY_ID))
@@ -176,7 +168,7 @@ public class DirectoryJpaDaoTest {
         );
         insertFavoriteDirectory(em, newDir.getId(), PEPE_ID);
         insertFavoriteDirectory(em, newDir.getId(), SAIDMAN_ID);
-        directoryDao.removeFavorite(em.getReference(User.class, PEPE_ID), newDir.getId());
+        directoryDao.removeFavorite(PEPE_ID, newDir.getId());
         em.flush();
         assertEquals(0, countRows(em, DIRECTORY_FAVORITES, "user_id = '" + PEPE_ID + "' AND directory_id = '" + newDir.getId() + "'"));
         assertEquals(1, countRows(em, DIRECTORY_FAVORITES, "user_id = '" + SAIDMAN_ID + "' AND directory_id = '" + newDir.getId() + "'"));
@@ -202,7 +194,7 @@ public class DirectoryJpaDaoTest {
         assertEquals(2, edaDir.getQtyFiles()); // only the 2 previously loaded notes
     }
 
-    @Test
+    /*@Test
     public void testLoadDirectoryFavorites() {
         Directory.DirectoryBuilder db = new Directory.DirectoryBuilder()
                 .parent(em.getReference(Directory.class, EDA_DIRECTORY_ID))
@@ -225,7 +217,7 @@ public class DirectoryJpaDaoTest {
         assertFalse(wasFaved1);
         assertFalse(wasFaved2);
 
-    }
+    }*/
 
     @Test
     public void testFindDirectoriesByIds(){

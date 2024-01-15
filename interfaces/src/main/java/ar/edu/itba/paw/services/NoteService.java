@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.models.note.Review;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,7 +21,7 @@ public interface NoteService {
     Page<Review> getReviewsDoneToUser(UUID userId, int pageNum, int pageSize);
     List<Review> getReviews(UUID noteId);
     void deleteReview(UUID noteId, UUID userId, String reason);
-    Collection<Note> getFavorites();
-    void addFavorite(UUID noteId);
-    void removeFavorite(UUID noteId);
+//    Collection<Note> getFavorites();
+    boolean addFavorite(UUID noteId);
+    boolean removeFavorite(UUID noteId);
 }

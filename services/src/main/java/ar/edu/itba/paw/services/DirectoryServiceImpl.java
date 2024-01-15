@@ -2,8 +2,8 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
+import ar.edu.itba.paw.models.exceptions.InvalidQueryException;
 import ar.edu.itba.paw.models.exceptions.UnavailableNameException;
 import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
@@ -16,21 +16,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
 @Service
 public class DirectoryServiceImpl implements DirectoryService {
     private final DirectoryDao directoryDao;
     private final SecurityService securityService;
     private final EmailService emailService;
     private final SearchService searchService;
+    private final UserService userService;
 
     @Autowired
-    public DirectoryServiceImpl(DirectoryDao directoryDao, SecurityService securityService, EmailService emailService, SearchService searchService) {
+    public DirectoryServiceImpl(final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SearchService searchService, final UserService userService) {
         this.directoryDao = directoryDao;
         this.securityService = securityService;
         this.emailService = emailService;
         this.searchService = searchService;
+        this.userService = userService;
     }
 
     @Transactional
@@ -57,7 +57,7 @@ public class DirectoryServiceImpl implements DirectoryService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, String sortBy, boolean ascending, int page, int pageSize) {
+    public Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, boolean isRdir, String sortBy, boolean ascending, int page, int pageSize) {
         final SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
                 .userId(userId)
                 .parentId(parentId)
@@ -69,16 +69,17 @@ public class DirectoryServiceImpl implements DirectoryService {
         maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
 
         boolean navigate = parentId != null || favBy != null; // Maybe this should be an additional parameter
+        if (!navigate && isRdir) throw new InvalidQueryException();
 
         SearchArguments searchArgumentsWithoutPaging = sab.build();
-        int countTotalResults = navigate? directoryDao.countNavigationResults(searchArgumentsWithoutPaging) : directoryDao.countSearchResults(searchArgumentsWithoutPaging);
+        int countTotalResults = navigate? directoryDao.countNavigationResults(searchArgumentsWithoutPaging, isRdir) : directoryDao.countSearchResults(searchArgumentsWithoutPaging);
         int safePage = Page.getSafePagePosition(page, countTotalResults, pageSize);
 
         sab.page(safePage).pageSize(pageSize);
         SearchArguments sa = sab.build();
 
         return new Page<>(
-                navigate? directoryDao.navigate(sa) : directoryDao.search(sa),
+                navigate? directoryDao.navigate(sa, isRdir) : directoryDao.search(sa),
                 sa.getPage(),
                 sa.getPageSize(),
                 countTotalResults
@@ -119,26 +120,27 @@ public class DirectoryServiceImpl implements DirectoryService {
         }
     }
 
-    @Transactional
+    /*@Transactional
     @Override
     public DirectoryFavoriteGroups getFavorites() {
         User currentUser = securityService.getCurrentUserOrThrow();
         Map<Boolean, List<Directory>> directories = currentUser.getDirectoryFavorites().stream().collect(Collectors.partitioningBy(Directory::isRootDirectory));
         return new DirectoryFavoriteGroups(directories.get(true), directories.get(false));
+    }*/
+
+    @Transactional
+    @Override
+    public boolean addFavorite(UUID directoryId) {
+        User user = securityService.getCurrentUserOrThrow();
+        directoryDao.getDirectoryById(directoryId, user.getUserId()).orElseThrow(DirectoryNotFoundException::new);
+        return directoryDao.addFavorite(user.getUserId(), directoryId);
     }
 
     @Transactional
     @Override
-    public void addFavorite(UUID directoryId) {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        directoryDao.addFavorite(currentUser, directoryId);
-    }
-
-    @Transactional
-    @Override
-    public void removeFavorite(UUID directoryId) {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        boolean success = directoryDao.removeFavorite(currentUser, directoryId);
-        if (!success) throw new InvalidDirectoryException();
+    public boolean removeFavorite(UUID directoryId) {
+        User user = securityService.getCurrentUserOrThrow();
+        directoryDao.getDirectoryById(directoryId, user.getUserId()).orElseThrow(DirectoryNotFoundException::new);
+        return directoryDao.removeFavorite(user.getUserId(), directoryId);
     }
 }

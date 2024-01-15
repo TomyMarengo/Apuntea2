@@ -108,7 +108,7 @@ public class  NoteServiceImpl implements NoteService {
     @Override
     public void update(UUID noteId, String name, Boolean visible, String category) {
         User currentUser = securityService.getCurrentUserOrThrow();
-        Note note = noteDao.getNoteById(noteId, securityService.getCurrentUserOrThrow().getUserId()).orElseThrow(NoteNotFoundException::new);
+        Note note = noteDao.getNoteById(noteId, currentUser.getUserId()).orElseThrow(NoteNotFoundException::new);
         if (!currentUser.equals(note.getUser()))
             throw new UserNotOwnerException();
         if (name != null) {
@@ -193,25 +193,26 @@ public class  NoteServiceImpl implements NoteService {
         emailService.sendDeleteReviewEmail(review, reason);
     }
 
+//    @Transactional
+//    @Override
+//    public Collection<Note> getFavorites() {
+//        User currentUser = securityService.getCurrentUserOrThrow();
+//        return currentUser.getNoteFavorites();
+//    }
+
     @Transactional
     @Override
-    public Collection<Note> getFavorites() {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        return currentUser.getNoteFavorites();
+    public boolean addFavorite(UUID noteId) {
+        User user = securityService.getCurrentUserOrThrow();
+        noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
+        return noteDao.addFavorite(user.getUserId(), noteId);
     }
 
     @Transactional
     @Override
-    public void addFavorite(UUID noteId) {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        noteDao.addFavorite(currentUser, noteId);
-    }
-
-    @Transactional
-    @Override
-    public void removeFavorite(UUID noteId) {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        boolean success = noteDao.removeFavorite(currentUser, noteId);
-        if (!success) throw new InvalidNoteException();
+    public boolean removeFavorite(UUID noteId) {
+        User user = securityService.getCurrentUserOrThrow();
+        noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
+        return noteDao.removeFavorite(user.getUserId(), noteId);
     }
 }

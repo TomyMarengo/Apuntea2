@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller.note;
 
 import ar.edu.itba.paw.models.Page;
+import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.services.NoteService;
@@ -58,7 +59,7 @@ public class NoteController {
                 noteQuery.getWord(),
                 noteQuery.getSortBy(),
                 noteQuery.getAscending(),
-                noteQuery.getPageNumber(),
+                noteQuery.getPage(),
                 noteQuery.getPageSize()
         );
         final Collection<NoteResponseDto> noteDtos = notePage.getContent()
@@ -92,14 +93,14 @@ public class NoteController {
         noteService.update(id, noteDto.getName(), noteDto.getVisible(), noteDto.getCategory());
         return Response.noContent().build();
     }
-    /*
+
     @DELETE
     @Path("/{id}")
     @Consumes(value = { MediaType.APPLICATION_JSON })
     public Response deleteNote(@PathParam("id") final UUID id, @QueryParam("reason") final String reason) {
         noteService.delete(id, reason);
         return Response.noContent().build();
-    }*/
+    }
 
     @GET
     @Path("/{id}/file")
@@ -111,4 +112,25 @@ public class NoteController {
         final Response.ResponseBuilder response = Response.ok(maybeFile.get().getContent(), maybeFile.get().getMimeType());
         return CacheUtils.unconditionalCache(response).build();
     }
+
+    @POST
+    @Path("/{id}/favorites")
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    public Response addFavorite(@PathParam("id") final UUID id){
+        if (noteService.addFavorite(id))
+            return Response.noContent().build();
+        throw new ConflictResponseException("error.favorite.alreadyExists");
+    }
+
+    // TODO: Check if the user id is required
+    @DELETE
+    @Path("/{id}/favorites")
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    public Response deleteFavorite(@PathParam("id") final UUID id) {
+        if (noteService.removeFavorite(id))
+            return Response.noContent().build();
+        throw new ConflictResponseException("error.favorite.notFound");
+    }
+
+
 }

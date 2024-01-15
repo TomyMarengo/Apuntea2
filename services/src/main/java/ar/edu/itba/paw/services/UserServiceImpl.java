@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserService {
 
     private	static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private static final int BAN_DURATION = 3;
-    private static final int PAGE_SIZE = 10;
 
     @Autowired
     public UserServiceImpl(final UserDao userDao, final CareerDao careerDao, PasswordEncoder passwordEncoder, final SecurityService securityService,
@@ -49,51 +48,51 @@ public class UserServiceImpl implements UserService {
         this.emailService = emailService;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<User> findById(UUID userId) {
         if (userId == null) return Optional.empty();
         return userDao.findById(userId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<User> findByEmail(String email) {
         return userDao.findByEmail(email);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<User> findByUsername(String username) {
         return userDao.findByUsername(username);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
-    public Page<User> getStudents(String query, String status, int page) {
+    public Page<User> getUsers(String query, String status, UUID followedBy, int page, int pageSize) {
         if (query == null) query = "";
         UserStatus userStatus = UserStatus.fromString(status);
-        int countStudents = userDao.getStudentsQuantity(query, userStatus);
-        int currentPage = Page.getSafePagePosition(page, countStudents, PAGE_SIZE);
-        List<User> users = userDao.getStudents(query, userStatus, currentPage, PAGE_SIZE);
-        return new Page<>(users, currentPage, PAGE_SIZE, countStudents);
+        int countStudents = userDao.getUsersQuantity(query, userStatus, followedBy);
+        int currentPage = Page.getSafePagePosition(page, countStudents, pageSize);
+        List<User> users = userDao.getUsers(query, userStatus, followedBy, currentPage, pageSize);
+        return new Page<>(users, currentPage, pageSize, countStudents);
     }
 
     @Transactional
     @Override
-    public void follow(UUID followedId) {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        userDao.follow(currentUser, followedId);
+    public boolean follow(UUID followedId) {
+        userDao.findById(followedId).orElseThrow(UserNotFoundException::new);
+        return userDao.follow(securityService.getCurrentUserOrThrow().getUserId(), followedId);
     }
 
     @Transactional
     @Override
-    public void unfollow(UUID followedId) {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        userDao.unfollow(currentUser, followedId);
+    public boolean unfollow(UUID followedId) {
+        userDao.findById(followedId).orElseThrow(UserNotFoundException::new);
+        return userDao.unfollow(securityService.getCurrentUserOrThrow().getUserId(), followedId);
     }
 
-    @Transactional
+    /*@Transactional
     @Override
     public Collection<User> getFollows() {
         User currentUser = securityService.getCurrentUserOrThrow();
@@ -106,7 +105,7 @@ public class UserServiceImpl implements UserService {
         User currentUser = securityService.getCurrentUserOrThrow();
         User followed = userDao.findById(followedId).orElseThrow(UserNotFoundException::new);
         return currentUser.getUsersFollowing().contains(followed);
-    }
+    }*/
 
     @Transactional
     @Override

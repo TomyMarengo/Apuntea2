@@ -198,13 +198,19 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
-    public void addFavorite(User user, UUID noteId) {
-        user.getNoteFavorites().add(em.getReference(Note.class, noteId));
+    public boolean addFavorite(UUID userId, UUID noteId) {
+        return em.createNativeQuery("INSERT INTO Note_Favorites (user_id, note_id) SELECT :userId, :noteId WHERE NOT EXISTS (SELECT 1 FROM Note_Favorites WHERE user_id = :userId AND note_id = :noteId)")
+                .setParameter("userId", userId)
+                .setParameter("noteId", noteId)
+                .executeUpdate() == 1;
     }
 
     @Override
-    public boolean removeFavorite(User user, UUID noteId) {
-       return user.getNoteFavorites().remove(em.getReference(Note.class, noteId));
+    public boolean removeFavorite(UUID userId, UUID noteId) {
+        return em.createNativeQuery("DELETE FROM Note_Favorites WHERE user_id = :userId AND note_id = :noteId")
+                .setParameter("userId", userId)
+                .setParameter("noteId", noteId)
+                .executeUpdate() == 1;
     }
 
 
@@ -280,7 +286,7 @@ public class NoteJpaDao implements NoteDao {
         DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) ")
                 .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Notes t ")
-                .appendIfPresent(sa.getFavBy(), "INNER JOIN Note_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
+                .appendIfPresent(sa.getFavBy(), "INNER JOIN Note_Favorites nf ON t.id = nf.note_id AND nf.user_id = :favBy ")
                 .append("INNER JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");
         queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
         sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));
@@ -291,7 +297,7 @@ public class NoteJpaDao implements NoteDao {
     public int countNavigationResults(SearchArguments sa) {
         DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT COUNT(DISTINCT CAST(id as VARCHAR(36))) ")
                 .append(" FROM Normalized_Notes t ")
-                .appendIfPresent(sa.getFavBy(), "INNER JOIN Note_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
+                .appendIfPresent(sa.getFavBy(), "INNER JOIN Note_Favorites nf ON t.id = nf.note_id AND nf.user_id = :favBy ")
                 .append("INNER JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");
         queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
         sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));

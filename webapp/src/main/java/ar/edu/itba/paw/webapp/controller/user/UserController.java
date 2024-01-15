@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller.user;
 
 import ar.edu.itba.paw.models.Page;
+import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.services.UserService;
@@ -8,6 +9,7 @@ import ar.edu.itba.paw.webapp.controller.user.dto.UserCreationDto;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserResponseDto;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserUpdateDto;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
+import ar.edu.itba.paw.webapp.forms.queries.UserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -48,10 +50,14 @@ public class UserController {
 
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions and validate
-    public Response listUsers(@QueryParam("query") String query,
-                              @QueryParam("status") String status,
-                              @QueryParam("page") @DefaultValue("1") int page) {
-        final Page<User> userPage = userService.getStudents(query, status, page);
+    public Response listUsers(@Valid @BeanParam final UserQuery userQuery) {
+        final Page<User> userPage = userService.getUsers(
+                userQuery.getQuery(),
+                userQuery.getStatus(),
+                userQuery.getFollowedBy(),
+                userQuery.getPage(),
+                userQuery.getPageSize()
+        );
         final Collection<UserResponseDto> dtoUsers = userPage.getContent()
                 .stream()
                 .map(u -> UserResponseDto.fromUser(u, uriInfo))
@@ -81,6 +87,26 @@ public class UserController {
         if (userDto.getNotificationsEnabled() != null)
             userService.updateNotificationsEnabled(userDto.getNotificationsEnabled());
         return Response.noContent().build();
+    }
+
+
+    @POST
+    @Path("/{id}/follows")
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    public Response follow(@PathParam("id") final UUID id){
+        if (userService.follow(id))
+            return Response.noContent().build();
+        throw new ConflictResponseException("error.follow.alreadyExists");
+    }
+
+    // TODO: Check if the user id is required
+    @DELETE
+    @Path("/{id}/follows")
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    public Response unfollow(@PathParam("id") final UUID id) {
+        if (userService.unfollow(id))
+            return Response.noContent().build();
+        throw new ConflictResponseException("error.follow.notFound");
     }
 
 }

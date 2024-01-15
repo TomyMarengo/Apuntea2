@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Category;
-import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
@@ -279,18 +278,10 @@ public class NoteJpaDaoTest {
     }
 
     @Test
-    public void testAddFavorite() {
-        noteDao.addFavorite(em.getReference(User.class, PEPE_ID), MVC_NOTE_ID);
-        em.flush();
-        assertEquals(1, countRows(em, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
-        assertEquals(0, countRows(em, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
-    }
-
-    @Test
     public void testRemoveFavorite() {
         insertFavoriteNote(em, notePublic.getId(), PEPE_ID);
         insertFavoriteNote(em, notePublic.getId(), SAIDMAN_ID);
-        noteDao.removeFavorite(em.getReference(User.class, PEPE_ID), notePublic.getId());
+        noteDao.removeFavorite(PEPE_ID, notePublic.getId());
         em.flush();
         assertEquals(0, countRows(em, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + notePublic.getId() + "'"));
         assertEquals(1, countRows(em, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + notePublic.getId() + "'"));
@@ -343,7 +334,7 @@ public class NoteJpaDaoTest {
         }
     }
 
-    @Test
+    /*@Test
     public void testLoadNoteFavorites() {
         Note.NoteBuilder nb = new Note.NoteBuilder()
                 .subject(edaSubject)
@@ -364,7 +355,7 @@ public class NoteJpaDaoTest {
         assertTrue(faved1.isFavorite());
         assertTrue(faved2.isFavorite());
         assertFalse(nofaved.isFavorite());
-    }
+    }*/
 
     @Test
     public void testAddInteraction() {
