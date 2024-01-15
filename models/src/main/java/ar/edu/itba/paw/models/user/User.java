@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.models.user;
 
-import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.institutional.Career;
-import ar.edu.itba.paw.models.note.Note;
 
 import javax.persistence.*;
 import java.util.*;
@@ -44,14 +42,14 @@ public class User {
     @JoinColumn(name = "profile_picture_id")
     private Image profilePicture;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    /*@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("name ASC")
     @JoinTable(
             name = "Note_Favorites",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "note_id" )}
     )
-    private Set<Note> noteFavorites = new HashSet<>();
+    private Set<Note> noteFavorites = new HashSet<>();*/
 
     /*@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("name ASC")
@@ -62,14 +60,14 @@ public class User {
     )
     private Set<Directory> directoryFavorites = new HashSet<>();*/
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    /*@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @OrderBy("email ASC")
     @JoinTable(
             name = "Follows",
             joinColumns = { @JoinColumn(name = "follower_id") },
             inverseJoinColumns = { @JoinColumn(name = "followed_id")}
     )
-    private Set<User> usersFollowing = new HashSet<>();
+    private Set<User> usersFollowing = new HashSet<>();*/
 
     /* package-private */ User() {
     }
@@ -190,14 +188,6 @@ public class User {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(userId, user.userId);
-    }
-
-    public Set<Note> getNoteFavorites() {
-        return noteFavorites;
-    }
-
-    public Set<User> getUsersFollowing() {
-        return usersFollowing;
     }
 
     public boolean hasProfilePicture() {

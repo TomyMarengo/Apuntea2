@@ -10,7 +10,6 @@ import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryUpdateDto;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryResponseDto;
 import ar.edu.itba.paw.webapp.forms.queries.DirectoryQuery;
-import ar.edu.itba.paw.webapp.validation.ExistingDirectory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -58,7 +57,7 @@ public class DirectoryController {
                 directoryQuery.isRdir(),
                 directoryQuery.getSortBy(),
                 directoryQuery.getAscending(),
-                directoryQuery.getPageNumber(),
+                directoryQuery.getPage(),
                 directoryQuery.getPageSize()
         );
         final Collection<DirectoryResponseDto> dtoDirectories = directoryPage.getContent()
@@ -102,7 +101,7 @@ public class DirectoryController {
     @POST
     @Path("/{id}/favorites")
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response addFavorite(@PathParam("id") @ExistingDirectory final UUID id){
+    public Response addFavorite(@PathParam("id") final UUID id){
         if (directoryService.addFavorite(id))
             return Response.noContent().build();
         throw new ConflictResponseException("error.favorite.alreadyExists");
@@ -112,7 +111,7 @@ public class DirectoryController {
     @DELETE
     @Path("/{id}/favorites")
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response deleteFavorite(@PathParam("id") @ExistingDirectory final UUID id) {
+    public Response deleteFavorite(@PathParam("id") final UUID id) {
         if (directoryService.removeFavorite(id))
             return Response.noContent().build();
         throw new ConflictResponseException("error.favorite.notFound");

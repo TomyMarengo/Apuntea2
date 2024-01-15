@@ -59,7 +59,7 @@ public class NoteController {
                 noteQuery.getWord(),
                 noteQuery.getSortBy(),
                 noteQuery.getAscending(),
-                noteQuery.getPageNumber(),
+                noteQuery.getPage(),
                 noteQuery.getPageSize()
         );
         final Collection<NoteResponseDto> noteDtos = notePage.getContent()

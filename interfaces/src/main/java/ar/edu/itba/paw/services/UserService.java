@@ -4,7 +4,6 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 
-import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,15 +32,15 @@ public interface UserService {
 
     void banUser(UUID userId, String reason);
 
-    Page<User> getStudents(String query, String status, int pageNum);
+    Page<User> getUsers(String query, String status, UUID followedBy, int page, int pageSize);
 
-    void follow(UUID followedId);
+    boolean follow(UUID followedId);
 
-    void unfollow(UUID followedId);
+    boolean unfollow(UUID followedId);
 
-    Collection<User> getFollows();
+//    Collection<User> getFollows();
 
-    boolean isFollowing(UUID followedId);
+//    boolean isFollowing(UUID followedId);
     
     void updateNotificationsEnabled(boolean notificationsEnabled);
 

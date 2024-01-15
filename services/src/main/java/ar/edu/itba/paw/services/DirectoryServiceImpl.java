@@ -2,13 +2,11 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
 import ar.edu.itba.paw.models.directory.DirectoryPath;
 import ar.edu.itba.paw.models.exceptions.InvalidQueryException;
 import ar.edu.itba.paw.models.exceptions.UnavailableNameException;
 import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
-import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
@@ -18,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
 @Service
 public class DirectoryServiceImpl implements DirectoryService {
     private final DirectoryDao directoryDao;
@@ -135,12 +131,16 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Transactional
     @Override
     public boolean addFavorite(UUID directoryId) {
-        return directoryDao.addFavorite(securityService.getCurrentUserOrThrow().getUserId(), directoryId);
+        User user = securityService.getCurrentUserOrThrow();
+        directoryDao.getDirectoryById(directoryId, user.getUserId()).orElseThrow(DirectoryNotFoundException::new);
+        return directoryDao.addFavorite(user.getUserId(), directoryId);
     }
 
     @Transactional
     @Override
     public boolean removeFavorite(UUID directoryId) {
-        return directoryDao.removeFavorite(securityService.getCurrentUserOrThrow().getUserId(), directoryId);
+        User user = securityService.getCurrentUserOrThrow();
+        directoryDao.getDirectoryById(directoryId, user.getUserId()).orElseThrow(DirectoryNotFoundException::new);
+        return directoryDao.removeFavorite(user.getUserId(), directoryId);
     }
 }

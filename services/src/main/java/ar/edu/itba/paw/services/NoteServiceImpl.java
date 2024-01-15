@@ -193,23 +193,26 @@ public class  NoteServiceImpl implements NoteService {
         emailService.sendDeleteReviewEmail(review, reason);
     }
 
-    @Transactional
-    @Override
-    public Collection<Note> getFavorites() {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        return currentUser.getNoteFavorites();
-    }
+//    @Transactional
+//    @Override
+//    public Collection<Note> getFavorites() {
+//        User currentUser = securityService.getCurrentUserOrThrow();
+//        return currentUser.getNoteFavorites();
+//    }
 
     @Transactional
     @Override
     public boolean addFavorite(UUID noteId) {
-        return noteDao.addFavorite(securityService.getCurrentUserOrThrow().getUserId(), noteId);
-
+        User user = securityService.getCurrentUserOrThrow();
+        noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
+        return noteDao.addFavorite(user.getUserId(), noteId);
     }
 
     @Transactional
     @Override
     public boolean removeFavorite(UUID noteId) {
-        return noteDao.removeFavorite(securityService.getCurrentUserOrThrow().getUserId(), noteId);
+        User user = securityService.getCurrentUserOrThrow();
+        noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
+        return noteDao.removeFavorite(user.getUserId(), noteId);
     }
 }
