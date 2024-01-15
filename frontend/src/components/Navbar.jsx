@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../store/slices/authSlice';
-import { Button, DarkMode, ProfileButton } from '.';
+import { Button, DarkMode, ProfileButton, NavSearchButton } from './index';
 
 const Navbar = () => {
   const user = useSelector(selectCurrentUser);
@@ -12,7 +12,10 @@ const Navbar = () => {
         Apuntea
       </NavLink>
       <div className="flex items-center gap-4">
-        <DarkMode />
+        <div className="flex gap-2">
+          <NavSearchButton />
+          <DarkMode />
+        </div>
         {user ? (
           <>
             <ProfileButton />

@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
 @import url('./styles/dropdown.css');
 @import url('./styles/home.css');
+@import url('./styles/navbar.css');
 
 @tailwind base;
 @tailwind components;

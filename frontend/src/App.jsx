@@ -1,10 +1,10 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import { Home, Profile, Login, Register, RequireAuth } from './pages';
-import Navbar from './components/Navbar.jsx';
-import Sidebar from './components/Sidebar.jsx';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from './store/slices/authSlice';
 import { Toaster } from 'sonner';
+
+import { selectCurrentToken } from './store/slices/authSlice';
+import { Home, Profile, Login, Register, RequireAuth, Search } from './pages';
+import { Navbar, Sidebar } from './components/index';
 
 function App() {
   const token = useSelector(selectCurrentToken);
@@ -19,6 +19,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/search" element={<Search />} />
 
           {/* Protected Routes */}
           <Route element={<RequireAuth />}>

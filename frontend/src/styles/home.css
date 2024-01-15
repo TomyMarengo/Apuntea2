@@ -14,9 +14,13 @@
 }
 
 .index-card:hover .icon-index-card {
-  @apply fill-pri;
+  @apply fill-dark-pri;
 }
 
 .icon-index-card {
   @apply w-20 h-20;
+}
+
+.index-card:hover>* {
+  @apply text-dark-pri;
 }

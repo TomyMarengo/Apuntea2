@@ -63,7 +63,7 @@ const Home = () => {
         {modifiedIndexCards.map((card) => (
           <NavLink to={card.link} key={card.title} className="index-card">
             {card.icon}
-            <h4 className="text-3xl text-dark-text ">{t(card.title)}</h4>
+            <h4 className="text-3xl text-dark-text">{t(card.title)}</h4>
             <p className="text-lg ">{t(card.description)}</p>
           </NavLink>
         ))}
