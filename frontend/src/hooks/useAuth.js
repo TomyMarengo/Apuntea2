@@ -10,15 +10,19 @@ const useAuth = () => {
   const dispatch = useDispatch();
 
   const getSession = async (credentials) => {
-    const { token } = await login(credentials).unwrap();
-    dispatch(setCredentials({ token }));
-    const rawToken = token.replace(/^Bearer\s+/i, '');
-    // Si está bien, decodifica el token y obtén el userId claim
-    const tokenDecoded = decode(rawToken);
-    const { payload: { userId } } = tokenDecoded;
-    const user = await getUser(userId).unwrap();
+    try {
+      const { token } = await login(credentials).unwrap();
+      dispatch(setCredentials({ token }));
+      const rawToken = token.replace(/^Bearer\s+/i, '');
+      const tokenDecoded = decode(rawToken);
+      const { payload: { userId } } = tokenDecoded;
+      const user = await getUser(userId).unwrap();
 
-    return { token, user }
+      return { token, user }
+    } catch (error) {
+      console.error('Error during login:', error);
+      throw new Error('Failed to login');
+    }
   }
 
   return { getSession };

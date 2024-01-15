@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const useForm = (initialValues, submitCallback, dispatchCallback, redirectUrl) => {
   const [form, setForm] = useState(initialValues);
@@ -21,15 +22,14 @@ const useForm = (initialValues, submitCallback, dispatchCallback, redirectUrl) =
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Formulario: ", form)
       const response = await submitCallback(form);
-      console.log("Response: ", response)
       dispatch(dispatchCallback({ ...response }));
       setForm(initialValues);
       setError('');
       navigate(redirectUrl);
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
     }
   }
 

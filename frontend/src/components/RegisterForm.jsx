@@ -14,7 +14,7 @@ const RegisterForm = () => {
 
   const { institutions, setInstitutionId, careers, setCareerId } = useInstitutionData({ skipSubjects: true });
 
-  const { form, error, handleChange, handleSubmit } = useForm(
+  const { form, handleChange, handleSubmit } = useForm(
     {
       email: '',
       password: '',
@@ -31,9 +31,6 @@ const RegisterForm = () => {
       <h1 className="text-3xl">{t('register.title')}</h1>
       <div className="flex flex-col gap-5 items-center w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 items-center w-full">
-          <p className={error ? 'errmsg' : 'offscreen'} aria-live="assertive">
-            {error}
-          </p>
           <Input
             {...registerInputs.find((input) => input.name === 'email')}
             value={form.email}

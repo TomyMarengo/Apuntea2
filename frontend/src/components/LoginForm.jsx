@@ -10,7 +10,7 @@ const LoginForm = () => {
   const { getSession } = useAuth();
   const { t } = useTranslation();
 
-  const { form, error, handleChange, handleSubmit } = useForm(
+  const { form, handleChange, handleSubmit } = useForm(
     {
       email: '',
       password: '',
@@ -25,9 +25,6 @@ const LoginForm = () => {
       <h1 className="text-3xl">{t('login.title')}</h1>
       <div className="flex flex-col gap-5 items-center w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 items-center w-full">
-          <p className={error ? 'errmsg' : 'offscreen'} aria-live="assertive">
-            {error}
-          </p>
           {loginInputs.map((input) => (
             <Input key={input.name} {...input} value={form[input.name]} onChange={handleChange} />
           ))}
