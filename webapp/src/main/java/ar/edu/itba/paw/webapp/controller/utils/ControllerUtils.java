@@ -12,7 +12,9 @@ public class ControllerUtils {
         return rb.link(ub.clone().queryParam("page",  "1").build(), "first")
                 .link(ub.clone().queryParam("page",  page.getTotalPages()).build(), "last")
                 .link(ub.clone().queryParam("page",  Integer.toString( page.getPreviousPage())).build(), "prev")
-                .link(ub.clone().queryParam("page",  Integer.toString(page.getNextPage())).build(), "next");
+                .link(ub.clone().queryParam("page",  Integer.toString(page.getNextPage())).build(), "next")
+                .header("X-Total-Count", page.getTotalResults())
+                .header("X-Total-Pages", page.getTotalPages());
     }
 
     private ControllerUtils() {
