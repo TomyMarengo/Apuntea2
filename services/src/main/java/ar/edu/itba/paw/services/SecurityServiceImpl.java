@@ -52,7 +52,7 @@ public class SecurityServiceImpl implements SecurityService{
     @Transactional
     @Override
     public User getAdminOrThrow() {
-        return getCurrentUser().filter(User::getIsAdmin).orElseThrow(RequiredAdminException::new);
+        return getCurrentUser().filter(User::isAdmin).orElseThrow(RequiredAdminException::new);
     }
 
     @Transactional

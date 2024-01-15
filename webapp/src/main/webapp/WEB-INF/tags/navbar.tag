@@ -14,7 +14,7 @@
 <%@ attribute name="careerId" required="false" %>
 <c:set var="loggedIn" value="${user ne null}"/>
 <c:if test="${user ne null}">
-    <c:set var="isAdmin" value="${user.isAdmin}"/>
+    <c:set var="isAdmin" value="${user.admin}"/>
 </c:if>
 
 <script>

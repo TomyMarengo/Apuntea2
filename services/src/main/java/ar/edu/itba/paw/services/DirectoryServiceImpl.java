@@ -109,7 +109,7 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Override
     public void delete(UUID directoryId, String reason) {
         User currentUser = securityService.getCurrentUserOrThrow();
-        if (!currentUser.getIsAdmin()) {
+        if (!currentUser.isAdmin()) {
             if (!directoryDao.delete(directoryId, currentUser.getUserId()))
                 throw new InvalidDirectoryException();
         } else {

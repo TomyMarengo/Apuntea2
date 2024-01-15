@@ -190,10 +190,11 @@ public class UserServiceImpl implements UserService {
     public void unbanUser(UUID userId) {
         User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         if (!userDao.unbanUser(user)) {
-            LOGGER.error("Error while unbanning user with id: {}", userId);
-            throw new InvalidUserException();
+            LOGGER.warn("Error while unbanning user with id: {}", userId);
+//            throw new InvalidUserException();
+        } else {
+            emailService.sendUnbanEmail(user);
         }
-        emailService.sendUnbanEmail(user);
     }
 
     @Transactional
@@ -202,10 +203,11 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         User admin = securityService.getAdminOrThrow();
         if (!userDao.banUser(user, admin, LocalDateTime.now().plusDays(BAN_DURATION), reason)) {
-            LOGGER.error("Error while banning user with id: {}", userId);
-            throw new InvalidUserException();
+            LOGGER.warn("Error while banning user with id: {}", userId);
+//            throw new InvalidUserException();
+        } else {
+            emailService.sendBanEmail(user, reason, BAN_DURATION);
         }
-        emailService.sendBanEmail(user, reason, BAN_DURATION);
     }
 
     @Transactional

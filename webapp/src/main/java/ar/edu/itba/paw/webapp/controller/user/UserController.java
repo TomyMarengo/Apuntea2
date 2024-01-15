@@ -4,17 +4,21 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
+import ar.edu.itba.paw.models.user.UserStatus;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserCreationDto;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserResponseDto;
+import ar.edu.itba.paw.webapp.controller.user.dto.UserStatusDto;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserUpdateDto;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.forms.queries.UserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
@@ -86,6 +90,21 @@ public class UserController {
             userService.updateCurrentUserPassword(userDto.getPassword());
         if (userDto.getNotificationsEnabled() != null)
             userService.updateNotificationsEnabled(userDto.getNotificationsEnabled());
+        return Response.noContent().build();
+    }
+
+    @PATCH
+    @Path("/{id}")
+    @Secured("ROLE_ADMIN")
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    public Response updateUserStatus(@PathParam("id") final UUID id, @Valid final UserStatusDto userStatusDto) {
+        if (userStatusDto.getStatus() == null)
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
+        if (userStatusDto.getUserStatus().equals(UserStatus.BANNED))
+            userService.banUser(id, userStatusDto.getReason());
+        else if (userStatusDto.getUserStatus().equals(UserStatus.ACTIVE))
+            userService.unbanUser(id);
         return Response.noContent().build();
     }
 

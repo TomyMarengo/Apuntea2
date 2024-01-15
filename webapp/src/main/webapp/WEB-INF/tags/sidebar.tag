@@ -88,7 +88,7 @@
             </a>
         </c:if>
 
-        <c:if test="${user.isAdmin eq true}">
+        <c:if test="${user.admin eq true}">
             <c:if test="${active eq 'manage-users'}">
                 <a class="btn nav-icon-button active" href="${baseUrl}/manage/users" data-bs-toggle="tooltip"
                    data-bs-placement="right"

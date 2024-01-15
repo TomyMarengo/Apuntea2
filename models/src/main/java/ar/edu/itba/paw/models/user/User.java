@@ -118,7 +118,7 @@ public class User {
         return username;
     }
 
-    public boolean getIsAdmin() {
+    public boolean isAdmin() {
         return roles != null && roles.stream().anyMatch(role -> role == Role.ROLE_ADMIN);
     }
 

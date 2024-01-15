@@ -126,7 +126,7 @@ public class  NoteServiceImpl implements NoteService {
     public void delete(UUID noteId, String reason) {
         User currentUser = securityService.getCurrentUserOrThrow();
         Note note = noteDao.getNoteById(noteId, currentUser.getUserId()).orElseThrow(NoteNotFoundException::new);
-        if (!currentUser.getIsAdmin()) {
+        if (!currentUser.isAdmin()) {
             if (!noteDao.delete(noteId, currentUser.getUserId()))
                 throw new InvalidNoteException();
         } else {

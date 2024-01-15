@@ -21,4 +21,5 @@ public class UserPermissions {
         Optional<User> maybeUser = securityService.getCurrentUser();
         return maybeUser.isPresent() && maybeUser.get().getUserId().equals(userId);
     }
+
 }
