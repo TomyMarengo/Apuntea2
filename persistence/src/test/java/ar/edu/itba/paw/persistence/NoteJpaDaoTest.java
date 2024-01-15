@@ -184,7 +184,7 @@ public class NoteJpaDaoTest {
         Note guiaEda = em.find(Note.class, GUIA1EDA_NOTE_ID);
         insertReview(em, guiaEda, newUser, 4, "ta ok");
 
-        Review review = noteDao.getReview(guiaEda.getId(), newUser.getUserId());
+        Review review = noteDao.getReview(guiaEda.getId(), newUser.getUserId()).orElseThrow(AssertionError::new);
 
         assertEquals(newUser, review.getUser());
         assertEquals(guiaEda, review.getNote());

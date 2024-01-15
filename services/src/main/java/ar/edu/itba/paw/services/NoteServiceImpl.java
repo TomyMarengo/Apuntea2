@@ -73,15 +73,17 @@ public class  NoteServiceImpl implements NoteService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Note> getNotes(UUID parentId, UUID userId, UUID favBy, String category, String word, String sortBy, boolean ascending, int page, int pageSize) {
+    public Page<Note> getNotes(final UUID parentId, final UUID userId, final UUID favBy, final String category, final String word,
+                               final UUID institutionId, final UUID careerId, final UUID subjectId,
+                               final String sortBy, final boolean ascending, final int page, final int pageSize) {
         final SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
                 .userId(userId)
                 .parentId(parentId)
                 .favBy(favBy)
                 .category(category)
                 .word(word)
-                .sortBy(sortBy)
-                .ascending(ascending);
+                .institutionId(institutionId).careerId(careerId).subjectId(subjectId)
+                .sortBy(sortBy).ascending(ascending);
         final Optional<User> maybeUser = securityService.getCurrentUser();
         maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
 
@@ -176,21 +178,26 @@ public class  NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public void createOrUpdateReview(UUID noteId, int score, String content) {
+    public Review createOrUpdateReview(UUID noteId, int score, String content) {
         User user = securityService.getCurrentUserOrThrow();
         Note note = noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
         if (note.getUser().equals(user))
             throw new InvalidReviewException();
         Review review = noteDao.createOrUpdateReview(note, user, score, content);
         emailService.sendReviewEmail(review);
+        return review;
     }
 
     @Transactional
     @Override
-    public void deleteReview(UUID noteId, UUID userId, String reason) {
-        Review review = noteDao.getReview(noteId, userId);
-        if (!noteDao.deleteReview(noteId, userId)) throw new InvalidReviewException();
-        emailService.sendDeleteReviewEmail(review, reason);
+    public boolean deleteReview(UUID noteId, UUID userId, String reason) {
+        Optional<Review> maybeReview = noteDao.getReview(noteId, userId);
+        if (!maybeReview.isPresent()) return false;
+        if (noteDao.deleteReview(noteId, userId)) {
+            emailService.sendDeleteReviewEmail(maybeReview.get(), reason);
+            return true;
+        }
+        return false;
     }
 
 //    @Transactional

@@ -112,11 +112,11 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
-    public Review getReview(UUID noteId, UUID userId)  {
+    public Optional<Review> getReview(UUID noteId, UUID userId)  {
         return em.createQuery("SELECT r FROM Review r JOIN FETCH r.user JOIN FETCH r.note WHERE r.note.id = :noteId AND r.user.id = :userId", Review.class)
                 .setParameter("noteId", noteId)
                 .setParameter("userId", userId)
-                .getSingleResult();
+                .getResultList().stream().findFirst();
     }
 
     @Override
@@ -191,7 +191,7 @@ public class NoteJpaDao implements NoteDao {
 
     @Override
     public boolean deleteReview(UUID noteId, UUID userId) {
-        return em.createQuery("DELETE FROM Review r WHERE r.note.id = :noteId AND r.user.id = :userId")
+        return em.createNativeQuery("DELETE FROM Reviews WHERE note_id = :noteId AND user_id = :userId")
                 .setParameter("noteId", noteId)
                 .setParameter("userId", userId)
                 .executeUpdate() == 1;

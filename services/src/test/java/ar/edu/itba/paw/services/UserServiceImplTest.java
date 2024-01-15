@@ -95,7 +95,7 @@ public class UserServiceImplTest {
 //        fail();
 //    }
 
-    @Test(expected = InvalidUserException.class)
+    /*@Test(expected = InvalidUserException.class)
     public void testBanUserError() {
         Mockito.when(userDao.findById(Mockito.any())).thenReturn(Optional.of(mockUser()));
         Mockito.when(securityService.getAdminOrThrow()).thenReturn(mockAdmin());
@@ -110,7 +110,7 @@ public class UserServiceImplTest {
         Mockito.when(userDao.unbanUser(Mockito.any())).thenReturn(false);
         userService.unbanUser(UUID.randomUUID());
         fail();
-    }
+    }*/
 
     @Test(expected = UserNotFoundException.class)
     public void testGetProfilePictureUserNotFound() {

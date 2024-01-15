@@ -27,8 +27,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static ar.edu.itba.paw.services.ServiceTestUtils.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -124,12 +123,12 @@ public class NoteServiceImplTest {
         fail();
     }
 
-    @Test(expected = InvalidReviewException.class)
+    @Test
     public void testDeleteReviewFailure() {
-        Mockito.when(noteDao.getReview(Mockito.any(), Mockito.any())).thenReturn(new Review(new Note.NoteBuilder().build(), mockUser(), 5, "wowie"));
+        Mockito.when(noteDao.getReview(Mockito.any(), Mockito.any())).thenReturn(Optional.of(new Review(new Note.NoteBuilder().build(), mockUser(), 5, "wowie")));
         Mockito.when(noteDao.deleteReview(Mockito.any(), Mockito.any())).thenReturn(false);
-        noteService.deleteReview(UUID.randomUUID(), UUID.randomUUID(), "Inappropriate");
-        fail();
+        boolean deleted = noteService.deleteReview(UUID.randomUUID(), UUID.randomUUID(), "Inappropriate");
+        assertFalse(deleted);
     }
 
     @Test(expected = InvalidReviewException.class)

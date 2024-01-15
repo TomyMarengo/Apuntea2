@@ -57,19 +57,24 @@ public class DirectoryServiceImpl implements DirectoryService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, boolean isRdir, String sortBy, boolean ascending, int page, int pageSize) {
+    public Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, UUID institutionId, UUID careerId, UUID subjectId, boolean isRdir, String sortBy, boolean ascending, int page, int pageSize) {
         final SearchArguments.SearchArgumentsBuilder sab = new SearchArguments.SearchArgumentsBuilder()
                 .userId(userId)
                 .parentId(parentId)
                 .favBy(favBy)
                 .word(word)
+                .institutionId(institutionId)
+                .careerId(careerId)
+                .subjectId(subjectId)
                 .sortBy(sortBy)
                 .ascending(ascending);
         final Optional<User> maybeUser = securityService.getCurrentUser();
         maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
 
         boolean navigate = parentId != null || favBy != null; // Maybe this should be an additional parameter
-        if (!navigate && isRdir) throw new InvalidQueryException();
+        if ((!navigate && isRdir) ||
+                (navigate && (institutionId != null || careerId != null || subjectId != null)))
+            throw new InvalidQueryException();
 
         SearchArguments searchArgumentsWithoutPaging = sab.build();
         int countTotalResults = navigate? directoryDao.countNavigationResults(searchArgumentsWithoutPaging, isRdir) : directoryDao.countSearchResults(searchArgumentsWithoutPaging);

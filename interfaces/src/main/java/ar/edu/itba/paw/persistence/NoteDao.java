@@ -42,7 +42,7 @@ public interface NoteDao {
 
     boolean deleteReview(UUID noteId, UUID userId);
 
-    Review getReview(UUID noteId, UUID userId);
+    Optional<Review> getReview(UUID noteId, UUID userId);
 
     Review createOrUpdateReview(Note note, User user, int score, String content);
 
