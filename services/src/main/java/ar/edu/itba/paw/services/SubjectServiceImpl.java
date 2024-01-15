@@ -50,7 +50,7 @@ public class SubjectServiceImpl implements SubjectService {
     public Map<Integer, List<Subject>> getSubjectsByCareerGroupByYear() {
         User currentUser = this.securityService.getCurrentUserOrThrow();
         List<Subject> subjects = subjectDao.getSubjectsByCareerId(currentUser.getCareer().getCareerId());
-        directoryDao.loadDirectoryFavorites(subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()), currentUser.getUserId());
+//        directoryDao.loadDirectoryFavorites(subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()), currentUser.getUserId());
         return subjects.stream().collect(Collectors.groupingBy(Subject::getYear));
     }
 

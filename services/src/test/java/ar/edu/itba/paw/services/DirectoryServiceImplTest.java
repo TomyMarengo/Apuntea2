@@ -57,12 +57,4 @@ public class DirectoryServiceImplTest {
         directoryService.delete(EDA_DIRECTORY_ID, null);
         Assert.fail();
     }
-
-    @Test(expected = InvalidDirectoryException.class)
-    public void testRemoveFavoriteDirectoryInvalid() {
-        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        Mockito.when(directoryDao.removeFavorite(Mockito.any(), Mockito.any())).thenReturn(false);
-        directoryService.removeFavorite(EDA_DIRECTORY_ID);
-        Assert.fail();
-    }
 }

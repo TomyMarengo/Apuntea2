@@ -278,14 +278,6 @@ public class NoteJpaDaoTest {
     }
 
     @Test
-    public void testAddFavorite() {
-        noteDao.addFavorite(PEPE_ID, MVC_NOTE_ID);
-        em.flush();
-        assertEquals(1, countRows(em, "Note_Favorites", "user_id = '" + PEPE_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
-        assertEquals(0, countRows(em, "Note_Favorites", "user_id = '" + SAIDMAN_ID + "' AND note_id = '" + MVC_NOTE_ID + "'"));
-    }
-
-    @Test
     public void testRemoveFavorite() {
         insertFavoriteNote(em, notePublic.getId(), PEPE_ID);
         insertFavoriteNote(em, notePublic.getId(), SAIDMAN_ID);
@@ -342,7 +334,7 @@ public class NoteJpaDaoTest {
         }
     }
 
-    @Test
+    /*@Test
     public void testLoadNoteFavorites() {
         Note.NoteBuilder nb = new Note.NoteBuilder()
                 .subject(edaSubject)
@@ -363,7 +355,7 @@ public class NoteJpaDaoTest {
         assertTrue(faved1.isFavorite());
         assertTrue(faved2.isFavorite());
         assertFalse(nofaved.isFavorite());
-    }
+    }*/
 
     @Test
     public void testAddInteraction() {

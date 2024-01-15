@@ -140,7 +140,7 @@ public class DirectoryJpaDao implements DirectoryDao {
         return query.getResultList();
     }
 
-    @Override
+    /*@Override
     public void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId) {
         if (currentUserId == null) return;
         List<Directory> favorites = em.createQuery("SELECT d FROM User u JOIN u.directoryFavorites d WHERE d.directoryId IN :directoryIds AND u.userId = :userId", Directory.class)
@@ -148,7 +148,7 @@ public class DirectoryJpaDao implements DirectoryDao {
                 .setParameter("directoryIds", directoryIds)
                 .getResultList();
         favorites.forEach(dir -> dir.setFavorite(true));
-    }
+    }*/
 
     @Override
     public List<Directory> findDirectoriesByIds(List<UUID> directoryIds) {

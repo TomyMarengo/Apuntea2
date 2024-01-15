@@ -34,7 +34,7 @@ public interface DirectoryDao {
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds);
 
-    void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId);
+    //void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId);
 
     void loadRootDirsFileQuantity(List<UUID> directoryIds, UUID userToFilterId, UUID currentUserId);
 

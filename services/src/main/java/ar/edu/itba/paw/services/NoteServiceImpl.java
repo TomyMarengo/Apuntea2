@@ -108,7 +108,7 @@ public class  NoteServiceImpl implements NoteService {
     @Override
     public void update(UUID noteId, String name, Boolean visible, String category) {
         User currentUser = securityService.getCurrentUserOrThrow();
-        Note note = noteDao.getNoteById(noteId, securityService.getCurrentUserOrThrow().getUserId()).orElseThrow(NoteNotFoundException::new);
+        Note note = noteDao.getNoteById(noteId, currentUser.getUserId()).orElseThrow(NoteNotFoundException::new);
         if (!currentUser.equals(note.getUser()))
             throw new UserNotOwnerException();
         if (name != null) {
