@@ -1,12 +1,15 @@
 package ar.edu.itba.paw.webapp.controller.institution;
 
 
+import ar.edu.itba.paw.models.exceptions.institutional.CareerNotFoundException;
+import ar.edu.itba.paw.models.exceptions.institutional.InstitutionNotFoundException;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.Institution;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.services.CareerService;
 import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SubjectService;
+import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.institution.dtos.CareerDto;
 import ar.edu.itba.paw.webapp.controller.institution.dtos.InstitutionDto;
 import ar.edu.itba.paw.webapp.controller.institution.dtos.SubjectDto;
@@ -41,8 +44,18 @@ public class InstitutionController {
         this.subjectService = subjectService;
     }
 
+
     @GET
-    @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
+    @Path("/{institutionId}")
+    @Produces(value = { ApunteaMediaType.INSTITUTION_V1})
+    public Response getInstitution(final @ValidUuid @PathParam("institutionId") UUID institutionId) {
+        final Institution institution = institutionService.getInstitution(institutionId).orElseThrow(InstitutionNotFoundException::new);
+        final InstitutionDto dtoInstitution = InstitutionDto.fromInstitution(institution, uriInfo);
+        return Response.ok(new GenericEntity<InstitutionDto>(dtoInstitution) {}).build();
+    }
+
+    @GET
+    @Produces(value = { ApunteaMediaType.INSTITUTION_COLLECTION_V1}) // TODO: Add versions
     public Response listAllInstitutions() {
         final Collection<Institution> allInstitutions = institutionService.getInstitutions();
         final Collection<InstitutionDto> dtoInstitutions = allInstitutions
@@ -50,6 +63,17 @@ public class InstitutionController {
                 .map(i -> InstitutionDto.fromInstitution(i, uriInfo))
                 .collect(Collectors.toList());
         return Response.ok(new GenericEntity<Collection<InstitutionDto>>(dtoInstitutions) {}).build();
+    }
+
+
+    // TODO: Validate that the career belongs to the institution
+    @GET
+    @Path("/{institutionId}/careers/{careerId}")
+    @Produces(value = { ApunteaMediaType.CAREER_V1})
+    public Response getCareer(final @ValidUuid @PathParam("institutionId") UUID institutionId, final @ValidUuid @PathParam("careerId") UUID careerId) {
+        final Career career = careerService.getCareerById(careerId).orElseThrow(CareerNotFoundException::new);
+        final CareerDto dtoCareer = CareerDto.fromCareer(career, uriInfo, institutionId);
+        return Response.ok(new GenericEntity<CareerDto>(dtoCareer) {}).build();
     }
 
     @GET
@@ -75,5 +99,4 @@ public class InstitutionController {
                 .collect(Collectors.toList());
         return Response.ok(new GenericEntity<Collection<SubjectDto>>(dtoSubjects) {}).build();
     }
-
 }

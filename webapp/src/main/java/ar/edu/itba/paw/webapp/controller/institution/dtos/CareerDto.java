@@ -12,7 +12,7 @@ public class CareerDto {
     private UUID id;
     private String name;
     private URI self;
-//    private URI institution;
+    private URI institution;
     private URI subjects;
 
 
@@ -22,7 +22,7 @@ public class CareerDto {
         careerDto.name = career.getName();
         UriBuilder builder = uriInfo.getBaseUriBuilder();
 
-//        careerDto.institution = builder.path("institution").path(institutionId.toString()).build();
+        careerDto.institution = builder.path("institution").path(institutionId.toString()).build();
         careerDto.self = builder.path("careers").path(career.getCareerId().toString()).build();
         careerDto.subjects = builder.path("subjects").build();
         return careerDto;
@@ -58,5 +58,13 @@ public class CareerDto {
 
     public void setSubjects(URI subjects) {
         this.subjects = subjects;
+    }
+
+    public URI getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(URI institution) {
+        this.institution = institution;
     }
 }

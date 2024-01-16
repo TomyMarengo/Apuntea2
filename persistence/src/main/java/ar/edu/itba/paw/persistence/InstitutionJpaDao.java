@@ -8,6 +8,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Repository
@@ -17,8 +19,17 @@ public class InstitutionJpaDao implements InstitutionDao{
 
     @Override
     public Collection<Institution> getInstitutions() {
-//        final TypedQuery<Institution> query = em.createQuery("SELECT DISTINCT i FROM Institution i JOIN FETCH i.careers c JOIN FETCH c.subjects s", Institution.class);
-//        return query.getResultList();
         return em.createQuery("SELECT i FROM Institution i", Institution.class).getResultList();
     }
+
+
+    @Override
+    public Optional<Institution> getInstitution(final UUID institutionId) {
+        return em.createQuery("FROM Institution i WHERE i.id = :institutionId", Institution.class)
+                .setParameter("institutionId", institutionId)
+                .getResultList()
+                .stream()
+                .findFirst();
+    }
+
 }

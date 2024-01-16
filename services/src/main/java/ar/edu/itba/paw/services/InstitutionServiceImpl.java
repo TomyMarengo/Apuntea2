@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 
 @Service
@@ -16,18 +18,15 @@ public class InstitutionServiceImpl implements InstitutionService{
     @Autowired
     public InstitutionServiceImpl(InstitutionDao institutionDao) { this.institutionDao = institutionDao; }
 
-//    @Transactional
-//    @Override
-//    public InstitutionDataDto getInstitutionData() {
-//        Collection<Institution> institutions = institutionDao.getInstitutions();
-//        InstitutionDataDto institutionDataDto = new InstitutionDataDto();
-//        institutions.forEach(institutionDataDto::addInstitution);
-//        return institutionDataDto;
-//    }
-
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Collection<Institution> getInstitutions() {
         return institutionDao.getInstitutions();
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Institution> getInstitution(final UUID institutionId) {
+        return institutionDao.getInstitution(institutionId);
     }
 }
