@@ -29,8 +29,8 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws MalformedURLException {
         if((!(authentication instanceof JwtAuthToken)) || ((JwtTokenDetails) authentication.getDetails()).getTokenType().equals(JwtTokenType.REFRESH)) {
             ApunteaUserDetails userDetails = (ApunteaUserDetails) authentication.getPrincipal();
-            response.addHeader("access-token", "Bearer " + jwtTokenService.createAccessToken(userDetails));
-            response.addHeader("refresh-token", "Bearer " + jwtTokenService.createRefreshToken(userDetails));
+            response.addHeader("Access-Token", "Bearer " + jwtTokenService.createAccessToken(userDetails));
+            response.addHeader("Refresh-Token", "Bearer " + jwtTokenService.createRefreshToken(userDetails));
         }
     }
 }

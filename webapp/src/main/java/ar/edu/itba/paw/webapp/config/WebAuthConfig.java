@@ -163,7 +163,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         config.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-        config.setExposedHeaders(Arrays.asList("access-token","refresh-token", "authorization", "X-Total-Pages", "Content-Disposition", "Link","Authorization", "Cache-Control", "Content-Type", "Location"));
+        config.setExposedHeaders(Arrays.asList("Access-Token","Refresh-Token", "X-Total-Pages", "X-Total-Count", "Content-Disposition", "Link", "Authorization", "Cache-Control", "Content-Type", "Location"));
 
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
