@@ -93,6 +93,7 @@
     "subject": "Materia",
     "subjects": "Materias",
     "user": "Usuario",
+    "username": "Nombre de usuario",
     "users": "Usuarios",
     "views": "Vistas",
     "year": "Año"
@@ -245,6 +246,9 @@
         "noReviews": "Todavía no hay reseñas.",
         "seeMore": "Ver más reseñas"
       }
+    },
+    "profile": {
+      "title": "Perfil"
     },
     "register": {
       "haveAccount": "¿Ya tienes una cuenta? ",

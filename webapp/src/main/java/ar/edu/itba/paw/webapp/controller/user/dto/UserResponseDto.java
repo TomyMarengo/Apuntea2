@@ -23,7 +23,7 @@ public class UserResponseDto {
     private URI self;
     private URI career;
     private URI institution;
-    private URI picture;
+    private URI profilePicture;
     private URI noteFavorites;
     private URI directoryFavorites;
     private URI subjectFavorites;
@@ -53,7 +53,7 @@ public class UserResponseDto {
         }
         // TODO: Check if this is efficient
         if (user.getProfilePicture() != null)
-            userDto.picture = uriInfo.getBaseUriBuilder().path("pictures").path(user.getProfilePicture().getImageId().toString()).build();
+            userDto.profilePicture = uriInfo.getBaseUriBuilder().path("pictures").path(user.getProfilePicture().getImageId().toString()).build();
         userDto.noteFavorites = uriInfo.getBaseUriBuilder().path("notes").queryParam("favBy", user.getUserId()).build();
         userDto.directoryFavorites = uriInfo.getBaseUriBuilder().path("directories").queryParam("favBy", user.getUserId()).build();
         userDto.subjectFavorites = uriInfo.getBaseUriBuilder().path("subjects").queryParam("favBy", user.getUserId()).build();
@@ -113,8 +113,8 @@ public class UserResponseDto {
         this.institution = institution;
     }
 
-    public void setPicture(URI picture) {
-        this.picture = picture;
+    public void setProfilePicture(URI profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public void setNoteFavorites(URI noteFavorites) {
@@ -185,8 +185,8 @@ public class UserResponseDto {
         return institution;
     }
 
-    public URI getPicture() {
-        return picture;
+    public URI getProfilePicture() {
+        return profilePicture;
     }
 
     public URI getNoteFavorites() {

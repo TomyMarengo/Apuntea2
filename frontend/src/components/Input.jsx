@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 import debounce from 'just-debounce-it';
 
 const Input = ({ password = false, list, ...props }) => {
-  const inputRef = useRef(null);
-  const inputHiddenRef = useRef(null);
+  const inputRef = useRef(props.value);
+  const inputHiddenRef = useRef(props.hiddenValue);
   const [hidden, setHidden] = useState(password);
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);

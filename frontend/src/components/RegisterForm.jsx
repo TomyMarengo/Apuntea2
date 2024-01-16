@@ -61,11 +61,11 @@ const RegisterForm = () => {
             list={careers}
             autoComplete="off"
           />
-          <Button type="submit">Log In</Button>
+          <Button type="submit">Register</Button>
         </form>
         <span>
           {t('pages.register.haveAccount')}
-          <NavLink to="/register" className="link">
+          <NavLink to="/login" className="link">
             {t('pages.register.login')}
           </NavLink>
         </span>

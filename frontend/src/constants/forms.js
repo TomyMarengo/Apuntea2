@@ -33,7 +33,7 @@ const registerInputs = [
     name: 'password',
     placeholder: 'placeholders.password',
     errorMessage: 'errors.password',
-    pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9@$!%*?&]{4,}$', // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and a special character '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$'
+    pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9@$!%*?&]{4,}$', // Minimum four characters, at least one uppercase letter, one lowercase letter, one number and a special character '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$'
     password: true,
   },
   {
@@ -58,7 +58,7 @@ const profileInputs = [
     name: 'firstName',
     placeholder: 'placeholders.firstName',
     errorMessage: 'errors.firstName',
-    pattern: '^[a-zA-ZÀ-ÿ\u00f1\u00d1\u0020]{1,25}(?!s*$)$',
+    pattern: '^(?![0-9s]+$)[p{L}s]{1,25}$',
     autoFocus: true,
   },
   {
@@ -66,14 +66,14 @@ const profileInputs = [
     name: 'lastName',
     placeholder: 'placeholders.lastName',
     errorMessage: 'errors.lastName',
-    pattern: '^[a-zA-ZÀ-ÿ\u00f1\u00d1\u0020]{1,25}(?!s*$)$',
+    pattern: '^(?![0-9s]+$)[p{L}s]{1,25}$',
   },
   {
     id: 'username',
     name: 'username',
     placeholder: 'placeholders.username',
     errorMessage: 'errors.username',
-    pattern: '^(?![-_.0-9]*$)[a-zA-Z0-9_.-]{1,25}$',
+    pattern: '^(?![0-9._-]+$)[a-zA-Z0-9._-]{1,25}$',
     required: true,
   },
   {
@@ -82,6 +82,11 @@ const profileInputs = [
     placeholder: 'placeholders.careerId',
     errorMessage: 'errors.careerId',
     pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}$',
+  },
+  {
+    id: 'profilePicture',
+    name: 'profilePicture',
+    errorMessage: 'errors.profilePicture',
   },
 ];
 
