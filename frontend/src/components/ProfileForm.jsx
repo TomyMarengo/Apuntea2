@@ -3,7 +3,7 @@ import { isUuid } from '../functions/validation';
 import { Input, Button } from './index';
 import { profileInputs } from '../constants/forms';
 import { useForm, useInstitutionData } from '../hooks/index';
-import { selectCurrentUser } from '../store/slices/authSlice';
+import { selectCurrentUser, setCredentials } from '../store/slices/authSlice';
 import EditableImage from './EditableImage';
 import { useSelector } from 'react-redux';
 import { useUpdateUserMutation } from '../store/slices/usersApiSlice';
@@ -13,22 +13,23 @@ const ProfileForm = () => {
   const { t } = useTranslation();
   const user = useSelector(selectCurrentUser);
 
-  console.log(user);
-  const { form, handleChange, handleSubmit } = useForm(
-    {
+  const { form, handleChange, handleSubmit } = useForm({
+    initialValues: {
       userId: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
       username: user.username,
-      careerId: user.career,
-      profilePicture: user.profilePicture,
+      careerId: user.career.id,
+      // profilePicture: user.profilePicture,
     },
-    updateUser,
-    '/'
-  );
+    submitCallback: updateUser,
+    dispatchCallback: setCredentials,
+  });
 
-  const initialInstitutionId = user.institution.split('/')[5];
-  const { careers, setCareerId, institutions } = useInstitutionData({ initialInstitutionId });
+  const { careers, setCareerId } = useInstitutionData({
+    skipInstitution: true,
+    initialInstitutionId: user.institution.id,
+  });
 
   return (
     <div className="flex flex-col w-full gap-5">
@@ -62,14 +63,14 @@ const ProfileForm = () => {
           </div>
           <div className="flex flex-col gap-1">
             <span className="font-bold">{t('data.institution')}</span>
-            <span>{}</span>
+            <span>{user.institution.name}</span>
           </div>
           <div className="flex flex-col gap-1">
             <span className="font-bold">{t('data.career')}</span>
             <Input
               {...profileInputs.find((input) => input.name === 'careerId')}
-              value={form.careerId} //career name
-              // hiddenValue={user.career} //career id
+              value={user.career.name} //career name
+              hiddenValue={form.careerId} //career id
               onChange={(e) => {
                 handleChange(e);
                 if (isUuid(e.target.value) || e.target.value === '') setCareerId(e.target.value);

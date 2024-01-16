@@ -4,9 +4,9 @@ import { CrossIcon, EyeIcon, EyeCrossedIcon } from './Icons';
 import { useTranslation } from 'react-i18next';
 import debounce from 'just-debounce-it';
 
-const Input = ({ password = false, list, ...props }) => {
+const Input = ({ password = false, hiddenValue = null, list, ...props }) => {
   const inputRef = useRef(props.value);
-  const inputHiddenRef = useRef(props.hiddenValue);
+  const inputHiddenRef = useRef(hiddenValue);
   const [hidden, setHidden] = useState(password);
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -98,6 +98,7 @@ const Input = ({ password = false, list, ...props }) => {
   const commonInputProps = {
     ...inputProps,
     value: list ? inputRef.current?.value : props.value,
+    defaultValue: list ? props.value : undefined,
     pattern: list ? undefined : props.pattern,
     name: list ? undefined : props.name,
     onKeyDown: list ? handleInputKeyDown : undefined,

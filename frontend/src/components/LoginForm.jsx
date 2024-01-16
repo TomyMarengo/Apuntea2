@@ -10,15 +10,15 @@ const LoginForm = () => {
   const { getSession } = useAuth();
   const { t } = useTranslation();
 
-  const { form, handleChange, handleSubmit } = useForm(
-    {
+  const { form, handleChange, handleSubmit } = useForm({
+    initialValues: {
       email: '',
       password: '',
     },
-    getSession,
-    setCredentials,
-    '/'
-  );
+    submitCallback: getSession,
+    dispatchCallback: setCredentials,
+    redirectUrl: '/',
+  });
 
   return (
     <div className="flex flex-col w-full gap-5">

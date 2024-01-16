@@ -14,20 +14,26 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
     updateUser: builder.mutation({
       query: ({ userId, firstName, lastName, username, careerId, profilePicture, password, notificationsEnabled }) => {
-        const bodyParams = {
-          ...(firstName !== undefined && { firstName }),
-          ...(lastName !== undefined && { lastName }),
-          ...(username !== undefined && { username }),
-          ...(careerId !== undefined && { careerId }),
-          ...(profilePicture !== undefined && { profilePicture }),
-          ...(password !== undefined && { password }),
-          ...(notificationsEnabled !== undefined && { notificationsEnabled }),
-        };
+        const formData = new FormData();
+
+        formData.append('userId', userId);
+
+        if (firstName !== undefined) formData.append('firstName', firstName);
+        if (lastName !== undefined) formData.append('lastName', lastName);
+        if (username !== undefined) formData.append('username', username);
+        if (careerId !== undefined) formData.append('careerId', careerId);
+        if (profilePicture !== undefined) formData.append('profilePicture', profilePicture);
+        if (password !== undefined) formData.append('password', password);
+        if (notificationsEnabled !== undefined) formData.append('notificationsEnabled', notificationsEnabled);
 
         return {
           url: `/users/${userId}`,
           method: 'PATCH',
-          body: bodyParams,
+          body: formData,
+          headers: {
+            // Do not set Content-Type for FormData, as it will be automatically set
+          },
+          formData: true,
         };
       },
     }),

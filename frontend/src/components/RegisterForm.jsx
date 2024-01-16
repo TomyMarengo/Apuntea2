@@ -14,17 +14,17 @@ const RegisterForm = () => {
 
   const { institutions, setInstitutionId, careers, setCareerId } = useInstitutionData({ skipSubjects: true });
 
-  const { form, handleChange, handleSubmit } = useForm(
-    {
+  const { form, handleChange, handleSubmit } = useForm({
+    initialValues: {
       email: '',
       password: '',
       institutionId: '',
       careerId: '',
     },
-    register,
-    setCredentials,
-    '/'
-  );
+    submitCallback: register,
+    dispatchCallback: setCredentials,
+    redirectUrl: '/',
+  });
 
   return (
     <div className="flex flex-col w-full gap-5">

@@ -14,6 +14,10 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       query: (institutionId) => `/institutions/${institutionId}/careers`,
       keepUnusedDataFor: 5, // 5 seconds
     }),
+    getCareer: builder.mutation({
+      query: ({ institutionId, careerId, url }) => url || `/institutions/${institutionId}/careers/${careerId}`,
+      keepUnusedDataFor: 5, // 5 seconds
+    }),
     getSubjects: builder.query({
       query: ({ institutionId, careerId }) => `/institutions/${institutionId}/careers/${careerId}/subjects`,
       keepUnusedDataFor: 5, // 5 seconds
@@ -21,5 +25,10 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetInstitutionsQuery, useGetInstitutionMutation, useGetCareersQuery, useGetSubjectsQuery } =
-  institutionsApiSlice;
+export const {
+  useGetInstitutionsQuery,
+  useGetInstitutionMutation,
+  useGetCareersQuery,
+  useGetCareerMutation,
+  useGetSubjectsQuery,
+} = institutionsApiSlice;
