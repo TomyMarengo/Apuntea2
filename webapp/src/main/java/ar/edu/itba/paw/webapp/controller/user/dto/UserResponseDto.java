@@ -6,8 +6,10 @@ import ar.edu.itba.paw.models.user.User;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.util.UUID;
 
 public class UserResponseDto {
+    private UUID id;
     private String email;
     private String firstName;
     private String lastName;
@@ -32,6 +34,7 @@ public class UserResponseDto {
 
     public static UserResponseDto fromUser(final User user, final UriInfo uriInfo) {
         final UserResponseDto userDto = new UserResponseDto();
+        userDto.id = user.getUserId();
         userDto.email = user.getEmail();
         userDto.firstName = user.getFirstName();
         userDto.lastName = user.getLastName();
@@ -60,6 +63,14 @@ public class UserResponseDto {
         // TODO: Change
         userDto.reviewsReceived = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).path("reviews").build();
         return userDto;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public void setEmail(String email) {
