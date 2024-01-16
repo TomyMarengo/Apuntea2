@@ -1,106 +1,321 @@
 {
-  "placeholders": {
-    "email": "apuntea@apuntea.com",
-    "password": "Apuntea1234@",
-    "firstName": "John",
-    "lastName": "Doe",
-    "username": "johndoe",
-    "institutionId": "Massachusetts Institute of Technology",
-    "careerId": "Software Engineering"
-  },
-  "apuntea": "Apuntea",
-  "verbs": {
-    "following": "Following",
-    "follow": "Follow",
-    "unfollow": "Unfollow",
-    "manage": "Manage",
-    "share": "Share",
-    "download": "Download",
-    "create": "Crear",
-    "edit": "Edit",
-    "favorite": "Favorite",
-    "favorites": "Favorites",
-    "delete": "Delete",
-    "logout": "Log out",
-    "login": "Log in",
+  "actions": {
     "cancel": "Cancel",
-    "register": "Register",
-    "views": "Views: <0>{{views}}</0>",
-    "upload": "Upload",
-    "update": "Update",
-    "editInformation": "Edit information",
     "close": "Close",
     "copyLink": "Copy link",
-    "send": "Send",
-    "repeatPassword": "Repeat password"
-  },
-  "specificVerbs": {
-    "uploadNote": "Upload note",
-    "editNote": "Edit note",
-    "editDirectory": "Edit folder",
-    "createDirectory": "Create folder",
+    "create": "Create",
+    "createDirectory": "Create directory",
     "createSubject": "Create a new subject",
-    "linkSubject": "Link subject to career",
+    "delete": "Delete",
+    "deleteNote": "Delete note",
+    "deleteReview": "Delete review",
+    "download": "Download",
+    "edit": "Edit",
+    "editDirectory": "Edit directory",
+    "editInformation": "Edit information",
+    "editNote": "Edit note",
+    "editSubject": "Edit subject",
+    "follow": "Follow",
+    "following": "Following",
     "link": "Link",
+    "linkSubject": "Link subject to career",
+    "login": "Login",
+    "logout": "Logout",
+    "manage": "Manage",
+    "openInOtherTab": "Open in other tab",
+    "openParentFolder": "Open parent folder",
+    "openSubjectFolder": "Open subject notes",
+    "register": "Register",
+    "repeatPassword": "Repeat password",
+    "search": "Search",
+    "send": "Send",
+    "share": "Share",
+    "sort": "Sort",
+    "toggleView": "Toggle view",
     "unlink": "Unlink",
     "unlinkSubject": "Unlink subject",
-    "editSubject": "Edit subject",
-    "banUser": "Ban user",
     "unbanUser": "Unban user",
-    "deleteNote": "Delete note",
-    "deleteReview": "Delete review"
+    "unfollow": "Unfollow",
+    "update": "Update",
+    "upload": "Upload",
+    "uploadNote": "Upload note"
+  },
+  "apuntea": "Apuntea",
+  "category": {
+    "all": "All",
+    "exam": "Exam",
+    "folder": "Folder",
+    "other": "Other",
+    "practice": "Practice",
+    "theory": "Theory"
   },
   "data": {
-    "separator": "separator",
-    "note": "Note",
-    "notes": "Notes",
-    "users": "Users",
-    "menu": "Menu",
-    "name": "Name",
-    "lastName": "Last name",
-    "username": "Username",
-    "roles": "Roles",
-    "status": "Status",
+    "career": "Career",
+    "category": "Category",
+    "color": "Color",
+    "createdAt": "Created at",
+    "date": "Date",
+    "email": "Email",
+    "favorite": "Favorite",
+    "favorites": "Favorites",
     "file": "File",
     "files": "Files",
     "folder": "Folder",
     "folders": "Folders",
-    "email": "Email",
     "institution": "Institution",
-    "career": "Career",
-    "subject": "Subject",
-    "category": "Category",
+    "lastModifiedAt": "Last modified at",
+    "lastName": "Last name",
+    "latestNotes": "Latest notes",
+    "menu": "Menu",
+    "name": "Name",
+    "note": "Note",
+    "notes": "Notes",
     "owner": "Owner",
-    "score": "Rating",
-    "createdAt": "Created at",
-    "lastModifiedAt": "Modified at",
-    "logotype": "Logotype",
-    "notifications": "Notifications",
+    "password": "Password",
     "private": "Private",
     "public": "Public",
-    "color": "Color",
-    "privacy": "Privacy",
-    "year": "Year",
-    "latestNotes": "Latest",
-    "configuration": "Configuration",
     "review": "Review",
     "reviews": "Reviews",
-    "date": "Date",
-    "password": "Password",
-    "darkMode": "Dark mode"
+    "roles": "Roles",
+    "score": "Rating",
+    "separator": "separator",
+    "sort": {
+      "asc": "Ascending",
+      "createdAt": "Order by creation date",
+      "desc": "Descending",
+      "image": "Sort image",
+      "lastModifiedAt": "Order by modification date",
+      "name": "Order by name",
+      "placeholder": "Not ordered",
+      "score": "Order by rating"
+    },
+    "status": "Status",
+    "subject": "Subject",
+    "subjects": "Subjects",
+    "user": "User",
+    "users": "Users",
+    "views": "Views",
+    "year": "Year"
   },
-  "category": {
-    "folder": "Folder",
-    "theory": "Theory",
-    "practice": "Practice",
-    "exam": "Exam",
-    "other": "Other",
-    "all": "All"
+  "date": {
+    "format": "<0>{{day}}</0>-<1>{{month}}</1>-<2>{{year}}</2>"
   },
-  "roles": {
-    "student": "Student",
-    "admin": "Administrator",
-    "moderator": "Moderator"
+  "errors": {
+    "400": {
+      "message": "The request was malformed",
+      "title": "Bad request"
+    },
+    "403": {
+      "message": "You don't have permission to access this page.",
+      "title": "Access denied"
+    },
+    "404": {
+      "message": "The page you are looking for does not exist.",
+      "title": "Page not found"
+    },
+    "500": {
+      "message": "Something went wrong. Please try again later.",
+      "title": "Internal server error"
+    }
+  },
+  "follows": {
+    "noContent": {
+      "description": "Follow other users to see their notes quickly."
+    }
+  },
+  "pages": {
+    "forgotPassword": {
+      "back": "Back to log in",
+      "challenge": {
+        "title": "The code has been sent to your email address"
+      },
+      "code": "Verification code",
+      "login": "Log in",
+      "newPassword": "New password",
+      "subtitle": "Enter your email address and we will send you a link to reset your password.",
+      "title": "Forgot password"
+    },
+    "index": {
+      "cards": {
+        "0": {
+          "description": "Create an account and start sharing your notes",
+          "title": "Register"
+        },
+        "1": {
+          "description": "Find notes from other students, share, download and rate them",
+          "title": "Find notes"
+        },
+        "2": {
+          "description": "Create folders and organize your notes by subject",
+          "title": "Organize your notes"
+        },
+        "3": {
+          "description": "Add a profile picture and edit your information",
+          "title": "Edit your profile"
+        }
+      },
+      "subtitle": "Connect your knowledge, expand your horizons",
+      "title": "Welcome to <0>{{pageName}}</0>"
+    },
+    "login": {
+      "dontHaveAccount": "Don't have an account? ",
+      "forgotPassword": "Forgot password?",
+      "register": "Create one",
+      "title": "Log In"
+    },
+    "manageCareers": {
+      "createSubject": {
+        "explanation": "Create a new subject in <0>{{career}}</0> <1>{{institution}}</1>."
+      },
+      "explanation": "To begin managing the subjects, select an institution and a career from the list.",
+      "explanation2": "Then, you can create, edit, link, unlink and delete subjects.",
+      "linkSubject": {
+        "explanation": "Link a subject from another career to <0>{{career}}</0> <1>{{institution}}</1>.",
+        "explanation2": "This will include the subject in <0>{{career}}</0> <1>{{institution}}</1>."
+      },
+      "sort": {
+        "year": "Order by year"
+      },
+      "title": "Manage careers",
+      "unlinkForm": {
+        "confirm": "Are you sure you want to unlink this subject from <0>{{career}}</0>? It will be deleted only from this career.",
+        "description": "Unlinking"
+      }
+    },
+    "manageUsers": {
+      "ban": {
+        "confirm": "The user will be suspended for 3 days"
+      },
+      "banUserForm": {
+        "explain": "Explain why you want to suspend this user..."
+      },
+      "searchUserForm": {
+        "noContent": "There are no users that match your search.",
+        "query": "Search by username or email"
+      },
+      "title": "Manage users",
+      "unban": {
+        "confirm": "The user will be unbanned"
+      },
+      "user": {
+        "status": {
+          "active": "Active",
+          "banned": "Banned"
+        }
+      }
+    },
+    "myCareer": {
+      "title": "My career"
+    },
+    "myFavorites": {
+      "directories": {
+        "noContent": {
+          "description": "Go to <a class=\"mx-1\" href={0}>Search</a> to add favorites."
+        }
+      },
+      "notes": {
+        "noContent": {
+          "description": "Go to <a class=\"mx-1\" href={0}>Search</a> to add favorites."
+        }
+      },
+      "subjects": {
+        "noContent": {
+          "description": "Go to <a class=\"mx-1\" href={0}>My Career</a> to add favorites."
+        }
+      }
+    },
+    "myNoteBoard": {
+      "title": "My notes"
+    },
+    "notes": {
+      "comments": {
+        "button": "Comments",
+        "noComments": "There are no comments yet.",
+        "yourReview": "Your review"
+      },
+      "currentScore": "Current rating:",
+      "file": {
+        "tooHeavy": "The file is too heavy to be uploaded."
+      },
+      "noScore": "No rating",
+      "review": {
+        "placeholder": "Write a review..."
+      },
+      "reviews": {
+        "noReviews": "There are no reviews yet.",
+        "seeMore": "See more reviews"
+      }
+    },
+    "register": {
+      "haveAccount": "Already have an account? ",
+      "login": "Log in",
+      "title": "Register"
+    },
+    "reviews": {
+      "comment": "Comment",
+      "myReviews": "Reviews made to me",
+      "noContent": {
+        "description": "There are no reviews yet. When a user rates a note, their review will appear here."
+      },
+      "note": {
+        "title": "<0>{{note}}</0>'s reviews"
+      },
+      "read": "Read reviews",
+      "seeMore": "See more reviews",
+      "user": {
+        "noReviews": "No reviews",
+        "title": "Reviews to <0>{{user}}</0>"
+      }
+    },
+    "roles": {
+      "admin": "Administrator",
+      "moderator": "Moderator",
+      "student": "Student"
+    },
+    "search": {
+      "button": {
+        "boxView": "Grid view",
+        "clearAllFilters": "Clear all filters",
+        "deselectAll": "Deselect all",
+        "listView": "List view",
+        "pageSize": "Page Size",
+        "selectAll": "Select all"
+      },
+      "category": {
+        "all": "All categories"
+      },
+      "noNotes": "There are no notes that match your search.",
+      "noScore": "No rating",
+      "openParentFolder": "Open parent folder",
+      "openSubjectFolder": "Open subject notes",
+      "openUserFolder": "Open user <0>{{user}}</0> notes",
+      "sort": {
+        "asc": "Ascending",
+        "createdAt": "Order by creation date",
+        "desc": "Descending",
+        "image": "Sort image",
+        "lastModifiedAt": "Order by modification date",
+        "name": "Order by name",
+        "placeholder": "Not ordered",
+        "score": "Order by rating"
+      },
+      "selected": "selected",
+      "title": "Search",
+      "toggleView": "Toggle view"
+    },
+    "settings": {
+      "changeInfo": "Information changed successfully",
+      "changePassword": {
+        "newPassword": "New password",
+        "oldPassword": "Old password",
+        "title": "Change password"
+      },
+      "otherConfigurations": {
+        "receiveMails": "Receive emails",
+        "title": "Other configurations"
+      },
+      "title": "Settings"
+    }
   },
   "ordinal": {
     "1": "1st",
@@ -114,288 +329,40 @@
     "9": "9th",
     "10": "10th"
   },
-  "date": {
-    "format": "<0>{{day}}</0>-<1>{{month}}</1>-<2>{{year}}</2>"
-  },
-  "index": {
-    "title": "Welcome to <0>{{pageName}}</0>",
-    "subtitle": "Connect your knowledge, expand your horizons",
-    "cards": {
-      "0": {
-        "title": "Register",
-        "description": "Create an account and start sharing your notes"
-      },
-      "1": {
-        "title": "Find notes",
-        "description": "Find notes from other students, share, download and rate them"
-      },
-      "2": {
-        "title": "Organize your notes",
-        "description": "Create folders and organize your notes by subject"
-      },
-      "3": {
-        "title": "Edit your profile",
-        "description": "Add a profile picture and edit your information"
-      }
-    }
-  },
-  "search": {
-    "title": "Search",
-    "category": {
-      "all": "All categories"
-    },
-    "sort": {
-      "placeholder": "Not ordered",
-      "image": "Sort image",
-      "name": "Order by name",
-      "score": "Order by rating",
-      "createdAt": "Order by creation date",
-      "lastModifiedAt": "Order by modification date",
-      "asc": "Ascending",
-      "desc": "Descending"
-    },
-    "word": {
-      "placeholder": "Search by name"
-    },
-    "button": {
-      "clearAllFilters": "Clear all filters",
-      "boxView": "Grid view",
-      "listView": "List view",
-      "pageSize": "Page Size",
-      "deselectAll": "Deselect all",
-      "selectAll": "Select all"
-    },
-    "toggleView": "Toggle view",
-    "selected": "selected",
-    "pagination": {
-      "previous": "Previous",
-      "next": "Next"
-    },
-    "openParentFolder": "Open parent folder",
-    "openUserFolder": "Open user <0>{{user}}</0> notes",
-    "openSubjectFolder": "Open subject notes",
-    "openInOtherTab": "Open in other tab",
-    "noNotes": "There are no notes that match your search.",
-    "noScore": "No rating"
-  },
-  "notes": {
-    "currentScore": "Current rating:",
-    "comments": {
-      "button": "Comments",
-      "yourReview": "Your review",
-      "noComments": "There are no comments yet."
-    },
-    "review": {
-      "placeholder": "Write a review..."
-    },
-    "reviews": {
-      "noReviews": "There are no reviews yet.",
-      "seeMore": "See more reviews"
-    },
-    "file": {
-      "tooHeavy": "The file is too heavy to be uploaded."
-    }
-  },
-  "reviews": {
-    "comment": "Comment",
-    "note": {
-      "title": "<0>{{note}}</0>'s reviews"
-    },
-    "read": "Read reviews",
-    "user": {
-      "title": "Reviews to <0>{{user}}</0>",
-      "noReviews": "No reviews"
-    },
-    "noContent": {
-      "description": "There are no reviews yet. When a user rates a note, their review will appear here."
-    },
-    "myReviews": "Reviews made to me"
-  },
-  "directories": {
-    "noContent": {
-      "description": "Create a new folder or upload a note."
-    }
-  },
-  "follows": {
-    "noContent": {
-      "description": "Follow other users to see their notes quickly."
-    }
-  },
-  "settings": {
-    "title": "Settings",
-    "changePassword": {
-      "title": "Change password",
-      "newPassword": "New password",
-      "oldPassword": "Old password"
-    },
-    "otherConfigurations": {
-      "title": "Other configurations",
-      "receiveMails": "Receive emails"
-    }
-  },
-  "profile": {
-    "title": "Profile",
-    "picture": "Profile picture"
-  },
-  "noteBoard": {
-    "myNoteBoard": {
-      "title": "My notes"
-    },
-    "yourNoteBoard": {
-      "title": "<0>{{user}}</0>'s notes"
-    },
-    "directories": {
-      "year": "<0>{{year}}</0> year"
-    },
-    "notes": {
-      "noContent": {
-        "description": "Go to <a class=\"mx-1\" href={0}>My Career</a> to upload notes."
-      }
-    },
-    "averageScore": "Average rating",
-    "myReviews": "My reviews"
-  },
-  "myFavorites": {
-    "notes": {
-      "noContent": {
-        "description": "Go to <a class=\"mx-1\" href={0}>Search</a> to add favorites."
-      }
-    },
-    "directories": {
-      "noContent": {
-        "description": "Go to <a class=\"mx-1\" href={0}>Search</a> to add favorites."
-      }
-    },
-    "subjects": {
-      "noContent": {
-        "description": "Go to <a class=\"mx-1\" href={0}>My Career</a> to add favorites."
-      }
-    }
-  },
-  "myCareer": {
-    "title": "My career"
-  },
-  "login": {
-    "title": "Log In",
-    "dontHaveAccount": "Don't have an account? ",
-    "register": "Create one",
-    "forgotPassword": "Forgot password?"
-  },
-  "register": {
-    "title": "Register",
-    "haveAccount": "Already have an account? ",
-    "login": "Log in"
-  },
-  "forgotPassword": {
-    "title": "Forgot password",
-    "subtitle": "Enter your email address and we will send you a link to reset your password.",
-    "back": "Back to log in",
-    "login": "Log in",
-    "code": "Verification code",
-    "newPassword": "New password",
-    "challenge": {
-      "title": "The code has been sent to your email address"
-    }
-  },
-  "manageUsers": {
-    "title": "Manage users",
-    "user": {
-      "status": {
-        "active": "Active",
-        "banned": "Banned"
-      }
-    },
-    "ban": {
-      "confirm": "The user will be suspended for 3 days"
-    },
-    "unban": {
-      "confirm": "The user will be unbanned"
-    },
-    "searchUserForm": {
-      "query": "Search by username or email",
-      "noContent": "There are no users that match your search."
-    },
-    "banUserForm": {
-      "explain": "Explain why you want to suspend this user..."
-    }
-  },
-  "manageCareers": {
-    "title": "Manage careers",
-    "explanation": "To begin managing the subjects, select an institution and a career from the list.",
-    "explanation2": "Then, you can create, edit, link, unlink and delete subjects.",
-    "sort": {
-      "year": "Order by year"
-    },
-    "linkSubject": {
-      "explanation": "Link a subject from another career to <0>{{career}}</0> <1>{{institution}}</1>.",
-      "explanation2": "This will include the subject in <0>{{career}}</0> <1>{{institution}}</1>."
-    },
-    "createSubject": {
-      "explanation": "Create a new subject in <0>{{career}}</0> <1>{{institution}}</1>."
-    },
-    "unlinkForm": {
-      "description": "Unlinking",
-      "confirm": "Are you sure you want to unlink this subject from <0>{{career}}</0>? It will be deleted only from this career."
-    },
-    "linkForm": {
-      "subject": {
-        "placeholder": "Subject from another career"
-      }
-    }
-  },
-  "navbar": {
-    "loggedIn": "Logged in as",
-    "bottom": {
-      "separator": ">",
-      "ellipsis": "...",
-      "middleEllipsis": "���"
-    }
-  },
-  "errors": {
-    "400": {
-      "title": "Bad request",
-      "message": "The request was malformed"
-    },
-    "403": {
-      "title": "Access denied",
-      "message": "You don't have permission to access this page."
-    },
-    "404": {
-      "title": "Page not found",
-      "message": "The page you are looking for does not exist."
-    },
-    "500": {
-      "title": "Internal server error",
-      "message": "Something went wrong. Please try again later."
-    },
-    "email": "Email is required",
-    "password": "Password is required, must be at least 8 characters long, and must contain at least one uppercase letter, one lowercase letter, and one number",
-    "passwordConfirmation": "Password confirmation is required, must be at least 8 characters long, and must contain at least one uppercase letter, one lowercase letter, and one number",
-    "careerId": "Career is required",
-    "institutionId": "Institution is required"
+  "placeholders": {
+    "careerId": "Software Engineering",
+    "email": "jonhdoe@gmail.com",
+    "firstName": "John",
+    "institutionId": "Massachusetts Institute of Technology",
+    "lastName": "Doe",
+    "password": "APassword162@@",
+    "username": "johndoe",
+    "word": "Search by name"
   },
   "toast": {
-    "linkCopied": "Link copied to clipboard",
-    "maxSizeExceeded": "Maximum size exceeded",
-    "register": "Registration successful",
-    "reviewUploaded": "Review uploaded to the note",
-    "forgotPassword": "Password changed successfully",
-    "changePassword": "Password changed successfully",
+    "addFavorite": "Added to favorites",
     "changeInfo": "Information changed successfully",
-    "noteEdited": "Note edited successfully",
-    "noteDeleted": "Note deleted successfully",
+    "changePassword": "Password changed successfully",
+    "clearAllFilters": "Clear all filters",
+    "copyLink": "Copy link",
+    "deleteNote": "Note deleted successfully",
     "directoryCreated": "Folder created successfully",
     "directoryDeleted": "Folder deleted successfully",
     "directoryEdited": "Folder edited successfully",
-    "addFavorite": "Added to favorites",
+    "itemsDeleted": "Deletion completed successfully",
+    "linkCopied": "Link copied to clipboard",
+    "maxSizeExceeded": "Maximum size exceeded",
+    "noteDeleted": "Note deleted successfully",
+    "noteEdited": "Note edited successfully",
+    "register": "Registration successful",
     "removeFavorite": "Removed from favorites",
-    "userBanned": "User banned successfully",
-    "userUnbanned": "User unbanned successfully",
     "reviewDeleted": "Review deleted successfully",
+    "reviewUploaded": "Review uploaded to the note",
     "subjectCreated": "Subject created successfully",
     "subjectEdited": "Subject edited successfully",
     "subjectLinked": "Subject linked successfully",
     "subjectUnlinked": "Subject unlinked successfully",
-    "itemsDeleted": "Deletion completed successfully"
+    "userBanned": "User banned successfully",
+    "userUnbanned": "User unbanned successfully"
   }
 }

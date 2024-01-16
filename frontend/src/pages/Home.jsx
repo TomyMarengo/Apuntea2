@@ -13,26 +13,26 @@ const Home = () => {
   let indexCards = useMemo(() => {
     return [
       {
-        title: 'index.cards.0.title',
-        description: 'index.cards.0.description',
+        title: 'pages.index.cards.0.title',
+        description: 'pages.index.cards.0.description',
         link: '/register',
         icon: <UsersIcon className="icon-index-card" />,
       },
       {
-        title: 'index.cards.1.title',
-        description: 'index.cards.1.description',
+        title: 'pages.index.cards.1.title',
+        description: 'pages.index.cards.1.description',
         link: '/search',
         icon: <SearchAltIcon className="icon-index-card" />,
       },
       {
-        title: 'index.cards.2.title',
-        description: 'index.cards.2.description',
+        title: 'pages.index.cards.2.title',
+        description: 'pages.index.cards.2.description',
         link: '/noteboard',
         icon: <AddDocumentIcon className="icon-index-card" />,
       },
       {
-        title: 'index.cards.3.title',
-        description: 'index.cards.3.description',
+        title: 'pages.index.cards.3.title',
+        description: 'pages.index.cards.3.description',
         link: '/profile',
         icon: <UserIcon className="icon-index-card" />,
       },
@@ -53,12 +53,12 @@ const Home = () => {
     <section className="flex flex-col items-center mt-16 gap-8 text-center">
       <h1 className="text-7xl text-dark-text">
         <Trans
-          i18nKey="index.title"
+          i18nKey="pages.index.title"
           values={{ pageName: t('apuntea') }}
           components={[<span key="0" className="text-pri font-bold"></span>]}
         />
       </h1>
-      <h3 className="text-2xl text-dark-text">{t('index.subtitle')}</h3>
+      <h3 className="text-2xl text-dark-text">{t('pages.index.subtitle')}</h3>
       <div className="index-card-container">
         {modifiedIndexCards.map((card) => (
           <NavLink to={card.link} key={card.title} className="index-card">

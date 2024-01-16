@@ -11,7 +11,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }
       }),
       transformResponse: async (response, meta) => {
-        const token = meta.response.headers.get('access-token')
+        const token = meta.response.headers.get('Access-Token')
         return { token }
       }
     }),
@@ -25,8 +25,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }
       }),
       transformResponse: async (response, meta) => {
-        const token = meta.response.headers.get('access-token')
         const data = await meta.response.json()
+        const token = meta.response.headers.get('Access-Token')
         return { ...data, token }
       }
     })

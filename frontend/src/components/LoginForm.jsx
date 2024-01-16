@@ -22,7 +22,7 @@ const LoginForm = () => {
 
   return (
     <div className="flex flex-col w-full gap-5">
-      <h1 className="text-3xl">{t('login.title')}</h1>
+      <h1 className="text-3xl">{t('pages.login.title')}</h1>
       <div className="flex flex-col gap-5 items-center w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 items-center w-full">
           {loginInputs.map((input) => (
@@ -31,9 +31,9 @@ const LoginForm = () => {
           <Button type="submit">Log In</Button>
         </form>
         <span>
-          {t('login.dontHaveAccount')}
+          {t('pages.login.dontHaveAccount')}
           <NavLink to="/register" className="link">
-            {t('login.register')}
+            {t('pages.login.register')}
           </NavLink>
         </span>
       </div>

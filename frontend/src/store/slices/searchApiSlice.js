@@ -3,17 +3,37 @@ import { apiSlice } from "./apiSlice";
 export const searchApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => (
     {
-      search: builder.query({
-        query: ({ institutionId, careerId, subjectId, word, pageNumber, ascending, sortBy, category, pageSize, parentId }) => `/search?institutionId=${institutionId}&careerId=${careerId}&subjectId=${subjectId}&word=${word}&page=${pageNumber}&asc=${ascending}&sortBy=${sortBy}&category=${category}&pageSize=${pageSize}&parentId=${parentId}`,
-        keepUnusedDataFor: 5, // 5 seconds
-        transformResponse: async (response) => {
-          const totalCount = response.headers.get('X-Total-Count');
-          const totalPages = response.headers.get('X-Total-Pages');
+      searchNotes: builder.query({
+        query: ({ institutionId, careerId, subjectId, word, page, asc, sortBy, category, pageSize, parentId }) => {
+          // Filtrar los parámetros que no son undefined
+          const queryParams = {
+            institutionId,
+            careerId,
+            subjectId,
+            word,
+            page,
+            asc,
+            sortBy,
+            category,
+            pageSize,
+            parentId,
+          };
 
-          const data = await response.json();
+          const filteredParams = Object.fromEntries(
+            // eslint-disable-next-line no-unused-vars
+            Object.entries(queryParams).filter(([_, value]) => value !== undefined)
+          );
+          const queryString = new URLSearchParams(filteredParams).toString();
+          return `/notes?${queryString}`;
+        },
+        keepUnusedDataFor: 5,
+        transformResponse: async (response, meta) => {
+          const totalCount = meta.response.headers.get('X-Total-Count');
+          const totalPages = meta.response.headers.get('X-Total-Pages');
+          const notes = await response;
 
           return {
-            data,
+            notes,
             totalCount,
             totalPages,
           };
@@ -23,5 +43,5 @@ export const searchApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-  useSearchQuery,
+  useSearchNotesQuery,
 } = searchApiSlice

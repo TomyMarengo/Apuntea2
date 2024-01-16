@@ -11,6 +11,7 @@ import Pagination from "./Pagination";
 import ProfileButton from "./ProfileButton";
 import ProfileForm from './ProfileForm';
 import RegisterForm from "./RegisterForm";
+import SearchTable from "./SearchTable";
 import Sidebar from "./Sidebar";
 
-export { Button, Card, DarkMode, Dropdown, EditableImage, Input, LoginForm, Navbar, NavSearchButton, Pagination, ProfileButton, ProfileForm, RegisterForm, Sidebar };
+export { Button, Card, DarkMode, Dropdown, EditableImage, Input, LoginForm, Navbar, NavSearchButton, Pagination, ProfileButton, ProfileForm, RegisterForm, SearchTable, Sidebar };

@@ -8,11 +8,11 @@ const NavSearchButton = () => {
   //TODO: Terminar cuando este hecho el search
 
   return (
-    <div class="search-container">
+    <div className="search-container">
       <NavLink to="/search" className="icon-button search-icon">
         <SearchIcon className="icon-s fill-dark-pri" />
       </NavLink>
-      <input type="text" className="search-input" placeholder={t('search.word.placeholder')} />
+      <input type="text" className="search-input" placeholder={t('placeholders.word')} />
     </div>
   );
 };

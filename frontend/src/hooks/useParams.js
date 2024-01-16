@@ -8,5 +8,7 @@ export default function useParams() {
     params[key] = value;
   }
 
-  return params;
+  const query = new URLSearchParams(params).toString() || '';
+
+  return { params, query };
 }

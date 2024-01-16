@@ -28,7 +28,7 @@ const RegisterForm = () => {
 
   return (
     <div className="flex flex-col w-full gap-5">
-      <h1 className="text-3xl">{t('register.title')}</h1>
+      <h1 className="text-3xl">{t('pages.register.title')}</h1>
       <div className="flex flex-col gap-5 items-center w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 items-center w-full">
           <Input
@@ -64,9 +64,9 @@ const RegisterForm = () => {
           <Button type="submit">Log In</Button>
         </form>
         <span>
-          {t('register.haveAccount')}
+          {t('pages.register.haveAccount')}
           <NavLink to="/register" className="link">
-            {t('register.login')}
+            {t('pages.register.login')}
           </NavLink>
         </span>
       </div>
