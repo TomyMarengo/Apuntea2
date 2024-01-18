@@ -174,7 +174,8 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .exceptionHandling()
+                .headers().frameOptions().disable()
+                .and().exceptionHandling()
                 .authenticationEntryPoint(authEntryPoint)
                 .accessDeniedHandler(accessDeniedHandler()).and()
                 .sessionManagement()
