@@ -1,0 +1,31 @@
+.note-info {
+  display: grid;
+  grid-template-areas: 'header header aside' 'main main aside';
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 5rem 1fr;
+}
+
+.note-header {
+  @apply px-3 py-3;
+  grid-area: header;
+}
+
+.note-frame {
+  @apply flex max-w-full justify-center;
+  background-color: var(--dark-text);
+  max-height: calc(100vh - 148px);
+  grid-area: main;
+}
+
+.reviews {
+  @apply px-3;
+  padding-top: 5rem;
+  grid-area: aside;
+}
+
+.user-profile-picture {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+}
