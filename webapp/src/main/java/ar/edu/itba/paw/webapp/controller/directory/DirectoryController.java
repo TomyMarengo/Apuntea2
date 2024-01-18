@@ -11,6 +11,7 @@ import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryResponseDto;
 import ar.edu.itba.paw.webapp.forms.queries.DirectoryQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -110,11 +111,11 @@ public class DirectoryController {
         throw new ConflictResponseException("error.favorite.alreadyExists");
     }
 
-    // TODO: Check if the user id is required
     @DELETE
-    @Path("/{id}/favorites")
+    @Path("/{id}/favorites/{userId}")
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response deleteFavorite(@PathParam("id") final UUID id) {
+    @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
+    public Response deleteFavorite(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
         if (directoryService.removeFavorite(id))
             return Response.noContent().build();
         throw new ConflictResponseException("error.favorite.notFound");

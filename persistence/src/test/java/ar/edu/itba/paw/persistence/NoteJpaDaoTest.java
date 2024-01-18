@@ -24,7 +24,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -45,6 +44,8 @@ public class NoteJpaDaoTest {
     private byte[] publicContent;
     private Note notePrivate;
     private byte[] privateContent;
+
+    private static final int pageSize = 10;
     @Before
     public void setUp() {
         pepeUser = em.find(User.class, PEPE_ID);
@@ -194,13 +195,13 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testCountReviews() {
-        int count = noteDao.countReviews(GUIA1EDA_NOTE_ID);
+        int count = noteDao.countReviews(GUIA1EDA_NOTE_ID, null);
         assertEquals(2, count);
     }
 
     @Test
     public void testGetReviews() {
-        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID, 1);
+        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID, null, 1, pageSize);
         assertEquals(2, reviews.size());
         assertNotNull(reviews.stream().filter(r -> r.getUser().getUserId().equals(PEPE_ID)).findFirst().orElse(null));
     }
@@ -218,7 +219,7 @@ public class NoteJpaDaoTest {
     public void testLimitPaginatedReviews() {
         spamReviews(GUIA1EDA_NOTE_ID);
         int pageSize = 5;
-        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID, 2, pageSize);
+        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID, null, 2, pageSize);
         assertEquals(pageSize, reviews.size());
         for (int i=0; i<reviews.size()-2; i++) {
             assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i+1).getCreatedAt()));
@@ -226,28 +227,14 @@ public class NoteJpaDaoTest {
     }
 
     @Test
-    public void testLimitReviews() {
+    public void testGetReviewsOrder() {
         spamReviews(GUIA1EDA_NOTE_ID);
 
-        List<Review> reviews = noteDao.getFirstReviews(GUIA1EDA_NOTE_ID, PEPE_ID);
-        assertEquals(NoteJpaDao.REVIEW_LIMIT, reviews.size());
+        List<Review> reviews = noteDao.getReviews(GUIA1EDA_NOTE_ID, null, 1, pageSize);
+        assertEquals(pageSize, reviews.size());
         for (int i=1; i<reviews.size()-2; i++) {
             assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i+1).getCreatedAt()));
         }
-        assertEquals(pepeUser.getUserId(), reviews.get(0).getUser().getUserId());
-    }
-
-    @Test
-    public void testLimitReviewsNoCurrentUserReview() {
-        spamReviews(GUIA1EDA_NOTE_ID);
-
-        List<Review> reviews = noteDao.getFirstReviews(GUIA1EDA_NOTE_ID, SAIDMAN_ID);
-        assertEquals(NoteJpaDao.REVIEW_LIMIT, reviews.size());
-        for (int i=1; i<reviews.size()-2; i++) {
-            assertFalse(reviews.get(i).getCreatedAt().isBefore(reviews.get(i+1).getCreatedAt()));
-        }
-        assertNotEquals(saidmanUser.getUserId(), reviews.get(0).getUser().getUserId());
-        assertTrue(reviews.stream().noneMatch(r -> r.getUser().getUserId().equals(saidmanUser.getUserId())));
     }
 
 
@@ -289,7 +276,7 @@ public class NoteJpaDaoTest {
 
     @Test
     public void testCountReviewsUser() {
-        int count = noteDao.countReviewsByUser(PEPE_ID);
+        int count = noteDao.countReviewsByTargetUser(PEPE_ID);
         assertEquals(4, count);
     }
 
@@ -305,7 +292,7 @@ public class NoteJpaDaoTest {
                 .fileType("jpg"));
         insertReview(em, newNote, carlaAdmin, 4, "ta ok!");
 
-        List<Review> reviews = noteDao.getReviewsByUser(PEPE_ID, 1, 10);
+        List<Review> reviews = noteDao.getReviewsByTargetUser(PEPE_ID, 1, 10);
 
         assertEquals(4, reviews.size());
         assertEquals(2, reviews.stream().filter(r -> r.getNote().getId().equals(GUIA1EDA_NOTE_ID)).count());
@@ -325,7 +312,7 @@ public class NoteJpaDaoTest {
                 .fileType("jpg"));
         insertReview(em, newNote, carlaAdmin, 4, "ta ok!");
 
-        List<Review> reviews = noteDao.getReviewsByUser(PEPE_ID, 1, 4);
+        List<Review> reviews = noteDao.getReviewsByTargetUser(PEPE_ID, 1, 4);
 
         assertEquals(4, reviews.size());
         assertEquals("new", reviews.get(0).getNote().getName());

@@ -4,23 +4,26 @@ import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
-// TODO: See if pagination should be inherited
 public class ReviewQuery extends PageableQuery{
     @ValidUuid
     @QueryParam("doneToUser")
-    private UUID doneToUser;
+    private UUID targetUser;
 
     @ValidUuid
     @QueryParam("noteId")
     private UUID noteId;
 
+    @ValidUuid
+    @QueryParam("userId")
+    private UUID userId;
 
-    public UUID getDoneToUser() {
-        return doneToUser;
+
+    public UUID getTargetUser() {
+        return targetUser;
     }
 
-    public void setDoneToUser(UUID doneToUser) {
-        this.doneToUser = doneToUser;
+    public void setTargetUser(UUID targetUser) {
+        this.targetUser = targetUser;
     }
 
     public UUID getNoteId() {
@@ -31,4 +34,11 @@ public class ReviewQuery extends PageableQuery{
         this.noteId = noteId;
     }
 
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
 }

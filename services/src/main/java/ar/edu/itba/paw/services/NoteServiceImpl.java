@@ -137,25 +137,19 @@ public class  NoteServiceImpl implements NoteService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
-    public List<Review> getReviews(UUID noteId) {
-        Optional<User> maybeUser = securityService.getCurrentUser();
-        if (maybeUser.isPresent())
-            return noteDao.getFirstReviews(noteId, maybeUser.get().getUserId());
-        return noteDao.getReviews(noteId, 1);
-    }
-
-    @Transactional
-    public Page<Review> getReviews(UUID noteId, int pageNum, int pageSize) {
+    public Page<Review> getReviews(UUID noteId, UUID userId, int pageNum, int pageSize) {
+        if (noteId != null)
+            this.noteDao.getNoteById(noteId, securityService.getCurrentUser().map(User::getUserId).orElse(null)).orElseThrow(NoteNotFoundException::new);
         if (noteId != null)
             this.noteDao.getNoteById(noteId, securityService.getCurrentUser().map(User::getUserId).orElse(null)).orElseThrow(NoteNotFoundException::new);
 
-        int countTotalResults = noteDao.countReviews(noteId);
+        int countTotalResults = noteDao.countReviews(noteId, userId);
         int safePage = Page.getSafePagePosition(pageNum, countTotalResults, pageSize);
 
         return new Page<>(
-                noteDao.getReviews(noteId, safePage, pageSize),
+                noteDao.getReviews(noteId, userId, safePage, pageSize),
                 safePage,
                 pageSize,
                 countTotalResults
@@ -164,12 +158,12 @@ public class  NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public Page<Review> getReviewsDoneToUser(UUID user, int pageNum, int pageSize) {
-        int countTotalResults = noteDao.countReviewsByUser(user);
+    public Page<Review> getReviewsByTargetUser(UUID targetUserId, int pageNum, int pageSize) {
+        int countTotalResults = noteDao.countReviewsByTargetUser(targetUserId);
         int safePage = Page.getSafePagePosition(pageNum, countTotalResults, pageSize);
 
         return new Page<>(
-                noteDao.getReviewsByUser(user, safePage, pageSize),
+                noteDao.getReviewsByTargetUser(targetUserId, safePage, pageSize),
                 safePage,
                 pageSize,
                 countTotalResults

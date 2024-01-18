@@ -110,7 +110,7 @@ public class UserController {
 
 
     @POST
-    @Path("/{id}/follows")
+    @Path("/{id}/followers")
     @Consumes(value = { MediaType.APPLICATION_JSON })
     public Response follow(@PathParam("id") final UUID id){
         if (userService.follow(id))
@@ -118,11 +118,11 @@ public class UserController {
         throw new ConflictResponseException("error.follow.alreadyExists");
     }
 
-    // TODO: Check if the user id is required
     @DELETE
-    @Path("/{id}/follows")
+    @Path("/{id}/followers/{followerId}")
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response unfollow(@PathParam("id") final UUID id) {
+    @PreAuthorize("@userPermissions.isCurrentUser(#followerId)")
+    public Response unfollow(@PathParam("id") final UUID id, @PathParam("followerId") final UUID followerId) {
         if (userService.unfollow(id))
             return Response.noContent().build();
         throw new ConflictResponseException("error.follow.notFound");

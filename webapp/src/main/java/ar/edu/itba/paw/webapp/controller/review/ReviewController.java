@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.exceptions.note.ReviewNotFoundException;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.controller.note.dtos.NoteResponseDto;
 import ar.edu.itba.paw.webapp.forms.queries.ReviewQuery;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,27 +35,38 @@ public class ReviewController {
 
     @GET
     @Produces(value = { ApunteaMediaType.REVIEW_COLLECTION_V1 }) // TODO: Add versions
-    public Response listReviews(@Valid @BeanParam ReviewQuery reviewQuery) {
+    public Response listReviews(@Valid @BeanParam final ReviewQuery reviewQuery) {
         Page<Review> reviewPage;
-        if (reviewQuery.getDoneToUser() != null) {
-            reviewPage = noteService.getReviewsDoneToUser(
-                    reviewQuery.getDoneToUser(),
+        reviewPage = (reviewQuery.getTargetUser() != null)?
+            noteService.getReviewsByTargetUser(
+                    reviewQuery.getTargetUser(),
                     reviewQuery.getPage(),
                     reviewQuery.getPageSize()
-            );
-        } else {
-            reviewPage = noteService.getReviews(
+            ) : noteService.getReviews(
                     reviewQuery.getNoteId(),
+                    reviewQuery.getUserId(),
                     reviewQuery.getPage(),
                     reviewQuery.getPageSize()
             );
-        }
 
         final Collection<ReviewResponseDto> reviewDtos = reviewPage.getContent()
                 .stream()
                 .map(d -> ReviewResponseDto.fromReview(d, uriInfo))
                 .collect(Collectors.toList());
         return Response.ok(new GenericEntity<Collection<ReviewResponseDto>>(reviewDtos){}).build();
+    }
+
+    @POST
+    @Produces(value = { ApunteaMediaType.REVIEW_V1 }) // TODO: Add versions
+    @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
+    public Response createReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Valid final ReviewDto reviewDto) {
+        final Review review = noteService.createOrUpdateReview(
+                noteId,
+                reviewDto.getScore(),
+                reviewDto.getContent()
+        );
+        final ReviewResponseDto reviewRespDto = ReviewResponseDto.fromReview(review, uriInfo);
+        return Response.ok(new GenericEntity<ReviewResponseDto>(reviewRespDto){}).build();
     }
 
     @PUT

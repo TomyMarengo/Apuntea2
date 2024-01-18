@@ -22,23 +22,14 @@ public interface NoteDao {
 
     boolean delete(UUID noteId, UUID currentUserId);
 
-    int countReviews(UUID noteId);
+    int countReviews(UUID noteId, UUID userId);
 
-    int countReviewsByUser(UUID userId);
+    int countReviewsByTargetUser(UUID targetUserId);
 
-    List<Review> getReviewsByUser(UUID userId, int pageNum, int pageSize);
+    List<Review> getReviewsByTargetUser(UUID targetUserId, int pageNum, int pageSize);
 
-    List<Review> getReviews(UUID noteId, int pageNum);
+    List<Review> getReviews(UUID noteId, UUID userId, int pageNum, int pageSize);
 
-    List<Review> getReviews(UUID noteId, int pageNum, int pageSize);
-
-    /**
-     * @param noteId Id of the note
-     * @param currentUserId Id of the current user
-     * @return List of reviews of the note with id noteId, ordered by date, with a limit of REVIEW_LIMIT.
-     * If the current user has a review, it will be the first element of the list
-     */
-    List<Review> getFirstReviews(UUID noteId, UUID currentUserId);
 
     boolean deleteReview(UUID noteId, UUID userId);
 

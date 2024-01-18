@@ -19,9 +19,8 @@ public interface NoteService {
     Review createOrUpdateReview(UUID noteId, int score, String content);
     void update(UUID noteId, String name, Boolean visible, String category);
     void delete(UUID noteId, String reason);
-    Page<Review> getReviews(UUID noteId, int pageNum, int pageSize);
-    Page<Review> getReviewsDoneToUser(UUID userId, int pageNum, int pageSize);
-    List<Review> getReviews(UUID noteId);
+    Page<Review> getReviews(UUID noteId, UUID userId, int pageNum, int pageSize);
+    Page<Review> getReviewsByTargetUser(UUID targetUserId, int pageNum, int pageSize);
     boolean deleteReview(UUID noteId, UUID userId, String reason);
 //    Collection<Note> getFavorites();
     boolean addFavorite(UUID noteId);

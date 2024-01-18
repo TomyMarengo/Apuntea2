@@ -13,6 +13,7 @@ import ar.edu.itba.paw.webapp.controller.note.dtos.NoteResponseDto;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteUpdateDto;
 import ar.edu.itba.paw.webapp.forms.queries.NoteQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -125,11 +126,11 @@ public class NoteController {
         throw new ConflictResponseException("error.favorite.alreadyExists");
     }
 
-    // TODO: Check if the user id is required
     @DELETE
-    @Path("/{id}/favorites")
+    @Path("/{id}/favorites/{userId}")
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    public Response deleteFavorite(@PathParam("id") final UUID id) {
+    @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
+    public Response deleteFavorite(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
         if (noteService.removeFavorite(id))
             return Response.noContent().build();
         throw new ConflictResponseException("error.favorite.notFound");
