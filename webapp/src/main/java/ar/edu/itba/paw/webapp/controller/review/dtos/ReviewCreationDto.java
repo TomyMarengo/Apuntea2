@@ -1,14 +1,16 @@
-package ar.edu.itba.paw.webapp.controller.review;
+package ar.edu.itba.paw.webapp.controller.review.dtos;
 
+import ar.edu.itba.paw.webapp.validation.EitherAttribute;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
-public class ReviewDto {
+public class ReviewCreationDto {
+    @ValidUuid
+    private UUID noteId;
 
     @Size(max = 255)
     private String content;
@@ -16,9 +18,6 @@ public class ReviewDto {
     @Min(1)
     @Max(5)
     private int score;
-
-    public ReviewDto() {
-    }
 
     public String getContent() {
         return content;
@@ -34,5 +33,13 @@ public class ReviewDto {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public UUID getNoteId() {
+        return noteId;
+    }
+
+    public void setNoteId(UUID noteId) {
+        this.noteId = noteId;
     }
 }

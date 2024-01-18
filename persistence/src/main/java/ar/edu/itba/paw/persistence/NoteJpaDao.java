@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Category;
+import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.*;
 import ar.edu.itba.paw.models.search.SearchArguments;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -121,8 +123,8 @@ public class NoteJpaDao implements NoteDao {
     @Override
     public int countReviews(UUID noteId, UUID userId) {
         final StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(*) FROM Reviews r WHERE TRUE ");
-        if (noteId != null) queryBuilder.append("AND r.note_id = :noteId");
-        if (userId != null) queryBuilder.append("AND r.user_id = :userId");
+        if (noteId != null) queryBuilder.append("AND r.note_id = :noteId ");
+        if (userId != null) queryBuilder.append("AND r.user_id = :userId ");
         final Query q = em.createNativeQuery(queryBuilder.toString());
         if (noteId != null) q.setParameter("noteId", noteId);
         if (userId != null) q.setParameter("userId", userId);

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.review;
+package ar.edu.itba.paw.webapp.controller.review.dtos;
 
 import ar.edu.itba.paw.models.note.Review;
 

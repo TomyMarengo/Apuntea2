@@ -136,7 +136,7 @@ public class NoteServiceImplTest {
         Note mNote = new Note.NoteBuilder().user(mUser).build();
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mUser);
         Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.ofNullable(mNote));
-        noteService.createOrUpdateReview(UUID.randomUUID(), 5, "my note is great");
+        noteService.createReview(UUID.randomUUID(), 5, "my note is great");
         fail();
     }
 

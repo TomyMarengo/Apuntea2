@@ -9,6 +9,8 @@ import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
+import ar.edu.itba.paw.models.exceptions.note.ReviewNotFoundException;
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
@@ -17,6 +19,7 @@ import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.DirectoryDao;
 import ar.edu.itba.paw.persistence.NoteDao;
+import ar.edu.itba.paw.persistence.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,7 @@ import java.util.*;
 
 @Service
 public class  NoteServiceImpl implements NoteService {
+    private final UserDao userDao;
     private final NoteDao noteDao;
     private final DirectoryDao directoryDao;
     private final EmailService emailService;
@@ -33,7 +37,8 @@ public class  NoteServiceImpl implements NoteService {
     private final SearchService searchService;
 
     @Autowired
-    public NoteServiceImpl(final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SearchService searchService) {
+    public NoteServiceImpl(final UserDao userDao, final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SearchService searchService) {
+        this.userDao = userDao;
         this.noteDao = noteDao;
         this.securityService = securityService;
         this.emailService = emailService;
@@ -139,11 +144,17 @@ public class  NoteServiceImpl implements NoteService {
 
     @Transactional(readOnly = true)
     @Override
+    public Optional<Review> getReview(UUID noteId, UUID userId) {
+        return noteDao.getReview(noteId, userId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
     public Page<Review> getReviews(UUID noteId, UUID userId, int pageNum, int pageSize) {
         if (noteId != null)
-            this.noteDao.getNoteById(noteId, securityService.getCurrentUser().map(User::getUserId).orElse(null)).orElseThrow(NoteNotFoundException::new);
-        if (noteId != null)
-            this.noteDao.getNoteById(noteId, securityService.getCurrentUser().map(User::getUserId).orElse(null)).orElseThrow(NoteNotFoundException::new);
+            noteDao.getNoteById(noteId, securityService.getCurrentUser().map(User::getUserId).orElse(null)).orElseThrow(NoteNotFoundException::new);
+        if (userId != null)
+            userDao.findById(userId).orElseThrow(UserNotFoundException::new);
 
         int countTotalResults = noteDao.countReviews(noteId, userId);
         int safePage = Page.getSafePagePosition(pageNum, countTotalResults, pageSize);
@@ -172,14 +183,27 @@ public class  NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public Review createOrUpdateReview(UUID noteId, int score, String content) {
+    public Review createReview(UUID noteId, int score, String content) {
         User user = securityService.getCurrentUserOrThrow();
         Note note = noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
         if (note.getUser().equals(user))
             throw new InvalidReviewException();
+        if (noteDao.getReview(noteId, user.getUserId()).isPresent())
+            return null;
         Review review = noteDao.createOrUpdateReview(note, user, score, content);
         emailService.sendReviewEmail(review);
         return review;
+    }
+
+    @Transactional
+    @Override
+    public Review updateReview(UUID noteId, int score, String content) {
+        User user = securityService.getCurrentUserOrThrow();
+        Note note = noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
+        noteDao.getReview(noteId, user.getUserId()).orElseThrow(ReviewNotFoundException::new);
+        if (note.getUser().equals(user))
+            throw new InvalidReviewException();
+        return noteDao.createOrUpdateReview(note, user, score, content);
     }
 
     @Transactional

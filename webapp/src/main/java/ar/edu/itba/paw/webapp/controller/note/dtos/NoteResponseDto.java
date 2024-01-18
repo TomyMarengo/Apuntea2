@@ -33,6 +33,7 @@ public class NoteResponseDto {
     private URI parent;
     private URI subject;
     private URI file;
+    private URI reviews;
 
     public NoteResponseDto() {
     }
@@ -56,6 +57,7 @@ public class NoteResponseDto {
             noteDto.owner = uriInfo.getBaseUriBuilder().path("users").path(note.getUser().getUserId().toString()).build();
         if(note.getParentId() != null)
             noteDto.parent = uriInfo.getBaseUriBuilder().path("directories").path(note.getParentId().toString()).build();
+        noteDto.reviews = uriInfo.getBaseUriBuilder().path("reviews").queryParam("noteId", note.getId().toString()).build();
         return noteDto;
     }
 
@@ -184,5 +186,13 @@ public class NoteResponseDto {
 
     public void setFile(URI file) {
         this.file = file;
+    }
+
+    public URI getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(URI reviews) {
+        this.reviews = reviews;
     }
 }
