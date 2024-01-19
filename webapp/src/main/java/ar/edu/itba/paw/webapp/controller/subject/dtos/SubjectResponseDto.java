@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.institution.dtos;
+package ar.edu.itba.paw.webapp.controller.subject.dtos;
 
 import ar.edu.itba.paw.models.institutional.Subject;
 
@@ -7,25 +7,20 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.UUID;
 
-public class SubjectDto {
+public class SubjectResponseDto {
     private UUID id;
     private String name;
     private int year;
 
-//    private URI institution;
-//    private URI career;
     private URI self;
     private URI rootDirectory;
 
-    public static SubjectDto fromSubject(final Subject subject, final UriInfo uriInfo, final UUID careerId, final UUID institutionId){
-        final SubjectDto subjectDto = new SubjectDto();
+    public static SubjectResponseDto fromSubject(final Subject subject, final UriInfo uriInfo){
+        final SubjectResponseDto subjectDto = new SubjectResponseDto();
         subjectDto.id = subject.getSubjectId();
         subjectDto.name = subject.getName();
 
-        UriBuilder builder = uriInfo.getBaseUriBuilder();
-//        subjectDto.institution = builder.path("institutions").path(institutionId.toString()).build();
-//        subjectDto.career = builder.path("careers").path(careerId.toString()).build();
-        subjectDto.self = builder.path("subjects").path(subject.getSubjectId().toString()).build();
+        subjectDto.self = uriInfo.getBaseUriBuilder().path("subjects").path(subject.getSubjectId().toString()).build();
         // TODO: Make sure that the id was already loaded
         subjectDto.rootDirectory = uriInfo.getBaseUriBuilder().path("directories").path(subject.getRootDirectoryId().toString()).build();
         return subjectDto;

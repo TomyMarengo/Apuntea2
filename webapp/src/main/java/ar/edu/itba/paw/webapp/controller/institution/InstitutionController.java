@@ -3,24 +3,27 @@ package ar.edu.itba.paw.webapp.controller.institution;
 
 import ar.edu.itba.paw.models.exceptions.institutional.CareerNotFoundException;
 import ar.edu.itba.paw.models.exceptions.institutional.InstitutionNotFoundException;
+import ar.edu.itba.paw.models.exceptions.institutional.SubjectCareerNotFoundException;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.Institution;
-import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.institutional.SubjectCareer;
 import ar.edu.itba.paw.services.CareerService;
 import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.institution.dtos.CareerDto;
 import ar.edu.itba.paw.webapp.controller.institution.dtos.InstitutionDto;
-import ar.edu.itba.paw.webapp.controller.institution.dtos.SubjectDto;
+import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerCreationDto;
+import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerResponseDto;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
 import java.util.UUID;
@@ -89,14 +92,32 @@ public class InstitutionController {
     }
 
     @GET
-    @Path("/{institutionId}/careers/{careerId}/subjects")
+    @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
     @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
-    public Response listAllSubjects(@PathParam("institutionId") final UUID institutionId, @PathParam("careerId") final UUID careerId) {
-        final Collection<Subject> allSubjects = subjectService.getSubjects(careerId);
-        final Collection<SubjectDto> dtoSubjects = allSubjects
-                .stream()
-                .map(s -> SubjectDto.fromSubject(s, uriInfo, careerId, institutionId))
-                .collect(Collectors.toList());
-        return Response.ok(new GenericEntity<Collection<SubjectDto>>(dtoSubjects) {}).build();
+    public Response getSubjectCareer(@PathParam("institutionId") final UUID institutionId, @PathParam("careerId") final UUID careerId, @PathParam("subjectId") final UUID subjectId) {
+        final SubjectCareer sc = subjectService.getSubjectCareer(careerId, subjectId).orElseThrow(SubjectCareerNotFoundException::new);
+        final SubjectCareerResponseDto scDto = SubjectCareerResponseDto.fromSubjectCareer(sc, uriInfo);
+        return Response.ok(new GenericEntity<SubjectCareerResponseDto>(scDto) {}).build();
+    }
+
+    @POST
+    @Path("/{institutionId}/careers/{careerId}/subjectcareers")
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    public Response addSubjectCareer(@PathParam("institutionId") final UUID institutionId, @PathParam("careerId") final UUID careerId, @Valid @BeanParam SubjectCareerCreationDto scDto) {
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
+    @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
+    public Response updateSubjectCareer(@PathParam("institutionId") final UUID institutionId, @PathParam("careerId") final UUID careerId, @PathParam("subjectId") final UUID subjectId, @Valid @Range(min = 1, max = 10) final int year) {
+        return Response.ok().build();
+    }
+
+    @DELETE
+    @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
+    @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
+    public Response deleteSubjectCareer(@PathParam("institutionId") final UUID institutionId, @PathParam("careerId") final UUID careerId, @PathParam("subjectId") final UUID subjectId, @Valid @Min(1) @Max(10) final int year) {
+        return Response.ok().build();
     }
 }

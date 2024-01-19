@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -21,17 +22,30 @@ public class SubjectJpaDao implements SubjectDao {
     private EntityManager em;
 
     @Override
+    public Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId) {
+        return em.createQuery("FROM SubjectCareer sc WHERE sc.subject.id = :subjectId AND sc.career.careerId = :careerId", SubjectCareer.class)
+                .setParameter("subjectId", subjectId)
+                .setParameter("careerId", careerId)
+                .getResultList().stream().findFirst();
+    }
+
+    @Override
     public Optional<Subject> getSubjectById(UUID subjectId) {
         return Optional.ofNullable(em.find(Subject.class, subjectId));
     }
 
     @Override
-    public List<Subject> getSubjectsByCareerId(UUID careerId) {
-        List<SubjectCareer> subjectsCareers = em.createQuery("SELECT DISTINCT sc FROM SubjectCareer sc WHERE sc.career.careerId = :careerId ORDER BY sc.year", SubjectCareer.class)
-                .setParameter("careerId", careerId)
-                .getResultList();
-        subjectsCareers.forEach(sc -> sc.getSubject().setYear(sc.getYear()));
-        return subjectsCareers.stream().map(SubjectCareer::getSubject).collect(Collectors.toList());
+    public List<Subject> getSubjectsByCareer(UUID careerId, Integer year) {
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT s FROM Subject s, SubjectCareer sc WHERE sc.subject = s AND sc.career.careerId = :careerId ");
+        queryCreator.addParameter("careerId", careerId);
+        if (year != null) {
+            queryCreator.append("AND sc.year = :year ");
+            queryCreator.addParameter("year", year);
+        }
+
+        TypedQuery<Subject> query = em.createQuery(queryCreator.createQuery(), Subject.class);
+        queryCreator.getParams().forEach(query::setParameter);
+        return query.getResultList();
     }
 
     @Override

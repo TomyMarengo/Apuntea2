@@ -7,10 +7,13 @@ public class EitherAttributeValidator implements ConstraintValidator<EitherAttri
     private String[] fieldGroup1;
     private String[] fieldGroup2;
 
+    private boolean allowNeither;
+
     @Override
     public void initialize(EitherAttribute constraintAnnotation) {
         this.fieldGroup1 = constraintAnnotation.fieldGroup1();
         this.fieldGroup2 = constraintAnnotation.fieldGroup2();
+        this.allowNeither = constraintAnnotation.allowNeither();
     }
 
     @Override
@@ -35,6 +38,6 @@ public class EitherAttributeValidator implements ConstraintValidator<EitherAttri
             }
         }
 
-        return count1 == 0 || count2 == 0;
+        return (count1 == 0 || count2 == 0) && (allowNeither || count1 + count2 > 0);
     }
 }

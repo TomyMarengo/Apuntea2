@@ -6,17 +6,16 @@ import java.lang.annotation.*;
 
 @Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = EitherAttributeValidator.class)
+@Constraint(validatedBy = AttributeDependenceValidator.class)
 @Documented
-public @interface EitherAttribute {
-    String message() default "{ar.edu.itba.paw.webapp.validation.EitherAttribute.message}";
+public @interface AttributeDependence {
+    String message() default "{ar.edu.itba.paw.webapp.validation.AttributeDependence.message}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    String[] fieldGroup1();
-    String[] fieldGroup2();
+    String baseField();
+    String dependentField();
 
-    boolean allowNeither() default true;
 }

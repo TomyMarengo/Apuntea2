@@ -48,7 +48,7 @@ public class NoteResponseDto {
         noteDto.interactions = note.getInteractions();
         noteDto.fileType = note.getFileType();
         noteDto.avgScore = note.getAvgScore();
-        //TODO do subjects correctly
+
         noteDto.subject = uriInfo.getBaseUriBuilder().path("subjects").path(note.getSubject().getSubjectId().toString()).build();
 
         noteDto.self = uriInfo.getBaseUriBuilder().path("notes").path(note.getId().toString()).build();

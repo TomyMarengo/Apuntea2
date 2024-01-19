@@ -68,7 +68,7 @@ public class NoteController {
         );
         final Collection<NoteResponseDto> noteDtos = notePage.getContent()
                 .stream()
-                .map(d -> NoteResponseDto.fromNote(d, uriInfo))
+                .map(n -> NoteResponseDto.fromNote(n, uriInfo))
                 .collect(Collectors.toList());
 
         return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<NoteResponseDto>>(noteDtos) {}),

@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.Subject;
+import ar.edu.itba.paw.models.institutional.SubjectCareer;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
@@ -12,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +27,7 @@ public class SubjectServiceImpl implements SubjectService {
     private final SecurityService securityService;
 
 
+
     @Autowired
     public SubjectServiceImpl(SubjectDao subjectDao, DirectoryDao directoryDao, UserDao userDao, CareerDao careerDao, SearchDao searchDao, SecurityService securityService) {
         this.subjectDao = subjectDao;
@@ -38,27 +38,27 @@ public class SubjectServiceImpl implements SubjectService {
         this.securityService = securityService;
     }
 
-
     @Override
-    @Transactional
-    public List<Subject> getSubjects(UUID careerId) {
-        return subjectDao.getSubjectsByCareerId(careerId);
+    @Transactional(readOnly = true)
+    public Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId) {
+        return subjectDao.getSubjectCareer(subjectId, careerId);
     }
 
     @Override
     @Transactional
-    public Map<Integer, List<Subject>> getSubjectsByCareerGroupByYear() {
-        User currentUser = this.securityService.getCurrentUserOrThrow();
-        List<Subject> subjects = subjectDao.getSubjectsByCareerId(currentUser.getCareer().getCareerId());
+    public List<Subject> getSubjectsByCareer(UUID careerId, Integer year) {
+        careerDao.getCareerById(careerId).orElseThrow(InvalidSubjectException::new); //TODO : change exception to 422
+        List<Subject> subjects = subjectDao.getSubjectsByCareer(careerId, year);
 //        directoryDao.loadDirectoryFavorites(subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()), currentUser.getUserId());
-        return subjects.stream().collect(Collectors.groupingBy(Subject::getYear));
+        return subjects;
     }
 
-//    @Override
-//    @Transactional
-//    public List<SubjectDto> getSubjectsByCareerComplemented(UUID careerId) {
-//        return subjectDao.getSubjectsByCareerIdComplemented(careerId).stream().map(SubjectDto::new).collect(Collectors.toList());
-//    }
+    @Override
+    @Transactional
+    public List<Subject> getSubjectsByCareerComplemented(UUID careerId) {
+        careerDao.getCareerById(careerId).orElseThrow(InvalidSubjectException::new); //TODO : change exception to 422
+        return subjectDao.getSubjectsByCareerIdComplemented(careerId);
+    }
 
     @Override
     @Transactional

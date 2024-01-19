@@ -1,0 +1,66 @@
+package ar.edu.itba.paw.webapp.controller.subject.dtos;
+
+import ar.edu.itba.paw.models.institutional.Career;
+import ar.edu.itba.paw.models.institutional.SubjectCareer;
+
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.UUID;
+
+public class SubjectCareerResponseDto {
+    private int year;
+
+    private URI self;
+    private URI career;
+    private URI subject;
+
+
+    public static SubjectCareerResponseDto fromSubjectCareer(SubjectCareer sc, UriInfo uriInfo) {
+        SubjectCareerResponseDto scDto = new SubjectCareerResponseDto();
+        scDto.year = sc.getYear();
+
+        UUID subjectId = sc.getSubject().getSubjectId();
+        Career c = sc.getCareer();
+        UUID institutionId = c.getInstitutionId();
+        UriBuilder ub = uriInfo.getBaseUriBuilder().path("institutions").path(institutionId.toString())
+                                                    .path("careers").path(c.getCareerId().toString());
+        scDto.setCareer(ub.build());
+        scDto.setSelf(ub.path("subjectcareers").path(subjectId.toString()).build());
+        scDto.setSubject(uriInfo.getBaseUriBuilder().path("subjects").path(subjectId.toString()).build());
+
+        return scDto;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public URI getSelf() {
+        return self;
+    }
+
+    public void setSelf(URI self) {
+        this.self = self;
+    }
+
+    public URI getCareer() {
+        return career;
+    }
+
+    public void setCareer(URI career) {
+        this.career = career;
+    }
+
+    public URI getSubject() {
+        return subject;
+    }
+
+    public void setSubject(URI subject) {
+        this.subject = subject;
+    }
+}

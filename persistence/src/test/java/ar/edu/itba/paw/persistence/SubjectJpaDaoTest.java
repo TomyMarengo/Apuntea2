@@ -101,7 +101,7 @@ public class SubjectJpaDaoTest {
     public void testGetSubjectsByCareerId(){
         TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
-        List<Subject> career1SubjectList = subjectDao.getSubjectsByCareerId(test.career1Id);
+        List<Subject> career1SubjectList = subjectDao.getSubjectsByCareer(test.career1Id, null);
 
         assertEquals(2, career1SubjectList.size());
         assertTrue(career1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject1Id)));
@@ -114,7 +114,7 @@ public class SubjectJpaDaoTest {
 
     @Test
     public void testOrderGetSubjectsByCareerId() {
-        List<Subject> subjects = subjectDao.getSubjectsByCareerId(ING_INF_ID);
+        List<Subject> subjects = subjectDao.getSubjectsByCareer(ING_INF_ID, null);
 
         for (int i = 0; i < subjects.size() - 2; i++) {
             assertTrue(subjects.get(i).getYear() <= subjects.get(i + 1).getYear());
