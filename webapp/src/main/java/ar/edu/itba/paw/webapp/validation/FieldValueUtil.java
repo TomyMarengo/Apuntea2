@@ -10,7 +10,18 @@ public class FieldValueUtil {
             field.setAccessible(true);
             return field.get(object);
         } catch (NoSuchFieldException | IllegalAccessException e) {
+            return getParentFieldValue(object, fieldName);
+        }
+    }
+
+    private static Object getParentFieldValue(Object object, String fieldName) {
+        try {
+            Field field = object.getClass().getSuperclass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return field.get(object);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             return null;
         }
     }
+
 }

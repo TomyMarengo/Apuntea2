@@ -10,7 +10,6 @@ import java.util.UUID;
 public class SubjectResponseDto {
     private UUID id;
     private String name;
-    private int year;
 
     private URI self;
     private URI rootDirectory;
@@ -37,8 +36,6 @@ public class SubjectResponseDto {
     public String getName(){
         return name;
     }
-
-    public int getYear() { return year; }
     public URI getSelf(){ return self; }
 
     public URI getRootDirectory() { return rootDirectory; }
@@ -47,7 +44,6 @@ public class SubjectResponseDto {
         this.name = name;
     }
 
-    public void setYear(int year) { this.year = year; }
     public void setSelf(URI self){
         this.self = self;
     }

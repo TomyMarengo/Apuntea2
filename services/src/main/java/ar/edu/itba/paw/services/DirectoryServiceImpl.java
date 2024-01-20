@@ -72,8 +72,7 @@ public class DirectoryServiceImpl implements DirectoryService {
         maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
 
         boolean navigate = parentId != null || favBy != null; // Maybe this should be an additional parameter
-        if ((!navigate && isRdir) ||
-                (navigate && (institutionId != null || careerId != null || subjectId != null)))
+        if (!navigate && isRdir)
             throw new InvalidQueryException();
 
         SearchArguments searchArgumentsWithoutPaging = sab.build();

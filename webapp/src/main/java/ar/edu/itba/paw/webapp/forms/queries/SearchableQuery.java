@@ -1,11 +1,13 @@
 package ar.edu.itba.paw.webapp.forms.queries;
 
+import ar.edu.itba.paw.webapp.validation.EitherAttribute;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
+@EitherAttribute(fieldGroup1 = {"institutionId", "careerId", "subjectId"}, fieldGroup2 = {"parentId", "favBy"}, message = "invalidAttributeCombination")
 public class SearchableQuery extends PageableQuery { //TODO: Add error messages
     @DefaultValue("true")
     @QueryParam("asc")

@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
-@EitherAttribute(fieldGroup1 = {"careerId", "year"}, fieldGroup2 = {"notInCareerId"}, allowNeither = false, message = "invalidAttributeCombination")
+@EitherAttribute(fieldGroup1 = {"careerId", "year"}, fieldGroup2 = {"notInCareer"}, allowNeither = false, message = "invalidAttributeCombination")
 @AttributeDependence(baseField = "year", dependentField = "careerId", message = "invalidAttributeCombination")
 public class SubjectQuery {
     @ValidUuid
@@ -20,8 +20,8 @@ public class SubjectQuery {
     private Integer year;
 
     @ValidUuid
-    @QueryParam("notInCareerId")
-    private UUID notInCareerId;
+    @QueryParam("notInCareer")
+    private UUID notInCareer;
 
     public UUID getCareerId() {
         return careerId;
@@ -39,11 +39,11 @@ public class SubjectQuery {
         this.year = year;
     }
 
-    public UUID getNotInCareerId() {
-        return notInCareerId;
+    public UUID getNotInCareer() {
+        return notInCareer;
     }
 
-    public void setNotInCareerId(UUID notInCareerId) {
-        this.notInCareerId = notInCareerId;
+    public void setNotInCareer(UUID notInCareer) {
+        this.notInCareer = notInCareer;
     }
 }

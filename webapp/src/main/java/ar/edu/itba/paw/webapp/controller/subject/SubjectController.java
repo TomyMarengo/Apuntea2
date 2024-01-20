@@ -32,7 +32,7 @@ public class SubjectController {
     public Response listSubjects(@Valid @BeanParam SubjectQuery subjectQuery){
         List<Subject> subjects = (subjectQuery.getCareerId() != null)?
                 subjectService.getSubjectsByCareer(subjectQuery.getCareerId(), subjectQuery.getYear()):
-                subjectService.getSubjectsByCareerComplemented(subjectQuery.getNotInCareerId());
+                subjectService.getSubjectsByCareerComplemented(subjectQuery.getNotInCareer());
         final Collection<SubjectResponseDto> subjectDtos = subjects.stream().map(s->SubjectResponseDto.fromSubject(s, uriInfo)).collect(java.util.stream.Collectors.toList());
         return Response.ok(new GenericEntity<Collection<SubjectResponseDto>>(subjectDtos){}).build();
     }

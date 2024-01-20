@@ -85,9 +85,9 @@ public class DaoUtils {
 
 
     static void applyInstitutionalFilters(final QueryCreator queryCreator, final SearchArguments sa) {
-        queryCreator.addConditionIfPresent(INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
-        queryCreator.addConditionIfPresent(CAREER_ID, "=", "AND", sa.getCareerId());
-        queryCreator.addConditionIfPresent(SUBJECT_ID, "=", "AND", sa.getSubjectId());
+        queryCreator.addConditionIfPresent("i", INSTITUTION_ID, "=", "AND", sa.getInstitutionId());
+        queryCreator.addConditionIfPresent("c", CAREER_ID, "=", "AND", sa.getCareerId());
+        queryCreator.addConditionIfPresent("s", SUBJECT_ID, "=", "AND", sa.getSubjectId());
     }
 
     /**
