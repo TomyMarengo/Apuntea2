@@ -1,6 +1,7 @@
 import Button from './Button';
 import Box from './Box';
 import Card from './Card';
+import CommentBox from './CommentBox';
 import CopyButton from './CopyButton';
 import DarkMode from './DarkMode';
 import DeleteButton from './DeleteButton';
@@ -24,6 +25,7 @@ export {
   Button,
   Box,
   Card,
+  CommentBox,
   CopyButton,
   DarkMode,
   DeleteButton,

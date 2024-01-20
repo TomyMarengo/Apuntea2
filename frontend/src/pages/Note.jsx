@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import FavoriteButton from '../components/FavoriteButton';
 import DownloadButton from '../components/DownloadButton';
-import { DeleteButton, ReviewCard } from '../components/index';
+import { DeleteButton, ReviewCard, CommentBox } from '../components/index';
 
 const Note = () => {
   const { t } = useTranslation();
@@ -21,12 +21,11 @@ const Note = () => {
         <div className="flex flex-row items-center">
           <img className="user-profile-picture" src={note?.user?.profilePicture} alt="user profile" />
           <div className="flex flex-col">
-            <h4 className="font-bold text-xl">
-              aa
+            <a className="font-bold text-xl" href={`/users/${note?.user?.id}`}>
               {/* {note.owner.name} */}
-            </h4>
+            </a>
             <span>
-              {t('data.views')}: {note.interactions}
+              {t('data.views')}:{/* {note.interactions} */}
             </span>
           </div>
         </div>
@@ -39,15 +38,19 @@ const Note = () => {
       <div className="reviews">
         <h2 className="text-3xl text-dark-pri mb-1">{t('data.reviews')}</h2>
         <span>
-          {t('data.score')}: {note.avgScore.toFixed(1)} ⭐
+          {t('data.score')}:{/* {note.avgScore.toFixed(1)} ⭐ */}
         </span>
-        <div className="p-2 mt-2 overflow-y-auto">
-          {/* {note.reviews.map((review) => (
+        <div className="p-2 mt-1">
+          <div className="reviews-container">
+            {/* {note.reviews.map((review) => (
             <ReviewCard key={review.id} {...review} />
           ))} */}
-          <ReviewCard />
+          </div>
+
+          <CommentBox />
         </div>
       </div>
+
       <div className="note-frame">
         <iframe src={`http://localhost:8080/paw-2023b-12/notes/${noteId}/file`}></iframe>
       </div>
