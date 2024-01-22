@@ -4,13 +4,14 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query({
       query: () => '/users',
-      keepUnusedDataFor: 5 * 60 * 60 * 1000, // 5 hours
+      providesTags: ['Users'],
     }),
-    getUser: builder.mutation({
+    getUser: builder.query({
       query: (userId) => ({
         url: `/users/${userId}`,
         method: 'GET',
       }),
+      providesTags: ['Users'],
     }),
     updateUser: builder.mutation({
       query: ({ userId, firstName, lastName, username, careerId, profilePicture, password, notificationsEnabled }) => {
@@ -36,8 +37,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           formData: true,
         };
       },
+      invalidatesTags: ['Users'],
     }),
   }),
 });
 
-export const { useGetUsersQuery, useGetUserMutation, useUpdateUserMutation } = usersApiSlice;
+export const { useGetUsersQuery, useGetUserQuery, useLazyGetUserQuery, useUpdateUserMutation } = usersApiSlice;

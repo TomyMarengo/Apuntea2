@@ -58,7 +58,7 @@ const profileInputs = [
     name: 'firstName',
     placeholder: 'placeholders.firstName',
     errorMessage: 'errors.firstName',
-    pattern: '^(?![0-9s]+$)[p{L}s]{1,25}$',
+    pattern: '^(?![0-9\\s]+$)[\\p{L}\\s]{1,25}$',
     autoFocus: true,
   },
   {
@@ -66,7 +66,7 @@ const profileInputs = [
     name: 'lastName',
     placeholder: 'placeholders.lastName',
     errorMessage: 'errors.lastName',
-    pattern: '^(?![0-9s]+$)[p{L}s]{1,25}$',
+    pattern: '^(?![0-9\\s]+$)[\\p{L}\\s]{1,25}$',
   },
   {
     id: 'username',

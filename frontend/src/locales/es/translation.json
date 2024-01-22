@@ -19,6 +19,7 @@
     "following": "Siguiendo",
     "link": "Enlace",
     "linkSubject": "Vincular materia a carrera",
+    "loading": "Cargando...",
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
     "manage": "Administrar",
@@ -27,6 +28,7 @@
     "openSubjectFolder": "Abrir notas de la materia",
     "register": "Registrarse",
     "repeatPassword": "Repetir contraseña",
+    "save": "Guardar",
     "search": "Buscar",
     "send": "Enviar",
     "share": "Compartir",
@@ -117,7 +119,15 @@
     "500": {
       "message": "Algo salió mal. Por favor, inténtalo de nuevo más tarde.",
       "title": "Error interno del servidor"
-    }
+    },
+    "careerId": "La carrera no es válida",
+    "email": "El correo electrónico no es válido",
+    "firstName": "El nombre debe tener al menos 2 caracteres",
+    "institutionId": "La institución no es válida",
+    "lastName": "El apellido debe tener al menos 2 caracteres",
+    "password": "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número",
+    "profilePicture": "La imagen de perfil debe ser un archivo de imagen",
+    "username": "El nombre de usuario debe tener al menos 4 caracteres"
   },
   "follows": {
     "noContent": {

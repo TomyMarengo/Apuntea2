@@ -19,6 +19,7 @@
     "following": "Following",
     "link": "Link",
     "linkSubject": "Link subject to career",
+    "loading": "Loading...",
     "login": "Login",
     "logout": "Logout",
     "manage": "Manage",
@@ -27,6 +28,7 @@
     "openSubjectFolder": "Open subject notes",
     "register": "Register",
     "repeatPassword": "Repeat password",
+    "save": "Save",
     "search": "Search",
     "send": "Send",
     "share": "Share",
@@ -117,7 +119,15 @@
     "500": {
       "message": "Something went wrong. Please try again later.",
       "title": "Internal server error"
-    }
+    },
+    "careerId": "Invalid career",
+    "email": "Invalid email",
+    "firstName": "First name must have at least 2 characters",
+    "institutionId": "Invalid institution",
+    "lastName": "Last name must have at least 2 characters",
+    "password": "Password must have at least 8 characters, one uppercase letter, one lowercase letter, and one number",
+    "profilePicture": "Profile picture must be an image file",
+    "username": "Username must have at least 4 characters"
   },
   "follows": {
     "noContent": {

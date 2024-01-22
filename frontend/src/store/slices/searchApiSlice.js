@@ -26,7 +26,6 @@ export const searchApiSlice = apiSlice.injectEndpoints({
           const queryString = new URLSearchParams(filteredParams).toString();
           return `/notes?${queryString}`;
         },
-        keepUnusedDataFor: 5,
         transformResponse: async (response, meta) => {
           const totalCount = meta.response.headers.get('X-Total-Count');
           const totalPages = meta.response.headers.get('X-Total-Pages');

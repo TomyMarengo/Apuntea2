@@ -3,15 +3,13 @@ import { isUuid } from '../functions/validation';
 import { Input, Button } from './index';
 import { profileInputs } from '../constants/forms';
 import { useForm, useInstitutionData } from '../hooks/index';
-import { selectCurrentUser, setCredentials } from '../store/slices/authSlice';
+
 import EditableImage from './EditableImage';
-import { useSelector } from 'react-redux';
 import { useUpdateUserMutation } from '../store/slices/usersApiSlice';
 
-const ProfileForm = () => {
-  const [updateUser, { isLoading }] = useUpdateUserMutation();
+const ProfileForm = ({ user, institution, career }) => {
+  const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
   const { t } = useTranslation();
-  const user = useSelector(selectCurrentUser);
 
   const { form, handleChange, handleSubmit } = useForm({
     initialValues: {
@@ -19,16 +17,15 @@ const ProfileForm = () => {
       firstName: user.firstName,
       lastName: user.lastName,
       username: user.username,
-      careerId: user.career.id,
+      careerId: career.id,
       // profilePicture: user.profilePicture,
     },
     submitCallback: updateUser,
-    dispatchCallback: setCredentials,
   });
 
   const { careers, setCareerId } = useInstitutionData({
     skipInstitution: true,
-    initialInstitutionId: user.institution.id,
+    initialInstitutionId: institution.id,
   });
 
   return (
@@ -63,14 +60,14 @@ const ProfileForm = () => {
           </div>
           <div className="flex flex-col gap-1">
             <span className="font-bold">{t('data.institution')}</span>
-            <span>{user.institution.name}</span>
+            <span>{institution.name}</span>
           </div>
           <div className="flex flex-col gap-1">
             <span className="font-bold">{t('data.career')}</span>
             <Input
               {...profileInputs.find((input) => input.name === 'careerId')}
-              value={user.career.name} //career name
-              hiddenValue={form.careerId} //career id
+              value={career.name}
+              hiddenValue={form.careerId}
               onChange={(e) => {
                 handleChange(e);
                 if (isUuid(e.target.value) || e.target.value === '') setCareerId(e.target.value);
@@ -85,7 +82,7 @@ const ProfileForm = () => {
           </div>
         </div>
         <Button type="submit" className="profile-footer">
-          Save
+          {isLoadingUpdate ? t('actions.loading') : t('actions.save')}
         </Button>
       </form>
     </div>
