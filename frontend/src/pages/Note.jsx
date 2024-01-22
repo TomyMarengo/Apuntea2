@@ -1,64 +1,62 @@
-import { useGetNoteQuery, useGetNoteFileQuery } from '../store/slices/noteApiSlice';
-import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-import FavoriteButton from '../components/FavoriteButton';
-import DownloadButton from '../components/DownloadButton';
-import { DeleteButton, ReviewCard, CommentBox } from '../components/index';
-import { useGetReviewsQuery } from '../store/slices/reviewApiSlice';
+import { DeleteButton, FavoriteButton, DownloadButton, ReviewsContainer } from '../components/index';
+import { NavLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useGetNoteQuery } from '../store/slices/notesApiSlice';
+import { useGetUserQuery, useGetUserPictureQuery } from '../store/slices/usersApiSlice';
 
 const Note = () => {
   const { t } = useTranslation();
+
   const { noteId } = useParams();
-  const { data: dataNote, isLoading: isLoadingNote, error: errorNote } = useGetNoteQuery(noteId);
-  const { data: dataReviews, isLoading: isLoadingReviews, error: errorReviews } = useGetReviewsQuery(noteId);
+  const { data: note, isLoading: isLoadingNote, error: errorNote } = useGetNoteQuery({ noteId });
+  const {
+    data: owner,
+    isLoading: isLoadingOwner,
+    error: errorOwner,
+  } = useGetUserQuery({ url: note?.owner }, { skip: !note, refetchOnMountOrArgChange: true });
 
-  const { note } = dataNote || {};
-  const { reviews } = dataReviews || {};
-
-  console.log(note);
-  console.log(dataReviews);
+  const {
+    data: ownerPicture,
+    isLoading: isLoadingOwnerPicture,
+    error: errorOwnerPicture,
+  } = useGetUserPictureQuery({ url: note?.owner }, { skip: !note, refetchOnMountOrArgChange: true });
 
   return (
     <section className="note-info">
-      {/* {isLoading && <p>Loading...</p>}
-        {error && <p>{error}</p>} */}
-      <div className="note-header flex justify-between items-center">
-        <div className="flex flex-row items-center">
-          <img className="user-profile-picture" src={note?.user?.profilePicture} alt="user profile" />
-          <div className="flex flex-col">
-            <a className="font-bold text-xl" href={`/users/${note?.user?.id}`}>
-              {/* {note.owner.name} */}
-            </a>
-            <span>
-              {t('data.views')}: {note.interactions}
-            </span>
+      {isLoadingNote || isLoadingOwner ? (
+        <span>... </span>
+      ) : (
+        <>
+          <div className="note-header flex justify-between items-center">
+            <div className="flex flex-row items-center">
+              {isLoadingOwnerPicture ? (
+                <span>...</span>
+              ) : (
+                <img className="user-profile-picture" src={ownerPicture} alt="user profile" />
+              )}
+              <div className="flex flex-col">
+                <NavLink className="font-bold text-xl" to={owner.self + '/noteboard'}>
+                  {owner.email}
+                </NavLink>
+                <span>
+                  {t('data.views')}: {note.interactions}
+                </span>
+              </div>
+            </div>
+            <div className="flex">
+              <FavoriteButton />
+              <DownloadButton link={note.file} />
+              <DeleteButton />
+            </div>
           </div>
-        </div>
-        <div className="flex">
-          <FavoriteButton />
-          <DownloadButton link={`http://localhost:8080/paw-2023b-12/notes/${noteId}/file`} />
-          <DeleteButton />
-        </div>
-      </div>
-      <div className="reviews">
-        <h2 className="text-3xl text-dark-pri mb-1">{t('data.reviews')}</h2>
-        <span>
-          {t('data.score')}: {note.avgScore.toFixed(1)} ⭐
-        </span>
-        <div className="p-2 mt-1">
-          <div className="reviews-container">
-            {reviews.map((review) => (
-              <ReviewCard key={review.id} {...review} />
-            ))}
+          <div className="note-frame">
+            <iframe src={note.file}></iframe>
           </div>
-
-          <CommentBox />
-        </div>
-      </div>
-      <div className="note-frame">
-        <iframe src={`http://localhost:8080/paw-2023b-12/notes/${noteId}/file`}></iframe>
-      </div>
+          <ReviewsContainer score={note.avgScore.toFixed(1)} noteId={note.id} />
+          {/* CHANGE TO REVIEW URL FROM NOTE */}
+        </>
+      )}
     </section>
   );
 };

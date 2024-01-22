@@ -1,20 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, DeleteButton } from './index';
 import { ChevronDownIcon, ChevronUpIcon } from './Icons';
+import { useGetUserQuery } from '../store/slices/usersApiSlice';
+import Spinner from './Spinner';
 
-const ReviewCard = ({ user, userLink, score, content }) => {
+const ReviewCard = ({ user, score, content }) => {
   const [isTextOverflowing, setIsTextOverflowing] = useState(false);
   const [isContentVisible, setIsContentVisible] = useState(false);
+  const contentRef = useRef(null);
 
+  const { data: owner, isLoading: isLoadingOwner, error: errorOwner } = useGetUserQuery({ url: user });
+
+  console.log('owner', owner);
   useEffect(() => {
-    const spanElement = document.getElementById(`rcContent-${userLink}`);
-    if (spanElement) {
+    if (contentRef.current) {
       setIsTextOverflowing(
-        spanElement.scrollWidth > spanElement.clientWidth || spanElement.scrollHeight > spanElement.clientHeight
+        contentRef.current.scrollWidth > contentRef.current.clientWidth ||
+          contentRef.current.scrollHeight > contentRef.current.clientHeight
       );
     }
-  }, [content, userLink]);
+  }, []);
 
   const toggleContentVisibility = () => {
     setIsContentVisible(!isContentVisible);
@@ -24,7 +30,7 @@ const ReviewCard = ({ user, userLink, score, content }) => {
     <Box className="flex flex-col gap-1 my-3">
       <div className="flex items-center justify-between">
         <div className="link text-xl">
-          <NavLink to={userLink}>{user}</NavLink>
+          {isLoadingOwner ? <Spinner /> : <NavLink to={owner.self + '/noteboard'}>{owner.email}</NavLink>}
         </div>
         <DeleteButton />
       </div>
@@ -33,7 +39,7 @@ const ReviewCard = ({ user, userLink, score, content }) => {
           <span key={i}>⭐</span>
         ))}
       </div>
-      <div id={`rcContent-${userLink}`} className={`${isContentVisible ? '' : 'truncate'}`}>
+      <div ref={contentRef} className={`${isContentVisible ? 'break-all' : 'truncate'}`}>
         {content}
       </div>
       {isTextOverflowing && (

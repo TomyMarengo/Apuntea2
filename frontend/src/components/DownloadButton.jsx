@@ -1,10 +1,10 @@
 import { DownloadIcon } from './Icons';
-
-const DownloadButton = ({ fileName, link }) => {
+import { Link } from 'react-router-dom';
+const DownloadButton = ({ link }) => {
   return (
-    <a className="icon-button" href={link} download={fileName}>
+    <Link className="icon-button" to={link} download="hola" target="_self">
       <DownloadIcon className="icon-s" />
-    </a>
+    </Link>
   );
 };
 export default DownloadButton;

@@ -1,7 +1,6 @@
-import Button from './Button';
 import Box from './Box';
+import Button from './Button';
 import Card from './Card';
-import CommentBox from './CommentBox';
 import CopyButton from './CopyButton';
 import DarkMode from './DarkMode';
 import DeleteButton from './DeleteButton';
@@ -17,15 +16,17 @@ import Pagination from './Pagination';
 import ProfileButton from './ProfileButton';
 import ProfileForm from './ProfileForm';
 import RegisterForm from './RegisterForm';
+import ReviewBox from './ReviewBox';
 import ReviewCard from './ReviewCard';
+import ReviewsContainer from './ReviewsContainer';
 import SearchTable from './SearchTable';
 import Sidebar from './Sidebar';
+import Spinner from './Spinner';
 
 export {
-  Button,
   Box,
+  Button,
   Card,
-  CommentBox,
   CopyButton,
   DarkMode,
   DeleteButton,
@@ -41,7 +42,10 @@ export {
   ProfileButton,
   ProfileForm,
   RegisterForm,
+  ReviewBox,
   ReviewCard,
+  ReviewsContainer,
   SearchTable,
   Sidebar,
+  Spinner,
 };

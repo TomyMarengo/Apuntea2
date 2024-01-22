@@ -7,14 +7,27 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Users'],
     }),
     getUser: builder.query({
-      query: (userId) => ({
-        url: `/users/${userId}`,
-        method: 'GET',
-      }),
+      query: ({ userId, url }) => url || `/users/${userId}`,
       providesTags: ['Users'],
+      refetchOnMountOrArgChange: true,
+    }),
+    getUserPicture: builder.query({
+      query: ({ userId, url }) => url || `/users/${userId}/picture`,
+      providesTags: ['Users'],
+      refetchOnMountOrArgChange: true,
     }),
     updateUser: builder.mutation({
-      query: ({ userId, firstName, lastName, username, careerId, profilePicture, password, notificationsEnabled }) => {
+      query: ({
+        userId,
+        firstName,
+        lastName,
+        username,
+        careerId,
+        profilePicture,
+        password,
+        notificationsEnabled,
+        url,
+      }) => {
         const formData = new FormData();
 
         formData.append('userId', userId);
@@ -28,7 +41,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         if (notificationsEnabled !== undefined) formData.append('notificationsEnabled', notificationsEnabled);
 
         return {
-          url: `/users/${userId}`,
+          url: url || `/users/${userId}`,
           method: 'PATCH',
           body: formData,
           headers: {
@@ -42,4 +55,5 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetUsersQuery, useGetUserQuery, useLazyGetUserQuery, useUpdateUserMutation } = usersApiSlice;
+export const { useGetUsersQuery, useGetUserQuery, useGetUserPictureQuery, useLazyGetUserQuery, useUpdateUserMutation } =
+  usersApiSlice;

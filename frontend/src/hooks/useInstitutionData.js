@@ -15,9 +15,12 @@ const useInstitutionData = ({
     skip: skipInstitution,
   });
 
-  const { data: careers } = useGetCareersQuery(institutionId, {
-    skip: !institutionId || skipCareers,
-  });
+  const { data: careers } = useGetCareersQuery(
+    { institutionId },
+    {
+      skip: !institutionId || skipCareers,
+    }
+  );
 
   const { data: subjects } = useGetSubjectsQuery(
     { institutionId, careerId },

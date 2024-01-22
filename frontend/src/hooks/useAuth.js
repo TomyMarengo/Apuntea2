@@ -12,7 +12,6 @@ const useAuth = () => {
   const [getCareer] = useLazyGetCareerQuery();
   const dispatch = useDispatch();
 
-
   const getSession = async (credentials) => {
     try {
       let { token } = await login(credentials).unwrap();
@@ -24,7 +23,7 @@ const useAuth = () => {
 
       dispatch(setCredentials({ token }));
 
-      const user = await getUser(userId).unwrap();
+      const user = await getUser({ userId }).unwrap();
       const institution = await getInstitution({ url: user.institution }).unwrap();
       const career = await getCareer({ url: user.career }).unwrap();
 

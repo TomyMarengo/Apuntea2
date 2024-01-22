@@ -1,6 +1,6 @@
 import { Box, Button } from './index';
 
-const CommentBox = () => {
+const ReviewBox = () => {
   return (
     <Box className="flex flex-col">
       <div className="my-2">
@@ -23,4 +23,4 @@ const CommentBox = () => {
   );
 };
 
-export default CommentBox;
+export default ReviewBox;
