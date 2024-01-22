@@ -24,14 +24,15 @@ const ReviewCard = ({ user, userLink, score, content }) => {
     <Box className="flex flex-col gap-1 my-3">
       <div className="flex items-center justify-between">
         <div className="link text-xl">
-          <NavLink to={userLink}>
-            Usuario
-            {/* {user} */}
-          </NavLink>
+          <NavLink to={userLink}>{user}</NavLink>
         </div>
         <DeleteButton />
       </div>
-      <div>{score}</div>
+      <div>
+        {Array.from({ length: score }, (_, i) => (
+          <span key={i}>⭐</span>
+        ))}
+      </div>
       <div id={`rcContent-${userLink}`} className={`${isContentVisible ? '' : 'truncate'}`}>
         {content}
       </div>

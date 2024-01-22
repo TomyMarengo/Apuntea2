@@ -1,18 +1,24 @@
 import { useGetNoteQuery, useGetNoteFileQuery } from '../store/slices/noteApiSlice';
-import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import FavoriteButton from '../components/FavoriteButton';
 import DownloadButton from '../components/DownloadButton';
 import { DeleteButton, ReviewCard, CommentBox } from '../components/index';
+import { useGetReviewsQuery } from '../store/slices/reviewApiSlice';
 
 const Note = () => {
   const { t } = useTranslation();
   const { noteId } = useParams();
-  const { data, isLoading, error } = useGetNoteQuery(noteId);
-  const { note } = data || {};
+  const { data: dataNote, isLoading: isLoadingNote, error: errorNote } = useGetNoteQuery(noteId);
+  const { data: dataReviews, isLoading: isLoadingReviews, error: errorReviews } = useGetReviewsQuery(noteId);
+
+  const { note } = dataNote || {};
+  const { reviews } = dataReviews || {};
 
   console.log(note);
+  console.log(dataReviews);
+
   return (
     <section className="note-info">
       {/* {isLoading && <p>Loading...</p>}
@@ -25,7 +31,7 @@ const Note = () => {
               {/* {note.owner.name} */}
             </a>
             <span>
-              {t('data.views')}:{/* {note.interactions} */}
+              {t('data.views')}: {note.interactions}
             </span>
           </div>
         </div>
@@ -38,19 +44,18 @@ const Note = () => {
       <div className="reviews">
         <h2 className="text-3xl text-dark-pri mb-1">{t('data.reviews')}</h2>
         <span>
-          {t('data.score')}:{/* {note.avgScore.toFixed(1)} ⭐ */}
+          {t('data.score')}: {note.avgScore.toFixed(1)} ⭐
         </span>
         <div className="p-2 mt-1">
           <div className="reviews-container">
-            {/* {note.reviews.map((review) => (
-            <ReviewCard key={review.id} {...review} />
-          ))} */}
+            {reviews.map((review) => (
+              <ReviewCard key={review.id} {...review} />
+            ))}
           </div>
 
           <CommentBox />
         </div>
       </div>
-
       <div className="note-frame">
         <iframe src={`http://localhost:8080/paw-2023b-12/notes/${noteId}/file`}></iframe>
       </div>

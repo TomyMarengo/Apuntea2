@@ -25,7 +25,7 @@
 
 .reviews-container {
   @apply flex flex-col;
-  max-height: calc(100vh - 148px - 5rem);
+  max-height: calc(100vh - 148px - 5rem - 10rem);
   overflow-y: auto;
 }
 .user-profile-picture {
