@@ -12,7 +12,7 @@ public abstract class PageableQuery {
     @DefaultValue("1")
     private int page;
 
-    @Range(min = 4, max = 24)
+    @Range(min = 1, max = 64)
     @QueryParam("pageSize")
     @DefaultValue("12")
     private int pageSize;

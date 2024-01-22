@@ -148,7 +148,7 @@ public class User {
         } else if (firstName != null && lastName != null) {
             return firstName + " " + lastName;
         }
-        return email;
+        return email.split("@")[0];
     }
 
     public void setFirstName(String firstName) {

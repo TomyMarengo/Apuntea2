@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class UserResponseDto {
     private UUID id;
-    private String email;
+//    private String email;
     private String firstName;
     private String lastName;
     private String locale;
@@ -35,11 +35,11 @@ public class UserResponseDto {
     public static UserResponseDto fromUser(final User user, final UriInfo uriInfo) {
         final UserResponseDto userDto = new UserResponseDto();
         userDto.id = user.getUserId();
-        userDto.email = user.getEmail();
+//        userDto.email = user.getEmail();
         userDto.firstName = user.getFirstName();
         userDto.lastName = user.getLastName();
         userDto.locale = user.getLocale().toString();
-        userDto.username = user.getUsername();
+        userDto.username = user.getDisplayName();
         userDto.status = user.getStatus().toString();
         userDto.notificationsEnabled = user.getNotificationsEnabled();
         userDto.self = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).build();
@@ -71,10 +71,6 @@ public class UserResponseDto {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public void setFirstName(String firstName) {
@@ -143,10 +139,6 @@ public class UserResponseDto {
 
     public void setReviewsReceived(URI reviewsReceived) {
         this.reviewsReceived = reviewsReceived;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getFirstName() {
