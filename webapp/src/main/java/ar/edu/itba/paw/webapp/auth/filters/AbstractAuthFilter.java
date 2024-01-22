@@ -34,6 +34,7 @@ public class AbstractAuthFilter extends AbstractAuthenticationProcessingFilter {
 
     public AbstractAuthFilter() {
         super(new OrRequestMatcher(
+                new AntPathRequestMatcher("/users", HttpMethod.GET),
                 new AntPathRequestMatcher("/users/**", HttpMethod.PATCH),
                 new AntPathRequestMatcher("/users/{id}/follows", HttpMethod.POST),
                 new AntPathRequestMatcher("/users/{id}/follows", HttpMethod.DELETE),

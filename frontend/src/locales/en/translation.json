@@ -122,12 +122,12 @@
     },
     "careerId": "Invalid career",
     "email": "Invalid email",
-    "firstName": "First name must have at least 2 characters",
+    "firstName": "First name must be between 4 and 25 characters and can be letters or spaces.",
     "institutionId": "Invalid institution",
-    "lastName": "Last name must have at least 2 characters",
+    "lastName": "Last name must be between 4 and 25 characters and can be letters or spaces.",
     "password": "Password must have at least 8 characters, one uppercase letter, one lowercase letter, and one number",
     "profilePicture": "Profile picture must be an image file",
-    "username": "Username must have at least 4 characters"
+    "username": "Username must be between 4 and 25 characters and can contain letters (uppercase or lowercase), numbers, periods, underscores, or hyphens."
   },
   "follows": {
     "noContent": {

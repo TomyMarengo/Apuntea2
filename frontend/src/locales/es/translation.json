@@ -122,12 +122,12 @@
     },
     "careerId": "La carrera no es válida",
     "email": "El correo electrónico no es válido",
-    "firstName": "El nombre debe tener al menos 2 caracteres",
+    "firstName": "El nombre debe tener entre 4 y 25 caracteres, que pueden ser letras o espacios.",
     "institutionId": "La institución no es válida",
-    "lastName": "El apellido debe tener al menos 2 caracteres",
+    "lastName": "El apellido debe tener entre 4 y 25 caracteres, que pueden ser letras o espacios.",
     "password": "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número",
     "profilePicture": "La imagen de perfil debe ser un archivo de imagen",
-    "username": "El nombre de usuario debe tener al menos 4 caracteres"
+    "username": "El nombre de usuario debe tener entre 4 y 25 caracteres y puede contener letras (mayúsculas o minúsculas), números, puntos, guiones bajos o guiones."
   },
   "follows": {
     "noContent": {

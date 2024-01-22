@@ -8,7 +8,7 @@ import { useGetCareerQuery, useGetInstitutionQuery } from '../store/slices/insti
 const Profile = () => {
   const userId = useSelector(selectCurrentUserId);
 
-  const { data: user } = useGetUserQuery(userId);
+  const { data: user, isLoading: isLoadingUser } = useGetUserQuery(userId);
   const { data: career, isLoading: isLoadingInstitution } = useGetInstitutionQuery(
     { url: user?.career },
     { skip: !user }
@@ -20,7 +20,7 @@ const Profile = () => {
 
   return (
     <section className="max-container center">
-      {isLoadingInstitution || isLoadingCareer ? (
+      {isLoadingUser || isLoadingInstitution || isLoadingCareer ? (
         <span>...</span>
       ) : (
         <Card>

@@ -2,10 +2,9 @@ import { apiSlice } from "./apiSlice";
 
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    login: builder.mutation({
+    login: builder.query({
       query: credentials => ({
-        url: '/tokens',
-        method: 'POST',
+        url: '/users?pageSize=4',
         headers: {
           Authorization: `Basic ${btoa(`${credentials.email}:${credentials.password}`)}`
         }
@@ -34,6 +33,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-  useLoginMutation,
+  useLazyLoginQuery,
   useRegisterMutation
 } = authApiSlice

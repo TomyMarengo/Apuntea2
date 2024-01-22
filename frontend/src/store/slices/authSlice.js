@@ -7,9 +7,9 @@ const authSlice = createSlice({
     setCredentials: (state, action) => {
       const { user, institution, career, token } = action.payload;
       const updatedUser = {
-        institution: institution !== undefined ? institution : state.user.institution,
-        career: career !== undefined ? career : state.user.career,
-        ...user
+        institution: !institution ? institution : state.user.institution,
+        career: !career ? career : state.user.career,
+        ...user,
       };
       state.user = updatedUser
       state.token = token;
