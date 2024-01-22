@@ -47,7 +47,8 @@ public class SubjectController {
     @POST
     @Consumes(value = { MediaType.MULTIPART_FORM_DATA })
     public Response createSubject(@Valid @NotNull(message = "error.body.empty") @BeanParam final SubjectCreationDto subjectDto){
-        return Response.ok().build();
+        UUID subjectId = subjectService.createSubject(subjectDto.getName());
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(subjectId.toString()).build()).build();
     }
 
     @PATCH

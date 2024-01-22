@@ -65,10 +65,9 @@ public class SubjectServiceImplTest {
     public void testUpdateSubjectCareerInvalidSubjectCareer() {
         UUID subjectId = UUID.randomUUID();
         UUID careerId = UUID.randomUUID();
-        String newName = "Subject 1a";
         int year = 1;
 
-        subjectService.updateSubjectCareer(subjectId, newName, careerId, year);
+        subjectService.updateSubjectCareer(subjectId, careerId, year);
 
         fail();
     }
@@ -110,7 +109,7 @@ public class SubjectServiceImplTest {
         Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(0);
         Mockito.when(searchDao.countChildren(Mockito.any())).thenReturn(0);
-        Mockito.when(subjectDao.delete(Mockito.any())).thenReturn(false);
+//        Mockito.when(subjectDao.delete(Mockito.any())).thenReturn(false);
 
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
         fail();
@@ -127,8 +126,8 @@ public class SubjectServiceImplTest {
         Mockito.when(subjectDao.unlinkSubjectFromCareer(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(careerDao.countCareersBySubjectId(Mockito.any())).thenReturn(0);
         Mockito.when(searchDao.countChildren(Mockito.any())).thenReturn(0);
-        Mockito.when(subjectDao.delete(Mockito.any())).thenReturn(true);
-        Mockito.when(directoryDao.delete(Mockito.any())).thenReturn(false);
+//        Mockito.when(subjectDao.delete(Mockito.any())).thenReturn(true);
+//        Mockito.when(directoryDao.delete(Mockito.any())).thenReturn(false);
 
         subjectService.unlinkSubjectFromCareer(subjectId, careerId);
         fail();

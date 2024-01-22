@@ -84,10 +84,8 @@ public class SubjectJpaDao implements SubjectDao {
     }
 
     @Override
-    public boolean delete(UUID subjectId) {
-        return em.createQuery("DELETE FROM Subject s WHERE s.id = :subjectId")
-                .setParameter("subjectId", subjectId)
-                .executeUpdate() == 1;
+    public void delete(Subject subject) {
+        em.remove(subject);
     }
 
     @Override
@@ -110,12 +108,12 @@ public class SubjectJpaDao implements SubjectDao {
 
     @Override
     public boolean updateSubjectCareer(UUID subjectId, UUID careerId, int year) {
-        SubjectCareer subjectCareer = em.createQuery("SELECT sc FROM SubjectCareer sc WHERE sc.subject.id = :subjectId AND sc.career.careerId = :careerId", SubjectCareer.class)
+        Optional<SubjectCareer> maybeSubjectCareer = em.createQuery("SELECT sc FROM SubjectCareer sc WHERE sc.subject.id = :subjectId AND sc.career.careerId = :careerId", SubjectCareer.class)
                 .setParameter("subjectId", subjectId)
                 .setParameter("careerId", careerId)
-                .getSingleResult();
-        if (subjectCareer != null) {
-            subjectCareer.setYear(year);
+                .getResultList().stream().findFirst();
+        if (maybeSubjectCareer.isPresent()) {
+            maybeSubjectCareer.get().setYear(year);
             return true;
         }
         return false;

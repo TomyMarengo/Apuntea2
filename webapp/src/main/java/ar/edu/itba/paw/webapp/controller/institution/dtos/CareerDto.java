@@ -16,13 +16,13 @@ public class CareerDto {
     private URI subjects;
 
 
-    public static CareerDto fromCareer(final Career career, final UriInfo uriInfo, final UUID institutionId){
+    public static CareerDto fromCareer(final Career career, final UriInfo uriInfo){
         final CareerDto careerDto = new CareerDto();
         careerDto.id = career.getCareerId();
         careerDto.name = career.getName();
         UriBuilder builder = uriInfo.getBaseUriBuilder();
 
-        careerDto.institution = builder.path("institution").path(institutionId.toString()).build();
+        careerDto.institution = builder.path("institution").path(career.getInstitutionId().toString()).build();
         careerDto.self = builder.path("careers").path(career.getCareerId().toString()).build();
         careerDto.subjects = builder.path("subjects").build();
         return careerDto;

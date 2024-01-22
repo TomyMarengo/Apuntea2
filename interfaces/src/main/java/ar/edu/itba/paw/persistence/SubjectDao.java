@@ -16,7 +16,7 @@ public interface SubjectDao {
     List<Subject> getSubjectsByCareerIdComplemented(UUID careerId);
     List<Subject> getSubjectsByUser(User user);
     Subject create(String name, UUID rootDirectoryId);
-    boolean delete(UUID subjectId);
+    void delete(Subject subject);
     boolean linkSubjectToCareer(Subject subject, UUID careerId, int year);
     boolean updateSubjectCareer(UUID subjectId, UUID careerId, int year);
     boolean unlinkSubjectFromCareer(UUID subjectId, UUID careerId);

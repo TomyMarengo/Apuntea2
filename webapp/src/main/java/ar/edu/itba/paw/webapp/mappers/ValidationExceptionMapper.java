@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Provider
@@ -31,6 +32,12 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
                         messageSource.getMessage(err.getMessage(), new Object[] {err.getField()}, err.getMessage(), LocaleHelper.getLocale())
                 ))
                 .collect(Collectors.toList());
+
+        Optional<ValidationErrorDto> maybeNotFound = errorList.stream().filter(ValidationErrorDto::isNotFound).findFirst();
+        if (maybeNotFound.isPresent())
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new GenericEntity<ValidationErrorDto>(maybeNotFound.get()) {}).build();
+
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity(new GenericEntity<List<ValidationErrorDto>>(errorList) {}).build();
     }

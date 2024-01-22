@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller.directory;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
+import ar.edu.itba.paw.models.exceptions.FavoriteNotFoundException;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryCreationDto;
@@ -26,14 +27,15 @@ import java.util.stream.Collectors;
 @Path("directories")
 @Component
 public class DirectoryController {
-
+    private final SecurityService securityService;
     private final DirectoryService directoryService;
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public DirectoryController(final DirectoryService directoryService) {
+    public DirectoryController(final DirectoryService directoryService, final SecurityService securityService) {
         this.directoryService = directoryService;
+        this.securityService = securityService;
     }
 
     @GET
@@ -96,7 +98,6 @@ public class DirectoryController {
 
     @DELETE
     @Path("/{id}")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
     public Response deleteDirectory(@PathParam("id") final UUID id, @QueryParam("reason") final String reason) {
         directoryService.delete(id, reason);
         return Response.noContent().build();
@@ -104,21 +105,21 @@ public class DirectoryController {
 
     @POST
     @Path("/{id}/favorites")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
     public Response addFavorite(@PathParam("id") final UUID id){
-        if (directoryService.addFavorite(id))
-            return Response.noContent().build();
+        if (directoryService.addFavorite(id)) {
+            UUID userId = securityService.getCurrentUserOrThrow().getUserId();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(id.toString()).path("favorites").path(userId.toString()).build()).build();
+        }
         throw new ConflictResponseException("error.favorite.alreadyExists");
     }
 
     @DELETE
     @Path("/{id}/favorites/{userId}")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
     public Response deleteFavorite(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
         if (directoryService.removeFavorite(id))
             return Response.noContent().build();
-        throw new ConflictResponseException("error.favorite.notFound");
+        throw new FavoriteNotFoundException();
     }
 
 

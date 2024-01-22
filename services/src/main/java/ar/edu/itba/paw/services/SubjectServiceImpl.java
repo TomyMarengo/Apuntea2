@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
+import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
+import ar.edu.itba.paw.models.exceptions.institutional.SubjectCareerNotFoundException;
+import ar.edu.itba.paw.models.exceptions.institutional.SubjectNotFoundException;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.institutional.SubjectCareer;
@@ -45,7 +48,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Subject> getSubjectsByCareer(UUID careerId, Integer year) {
         careerDao.getCareerById(careerId).orElseThrow(InvalidSubjectException::new); //TODO : change exception to 422
         List<Subject> subjects = subjectDao.getSubjectsByCareer(careerId, year);
@@ -54,15 +57,15 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Subject> getSubjectsByCareerComplemented(UUID careerId) {
         careerDao.getCareerById(careerId).orElseThrow(InvalidSubjectException::new); //TODO : change exception to 422
         return subjectDao.getSubjectsByCareerIdComplemented(careerId);
     }
 
     @Override
-    @Transactional
-    public Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId) {
+    @Transactional(readOnly = true)
+    public Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId) { // TODO: Remove?
         UUID currentUserId = this.securityService.getCurrentUser().map(User::getUserId).orElse(null);
         User user = this.userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         List<Subject> subjects = subjectDao.getSubjectsByUser(user);
@@ -76,18 +79,17 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional
-    public UUID createSubject(String name, UUID careerId, int year) {
+    public UUID createSubject(String name) {
         Directory rootDirectory = directoryDao.createRootDirectory(name);
         Subject subject = subjectDao.create(name, rootDirectory.getId());
-        subjectDao.linkSubjectToCareer(subject, careerId, year);
         return subject.getSubjectId();
     }
 
     @Override
     @Transactional
-    public void linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
+    public boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
         Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
-        subjectDao.linkSubjectToCareer(subject, careerId, year);
+        return subjectDao.linkSubjectToCareer(subject, careerId, year);
     }
 
     @Override
@@ -99,29 +101,27 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional
-    public void updateSubjectCareer(UUID subjectId, String subjectName, UUID careerId, int year) {
-        updateSubject(subjectId, subjectName);
+    public void updateSubjectCareer(UUID subjectId, UUID careerId, int year) {
         boolean success = subjectDao.updateSubjectCareer(subjectId, careerId, year);
         if (!success) {
-            throw new InvalidSubjectCareerException();
+            throw new SubjectCareerNotFoundException();
         }
     }
 
     @Override
     @Transactional
-    public void unlinkSubjectFromCareer(UUID subjectId, UUID careerId) {
-        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
-        boolean success = subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
-        if (!success) {
-            throw new InvalidSubjectCareerException();
-        } else if (careerDao.countCareersBySubjectId(subjectId) == 0 && searchDao.countChildren(subject.getRootDirectoryId()) == 0) {
-            success = subjectDao.delete(subjectId);
-            if (!success)
-                throw new InvalidSubjectException();
-            success = directoryDao.delete(subject.getRootDirectoryId());
-            if (!success)
-                throw new InvalidDirectoryException();
-        }
+    public void deleteSubject(UUID subjectId) {
+        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(SubjectCareerNotFoundException::new);
+        UUID rootDirectoryId = subject.getRootDirectoryId();
+        subjectDao.delete(subject);
+        directoryDao.delete(rootDirectoryId);
+    }
+
+    @Override
+    @Transactional
+    public boolean unlinkSubjectFromCareer(UUID subjectId, UUID careerId) {
+//        subjectDao.getSubjectById(subjectId).orElseThrow(SubjectNotFoundException::new);
+        return subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
     }
 
     @Transactional

@@ -115,10 +115,11 @@ public class DirectoryServiceImpl implements DirectoryService {
         User currentUser = securityService.getCurrentUserOrThrow();
         if (!currentUser.isAdmin()) {
             if (!directoryDao.delete(directoryId, currentUser.getUserId()))
-                throw new InvalidDirectoryException();
+                throw new UserNotOwnerException();
         } else {
             Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(directoryId, currentUser.getUserId());
             if (!maybeDirectory.isPresent()) throw new DirectoryNotFoundException();
+            if (maybeDirectory.get().isRootDirectory()) throw new UserNotOwnerException();
             if (!directoryDao.delete(directoryId)) throw new InvalidDirectoryException();
             emailService.sendDeleteDirectoryEmail(maybeDirectory.get(), reason);
         }

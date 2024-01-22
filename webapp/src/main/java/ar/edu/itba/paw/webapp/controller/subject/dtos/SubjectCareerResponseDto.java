@@ -15,6 +15,18 @@ public class SubjectCareerResponseDto {
     private URI career;
     private URI subject;
 
+    public SubjectCareerResponseDto() {
+    }
+
+    public SubjectCareerResponseDto(int year, UUID institutionId, UUID careerId, UUID subjectId, UriInfo uriInfo) {
+        this.year = year;
+        UriBuilder ub = uriInfo.getBaseUriBuilder().path("institutions").path(institutionId.toString())
+                .path("careers").path(careerId.toString());
+        career = ub.build();
+        self = ub.path("subjectcareers").path(subjectId.toString()).build();
+        subject = uriInfo.getBaseUriBuilder().path("subjects").path(subjectId.toString()).build();
+    }
+
 
     public static SubjectCareerResponseDto fromSubjectCareer(SubjectCareer sc, UriInfo uriInfo) {
         SubjectCareerResponseDto scDto = new SubjectCareerResponseDto();
@@ -25,9 +37,9 @@ public class SubjectCareerResponseDto {
         UUID institutionId = c.getInstitutionId();
         UriBuilder ub = uriInfo.getBaseUriBuilder().path("institutions").path(institutionId.toString())
                                                     .path("careers").path(c.getCareerId().toString());
-        scDto.setCareer(ub.build());
-        scDto.setSelf(ub.path("subjectcareers").path(subjectId.toString()).build());
-        scDto.setSubject(uriInfo.getBaseUriBuilder().path("subjects").path(subjectId.toString()).build());
+        scDto.career = ub.build();
+        scDto.self = ub.path("subjectcareers").path(subjectId.toString()).build();
+        scDto.subject = uriInfo.getBaseUriBuilder().path("subjects").path(subjectId.toString()).build();
 
         return scDto;
     }

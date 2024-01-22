@@ -201,10 +201,10 @@ public class SubjectJpaDaoTest {
         boolean inserted = countRows(em, SUBJECTS, "subject_id = '" + subject.getSubjectId() + "'") == 1;
         boolean inserted2 = countRows(em, SUBJECTS, "subject_id = '" + subject2.getSubjectId() + "'") == 1;
 
-        boolean result = subjectDao.delete(subject.getSubjectId());
+        subjectDao.delete(subject);
         em.flush();
 
-        assertTrue(result);
+//        assertTrue(result);
         assertTrue(inserted);
         assertTrue(inserted2);
         assertEquals(0, countRows(em, SUBJECTS, "subject_id = '" + subject.getSubjectId() + "'"));

@@ -2,9 +2,11 @@ package ar.edu.itba.paw.webapp.controller.user;
 
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
+import ar.edu.itba.paw.models.exceptions.FavoriteNotFoundException;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.UserStatus;
+import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserCreationDto;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserResponseDto;
@@ -28,7 +30,7 @@ import java.util.stream.Collectors;
 @Path("users")
 @Component
 public class UserController {
-
+    private final SecurityService securityService;
     private final UserService userService;
 
     @Context
@@ -36,8 +38,9 @@ public class UserController {
 
 
     @Autowired
-    public UserController(final UserService userService) {
+    public UserController(final UserService userService, final SecurityService securityService) {
         this.userService = userService;
+        this.securityService = securityService;
     }
 
     @GET
@@ -112,8 +115,10 @@ public class UserController {
     @Path("/{id}/followers")
     @Consumes(value = { MediaType.APPLICATION_JSON })
     public Response follow(@PathParam("id") final UUID id){
-        if (userService.follow(id))
-            return Response.noContent().build();
+        if (userService.follow(id)) {
+            UUID userId = securityService.getCurrentUserOrThrow().getUserId();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(id.toString()).path("followers").path(userId.toString()).build()).build();
+        }
         throw new ConflictResponseException("error.follow.alreadyExists");
     }
 
@@ -124,7 +129,7 @@ public class UserController {
     public Response unfollow(@PathParam("id") final UUID id, @PathParam("followerId") final UUID followerId) {
         if (userService.unfollow(id))
             return Response.noContent().build();
-        throw new ConflictResponseException("error.follow.notFound");
+        throw new FavoriteNotFoundException();
     }
 
 }

@@ -2,9 +2,12 @@ package ar.edu.itba.paw.webapp.controller.note;
 
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
+import ar.edu.itba.paw.models.exceptions.FavoriteNotFoundException;
+import ar.edu.itba.paw.models.exceptions.note.ReviewNotFoundException;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.services.NoteService;
+import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.utils.CacheUtils;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
@@ -28,14 +31,16 @@ import java.util.stream.Collectors;
 @Path("notes")
 @Component
 public class NoteController {
+    private final SecurityService securityService;
     private final NoteService noteService;
 
     @Context
     private UriInfo uriInfo;
 
     @Autowired
-    public NoteController(final NoteService noteService) {
+    public NoteController(final SecurityService securityService, final NoteService noteService) {
         this.noteService = noteService;
+        this.securityService = securityService;
     }
 
     @GET
@@ -108,7 +113,6 @@ public class NoteController {
 
     @GET
     @Path("/{id}/file")
-    @Produces
     public Response getNoteFile(@PathParam("id") final UUID id) {
         Optional<NoteFile> maybeFile = noteService.getNoteFileById(id);
         if (!maybeFile.isPresent())
@@ -121,8 +125,10 @@ public class NoteController {
     @Path("/{id}/favorites")
     @Consumes(value = { MediaType.APPLICATION_JSON })
     public Response addFavorite(@PathParam("id") final UUID id){
-        if (noteService.addFavorite(id))
-            return Response.noContent().build();
+        if (noteService.addFavorite(id)) {
+            UUID userId = securityService.getCurrentUserOrThrow().getUserId();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(id.toString()).path("favorites").path(userId.toString()).build()).build();
+        }
         throw new ConflictResponseException("error.favorite.alreadyExists");
     }
 
@@ -133,8 +139,6 @@ public class NoteController {
     public Response deleteFavorite(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
         if (noteService.removeFavorite(id))
             return Response.noContent().build();
-        throw new ConflictResponseException("error.favorite.notFound");
+        throw new FavoriteNotFoundException();
     }
-
-
 }

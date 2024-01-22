@@ -14,13 +14,13 @@ public interface SubjectService {
     List<Subject> getSubjectsByCareerComplemented(UUID careerId);
     List<Subject> getSubjectsByCareer(UUID careerId, Integer year);
     Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId);
-    UUID createSubject(String name, UUID careerId, int year);
-    void linkSubjectToCareer(UUID subjectId, UUID careerId, int year);
+    UUID createSubject(String name);
+    boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year);
 
     void updateSubject(UUID subjectId, String name);
-    void updateSubjectCareer(UUID subjectId, String subjectName, UUID careerId, int year);
-
-    void unlinkSubjectFromCareer(UUID subjectId, UUID careerId);
+    void updateSubjectCareer(UUID subjectId, UUID careerId, int year);
+    void deleteSubject(UUID subjectId);
+    boolean unlinkSubjectFromCareer(UUID subjectId, UUID careerId);
 
     boolean isSubjectDetachable(UUID subjectId);
 
