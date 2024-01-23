@@ -17,7 +17,7 @@
 }
 
 .icon-index-card {
-  @apply w-20 h-20;
+  @apply w-20 h-20 fill-dark-text;
 }
 
 .index-card:hover > * {

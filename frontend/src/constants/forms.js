@@ -33,7 +33,7 @@ const registerInputs = [
     name: 'password',
     placeholder: 'placeholders.password',
     errorMessage: 'errors.password',
-    pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9@$!%*?&]{4,}$', // Minimum four characters, at least one uppercase letter, one lowercase letter, one number and a special character '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$'
+    pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[A-Za-z0-9]{4,50}$', // Minimum four characters, at least one uppercase letter, one lowercase letter, one number and a special character '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&])[A-Za-z0-9@$!%*?&]{8,}$'
     password: true,
   },
   {
@@ -58,7 +58,7 @@ const profileInputs = [
     name: 'firstName',
     placeholder: 'placeholders.firstName',
     errorMessage: 'errors.firstName',
-    pattern: '^(?![0-9\\s]+$)[\\p{L}\\s]{4,25}$',
+    pattern: '^(?![0-9\\s]+$)[\\p{L}\\s]{0,20}$',
     autoFocus: true,
   },
   {
@@ -66,14 +66,14 @@ const profileInputs = [
     name: 'lastName',
     placeholder: 'placeholders.lastName',
     errorMessage: 'errors.lastName',
-    pattern: '^(?![0-9\\s]+$)[\\p{L}\\s]{4,25}$',
+    pattern: '^(?![0-9\\s]+$)[\\p{L}\\s]{0,20}$',
   },
   {
     id: 'username',
     name: 'username',
     placeholder: 'placeholders.username',
     errorMessage: 'errors.username',
-    pattern: '^(?![0-9._-]+$)[a-zA-Z0-9._-]{4,25}$',
+    pattern: '^(?![0-9._-]+$)[a-zA-Z0-9._-]{0,30}$',
     required: true,
   },
   {

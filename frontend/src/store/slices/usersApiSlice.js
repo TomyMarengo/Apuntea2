@@ -12,8 +12,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       refetchOnMountOrArgChange: true,
     }),
     getUserPicture: builder.query({
-      query: ({ userId, url }) => url || `/users/${userId}/picture`,
-      providesTags: ['Users'],
+      query: ({ pictureId, url }) => ({
+        url: url || `/pictures/${pictureId}`,
+      }),
+      providesTags: ['ProfilePicture'],
       refetchOnMountOrArgChange: true,
     }),
     updateUser: builder.mutation({
@@ -50,7 +52,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           formData: true,
         };
       },
-      invalidatesTags: ['Users'],
+      invalidatesTags: ['Users', 'ProfilePicture'],
     }),
   }),
 });

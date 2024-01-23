@@ -1,8 +1,10 @@
-import { useState } from 'react';
 import { PencilIcon } from './Icons';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 
-const EditableImage = ({ onFileChange, ...props }) => {
+const EditableImage = ({ profilePictureUrl, onChange, ...props }) => {
+  const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (event) => {
@@ -10,8 +12,8 @@ const EditableImage = ({ onFileChange, ...props }) => {
     setSelectedFile(file);
 
     // Pass the selected file to the parent component if a callback is provided
-    if (onFileChange) {
-      onFileChange(file);
+    if (onChange) {
+      onChange({ target: { name: 'profilePicture', value: file } });
     }
   };
 
@@ -25,7 +27,7 @@ const EditableImage = ({ onFileChange, ...props }) => {
           <>
             <img
               src={URL.createObjectURL(selectedFile)}
-              alt="Selected"
+              alt={t('data.profilePicture')}
               className="w-full h-full rounded-full object-cover transition duration-300 ease-in-out group-hover:opacity-50"
             />
             <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
@@ -33,7 +35,16 @@ const EditableImage = ({ onFileChange, ...props }) => {
             </div>
           </>
         ) : (
-          <span>Click to select an image</span>
+          <>
+            <img
+              className="w-full h-full rounded-full object-cover transition duration-300 ease-in-out group-hover:opacity-50"
+              src={profilePictureUrl || '/profile-picture.jpeg'}
+              alt={t('data.profilePicture')}
+            />
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <PencilIcon className="fill-text w-10 h-10" />
+            </div>
+          </>
         )}
       </label>
       <input type="file" id="fileInput" accept="image/*" className="hidden" onChange={handleFileChange} />

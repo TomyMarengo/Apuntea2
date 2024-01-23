@@ -50,7 +50,7 @@ const Home = () => {
   }, [user, indexCards]);
 
   return (
-    <section className="flex flex-col items-center mt-16 gap-8 text-center">
+    <section className="flex flex-col items-center mt-16 gap-4 text-center">
       <h1 className="text-7xl text-dark-text">
         <Trans
           i18nKey="pages.index.title"

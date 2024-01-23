@@ -30,7 +30,7 @@ const ReviewCard = ({ user, score, content }) => {
     <Box className="flex flex-col gap-1 my-3">
       <div className="flex items-center justify-between">
         <div className="link text-xl">
-          {isLoadingOwner ? <Spinner /> : <NavLink to={owner.self + '/noteboard'}>{owner.email}</NavLink>}
+          {isLoadingOwner ? <Spinner /> : <NavLink to={owner.self + '/noteboard'}>{owner.username}</NavLink>}
         </div>
         <DeleteButton />
       </div>

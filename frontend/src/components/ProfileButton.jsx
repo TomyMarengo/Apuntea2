@@ -31,7 +31,7 @@ const ProfileButton = () => {
       menu={[
         <div className="flex flex-col px-4" key="User">
           <span className="text-xs text-dark/10">Se ha iniciado sesión como</span>
-          <span className="font-bold">{user.email}</span>
+          <span className="font-bold">{user.username}</span>
         </div>,
         <hr key="Divider1" className="dropdown-divider" />,
         <Button key="Profile" to="/profile">

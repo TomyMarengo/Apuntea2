@@ -8,7 +8,7 @@ import { useGetCareerQuery, useGetInstitutionQuery } from '../store/slices/insti
 const Profile = () => {
   const userId = useSelector(selectCurrentUserId);
 
-  const { data: user, isLoading: isLoadingUser } = useGetUserQuery(userId);
+  const { data: user, isLoading: isLoadingUser } = useGetUserQuery({ userId });
   const { data: career, isLoading: isLoadingInstitution } = useGetInstitutionQuery(
     { url: user?.career },
     { skip: !user }

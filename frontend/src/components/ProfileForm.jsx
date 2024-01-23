@@ -3,7 +3,7 @@ import { isUuid } from '../functions/validation';
 import { Input, Button } from './index';
 import { profileInputs } from '../constants/forms';
 import { useForm, useInstitutionData } from '../hooks/index';
-
+import { useState } from 'react';
 import EditableImage from './EditableImage';
 import { useUpdateUserMutation } from '../store/slices/usersApiSlice';
 
@@ -18,7 +18,6 @@ const ProfileForm = ({ user, institution, career }) => {
       lastName: user.lastName,
       username: user.username,
       careerId: career.id,
-      // profilePicture: user.profilePicture,
     },
     submitCallback: updateUser,
   });
@@ -32,7 +31,7 @@ const ProfileForm = ({ user, institution, career }) => {
     <div className="flex flex-col w-full gap-5">
       <h1 className="text-3xl">{t('pages.profile.title')}</h1>
       <form onSubmit={handleSubmit} className="gap-5 w-full profile-form">
-        <EditableImage className="profile-picture" />
+        <EditableImage className="profile-picture" profilePictureUrl={user.profilePicture} onChange={handleChange} />
         <div className="profile-inputs">
           <div className="flex flex-col gap-1">
             <span className="font-bold">{t('data.name')}</span>
@@ -75,10 +74,6 @@ const ProfileForm = ({ user, institution, career }) => {
               list={careers}
               autoComplete="off"
             />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="font-bold">{t('data.email')}</span>
-            <span>{user.email}</span>
           </div>
         </div>
         <Button type="submit" className="profile-footer">

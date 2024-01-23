@@ -16,12 +16,7 @@ const Note = () => {
     error: errorOwner,
   } = useGetUserQuery({ url: note?.owner }, { skip: !note, refetchOnMountOrArgChange: true });
 
-  const {
-    data: ownerPicture,
-    isLoading: isLoadingOwnerPicture,
-    error: errorOwnerPicture,
-  } = useGetUserPictureQuery({ url: note?.owner }, { skip: !note, refetchOnMountOrArgChange: true });
-
+  console.log('owner', owner);
   return (
     <section className="note-info">
       {isLoadingNote || isLoadingOwner ? (
@@ -29,15 +24,15 @@ const Note = () => {
       ) : (
         <>
           <div className="note-header flex justify-between items-center">
-            <div className="flex flex-row items-center">
-              {isLoadingOwnerPicture ? (
-                <span>...</span>
-              ) : (
-                <img className="user-profile-picture" src={ownerPicture} alt="user profile" />
-              )}
+            <div className="flex flex-row items-center gap-2">
+              <img
+                className="user-profile-picture"
+                src={owner.profilePicture || '/profile-picture.jpeg'}
+                alt={t('data.profilePicture')}
+              />
               <div className="flex flex-col">
                 <NavLink className="font-bold text-xl" to={owner.self + '/noteboard'}>
-                  {owner.email}
+                  {owner.username}
                 </NavLink>
                 <span>
                   {t('data.views')}: {note.interactions}
