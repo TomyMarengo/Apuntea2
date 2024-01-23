@@ -31,10 +31,6 @@ public class Subject {
     private static final int MIN_YEAR = 1;
     private static final int MAX_YEAR = 10;
 
-    // loaded only when related with a career
-    @Transient
-    private Integer year;
-
     /* package-private */ Subject() {
 
     }
@@ -47,7 +43,6 @@ public class Subject {
     public Subject(UUID subjectId, String name, Integer year, Directory rootDirectory) {
         this.subjectId = subjectId;
         this.name = name;
-        this.year =year;
         this.rootDirectory = rootDirectory;
     }
 
@@ -56,16 +51,6 @@ public class Subject {
     }
     public String getName() {
         return name;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        if (year < MIN_YEAR || year > MAX_YEAR)
-            throw new IllegalArgumentException();
-        this.year = year;
     }
 
     public UUID getRootDirectoryId() {

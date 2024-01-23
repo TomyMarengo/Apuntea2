@@ -113,7 +113,7 @@ public class NoteServiceImplTest {
         fail();
     }
 
-    @Test(expected = InvalidNoteException.class)
+    @Test(expected = UserNotOwnerException.class)
     public void testDeleteNoteFailure() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.ofNullable(new Note.NoteBuilder().build()));

@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.controller.subject;
 
+import ar.edu.itba.paw.models.exceptions.institutional.SubjectNotFoundException;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.services.SubjectService;
+import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCreationDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectResponseDto;
 import ar.edu.itba.paw.webapp.forms.queries.SubjectQuery;
@@ -29,7 +31,7 @@ public class SubjectController {
 
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
-    public Response listSubjects(@Valid @BeanParam SubjectQuery subjectQuery){
+    public Response listSubjects(@Valid @BeanParam final SubjectQuery subjectQuery){
         List<Subject> subjects = (subjectQuery.getCareerId() != null)?
                 subjectService.getSubjectsByCareer(subjectQuery.getCareerId(), subjectQuery.getYear()):
                 subjectService.getSubjectsByCareerComplemented(subjectQuery.getNotInCareer());
@@ -39,9 +41,10 @@ public class SubjectController {
 
     @GET
     @Path("/{subjectId}")
-    @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
-    public Response getSubject(@PathParam("subjectId") final String subjectId){
-        return Response.ok().build();
+    @Produces(value = {ApunteaMediaType.SUBJECT_V1 }) // TODO: Add versions
+    public Response getSubject(@PathParam("subjectId") final UUID subjectId){
+        Subject sub = subjectService.getSubject(subjectId).orElseThrow(SubjectNotFoundException::new);
+        return Response.ok(new GenericEntity<SubjectResponseDto>(SubjectResponseDto.fromSubject(sub, uriInfo)){}).build();
     }
 
     @POST
@@ -53,14 +56,16 @@ public class SubjectController {
 
     @PATCH
     @Path("/{subjectId}")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Consumes(value = { MediaType.APPLICATION_JSON }) // TODO: Change
     public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @NotEmpty final String name) {
-        return Response.ok().build();
+        subjectService.updateSubject(subjectId, name);
+        return Response.noContent().build();
     }
 
     @DELETE
     @Path("/{subjectId}")
     public Response deleteSubject(@PathParam("subjectId") final UUID subjectId) {
-        return Response.ok().build();
+        subjectService.deleteSubject(subjectId);
+        return Response.noContent().build();
     }
 }

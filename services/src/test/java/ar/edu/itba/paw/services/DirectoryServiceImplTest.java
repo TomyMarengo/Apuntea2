@@ -2,6 +2,7 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.directory.DirectoryFavoriteGroups;
+import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.user.User;
@@ -50,8 +51,8 @@ public class DirectoryServiceImplTest {
         Assert.fail();
     }
 
-    @Test(expected = InvalidDirectoryException.class)
-    public void testDeleteNotAdminInvalidIds() {
+    @Test(expected = UserNotOwnerException.class)
+    public void testDeleteNotAdminNotOwnerId() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(directoryDao.delete(Mockito.any(), Mockito.any())).thenReturn(false); // The deletion failed
         directoryService.delete(EDA_DIRECTORY_ID, null);

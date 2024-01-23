@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.ApunteaAuthenticationEntryPoint;
 import ar.edu.itba.paw.webapp.auth.filters.AbstractAuthFilter;
+import ar.edu.itba.paw.webapp.auth.filters.AnonymousAuthFilter;
 import ar.edu.itba.paw.webapp.auth.handlers.ApunteaAccessDeniedHandler;
 import ar.edu.itba.paw.webapp.auth.handlers.AuthFailureHandler;
 import ar.edu.itba.paw.webapp.auth.handlers.AuthSuccessHandler;
@@ -63,6 +64,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAuthProvider jwtAuthProvider;
+
+    @Autowired
+    private AnonymousAuthFilter anonymousFilter;
 
     @Autowired
     private Environment env;
@@ -183,11 +187,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests().antMatchers(HttpMethod.POST, "/users").anonymous()
                 // Set correctly PATCH and POST methods!
-                .antMatchers(HttpMethod.GET, "/tokens", "/users/**", "/directories/**", "/notes/**", "/reviews/**", "/institutions/**", "/pictures/{id}") // TODO: Change
+                .antMatchers(HttpMethod.GET, "/users/**", "/directories/**", "/notes/**", "/reviews/**", "/institutions/**", "/pictures/{id}") // TODO: Change
                 .permitAll()
                 .anyRequest()
                 .authenticated()
-                .and().addFilterBefore(abstractAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+                .and().addFilterBefore(anonymousFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(abstractAuthFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

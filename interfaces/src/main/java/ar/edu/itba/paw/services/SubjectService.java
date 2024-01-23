@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface SubjectService {
+    Optional<Subject> getSubject(UUID subjectId);
     Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId);
     List<Subject> getSubjectsByCareerComplemented(UUID careerId);
     List<Subject> getSubjectsByCareer(UUID careerId, Integer year);

@@ -39,7 +39,6 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     private static final String AUTHORITIES_CLAIM = "authorities";
     private static final String TOKEN_TYPE_CLAIM = "tokenType";
-    private static final String EMAIL_CLAIM = "email";
     private static final String USER_ID_CLAIM = "userId";
 
     public JwtTokenServiceImpl(Environment environment) {

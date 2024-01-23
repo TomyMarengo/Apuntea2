@@ -43,6 +43,12 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional(readOnly = true)
+    public Optional<Subject> getSubject(UUID subjectId) {
+        return subjectDao.getSubjectById(subjectId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId) {
         return subjectDao.getSubjectCareer(subjectId, careerId);
     }
@@ -74,7 +80,8 @@ public class SubjectServiceImpl implements SubjectService {
                 user.getUserId(),
                 currentUserId
         );
-        return subjects.stream().collect(Collectors.groupingBy(Subject::getYear));
+//        return subjects.stream().collect(Collectors.groupingBy(Subject::getYear));
+        return null;
     }
 
     @Override
@@ -95,7 +102,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public void updateSubject(UUID subjectId, String name) {
-        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
+        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(SubjectNotFoundException::new);
         subject.setName(name);
     }
 
@@ -111,7 +118,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public void deleteSubject(UUID subjectId) {
-        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(SubjectCareerNotFoundException::new);
+        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(SubjectNotFoundException::new);
         UUID rootDirectoryId = subject.getRootDirectoryId();
         subjectDao.delete(subject);
         directoryDao.delete(rootDirectoryId);
@@ -120,7 +127,6 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public boolean unlinkSubjectFromCareer(UUID subjectId, UUID careerId) {
-//        subjectDao.getSubjectById(subjectId).orElseThrow(SubjectNotFoundException::new);
         return subjectDao.unlinkSubjectFromCareer(subjectId, careerId);
     }
 

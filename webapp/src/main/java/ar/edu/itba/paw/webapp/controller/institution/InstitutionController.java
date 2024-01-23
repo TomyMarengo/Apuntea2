@@ -128,6 +128,6 @@ public class InstitutionController {
     public Response deleteSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
         if (subjectService.unlinkSubjectFromCareer(instCarParams.getCareerId(), subjectId))
             return Response.noContent().build();
-        throw new ConflictResponseException("error.favorite.alreadyExists");
+        throw new SubjectCareerNotFoundException();
     }
 }

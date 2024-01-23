@@ -42,6 +42,7 @@ public class SubjectJpaDao implements SubjectDao {
             queryCreator.append("AND sc.year = :year ");
             queryCreator.addParameter("year", year);
         }
+        queryCreator.append("ORDER BY s.name");
 
         TypedQuery<Subject> query = em.createQuery(queryCreator.createQuery(), Subject.class);
         queryCreator.getParams().forEach(query::setParameter);
@@ -72,7 +73,7 @@ public class SubjectJpaDao implements SubjectDao {
                 .setParameter("userId", user.getUserId())
                 .setParameter("careerId", user.getCareer().getCareerId())
                 .getResultList();
-        subjectsCareers.forEach(sc -> sc.getSubject().setYear(sc.getYear()));
+//        subjectsCareers.forEach(sc -> sc.getSubject().setYear(sc.getYear()));
         return subjectsCareers.stream().map(SubjectCareer::getSubject).collect(Collectors.toList());
     }
 

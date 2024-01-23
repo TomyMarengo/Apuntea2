@@ -117,7 +117,7 @@ public class SubjectJpaDaoTest {
         List<Subject> subjects = subjectDao.getSubjectsByCareer(ING_INF_ID, null);
 
         for (int i = 0; i < subjects.size() - 2; i++) {
-            assertTrue(subjects.get(i).getYear() <= subjects.get(i + 1).getYear());
+            assertTrue(subjects.get(i).getName().compareTo(subjects.get(i + 1).getName()) < 0);
         }
 
     }
