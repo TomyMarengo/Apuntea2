@@ -23,6 +23,7 @@ import javax.ws.rs.core.SecurityContext;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Collections;
 
 public class AbstractAuthFilter extends AbstractAuthenticationProcessingFilter {
     private static final int BASIC_LENGTH = 6;
@@ -45,7 +46,7 @@ public class AbstractAuthFilter extends AbstractAuthenticationProcessingFilter {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null){
-            return SecurityContextHolder.getContext().getAuthentication();
+            return new AnonymousAuthenticationToken("anonymous", "anonymous", Collections.singleton(() -> "ROLE_ANONYMOUS"));
         }
         else if (authHeader.startsWith("Basic ")){
             final Credentials credentials = getCredentialsFromBasic(authHeader);

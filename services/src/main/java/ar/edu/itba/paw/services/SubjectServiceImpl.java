@@ -110,9 +110,8 @@ public class SubjectServiceImpl implements SubjectService {
     @Transactional
     public void updateSubjectCareer(UUID subjectId, UUID careerId, int year) {
         boolean success = subjectDao.updateSubjectCareer(subjectId, careerId, year);
-        if (!success) {
+        if (!success)
             throw new SubjectCareerNotFoundException();
-        }
     }
 
     @Override
