@@ -1,6 +1,11 @@
 package ar.edu.itba.paw.webapp.validation;
 
+import ar.edu.itba.paw.services.SecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.validation.Constraint;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import javax.validation.Payload;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -13,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {MatchesCurrentUserPasswordValidator.class})
+@Constraint(validatedBy = {MatchesCurrentUserPassword.MatchesCurrentUserPasswordValidator.class})
 public @interface MatchesCurrentUserPassword {
 
     String message() default "{ar.edu.itba.paw.webapp.validation.MatchesCurrentUserPassword.message}";
@@ -28,5 +33,19 @@ public @interface MatchesCurrentUserPassword {
     @interface List {
         MatchesCurrentUserPassword[] matchesCurrentUserPassword();
     }
+
+    class MatchesCurrentUserPasswordValidator implements ConstraintValidator<MatchesCurrentUserPassword, String> {
+        @Autowired
+        private SecurityService securityService;
+
+        @Override
+        public void initialize(MatchesCurrentUserPassword matchesCurrentUserPassword) {    }
+
+        @Override
+        public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+            return securityService.currentUserPasswordMatches(s);
+        }
+    }
+
 }
 

@@ -126,7 +126,7 @@ public class UserController {
     public Response follow(@PathParam("id") final UUID id){
         if (userService.follow(id)) {
             UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-            return Response.created(uriInfo.getAbsolutePathBuilder().path(id.toString()).path("followers").path(userId.toString()).build()).build();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
         }
         throw new ConflictResponseException("error.follow.alreadyExists");
     }
