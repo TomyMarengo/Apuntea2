@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller.note;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
 import ar.edu.itba.paw.models.exceptions.FavoriteNotFoundException;
-import ar.edu.itba.paw.models.exceptions.note.ReviewNotFoundException;
 import ar.edu.itba.paw.models.note.Note;
 import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.services.NoteService;
@@ -124,11 +123,10 @@ public class NoteController {
 
     @POST
     @Path("/{id}/favorites")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
     public Response addFavorite(@PathParam("id") final UUID id){
         if (noteService.addFavorite(id)) {
             UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-            return Response.created(uriInfo.getAbsolutePathBuilder().path(id.toString()).path("favorites").path(userId.toString()).build()).build();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
         }
         throw new ConflictResponseException("error.favorite.alreadyExists");
     }
@@ -144,9 +142,8 @@ public class NoteController {
 
     @DELETE
     @Path("/{id}/favorites/{userId}")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
-//    @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
-    public Response deleteFavorite(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
+    @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
+    public Response deleteFavoriteNote(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
         if (noteService.removeFavorite(id))
             return Response.noContent().build();
         throw new FavoriteNotFoundException();

@@ -15,18 +15,15 @@ import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.institution.dtos.CareerDto;
 import ar.edu.itba.paw.webapp.controller.institution.dtos.InstitutionCareerPathParams;
 import ar.edu.itba.paw.webapp.controller.institution.dtos.InstitutionDto;
-import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewResponseDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerCreationDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerResponseDto;
+import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerUpdateDto;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
@@ -99,7 +96,7 @@ public class InstitutionController {
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
     @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
     public Response getSubjectCareer(final @Valid @BeanParam InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
-        final SubjectCareer sc = subjectService.getSubjectCareer(instCarParams.getCareerId(), subjectId).orElseThrow(SubjectCareerNotFoundException::new);
+        final SubjectCareer sc = subjectService.getSubjectCareer(subjectId, instCarParams.getCareerId()).orElseThrow(SubjectCareerNotFoundException::new);
         final SubjectCareerResponseDto scDto = SubjectCareerResponseDto.fromSubjectCareer(sc, uriInfo);
         return Response.ok(new GenericEntity<SubjectCareerResponseDto>(scDto) {}).build();
     }
@@ -108,9 +105,9 @@ public class InstitutionController {
     @Path("/{institutionId}/careers/{careerId}/subjectcareers")
     @Consumes(value = { MediaType.APPLICATION_JSON })
     @Secured({"ROLE_ADMIN"})
-    public Response addSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @Valid @BeanParam final SubjectCareerCreationDto scDto) {
+    public Response addSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @Valid final SubjectCareerCreationDto scDto) {
         if (subjectService.linkSubjectToCareer(scDto.getSubjectId(), instCarParams.getCareerId(), scDto.getYear()))
-            return Response.created(uriInfo.getAbsolutePathBuilder().path(instCarParams.getInstitutionId().toString()).path("careers").path(instCarParams.getCareerId().toString()).path("subjectcareers").path(scDto.getSubjectId().toString()).build()).build();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(scDto.getSubjectId().toString()).build()).build();
         throw new ConflictResponseException("error.subjectcareer.alreadyExists");
     }
 
@@ -119,10 +116,10 @@ public class InstitutionController {
     @Consumes(value = { MediaType.APPLICATION_JSON })
     @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
     @Secured({"ROLE_ADMIN"})
-    public Response updateSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId, @Valid @Range(min = 1, max = 10) final int year) {
-        subjectService.updateSubjectCareer(subjectId, instCarParams.getCareerId(), year);
+    public Response updateSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId, @Valid final SubjectCareerUpdateDto subjectCareerDto) {
+        subjectService.updateSubjectCareer(subjectId, instCarParams.getCareerId(), subjectCareerDto.getYear());
         return Response.ok(new GenericEntity<SubjectCareerResponseDto>(
-                new SubjectCareerResponseDto(year, instCarParams.getInstitutionId(), instCarParams.getCareerId(), subjectId, uriInfo)){}
+                new SubjectCareerResponseDto(subjectCareerDto.getYear(), instCarParams.getInstitutionId(), instCarParams.getCareerId(), subjectId, uriInfo)){}
         ).build();
     }
 
@@ -130,7 +127,7 @@ public class InstitutionController {
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
     @Secured({"ROLE_ADMIN"})
     public Response deleteSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
-        if (subjectService.unlinkSubjectFromCareer(instCarParams.getCareerId(), subjectId))
+        if (subjectService.unlinkSubjectFromCareer(subjectId, instCarParams.getCareerId()))
             return Response.noContent().build();
         throw new SubjectCareerNotFoundException();
     }

@@ -117,7 +117,7 @@ public class DirectoryController {
     public Response addFavorite(@PathParam("id") final UUID id){
         if (directoryService.addFavorite(id)) {
             UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-            return Response.created(uriInfo.getAbsolutePathBuilder().path(id.toString()).path("favorites").path(userId.toString()).build()).build();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
         }
         throw new ConflictResponseException("error.favorite.alreadyExists");
     }

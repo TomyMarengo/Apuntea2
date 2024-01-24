@@ -32,7 +32,7 @@ public class SubjectController {
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
     public Response listSubjects(@Valid @BeanParam final SubjectQuery subjectQuery){
-        List<Subject> subjects = (subjectQuery.getCareerId() != null)?
+        List<Subject> subjects = (subjectQuery.getCareerId() != null || subjectQuery.getUserId() != null )?
                 subjectService.getSubjects(subjectQuery.getCareerId(), subjectQuery.getYear(), subjectQuery.getUserId()):
                 subjectService.getSubjectsByCareerComplemented(subjectQuery.getNotInCareer());
         final Collection<SubjectResponseDto> subjectDtos = subjects.stream().map(s->SubjectResponseDto.fromSubject(s, uriInfo)).collect(java.util.stream.Collectors.toList());

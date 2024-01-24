@@ -42,11 +42,6 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectDao.getSubjectById(subjectId);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId) {
-        return subjectDao.getSubjectCareer(subjectId, careerId);
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -91,25 +86,11 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     @Transactional
-    public boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
-        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
-        return subjectDao.linkSubjectToCareer(subject, careerId, year);
-    }
-
-    @Override
-    @Transactional
     public void updateSubject(UUID subjectId, String name) {
         Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(SubjectNotFoundException::new);
         subject.setName(name);
     }
 
-    @Override
-    @Transactional
-    public void updateSubjectCareer(UUID subjectId, UUID careerId, int year) {
-        boolean success = subjectDao.updateSubjectCareer(subjectId, careerId, year);
-        if (!success)
-            throw new SubjectCareerNotFoundException();
-    }
 
     @Override
     @Transactional
@@ -119,6 +100,25 @@ public class SubjectServiceImpl implements SubjectService {
         subjectDao.delete(subject);
         directoryDao.delete(rootDirectoryId);
     }
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId) {
+        return subjectDao.getSubjectCareer(subjectId, careerId);
+    }
+    @Override
+    @Transactional
+    public boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {
+        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(InvalidSubjectException::new);
+        return subjectDao.linkSubjectToCareer(subject, careerId, year);
+    }
+    @Override
+    @Transactional
+    public void updateSubjectCareer(UUID subjectId, UUID careerId, int year) {
+        boolean success = subjectDao.updateSubjectCareer(subjectId, careerId, year);
+        if (!success)
+            throw new SubjectCareerNotFoundException();
+    }
+
 
     @Override
     @Transactional
