@@ -4,6 +4,7 @@ import { useGetReviewQuery, useCreateReviewMutation, useUpdateReviewMutation } f
 import { useForm } from '../hooks/index';
 import { reviewInputs } from '../constants/forms';
 import { useEffect } from 'react';
+import StarSelector from './StarSelector';
 
 const ReviewBox = ({ note, userId }) => {
   const { t } = useTranslation();
@@ -41,7 +42,7 @@ const ReviewBox = ({ note, userId }) => {
     <Box className="flex flex-col">
       <form onSubmit={handleSubmit} className="my-2">
         {isLoadingReview ? (
-          <span>############PUTO EL QUE LEE############ </span>
+          <span>...</span>
         ) : (
           <>
             <textarea
@@ -52,18 +53,11 @@ const ReviewBox = ({ note, userId }) => {
               value={form.content}
             ></textarea>
             <div className="flex flex-row justify-between mt-3 gap-4 ">
-              <select
+              <StarSelector
                 {...reviewInputs.find((input) => input.name === 'score')}
-                className="w-full border-[1px] rounded-xl p-2 focus:ring-4 focus:ring-light-pri"
-                onChange={handleChange}
-                value={form.score}
-              >
-                <option value="5">⭐⭐⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="1">⭐</option>
-              </select>
+                onStarClick={handleChange}
+                initialRating={form.score}
+              />
               <Button type="submit">{isLoadingReview ? t('actions.loading') : t('actions.save')}</Button>
             </div>
           </>

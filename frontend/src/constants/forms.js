@@ -101,9 +101,6 @@ const reviewInputs = [
   {
     id: 'score',
     name: 'score',
-    placeholder: 'placeholders.rating',
-    errorMessage: 'errors.rating',
-    pattern: '^[1-5]$',
   },
 ];
 export { loginInputs, registerInputs, reviewInputs, profileInputs };
