@@ -43,14 +43,12 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         url: url || `/notes/${noteId}/favorites`,
         method: 'POST',
       }),
-      invalidatesTags: ['Notes'],
     }),
     removeFavorite: builder.mutation({
       query: ({ noteId, userId, url }) => ({
         url: url || `/notes/${noteId}/favorites/${userId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Notes'],
     }),
   }),
 });

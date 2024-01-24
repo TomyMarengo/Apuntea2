@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { DeleteButton, FavoriteButton, DownloadButton, ReviewsContainer } from '../components/index';
 import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { useGetNoteQuery } from '../store/slices/notesApiSlice';
+import { useGetNoteQuery, useGetIsFavoriteQuery } from '../store/slices/notesApiSlice';
 import { useGetUserQuery } from '../store/slices/usersApiSlice';
 import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from '../store/slices/authSlice';
@@ -19,6 +19,12 @@ const Note = () => {
     isLoading: isLoadingNoteOwner,
     error: errorNoteOwner,
   } = useGetUserQuery({ url: note?.owner }, { skip: !note, refetchOnMountOrArgChange: true });
+
+  const {
+    data: isFavorite,
+    isLoading: isLoadingIsFavorite,
+    error: errorIsFavorite,
+  } = useGetIsFavoriteQuery({ noteId, userId }, { skip: !userId || !noteId, refetchOnMountOrArgChange: true });
 
   return (
     <section className="note-info">
@@ -43,7 +49,11 @@ const Note = () => {
               </div>
             </div>
             <div className="flex">
-              <FavoriteButton noteId={noteId} isFavorited />
+              {isLoadingIsFavorite ? (
+                <span>...</span>
+              ) : (
+                <FavoriteButton noteId={noteId} isFavorite={!errorIsFavorite} />
+              )}
               <DownloadButton link={note.file} />
               {userId === note.owner.id && <DeleteButton />}
             </div>
