@@ -133,10 +133,19 @@ public class NoteController {
         throw new ConflictResponseException("error.favorite.alreadyExists");
     }
 
+    @GET
+    @Path("/{id}/favorites/{userId}")
+    @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
+    public Response getFavorite(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
+        if (noteService.isFavorite(id))
+            return Response.noContent().build();
+        throw new FavoriteNotFoundException();
+    }
+
     @DELETE
     @Path("/{id}/favorites/{userId}")
     @Consumes(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
+//    @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
     public Response deleteFavorite(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
         if (noteService.removeFavorite(id))
             return Response.noContent().build();

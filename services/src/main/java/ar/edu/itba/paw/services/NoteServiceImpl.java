@@ -233,6 +233,14 @@ public class  NoteServiceImpl implements NoteService {
         return noteDao.addFavorite(user.getUserId(), noteId);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isFavorite(UUID noteId) {
+        User user = securityService.getCurrentUserOrThrow();
+        noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
+        return noteDao.isFavorite(user.getUserId(), noteId);
+    }
+
     @Transactional
     @Override
     public boolean removeFavorite(UUID noteId) {

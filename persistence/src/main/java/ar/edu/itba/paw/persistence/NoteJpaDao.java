@@ -178,6 +178,14 @@ public class NoteJpaDao implements NoteDao {
     }
 
     @Override
+    public boolean isFavorite(UUID userId, UUID noteId) {
+        return em.createNativeQuery("SELECT 1 FROM Note_Favorites WHERE user_id = :userId AND note_id = :noteId")
+                .setParameter("userId", userId)
+                .setParameter("noteId", noteId)
+                .getResultList().size() == 1;
+    }
+
+    @Override
     public boolean addFavorite(UUID userId, UUID noteId) {
         return em.createNativeQuery("INSERT INTO Note_Favorites (user_id, note_id) SELECT :userId, :noteId WHERE NOT EXISTS (SELECT 1 FROM Note_Favorites WHERE user_id = :userId AND note_id = :noteId)")
                 .setParameter("userId", userId)

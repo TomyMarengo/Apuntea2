@@ -90,4 +90,20 @@ const profileInputs = [
   },
 ];
 
-export { loginInputs, registerInputs, profileInputs };
+const reviewInputs = [
+  {
+    id: 'content',
+    name: 'content',
+    placeholder: 'placeholders.content',
+    errorMessage: 'errors.content',
+    pattern: '^.{0,255}$',
+  },
+  {
+    id: 'score',
+    name: 'score',
+    placeholder: 'placeholders.rating',
+    errorMessage: 'errors.rating',
+    pattern: '^[1-5]$',
+  },
+];
+export { loginInputs, registerInputs, reviewInputs, profileInputs };

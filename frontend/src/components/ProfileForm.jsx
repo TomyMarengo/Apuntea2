@@ -3,7 +3,6 @@ import { isUuid } from '../functions/validation';
 import { Input, Button } from './index';
 import { profileInputs } from '../constants/forms';
 import { useForm, useInstitutionData } from '../hooks/index';
-import { useState } from 'react';
 import EditableImage from './EditableImage';
 import { useUpdateUserMutation } from '../store/slices/usersApiSlice';
 

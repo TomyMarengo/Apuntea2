@@ -42,5 +42,5 @@ export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({}),
   keepUnusedDataFor: 2,
-  tagTypes: ['Institutions', 'Careers', 'Subjects', 'Notes', 'Directories', 'Users', 'ProfilePicture'],
+  tagTypes: ['Institutions', 'Careers', 'Subjects', 'Notes', 'Directories', 'Users', 'ProfilePicture', 'Reviews'],
 });

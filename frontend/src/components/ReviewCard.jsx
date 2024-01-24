@@ -12,7 +12,6 @@ const ReviewCard = ({ user, score, content }) => {
 
   const { data: owner, isLoading: isLoadingOwner, error: errorOwner } = useGetUserQuery({ url: user });
 
-  console.log('owner', owner);
   useEffect(() => {
     if (contentRef.current) {
       setIsTextOverflowing(

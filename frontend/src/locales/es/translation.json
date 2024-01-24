@@ -122,12 +122,14 @@
       "title": "Error interno del servidor"
     },
     "careerId": "La carrera no es válida",
+    "content": "El comentario debe tener entre 1 y 255 caracteres",
     "email": "El correo electrónico no es válido",
     "firstName": "El nombre debe tener entre 4 y 25 caracteres, que pueden ser letras o espacios.",
     "institutionId": "La institución no es válida",
     "lastName": "El apellido debe tener entre 4 y 25 caracteres, que pueden ser letras o espacios.",
     "password": "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número",
     "profilePicture": "La imagen de perfil debe ser un archivo de imagen",
+    "score": "La calificación debe ser un número entre 1 y 5",
     "username": "El nombre de usuario debe tener entre 4 y 25 caracteres y puede contener letras (mayúsculas o minúsculas), números, puntos, guiones bajos o guiones."
   },
   "follows": {
