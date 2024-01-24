@@ -103,6 +103,15 @@ public class DirectoryController {
         return Response.noContent().build();
     }
 
+    @GET
+    @Path("/{id}/favorites/{followerId}")
+    @PreAuthorize("@userPermissions.isCurrentUser(#followerId)")
+    public Response getFavorite(@PathParam("id") final UUID id, @PathParam("followerId") final UUID followerId) {
+        if (directoryService.isFavorite(id))
+            return Response.noContent().build();
+        throw new FavoriteNotFoundException();
+    }
+
     @POST
     @Path("/{id}/favorites")
     public Response addFavorite(@PathParam("id") final UUID id){

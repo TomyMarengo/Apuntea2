@@ -35,6 +35,8 @@ public interface UserService {
 
     Page<User> getUsers(String query, String status, UUID followedBy, int page, int pageSize);
 
+    boolean isFollowing(UUID followedId);
+
     boolean follow(UUID followedId);
 
     boolean unfollow(UUID followedId);

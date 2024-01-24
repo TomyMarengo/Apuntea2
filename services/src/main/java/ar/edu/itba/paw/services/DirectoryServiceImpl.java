@@ -7,6 +7,7 @@ import ar.edu.itba.paw.models.exceptions.InvalidQueryException;
 import ar.edu.itba.paw.models.exceptions.UnavailableNameException;
 import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
 import ar.edu.itba.paw.models.exceptions.directory.DirectoryNotFoundException;
+import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
@@ -123,6 +124,14 @@ public class DirectoryServiceImpl implements DirectoryService {
             if (!directoryDao.delete(directoryId)) throw new InvalidDirectoryException();
             emailService.sendDeleteDirectoryEmail(maybeDirectory.get(), reason);
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isFavorite(UUID directoryId) {
+        User user = securityService.getCurrentUserOrThrow();
+        directoryDao.getDirectoryById(directoryId, user.getUserId()).orElseThrow(DirectoryNotFoundException::new);
+        return directoryDao.isFavorite(user.getUserId(), directoryId);
     }
 
     /*@Transactional

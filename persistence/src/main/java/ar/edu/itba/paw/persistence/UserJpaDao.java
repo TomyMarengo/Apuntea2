@@ -139,6 +139,14 @@ class UserJpaDao implements UserDao {
     }
 
     @Override
+    public boolean isFollowing(UUID followerId, UUID followedId) {
+        return em.createNativeQuery("SELECT 1 FROM Follows WHERE followed_id = :followedId AND follower_id = :followerId")
+                .setParameter("followedId", followedId)
+                .setParameter("followerId", followerId)
+                .getResultList().size() == 1;
+    }
+
+    @Override
     public int unbanUsers() {
         return em.createQuery("UPDATE User u SET status = 'ACTIVE' WHERE status = 'BANNED' " +
                         "AND NOT EXISTS (SELECT 1 FROM Ban b WHERE b.banId.user.userId = u.userId AND b.endDate > now())")
