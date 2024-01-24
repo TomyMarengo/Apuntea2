@@ -24,7 +24,7 @@ public class CareerDto {
 
         careerDto.institution = builder.path("institution").path(career.getInstitutionId().toString()).build();
         careerDto.self = builder.path("careers").path(career.getCareerId().toString()).build();
-        careerDto.subjects = builder.path("subjects").build();
+        careerDto.subjects = uriInfo.getBaseUriBuilder().path("subjects").queryParam("careerId", career.getCareerId().toString()).build();
         return careerDto;
     }
 

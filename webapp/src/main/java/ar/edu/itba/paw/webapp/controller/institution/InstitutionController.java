@@ -21,6 +21,7 @@ import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerResponseDto;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -106,6 +107,7 @@ public class InstitutionController {
     @POST
     @Path("/{institutionId}/careers/{careerId}/subjectcareers")
     @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Secured({"ROLE_ADMIN"})
     public Response addSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @Valid @BeanParam final SubjectCareerCreationDto scDto) {
         if (subjectService.linkSubjectToCareer(scDto.getSubjectId(), instCarParams.getCareerId(), scDto.getYear()))
             return Response.created(uriInfo.getAbsolutePathBuilder().path(instCarParams.getInstitutionId().toString()).path("careers").path(instCarParams.getCareerId().toString()).path("subjectcareers").path(scDto.getSubjectId().toString()).build()).build();
@@ -116,6 +118,7 @@ public class InstitutionController {
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
     @Consumes(value = { MediaType.APPLICATION_JSON })
     @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
+    @Secured({"ROLE_ADMIN"})
     public Response updateSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId, @Valid @Range(min = 1, max = 10) final int year) {
         subjectService.updateSubjectCareer(subjectId, instCarParams.getCareerId(), year);
         return Response.ok(new GenericEntity<SubjectCareerResponseDto>(
@@ -125,6 +128,7 @@ public class InstitutionController {
 
     @DELETE
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
+    @Secured({"ROLE_ADMIN"})
     public Response deleteSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
         if (subjectService.unlinkSubjectFromCareer(instCarParams.getCareerId(), subjectId))
             return Response.noContent().build();

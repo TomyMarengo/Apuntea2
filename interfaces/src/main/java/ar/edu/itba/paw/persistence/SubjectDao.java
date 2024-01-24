@@ -12,9 +12,8 @@ public interface SubjectDao {
     Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId);
     Optional<Subject> getSubjectById(UUID subjectId);
     UUID getSubjectByRootDirectoryId(UUID rootDirectoryId);
-    List<Subject> getSubjectsByCareer(UUID careerId, Integer year);
+    List<Subject> getSubjects(UUID careerId, Integer year, User user);
     List<Subject> getSubjectsByCareerIdComplemented(UUID careerId);
-    List<Subject> getSubjectsByUser(User user);
     Subject create(String name, UUID rootDirectoryId);
     void delete(Subject subject);
     boolean linkSubjectToCareer(Subject subject, UUID careerId, int year);

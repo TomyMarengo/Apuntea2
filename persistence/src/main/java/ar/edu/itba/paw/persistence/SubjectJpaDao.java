@@ -35,13 +35,23 @@ public class SubjectJpaDao implements SubjectDao {
     }
 
     @Override
-    public List<Subject> getSubjectsByCareer(UUID careerId, Integer year) {
+    public List<Subject> getSubjects(UUID careerId, Integer year, User user) {
+        if (careerId == null && user != null) { //by default, filter by the user's career
+            careerId = user.getCareer().getCareerId();
+        }
+
         DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT s FROM Subject s, SubjectCareer sc WHERE sc.subject = s AND sc.career.careerId = :careerId ");
         queryCreator.addParameter("careerId", careerId);
         if (year != null) {
             queryCreator.append("AND sc.year = :year ");
             queryCreator.addParameter("year", year);
         }
+        if (user != null) {
+            queryCreator.append("AND (EXISTS(SELECT n FROM Note n WHERE n.parentId = s.rootDirectory.id AND n.user = :user) " +
+                    "OR EXISTS(SELECT d FROM Directory d WHERE d.parent = s.rootDirectory AND d.user = :user)) ");
+            queryCreator.addParameter("user", user);
+        }
+
         queryCreator.append("ORDER BY s.name");
 
         TypedQuery<Subject> query = em.createQuery(queryCreator.createQuery(), Subject.class);
@@ -65,17 +75,17 @@ public class SubjectJpaDao implements SubjectDao {
                 .getResultList();
     }
 
-    @Override
-    public List<Subject> getSubjectsByUser(User user) {
-        List<SubjectCareer> subjectsCareers = em.createQuery("SELECT DISTINCT sc FROM SubjectCareer sc JOIN sc.subject s JOIN s.rootDirectory rd " +
-                        "WHERE sc.career.id = :careerId AND (EXISTS(SELECT n FROM Note n WHERE n.parentId = rd.id AND n.user.id = :userId) " +
-                        "OR EXISTS(SELECT d FROM Directory d WHERE d.parent = rd AND d.user.id = :userId))", SubjectCareer.class)
-                .setParameter("userId", user.getUserId())
-                .setParameter("careerId", user.getCareer().getCareerId())
-                .getResultList();
-//        subjectsCareers.forEach(sc -> sc.getSubject().setYear(sc.getYear()));
-        return subjectsCareers.stream().map(SubjectCareer::getSubject).collect(Collectors.toList());
-    }
+//    @Override
+//    public List<Subject> getSubjectsByUser(User user) {
+//        List<SubjectCareer> subjectsCareers = em.createQuery("SELECT DISTINCT sc FROM SubjectCareer sc JOIN sc.subject s JOIN s.rootDirectory rd " +
+//                        "WHERE sc.career.id = :careerId AND (EXISTS(SELECT n FROM Note n WHERE n.parentId = rd.id AND n.user.id = :userId) " +
+//                        "OR EXISTS(SELECT d FROM Directory d WHERE d.parent = rd AND d.user.id = :userId))", SubjectCareer.class)
+//                .setParameter("userId", user.getUserId())
+//                .setParameter("careerId", user.getCareer().getCareerId())
+//                .getResultList();
+////        subjectsCareers.forEach(sc -> sc.getSubject().setYear(sc.getYear()));
+//        return subjectsCareers.stream().map(SubjectCareer::getSubject).collect(Collectors.toList());
+//    }
 
     @Override
     public Subject create(String name, UUID rootDirectoryId) {

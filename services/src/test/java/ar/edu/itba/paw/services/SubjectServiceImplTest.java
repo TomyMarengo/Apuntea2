@@ -86,9 +86,8 @@ public class SubjectServiceImplTest {
 
     @Test(expected = UserNotFoundException.class)
     public void testGetSubjectsByUserIdGroupNonExistentUser() {
-        Mockito.when(securityService.getCurrentUser()).thenReturn(Optional.empty());
         Mockito.when(userDao.findById(Mockito.any())).thenReturn(Optional.empty());
-        subjectService.getSubjectsByUserIdGroupByYear(UUID.randomUUID());
+        subjectService.getSubjects(UUID.randomUUID(), null, UUID.randomUUID());
         fail();
     }
 

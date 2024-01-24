@@ -110,6 +110,7 @@ public class NoteController {
         noteService.delete(id, reason);
         return Response.noContent().build();
     }
+    //TODO split into two methods (owner / admin)?
 
     @GET
     @Path("/{id}/file")

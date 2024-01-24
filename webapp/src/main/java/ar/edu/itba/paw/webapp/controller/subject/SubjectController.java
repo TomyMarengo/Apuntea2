@@ -4,11 +4,11 @@ import ar.edu.itba.paw.models.exceptions.institutional.SubjectNotFoundException;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCreationDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectResponseDto;
 import ar.edu.itba.paw.webapp.forms.queries.SubjectQuery;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
@@ -33,7 +33,7 @@ public class SubjectController {
     @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
     public Response listSubjects(@Valid @BeanParam final SubjectQuery subjectQuery){
         List<Subject> subjects = (subjectQuery.getCareerId() != null)?
-                subjectService.getSubjectsByCareer(subjectQuery.getCareerId(), subjectQuery.getYear()):
+                subjectService.getSubjects(subjectQuery.getCareerId(), subjectQuery.getYear(), subjectQuery.getUserId()):
                 subjectService.getSubjectsByCareerComplemented(subjectQuery.getNotInCareer());
         final Collection<SubjectResponseDto> subjectDtos = subjects.stream().map(s->SubjectResponseDto.fromSubject(s, uriInfo)).collect(java.util.stream.Collectors.toList());
         return Response.ok(new GenericEntity<Collection<SubjectResponseDto>>(subjectDtos){}).build();
@@ -48,22 +48,25 @@ public class SubjectController {
     }
 
     @POST
-    @Consumes(value = { MediaType.MULTIPART_FORM_DATA })
-    public Response createSubject(@Valid @NotNull(message = "error.body.empty") @BeanParam final SubjectCreationDto subjectDto){
-        UUID subjectId = subjectService.createSubject(subjectDto.getName());
+    @Consumes(value = { MediaType.TEXT_PLAIN })
+    @Secured({"ROLE_ADMIN"})
+    public Response createSubject(@Valid @NotNull @NotEmpty final String name){
+        UUID subjectId = subjectService.createSubject(name);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(subjectId.toString()).build()).build();
     }
 
     @PATCH
     @Path("/{subjectId}")
-    @Consumes(value = { MediaType.APPLICATION_JSON }) // TODO: Change
-    public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @NotEmpty final String name) {
+    @Consumes(value = { MediaType.TEXT_PLAIN })
+    @Secured({"ROLE_ADMIN"})
+    public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @Valid @NotNull @NotEmpty final String name) {
         subjectService.updateSubject(subjectId, name);
         return Response.noContent().build();
     }
 
     @DELETE
     @Path("/{subjectId}")
+    @Secured({"ROLE_ADMIN"})
     public Response deleteSubject(@PathParam("subjectId") final UUID subjectId) {
         subjectService.deleteSubject(subjectId);
         return Response.noContent().build();
