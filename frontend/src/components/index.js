@@ -1,3 +1,4 @@
+import BottomNavbar from './BottomNavbar';
 import Box from './Box';
 import Button from './Button';
 import Card from './Card';
@@ -19,11 +20,13 @@ import RegisterForm from './RegisterForm';
 import ReviewBox from './ReviewBox';
 import ReviewCard from './ReviewCard';
 import ReviewsContainer from './ReviewsContainer';
+import SearchForm from './SearchForm';
 import SearchTable from './SearchTable';
 import Sidebar from './Sidebar';
 import Spinner from './Spinner';
 
 export {
+  BottomNavbar,
   Box,
   Button,
   Card,
@@ -45,6 +48,7 @@ export {
   ReviewBox,
   ReviewCard,
   ReviewsContainer,
+  SearchForm,
   SearchTable,
   Sidebar,
   Spinner,

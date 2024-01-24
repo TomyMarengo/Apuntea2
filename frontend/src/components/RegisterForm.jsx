@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { setCredentials } from '../store/slices/authSlice';
 import { Input, Button } from './index';
 import { registerInputs } from '../constants/forms';
-import { useForm, useInstitutionData } from '../hooks/index';
-import { useRegisterMutation } from '../store/slices/authApiSlice';
+import { useForm, useInstitutionData, useRegister } from '../hooks/index';
 import { isUuid } from '../functions/validation';
 
 const RegisterForm = () => {
-  const [register, { isLoading }] = useRegisterMutation();
+  const { registerUser } = useRegister();
   const { t } = useTranslation();
 
   const { institutions, setInstitutionId, careers, setCareerId } = useInstitutionData({ skipSubjects: true });
@@ -21,7 +20,7 @@ const RegisterForm = () => {
       institutionId: '',
       careerId: '',
     },
-    submitCallback: register,
+    submitCallback: registerUser,
     dispatchCallback: setCredentials,
     redirectUrl: '/',
   });

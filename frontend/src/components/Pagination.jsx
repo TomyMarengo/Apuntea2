@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import { useSearchParams, NavLink } from 'react-router-dom';
 import { generatePagination } from '../functions/pagination';
 import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
+import { Trans } from 'react-i18next';
 
-const Pagination = ({ totalPages }) => {
+const Pagination = ({ totalPages, currentPage, pageSize, totalCount, dataLength }) => {
   const [searchParams] = useSearchParams();
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const allPages = generatePagination(currentPage, totalPages);
 
   const createPageURL = (page) => {
@@ -15,7 +15,7 @@ const Pagination = ({ totalPages }) => {
   };
 
   return (
-    <>
+    <div className="flex flex-col gap-3 justify-center items-center">
       <div className="inline-flex">
         <PaginationArrow direction="left" href={createPageURL(currentPage - 1)} isDisabled={currentPage <= 1} />
 
@@ -46,7 +46,18 @@ const Pagination = ({ totalPages }) => {
           isDisabled={currentPage >= totalPages}
         />
       </div>
-    </>
+      <span className="italic text-sm">
+        <Trans
+          i18nKey="pages.search.totalCount"
+          values={{ from: currentPage, to: currentPage + Math.min(pageSize, dataLength) - 1, totalCount }}
+          components={[
+            <span key="0" className="text-dark-text font-bold"></span>,
+            <span key="1" className="text-dark-text font-bold"></span>,
+            <span key="2" className="text-dark-text font-bold"></span>,
+          ]}
+        />
+      </span>
+    </div>
   );
 };
 

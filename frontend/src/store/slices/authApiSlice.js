@@ -11,22 +11,22 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
       transformResponse: async (response, meta) => {
         const token = meta.response.headers.get('Access-Token')
-        return { token }
+        const refreshToken = meta.response.headers.get('Refresh-Token')
+        return { token, refreshToken }
       }
     }),
-    register: builder.mutation({
-      query: userInfo => ({
-        url: '/users',
-        method: 'POST',
-        body: userInfo,
+    register: builder.query({
+      query: ({ credentials, userId, url }) => ({
+        url: url || `/users/${userId}`,
         headers: {
-          Authorization: `Basic ${btoa(`${userInfo.email}:${userInfo.password}`)}`
+          Authorization: `Basic ${btoa(`${credentials.email}:${credentials.password}`)}`
         }
       }),
       transformResponse: async (response, meta) => {
-        const data = await meta.response.json()
+        const user = await response;
         const token = meta.response.headers.get('Access-Token')
-        return { ...data, token }
+        const refreshToken = meta.response.headers.get('Refresh-Token')
+        return { user, token, refreshToken }
       }
     })
   })
@@ -34,5 +34,5 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLazyLoginQuery,
-  useRegisterMutation
+  useLazyRegisterQuery,
 } = authApiSlice

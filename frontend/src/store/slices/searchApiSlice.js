@@ -43,4 +43,5 @@ export const searchApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useSearchNotesQuery,
+  useLazySearchNotesQuery,
 } = searchApiSlice

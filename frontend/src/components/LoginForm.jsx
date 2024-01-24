@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { setCredentials } from '../store/slices/authSlice';
 import { Input, Button } from '.';
 import { loginInputs } from '../constants/forms';
-import { useForm, useAuth } from '../hooks/index';
+import { useForm, useLogin } from '../hooks/index';
 
 const LoginForm = () => {
-  const { getSession } = useAuth();
+  const { getSession } = useLogin();
   const { t } = useTranslation();
 
   const { form, handleChange, handleSubmit } = useForm({

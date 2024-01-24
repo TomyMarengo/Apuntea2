@@ -288,7 +288,7 @@
       "student": "Estudiante"
     },
     "search": {
-      "button": {
+      "buttons": {
         "boxView": "Vista de cuadrícula",
         "clearAllFilters": "Borrar todos los filtros",
         "deselectAll": "Deseleccionar todo",
@@ -316,7 +316,8 @@
       },
       "selected": "seleccionado",
       "title": "Buscar",
-      "toggleView": "Cambiar vista"
+      "toggleView": "Cambiar vista",
+      "totalCount": "Mostrando <0>{{from}}</0> a <1>{{to}}</1> de <2>{{totalCount}}</2> resultados"
     },
     "settings": {
       "changeInfo": "Información cambiada exitosamente",

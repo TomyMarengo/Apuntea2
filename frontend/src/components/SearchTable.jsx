@@ -1,9 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
-const SearchTable = ({ data }) => {
+const SearchTable = ({ notes }) => {
   const { t } = useTranslation();
-  console.log(data);
 
   return (
     <table className="w-full border-collapse">
@@ -17,7 +16,7 @@ const SearchTable = ({ data }) => {
         </tr>
       </thead>
       <tbody className="bg-white divide-y divide-gray-200">
-        {data?.notes?.map((note) => (
+        {notes?.map((note) => (
           <tr key={note.id} className="text-sm text-gray-500">
             <td className="px-6 py-3">
               <NavLink to={`/notes/${note.id}`} className="text-blue-500 hover:text-blue-600">

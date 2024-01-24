@@ -5,7 +5,7 @@ import { useLazyGetInstitutionQuery, useLazyGetCareerQuery } from '../store/slic
 import { setCredentials } from '../store/slices/authSlice';
 import { useDispatch } from 'react-redux';
 
-const useAuth = () => {
+const useLogin = () => {
   const [login] = useLazyLoginQuery();
   const [getUser] = useLazyGetUserQuery();
   const [getInstitution] = useLazyGetInstitutionQuery();
@@ -14,20 +14,20 @@ const useAuth = () => {
 
   const getSession = async (credentials) => {
     try {
-      let { token } = await login(credentials).unwrap();
+      let { token, refreshToken } = await login(credentials).unwrap();
       const rawToken = token.replace(/^Bearer\s+/i, '');
       token = decode(rawToken);
       const {
         payload: { userId },
       } = token;
 
-      dispatch(setCredentials({ token }));
+      dispatch(setCredentials({ token, refreshToken }));
 
       const user = await getUser({ userId }).unwrap();
       const institution = await getInstitution({ url: user.institution }).unwrap();
       const career = await getCareer({ url: user.career }).unwrap();
 
-      return { token, user, institution, career };
+      return { token, refreshToken, user, institution, career };
     } catch (error) {
       console.error('Error during login:', error);
       throw new Error('Failed to login');
@@ -37,4 +37,4 @@ const useAuth = () => {
   return { getSession };
 };
 
-export default useAuth;
+export default useLogin;

@@ -288,7 +288,7 @@
       "student": "Student"
     },
     "search": {
-      "button": {
+      "buttons": {
         "boxView": "Grid view",
         "clearAllFilters": "Clear all filters",
         "deselectAll": "Deselect all",
@@ -316,7 +316,8 @@
       },
       "selected": "selected",
       "title": "Search",
-      "toggleView": "Toggle view"
+      "toggleView": "Toggle view",
+      "totalCount": "Showing <0>{{from}}</0> to <1>{{to}}</1> of <2>{{totalCount}}</2> entries"
     },
     "settings": {
       "changeInfo": "Information changed successfully",

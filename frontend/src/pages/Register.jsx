@@ -1,4 +1,4 @@
-import { Card, RegisterForm } from '../components';
+import { Card, RegisterForm } from '../components/index';
 
 const Login = () => {
   return (

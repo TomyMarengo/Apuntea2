@@ -54,8 +54,18 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['Users', 'ProfilePicture'],
     }),
+    createUser: builder.mutation({
+      query: userInfo => ({
+        url: '/users',
+        method: 'POST',
+        body: userInfo,
+      }),
+      transformResponse: async (response, meta) => {
+        return { location: meta.response.headers.get('Location') }
+      }
+    }),
   }),
 });
 
-export const { useGetUsersQuery, useGetUserQuery, useGetUserPictureQuery, useLazyGetUserQuery, useUpdateUserMutation } =
+export const { useGetUsersQuery, useGetUserQuery, useGetUserPictureQuery, useLazyGetUserQuery, useUpdateUserMutation, useCreateUserMutation } =
   usersApiSlice;
