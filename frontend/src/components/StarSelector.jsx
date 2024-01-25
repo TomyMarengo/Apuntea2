@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { StarIcon } from './Icons';
+import { StarIcon } from './Utils/Icons';
 
 const StarSelector = ({ totalStars = 5, initialRating = 0, onStarClick, name }) => {
   const [rating, setRating] = useState(initialRating);

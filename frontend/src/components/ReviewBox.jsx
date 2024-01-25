@@ -46,9 +46,9 @@ const ReviewBox = ({ note, userId }) => {
         ) : (
           <>
             <textarea
-              {...reviewInputs.find((input) => input.name === 'content')}
+              {...reviewInputs.find((input) => input.name === 'content')} //TODO: ojo, se está trayendo también errorMessage
               className="review-text bg-dark-bg w-full p-2 border-[1px] background-bg resize-none rounded-lg focus:ring-4 focus:ring-light-pri"
-              placeholder="Escribe un comentario..."
+              placeholder="Escribe un comentario..." //TODO: translate
               onChange={handleChange}
               value={form.content}
             ></textarea>

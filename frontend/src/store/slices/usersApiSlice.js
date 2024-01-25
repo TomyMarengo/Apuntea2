@@ -32,8 +32,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }) => {
         const formData = new FormData();
 
-        formData.append('userId', userId);
-
         if (firstName !== undefined) formData.append('firstName', firstName);
         if (lastName !== undefined) formData.append('lastName', lastName);
         if (username !== undefined) formData.append('username', username);

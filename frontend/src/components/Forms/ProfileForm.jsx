@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useUpdateUserMutation } from '../../store/slices/usersApiSlice';
 import { useForm, useInstitutionData } from '../../hooks/index';
-import { Input, Button, EditableImage } from '../index';
+import { Input, Button, EditableImage, InstitutionDataInputs } from '../index';
 import { profileInputs } from '../../constants/forms';
 import { isUuid } from '../../functions/utils';
 
@@ -11,21 +11,10 @@ const ProfileForm = ({ user, institution, career }) => {
   const { t } = useTranslation();
 
   const { form, handleChange, handleSubmit } = useForm({
-    initialValues: {
+    args: {
       userId: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      username: user.username,
-      careerId: career.id,
     },
     submitCallback: updateUser,
-  });
-
-  const { careers, setCareerId } = useInstitutionData({
-    skipInstitutions: true,
-    skipSubjects: true,
-    initialInstitutionId: institution.id,
-    initialCareerId: career.id,
   });
 
   return (
@@ -38,7 +27,7 @@ const ProfileForm = ({ user, institution, career }) => {
             <span className="font-bold">{t('data.name')}</span>
             <Input
               {...profileInputs.find((input) => input.name === 'firstName')}
-              value={form.firstName}
+              defaultValue={user.firstName}
               onChange={handleChange}
             />
           </div>
@@ -46,7 +35,7 @@ const ProfileForm = ({ user, institution, career }) => {
             <span className="font-bold">{t('data.lastName')}</span>
             <Input
               {...profileInputs.find((input) => input.name === 'lastName')}
-              value={form.lastName}
+              defaultValue={user.lastName}
               onChange={handleChange}
             />
           </div>
@@ -54,7 +43,7 @@ const ProfileForm = ({ user, institution, career }) => {
             <span className="font-bold">{t('data.username')}</span>
             <Input
               {...profileInputs.find((input) => input.name === 'username')}
-              value={form.username}
+              defaultValue={user.username}
               onChange={handleChange}
             />
           </div>
@@ -64,16 +53,13 @@ const ProfileForm = ({ user, institution, career }) => {
           </div>
           <div className="flex flex-col gap-1">
             <span className="font-bold">{t('data.career')}</span>
-            <Input
-              {...profileInputs.find((input) => input.name === 'careerId')}
-              value={career.name}
-              hiddenValue={form.careerId}
-              onChange={(e) => {
-                handleChange(e);
-                if (isUuid(e.target.value) || e.target.value === '') setCareerId(e.target.value);
-              }}
-              list={careers}
-              autoComplete="off"
+            <InstitutionDataInputs
+              initialInstitutionId={institution.id}
+              initialCareerId={career.id}
+              onChange={handleChange}
+              noInstitution
+              noSubject
+              skipSubjects
             />
           </div>
         </div>

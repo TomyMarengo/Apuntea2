@@ -26,6 +26,7 @@ import SearchForm from './Forms/SearchForm';
 import SearchTable from './SearchTable';
 import Sidebar from './Menu/Sidebar';
 import Spinner from './Utils/Spinner';
+import StarSelector from './StarSelector';
 
 export {
   BottomNavbar,
@@ -56,4 +57,5 @@ export {
   SearchTable,
   Sidebar,
   Spinner,
+  StarSelector
 };

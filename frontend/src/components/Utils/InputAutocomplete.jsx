@@ -64,7 +64,16 @@ const InputAutocomplete = forwardRef(function InputAutocomplete(
   }, []);
 
   const handleInputKeyDown = (e) => {
-    const listItems = list.filter((item) => item.name.toLowerCase().startsWith(inputRef.current.value.toLowerCase()));
+    const listItems = list.filter((item) => {
+      const len = ref.current.value.length;
+
+      return (
+        item.name
+          .toLowerCase()
+          .substring(0, len)
+          .localeCompare(ref.current.value.toLowerCase().substring(0, len), undefined, { sensitivity: 'base' }) == 0
+      );
+    });
 
     switch (e.key) {
       case 'ArrowUp':
@@ -113,9 +122,19 @@ const InputAutocomplete = forwardRef(function InputAutocomplete(
         {open && list && (
           <ul className="dropdown-autocomplete">
             {list
-              .filter((item) => item.name.toLowerCase().startsWith(ref.current.value.toLowerCase()))
+              .filter((item) => {
+                const len = ref.current.value.length;
+                return (
+                  item.name
+                    .toLowerCase()
+                    .substring(0, len)
+                    .localeCompare(ref.current.value.toLowerCase().substring(0, len), undefined, {
+                      sensitivity: 'base',
+                    }) == 0
+                );
+              })
               .map((item, index) => {
-                const matchIndex = item.name.toLowerCase().indexOf(ref.current.value.toLowerCase());
+                const matchIndex = 0;
                 const prefix = item.name.substring(0, matchIndex);
                 const match = item.name.substring(matchIndex, matchIndex + ref.current.value.length);
                 const suffix = item.name.substring(matchIndex + ref.current.value.length);
@@ -129,7 +148,7 @@ const InputAutocomplete = forwardRef(function InputAutocomplete(
                     className={clsx(isSelected && 'selected')}
                   >
                     {prefix}
-                    <span className={clsx(isSelected && 'font-bold')} tabIndex="0">
+                    <span className={clsx('font-bold')} tabIndex="0">
                       {match}
                     </span>
                     {suffix}
