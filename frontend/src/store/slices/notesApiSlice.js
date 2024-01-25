@@ -33,22 +33,24 @@ export const notesApiSlice = apiSlice.injectEndpoints({
     getUserNotesFavorites: builder.query({
       query: ({ userId, url }) => url || `/notes?favBy=${userId}`,
       providesTags: ['Notes'],
-      refetchOnMountOrArgChange: true,
     }),
-    getIsFavorite: builder.query({
+    getIsFavoriteNote: builder.query({
       query: ({ noteId, userId, url }) => url || `/notes/${noteId}/favorites/${userId}`,
+      providesTags: ['FavoriteNotes'],
     }),
-    addFavorite: builder.mutation({
+    addFavoriteNote: builder.mutation({
       query: ({ noteId, url }) => ({
         url: url || `/notes/${noteId}/favorites`,
         method: 'POST',
       }),
+      invalidatesTags: ['FavoriteNotes'],
     }),
-    removeFavorite: builder.mutation({
+    removeFavoriteNote: builder.mutation({
       query: ({ noteId, userId, url }) => ({
         url: url || `/notes/${noteId}/favorites/${userId}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['FavoriteNotes'],
     }),
   }),
 });
@@ -59,7 +61,7 @@ export const {
   useDeleteNoteMutation,
   useUpdateNoteMutation,
   useGetUserNotesFavoritesQuery,
-  useGetIsFavoriteQuery,
-  useAddFavoriteMutation,
-  useRemoveFavoriteMutation,
+  useGetIsFavoriteNoteQuery,
+  useAddFavoriteNoteMutation,
+  useRemoveFavoriteNoteMutation,
 } = notesApiSlice;

@@ -2,7 +2,12 @@ import { useTranslation } from 'react-i18next';
 import { DeleteButton, FavoriteButton, DownloadButton, ReviewsContainer } from '../components/index';
 import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { useGetNoteQuery, useGetIsFavoriteQuery } from '../store/slices/notesApiSlice';
+import {
+  useGetNoteQuery,
+  useGetIsFavoriteNoteQuery,
+  useAddFavoriteNoteMutation,
+  useRemoveFavoriteNoteMutation,
+} from '../store/slices/notesApiSlice';
 import { useGetUserQuery } from '../store/slices/usersApiSlice';
 import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from '../store/slices/authSlice';
@@ -18,13 +23,26 @@ const Note = () => {
     data: noteOwner,
     isLoading: isLoadingNoteOwner,
     error: errorNoteOwner,
-  } = useGetUserQuery({ url: note?.owner }, { skip: !note, refetchOnMountOrArgChange: true });
+  } = useGetUserQuery({ url: note?.owner }, { skip: !note });
 
   const {
     data: isFavorite,
     isLoading: isLoadingIsFavorite,
     error: errorIsFavorite,
-  } = useGetIsFavoriteQuery({ noteId, userId }, { skip: !userId || !noteId, refetchOnMountOrArgChange: true });
+  } = useGetIsFavoriteNoteQuery({ noteId, userId }, { skip: !userId || !noteId });
+
+  const [addFavorite, { isLoading: isLoadingAdd }] = useAddFavoriteNoteMutation();
+  const [removeFavorite, { isLoading: isLoadingRemove }] = useRemoveFavoriteNoteMutation();
+
+  const addFavoriteHandler = () => {
+    console.log('add');
+    addFavorite({ noteId });
+  };
+
+  const removeFavoriteHandler = () => {
+    console.log('remove');
+    removeFavorite({ noteId, userId });
+  };
 
   return (
     <section className="note-info">
@@ -52,7 +70,11 @@ const Note = () => {
               {isLoadingIsFavorite ? (
                 <span>...</span>
               ) : (
-                <FavoriteButton noteId={noteId} isFavorite={!errorIsFavorite} />
+                <FavoriteButton
+                  isFavorite={!errorIsFavorite}
+                  addFavorite={addFavoriteHandler}
+                  removeFavorite={removeFavoriteHandler}
+                />
               )}
               <DownloadButton link={note.file} />
               {userId === note.owner.id && <DeleteButton />}

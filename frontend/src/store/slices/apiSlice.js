@@ -46,5 +46,15 @@ export const apiSlice = createApi({
   // eslint-disable-next-line no-unused-vars
   endpoints: (builder) => ({}),
   keepUnusedDataFor: 2,
-  tagTypes: ['Institutions', 'Careers', 'Subjects', 'Notes', 'Directories', 'Users', 'ProfilePicture', 'Reviews'],
+  tagTypes: [
+    'Institutions',
+    'Careers',
+    'Subjects',
+    'Notes',
+    'Directories',
+    'Users',
+    'ProfilePicture',
+    'Reviews',
+    'FavoriteNotes',
+  ],
 });

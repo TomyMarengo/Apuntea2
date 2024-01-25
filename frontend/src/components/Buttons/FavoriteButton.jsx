@@ -1,28 +1,14 @@
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-
-import { useAddFavoriteMutation, useRemoveFavoriteMutation } from '../../store/slices/notesApiSlice';
+import { useState } from 'react';
 import { FilledHeartIcon, EmptyHeartIcon } from '../Utils/Icons';
-import { selectCurrentUserId } from '../../store/slices/authSlice';
 
-const FavoriteButton = ({ noteId, isFavorite }) => {
-  const userId = useSelector(selectCurrentUserId);
-
-  const [addFavorite, { isLoading: isLoadingAdd }] = useAddFavoriteMutation();
-  const [removeFavorite, { isLoading: isLoadingRemove }] = useRemoveFavoriteMutation();
-
+const FavoriteButton = ({ addFavorite, removeFavorite, isFavorite }) => {
   const [isFavorited, setIsFavorited] = useState(isFavorite);
-
-  useEffect(() => {
-    setIsFavorited(isFavorite);
-  }, [isFavorite]);
-  // ??????
 
   const handleFavorite = () => {
     if (isFavorited) {
-      removeFavorite({ noteId, userId });
+      removeFavorite();
     } else {
-      addFavorite({ noteId });
+      addFavorite();
     }
     setIsFavorited(!isFavorited);
   };
