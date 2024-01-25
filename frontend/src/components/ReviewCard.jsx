@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Box, DeleteButton } from './index';
+
+import { Box, DeleteButton, Spinner } from './index';
 import { ChevronDownIcon, ChevronUpIcon } from './Utils/Icons';
 import { useGetUserQuery } from '../store/slices/usersApiSlice';
-import Spinner from './Utils/Spinner';
 
 const ReviewCard = ({ user, score, content }) => {
   const [isTextOverflowing, setIsTextOverflowing] = useState(false);

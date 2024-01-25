@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
-import { SearchIcon } from '../Utils/Icons';
 import { useTranslation } from 'react-i18next';
+
+import { SearchIcon } from '../Utils/Icons';
 
 const NavSearchButton = () => {
   const { t } = useTranslation();

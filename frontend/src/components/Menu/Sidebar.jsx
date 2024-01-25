@@ -1,7 +1,7 @@
-import { NavLink } from 'react-router-dom';
-import { BooksIcon, FilledHeartIcon, MyNotesIcon, OpenBookIcon, ReviewIcon, UserSlashIcon } from '../Utils/Icons';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+
+import { BooksIcon, FilledHeartIcon, MyNotesIcon, OpenBookIcon, ReviewIcon, UserSlashIcon } from '../Utils/Icons';
 
 const Sidebar = () => {
   const options = useMemo(

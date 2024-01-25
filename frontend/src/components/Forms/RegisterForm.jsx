@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { useForm, useRegister } from '../../hooks/index';
 import { setCredentials } from '../../store/slices/authSlice';
-import { Input, Button } from '../index';
 import { registerInputs } from '../../constants/forms';
-import { useForm, useInstitutionData, useRegister } from '../../hooks/index';
 import { isUuid } from '../../functions/utils';
+import { Input, Button } from '../index';
 
 const RegisterForm = () => {
   const { registerUser } = useRegister();

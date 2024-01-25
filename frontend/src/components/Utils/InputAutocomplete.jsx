@@ -1,8 +1,9 @@
 import { useState, useCallback, useEffect, forwardRef } from 'react';
-import clsx from 'clsx';
-import { CrossIcon } from './Icons';
 import { useTranslation } from 'react-i18next';
 import debounce from 'just-debounce-it';
+import clsx from 'clsx';
+
+import { CrossIcon } from './Icons';
 
 const InputAutocomplete = forwardRef(function InputAutocomplete(
   { password, list, errorMessage, onChange, ...props },

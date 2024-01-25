@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Input, InstitutionDataInputs } from '../index';
-import { useForm } from '../../hooks/index';
 import { useLazySearchNotesQuery } from '../../store/slices/searchApiSlice';
+import { Button, Input, InstitutionDataInputs } from '../index';
 import { serializeFormQuery } from '../../functions/utils';
 import { searchInputs } from '../../constants/forms';
+import { useForm } from '../../hooks/index';
 
 const SearchForm = ({ params, user, institution, career }) => {
   const { t } = useTranslation();

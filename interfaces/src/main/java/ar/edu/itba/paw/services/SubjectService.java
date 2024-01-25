@@ -5,15 +5,15 @@ import ar.edu.itba.paw.models.institutional.SubjectCareer;
 //import ar.edu.itba.paw.models.institutional.dtos.SubjectDto;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 public interface SubjectService {
+    Optional<Subject> getSubject(UUID subjectId);
     Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId);
+    List<Subject> getSubjects(UUID careerId, Integer year, UUID userId);
     List<Subject> getSubjectsByCareerComplemented(UUID careerId);
-    List<Subject> getSubjectsByCareer(UUID careerId, Integer year);
-    Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId);
+//    Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId);
     UUID createSubject(String name);
     boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year);
 

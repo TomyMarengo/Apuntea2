@@ -24,6 +24,7 @@ public interface DirectoryDao {
 
     boolean delete(UUID directoryId); // Strong delete
 
+    boolean isFavorite(UUID userId, UUID directoryId);
 
     boolean addFavorite(UUID userId, UUID directoryId);
 

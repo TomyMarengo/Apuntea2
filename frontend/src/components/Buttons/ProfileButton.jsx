@@ -1,7 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logOut, selectCurrentUser } from '../../store/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
+import { logOut, selectCurrentUser } from '../../store/slices/authSlice';
 import { UserIcon, ChevronDownIcon } from '../Utils/Icons';
 import { Button, Dropdown } from '../index';
 

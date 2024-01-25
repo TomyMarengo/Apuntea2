@@ -1,8 +1,10 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import clsx from 'clsx';
-import { CrossIcon, EyeIcon, EyeCrossedIcon } from './Icons';
+import { useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import debounce from 'just-debounce-it';
+import clsx from 'clsx';
+
+import { CrossIcon, EyeIcon, EyeCrossedIcon } from './Icons';
+
 
 const Input = ({ password, errorMessage, onChange, ...props }) => {
   const [hidden, setHidden] = useState(password);

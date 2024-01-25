@@ -4,6 +4,8 @@ export const notesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getNote: builder.query({
       query: ({ noteId, url }) => url || `/notes/${noteId}`,
+      providesTags: ['Notes'],
+      refetchOnMountOrArgChange: true,
     }),
     getNoteFile: builder.query({
       query: ({ noteId, fileType, url }) => ({
@@ -18,6 +20,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         url: url || `/notes/${noteId}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['Notes'],
     }),
     updateNote: builder.mutation({
       query: ({ noteId, note, url }) => ({
@@ -25,8 +28,38 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: note,
       }),
+      invalidatesTags: ['Notes'],
+    }),
+    getUserNotesFavorites: builder.query({
+      query: ({ userId, url }) => url || `/notes?favBy=${userId}`,
+      providesTags: ['Notes'],
+      refetchOnMountOrArgChange: true,
+    }),
+    getIsFavorite: builder.query({
+      query: ({ noteId, userId, url }) => url || `/notes/${noteId}/favorites/${userId}`,
+    }),
+    addFavorite: builder.mutation({
+      query: ({ noteId, url }) => ({
+        url: url || `/notes/${noteId}/favorites`,
+        method: 'POST',
+      }),
+    }),
+    removeFavorite: builder.mutation({
+      query: ({ noteId, userId, url }) => ({
+        url: url || `/notes/${noteId}/favorites/${userId}`,
+        method: 'DELETE',
+      }),
     }),
   }),
 });
 
-export const { useGetNoteQuery, useGetNoteFileQuery, useDeleteNoteMutation, useUpdateNoteMutation } = notesApiSlice;
+export const {
+  useGetNoteQuery,
+  useGetNoteFileQuery,
+  useDeleteNoteMutation,
+  useUpdateNoteMutation,
+  useGetUserNotesFavoritesQuery,
+  useGetIsFavoriteQuery,
+  useAddFavoriteMutation,
+  useRemoveFavoriteMutation,
+} = notesApiSlice;

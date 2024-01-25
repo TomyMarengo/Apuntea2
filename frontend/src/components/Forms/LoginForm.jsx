@@ -2,9 +2,9 @@ import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { setCredentials } from '../../store/slices/authSlice';
-import { Input, Button } from '../index';
-import { loginInputs } from '../../constants/forms';
 import { useForm, useLogin } from '../../hooks/index';
+import { loginInputs } from '../../constants/forms';
+import { Input, Button } from '../index';
 
 const LoginForm = () => {
   const { getSession } = useLogin();

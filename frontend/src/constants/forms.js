@@ -121,5 +121,18 @@ const searchInputs = [
   }
 ];
 
+const reviewInputs = [
+  {
+    id: 'content',
+    name: 'content',
+    placeholder: 'placeholders.content',
+    errorMessage: 'errors.content',
+    pattern: '^.{0,255}$',
+  },
+  {
+    id: 'score',
+    name: 'score',
+  },
+];
+export { loginInputs, registerInputs, profileInputs, institutionInputs, searchInputs, reviewInputs };
 
-export { loginInputs, registerInputs, profileInputs, institutionInputs, searchInputs };

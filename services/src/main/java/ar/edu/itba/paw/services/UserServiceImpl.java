@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.exceptions.institutional.InvalidCareerException;
+import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.institutional.Career;
@@ -98,14 +99,14 @@ public class UserServiceImpl implements UserService {
         User currentUser = securityService.getCurrentUserOrThrow();
         return currentUser.getUsersFollowing();
     }
-
+    */
     @Transactional
     @Override
     public boolean isFollowing(UUID followedId) {
         User currentUser = securityService.getCurrentUserOrThrow();
-        User followed = userDao.findById(followedId).orElseThrow(UserNotFoundException::new);
-        return currentUser.getUsersFollowing().contains(followed);
-    }*/
+        userDao.findById(followedId).orElseThrow(UserNotFoundException::new);
+        return userDao.isFollowing(currentUser.getUserId(), followedId);
+    }
 
     @Transactional
     @Override

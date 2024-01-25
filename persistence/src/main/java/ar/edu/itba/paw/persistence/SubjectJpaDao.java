@@ -35,13 +35,24 @@ public class SubjectJpaDao implements SubjectDao {
     }
 
     @Override
-    public List<Subject> getSubjectsByCareer(UUID careerId, Integer year) {
+    public List<Subject> getSubjects(UUID careerId, Integer year, User user) {
+        if (careerId == null && user != null) { //by default, filter by the user's career
+            careerId = user.getCareer().getCareerId();
+        }
+
         DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT s FROM Subject s, SubjectCareer sc WHERE sc.subject = s AND sc.career.careerId = :careerId ");
         queryCreator.addParameter("careerId", careerId);
         if (year != null) {
             queryCreator.append("AND sc.year = :year ");
             queryCreator.addParameter("year", year);
         }
+        if (user != null) {
+            queryCreator.append("AND (EXISTS(SELECT n FROM Note n WHERE n.parentId = s.rootDirectory.id AND n.user = :user) " +
+                    "OR EXISTS(SELECT d FROM Directory d WHERE d.parent = s.rootDirectory AND d.user = :user)) ");
+            queryCreator.addParameter("user", user);
+        }
+
+        queryCreator.append("ORDER BY s.name");
 
         TypedQuery<Subject> query = em.createQuery(queryCreator.createQuery(), Subject.class);
         queryCreator.getParams().forEach(query::setParameter);
@@ -64,17 +75,17 @@ public class SubjectJpaDao implements SubjectDao {
                 .getResultList();
     }
 
-    @Override
-    public List<Subject> getSubjectsByUser(User user) {
-        List<SubjectCareer> subjectsCareers = em.createQuery("SELECT DISTINCT sc FROM SubjectCareer sc JOIN sc.subject s JOIN s.rootDirectory rd " +
-                        "WHERE sc.career.id = :careerId AND (EXISTS(SELECT n FROM Note n WHERE n.parentId = rd.id AND n.user.id = :userId) " +
-                        "OR EXISTS(SELECT d FROM Directory d WHERE d.parent = rd AND d.user.id = :userId))", SubjectCareer.class)
-                .setParameter("userId", user.getUserId())
-                .setParameter("careerId", user.getCareer().getCareerId())
-                .getResultList();
-        subjectsCareers.forEach(sc -> sc.getSubject().setYear(sc.getYear()));
-        return subjectsCareers.stream().map(SubjectCareer::getSubject).collect(Collectors.toList());
-    }
+//    @Override
+//    public List<Subject> getSubjectsByUser(User user) {
+//        List<SubjectCareer> subjectsCareers = em.createQuery("SELECT DISTINCT sc FROM SubjectCareer sc JOIN sc.subject s JOIN s.rootDirectory rd " +
+//                        "WHERE sc.career.id = :careerId AND (EXISTS(SELECT n FROM Note n WHERE n.parentId = rd.id AND n.user.id = :userId) " +
+//                        "OR EXISTS(SELECT d FROM Directory d WHERE d.parent = rd AND d.user.id = :userId))", SubjectCareer.class)
+//                .setParameter("userId", user.getUserId())
+//                .setParameter("careerId", user.getCareer().getCareerId())
+//                .getResultList();
+////        subjectsCareers.forEach(sc -> sc.getSubject().setYear(sc.getYear()));
+//        return subjectsCareers.stream().map(SubjectCareer::getSubject).collect(Collectors.toList());
+//    }
 
     @Override
     public Subject create(String name, UUID rootDirectoryId) {
@@ -90,11 +101,12 @@ public class SubjectJpaDao implements SubjectDao {
 
     @Override
     public boolean linkSubjectToCareer(Subject subject, UUID careerId, int year) {
+        //check if the subject is linked with other institutions or with the same career
         int count = ((BigInteger) em.createNativeQuery("SELECT COUNT(*) as n FROM Subjects_Careers sc " +
                         "INNER JOIN Subjects s ON sc.subject_id = s.subject_id " +
                         "INNER JOIN Careers c ON sc.career_id = c.career_id " +
                         "WHERE sc.subject_id = :subjectId " +
-                        "AND c.institution_id != (SELECT c2.institution_id FROM Careers c2 WHERE c2.career_id = :careerId)")
+                        "AND ( c.institution_id != (SELECT c2.institution_id FROM Careers c2 WHERE c2.career_id = :careerId) OR sc.career_id = :careerId ) ")
                 .setParameter("careerId", careerId)
                 .setParameter("subjectId", subject.getSubjectId())
                 .getSingleResult()).intValue();

@@ -15,6 +15,10 @@ const useForm = ({ initialValues, submitCallback, dispatchCallback, redirectUrl,
     setForm({ ...form, [name]: newValue });
   };
 
+  const setFormValues = (currentForm) => {
+    setForm({ ...currentForm });
+  };
+
   const resetForm = () => {
     setForm(initialValues);
   };
@@ -24,17 +28,18 @@ const useForm = ({ initialValues, submitCallback, dispatchCallback, redirectUrl,
     try {
       const response = await submitCallback(form);
       if (dispatchCallback) dispatch(dispatchCallback({ ...response }));
-      setForm(initialValues);
+      // setForm(initialValues);
       setError('');
       if (redirectUrl) navigate(redirectUrl);
     } catch (error) {
+      setForm(initialValues);
       setError(error.message);
       toast.error(error.message);
       if (redirectErrorUrl) navigate(redirectErrorUrl);
     }
   };
 
-  return { form, resetForm, error, handleChange, handleSubmit };
+  return { form, setFormValues, resetForm, error, handleChange, handleSubmit };
 };
 
 export default useForm;

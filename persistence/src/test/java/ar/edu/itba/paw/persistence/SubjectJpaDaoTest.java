@@ -101,7 +101,7 @@ public class SubjectJpaDaoTest {
     public void testGetSubjectsByCareerId(){
         TestSubjectsCareersInserts test = new TestSubjectsCareersInserts();
 
-        List<Subject> career1SubjectList = subjectDao.getSubjectsByCareer(test.career1Id, null);
+        List<Subject> career1SubjectList = subjectDao.getSubjects(test.career1Id, null, null);
 
         assertEquals(2, career1SubjectList.size());
         assertTrue(career1SubjectList.stream().anyMatch(s -> s.getSubjectId().equals(test.subject1Id)));
@@ -114,10 +114,10 @@ public class SubjectJpaDaoTest {
 
     @Test
     public void testOrderGetSubjectsByCareerId() {
-        List<Subject> subjects = subjectDao.getSubjectsByCareer(ING_INF_ID, null);
+        List<Subject> subjects = subjectDao.getSubjects(ING_INF_ID, null, null);
 
         for (int i = 0; i < subjects.size() - 2; i++) {
-            assertTrue(subjects.get(i).getYear() <= subjects.get(i + 1).getYear());
+            assertTrue(subjects.get(i).getName().compareTo(subjects.get(i + 1).getName()) < 0);
         }
 
     }
@@ -175,7 +175,7 @@ public class SubjectJpaDaoTest {
         insertDirectory(em, new Directory.DirectoryBuilder().name("d1").parent(em.getReference(Directory.class, PAW_DIRECTORY_ID)).user(jaimitoUser));
         insertNote(em, nb.name("n1").subject(em.getReference(Subject.class, MATE_ID)).parentId(MATE_DIRECTORY_ID).user(pepeUser));
 
-        List<Subject> subjects = subjectDao.getSubjectsByUser(jaimitoUser);
+        List<Subject> subjects = subjectDao.getSubjects(null, null, jaimitoUser);
 
         assertEquals(2, subjects.size());
         assertTrue(subjects.stream().anyMatch(s -> s.getSubjectId().equals(EDA_ID)));

@@ -111,20 +111,28 @@ public class UserController {
     }
 
 
+    @GET
+    @Path("/{id}/followers/{followerId}")
+    @PreAuthorize("@userPermissions.isCurrentUser(#followerId)")
+    public Response isFollowing(@PathParam("id") final UUID id, @PathParam("followerId") final UUID followerId) {
+        if (userService.isFollowing(id)) {
+            return Response.noContent().build();
+        }
+        throw new FavoriteNotFoundException();
+    }
+
     @POST
     @Path("/{id}/followers")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
     public Response follow(@PathParam("id") final UUID id){
         if (userService.follow(id)) {
             UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-            return Response.created(uriInfo.getAbsolutePathBuilder().path(id.toString()).path("followers").path(userId.toString()).build()).build();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
         }
         throw new ConflictResponseException("error.follow.alreadyExists");
     }
 
     @DELETE
     @Path("/{id}/followers/{followerId}")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("@userPermissions.isCurrentUser(#followerId)")
     public Response unfollow(@PathParam("id") final UUID id, @PathParam("followerId") final UUID followerId) {
         if (userService.unfollow(id))

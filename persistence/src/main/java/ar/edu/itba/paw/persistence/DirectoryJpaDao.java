@@ -117,6 +117,14 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
+    public boolean isFavorite(UUID userId, UUID directoryId) {
+        return em.createNativeQuery("SELECT 1 FROM Directory_Favorites WHERE user_id = :userId AND directory_id = :directoryId")
+                .setParameter("userId", userId)
+                .setParameter("directoryId", directoryId)
+                .getResultList().size() == 1;
+    }
+
+    @Override
     public boolean addFavorite(UUID userId, UUID directoryId) {
         return em.createNativeQuery("INSERT INTO Directory_Favorites (user_id, directory_id) SELECT :userId, :directoryId WHERE NOT EXISTS (SELECT 1 FROM Directory_Favorites WHERE user_id = :userId AND directory_id = :directoryId)")
                 .setParameter("userId", userId)

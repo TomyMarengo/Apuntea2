@@ -61,9 +61,9 @@ public class  NoteServiceImpl implements NoteService {
     @Override
     public Optional<Note> getNoteById(UUID noteId) {
         final Optional<User> maybeUser = securityService.getCurrentUser();
-        Optional<Note> note = noteDao.getNoteById(noteId, maybeUser.map(User::getUserId).orElse(null));
+        final Optional<Note> note = noteDao.getNoteById(noteId, maybeUser.map(User::getUserId).orElse(null));
         if (note.isPresent() && maybeUser.isPresent()) {
-            noteDao.loadNoteFavorites(Collections.singletonList(note.get().getId()), maybeUser.get().getUserId());
+//            noteDao.loadNoteFavorites(Collections.singletonList(note.get().getId()), maybeUser.get().getUserId());
             noteDao.addInteractionIfNotExists(maybeUser.get(), note.get());
         }
         return note;
@@ -231,6 +231,14 @@ public class  NoteServiceImpl implements NoteService {
         User user = securityService.getCurrentUserOrThrow();
         noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
         return noteDao.addFavorite(user.getUserId(), noteId);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean isFavorite(UUID noteId) {
+        User user = securityService.getCurrentUserOrThrow();
+        noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
+        return noteDao.isFavorite(user.getUserId(), noteId);
     }
 
     @Transactional

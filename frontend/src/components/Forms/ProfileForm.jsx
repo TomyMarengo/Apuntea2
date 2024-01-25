@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { isUuid } from '../../functions/utils';
-import { Input, Button } from '../index';
-import { profileInputs } from '../../constants/forms';
-import { useForm, useInstitutionData } from '../../hooks/index';
-import EditableImage from '../EditableImage';
+
 import { useUpdateUserMutation } from '../../store/slices/usersApiSlice';
+import { useForm, useInstitutionData } from '../../hooks/index';
+import { Input, Button, EditableImage } from '../index';
+import { profileInputs } from '../../constants/forms';
+import { isUuid } from '../../functions/utils';
 
 const ProfileForm = ({ user, institution, career }) => {
   const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();

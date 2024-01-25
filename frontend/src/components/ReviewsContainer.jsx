@@ -1,10 +1,14 @@
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+
 import { ReviewBox, ReviewCard } from './index';
 import { useGetReviewsQuery } from '../store/slices/reviewsApiSlice';
-import { useTranslation } from 'react-i18next';
+import { selectCurrentUserId } from '../store/slices/authSlice';
 
-const ReviewsContainer = ({ score, noteId }) => {
+const ReviewsContainer = ({ score, note }) => {
   const { t } = useTranslation();
-  const { data: reviews, isLoading: isLoadingReviews, error: errorReviews } = useGetReviewsQuery({ noteId });
+  const { data: reviews, isLoading: isLoadingReviews, error: errorReviews } = useGetReviewsQuery({ noteId: note.id });
+  const userId = useSelector(selectCurrentUserId);
 
   return (
     <div className="reviews">
@@ -18,11 +22,13 @@ const ReviewsContainer = ({ score, noteId }) => {
           </span>
           <div className="p-2 mt-1">
             <div className="reviews-container">
-              {reviews.map((review) => (
-                <ReviewCard key={review.userId} {...review} />
-              ))}
+              {reviews?.map((review) => {
+                if (review.userId !== userId) {
+                  return <ReviewCard key={review.userId} {...review} />;
+                }
+              })}
             </div>
-            <ReviewBox />
+            <ReviewBox note={note} userId={userId} />
           </div>
         </>
       )}

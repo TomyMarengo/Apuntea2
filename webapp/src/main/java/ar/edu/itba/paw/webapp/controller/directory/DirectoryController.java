@@ -103,12 +103,21 @@ public class DirectoryController {
         return Response.noContent().build();
     }
 
+    @GET
+    @Path("/{id}/favorites/{followerId}")
+    @PreAuthorize("@userPermissions.isCurrentUser(#followerId)")
+    public Response getFavorite(@PathParam("id") final UUID id, @PathParam("followerId") final UUID followerId) {
+        if (directoryService.isFavorite(id))
+            return Response.noContent().build();
+        throw new FavoriteNotFoundException();
+    }
+
     @POST
     @Path("/{id}/favorites")
     public Response addFavorite(@PathParam("id") final UUID id){
         if (directoryService.addFavorite(id)) {
             UUID userId = securityService.getCurrentUserOrThrow().getUserId();
-            return Response.created(uriInfo.getAbsolutePathBuilder().path(id.toString()).path("favorites").path(userId.toString()).build()).build();
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
         }
         throw new ConflictResponseException("error.favorite.alreadyExists");
     }

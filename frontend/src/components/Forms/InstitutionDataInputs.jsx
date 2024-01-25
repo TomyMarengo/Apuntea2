@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { InputAutocomplete } from '../index';
+import { useRef, useEffect } from 'react';
+
 import { institutionInputs } from '../../constants/forms';
-import { isUuid } from '../../functions/utils';
 import { useInstitutionData } from '../../hooks/index';
-import { useRef } from 'react';
-import { useEffect } from 'react';
+import { isUuid } from '../../functions/utils';
+import { InputAutocomplete } from '../index';
 
 const InstitutionDataInputs = ({
   onChange,
