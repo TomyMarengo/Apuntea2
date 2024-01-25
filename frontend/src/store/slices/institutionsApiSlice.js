@@ -17,15 +17,23 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
     getSubjects: builder.query({
       query: ({ institutionId, careerId, url }) => url || `/institutions/${institutionId}/careers/${careerId}/subjects`,
     }),
+    getSubject: builder.query({
+      query: ({ institutionId, careerId, subjectId, url }) => url || `/institutions/${institutionId}/careers/${careerId}/subjects/${subjectId}`,
+    }),
   }),
 });
 
 export const {
   useGetInstitutionsQuery,
+  useLazyGetInstitutionsQuery,
   useGetInstitutionQuery,
   useLazyGetInstitutionQuery,
   useGetCareersQuery,
+  useLazyGetCareersQuery,
   useGetCareerQuery,
   useLazyGetCareerQuery,
   useGetSubjectsQuery,
+  useLazyGetSubjectsQuery,
+  useGetSubjectQuery,
+  useLazyGetSubjectQuery,
 } = institutionsApiSlice;

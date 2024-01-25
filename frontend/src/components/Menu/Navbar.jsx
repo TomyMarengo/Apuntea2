@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../store/slices/authSlice';
-import { Button, DarkMode, ProfileButton, NavSearchButton } from './index';
+import { selectCurrentUser } from '../../store/slices/authSlice';
+import { Button, DarkMode, ProfileButton, NavSearchButton } from '../index';
 
 const Navbar = () => {
   const user = useSelector(selectCurrentUser);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FilledHeartIcon, EmptyHeartIcon } from './Icons';
+import { FilledHeartIcon, EmptyHeartIcon } from '../Utils/Icons';
 
 const FavoriteButton = () => {
   const [favorite, setFavorite] = useState(false);

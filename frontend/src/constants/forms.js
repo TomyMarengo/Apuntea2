@@ -90,4 +90,36 @@ const profileInputs = [
   },
 ];
 
-export { loginInputs, registerInputs, profileInputs };
+const institutionInputs = [
+  {
+    id: 'institutionId',
+    name: 'institutionId',
+    placeholder: 'placeholders.institutionId',
+    errorMessage: 'errors.institutionId',
+  },
+  {
+    id: 'careerId',
+    name: 'careerId',
+    placeholder: 'placeholders.careerId',
+    errorMessage: 'errors.careerId',
+  },
+  {
+    id: 'subjectId',
+    name: 'subjectId',
+    placeholder: 'placeholders.subjectId',
+    errorMessage: 'errors.subjectId',
+  },
+]
+
+const searchInputs = [
+  {
+    id: 'word',
+    name: 'word',
+    placeholder: 'placeholders.word',
+    errorMessage: 'errors.word',
+    pattern: '^(?![0-9\\s]+$)[\\p{L}\\s]{0,20}$', //TODO: Revisar patterns
+  }
+];
+
+
+export { loginInputs, registerInputs, profileInputs, institutionInputs, searchInputs };

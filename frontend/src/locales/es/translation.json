@@ -346,13 +346,14 @@
     "10": "10mo.º"
   },
   "placeholders": {
-    "careerId": "Ingeniería Informática",
-    "email": "juanperez@gmail.com",
-    "firstName": "Juan",
-    "institutionId": "Instituto Tecnológico de Buenos Aires",
-    "lastName": "Perez",
-    "password": "UnaContraSenia162@@",
-    "username": "juanperez",
+    "careerId": "Carrera",
+    "email": "Correo electrónico",
+    "firstName": "Nombre",
+    "institutionId": "Institución",
+    "lastName": "Apellido",
+    "password": "Contraseña",
+    "subjectId": "Materia",
+    "username": "Nombre de usuario",
     "word": "Buscar por nombre"
   },
   "toast": {

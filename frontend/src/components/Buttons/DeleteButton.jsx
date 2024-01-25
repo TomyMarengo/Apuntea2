@@ -1,4 +1,4 @@
-import { TrashIcon } from './Icons';
+import { TrashIcon } from '../Utils/Icons';
 
 const DeleteButton = () => {
   return (

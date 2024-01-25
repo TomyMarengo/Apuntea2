@@ -1,17 +1,15 @@
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { setCredentials } from '../store/slices/authSlice';
-import { Input, Button } from './index';
-import { registerInputs } from '../constants/forms';
-import { useForm, useInstitutionData, useRegister } from '../hooks/index';
-import { isUuid } from '../functions/validation';
+import { setCredentials } from '../../store/slices/authSlice';
+import { Input, Button } from '../index';
+import { registerInputs } from '../../constants/forms';
+import { useForm, useInstitutionData, useRegister } from '../../hooks/index';
+import { isUuid } from '../../functions/utils';
 
 const RegisterForm = () => {
   const { registerUser } = useRegister();
   const { t } = useTranslation();
-
-  const { institutions, setInstitutionId, careers, setCareerId } = useInstitutionData({ skipSubjects: true });
 
   const { form, handleChange, handleSubmit } = useForm({
     initialValues: {

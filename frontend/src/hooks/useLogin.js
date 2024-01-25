@@ -1,15 +1,12 @@
 import { useLazyLoginQuery } from '../store/slices/authApiSlice';
 import { useLazyGetUserQuery } from '../store/slices/usersApiSlice';
-import { decode } from '../functions/jwt';
-import { useLazyGetInstitutionQuery, useLazyGetCareerQuery } from '../store/slices/institutionsApiSlice';
+import { decode } from '../functions/utils';
 import { setCredentials } from '../store/slices/authSlice';
 import { useDispatch } from 'react-redux';
 
 const useLogin = () => {
   const [login] = useLazyLoginQuery();
   const [getUser] = useLazyGetUserQuery();
-  const [getInstitution] = useLazyGetInstitutionQuery();
-  const [getCareer] = useLazyGetCareerQuery();
   const dispatch = useDispatch();
 
   const getSession = async (credentials) => {
@@ -24,10 +21,8 @@ const useLogin = () => {
       dispatch(setCredentials({ token, refreshToken }));
 
       const user = await getUser({ userId }).unwrap();
-      const institution = await getInstitution({ url: user.institution }).unwrap();
-      const career = await getCareer({ url: user.career }).unwrap();
 
-      return { token, refreshToken, user, institution, career };
+      return { token, refreshToken, user };
     } catch (error) {
       console.error('Error during login:', error);
       throw new Error('Failed to login');

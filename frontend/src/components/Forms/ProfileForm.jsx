@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { isUuid } from '../functions/validation';
-import { Input, Button } from './index';
-import { profileInputs } from '../constants/forms';
-import { useForm, useInstitutionData } from '../hooks/index';
-import EditableImage from './EditableImage';
-import { useUpdateUserMutation } from '../store/slices/usersApiSlice';
+import { isUuid } from '../../functions/utils';
+import { Input, Button } from '../index';
+import { profileInputs } from '../../constants/forms';
+import { useForm, useInstitutionData } from '../../hooks/index';
+import EditableImage from '../EditableImage';
+import { useUpdateUserMutation } from '../../store/slices/usersApiSlice';
 
 const ProfileForm = ({ user, institution, career }) => {
   const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
@@ -22,9 +22,10 @@ const ProfileForm = ({ user, institution, career }) => {
   });
 
   const { careers, setCareerId } = useInstitutionData({
-    skipInstitution: true,
+    skipInstitutions: true,
     skipSubjects: true,
     initialInstitutionId: institution.id,
+    initialCareerId: career.id,
   });
 
   return (

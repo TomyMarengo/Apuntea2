@@ -1,4 +1,4 @@
-import { DownloadIcon } from './Icons';
+import { DownloadIcon } from '../Utils/Icons';
 import { Link } from 'react-router-dom';
 const DownloadButton = ({ link }) => {
   return (

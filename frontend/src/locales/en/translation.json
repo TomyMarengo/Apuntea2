@@ -346,13 +346,14 @@
     "10": "10th"
   },
   "placeholders": {
-    "careerId": "Software Engineering",
-    "email": "jonhdoe@gmail.com",
-    "firstName": "John",
-    "institutionId": "Massachusetts Institute of Technology",
-    "lastName": "Doe",
-    "password": "APassword162@@",
-    "username": "johndoe",
+    "careerId": "Career",
+    "email": "Email",
+    "firstName": "First Name",
+    "institutionId": "Institution",
+    "lastName": "Last Name",
+    "password": "Password",
+    "subjectId": "Subject",
+    "username": "Username",
     "word": "Search by name"
   },
   "toast": {

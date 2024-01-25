@@ -16,7 +16,6 @@ const Note = () => {
     error: errorOwner,
   } = useGetUserQuery({ url: note?.owner }, { skip: !note, refetchOnMountOrArgChange: true });
 
-  console.log('owner', owner);
   return (
     <section className="note-info">
       {isLoadingNote || isLoadingOwner ? (

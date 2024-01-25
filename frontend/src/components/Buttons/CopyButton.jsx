@@ -1,4 +1,4 @@
-import { LinkIcon } from './Icons';
+import { LinkIcon } from '../Utils/Icons';
 
 const CopyButton = ({ link }) => {
   return (

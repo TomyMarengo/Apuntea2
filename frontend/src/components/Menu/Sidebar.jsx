@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { BooksIcon, FilledHeartIcon, MyNotesIcon, OpenBookIcon, ReviewIcon, UserSlashIcon } from './Icons';
+import { BooksIcon, FilledHeartIcon, MyNotesIcon, OpenBookIcon, ReviewIcon, UserSlashIcon } from '../Utils/Icons';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 

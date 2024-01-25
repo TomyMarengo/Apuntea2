@@ -3,12 +3,11 @@
 /*************************/
 
 .dropdown-autocomplete {
-  @apply absolute top-full left-0 w-full max-h-[160px] overflow-y-auto bg-bg border border-text/20 rounded-b-xl z-10;
+  @apply absolute top-full left-0 w-full max-h-[160px] overflow-y-auto bg-bg border border-text/20 rounded-b-xl z-10 text-left;
 }
 
 .dropdown-autocomplete li {
-  padding: 8px;
-  cursor: pointer;
+  @apply px-3 py-2 cursor-pointer;
 }
 
 .dropdown-autocomplete li:hover {
@@ -63,22 +62,22 @@
   @apply left-0;
 }
 
-.dropdown-menu > li {
+.dropdown-menu>li {
   @apply bg-transparent;
 }
 
-.dropdown-menu > li > button,
-.dropdown-menu > li > a {
+.dropdown-menu>li>button,
+.dropdown-menu>li>a {
   @apply w-full h-full bg-transparent m-0 text-text rounded-none flex justify-start;
   font: inherit;
 }
 
-.dropdown-menu > li > button:hover,
-.dropdown-menu > li > a:hover {
+.dropdown-menu>li>button:hover,
+.dropdown-menu>li>a:hover {
   @apply bg-pri text-bg;
 }
 
-.dropdown-menu > li > br {
+.dropdown-menu>li>br {
   @apply border-t border-text/10 my-2;
 }
 

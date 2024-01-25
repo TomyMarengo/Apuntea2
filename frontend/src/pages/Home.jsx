@@ -1,8 +1,8 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import { selectCurrentUser } from '../store/slices/authSlice';
-import { UsersIcon, SearchAltIcon, AddDocumentIcon, UserIcon } from '../components/Icons';
-import Card from '../components/Card';
+import { UsersIcon, SearchAltIcon, AddDocumentIcon, UserIcon } from '../components/Utils/Icons';
+import Card from '../components/Utils/Card';
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 

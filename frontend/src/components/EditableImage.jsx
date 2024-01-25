@@ -1,4 +1,4 @@
-import { PencilIcon } from './Icons';
+import { PencilIcon } from './Utils/Icons';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';

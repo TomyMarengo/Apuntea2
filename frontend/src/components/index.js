@@ -1,29 +1,31 @@
-import BottomNavbar from './BottomNavbar';
-import Box from './Box';
-import Button from './Button';
-import Card from './Card';
-import CopyButton from './CopyButton';
-import DarkMode from './DarkMode';
-import DeleteButton from './DeleteButton';
-import DownloadButton from './DownloadButton';
-import Dropdown from './Dropdown';
+import BottomNavbar from './Menu/BottomNavbar';
+import Box from './Utils/Box';
+import Button from './Buttons/Button';
+import Card from './Utils/Card';
+import CopyButton from './Buttons/CopyButton';
+import DarkMode from './Buttons/DarkModeButton';
+import DeleteButton from './Buttons/DeleteButton';
+import DownloadButton from './Buttons/DownloadButton';
+import Dropdown from './Buttons/Dropdown';
 import EditableImage from './EditableImage';
-import FavoriteButton from './FavoriteButton';
-import Input from './Input';
-import LoginForm from './LoginForm';
-import Navbar from './Navbar';
-import NavSearchButton from './NavSearchButton';
-import Pagination from './Pagination';
-import ProfileButton from './ProfileButton';
-import ProfileForm from './ProfileForm';
-import RegisterForm from './RegisterForm';
+import FavoriteButton from './Buttons/FavoriteButton';
+import Input from './Utils/Input';
+import InputAutocomplete from './Utils/InputAutocomplete';
+import InstitutionDataInputs from './Forms/InstitutionDataInputs';
+import LoginForm from './Forms/LoginForm';
+import Navbar from './Menu/Navbar';
+import NavSearchButton from './Menu/NavSearchButton';
+import Pagination from './Forms/Pagination';
+import ProfileButton from './Buttons/ProfileButton';
+import ProfileForm from './Forms/ProfileForm';
+import RegisterForm from './Forms/RegisterForm';
 import ReviewBox from './ReviewBox';
 import ReviewCard from './ReviewCard';
 import ReviewsContainer from './ReviewsContainer';
-import SearchForm from './SearchForm';
+import SearchForm from './Forms/SearchForm';
 import SearchTable from './SearchTable';
-import Sidebar from './Sidebar';
-import Spinner from './Spinner';
+import Sidebar from './Menu/Sidebar';
+import Spinner from './Utils/Spinner';
 
 export {
   BottomNavbar,
@@ -38,6 +40,8 @@ export {
   EditableImage,
   FavoriteButton,
   Input,
+  InputAutocomplete,
+  InstitutionDataInputs,
   LoginForm,
   Navbar,
   NavSearchButton,

@@ -1,22 +1,21 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, forwardRef } from 'react';
 import clsx from 'clsx';
-import { CrossIcon, EyeIcon, EyeCrossedIcon } from './Icons';
+import { CrossIcon } from './Icons';
 import { useTranslation } from 'react-i18next';
 import debounce from 'just-debounce-it';
 
-const Input = ({ password = false, hiddenValue = null, list, ...props }) => {
-  const inputRef = useRef(props.value);
-  const inputHiddenRef = useRef(hiddenValue);
-  const [hidden, setHidden] = useState(password);
+const InputAutocomplete = forwardRef(function InputAutocomplete(
+  { password, list, errorMessage, onChange, ...props },
+  ref
+) {
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [showError, setShowError] = useState(false);
-  const { errorMessage, onChange, ...inputProps } = props;
   const { t } = useTranslation();
 
   const showErrorCondition = () => {
-    if (inputRef.current && inputRef.current.value !== '') {
-      setShowError(!inputRef.current.validity.valid);
+    if (ref.current && ref.current.value !== '') {
+      setShowError(!ref.current.validity.valid);
     } else {
       setShowError(false);
     }
@@ -37,33 +36,30 @@ const Input = ({ password = false, hiddenValue = null, list, ...props }) => {
   };
 
   const handleClear = () => {
-    if (inputRef.current) {
-      inputRef.current.value = '';
-      if (inputHiddenRef.current) inputHiddenRef.current.value = '';
+    if (ref.current) {
+      ref.current.value = '';
       handleChange({ target: { name: props.name, value: '' } });
     }
   };
 
   const handleDropdownClick = (item) => {
-    inputRef.current.value = item.name;
+    if (ref.current) ref.current.value = item.name;
     handleChange({ target: { name: props.name, value: item.id } });
     setOpen(false);
   };
 
   const handleDocumentClick = (e) => {
-    if (!inputRef.current.contains(e.target)) {
+    if (!ref.current?.contains(e.target)) {
       setOpen(false);
     }
   };
 
   useEffect(() => {
-    // Attach click event listener to the document
     document.addEventListener('click', handleDocumentClick);
-
-    // Clean up event listener on component unmount
     return () => {
       document.removeEventListener('click', handleDocumentClick);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleInputKeyDown = (e) => {
@@ -79,6 +75,7 @@ const Input = ({ password = false, hiddenValue = null, list, ...props }) => {
         setSelectedIndex((prevIndex) => (prevIndex !== null ? Math.min(prevIndex + 1, listItems.length - 1) : 0));
         break;
       case 'Enter':
+        e.preventDefault();
         if (selectedIndex !== null && listItems[selectedIndex]) {
           handleDropdownClick(listItems[selectedIndex]);
         }
@@ -95,47 +92,32 @@ const Input = ({ password = false, hiddenValue = null, list, ...props }) => {
     }
   };
 
-  const commonInputProps = {
-    ...inputProps,
-    value: list ? inputRef.current?.value : props.value,
-    defaultValue: list ? props.value : undefined,
-    pattern: list ? undefined : props.pattern,
-    name: list ? undefined : props.name,
-    onKeyDown: list ? handleInputKeyDown : undefined,
-    placeholder: t(props.placeholder),
-    required: props.required,
-    onChange: handleChange,
-  };
-
   return (
     <div className="flex flex-col gap-2 w-full">
       <div className="flex w-full relative">
         <label htmlFor={props.id} className="relative w-full">
           <input
-            ref={inputRef}
-            type={hidden ? 'password' : 'text'}
-            {...commonInputProps}
+            {...props}
+            ref={ref}
             className={clsx(props.className, password && 'rounded-r-none')}
             onClick={() => setOpen(true)}
+            onKeyDown={handleInputKeyDown}
+            onChange={handleChange}
+            placeholder={t(props.placeholder)}
           />
           <button tabIndex="-1" className="erasable-button" type="button" onClick={handleClear}>
             <CrossIcon className="w-[10px] h-[10px] fill-text/50" />
           </button>
         </label>
-        {password && (
-          <button tabIndex="-1" className="input-button" type="button" onClick={() => setHidden((hidden) => !hidden)}>
-            {hidden ? <EyeIcon className="icon-s fill-pri" /> : <EyeCrossedIcon className="icon-s fill-pri" />}
-          </button>
-        )}
         {open && list && (
           <ul className="dropdown-autocomplete">
             {list
-              .filter((item) => item.name.toLowerCase().startsWith(inputRef.current.value.toLowerCase()))
+              .filter((item) => item.name.toLowerCase().startsWith(ref.current.value.toLowerCase()))
               .map((item, index) => {
-                const matchIndex = item.name.toLowerCase().indexOf(inputRef.current.value.toLowerCase());
+                const matchIndex = item.name.toLowerCase().indexOf(ref.current.value.toLowerCase());
                 const prefix = item.name.substring(0, matchIndex);
-                const match = item.name.substring(matchIndex, matchIndex + inputRef.current.value.length);
-                const suffix = item.name.substring(matchIndex + inputRef.current.value.length);
+                const match = item.name.substring(matchIndex, matchIndex + ref.current.value.length);
+                const suffix = item.name.substring(matchIndex + ref.current.value.length);
 
                 const isSelected = index === selectedIndex;
 
@@ -155,13 +137,10 @@ const Input = ({ password = false, hiddenValue = null, list, ...props }) => {
               })}
           </ul>
         )}
-        {list && (
-          <input type="hidden" ref={inputHiddenRef} value={props.value} pattern={props.pattern} name={props.name} />
-        )}
       </div>
       {showError && <span className="error">{t(errorMessage)}</span>}
     </div>
   );
-};
+});
 
-export default Input;
+export default InputAutocomplete;

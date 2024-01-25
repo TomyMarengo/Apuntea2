@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useSearchParams, NavLink } from 'react-router-dom';
-import { generatePagination } from '../functions/pagination';
-import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
+import { generatePagination } from '../../functions/pagination';
+import { ChevronLeftIcon, ChevronRightIcon } from '../Utils/Icons';
 import { Trans } from 'react-i18next';
 
 const Pagination = ({ totalPages, currentPage, pageSize, totalCount, dataLength }) => {

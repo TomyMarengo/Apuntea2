@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Box, DeleteButton } from './index';
-import { ChevronDownIcon, ChevronUpIcon } from './Icons';
+import { ChevronDownIcon, ChevronUpIcon } from './Utils/Icons';
 import { useGetUserQuery } from '../store/slices/usersApiSlice';
-import Spinner from './Spinner';
+import Spinner from './Utils/Spinner';
 
 const ReviewCard = ({ user, score, content }) => {
   const [isTextOverflowing, setIsTextOverflowing] = useState(false);
@@ -12,7 +12,6 @@ const ReviewCard = ({ user, score, content }) => {
 
   const { data: owner, isLoading: isLoadingOwner, error: errorOwner } = useGetUserQuery({ url: user });
 
-  console.log('owner', owner);
   useEffect(() => {
     if (contentRef.current) {
       setIsTextOverflowing(

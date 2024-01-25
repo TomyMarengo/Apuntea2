@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logOut, selectCurrentUser } from '../store/slices/authSlice';
+import { logOut, selectCurrentUser } from '../../store/slices/authSlice';
 
-import { UserIcon, ChevronDownIcon } from './Icons';
-import { Button, Dropdown } from './index';
+import { UserIcon, ChevronDownIcon } from '../Utils/Icons';
+import { Button, Dropdown } from '../index';
 
 const ProfileButton = () => {
   const dispatch = useDispatch();

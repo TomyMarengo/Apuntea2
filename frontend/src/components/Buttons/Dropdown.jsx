@@ -1,6 +1,6 @@
 import { useState, cloneElement, useEffect } from 'react';
 import clsx from 'clsx';
-import { Button } from '.';
+import { Button } from '../index';
 
 const Dropdown = ({ trigger, menu, ...props }) => {
   const [open, setOpen] = useState(false);

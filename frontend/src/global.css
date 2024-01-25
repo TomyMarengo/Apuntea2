@@ -133,26 +133,22 @@ body {
   line-height: 1.5;
   background-size: cover;
   background-blend-mode: lighten;
-  background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%)
-    no-repeat fixed;
+  background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat fixed;
 }
 
 nav {
   min-height: 60px;
 }
 
-main > section {
+main>section {
   width: 100%;
 }
 
-html.dark > body {
-  background: linear-gradient(
-      180deg,
+html.dark>body {
+  background: linear-gradient(180deg,
       var(--gradient-top-dark) 0%,
       var(--gradient-mid-dark) 42.19%,
-      var(--gradient-bot-dark) 99.99%
-    )
-    no-repeat fixed;
+      var(--gradient-bot-dark) 99.99%) no-repeat fixed;
 }
 
 /* Set shorter line heights on headings and interactive elements */
@@ -207,7 +203,7 @@ textarea:not([rows]) {
 
 input {
   @apply text-text bg-bg border-text/20 focus:border-pri focus:ring-light-pri dark:focus:ring-light-pri/50;
-  @apply block w-full px-4 py-2 border rounded-md focus:ring-4 focus:outline-none;
+  @apply block w-full pl-4 pr-7 py-2 border rounded-md focus:ring-4 focus:outline-none;
 }
 
 input::placeholder {

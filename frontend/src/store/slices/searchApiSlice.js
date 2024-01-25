@@ -21,7 +21,7 @@ export const searchApiSlice = apiSlice.injectEndpoints({
 
           const filteredParams = Object.fromEntries(
             // eslint-disable-next-line no-unused-vars
-            Object.entries(queryParams).filter(([_, value]) => value !== undefined)
+            Object.entries(queryParams).filter(([_, value]) => value)
           );
           const queryString = new URLSearchParams(filteredParams).toString();
           return `/notes?${queryString}`;
