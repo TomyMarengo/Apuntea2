@@ -136,19 +136,19 @@ body {
   background: linear-gradient(180deg, var(--gradient-top) 0%, var(--gradient-mid) 42.19%, var(--gradient-bot) 99.99%) no-repeat fixed;
 }
 
+html.dark>body {
+  background: linear-gradient(180deg,
+      var(--gradient-top-dark) 0%,
+      var(--gradient-mid-dark) 42.19%,
+      var(--gradient-bot-dark) 99.99%) no-repeat fixed;
+}
+
 nav {
   min-height: 60px;
 }
 
 main>section {
   width: 100%;
-}
-
-html.dark>body {
-  background: linear-gradient(180deg,
-      var(--gradient-top-dark) 0%,
-      var(--gradient-mid-dark) 42.19%,
-      var(--gradient-bot-dark) 99.99%) no-repeat fixed;
 }
 
 /* Set shorter line heights on headings and interactive elements */

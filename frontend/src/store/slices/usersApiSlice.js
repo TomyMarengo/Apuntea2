@@ -9,14 +9,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     getUser: builder.query({
       query: ({ userId, url }) => url || `/users/${userId}`,
       providesTags: ['Users'],
-      refetchOnMountOrArgChange: true,
     }),
     getUserPicture: builder.query({
       query: ({ pictureId, url }) => ({
         url: url || `/pictures/${pictureId}`,
       }),
       providesTags: ['ProfilePicture'],
-      refetchOnMountOrArgChange: true,
     }),
     updateUser: builder.mutation({
       query: ({

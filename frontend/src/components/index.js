@@ -9,6 +9,7 @@ import DownloadButton from './Buttons/DownloadButton';
 import Dropdown from './Buttons/Dropdown';
 import EditableImage from './EditableImage';
 import FavoriteButton from './Buttons/FavoriteButton';
+import FormattedDate from './Utils/FormattedDate';
 import Input from './Utils/Input';
 import InputAutocomplete from './Utils/InputAutocomplete';
 import InstitutionDataInputs from './Forms/InstitutionDataInputs';
@@ -40,6 +41,7 @@ export {
   Dropdown,
   EditableImage,
   FavoriteButton,
+  FormattedDate,
   Input,
   InputAutocomplete,
   InstitutionDataInputs,

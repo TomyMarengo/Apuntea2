@@ -11,9 +11,6 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
     const refreshToken = getState().auth.refreshToken;
-
-    console.log("token:", token);
-    console.log("refreshToken:", refreshToken);
     if (token || refreshToken) {
       headers.set('Authorization', 'Bearer ' + (token?.raw || refreshToken));
     }

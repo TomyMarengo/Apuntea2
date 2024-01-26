@@ -17,7 +17,7 @@ const Pagination = ({ totalPages, currentPage, pageSize, totalCount, dataLength 
 
   return (
     <div className="flex flex-col gap-3 justify-center items-center">
-      <div className="inline-flex">
+      <div className="flex">
         <PaginationArrow direction="left" href={createPageURL(currentPage - 1)} isDisabled={currentPage <= 1} />
 
         <div className="flex -space-x-px">
@@ -90,7 +90,8 @@ function PaginationArrow({ href, direction, isDisabled }) {
     'ml-2 md:ml-4': direction === 'right',
   });
 
-  const icon = direction === 'left' ? <ChevronLeftIcon className="w-4" /> : <ChevronRightIcon className="w-4" />;
+  const icon =
+    direction === 'left' ? <ChevronLeftIcon className="icon-xs" /> : <ChevronRightIcon className="icon-xs" />;
 
   return isDisabled ? (
     <div className={className}>{icon}</div>

@@ -42,8 +42,6 @@ const SearchForm = ({ params, user, institution, career }) => {
           initialInstitutionId={form.institutionId}
           initialCareerId={form.careerId}
           onChange={handleChange}
-          noSubject
-          skipSubjects
         />
         <Input
           {...searchInputs.find((input) => input.name === 'word')}

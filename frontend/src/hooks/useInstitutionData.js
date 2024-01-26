@@ -4,7 +4,7 @@ import {
   useLazyGetInstitutionQuery,
   useLazyGetCareersQuery,
   useLazyGetCareerQuery,
-  useLazyGetSubjectsQuery,
+  useLazyGetSubjectsByCareerQuery,
   useLazyGetSubjectQuery
 } from '../store/slices/institutionsApiSlice';
 
@@ -30,7 +30,7 @@ const useInstitutionData = ({
   const [getInstitutionTrigger] = useLazyGetInstitutionQuery();
   const [getCareersTrigger] = useLazyGetCareersQuery();
   const [getCareerTrigger] = useLazyGetCareerQuery();
-  const [getSubjectsTrigger] = useLazyGetSubjectsQuery();
+  const [getSubjectsByCareerTrigger] = useLazyGetSubjectsByCareerQuery();
   const [getSubjectTrigger] = useLazyGetSubjectQuery();
 
   const getInstitutions = async () => {
@@ -90,7 +90,7 @@ const useInstitutionData = ({
   const getSubjects = async () => {
     if (!institutionId || !careerId || skipSubjects) return;
     setSubject(null);
-    const { data } = await getSubjectsTrigger({ institutionId, careerId });
+    const { data } = await getSubjectsByCareerTrigger({ careerId });
     setSubjects(data);
   };
 
@@ -100,7 +100,7 @@ const useInstitutionData = ({
       setSubject(null);
       return;
     }
-    const { data } = await getSubjectTrigger({ institutionId, careerId, subjectId });
+    const { data } = await getSubjectTrigger({ subjectId });
     setSubject(data);
   };
 
