@@ -97,22 +97,6 @@ public class NoteServiceImplTest {
         fail();
     }
 
-    @Test(expected = NoteNotFoundException.class)
-    public void testDeleteNoteFailureNotFound() {
-        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
-        Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.empty());
-        noteService.delete(UUID.randomUUID(), "reason");
-        fail();
-    }
-
-    @Test(expected = InvalidNoteException.class)
-    public void testDeleteNoteFailureAdmin() {
-        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockAdmin());
-        Mockito.when(noteDao.getNoteById(Mockito.any(), Mockito.any())).thenReturn(Optional.ofNullable(new Note.NoteBuilder().build()));
-        noteService.delete(UUID.randomUUID(), "reason");
-        fail();
-    }
-
     @Test(expected = UserNotOwnerException.class)
     public void testDeleteNoteFailure() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());

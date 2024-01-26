@@ -183,9 +183,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().headers().cacheControl().disable()
-                .and().authorizeRequests().antMatchers(HttpMethod.POST, "/users").anonymous()
+                .and().authorizeRequests().antMatchers(HttpMethod.POST, "/api/users").anonymous()
                 // Set correctly PATCH and POST methods!
-                .antMatchers(HttpMethod.GET, "/users/**", "/directories/**", "/notes/**", "/reviews/**", "/institutions/**", "/pictures/{id}", "/subjects/**") // TODO: Change
+                .antMatchers(HttpMethod.GET, "/api/users/**", "/api/directories/**", "/api/notes/**", "/api/reviews/**", "/api/institutions/**", "/api/pictures/{id}", "/api/subjects/**") // TODO: Change
                 .permitAll()
                 .anyRequest()
                 .authenticated()
