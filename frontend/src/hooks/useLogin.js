@@ -12,8 +12,7 @@ const useLogin = () => {
   const getSession = async (credentials) => {
     try {
       let { token, refreshToken } = await login(credentials).unwrap();
-      const rawToken = token.replace(/^Bearer\s+/i, '');
-      token = decode(rawToken);
+      token = decode(token);
       const {
         payload: { userId },
       } = token;

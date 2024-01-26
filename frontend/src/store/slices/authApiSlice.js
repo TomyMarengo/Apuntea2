@@ -10,8 +10,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }
       }),
       transformResponse: async (response, meta) => {
-        const token = meta.response.headers.get('Access-Token')
-        const refreshToken = meta.response.headers.get('Refresh-Token')
+        const token = meta.response.headers.get('Access-Token').split(' ')[1]
+        const refreshToken = meta.response.headers.get('Refresh-Token').split(' ')[1]
         return { token, refreshToken }
       }
     }),
@@ -24,8 +24,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
       }),
       transformResponse: async (response, meta) => {
         const user = await response;
-        const token = meta.response.headers.get('Access-Token')
-        const refreshToken = meta.response.headers.get('Refresh-Token')
+        const token = meta.response.headers.get('Access-Token').split(' ')[1]
+        const refreshToken = meta.response.headers.get('Refresh-Token').split(' ')[1]
         return { user, token, refreshToken }
       }
     })
