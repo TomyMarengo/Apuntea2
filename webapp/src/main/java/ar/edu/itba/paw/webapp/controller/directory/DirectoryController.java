@@ -126,9 +126,8 @@ public class DirectoryController {
     @Path("/{id}/favorites/{userId}")
     @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
     public Response deleteFavorite(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
-        if (directoryService.removeFavorite(id))
-            return Response.noContent().build();
-        throw new FavoriteNotFoundException();
+        directoryService.removeFavorite(id);
+        return Response.noContent().build();
     }
 
 

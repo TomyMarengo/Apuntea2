@@ -132,13 +132,14 @@ public class  NoteServiceImpl implements NoteService {
     @Override
     public void delete(UUID noteId, String reason) {
         User currentUser = securityService.getCurrentUserOrThrow();
-        Note note = noteDao.getNoteById(noteId, currentUser.getUserId()).orElseThrow(NoteNotFoundException::new);
+        Optional<Note> maybeNote = noteDao.getNoteById(noteId, currentUser.getUserId());
+        if (!maybeNote.isPresent()) return;
         if (!currentUser.isAdmin()) {
             if (!noteDao.delete(noteId, currentUser.getUserId()))
                 throw new UserNotOwnerException();
         } else {
-            if (!noteDao.delete(noteId)) throw new InvalidNoteException();
-            emailService.sendDeleteNoteEmail(note, reason);
+            noteDao.delete(noteId);
+            emailService.sendDeleteNoteEmail(maybeNote.get(), reason);
         }
     }
 

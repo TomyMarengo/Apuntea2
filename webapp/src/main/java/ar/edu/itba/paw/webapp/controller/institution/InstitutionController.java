@@ -127,8 +127,7 @@ public class InstitutionController {
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
     @Secured({"ROLE_ADMIN"})
     public Response deleteSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
-        if (subjectService.unlinkSubjectFromCareer(subjectId, instCarParams.getCareerId()))
-            return Response.noContent().build();
-        throw new SubjectCareerNotFoundException();
+        subjectService.unlinkSubjectFromCareer(subjectId, instCarParams.getCareerId());
+        return Response.noContent().build();
     }
 }

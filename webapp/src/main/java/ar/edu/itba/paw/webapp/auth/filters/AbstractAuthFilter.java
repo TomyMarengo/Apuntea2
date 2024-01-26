@@ -46,7 +46,7 @@ public class AbstractAuthFilter extends AbstractAuthenticationProcessingFilter {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authHeader == null){
-            return new AnonymousAuthenticationToken("anonymous", "anonymous", Collections.singleton(() -> "ROLE_ANONYMOUS"));
+            return SecurityContextHolder.getContext().getAuthentication();
         }
         else if (authHeader.startsWith("Basic ")){
             final Credentials credentials = getCredentialsFromBasic(authHeader);
@@ -57,8 +57,7 @@ public class AbstractAuthFilter extends AbstractAuthenticationProcessingFilter {
             final String authToken = authHeader.substring(JWT_LENGTH);
             return getAuthenticationManager().authenticate(new JwtAuthToken(authToken));
         }
-
-        throw new InsufficientAuthenticationException("No authorization token provided");
+        throw new InsufficientAuthenticationException("Unsupported Authorization header");
     }
 
     // https://stackoverflow.com/questions/16000517/how-to-get-password-from-http-basic-authentication

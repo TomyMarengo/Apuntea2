@@ -135,9 +135,8 @@ public class UserController {
     @Path("/{id}/followers/{followerId}")
     @PreAuthorize("@userPermissions.isCurrentUser(#followerId)")
     public Response unfollow(@PathParam("id") final UUID id, @PathParam("followerId") final UUID followerId) {
-        if (userService.unfollow(id))
-            return Response.noContent().build();
-        throw new FavoriteNotFoundException();
+        userService.unfollow(id);
+        return Response.noContent().build();
     }
 
 }

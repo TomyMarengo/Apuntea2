@@ -109,7 +109,6 @@ public class NoteController {
         noteService.delete(id, reason);
         return Response.noContent().build();
     }
-    //TODO split into two methods (owner / admin)?
 
     @GET
     @Path("/{id}/file")
@@ -144,8 +143,7 @@ public class NoteController {
     @Path("/{id}/favorites/{userId}")
     @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
     public Response deleteFavoriteNote(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
-        if (noteService.removeFavorite(id))
-            return Response.noContent().build();
-        throw new FavoriteNotFoundException();
+        noteService.removeFavorite(id);
+        return Response.noContent().build();
     }
 }

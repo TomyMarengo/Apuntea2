@@ -8,7 +8,6 @@ import javax.validation.constraints.Pattern;
 
 public class NoteUpdateDto extends SearchableUpdateDto {
 
-    @NotEmpty
     @Pattern(regexp = RegexUtils.CATEGORY_REGEX)
     private String category;
 

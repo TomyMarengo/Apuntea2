@@ -95,9 +95,10 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public void deleteSubject(UUID subjectId) {
-        Subject subject = subjectDao.getSubjectById(subjectId).orElseThrow(SubjectNotFoundException::new);
-        UUID rootDirectoryId = subject.getRootDirectoryId();
-        subjectDao.delete(subject);
+        Optional<Subject> maybeSubject = subjectDao.getSubjectById(subjectId);
+        if (!maybeSubject.isPresent()) return;
+        UUID rootDirectoryId = maybeSubject.get().getRootDirectoryId();
+        subjectDao.delete(maybeSubject.get());
         directoryDao.delete(rootDirectoryId);
     }
     @Override

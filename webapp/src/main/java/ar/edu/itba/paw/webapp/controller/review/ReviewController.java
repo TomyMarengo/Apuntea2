@@ -106,9 +106,8 @@ public class ReviewController {
     @Consumes(value = {MediaType.APPLICATION_JSON})
     @Secured("ROLE_ADMIN")
     public Response deleteReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Length(max = 255) final String reason) {
-        if (noteService.deleteReview(noteId, userId, reason))
-            return Response.noContent().build();
-        throw new ReviewNotFoundException(); //TODO move to service?
+        noteService.deleteReview(noteId, userId, reason);
+        return Response.noContent().build();
     }
 
 }
