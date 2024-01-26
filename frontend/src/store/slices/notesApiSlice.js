@@ -14,6 +14,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           'content-type': fileType,
         },
       }),
+      keepUnusedDataFor: 30 * 24 * 60 * 60, // 30 days
     }),
     deleteNote: builder.mutation({
       query: ({ noteId, url }) => ({
@@ -36,21 +37,18 @@ export const notesApiSlice = apiSlice.injectEndpoints({
     }),
     getIsFavoriteNote: builder.query({
       query: ({ noteId, userId, url }) => url || `/notes/${noteId}/favorites/${userId}`,
-      providesTags: ['FavoriteNotes'],
     }),
     addFavoriteNote: builder.mutation({
       query: ({ noteId, url }) => ({
         url: url || `/notes/${noteId}/favorites`,
         method: 'POST',
       }),
-      invalidatesTags: ['FavoriteNotes'],
     }),
     removeFavoriteNote: builder.mutation({
       query: ({ noteId, userId, url }) => ({
         url: url || `/notes/${noteId}/favorites/${userId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['FavoriteNotes'],
     }),
   }),
 });

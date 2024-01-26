@@ -56,7 +56,7 @@ const ReviewBox = ({ note, userId }) => {
               onChange={handleChange}
               value={form.content}
             ></textarea>
-            <div className="flex flex-row justify-between mt-3 gap-4 ">
+            <div className="flex flex-row justify-between mt-3 gap-4 items-center">
               <StarSelector
                 {...reviewInputs.find((input) => input.name === 'score')}
                 onStarClick={handleChange}
