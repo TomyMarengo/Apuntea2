@@ -114,14 +114,14 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Override
     public void delete(UUID directoryId, String reason) {
         User currentUser = securityService.getCurrentUserOrThrow();
+        Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(directoryId, currentUser.getUserId());
+        if (!maybeDirectory.isPresent()) return;
         if (!currentUser.isAdmin()) {
             if (!directoryDao.delete(directoryId, currentUser.getUserId()))
                 throw new UserNotOwnerException();
         } else {
-            Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(directoryId, currentUser.getUserId());
-            if (!maybeDirectory.isPresent()) throw new DirectoryNotFoundException();
             if (maybeDirectory.get().isRootDirectory()) throw new UserNotOwnerException();
-            if (!directoryDao.delete(directoryId)) throw new InvalidDirectoryException();
+            directoryDao.delete(directoryId);
             emailService.sendDeleteDirectoryEmail(maybeDirectory.get(), reason);
         }
     }
