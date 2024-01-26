@@ -29,7 +29,8 @@ public class UserResponseDto {
     private URI subjectFavorites;
     private URI following;
     private URI notes;
-    private URI noteGroups;
+
+    private URI subjects;
     private URI reviewsReceived;
 
     public static UserResponseDto fromUser(final User user, final UriInfo uriInfo) {
@@ -56,12 +57,11 @@ public class UserResponseDto {
             userDto.profilePicture = uriInfo.getBaseUriBuilder().path("pictures").path(user.getProfilePicture().getImageId().toString()).build();
         userDto.noteFavorites = uriInfo.getBaseUriBuilder().path("notes").queryParam("favBy", user.getUserId()).build();
         userDto.directoryFavorites = uriInfo.getBaseUriBuilder().path("directories").queryParam("favBy", user.getUserId()).build();
-        userDto.subjectFavorites = uriInfo.getBaseUriBuilder().path("subjects").queryParam("favBy", user.getUserId()).build();
-        userDto.following = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).path("following").build();
+        userDto.subjectFavorites = uriInfo.getBaseUriBuilder().path("directories").queryParam("favBy", user.getUserId()).queryParam("rdir", true).build();
+        userDto.following = uriInfo.getBaseUriBuilder().path("users").queryParam("favBy", user.getUserId().toString()).build();
         userDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("userId", user.getUserId().toString()).build();
-        userDto.noteGroups = uriInfo.getBaseUriBuilder().path("notes").queryParam("owner", user.getUserId().toString()).queryParam("grouped").build();
-        // TODO: Change
-        userDto.reviewsReceived = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).path("reviews").build();
+        userDto.subjects = uriInfo.getBaseUriBuilder().path("subjects").queryParam("userId", user.getUserId().toString()).build();
+        userDto.reviewsReceived = uriInfo.getBaseUriBuilder().path("reviews").queryParam("targetUser", user.getUserId()).build();
         return userDto;
     }
 
@@ -134,7 +134,7 @@ public class UserResponseDto {
     }
 
     public void setNoteGroups(URI noteGroups) {
-        this.noteGroups = noteGroups;
+        this.subjects = noteGroups;
     }
 
     public void setReviewsReceived(URI reviewsReceived) {
@@ -202,7 +202,7 @@ public class UserResponseDto {
     }
 
     public URI getNoteGroups() {
-        return noteGroups;
+        return subjects;
     }
 
     public URI getReviewsReceived() {

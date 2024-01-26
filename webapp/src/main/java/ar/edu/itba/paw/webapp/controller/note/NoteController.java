@@ -146,4 +146,12 @@ public class NoteController {
         noteService.removeFavorite(id);
         return Response.noContent().build();
     }
+
+    @PUT
+    @Path("/{id}/interactions/{userId}")
+    @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
+    public Response addInteraction(@PathParam("id") final UUID id, @PathParam("userId") final UUID userId) {
+        noteService.addInteraction(id);
+        return Response.noContent().build();
+    }
 }
