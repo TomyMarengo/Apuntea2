@@ -3,11 +3,13 @@ package ar.edu.itba.paw.webapp.controller.user;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
 import ar.edu.itba.paw.models.exceptions.FavoriteNotFoundException;
+import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.UserStatus;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserCreationDto;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserResponseDto;
 import ar.edu.itba.paw.webapp.controller.user.dto.UserStatusDto;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -45,25 +48,24 @@ public class UserController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.USER_V1 })
     public Response getUser(@PathParam("id") final UUID id) {
-        final Optional<User> maybeUser = userService.findById(id);
-        final Optional<UserResponseDto> userDto = maybeUser.map(u -> UserResponseDto.fromUser(u, uriInfo));
-        if (!userDto.isPresent())
-            return Response.status(Response.Status.NOT_FOUND).build();
-        return Response.ok(new GenericEntity<UserResponseDto>(userDto.get()){}).build();
+        final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
+        return Response.ok(new GenericEntity<UserResponseDto>(UserResponseDto.fromUser(user, uriInfo)){}).build();
     }
 
     @GET
-    @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions and validate
+    @Produces(value = {ApunteaMediaType.USER_COLLECTION_V1})
     public Response listUsers(@Valid @BeanParam final UserQuery userQuery) {
-        final Page<User> userPage = userService.getUsers(
-                userQuery.getQuery(),
-                userQuery.getStatus(),
-                userQuery.getFollowedBy(),
-                userQuery.getPage(),
-                userQuery.getPageSize()
-        );
+        final Page<User> userPage = (userQuery.getEmail() != null) ?
+           Page.fromOptional(userService.findByEmail(userQuery.getEmail())) :
+                userService.getUsers(
+                    userQuery.getQuery(),
+                    userQuery.getStatus(),
+                    userQuery.getFollowedBy(),
+                    userQuery.getPage(),
+                    userQuery.getPageSize()
+            );
         final Collection<UserResponseDto> dtoUsers = userPage.getContent()
                 .stream()
                 .map(u -> UserResponseDto.fromUser(u, uriInfo))

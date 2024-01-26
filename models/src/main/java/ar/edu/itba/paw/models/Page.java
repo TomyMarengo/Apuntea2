@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.models;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Page<T>{
 
@@ -14,6 +16,12 @@ public class Page<T>{
         this.currentPage = currentPage;
         this.pageSize = pageSize;
         this.totalResults = totalResults;
+    }
+
+    public static <E> Page<E> fromOptional(final Optional<E> maybeObject) {
+        final ArrayList<E> list = new ArrayList<>();
+        maybeObject.ifPresent(list::add);
+        return new Page<>(list, 1, 1, list.size());
     }
 
     public List<T> getContent() {

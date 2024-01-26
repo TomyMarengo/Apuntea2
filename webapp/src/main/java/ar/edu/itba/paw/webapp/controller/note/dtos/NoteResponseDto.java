@@ -35,6 +35,8 @@ public class NoteResponseDto {
     private URI file;
     private URI reviews;
 
+    private URI interactionsUri;
+
     public NoteResponseDto() {
     }
     public static NoteResponseDto fromNote(Note note, UriInfo uriInfo){
@@ -53,6 +55,7 @@ public class NoteResponseDto {
 
         noteDto.self = uriInfo.getBaseUriBuilder().path("notes").path(note.getId().toString()).build();
         noteDto.file = uriInfo.getBaseUriBuilder().path("notes").path(note.getId().toString()).path("file").build();
+        noteDto.interactionsUri = uriInfo.getBaseUriBuilder().path("notes").path(note.getId().toString()).path("interactions").build();
         if (note.getUser() != null)
             noteDto.owner = uriInfo.getBaseUriBuilder().path("users").path(note.getUser().getUserId().toString()).build();
         if(note.getParentId() != null)
@@ -194,5 +197,13 @@ public class NoteResponseDto {
 
     public void setReviews(URI reviews) {
         this.reviews = reviews;
+    }
+
+    public URI getInteractionsUri() {
+        return interactionsUri;
+    }
+
+    public void setInteractionsUri(URI interactionsUri) {
+        this.interactionsUri = interactionsUri;
     }
 }

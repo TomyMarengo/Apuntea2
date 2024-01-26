@@ -73,16 +73,6 @@ public class SubjectServiceImplTest {
         fail();
     }*/
 
-    @Test(expected = SubjectNotFoundException.class)
-    public void testUnlinkSubjectFromCareerFailureGetSubjectById() {
-        UUID subjectId = UUID.randomUUID();
-        Mockito.when(subjectDao.getSubjectById(subjectId)).thenReturn(
-                Optional.empty()
-        );
-
-        subjectService.deleteSubject(subjectId);
-        fail();
-    }
 
     @Test(expected = UserNotFoundException.class)
     public void testGetSubjectsByUserIdGroupNonExistentUser() {

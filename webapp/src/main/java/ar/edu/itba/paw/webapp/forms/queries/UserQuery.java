@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.webapp.forms.queries;
 
+import ar.edu.itba.paw.webapp.validation.EitherAttribute;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
+import org.hibernate.validator.constraints.Email;
 
 import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
+@EitherAttribute(fieldGroup1 = {"email"}, fieldGroup2 = {"followedBy", "query", "status"})
 public class UserQuery extends PageableQuery {
     @ValidUuid
     @QueryParam("followedBy")
@@ -15,6 +18,10 @@ public class UserQuery extends PageableQuery {
 
     @QueryParam("status")
     private String status;
+
+    @QueryParam("email")
+    @Email
+    private String email;
 
     public UUID getFollowedBy() {
         return followedBy;
@@ -38,5 +45,13 @@ public class UserQuery extends PageableQuery {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

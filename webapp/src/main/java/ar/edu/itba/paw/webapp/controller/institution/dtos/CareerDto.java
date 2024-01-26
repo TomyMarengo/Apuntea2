@@ -14,6 +14,9 @@ public class CareerDto {
     private URI self;
     private URI institution;
     private URI subjects;
+    private URI subjectsNotInCareer;
+
+    private URI subjectCareers;
 
 
     public static CareerDto fromCareer(final Career career, final UriInfo uriInfo){
@@ -24,7 +27,9 @@ public class CareerDto {
 
         careerDto.institution = builder.path("institution").path(career.getInstitutionId().toString()).build();
         careerDto.self = builder.path("careers").path(career.getCareerId().toString()).build();
+        careerDto.subjectCareers = builder.path("subjectcareers").build();
         careerDto.subjects = uriInfo.getBaseUriBuilder().path("subjects").queryParam("careerId", career.getCareerId().toString()).build();
+        careerDto.subjectsNotInCareer = uriInfo.getBaseUriBuilder().path("subjects").queryParam("notInCareer", career.getCareerId().toString()).build();
         return careerDto;
     }
 
@@ -66,5 +71,21 @@ public class CareerDto {
 
     public void setInstitution(URI institution) {
         this.institution = institution;
+    }
+
+    public URI getSubjectsNotInCareer() {
+        return subjectsNotInCareer;
+    }
+
+    public void setSubjectsNotInCareer(URI subjectsNotInCareer) {
+        this.subjectsNotInCareer = subjectsNotInCareer;
+    }
+
+    public URI getSubjectCareers() {
+        return subjectCareers;
+    }
+
+    public void setSubjectCareers(URI subjectCareers) {
+        this.subjectCareers = subjectCareers;
     }
 }
