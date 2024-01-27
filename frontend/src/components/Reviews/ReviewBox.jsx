@@ -43,7 +43,7 @@ const ReviewBox = ({ note, userId }) => {
   }, [review]);
 
   return (
-    <Box className="flex flex-col">
+    <Box className="flex flex-col mt-2">
       <form onSubmit={handleSubmit} className="my-2">
         {isLoadingReview ? (
           <span>...</span>

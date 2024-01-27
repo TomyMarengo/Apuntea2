@@ -1,7 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
-import { Home, Profile, Login, Register, RequireAuth, Search, Note } from './pages';
+import { Home, Profile, Login, Register, RequireAuthPage, Search, Note } from './pages';
 import { Navbar, Sidebar } from './components/index';
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
           />
 
           {/* Protected Routes */}
-          <Route element={<RequireAuth />}>
+          <Route element={<RequireAuthPage />}>
             <Route path="/profile" element={<Profile />} />
           </Route>
         </Routes>

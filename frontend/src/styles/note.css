@@ -1,8 +1,8 @@
 .note-info {
   display: grid;
-  grid-template-areas: 'header header aside' 'main main aside';
+  grid-template-areas: 'bnav bnav bnav' 'header header empty' 'main main aside';
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  grid-template-rows: 5rem 1fr;
+  grid-template-rows: 40px 5rem calc(100% - 40px - 5rem);
 }
 
 .note-header {
@@ -11,21 +11,28 @@
 }
 
 .note-frame {
-  @apply flex max-w-full justify-center;
-  background-color: var(--dark-text);
-  max-height: calc(100vh - 148px);
+  @apply pb-8;
   grid-area: main;
 }
 
+.note-img-container {
+  @apply flex justify-center;
+  background-color: var(--dark-text);
+}
+
+.note-img-container img {
+  display: block;
+  height: 100%; /* Ajusta la altura de la imagen al 100% del contenedor */
+  width: auto; /* Ajusta automáticamente el ancho para evitar deformaciones */
+  max-width: 100%;
+}
+
 .reviews {
-  @apply px-3;
-  padding-top: 5rem;
+  @apply px-4 pb-8 flex flex-col;
   grid-area: aside;
 }
 
 .reviews-container {
-  @apply flex flex-col;
-  max-height: calc(100vh - 148px - 5rem - 10rem);
   overflow-y: auto;
 }
 .user-profile-picture {
