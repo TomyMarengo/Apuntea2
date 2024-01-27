@@ -51,7 +51,7 @@
 }
 
 .dropdown-menu {
-  @apply absolute rounded-xl border border-text/10 py-4 min-w-48 bg-dark-bg;
+  @apply absolute rounded-xl border border-text/10 py-4 min-w-48 bg-dark-bg z-10;
 }
 
 .dropdown-menu.right {

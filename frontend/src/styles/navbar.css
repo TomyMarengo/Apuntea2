@@ -58,7 +58,7 @@
   z-index: 0;
 }
 
-.nav-profile-button:hover > * {
+.nav-profile-button:hover>* {
   @apply fill-dark-pri;
 }
 
@@ -68,10 +68,9 @@
   left: 60px;
   display: flex;
   align-items: center;
-  background-color: var(--primary);
+  background-color: var(--pri);
   border-radius: 25px 0 25px 0;
   min-width: 300px;
-  width: fit-content;
   height: 40px;
   padding: 0 30px;
 }

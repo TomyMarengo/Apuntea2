@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
-import { FormattedDate } from './index';
-import { useGetUserQuery } from '../store/slices/usersApiSlice';
-import { useGetSubjectQuery } from '../store/slices/institutionsApiSlice';
+import { FormattedDate } from '../index';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
+import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
 
 const SearchTable = ({ notes }) => {
   const { t } = useTranslation();
@@ -29,7 +29,6 @@ const SearchTable = ({ notes }) => {
 };
 
 const TableRow = ({ note }) => {
-  console.log(note);
   const { data: owner, isLoading: isLoadingOwner, error: isErrorOwner } = useGetUserQuery({ url: note.owner });
   const {
     data: subject,

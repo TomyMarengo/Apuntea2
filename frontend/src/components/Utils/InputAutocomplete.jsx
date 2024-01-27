@@ -5,10 +5,7 @@ import clsx from 'clsx';
 
 import { CrossIcon } from './Icons';
 
-const InputAutocomplete = forwardRef(function InputAutocomplete(
-  { password, list, errorMessage, onChange, ...props },
-  ref
-) {
+const InputAutocomplete = forwardRef(function InputAutocomplete({ list, errorMessage, onChange, ...props }, ref) {
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [showError, setShowError] = useState(false);
@@ -44,9 +41,11 @@ const InputAutocomplete = forwardRef(function InputAutocomplete(
   };
 
   const handleDropdownClick = (item) => {
-    if (ref.current) ref.current.value = item.name;
-    handleChange({ target: { name: props.name, value: item.id } });
-    setOpen(false);
+    if (ref.current) {
+      ref.current.value = item.name;
+      handleChange({ target: { name: props.name, value: item.id } });
+      setOpen(false);
+    }
   };
 
   const handleDocumentClick = (e) => {
@@ -109,7 +108,7 @@ const InputAutocomplete = forwardRef(function InputAutocomplete(
           <input
             {...props}
             ref={ref}
-            className={clsx(props.className, password && 'rounded-r-none')}
+            className={props.className}
             onClick={() => setOpen(true)}
             onKeyDown={handleInputKeyDown}
             onChange={handleChange}
@@ -162,5 +161,6 @@ const InputAutocomplete = forwardRef(function InputAutocomplete(
     </div>
   );
 });
+
 
 export default InputAutocomplete;

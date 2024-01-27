@@ -1,11 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 // Manually define the colors object with opacity variations
 const colors = {
-  "light-pri": "var(--light-primary)",
-  "pri": "var(--primary)",
-  "sec": "var(--secondary)",
-  "dark-pri": "var(--dark-primary)",
-  "dark-sec": "var(--dark-secondary)",
+  "light-pri": "var(--light-pri)",
+  "pri": "var(--pri)",
+  "sec": "var(--sec)",
+  "dark-pri": "var(--dark-pri)",
+  "dark-sec": "var(--dark-sec)",
   "text": "var(--text)",
   "dark-text": "var(--dark-text)",
   "bg": "var(--bg)",

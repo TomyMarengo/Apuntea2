@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { SunIcon, MoonIcon } from '../Utils/Icons';
 
-const DarkMode = () => {
+const DarkModeButton = () => {
   const [theme, setTheme] = useState(() => {
     const localTheme = window.localStorage.getItem('theme');
     return localTheme ? localTheme : 'light';
@@ -29,4 +29,4 @@ const DarkMode = () => {
   );
 };
 
-export default DarkMode;
+export default DarkModeButton;

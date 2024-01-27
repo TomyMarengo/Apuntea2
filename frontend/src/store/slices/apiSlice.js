@@ -3,7 +3,7 @@ import { setCredentials, logOut, invalidateToken } from './authSlice';
 import { decode } from '../../functions/utils';
 
 const getTokenUrl = '/users?pageSize=4';
-const baseUrl = 'http://localhost:8080/paw-2023b-12';
+const baseUrl = 'http://localhost:8080/paw-2023b-12/api';
 
 const baseQuery = fetchBaseQuery({
   baseUrl,

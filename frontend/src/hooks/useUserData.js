@@ -21,7 +21,7 @@ const useUserData = () => {
 
   const isLoading = isLoadingUser || isLoadingInstitution || isLoadingCareer;
 
-  return { user, career, institution, isLoading };
+  return { user, career, institution, isLoadingUser, isLoadingInstitution, isLoadingCareer, isLoading};
 }
 
 export default useUserData;

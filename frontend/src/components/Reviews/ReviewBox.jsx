@@ -1,10 +1,14 @@
-import { Box, Button } from './index';
+import { Box, Button } from '../index';
 import { useTranslation } from 'react-i18next';
-import { useGetReviewQuery, useCreateReviewMutation, useUpdateReviewMutation } from '../store/slices/reviewsApiSlice';
-import { useForm } from '../hooks/index';
-import { reviewInputs } from '../constants/forms';
+import {
+  useGetReviewQuery,
+  useCreateReviewMutation,
+  useUpdateReviewMutation,
+} from '../../store/slices/reviewsApiSlice';
+import { useForm } from '../../hooks/index';
+import { reviewInputs } from '../../constants/forms';
 import { useEffect } from 'react';
-import StarSelector from './StarSelector';
+import StarSelector from '../Buttons/StarSelector';
 
 const ReviewBox = ({ note, userId }) => {
   const { t } = useTranslation();

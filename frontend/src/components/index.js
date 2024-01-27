@@ -1,63 +1,88 @@
-import BottomNavbar from './Menu/BottomNavbar';
-import Box from './Utils/Box';
+/* Buttons */
 import Button from './Buttons/Button';
-import Card from './Utils/Card';
 import CopyButton from './Buttons/CopyButton';
-import DarkMode from './Buttons/DarkModeButton';
+import DarkModeButton from './Buttons/DarkModeButton';
 import DeleteButton from './Buttons/DeleteButton';
 import DownloadButton from './Buttons/DownloadButton';
 import Dropdown from './Buttons/Dropdown';
-import EditableImage from './EditableImage';
 import FavoriteButton from './Buttons/FavoriteButton';
+import ProfileButton from './Buttons/ProfileButton';
+import StarSelector from './Buttons/StarSelector';
+
+/* Forms */
+import InstitutionDataInputs from './Utils/InstitutionDataInputs';
+import LoginForm from './Forms/LoginForm';
+import Pagination from './Forms/Pagination';
+import ProfileForm from './Forms/ProfileForm';
+import RegisterForm from './Forms/RegisterForm';
+import SearchForm from './Forms/SearchForm';
+
+/* Menu */
+import BottomNavbar from './Menu/BottomNavbar';
+import Navbar from './Menu/Navbar';
+import NavSearchButton from './Menu/NavSearchButton';
+import Sidebar from './Menu/Sidebar';
+
+/* Reviews */
+import ReviewBox from './Reviews/ReviewBox';
+import ReviewCard from './Reviews/ReviewCard';
+import ReviewsContainer from './Reviews/ReviewsContainer';
+
+/* Skeletons */
+import InputSkeleton from './Skeletons/InputSkeleton';
+
+/* Utils */
+import Box from './Utils/Box';
+import Card from './Utils/Card';
+import EditableImage from './Utils/EditableImage';
 import FormattedDate from './Utils/FormattedDate';
 import Input from './Utils/Input';
 import InputAutocomplete from './Utils/InputAutocomplete';
-import InstitutionDataInputs from './Forms/InstitutionDataInputs';
-import LoginForm from './Forms/LoginForm';
-import Navbar from './Menu/Navbar';
-import NavSearchButton from './Menu/NavSearchButton';
-import Pagination from './Forms/Pagination';
-import ProfileButton from './Buttons/ProfileButton';
-import ProfileForm from './Forms/ProfileForm';
-import RegisterForm from './Forms/RegisterForm';
-import ReviewBox from './ReviewBox';
-import ReviewCard from './ReviewCard';
-import ReviewsContainer from './ReviewsContainer';
-import SearchForm from './Forms/SearchForm';
-import SearchTable from './SearchTable';
-import Sidebar from './Menu/Sidebar';
+import SearchTable from './Utils/SearchTable';
 import Spinner from './Utils/Spinner';
-import StarSelector from './StarSelector';
+
 
 export {
-  BottomNavbar,
-  Box,
+  /* Buttons */
   Button,
-  Card,
   CopyButton,
-  DarkMode,
+  DarkModeButton,
   DeleteButton,
   DownloadButton,
   Dropdown,
-  EditableImage,
   FavoriteButton,
-  FormattedDate,
-  Input,
-  InputAutocomplete,
+  ProfileButton,
+  StarSelector,
+
+  /* Forms */
   InstitutionDataInputs,
   LoginForm,
-  Navbar,
-  NavSearchButton,
   Pagination,
-  ProfileButton,
   ProfileForm,
   RegisterForm,
+  SearchForm,
+
+  /* Menu */
+  BottomNavbar,
+  Navbar,
+  NavSearchButton,
+  Sidebar,
+
+  /* Reviews */
   ReviewBox,
   ReviewCard,
   ReviewsContainer,
-  SearchForm,
+
+  /* Skeletons */
+  InputSkeleton,
+
+  /* Utils */
+  Box,
+  Card,
+  EditableImage,
+  FormattedDate,
+  Input,
+  InputAutocomplete,
   SearchTable,
-  Sidebar,
   Spinner,
-  StarSelector
 };

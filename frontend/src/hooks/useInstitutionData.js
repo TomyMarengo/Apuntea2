@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   useLazyGetInstitutionsQuery,
   useLazyGetInstitutionQuery,
@@ -26,12 +26,12 @@ const useInstitutionData = ({
   const [subjects, setSubjects] = useState(null);
   const [subject, setSubject] = useState(null);
 
-  const [getInstitutionsTrigger] = useLazyGetInstitutionsQuery();
-  const [getInstitutionTrigger] = useLazyGetInstitutionQuery();
-  const [getCareersTrigger] = useLazyGetCareersQuery();
-  const [getCareerTrigger] = useLazyGetCareerQuery();
-  const [getSubjectsByCareerTrigger] = useLazyGetSubjectsByCareerQuery();
-  const [getSubjectTrigger] = useLazyGetSubjectQuery();
+  const [getInstitutionsTrigger, { isFetching: isFetchingInstitutions }] = useLazyGetInstitutionsQuery();
+  const [getInstitutionTrigger, { isFetching: isFetchingInstitution }] = useLazyGetInstitutionQuery();
+  const [getCareersTrigger, { isFetching: isFetchingCareers }] = useLazyGetCareersQuery();
+  const [getCareerTrigger, { isFetching: isFetchingCareer }] = useLazyGetCareerQuery();
+  const [getSubjectsByCareerTrigger, { isFetching: isFetchingSubjectsByCareer }] = useLazyGetSubjectsByCareerQuery();
+  const [getSubjectTrigger, { isFetching: isFetchingSubject }] = useLazyGetSubjectQuery();
 
   const getInstitutions = async () => {
     if (skipInstitutions) return;
@@ -141,6 +141,8 @@ const useInstitutionData = ({
     subject,
     subjectId,
     setSubjectId,
+    isFetchingInstitutions,
+    isFetchingInstitution
   };
 };
 

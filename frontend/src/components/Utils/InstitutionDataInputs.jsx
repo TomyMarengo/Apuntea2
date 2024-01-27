@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react';
 import { institutionInputs } from '../../constants/forms';
 import { useInstitutionData } from '../../hooks/index';
 import { isUuid } from '../../functions/utils';
-import { InputAutocomplete } from '../index';
+import { InputAutocomplete, InputSkeleton } from '../index';
 
 const InstitutionDataInputs = ({
   onChange,
@@ -31,13 +31,14 @@ const InstitutionDataInputs = ({
     subject,
     subjectId,
     setSubjectId,
+    isFetchingInstitution,
   } = useInstitutionData({
     skipInstitutions,
     skipCareers,
     skipSubjects,
-    initialInstitutionId,
-    initialCareerId,
-    initialSubjectId,
+    initialInstitutionId: initialInstitutionId || '',
+    initialCareerId: initialCareerId || '',
+    initialSubjectId: initialSubjectId || '',
   });
 
   const institutionRef = useRef(null);
@@ -92,35 +93,51 @@ const InstitutionDataInputs = ({
     }
   }, [subject]);
 
+  useEffect(() => {
+    console.log(isFetchingInstitution);
+  }, [isFetchingInstitution]);
+
   return (
     <>
-      {!noInstitution && (
-        <InputAutocomplete
-          ref={institutionRef}
-          {...institutionInputs.find((input) => input.name === 'institutionId')}
-          onChange={onChangeInstitution}
-          list={institutions}
-          autoComplete="off"
-        />
-      )}
-      {!noCareer && (
-        <InputAutocomplete
-          ref={careerRef}
-          {...institutionInputs.find((input) => input.name === 'careerId')}
-          onChange={onChangeCareer}
-          list={careers}
-          autoComplete="off"
-        />
-      )}
-      {!noSubject && (
-        <InputAutocomplete
-          ref={subjectRef}
-          {...institutionInputs.find((input) => input.name === 'subjectId')}
-          onChange={onChangeSubject}
-          list={subjects}
-          autoComplete="off"
-        />
-      )}
+      {!noInstitution &&
+        (!isFetchingInstitution ? (
+          <InputAutocomplete
+            defaultValue={institution?.name || ''}
+            ref={institutionRef}
+            {...institutionInputs.find((input) => input.name === 'institutionId')}
+            onChange={onChangeInstitution}
+            list={institutions}
+            autoComplete="off"
+          />
+        ) : (
+          <InputSkeleton />
+        ))}
+      {!noCareer &&
+        (!isFetchingInstitution ? (
+          <InputAutocomplete
+            defaultValue={career?.name || ''}
+            ref={careerRef}
+            {...institutionInputs.find((input) => input.name === 'careerId')}
+            onChange={onChangeCareer}
+            list={careers}
+            autoComplete="off"
+          />
+        ) : (
+          <InputSkeleton />
+        ))}
+      {!noSubject &&
+        (!isFetchingInstitution ? (
+          <InputAutocomplete
+            defaultValue={subject?.name || ''}
+            ref={subjectRef}
+            {...institutionInputs.find((input) => input.name === 'subjectId')}
+            onChange={onChangeSubject}
+            list={subjects}
+            autoComplete="off"
+          />
+        ) : (
+          <InputSkeleton />
+        ))}
     </>
   );
 };

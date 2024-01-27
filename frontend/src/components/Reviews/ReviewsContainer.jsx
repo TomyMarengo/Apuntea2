@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { ReviewBox, ReviewCard } from './index';
-import { useGetReviewsQuery } from '../store/slices/reviewsApiSlice';
-import { selectCurrentUserId } from '../store/slices/authSlice';
+import { ReviewBox, ReviewCard } from '../index';
+import { useGetReviewsQuery } from '../../store/slices/reviewsApiSlice';
+import { selectCurrentUserId } from '../../store/slices/authSlice';
 
 const ReviewsContainer = ({ score, note }) => {
   const { t } = useTranslation();

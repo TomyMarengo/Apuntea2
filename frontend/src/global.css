@@ -38,27 +38,27 @@
   --dark-text-dark: #f9f1e7;
   --dark-text-dark-rgb: 249, 241, 231;
 
-  --light-primary: #ffddd8;
-  --light-primary-rgb: 255, 221, 216;
-  --primary: #ef7765;
-  --primary-rgb: 239, 119, 101;
-  --dark-primary: #cc6252;
-  --dark-primary-rgb: 204, 98, 82;
-  --secondary: #fdc286;
-  --secondary-rgb: 253, 194, 134;
-  --dark-secondary: #fcaa6f;
-  --dark-secondary-rgb: 252, 170, 111;
+  --light-pri: #ffddd8;
+  --light-pri-rgb: 255, 221, 216;
+  --pri: #ef7765;
+  --pri-rgb: 239, 119, 101;
+  --dark-pri: #cc6252;
+  --dark-pri-rgb: 204, 98, 82;
+  --sec: #fdc286;
+  --sec-rgb: 253, 194, 134;
+  --dark-sec: #fcaa6f;
+  --dark-sec-rgb: 252, 170, 111;
 
-  --light-primary-dark: #e9ffe6;
-  --light-primary-dark-rgb: 233, 255, 230;
-  --primary-dark: #b3e8c3;
-  --primary-dark-rgb: 179, 232, 195;
-  --dark-primary-dark: #7fb58f;
-  --dark-primary-dark-rgb: 127, 181, 143;
-  --secondary-dark: #50c4ec;
-  --secondary-dark-rgb: 80, 196, 236;
-  --dark-secondary-dark: #2f9cbb;
-  --dark-secondary-dark-rgb: 47, 156, 187;
+  --light-pri-dark: #e9ffe6;
+  --light-pri-dark-rgb: 233, 255, 230;
+  --pri-dark: #b3e8c3;
+  --pri-dark-rgb: 179, 232, 195;
+  --dark-pri-dark: #7fb58f;
+  --dark-pri-dark-rgb: 127, 181, 143;
+  --sec-dark: #50c4ec;
+  --sec-dark-rgb: 80, 196, 236;
+  --dark-sec-dark: #2f9cbb;
+  --dark-sec-dark-rgb: 47, 156, 187;
 }
 
 html.dark .root,
@@ -75,16 +75,16 @@ html.dark #docs-root {
   --text-rgb: var(--text-dark-rgb);
   --dark-text: var(--dark-text-dark);
   --dark-text-rgb: var(--dark-text-dark-rgb);
-  --light-primary: var(--light-primary-dark);
-  --light-primary-rgb: var(--light-primary-dark-rgb);
-  --primary: var(--primary-dark);
-  --primary-rgb: var(--primary-dark-rgb);
-  --dark-primary: var(--dark-primary-dark);
-  --dark-primary-rgb: var(--dark-primary-dark-rgb);
-  --secondary: var(--secondary-dark);
-  --secondary-rgb: var(--secondary-dark-rgb);
-  --dark-secondary: var(--dark-secondary-dark);
-  --dark-secondary-rgb: var(--dark-secondary-dark-rgb);
+  --light-pri: var(--light-pri-dark);
+  --light-pri-rgb: var(--light-pri-dark-rgb);
+  --pri: var(--pri-dark);
+  --pri-rgb: var(--pri-dark-rgb);
+  --dark-pri: var(--dark-pri-dark);
+  --dark-pri-rgb: var(--dark-pri-dark-rgb);
+  --sec: var(--sec-dark);
+  --sec-rgb: var(--sec-dark-rgb);
+  --dark-sec: var(--dark-sec-dark);
+  --dark-sec-rgb: var(--dark-sec-dark-rgb);
 }
 
 /* Box sizing rules */
