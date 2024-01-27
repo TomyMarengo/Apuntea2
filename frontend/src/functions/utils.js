@@ -12,6 +12,10 @@ export function isUuid(uuid) {
 }
 
 export function serializeFormQuery(params) {
+  // remove params with empty values or null or undefined
+  Object.keys(params).forEach(key => {
+    if (params[key] === '' || params[key] === null || params[key] === undefined) delete params[key];
+  });
   const query = new URLSearchParams(params).toString() || '';
   return query;
 }

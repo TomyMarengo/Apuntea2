@@ -5,7 +5,6 @@ import clsx from 'clsx';
 
 import { CrossIcon, EyeIcon, EyeCrossedIcon } from './Icons';
 
-
 const Input = ({ password, errorMessage, onChange, ...props }) => {
   const [hidden, setHidden] = useState(password);
   const inputRef = useRef(null);
@@ -49,7 +48,7 @@ const Input = ({ password, errorMessage, onChange, ...props }) => {
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <div className="flex w-full relative">
+      <div className="flex relative w-full">
         <label htmlFor={props.id} className="relative w-full">
           <input
             {...commonInputProps}
@@ -63,7 +62,7 @@ const Input = ({ password, errorMessage, onChange, ...props }) => {
         </label>
         {password && (
           <button tabIndex="-1" className="input-button" type="button" onClick={() => setHidden((hidden) => !hidden)}>
-            {hidden ? <EyeIcon className="icon-s fill-pri" /> : <EyeCrossedIcon className="icon-s fill-pri" />}
+            {hidden ? <EyeIcon className="icon-xs fill-pri" /> : <EyeCrossedIcon className="icon-s fill-pri" />}
           </button>
         )}
       </div>

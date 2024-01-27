@@ -5,7 +5,7 @@ import { useForm, useRegister } from '../../hooks/index';
 import { setCredentials } from '../../store/slices/authSlice';
 import { registerInputs } from '../../constants/forms';
 import { isUuid } from '../../functions/utils';
-import { Input, Button } from '../index';
+import { Input, Button, InstitutionDataInputs } from '../index';
 
 const RegisterForm = () => {
   const { registerUser } = useRegister();
@@ -24,40 +24,23 @@ const RegisterForm = () => {
   });
 
   return (
-    <div className="flex flex-col w-full gap-5">
+    <div className="flex flex-col gap-10">
       <h1 className="text-3xl">{t('pages.register.title')}</h1>
-      <div className="flex flex-col gap-5 items-center w-full">
+      <div className="flex flex-col gap-7 items-center w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 items-center w-full">
           <Input
             {...registerInputs.find((input) => input.name === 'email')}
             value={form.email}
             onChange={handleChange}
+            className="w-full"
           />
           <Input
             {...registerInputs.find((input) => input.name === 'password')}
             value={form.password}
             onChange={handleChange}
+            className="w-full"
           />
-          <Input
-            {...registerInputs.find((input) => input.name === 'institutionId')}
-            value={form.institutionId}
-            onChange={(e) => {
-              handleChange(e);
-              if (isUuid(e.target.value) || e.target.value === '') setInstitutionId(e.target.value);
-            }}
-            list={institutions}
-            autoComplete="off"
-          />
-          <Input
-            {...registerInputs.find((input) => input.name === 'careerId')}
-            value={form.careerId}
-            onChange={(e) => {
-              handleChange(e);
-              if (isUuid(e.target.value) || e.target.value === '') setCareerId(e.target.value);
-            }}
-            list={careers}
-            autoComplete="off"
-          />
+          <InstitutionDataInputs onChange={handleChange} noSubject skipSubjects className="w-full" />
           <Button type="submit">Register</Button>
         </form>
         <span>

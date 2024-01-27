@@ -11,7 +11,7 @@ const SearchTable = ({ notes }) => {
   return (
     <table>
       <thead>
-        <tr className="text-sm font-medium tracking-wider text-left text-gray-500 uppercase border-b border-gray-200">
+        <tr className="text-left border-b border-text/20">
           <th className="px-6 py-3">{t('data.name')}</th>
           <th className="px-6 py-3">{t('data.subject')}</th>
           <th className="px-6 py-3">{t('data.owner')}</th>
@@ -19,16 +19,16 @@ const SearchTable = ({ notes }) => {
           <th className="px-6 py-3">{t('data.score')}</th>
         </tr>
       </thead>
-      <tbody className="bg-white divide-y divide-gray-200">
+      <tbody className="text-left bg-transparent">
         {notes?.map((note) => (
-          <TableRow key={note.id} note={note} />
+          <TableRow key={note.id} note={note} t={t} />
         ))}
       </tbody>
     </table>
   );
 };
 
-const TableRow = ({ note }) => {
+const TableRow = ({ note, t }) => {
   const { data: owner, isLoading: isLoadingOwner, error: isErrorOwner } = useGetUserQuery({ url: note.owner });
   const {
     data: subject,
@@ -37,14 +37,19 @@ const TableRow = ({ note }) => {
   } = useGetSubjectQuery({ url: note.subject });
 
   return (
-    <tr key={note.id} className="text-sm text-gray-500">
+    <tr key={note.id} className="border-b border-text/20 hover:bg-dark-sec/20">
       <td className="px-6 py-3">
-        <NavLink to={`/notes/${note.id}`} className="text-blue-500 hover:text-blue-600">
+        <NavLink className="link" to={`/notes/${note.id}`}>
           {note.name}
         </NavLink>
       </td>
-      <td className="px-6 py-3">{isLoadingSubject ? <SkeletonLoader /> : subject ? subject.name : 'Unknown'}</td>
-      <td className="px-6 py-3">{isLoadingOwner ? <SkeletonLoader /> : owner ? owner.username : 'Unknown'}</td>
+      <td className="px-6 py-3">
+        {isLoadingSubject ? <SkeletonLoader t={t} /> : subject ? subject.name : t('data.unknown')}
+      </td>
+      <td className="px-6 py-3">
+        {isLoadingOwner ? <SkeletonLoader t={t} /> : owner?.username ? owner.username : t('data.unknown')}
+      </td>
+
       <td className="px-6 py-3">
         <FormattedDate date={note.lastModifiedAt} />
       </td>
@@ -53,9 +58,9 @@ const TableRow = ({ note }) => {
   );
 };
 
-const SkeletonLoader = () => {
+const SkeletonLoader = ({ t }) => {
   return (
-    <div className="animate-pulse bg-gray-200 h-4 w-24 rounded-md"></div> // Puedes ajustar el estilo según tu diseño
+    <div className="skeleton-text h-4 w-24">{t('actions.loading')}</div> // Puedes ajustar el estilo según tu diseño
   );
 };
 

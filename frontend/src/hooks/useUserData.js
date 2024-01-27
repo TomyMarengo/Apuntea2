@@ -11,17 +11,17 @@ const useUserData = () => {
 
   const { data: career, isLoading: isLoadingInstitution } = useGetInstitutionQuery(
     { url: user?.career },
-    { skip: !user }
+    { skip: !user || !userId }
   );
 
   const { data: institution, isLoading: isLoadingCareer } = useGetCareerQuery(
     { url: user?.institution },
-    { skip: !user }
+    { skip: !user || !userId }
   );
 
   const isLoading = isLoadingUser || isLoadingInstitution || isLoadingCareer;
 
-  return { user, career, institution, isLoadingUser, isLoadingInstitution, isLoadingCareer, isLoading};
+  return { user, career, institution, isLoadingUser, isLoadingInstitution, isLoadingCareer, isLoading };
 }
 
 export default useUserData;

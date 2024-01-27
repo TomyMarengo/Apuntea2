@@ -97,6 +97,7 @@ html.dark #docs-root {
   user-select: none;
 }
 
+
 *:focus {
   outline: none;
 }
@@ -245,15 +246,23 @@ input::placeholder {
 }
 
 .max-container {
-  @apply max-w-3xl mx-auto sm:p-16 pb-12 px-8 min-h-[calc(100vh-60px)];
+  @apply max-w-7xl mx-auto mt-20 sm:px-0 px-8;
 }
 
 .max-container.center {
-  @apply flex flex-col justify-center;
+  @apply flex flex-col items-center;
 }
 
 .link {
   @apply text-dark-pri hover:text-pri focus:text-pri focus:underline;
+}
+
+.skeleton-container {
+  @apply animate-pulse bg-light-pri dark:bg-dark-pri border-none;
+}
+
+.skeleton-text {
+  @apply animate-pulse text-dark-pri dark:text-light-pri;
 }
 
 .sidebar::before {

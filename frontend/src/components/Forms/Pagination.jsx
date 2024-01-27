@@ -83,7 +83,7 @@ function PaginationNumber({ page, href, isActive, position /* 'first' | 'last' |
 }
 
 function PaginationArrow({ href, direction, isDisabled }) {
-  const className = clsx('flex h-10 w-10 items-center justify-center rounded-md border', {
+  const className = clsx('flex h-10 w-10 items-center justify-center rounded-md border border-text/20', {
     'pointer-events-none bg-text/10 fill-text/50': isDisabled,
     'hover:bg-dark-bg fill-pri': !isDisabled,
     'mr-2 md:mr-4': direction === 'left',

@@ -6,8 +6,9 @@ import { Button, Input, InstitutionDataInputs } from '../index';
 import { serializeFormQuery } from '../../functions/utils';
 import { searchInputs } from '../../constants/forms';
 import { useForm } from '../../hooks/index';
+import { useEffect } from 'react';
 
-const SearchForm = ({ params, user, institution, career }) => {
+const SearchForm = ({ params, institution, career, subject }) => {
   const { t } = useTranslation();
   const [searchNotes] = useLazySearchNotesQuery();
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const SearchForm = ({ params, user, institution, career }) => {
     initialValues: {
       institutionId: params['institutionId'] || institution?.id || '',
       careerId: params['careerId'] || career?.id || '',
-      /* subjectId: params['subject'] || '', */
+      subjectId: params['subject'] || '',
       word: params['word'] || '',
       asc: params['asc'] || false,
       sortBy: params['sortBy'] || 'modified',
@@ -26,21 +27,28 @@ const SearchForm = ({ params, user, institution, career }) => {
     submitCallback: searchNotes,
   });
 
+  /* Detect changes in params from NavSearchButton and update form */
+  useEffect(() => {
+    if (params['word']) {
+      handleChange({ target: { name: 'word', value: params['word'] } });
+    }
+  }, [params['word']]);
+
   const handleSearch = (event) => {
     event.preventDefault();
     let params = serializeFormQuery(form);
     navigate(`/search?${params}`);
-
-    handleSubmit(event);
+    /* handleSubmit(event);  -> TODO: El navigate se encarga, 
+    ya que rerenderiza y se pide desde params, ver si esto puede traer bugs */
   };
 
   return (
-    <form onSubmit={handleSearch} className="flex flex-col gap-4">
-      <div className="flex gap-4">
-        {/* TODO: Quitar noSubject y skipSubjects */}
+    <form onSubmit={handleSearch} className="flex flex-col items-center gap-6">
+      <div className="grid grid-flow-col lg:gap-4 lg:grid-cols-4 lg:grid-rows-1 gap-y-6 gap-x-8 grid-cols-2 grid-rows-2">
         <InstitutionDataInputs
-          initialInstitutionId={form.institutionId}
-          initialCareerId={form.careerId}
+          initialInstitution={institution}
+          initialCareer={career}
+          initialSubject={subject}
           onChange={handleChange}
         />
         <Input

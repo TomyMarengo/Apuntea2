@@ -1,10 +1,9 @@
 import { useTranslation } from 'react-i18next';
 
 import { useUpdateUserMutation } from '../../store/slices/usersApiSlice';
-import { useForm, useInstitutionData } from '../../hooks/index';
+import { useForm } from '../../hooks/index';
 import { Input, Button, EditableImage, InstitutionDataInputs } from '../index';
 import { profileInputs } from '../../constants/forms';
-import { isUuid } from '../../functions/utils';
 
 const ProfileForm = ({ user, institution, career }) => {
   const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
@@ -54,8 +53,8 @@ const ProfileForm = ({ user, institution, career }) => {
           <div className="flex flex-col gap-1">
             <span className="font-bold">{t('data.career')}</span>
             <InstitutionDataInputs
-              initialInstitutionId={institution.id}
-              initialCareerId={career.id}
+              initialInstitution={institution}
+              initialCareer={career}
               onChange={handleChange}
               noInstitution
               noSubject

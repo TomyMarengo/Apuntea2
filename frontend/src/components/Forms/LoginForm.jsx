@@ -21,12 +21,12 @@ const LoginForm = () => {
   });
 
   return (
-    <div className="flex flex-col w-full gap-5">
+    <div className="flex flex-col gap-10">
       <h1 className="text-3xl">{t('pages.login.title')}</h1>
-      <div className="flex flex-col gap-5 items-center w-full">
+      <div className="flex flex-col gap-7 items-center w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-5 items-center w-full">
           {loginInputs.map((input) => (
-            <Input key={input.name} {...input} value={form[input.name]} onChange={handleChange} />
+            <Input key={input.name} {...input} value={form[input.name]} onChange={handleChange} className="w-full" />
           ))}
           <Button type="submit">Log In</Button>
         </form>

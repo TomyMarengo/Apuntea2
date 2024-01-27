@@ -8,37 +8,37 @@ import { InputAutocomplete, InputSkeleton } from '../index';
 
 const InstitutionDataInputs = ({
   onChange,
-  initialInstitutionId,
-  initialCareerId,
-  initialSubjectId,
+  initialInstitution,
+  initialCareer,
+  initialSubject,
   skipInstitutions,
   skipCareers,
   skipSubjects,
   noInstitution,
   noCareer,
   noSubject,
+  ...props
 }) => {
   const {
-    institutions,
     institution,
-    institutionId,
-    setInstitutionId,
-    careers,
+    institutions,
+    setInstitution,
+    isFetchingInstitutions,
     career,
-    careerId,
-    setCareerId,
-    subjects,
+    careers,
+    setCareer,
+    isFetchingCareers,
     subject,
-    subjectId,
-    setSubjectId,
-    isFetchingInstitution,
+    subjects,
+    setSubject,
+    isFetchingSubjects,
   } = useInstitutionData({
     skipInstitutions,
     skipCareers,
     skipSubjects,
-    initialInstitutionId: initialInstitutionId || '',
-    initialCareerId: initialCareerId || '',
-    initialSubjectId: initialSubjectId || '',
+    initialInstitution,
+    initialCareer,
+    initialSubject,
   });
 
   const institutionRef = useRef(null);
@@ -46,26 +46,26 @@ const InstitutionDataInputs = ({
   const subjectRef = useRef(null);
 
   const onChangeInstitution = (e) => {
-    if (isUuid(e.target.value)) setInstitutionId(e.target.value);
-    else setInstitutionId('');
+    if (isUuid(e.target.value)) setInstitution(institutions.find((institution) => institution.id === e.target.value));
+    else setInstitution({});
     onChange(e);
   };
 
   const onChangeCareer = (e) => {
-    if (isUuid(e.target.value)) setCareerId(e.target.value);
-    else setCareerId('');
+    if (isUuid(e.target.value)) setCareer(careers.find((career) => career.id === e.target.value));
+    else setCareer({});
     onChange(e);
   };
 
   const onChangeSubject = (e) => {
-    if (isUuid(e.target.value)) setSubjectId(e.target.value);
-    else setSubjectId('');
+    if (isUuid(e.target.value)) setSubject(subjects.find((subject) => subject.id === e.target.value));
+    else setSubject({});
     onChange(e);
   };
 
   useEffect(() => {
     if (institutionRef.current) {
-      if (institutionId) {
+      if (institution?.name) {
         institutionRef.current.value = institution?.name;
       } else {
         institutionRef.current.value = '';
@@ -75,7 +75,7 @@ const InstitutionDataInputs = ({
 
   useEffect(() => {
     if (careerRef.current) {
-      if (careerId) {
+      if (career?.name) {
         careerRef.current.value = career?.name;
       } else {
         careerRef.current.value = '';
@@ -85,7 +85,7 @@ const InstitutionDataInputs = ({
 
   useEffect(() => {
     if (subjectRef.current) {
-      if (subjectId) {
+      if (subject?.name) {
         subjectRef.current.value = subject?.name;
       } else {
         subjectRef.current.value = '';
@@ -93,14 +93,10 @@ const InstitutionDataInputs = ({
     }
   }, [subject]);
 
-  useEffect(() => {
-    console.log(isFetchingInstitution);
-  }, [isFetchingInstitution]);
-
   return (
     <>
       {!noInstitution &&
-        (!isFetchingInstitution ? (
+        (!isFetchingInstitutions ? (
           <InputAutocomplete
             defaultValue={institution?.name || ''}
             ref={institutionRef}
@@ -108,12 +104,13 @@ const InstitutionDataInputs = ({
             onChange={onChangeInstitution}
             list={institutions}
             autoComplete="off"
+            className={props.className}
           />
         ) : (
           <InputSkeleton />
         ))}
       {!noCareer &&
-        (!isFetchingInstitution ? (
+        (!isFetchingCareers ? (
           <InputAutocomplete
             defaultValue={career?.name || ''}
             ref={careerRef}
@@ -121,12 +118,13 @@ const InstitutionDataInputs = ({
             onChange={onChangeCareer}
             list={careers}
             autoComplete="off"
+            className={props.className}
           />
         ) : (
           <InputSkeleton />
         ))}
       {!noSubject &&
-        (!isFetchingInstitution ? (
+        (!isFetchingSubjects ? (
           <InputAutocomplete
             defaultValue={subject?.name || ''}
             ref={subjectRef}
@@ -134,6 +132,7 @@ const InstitutionDataInputs = ({
             onChange={onChangeSubject}
             list={subjects}
             autoComplete="off"
+            className={props.className}
           />
         ) : (
           <InputSkeleton />
