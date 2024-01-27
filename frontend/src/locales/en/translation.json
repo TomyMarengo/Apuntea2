@@ -131,6 +131,7 @@
     "password": "Password must have at least 8 characters, one uppercase letter, one lowercase letter, and one number",
     "profilePicture": "Profile picture must be an image file",
     "score": "Score must be between 1 and 5",
+    "subjectId": "Invalid subject",
     "username": "Username must be between 4 and 25 characters and can contain letters (uppercase or lowercase), numbers, periods, underscores, or hyphens."
   },
   "follows": {

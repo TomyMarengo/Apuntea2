@@ -1,3 +1,4 @@
+import { isUuid } from "../../functions/utils";
 import { apiSlice } from "./apiSlice";
 
 export const searchApiSlice = apiSlice.injectEndpoints({
@@ -18,6 +19,18 @@ export const searchApiSlice = apiSlice.injectEndpoints({
             pageSize,
             parentId,
           };
+
+          if (queryParams.institutionId && isUuid(queryParams.institutionId)) {
+            throw new Error('errors.institutionId');
+          }
+
+          if (queryParams.careerId && isUuid(queryParams.careerId)) {
+            throw new Error('errors.careerId');
+          }
+
+          if (queryParams.subjectId && isUuid(queryParams.subjectId)) {
+            throw new Error('errors.subjectId');
+          }
 
           const filteredParams = Object.fromEntries(
             // eslint-disable-next-line no-unused-vars

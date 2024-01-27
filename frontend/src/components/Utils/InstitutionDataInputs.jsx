@@ -17,6 +17,7 @@ const InstitutionDataInputs = ({
   noInstitution,
   noCareer,
   noSubject,
+  errors,
   ...props
 }) => {
   const {
@@ -47,19 +48,19 @@ const InstitutionDataInputs = ({
 
   const onChangeInstitution = (e) => {
     if (isUuid(e.target.value)) setInstitution(institutions.find((institution) => institution.id === e.target.value));
-    else setInstitution({});
+    else if (e.target.value === '') setInstitution({});
     onChange(e);
   };
 
   const onChangeCareer = (e) => {
     if (isUuid(e.target.value)) setCareer(careers.find((career) => career.id === e.target.value));
-    else setCareer({});
+    else if (e.target.value === '') setCareer({});
     onChange(e);
   };
 
   const onChangeSubject = (e) => {
     if (isUuid(e.target.value)) setSubject(subjects.find((subject) => subject.id === e.target.value));
-    else setSubject({});
+    else if (e.target.value === '') setSubject({});
     onChange(e);
   };
 
@@ -105,6 +106,7 @@ const InstitutionDataInputs = ({
             list={institutions}
             autoComplete="off"
             className={props.className}
+            errors={errors?.institutionId}
           />
         ) : (
           <InputSkeleton />
@@ -119,6 +121,7 @@ const InstitutionDataInputs = ({
             list={careers}
             autoComplete="off"
             className={props.className}
+            errors={errors?.careerId}
           />
         ) : (
           <InputSkeleton />
@@ -133,6 +136,7 @@ const InstitutionDataInputs = ({
             list={subjects}
             autoComplete="off"
             className={props.className}
+            errors={errors?.subjectId}
           />
         ) : (
           <InputSkeleton />

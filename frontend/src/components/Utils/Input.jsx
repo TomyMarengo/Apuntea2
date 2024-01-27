@@ -1,41 +1,18 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import debounce from 'just-debounce-it';
 import clsx from 'clsx';
 
 import { CrossIcon, EyeIcon, EyeCrossedIcon } from './Icons';
 
-const Input = ({ password, errorMessage, onChange, ...props }) => {
+const Input = ({ password, onChange, errors, ...props }) => {
   const [hidden, setHidden] = useState(password);
   const inputRef = useRef(null);
-  const [showError, setShowError] = useState(false);
   const { t } = useTranslation();
-
-  const showErrorCondition = () => {
-    if (inputRef.current && inputRef.current.value !== '') {
-      setShowError(!inputRef.current.validity.valid);
-    } else {
-      setShowError(false);
-    }
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedShowError = useCallback(
-    debounce(() => {
-      showErrorCondition();
-    }, 200),
-    []
-  );
-
-  const handleChange = (e) => {
-    onChange(e);
-    debouncedShowError();
-  };
 
   const handleClear = () => {
     if (inputRef.current) {
       inputRef.current.value = '';
-      handleChange({ target: { name: props.name, value: '' } });
+      onChange({ target: { name: props.name, value: '' } });
     }
   };
 
@@ -43,7 +20,7 @@ const Input = ({ password, errorMessage, onChange, ...props }) => {
     ...props,
     placeholder: t(props.placeholder),
     required: props.required,
-    onChange: handleChange,
+    onChange,
   };
 
   return (
@@ -66,7 +43,12 @@ const Input = ({ password, errorMessage, onChange, ...props }) => {
           </button>
         )}
       </div>
-      {showError && <span className="error">{t(errorMessage)}</span>}
+      {errors?.length > 0 &&
+        errors.map((error) => (
+          <p className="mt-2 text-sm text-red-500" key={error}>
+            {error} {/* TODO: Poner el t de translation*/}
+          </p>
+        ))}
     </div>
   );
 };

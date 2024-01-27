@@ -5,6 +5,7 @@ import { BottomNavbar, Pagination, SearchTable, SearchForm } from '../components
 import { useSearchNotesQuery } from '../store/slices/searchApiSlice';
 import { useParams, useUserData } from '../hooks/index';
 import { useGetCareerQuery, useGetInstitutionQuery, useGetSubjectQuery } from '../store/slices/institutionsApiSlice';
+import { isUuid } from '../functions/utils';
 
 const DEFAULT_PAGE_SIZE = 12;
 const DEFAULT_PAGE = 1;
@@ -21,19 +22,23 @@ const Search = () => {
   const { data: institution, isLoading: isLoadingInstitution } = useGetInstitutionQuery(
     { institutionId: params['institutionId'] },
     {
-      skip: !params['institutionId'],
+      skip: !params['institutionId'] || !isUuid(params['institutionId']),
     }
   );
   const { data: career, isLoading: isLoadingCareer } = useGetCareerQuery(
     { careerId: params['careerId'], institutionId: params['institutionId'] },
     {
-      skip: !params['careerId'] || !params['institutionId'],
+      skip:
+        !params['careerId'] ||
+        !params['institutionId'] ||
+        !isUuid(params['careerId']) ||
+        !isUuid(params['institutionId']),
     }
   );
   const { data: subject, isLoading: isLoadingSubject } = useGetSubjectQuery(
     { subjectId: params['subjectId'] },
     {
-      skip: !params['subjectId'],
+      skip: !params['subjectId'] || !isUuid(params['subjectId']),
     }
   );
   const { institution: institutionUser, career: careerUser, isLoading: isLoadingUserData } = useUserData();

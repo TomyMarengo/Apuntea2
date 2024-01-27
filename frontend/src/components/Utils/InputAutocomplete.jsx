@@ -1,36 +1,31 @@
-import { useState, useCallback, useEffect, forwardRef } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import debounce from 'just-debounce-it';
 import clsx from 'clsx';
 
 import { CrossIcon } from './Icons';
 
-const InputAutocomplete = forwardRef(function InputAutocomplete({ list, errorMessage, onChange, ...props }, ref) {
+const InputAutocomplete = forwardRef(function InputAutocomplete({ list, onChange, errors, ...props }, ref) {
   const [open, setOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [showError, setShowError] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [listItems, setListItems] = useState([]);
   const { t } = useTranslation();
-
-  const showErrorCondition = () => {
-    if (ref.current && ref.current.value !== '') {
-      setShowError(!ref.current.validity.valid);
-    } else {
-      setShowError(false);
-    }
-  };
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedShowError = useCallback(
-    debounce(() => {
-      showErrorCondition();
-    }, 200),
-    []
-  );
 
   const handleChange = (e) => {
     onChange(e);
-    debouncedShowError();
-    setSelectedIndex(-1);
+    setSelectedIndex(0);
+    setListItems(
+      list.filter((item) => {
+        const len = ref.current.value.length;
+
+        return (
+          item.name
+            .toLowerCase()
+            .substring(0, len)
+            .localeCompare(ref.current.value.toLowerCase().substring(0, len), undefined, { sensitivity: 'base' }) == 0
+        );
+      })
+    );
+    setOpen(true);
   };
 
   const handleClear = () => {
@@ -63,17 +58,6 @@ const InputAutocomplete = forwardRef(function InputAutocomplete({ list, errorMes
   }, []);
 
   const handleInputKeyDown = (e) => {
-    const listItems = list.filter((item) => {
-      const len = ref.current.value.length;
-
-      return (
-        item.name
-          .toLowerCase()
-          .substring(0, len)
-          .localeCompare(ref.current.value.toLowerCase().substring(0, len), undefined, { sensitivity: 'base' }) == 0
-      );
-    });
-
     switch (e.key) {
       case 'ArrowUp':
         e.preventDefault();
@@ -120,47 +104,39 @@ const InputAutocomplete = forwardRef(function InputAutocomplete({ list, errorMes
         </label>
         {open && list && (
           <ul className="dropdown-autocomplete">
-            {list
-              .filter((item) => {
-                const len = ref.current.value.length;
-                return (
-                  item.name
-                    .toLowerCase()
-                    .substring(0, len)
-                    .localeCompare(ref.current.value.toLowerCase().substring(0, len), undefined, {
-                      sensitivity: 'base',
-                    }) == 0
-                );
-              })
-              .map((item, index) => {
-                const matchIndex = 0;
-                const prefix = item.name.substring(0, matchIndex);
-                const match = item.name.substring(matchIndex, matchIndex + ref.current.value.length);
-                const suffix = item.name.substring(matchIndex + ref.current.value.length);
+            {listItems.map((item, index) => {
+              const matchIndex = 0;
+              const prefix = item.name.substring(0, matchIndex);
+              const match = item.name.substring(matchIndex, matchIndex + ref.current.value.length);
+              const suffix = item.name.substring(matchIndex + ref.current.value.length);
 
-                const isSelected = index === selectedIndex;
+              const isSelected = index === selectedIndex;
 
-                return (
-                  <li
-                    key={item.name}
-                    onClick={() => handleDropdownClick(item)}
-                    className={clsx(isSelected && 'selected')}
-                  >
-                    {prefix}
-                    <span className={clsx('font-bold')} tabIndex="0">
-                      {match}
-                    </span>
-                    {suffix}
-                  </li>
-                );
-              })}
+              return (
+                <li
+                  key={item.name}
+                  onClick={() => handleDropdownClick(item)}
+                  className={clsx(isSelected && 'selected')}
+                >
+                  {prefix}
+                  <span className={clsx('font-bold')} tabIndex="0">
+                    {match}
+                  </span>
+                  {suffix}
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
-      {showError && <span className="error">{t(errorMessage)}</span>}
+      {errors?.length > 0 &&
+        errors.map((error) => (
+          <p className="mt-2 text-sm text-red-500" key={error}>
+            {error} {/* TODO: Poner el t de translation*/}
+          </p>
+        ))}
     </div>
   );
 });
-
 
 export default InputAutocomplete;

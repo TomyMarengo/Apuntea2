@@ -32,14 +32,13 @@ const SearchForm = ({ params, institution, career, subject }) => {
     if (params['word']) {
       handleChange({ target: { name: 'word', value: params['word'] } });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params['word']]);
 
   const handleSearch = (event) => {
     event.preventDefault();
     let params = serializeFormQuery(form);
     navigate(`/search?${params}`);
-    /* handleSubmit(event);  -> TODO: El navigate se encarga, 
-    ya que rerenderiza y se pide desde params, ver si esto puede traer bugs */
   };
 
   return (

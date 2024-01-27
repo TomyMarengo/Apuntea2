@@ -4,16 +4,18 @@ import { useUpdateUserMutation } from '../../store/slices/usersApiSlice';
 import { useForm } from '../../hooks/index';
 import { Input, Button, EditableImage, InstitutionDataInputs } from '../index';
 import { profileInputs } from '../../constants/forms';
+import { PatchUserSchema } from '../../constants/schemas';
 
 const ProfileForm = ({ user, institution, career }) => {
   const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
   const { t } = useTranslation();
 
-  const { form, handleChange, handleSubmit } = useForm({
+  const { form, handleChange, handleSubmit, errors } = useForm({
     args: {
       userId: user.id,
     },
     submitCallback: updateUser,
+    schema: PatchUserSchema,
   });
 
   return (
@@ -28,6 +30,7 @@ const ProfileForm = ({ user, institution, career }) => {
               {...profileInputs.find((input) => input.name === 'firstName')}
               defaultValue={user.firstName}
               onChange={handleChange}
+              errors={errors?.firstName}
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -36,6 +39,7 @@ const ProfileForm = ({ user, institution, career }) => {
               {...profileInputs.find((input) => input.name === 'lastName')}
               defaultValue={user.lastName}
               onChange={handleChange}
+              errors={errors?.lastName}
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -44,6 +48,7 @@ const ProfileForm = ({ user, institution, career }) => {
               {...profileInputs.find((input) => input.name === 'username')}
               defaultValue={user.username}
               onChange={handleChange}
+              errors={errors?.username}
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -56,6 +61,7 @@ const ProfileForm = ({ user, institution, career }) => {
               initialInstitution={institution}
               initialCareer={career}
               onChange={handleChange}
+              errors={errors}
               noInstitution
               noSubject
               skipSubjects
