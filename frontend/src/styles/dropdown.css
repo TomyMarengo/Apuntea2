@@ -10,16 +10,10 @@
   @apply px-3 py-2 cursor-pointer;
 }
 
+.dropdown-autocomplete li.selected,
+.dropdown-autocomplete li:focus,
 .dropdown-autocomplete li:hover {
-  @apply bg-light-pri;
-}
-
-.dropdown-autocomplete li:focus {
-  @apply bg-light-pri;
-}
-
-.dropdown-autocomplete li.selected {
-  @apply bg-light-pri;
+  @apply bg-light-pri text-bg;
 }
 
 /* width */

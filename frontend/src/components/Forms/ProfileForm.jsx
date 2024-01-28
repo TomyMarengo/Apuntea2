@@ -10,11 +10,11 @@ const ProfileForm = ({ user, institution, career }) => {
   const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
   const { t } = useTranslation();
 
-  const { form, handleChange, handleSubmit, errors } = useForm({
+  const { handleChange, handleSubmit, errors } = useForm({
+    submitCallback: updateUser,
     args: {
       userId: user.id,
     },
-    submitCallback: updateUser,
     schema: PatchUserSchema,
   });
 

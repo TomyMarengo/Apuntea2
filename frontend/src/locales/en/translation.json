@@ -128,11 +128,17 @@
     "firstName": "First name must be between 4 and 25 characters and can be letters or spaces.",
     "institutionId": "Invalid institution",
     "lastName": "Last name must be between 4 and 25 characters and can be letters or spaces.",
-    "password": "Password must have at least 8 characters, one uppercase letter, one lowercase letter, and one number",
+    "password": {
+      "length": "Password can contain up to 50 characters",
+      "regex": "Password must contain at least one uppercase letter, one lowercase letter and one number."
+    },
+    "page": "Page must be a number greater than 0",
+    "pageSize": "Page size must be a number greater than 0",
     "profilePicture": "Profile picture must be an image file",
     "score": "Score must be between 1 and 5",
+    "sortBy": "Invalid sort",
     "subjectId": "Invalid subject",
-    "username": "Username must be between 4 and 25 characters and can contain letters (uppercase or lowercase), numbers, periods, underscores, or hyphens."
+    "username": "Username must be between 4 and 30 characters and can contain letters (uppercase or lowercase), numbers, periods, underscores, or hyphens."
   },
   "follows": {
     "noContent": {

@@ -7,11 +7,10 @@ import { CrossIcon } from './Icons';
 const InputAutocomplete = forwardRef(function InputAutocomplete({ list, onChange, errors, ...props }, ref) {
   const [open, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [listItems, setListItems] = useState([]);
+  const [listItems, setListItems] = useState(list);
   const { t } = useTranslation();
 
   const handleChange = (e) => {
-    onChange(e);
     setSelectedIndex(0);
     setListItems(
       list.filter((item) => {
@@ -26,6 +25,7 @@ const InputAutocomplete = forwardRef(function InputAutocomplete({ list, onChange
       })
     );
     setOpen(true);
+    onChange(e);
   };
 
   const handleClear = () => {
@@ -116,10 +116,10 @@ const InputAutocomplete = forwardRef(function InputAutocomplete({ list, onChange
                 <li
                   key={item.name}
                   onClick={() => handleDropdownClick(item)}
-                  className={clsx(isSelected && 'selected')}
+                  className={clsx(isSelected && 'selected text-bg hover:text-bg')}
                 >
                   {prefix}
-                  <span className={clsx('font-bold')} tabIndex="0">
+                  <span className={clsx({ 'text-bg': isSelected, 'text-inherit': !isSelected })} tabIndex="0">
                     {match}
                   </span>
                   {suffix}
@@ -131,8 +131,8 @@ const InputAutocomplete = forwardRef(function InputAutocomplete({ list, onChange
       </div>
       {errors?.length > 0 &&
         errors.map((error) => (
-          <p className="mt-2 text-sm text-red-500" key={error}>
-            {error} {/* TODO: Poner el t de translation*/}
+          <p className="text-sm text-red-500" key={error}>
+            {t(error)}
           </p>
         ))}
     </div>

@@ -7,13 +7,14 @@ import { serializeFormQuery } from '../../functions/utils';
 import { searchInputs } from '../../constants/forms';
 import { useForm } from '../../hooks/index';
 import { useEffect } from 'react';
+import { SearchSchema } from '../../constants/schemas';
 
 const SearchForm = ({ params, institution, career, subject }) => {
   const { t } = useTranslation();
   const [searchNotes] = useLazySearchNotesQuery();
   const navigate = useNavigate();
 
-  const { form, handleChange, handleSubmit } = useForm({
+  const { form, handleChange } = useForm({
     initialValues: {
       institutionId: params['institutionId'] || institution?.id || '',
       careerId: params['careerId'] || career?.id || '',
@@ -25,6 +26,7 @@ const SearchForm = ({ params, institution, career, subject }) => {
       pageSize: params['pageSize'],
     },
     submitCallback: searchNotes,
+    schema: SearchSchema,
   });
 
   /* Detect changes in params from NavSearchButton and update form */

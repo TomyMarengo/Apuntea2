@@ -128,11 +128,17 @@
     "firstName": "El nombre debe tener entre 4 y 25 caracteres, que pueden ser letras o espacios.",
     "institutionId": "La institución no es válida",
     "lastName": "El apellido debe tener entre 4 y 25 caracteres, que pueden ser letras o espacios.",
-    "password": "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número",
+    "password": {
+      "length": "La contraseña puede contener hasta 50 caracteres",
+      "regex": "La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número."
+    },
+    "page": "La página debe ser un número mayor que 0",
+    "pageSize": "El tamaño de página debe ser un número mayor que 0",
     "profilePicture": "La imagen de perfil debe ser un archivo de imagen",
     "score": "La calificación debe ser un número entre 1 y 5",
+    "sortBy": "El ordenamiento no es válido",
     "subjectId": "La materia no es válida",
-    "username": "El nombre de usuario debe tener entre 4 y 25 caracteres y puede contener letras (mayúsculas o minúsculas), números, puntos, guiones bajos o guiones."
+    "username": "El nombre de usuario debe tener entre 4 y 30 caracteres y puede contener letras (mayúsculas o minúsculas), números, puntos, guiones bajos o guiones."
   },
   "follows": {
     "noContent": {

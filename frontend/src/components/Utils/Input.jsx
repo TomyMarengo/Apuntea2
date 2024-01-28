@@ -45,8 +45,8 @@ const Input = ({ password, onChange, errors, ...props }) => {
       </div>
       {errors?.length > 0 &&
         errors.map((error) => (
-          <p className="mt-2 text-sm text-red-500" key={error}>
-            {error} {/* TODO: Poner el t de translation*/}
+          <p className="text-sm text-red-500" key={error}>
+            {t(error)}
           </p>
         ))}
     </div>
