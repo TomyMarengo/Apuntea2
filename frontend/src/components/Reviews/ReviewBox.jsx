@@ -43,7 +43,7 @@ const ReviewBox = ({ note, userId }) => {
   }, [review]);
 
   return (
-    <Box className="flex flex-col">
+    <Box className="flex flex-col mt-2">
       <form onSubmit={handleSubmit} className="my-2">
         {isLoadingReview ? (
           <span>...</span>
@@ -56,7 +56,7 @@ const ReviewBox = ({ note, userId }) => {
               onChange={handleChange}
               value={form.content}
             ></textarea>
-            <div className="flex flex-row justify-between mt-3 gap-4 ">
+            <div className="flex flex-row justify-between mt-3 gap-4 items-center">
               <StarSelector
                 {...reviewInputs.find((input) => input.name === 'score')}
                 onStarClick={handleChange}

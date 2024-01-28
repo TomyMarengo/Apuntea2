@@ -38,9 +38,9 @@ import EditableImage from './Utils/EditableImage';
 import FormattedDate from './Utils/FormattedDate';
 import Input from './Utils/Input';
 import InputAutocomplete from './Utils/InputAutocomplete';
+import RequireAuth from './Utils/RequireAuth';
 import SearchTable from './Utils/SearchTable';
 import Spinner from './Utils/Spinner';
-
 
 export {
   /* Buttons */
@@ -83,6 +83,7 @@ export {
   FormattedDate,
   Input,
   InputAutocomplete,
+  RequireAuth,
   SearchTable,
   Spinner,
 };

@@ -14,6 +14,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           'content-type': fileType,
         },
       }),
+      keepUnusedDataFor: 30 * 24 * 60 * 60, // 30 days
     }),
     deleteNote: builder.mutation({
       query: ({ noteId, url }) => ({
@@ -33,18 +34,17 @@ export const notesApiSlice = apiSlice.injectEndpoints({
     getUserNotesFavorites: builder.query({
       query: ({ userId, url }) => url || `/notes?favBy=${userId}`,
       providesTags: ['Notes'],
-      refetchOnMountOrArgChange: true,
     }),
-    getIsFavorite: builder.query({
+    getIsFavoriteNote: builder.query({
       query: ({ noteId, userId, url }) => url || `/notes/${noteId}/favorites/${userId}`,
     }),
-    addFavorite: builder.mutation({
+    addFavoriteNote: builder.mutation({
       query: ({ noteId, url }) => ({
         url: url || `/notes/${noteId}/favorites`,
         method: 'POST',
       }),
     }),
-    removeFavorite: builder.mutation({
+    removeFavoriteNote: builder.mutation({
       query: ({ noteId, userId, url }) => ({
         url: url || `/notes/${noteId}/favorites/${userId}`,
         method: 'DELETE',
@@ -59,7 +59,7 @@ export const {
   useDeleteNoteMutation,
   useUpdateNoteMutation,
   useGetUserNotesFavoritesQuery,
-  useGetIsFavoriteQuery,
-  useAddFavoriteMutation,
-  useRemoveFavoriteMutation,
+  useGetIsFavoriteNoteQuery,
+  useAddFavoriteNoteMutation,
+  useRemoveFavoriteNoteMutation,
 } = notesApiSlice;

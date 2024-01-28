@@ -1,11 +1,17 @@
 import { useTranslation } from 'react-i18next';
-import { DeleteButton, FavoriteButton, DownloadButton, ReviewsContainer } from '../components/index';
+import { DeleteButton, FavoriteButton, DownloadButton, ReviewsContainer, RequireAuth } from '../components/index';
 import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { useGetNoteQuery, useGetIsFavoriteQuery } from '../store/slices/notesApiSlice';
+import {
+  useGetNoteQuery,
+  useGetIsFavoriteNoteQuery,
+  useAddFavoriteNoteMutation,
+  useRemoveFavoriteNoteMutation,
+} from '../store/slices/notesApiSlice';
 import { useGetUserQuery } from '../store/slices/usersApiSlice';
 import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from '../store/slices/authSlice';
+import { BottomNavbar } from '../components/index';
 
 const Note = () => {
   const { t } = useTranslation();
@@ -14,17 +20,30 @@ const Note = () => {
   const { noteId } = useParams();
   const { data: note, isLoading: isLoadingNote, error: errorNote } = useGetNoteQuery({ noteId });
 
+  console.log(note);
   const {
     data: noteOwner,
     isLoading: isLoadingNoteOwner,
     error: errorNoteOwner,
-  } = useGetUserQuery({ url: note?.owner }, { skip: !note, refetchOnMountOrArgChange: true });
+  } = useGetUserQuery({ url: note?.owner }, { skip: !note });
 
-  const {
-    data: isFavorite,
-    isLoading: isLoadingIsFavorite,
-    error: errorIsFavorite,
-  } = useGetIsFavoriteQuery({ noteId, userId }, { skip: !userId || !noteId, refetchOnMountOrArgChange: true });
+  const { isLoading: isLoadingIsFavorite, error: errorIsFavorite } = useGetIsFavoriteNoteQuery(
+    { noteId, userId },
+    { skip: !userId || !noteId }
+  );
+
+  const [addFavorite, { isLoading: isLoadingAdd }] = useAddFavoriteNoteMutation();
+  const [removeFavorite, { isLoading: isLoadingRemove }] = useRemoveFavoriteNoteMutation();
+
+  const addFavoriteHandler = () => {
+    console.log('add');
+    addFavorite({ noteId });
+  };
+
+  const removeFavoriteHandler = () => {
+    console.log('remove');
+    removeFavorite({ noteId, userId });
+  };
 
   return (
     <section className="note-info">
@@ -32,6 +51,7 @@ const Note = () => {
         <span>... </span>
       ) : (
         <>
+          <BottomNavbar title={note.name} to={'/notes/' + noteId} />
           <div className="note-header flex justify-between items-center">
             <div className="flex flex-row items-center gap-2">
               <img
@@ -49,17 +69,43 @@ const Note = () => {
               </div>
             </div>
             <div className="flex">
-              {isLoadingIsFavorite ? (
-                <span>...</span>
-              ) : (
-                <FavoriteButton noteId={noteId} isFavorite={!errorIsFavorite} />
-              )}
+              <RequireAuth>
+                {isLoadingIsFavorite ? (
+                  <span>...</span>
+                ) : (
+                  <FavoriteButton
+                    isFavorite={!errorIsFavorite && userId}
+                    addFavorite={addFavoriteHandler}
+                    removeFavorite={removeFavoriteHandler}
+                  />
+                )}
+              </RequireAuth>
               <DownloadButton link={note.file} />
               {userId === note.owner.id && <DeleteButton />}
             </div>
           </div>
           <div className="note-frame">
-            <iframe src={note.file}></iframe>
+            {note.fileType === 'jpeg' ||
+              note.fileType === 'jpg' ||
+              (note.fileType === 'png' && (
+                <div className="container-img-note">
+                  <img src={note.file} alt={note.name} />
+                </div>
+              ))}
+
+            {note.fileType === 'mp3' && (
+              <audio controls className="w-100">
+                <source src={note.file} type="audio/mp3" />
+              </audio>
+            )}
+
+            {note.fileType === 'pdf' && <iframe className="w-full h-full" src={note.file}></iframe>}
+
+            {note.fileType === 'mp4' && (
+              <video controls className="w-100">
+                <source src={note.file} type="video/mp4" />
+              </video>
+            )}
           </div>
           <ReviewsContainer score={note.avgScore.toFixed(1)} note={note} />
           {/* CHANGE TO REVIEW URL FROM NOTE */}
