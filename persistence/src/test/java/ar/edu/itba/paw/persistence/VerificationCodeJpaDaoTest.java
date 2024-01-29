@@ -48,20 +48,20 @@ public class VerificationCodeJpaDaoTest {
     @Test
     public void testVerifyForgotPasswordCode() {
         insertVerificationCode(em, DEFAULT_CODE, user, LocalDateTime.now().plusMinutes(10));
-        boolean success = verificationCodeDao.verifyForgotPasswordCode(VERIFICATION_EMAIL, DEFAULT_CODE);
+        boolean success = verificationCodeDao.verifyForgotPasswordCode(user.getUserId(), DEFAULT_CODE);
         assertTrue(success);
     }
 
     @Test
     public void testVerifyForgotPasswordCodeInvalidCode() {
         insertVerificationCode(em, DEFAULT_CODE, user, LocalDateTime.now().plusMinutes(10));
-        boolean success = verificationCodeDao.verifyForgotPasswordCode(VERIFICATION_EMAIL, DEFAULT_CODE2);
+        boolean success = verificationCodeDao.verifyForgotPasswordCode(user.getUserId(), DEFAULT_CODE2);
         assertFalse(success);
     }
 
     @Test
     public void testVerifyForgotPasswordCodeInvalidEmail() {
-        boolean success = verificationCodeDao.verifyForgotPasswordCode(VERIFICATION_EMAIL, DEFAULT_CODE);
+        boolean success = verificationCodeDao.verifyForgotPasswordCode(user.getUserId(), DEFAULT_CODE);
         assertFalse(success);
     }
 
@@ -69,7 +69,7 @@ public class VerificationCodeJpaDaoTest {
     public void testVerifyForgotPasswordExpired() {
 //        VerificationCode code = new VerificationCode(DEFAULT_CODE, user, LocalDateTime.now().minusMinutes(10));
         VerificationCode code = insertVerificationCode(em, DEFAULT_CODE, user, LocalDateTime.now().minusMinutes(10));
-        boolean success = verificationCodeDao.verifyForgotPasswordCode(code.getEmail(), DEFAULT_CODE);
+        boolean success = verificationCodeDao.verifyForgotPasswordCode(code.getUserId(), DEFAULT_CODE);
         assertFalse(success);
     }
 
@@ -82,7 +82,7 @@ public class VerificationCodeJpaDaoTest {
         VerificationCode code = new VerificationCode(DEFAULT_CODE, otherUser, LocalDateTime.now().plusMinutes(10));
         insertVerificationCode(em, DEFAULT_CODE, otherUser, LocalDateTime.now().plusMinutes(10));
         int oldQty = countRows(em, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + VERIFICATION_EMAIL + "')");
-        boolean success = verificationCodeDao.deleteVerificationCodes(VERIFICATION_EMAIL);
+        boolean success = verificationCodeDao.deleteVerificationCodes(user.getUserId());
         assertTrue(success);
         assertEquals(10, oldQty);
         assertEquals(0, countRows(em, "verification_codes", "user_id = (SELECT user_id FROM users WHERE email = '" + VERIFICATION_EMAIL + "')"));

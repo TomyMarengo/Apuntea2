@@ -166,12 +166,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public boolean updateUserPasswordWithCode(String email, String code, String password) {
-        LOGGER.info("Updating forgotten password for user with email: {}", email);
-        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
-        boolean success = verificationCodesService.verifyForgotPasswordCode(email, code);
+    public boolean updateUserPasswordWithCode(UUID userId, String code, String password) {
+        LOGGER.info("Updating forgotten password for user with id: {}", userId);
+        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
+        boolean success = verificationCodesService.verifyForgotPasswordCode(userId, code);
         if (!success) {
-            LOGGER.warn("Invalid code for user with email: {}", email);
+            LOGGER.warn("Invalid code for user with id: {}", userId);
             return false;
         }
         user.setPassword(passwordEncoder.encode(password));

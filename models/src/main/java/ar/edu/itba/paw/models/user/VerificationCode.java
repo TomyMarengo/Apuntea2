@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "verification_codes")
@@ -35,6 +36,11 @@ public class VerificationCode {
         return code;
     }
 
+
+    public UUID getUserId() {
+        return user.getUserId();
+    }
+    
     public String getEmail() {
         return user.getEmail();
     }

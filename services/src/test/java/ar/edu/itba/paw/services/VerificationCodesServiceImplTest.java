@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @RunWith(MockitoJUnitRunner.class)
 public class VerificationCodesServiceImplTest {
@@ -29,7 +30,7 @@ public class VerificationCodesServiceImplTest {
 
     @Test(expected = UserNotFoundException.class)
     public void testVerifyInvalidCode() {
-        verificationCodesService.sendForgotPasswordCode("email");
+        verificationCodesService.sendForgotPasswordCode(UUID.randomUUID());
         Assert.fail();
     }
 
@@ -38,26 +39,25 @@ public class VerificationCodesServiceImplTest {
     public void testVerifyForgotPasswordCode() {
         Mockito.when(verificationCodesDao.verifyForgotPasswordCode(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(verificationCodesDao.deleteVerificationCodes(Mockito.any())).thenReturn(true);
-        Assert.assertTrue(verificationCodesService.verifyForgotPasswordCode("email", "code"));
+        Assert.assertTrue(verificationCodesService.verifyForgotPasswordCode(UUID.randomUUID(), "code"));
     }
 
     @Test
     public void testVerifyForgotPasswordCodeInvalidCode() {
         Mockito.when(verificationCodesDao.verifyForgotPasswordCode(Mockito.any(), Mockito.any())).thenReturn(false);
-        Assert.assertFalse(verificationCodesService.verifyForgotPasswordCode("email", "code"));
+        Assert.assertFalse(verificationCodesService.verifyForgotPasswordCode(UUID.randomUUID(), "code"));
     }
 
     @Test
     public void testVerifyForgotPasswordCodeInvalidEmail() {
         Mockito.when(verificationCodesDao.verifyForgotPasswordCode(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(verificationCodesDao.deleteVerificationCodes(Mockito.any())).thenReturn(false);
-        Assert.assertFalse(verificationCodesService.verifyForgotPasswordCode("email", "code"));
+        Assert.assertFalse(verificationCodesService.verifyForgotPasswordCode(UUID.randomUUID(), "code"));
     }
 
     @Test(expected = UserNotFoundException.class)
     public void testSendForgotPasswordToInvalidEmail() {
-        Mockito.when(userDao.findByEmail(Mockito.any())).thenReturn(Optional.empty());
-        verificationCodesService.sendForgotPasswordCode("email");
+        verificationCodesService.sendForgotPasswordCode(UUID.randomUUID());
         Assert.fail();
     }
 }

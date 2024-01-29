@@ -173,6 +173,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
+
+    // TODO: Change to more specific endpoints
+    private static final String[] PERMIT_ALL_ENDPOINTS = {
+            "/api/users/**", "/api/directories/**", "/api/notes/**", "/api/reviews/**", "/api/institutions/**", "/api/pictures/{id}", "/api/subjects/**"
+    };
+
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
@@ -185,8 +191,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests().antMatchers(HttpMethod.POST, "/api/users").anonymous()
                 // Set correctly PATCH and POST methods!
-                .antMatchers(HttpMethod.GET, "/api/users/**", "/api/directories/**", "/api/notes/**", "/api/reviews/**", "/api/institutions/**", "/api/pictures/{id}", "/api/subjects/**") // TODO: Change
+                .antMatchers(HttpMethod.GET, PERMIT_ALL_ENDPOINTS) // TODO: Change
                 .permitAll()
+                .antMatchers(HttpMethod.HEAD, PERMIT_ALL_ENDPOINTS) // TODO: Change
+                .permitAll()
+                .antMatchers(HttpMethod.PATCH, "/api/users/{userId}").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().addFilterAfter(abstractAuthFilter(), AnonymousAuthenticationFilter.class);

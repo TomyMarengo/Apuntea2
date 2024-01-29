@@ -26,6 +26,6 @@ public class InvalidExceptionMapper implements ExceptionMapper<InvalidException>
     public Response toResponse(InvalidException e) {
         LOGGER.error("{}: {}", e.getClass().getName(), e.getMessage());
         ApiErrorDto errorDto = new ApiErrorDto(messageSource.getMessage("error.entity.invalid", null, LocaleHelper.getLocale())); //TODO generalize
-        return Response.status(422, "Unprocessable Content").type(MediaType.APPLICATION_JSON).entity(errorDto).build();
+        return Response.status(422).type(MediaType.APPLICATION_JSON).entity(errorDto).build();
     }
 }

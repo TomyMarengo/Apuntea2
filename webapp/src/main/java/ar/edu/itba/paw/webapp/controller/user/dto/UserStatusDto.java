@@ -3,10 +3,12 @@ package ar.edu.itba.paw.webapp.controller.user.dto;
 import ar.edu.itba.paw.models.user.UserStatus;
 
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserStatusDto {
+    @NotNull
     @Pattern(regexp = "^(active|banned)$")
     private String status;
 

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 public class VerificationCodesServiceImpl implements VerificationCodesService  {
@@ -29,23 +30,23 @@ public class VerificationCodesServiceImpl implements VerificationCodesService  {
 
     @Override
     @Transactional
-    public void sendForgotPasswordCode(String email) {
+    public void sendForgotPasswordCode(UUID userId) {
         Random rnd = new Random();
         int number = rnd.nextInt(999999);
 
-        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        verificationCodeDao.deleteVerificationCodes(email);
+        verificationCodeDao.deleteVerificationCodes(userId);
 
         VerificationCode verificationCode = verificationCodeDao.saveVerificationCode(String.format("%06d", number), user, LocalDateTime.now().plusMinutes(10));
-        LOGGER.info("New verification code stored into database for user {}", email);
+        LOGGER.info("New verification code stored into database for user {}", user.getEmail());
         emailService.sendForgotPasswordEmail(verificationCode, user.getLocale());
     }
 
     @Override
     @Transactional
-    public boolean verifyForgotPasswordCode(String email, String code) {
-        return verificationCodeDao.verifyForgotPasswordCode(email, code) &&
-                verificationCodeDao.deleteVerificationCodes(email);
+    public boolean verifyForgotPasswordCode(UUID userId, String code) {
+        return verificationCodeDao.verifyForgotPasswordCode(userId, code) &&
+                verificationCodeDao.deleteVerificationCodes(userId);
     }
 }

@@ -25,7 +25,7 @@ public interface UserService {
 
     void updateCurrentUserPassword(String password);
 
-    boolean updateUserPasswordWithCode(String email, String code, String password);
+    boolean updateUserPasswordWithCode(UUID userId, String code, String password);
 
     void unbanUsers();
 
