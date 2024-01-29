@@ -102,6 +102,14 @@ public class Review {
         this.userId = userId;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
     public static class ReviewKey implements Serializable {
         private UUID userId;
         private UUID noteId;

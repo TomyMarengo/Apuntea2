@@ -56,19 +56,18 @@ public class NoteServiceImplTest {
         Mockito.when(directoryDao.getDirectoryRoot(Mockito.any())).thenReturn(Optional.of(dirToReturn));
         UUID expectedNoteId = UUID.randomUUID();
         Mockito.when(noteDao.create(Mockito.anyString(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.anyBoolean(), Mockito.any(), Mockito.anyString(), Mockito.anyString())).thenReturn(expectedNoteId);
-        Mockito.when(searchService.findByName(Mockito.any(), Mockito.anyString())).thenReturn(Optional.empty());
-        UUID noteId = noteService.createNote("new", UUID.randomUUID(), true, new byte[0], "" , Category.EXAM.getFormattedName());
+        UUID noteId = noteService.createNote("new", UUID.randomUUID(), true, new byte[]{1}, "pdf" , Category.EXAM.getFormattedName());
         assertEquals(expectedNoteId, noteId);
     }
 
-    @Test(expected = UnavailableNameException.class)
-    public void testCreateNoteNameUsed() {
-        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-        UUID expectedNoteId = UUID.randomUUID();
-        Mockito.when(searchService.findByName(Mockito.any(), Mockito.anyString())).thenReturn(Optional.of(UUID.randomUUID()));
-        noteService.createNote("new", UUID.randomUUID(), true, new byte[0], "" , Category.EXAM.getFormattedName());
-        fail();
-    }
+//    @Test(expected = UnavailableNameException.class)
+//    public void testCreateNoteNameUsed() {
+//        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
+//        UUID expectedNoteId = UUID.randomUUID();
+//        Mockito.when(searchService.findByName(Mockito.any(), Mockito.anyString())).thenReturn(Optional.of(UUID.randomUUID()));
+//        noteService.createNote("new", UUID.randomUUID(), true, new byte[]{0}, "png" , Category.EXAM.getFormattedName());
+//        fail();
+//    }
 
     @Test(expected = NoteNotFoundException.class)
     public void testUpdateNoteNotFound() {

@@ -87,18 +87,13 @@ public class ReviewController {
         return Response.created(uriInfo.getAbsolutePathBuilder().path(String.format("%s_%s", review.getNoteId(), review.getUserId())).build()).build();
     }
 
-    @PUT
+    @PATCH
     @Path("/{noteId}_{userId}")
-    @Produces(value = { ApunteaMediaType.REVIEW_V1 }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.REVIEW_V1 })
     @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
     public Response updateReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Valid final ReviewUpdateDto reviewUpdateDto) {
-        final Review review = noteService.updateReview(
-                noteId,
-                reviewUpdateDto.getScore(),
-                reviewUpdateDto.getContent()
-        );
-        final ReviewResponseDto reviewRespDto = ReviewResponseDto.fromReview(review, uriInfo);
-        return Response.ok(new GenericEntity<ReviewResponseDto>(reviewRespDto){}).build();
+        noteService.updateReview(noteId, reviewUpdateDto.getScore(), reviewUpdateDto.getContent());
+        return Response.noContent().build();
     }
 
     @DELETE

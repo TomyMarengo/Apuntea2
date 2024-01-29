@@ -199,13 +199,15 @@ public class  NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public Review updateReview(UUID noteId, int score, String content) {
+    public Review updateReview(UUID noteId, Integer score, String content) {
         User user = securityService.getCurrentUserOrThrow();
         Note note = noteDao.getNoteById(noteId, user.getUserId()).orElseThrow(NoteNotFoundException::new);
-        noteDao.getReview(noteId, user.getUserId()).orElseThrow(ReviewNotFoundException::new);
+        Review review = noteDao.getReview(noteId, user.getUserId()).orElseThrow(ReviewNotFoundException::new);
         if (note.getUser().equals(user))
             throw new InvalidReviewException();
-        return noteDao.createOrUpdateReview(note, user, score, content);
+        if (content != null) review.setContent(content);
+        if (score != null) review.setScore(score);
+        return review;
     }
 
     @Transactional

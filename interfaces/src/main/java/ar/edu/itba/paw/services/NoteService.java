@@ -21,7 +21,7 @@ public interface NoteService {
 
     Review createReview(UUID noteId, int score, String content);
 
-    Review updateReview(UUID noteId, int score, String content);
+    Review updateReview(UUID noteId, Integer score, String content);
 
     void update(UUID noteId, String name, Boolean visible, String category);
 
