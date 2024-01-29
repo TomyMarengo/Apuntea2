@@ -89,7 +89,12 @@ public class UserController {
     @PreAuthorize("@userPermissions.isCurrentUser(#id)")
     @Consumes(value = { MediaType.MULTIPART_FORM_DATA })
     public Response updateUser(@PathParam("id") final UUID id, @Valid @BeanParam final UserUpdateDto userDto) {
-        userService.updateProfile(userDto.getFirstName(), userDto.getLastName(), userDto.getUsername(), userDto.getProfilePictureBytes(), userDto.getCareerId());
+        userService.updateProfile(userDto.getFirstName(),
+                userDto.getLastName(),
+                userDto.getUsername(),
+                userDto.getProfilePictureBytes(),
+                userDto.getProfilePictureDetails().getMediaType().getSubtype(),
+                userDto.getCareerId());
         if (userDto.getPassword() != null)
             userService.updateCurrentUserPassword(userDto.getPassword());
         if (userDto.getNotificationsEnabled() != null)

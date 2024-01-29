@@ -3,12 +3,15 @@ package ar.edu.itba.paw.webapp.controller.user.dto;
 import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import ar.edu.itba.paw.webapp.validation.*;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.springframework.context.annotation.DependsOn;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
+@AttributeDependence(baseField = "oldPassword", dependentField = "password")
 public class UserUpdateDto {
     @Pattern(regexp = RegexUtils.NAME_REGEX)
     @Size(max = 20)
@@ -29,21 +32,20 @@ public class UserUpdateDto {
     @FormDataParam("profilePicture")
     private byte[] profilePictureBytes;
 
-    //TODO Fix validators
     @FormDataParam("profilePicture")
-//    @AcceptedExtension(allowedExtensions = {"jpeg", "png"})
-//    @AcceptedFileSize(max = 50)
     private FormDataBodyPart profilePictureDetails;
 
     @ValidUuid
     @FormDataParam("careerId")
     private UUID careerId;
 
-
     @Size(min = 4, max = 50)
     @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
     @FormDataParam("password")
     private String password;
+
+    @MatchesCurrentUserPassword
+    private String oldPassword;
 
     @FormDataParam("notificationsEnabled")
     private Boolean notificationsEnabled;
@@ -87,6 +89,14 @@ public class UserUpdateDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     public Boolean getNotificationsEnabled() {

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectResponseDto;
+import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import ar.edu.itba.paw.webapp.forms.queries.SubjectQuery;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
@@ -41,7 +43,7 @@ public class SubjectController {
 
     @GET
     @Path("/{subjectId}")
-    @Produces(value = {ApunteaMediaType.SUBJECT_V1 }) // TODO: Add versions
+    @Produces(value = {ApunteaMediaType.SUBJECT_V1 })
     public Response getSubject(@PathParam("subjectId") final UUID subjectId){
         Subject sub = subjectService.getSubject(subjectId).orElseThrow(SubjectNotFoundException::new);
         return Response.ok(new GenericEntity<SubjectResponseDto>(SubjectResponseDto.fromSubject(sub, uriInfo)){}).build();
@@ -50,7 +52,7 @@ public class SubjectController {
     @POST
     @Consumes(value = { MediaType.TEXT_PLAIN })
     @Secured({"ROLE_ADMIN"})
-    public Response createSubject(@Valid @NotNull @NotEmpty final String name){
+    public Response createSubject(@Valid @NotNull @NotEmpty @Pattern(regexp = RegexUtils.FILE_REGEX) final String name){
         UUID subjectId = subjectService.createSubject(name);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(subjectId.toString()).build()).build();
     }
@@ -59,7 +61,7 @@ public class SubjectController {
     @Path("/{subjectId}")
     @Consumes(value = { MediaType.TEXT_PLAIN })
     @Secured({"ROLE_ADMIN"})
-    public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @Valid @NotNull @NotEmpty final String name) {
+    public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @Valid @NotNull @NotEmpty @Pattern(regexp = RegexUtils.FILE_REGEX) final String name) {
         subjectService.updateSubject(subjectId, name);
         return Response.noContent().build();
     }

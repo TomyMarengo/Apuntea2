@@ -43,6 +43,7 @@ public @interface MatchesCurrentUserPassword {
 
         @Override
         public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+            if (s == null) return true;
             return securityService.currentUserPasswordMatches(s);
         }
     }

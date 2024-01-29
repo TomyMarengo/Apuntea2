@@ -38,7 +38,7 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Override
     public UUID create(String name, UUID parentId, boolean visible, String iconColor) {
         User user = securityService.getCurrentUserOrThrow();
-        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
+//        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
         return directoryDao.create(name, parentId, user, visible, iconColor).getId();
     }
 

@@ -17,7 +17,7 @@ public interface UserService {
 
     UUID create(String email, String password, UUID careerId, Role role);
 
-    void updateProfile(String firstName, String lastName, String username, byte[] profilePictureBytes, UUID careerId);
+    void updateProfile(String firstName, String lastName, String username, byte[] profilePictureBytes, String imageExtension, UUID careerId);
 
     Optional<byte[]> getProfilePictureByUserId(UUID userId);
 

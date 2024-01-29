@@ -16,11 +16,8 @@ public class NoteCreationDto extends SearchableCreationDto {
     @FormDataParam("file")
     private byte[] file;
 
-    //TODO Fix validators
     @NotNull
     @FormDataParam("file")
-//    @AcceptedExtension(allowedExtensions = {"jpeg", "png", "jpg", "pdf", "mp3", "mp4"})
-//    @AcceptedFileSize(max = 500)
     private FormDataBodyPart fileDetails;
 
     @NotEmpty

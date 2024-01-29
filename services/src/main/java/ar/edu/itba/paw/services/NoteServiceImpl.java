@@ -3,8 +3,7 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.Category;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
-import ar.edu.itba.paw.models.exceptions.UnavailableNameException;
-import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
+import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
@@ -36,6 +35,9 @@ public class  NoteServiceImpl implements NoteService {
 
     private final SearchService searchService;
 
+    private static final String[] ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "pdf", "mp4", "mp3"};
+    private static final int MAX_FILE_SIZE = 500 * 1024 * 1024; // 500 MB
+
     @Autowired
     public NoteServiceImpl(final UserDao userDao, final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SearchService searchService) {
         this.userDao = userDao;
@@ -50,10 +52,14 @@ public class  NoteServiceImpl implements NoteService {
     @Override
     public UUID createNote(final String name, final UUID parentId, final boolean visible, final byte[] file, final String mimeType, final String category) {
         User user = securityService.getCurrentUserOrThrow();
-        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
+//        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
 
         Directory rootDir = directoryDao.getDirectoryRoot(parentId).orElseThrow(InvalidDirectoryException::new);
         Subject subject = rootDir.getSubject();
+
+        if (file.length > MAX_FILE_SIZE) throw new FileSizeException(MAX_FILE_SIZE);
+        if (mimeType == null || !Arrays.asList(ALLOWED_EXTENSIONS).contains(mimeType.toLowerCase())) throw new FileExtensionException(ALLOWED_EXTENSIONS);
+
         return noteDao.create(name, subject.getSubjectId(), user, parentId, visible, file, category, mimeType);
     }
 

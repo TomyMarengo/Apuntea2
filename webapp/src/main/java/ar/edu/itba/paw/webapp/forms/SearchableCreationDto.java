@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
-@NonExistingCreateSearchable
+@NonExistingCreateSearchable(message = "error.searchable.alreadyExists")
 public abstract class SearchableCreationDto {
     @NotEmpty
     @Size(min = 2, max = 50)

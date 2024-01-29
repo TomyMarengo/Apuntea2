@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller.review.dtos;
 
 import ar.edu.itba.paw.webapp.validation.EitherAttribute;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
+import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -15,8 +16,7 @@ public class ReviewCreationDto {
     @Size(max = 255)
     private String content;
 
-    @Min(1)
-    @Max(5)
+    @Range(min = 1, max = 5)
     private int score;
 
     public String getContent() {
