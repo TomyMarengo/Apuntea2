@@ -122,4 +122,10 @@ public class UserUpdateDto {
     public void setProfilePictureDetails(FormDataBodyPart profilePictureDetails) {
         this.profilePictureDetails = profilePictureDetails;
     }
+
+    public String getProfilePictureExtension() {
+        if (profilePictureDetails == null)
+            return null;
+        return profilePictureDetails.getMediaType().getSubtype();
+    }
 }

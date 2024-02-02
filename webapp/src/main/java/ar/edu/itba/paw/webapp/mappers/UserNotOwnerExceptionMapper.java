@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.mappers;
 
 import ar.edu.itba.paw.models.exceptions.UserNotOwnerException;
-import ar.edu.itba.paw.webapp.auth.AuthPageFilter;
 import ar.edu.itba.paw.webapp.dto.ApiErrorDto;
 import ar.edu.itba.paw.webapp.helpers.LocaleHelper;
 import org.slf4j.Logger;

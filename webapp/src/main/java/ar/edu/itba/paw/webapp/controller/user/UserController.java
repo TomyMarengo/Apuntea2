@@ -15,6 +15,7 @@ import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.user.dto.*;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.forms.queries.UserQuery;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -93,7 +94,7 @@ public class UserController {
                 userDto.getLastName(),
                 userDto.getUsername(),
                 userDto.getProfilePictureBytes(),
-                userDto.getProfilePictureDetails().getMediaType().getSubtype(),
+                userDto.getProfilePictureExtension(),
                 userDto.getCareerId());
         if (userDto.getPassword() != null)
             userService.updateCurrentUserPassword(userDto.getPassword());
@@ -114,23 +115,12 @@ public class UserController {
         return Response.noContent().build();
     }
 
-    @PATCH
-    @Path("/{id}")
+    @POST
     @Secured("ROLE_ANONYMOUS")
-    @Consumes(value = { ApunteaMediaType.USER_REQUEST_PASSWORD_CHANGE_V1 })
-    public Response updateUserRequestPasswordChange(@PathParam("id") final UUID id) {
-        verificationCodesService.sendForgotPasswordCode(id);
+    @Consumes(value = { MediaType.TEXT_PLAIN })
+    public Response requestPasswordChange(@Valid @Email final String email) {
+        verificationCodesService.sendForgotPasswordCode(email);
         return Response.noContent().build();
-    }
-
-    @PATCH
-    @Path("/{id}")
-    @Secured("ROLE_ANONYMOUS")
-    @Consumes(value = { ApunteaMediaType.USER_UPDATE_PASSWORD_V1 })
-    public Response updateUserPassword(@PathParam("id") final UUID id, @Valid final PasswordForgotDto passwordForgotDto) {
-        if (userService.updateUserPasswordWithCode(id, passwordForgotDto.getCode(), passwordForgotDto.getPassword()))
-            return Response.noContent().build();
-        throw new InvalidVerificationCodeException();
     }
 
     @GET

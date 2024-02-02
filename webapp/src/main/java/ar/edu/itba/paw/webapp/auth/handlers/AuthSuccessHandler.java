@@ -16,7 +16,6 @@ import java.net.MalformedURLException;
 @Component
 public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-    //TODO: Add again!!!!
     private final JwtTokenService jwtTokenService;
 
     @Autowired

@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Repository
 public class VerificationCodeJpaDao implements VerificationCodeDao {
@@ -28,19 +27,19 @@ public class VerificationCodeJpaDao implements VerificationCodeDao {
     }
 
     @Override
-    public boolean verifyForgotPasswordCode(UUID userId, String code) {
-        return ((BigInteger)em.createNativeQuery("SELECT COUNT(*) FROM Verification_Codes WHERE user_id = :userId AND code = :code AND expires_at > NOW()")
-                .setParameter("userId", userId)
+    public boolean verifyForgotPasswordCode(String email, String code) {
+        return ((BigInteger)em.createNativeQuery("SELECT COUNT(*) FROM Verification_Codes WHERE user_id = (SELECT user_id FROM Users WHERE email = :email) AND code = :code AND expires_at > NOW()")
+                .setParameter("email", email)
                 .setParameter("code", code)
                 .getSingleResult()).intValue() > 0;
     }
 
     @Override
-    public boolean deleteVerificationCodes(UUID userId) {
-        int qtyRemoved = em.createNativeQuery("DELETE FROM Verification_Codes WHERE user_id = :userId")
-                .setParameter("userId", userId)
+    public boolean deleteVerificationCodes(String email) {
+        int qtyRemoved = em.createNativeQuery("DELETE FROM Verification_Codes WHERE user_id = (SELECT user_id FROM Users WHERE email = :email)")
+                .setParameter("email", email)
                 .executeUpdate();
-        LOGGER.info("Deleted {} verification codes for user with userId {}", qtyRemoved, userId);
+        LOGGER.info("Deleted {} verification codes for user {}", qtyRemoved, email);
         return qtyRemoved > 0;
     }
 

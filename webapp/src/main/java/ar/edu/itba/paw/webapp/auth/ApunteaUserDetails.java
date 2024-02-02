@@ -17,9 +17,10 @@ public class ApunteaUserDetails extends User {
         this.userId = userId;
     }
 
-//    public ApunteaUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-//        super(username, password, authorities);
-//    }
+    public ApunteaUserDetails(UUID userId, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+        super(username, password, authorities);
+        this.userId = userId;
+    }
 //
 //    public ApunteaUserDetails(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
 //        super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);

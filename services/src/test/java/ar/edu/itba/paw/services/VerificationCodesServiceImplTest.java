@@ -30,7 +30,7 @@ public class VerificationCodesServiceImplTest {
 
     @Test(expected = UserNotFoundException.class)
     public void testVerifyInvalidCode() {
-        verificationCodesService.sendForgotPasswordCode(UUID.randomUUID());
+        verificationCodesService.sendForgotPasswordCode("user@mail.com");
         Assert.fail();
     }
 
@@ -39,25 +39,25 @@ public class VerificationCodesServiceImplTest {
     public void testVerifyForgotPasswordCode() {
         Mockito.when(verificationCodesDao.verifyForgotPasswordCode(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(verificationCodesDao.deleteVerificationCodes(Mockito.any())).thenReturn(true);
-        Assert.assertTrue(verificationCodesService.verifyForgotPasswordCode(UUID.randomUUID(), "code"));
+        Assert.assertTrue(verificationCodesService.verifyForgotPasswordCode("user@mail.com", "code"));
     }
 
     @Test
     public void testVerifyForgotPasswordCodeInvalidCode() {
         Mockito.when(verificationCodesDao.verifyForgotPasswordCode(Mockito.any(), Mockito.any())).thenReturn(false);
-        Assert.assertFalse(verificationCodesService.verifyForgotPasswordCode(UUID.randomUUID(), "code"));
+        Assert.assertFalse(verificationCodesService.verifyForgotPasswordCode("user@mail.com", "code"));
     }
 
     @Test
     public void testVerifyForgotPasswordCodeInvalidEmail() {
         Mockito.when(verificationCodesDao.verifyForgotPasswordCode(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(verificationCodesDao.deleteVerificationCodes(Mockito.any())).thenReturn(false);
-        Assert.assertFalse(verificationCodesService.verifyForgotPasswordCode(UUID.randomUUID(), "code"));
+        Assert.assertFalse(verificationCodesService.verifyForgotPasswordCode("user@mail.com", "code"));
     }
 
     @Test(expected = UserNotFoundException.class)
     public void testSendForgotPasswordToInvalidEmail() {
-        verificationCodesService.sendForgotPasswordCode(UUID.randomUUID());
+        verificationCodesService.sendForgotPasswordCode("user@mail.com");
         Assert.fail();
     }
 }

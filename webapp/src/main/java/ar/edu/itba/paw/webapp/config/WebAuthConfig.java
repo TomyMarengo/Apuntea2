@@ -1,5 +1,8 @@
 package ar.edu.itba.paw.webapp.config;
 
+import ar.edu.itba.paw.models.user.Role;
+import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.services.VerificationCodesService;
 import ar.edu.itba.paw.webapp.auth.ApunteaAuthenticationEntryPoint;
 import ar.edu.itba.paw.webapp.auth.filters.AbstractAuthFilter;
 import ar.edu.itba.paw.webapp.auth.handlers.ApunteaAccessDeniedHandler;
@@ -46,7 +49,7 @@ import java.util.Collections;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @EnableWebSecurity
-@ComponentScan({"ar.edu.itba.paw.webapp.auth"})
+@ComponentScan({"ar.edu.itba.paw.webapp.auth", "ar.edu.itba.paw.services"})
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Value("classpath:rememberme.key")
     private Resource remembermeKey;
@@ -68,8 +71,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private Environment env;
-//    private final static String[] anonymousPaths = {"/login", "/forgot-password", "/challenge", "/register"};
 
+    @Autowired
+    private VerificationCodesService verificationCodesService;
+
+    @Autowired
+    private UserService userService;
 
     @Bean
     @Override
@@ -150,7 +157,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AbstractAuthFilter abstractAuthFilter() throws Exception {
-        AbstractAuthFilter abstractAuthFilter = new AbstractAuthFilter();
+        AbstractAuthFilter abstractAuthFilter = new AbstractAuthFilter(userService, verificationCodesService);
         abstractAuthFilter.setAuthenticationManager(authenticationManagerBean());
         abstractAuthFilter.setAuthenticationSuccessHandler(authSuccessHandler);
         abstractAuthFilter.setAuthenticationFailureHandler(authFailureHandler);
@@ -189,15 +196,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().headers().cacheControl().disable()
-                .and().authorizeRequests().antMatchers(HttpMethod.POST, "/api/users").anonymous()
-                // Set correctly PATCH and POST methods!
-                .antMatchers(HttpMethod.GET, PERMIT_ALL_ENDPOINTS) // TODO: Change
-                .permitAll()
-                .antMatchers(HttpMethod.HEAD, PERMIT_ALL_ENDPOINTS) // TODO: Change
-                .permitAll()
-                .antMatchers(HttpMethod.PATCH, "/api/users/{userId}").permitAll()
-                .anyRequest()
-                .authenticated()
+                .and().authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/api/users").anonymous()
+                .antMatchers(HttpMethod.GET, PERMIT_ALL_ENDPOINTS).not().hasRole(Role.ROLE_VERIFY.getShortName()) // During the verification process, users can only change their passwords
+                .antMatchers(HttpMethod.HEAD, PERMIT_ALL_ENDPOINTS).not().hasRole(Role.ROLE_VERIFY.getShortName())
+                .antMatchers(HttpMethod.PATCH, "/api/users/{userId}").authenticated()
+                .anyRequest().hasAnyRole(Role.ROLE_ADMIN.getShortName(), Role.ROLE_STUDENT.getShortName())
                 .and().addFilterAfter(abstractAuthFilter(), AnonymousAuthenticationFilter.class);
     }
 

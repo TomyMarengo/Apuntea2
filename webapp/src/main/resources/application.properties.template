@@ -1,8 +1,8 @@
 datasource.url:
 datasource.username:
 datasource.password:
-base.root:
-base.url:
+jwt.secret:
+jwt.issuer:
 
 mail.address:
 mail.password:

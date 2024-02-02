@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.models.user;
 
 public enum Role {
+    ROLE_ANONYMOUS("ROLE_ANONYMOUS", "ANONYMOUS"),
     ROLE_STUDENT("ROLE_STUDENT", "STUDENT"),
     ROLE_MODERATOR("ROLE_MODERATOR", "MODERATOR"),
+    ROLE_VERIFY("ROLE_VERIFY", "VERIFY"),
     ROLE_ADMIN("ROLE_ADMIN", "ADMIN");
 
     private final String role;

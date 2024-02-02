@@ -172,20 +172,6 @@ public class UserServiceImpl implements UserService {
         LOGGER.info("Password updated for user with id: {}", user.getUserId());
     }
 
-    @Transactional
-    @Override
-    public boolean updateUserPasswordWithCode(UUID userId, String code, String password) {
-        LOGGER.info("Updating forgotten password for user with id: {}", userId);
-        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
-        boolean success = verificationCodesService.verifyForgotPasswordCode(userId, code);
-        if (!success) {
-            LOGGER.warn("Invalid code for user with id: {}", userId);
-            return false;
-        }
-        user.setPassword(passwordEncoder.encode(password));
-        return true;
-    }
-
     @Scheduled(cron = "0 0 0 * * ?") // Every day at midnight
     @Transactional
     @Override

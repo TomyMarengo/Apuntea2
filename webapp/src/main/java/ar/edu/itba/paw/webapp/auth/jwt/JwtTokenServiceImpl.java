@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-// TODO: Change back to service and ask why it doesn't work
-//@Service
 @Component
 @PropertySource("classpath:application.properties")
 public class JwtTokenServiceImpl implements JwtTokenService {

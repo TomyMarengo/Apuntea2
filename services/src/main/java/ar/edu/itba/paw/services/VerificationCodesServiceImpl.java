@@ -30,13 +30,11 @@ public class VerificationCodesServiceImpl implements VerificationCodesService  {
 
     @Override
     @Transactional
-    public void sendForgotPasswordCode(UUID userId) {
+    public void sendForgotPasswordCode(String email) {
         Random rnd = new Random();
         int number = rnd.nextInt(999999);
 
-        User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
-
-        verificationCodeDao.deleteVerificationCodes(userId);
+        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
 
         VerificationCode verificationCode = verificationCodeDao.saveVerificationCode(String.format("%06d", number), user, LocalDateTime.now().plusMinutes(10));
         LOGGER.info("New verification code stored into database for user {}", user.getEmail());
@@ -45,8 +43,7 @@ public class VerificationCodesServiceImpl implements VerificationCodesService  {
 
     @Override
     @Transactional
-    public boolean verifyForgotPasswordCode(UUID userId, String code) {
-        return verificationCodeDao.verifyForgotPasswordCode(userId, code) &&
-                verificationCodeDao.deleteVerificationCodes(userId);
+    public boolean verifyForgotPasswordCode(String email, String code) {
+        return verificationCodeDao.verifyForgotPasswordCode(email, code) && verificationCodeDao.deleteVerificationCodes(email);
     }
 }
