@@ -29,8 +29,10 @@ export const SearchSchema = z.object({
   careerId: z.string().uuid({ message: 'errors.careerId' }),
   subjectId: z.string().uuid({ message: 'errors.subjectId' }),
   word: z.string().min(2).max(50).regex(new RegExp('/^(?!([ ,\\-_.]{2,50})$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]{2,50}$'), 'errors.word'),
-  asc: z.boolean(),
-  sortBy: z.enum(['modified', 'name', 'date'], { message: 'errors.sortBy' }),
+  asc: z.enum(['true', 'false'], { message: 'errors.asc' }),
+  sortBy: z.enum(['modified', 'name', 'date', 'score'], { message: 'errors.sortBy' }),
   page: z.number().int().positive().refine((val) => val >= 1, { message: 'errors.page' }),
   pageSize: z.number().int().positive().refine((val) => val >= MIN_PAGE_SIZE && val <= MAX_PAGE_SIZE, { message: 'errors.pageSize' }),
 });
+
+export const SearchSchemaPartial = SearchSchema.partial();

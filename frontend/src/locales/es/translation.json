@@ -52,11 +52,13 @@
     "theory": "Teoría"
   },
   "data": {
+    "asc": "Ascendente",
     "career": "Carrera",
     "category": "Categoría",
     "color": "Color",
     "createdAt": "Creado el",
     "date": "Fecha",
+    "desc": "Descendente",
     "email": "Correo electrónico",
     "favorite": "Favorito",
     "favorites": "Favoritos",

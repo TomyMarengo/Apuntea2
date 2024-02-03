@@ -202,7 +202,8 @@ textarea:not([rows]) {
   scroll-margin-block: 5ex;
 }
 
-input {
+input,
+select {
   @apply text-text bg-bg border-text/20 focus:border-pri focus:ring-light-pri dark:focus:ring-light-pri/50;
   @apply block w-full pl-4 pr-7 py-2 border rounded-md focus:ring-4 focus:outline-none;
 }
@@ -232,7 +233,7 @@ input::placeholder {
 }
 
 .icon-md {
-  @apply w-5 h-5;
+  @apply w-6 h-6;
 }
 
 .icon-button {
@@ -278,4 +279,36 @@ input::placeholder {
 
   position: absolute;
   z-index: -1;
+}
+
+.search-pill-button {
+  @apply flex justify-center items-center py-2 px-3 border border-pri
+}
+
+.search-pill-button>span {
+  @apply font-bold;
+}
+
+.search-pill-button:not(.active) {
+  @apply bg-bg opacity-50 hover:opacity-100 transition-all duration-300;
+}
+
+.search-pill-button:not(.active)>span {
+  @apply text-pri;
+}
+
+.search-pill-button.active {
+  @apply bg-pri;
+}
+
+.search-pill-button.active>span {
+  @apply text-bg;
+}
+
+.search-pill-button-icon {
+  @apply icon-md fill-pri;
+}
+
+.search-pill-button-icon.active {
+  @apply fill-bg;
 }

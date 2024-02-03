@@ -7,6 +7,8 @@ import DownloadButton from './Buttons/DownloadButton';
 import Dropdown from './Buttons/Dropdown';
 import FavoriteButton from './Buttons/FavoriteButton';
 import ProfileButton from './Buttons/ProfileButton';
+import SearchPill from './Buttons/SearchPill';
+import SortBySelect from './Buttons/SortBySelect';
 import StarSelector from './Buttons/StarSelector';
 
 /* Forms */
@@ -52,6 +54,8 @@ export {
   Dropdown,
   FavoriteButton,
   ProfileButton,
+  SearchPill,
+  SortBySelect,
   StarSelector,
 
   /* Forms */

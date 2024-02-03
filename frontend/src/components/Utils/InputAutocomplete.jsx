@@ -31,7 +31,7 @@ const InputAutocomplete = forwardRef(function InputAutocomplete({ list, onChange
   const handleClear = () => {
     if (ref.current) {
       ref.current.value = '';
-      handleChange({ target: { name: props.name, value: '' } });
+      handleChange({ target: { name: props.name, value: undefined } });
     }
   };
 

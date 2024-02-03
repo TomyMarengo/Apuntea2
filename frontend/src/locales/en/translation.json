@@ -52,11 +52,14 @@
     "theory": "Theory"
   },
   "data": {
+    "asc": "Ascending",
+    "all": "All",
     "career": "Career",
     "category": "Category",
     "color": "Color",
     "createdAt": "Created at",
     "date": "Date",
+    "desc": "Descending",
     "email": "Email",
     "favorite": "Favorite",
     "favorites": "Favorites",

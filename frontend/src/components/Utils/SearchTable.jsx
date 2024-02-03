@@ -5,8 +5,11 @@ import { FormattedDate } from '../index';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
 
-const SearchTable = ({ notes }) => {
+const SearchTable = ({ params, notes, directories }) => {
   const { t } = useTranslation();
+
+  const showNotes = params['category'] !== 'directory';
+  const showDirectories = params['category'] === 'directory';
 
   return (
     <table>
@@ -16,32 +19,30 @@ const SearchTable = ({ notes }) => {
           <th className="px-6 py-3">{t('data.subject')}</th>
           <th className="px-6 py-3">{t('data.owner')}</th>
           <th className="px-6 py-3">{t('data.lastModifiedAt')}</th>
-          <th className="px-6 py-3">{t('data.score')}</th>
+          {!showDirectories && <th className="px-6 py-3">{t('data.score')}</th>}
         </tr>
       </thead>
       <tbody className="text-left bg-transparent">
-        {notes?.map((note) => (
-          <TableRow key={note.id} note={note} t={t} />
-        ))}
+        {showNotes && notes?.map((note) => <TableRow key={note.id} data={note} t={t} isNote={true} />)}
+        {showDirectories &&
+          directories?.map((directory) => <TableRow key={directory.id} data={directory} t={t} isNote={false} />)}
       </tbody>
     </table>
   );
 };
 
-const TableRow = ({ note, t }) => {
-  const { data: owner, isLoading: isLoadingOwner, error: isErrorOwner } = useGetUserQuery({ url: note.owner });
-  const {
-    data: subject,
-    isLoading: isLoadingSubject,
-    error: isErrorSubject,
-  } = useGetSubjectQuery({ url: note.subject });
+const TableRow = ({ data, t, isNote }) => {
+  const { data: owner, isLoading: isLoadingOwner } = useGetUserQuery({ url: data.owner });
+  const { data: subject, isLoading: isLoadingSubject } = useGetSubjectQuery({ url: data.subject });
 
   return (
-    <tr key={note.id} className="border-b border-text/20 hover:bg-dark-sec/20">
+    <tr key={data.id} className="border-b border-text/20 hover:bg-dark-sec/20">
       <td className="px-6 py-3">
-        <NavLink className="link" to={`/notes/${note.id}`}>
-          {note.name}
-        </NavLink>
+        {
+          <NavLink className="link" to={isNote ? `/notes/${data.id}` : `/directories/${data.id}`}>
+            {data.name}
+          </NavLink>
+        }
       </td>
       <td className="px-6 py-3">
         {isLoadingSubject ? <SkeletonLoader t={t} /> : subject ? subject.name : t('data.unknown')}
@@ -51,9 +52,9 @@ const TableRow = ({ note, t }) => {
       </td>
 
       <td className="px-6 py-3">
-        <FormattedDate date={note.lastModifiedAt} />
+        <FormattedDate date={data.lastModifiedAt} />
       </td>
-      <td className="px-6 py-3">{note.avgScore}</td>
+      {isNote && <td className="px-6 py-3">{data.avgScore}</td>}
     </tr>
   );
 };

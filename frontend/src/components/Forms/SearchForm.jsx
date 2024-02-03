@@ -1,32 +1,30 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useLazySearchNotesQuery } from '../../store/slices/searchApiSlice';
-import { Button, Input, InstitutionDataInputs } from '../index';
+import { Button, Input, InstitutionDataInputs, SortBySelect, SearchPill } from '../index';
 import { serializeFormQuery } from '../../functions/utils';
 import { searchInputs } from '../../constants/forms';
 import { useForm } from '../../hooks/index';
 import { useEffect } from 'react';
-import { SearchSchema } from '../../constants/schemas';
+import { SearchSchemaPartial } from '../../constants/schemas';
 
 const SearchForm = ({ params, institution, career, subject }) => {
   const { t } = useTranslation();
-  const [searchNotes] = useLazySearchNotesQuery();
   const navigate = useNavigate();
 
   const { form, handleChange } = useForm({
     initialValues: {
-      institutionId: params['institutionId'] || institution?.id || '',
-      careerId: params['careerId'] || career?.id || '',
-      subjectId: params['subject'] || '',
-      word: params['word'] || '',
-      asc: params['asc'] || false,
-      sortBy: params['sortBy'] || 'modified',
+      institutionId: params['institutionId'],
+      careerId: params['careerId'],
+      subjectId: params['subject'],
+      word: params['word'],
+      asc: params['asc'],
+      sortBy: params['sortBy'],
       page: params['page'],
       pageSize: params['pageSize'],
+      category: params['category'],
     },
-    submitCallback: searchNotes,
-    schema: SearchSchema,
+    schema: SearchSchemaPartial,
   });
 
   /* Detect changes in params from NavSearchButton and update form */
@@ -37,14 +35,27 @@ const SearchForm = ({ params, institution, career, subject }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params['word']]);
 
+  useEffect(() => {
+    if (params['category'] === 'directory' && params['sortBy'] === 'score') {
+      handleChange({ target: { name: 'sortBy', value: 'modified' } });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params['category'], params['sortBy']]);
+
   const handleSearch = (event) => {
     event.preventDefault();
-    let params = serializeFormQuery(form);
-    navigate(`/search?${params}`);
+    console.log(form);
+    const query = serializeFormQuery(form);
+    navigate(`/search?${query}`);
   };
 
+  useEffect(() => {
+    handleSearch({ preventDefault: () => {} });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form.category, form.sortBy, form.asc]);
+
   return (
-    <form onSubmit={handleSearch} className="flex flex-col items-center gap-6">
+    <form onSubmit={handleSearch} className="flex flex-col gap-6">
       <div className="grid grid-flow-col lg:gap-4 lg:grid-cols-4 lg:grid-rows-1 gap-y-6 gap-x-8 grid-cols-2 grid-rows-2">
         <InstitutionDataInputs
           initialInstitution={institution}
@@ -59,7 +70,13 @@ const SearchForm = ({ params, institution, career, subject }) => {
           onChange={handleChange}
         />
       </div>
-      <Button type="submit">{t('actions.search')}</Button>
+      <Button className="self-center" type="submit">
+        {t('actions.search')}
+      </Button>
+      <div className="flex flex-wrap gap-4">
+        <SearchPill category={form.category} setCategory={handleChange} />
+        <SortBySelect sortBy={form.sortBy} asc={form.asc} setSortBy={handleChange} setAsc={handleChange} />
+      </div>
     </form>
   );
 };

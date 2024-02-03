@@ -23,7 +23,7 @@ const useForm = ({ args, initialValues, submitCallback, dispatchCallback, schema
       }
       setErrors({ ...errors, [name]: '' });
     }
-    setForm({ ...form, [name]: newValue });
+    setForm((prevForm) => ({ ...prevForm, [name]: newValue }));
   };
 
   const setFormValues = (currentForm) => {
