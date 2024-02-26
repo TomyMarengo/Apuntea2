@@ -50,7 +50,7 @@ public class NoteController {
         if (!maybeNote.isPresent())
             return Response.status(Response.Status.NOT_FOUND).build();
         final NoteResponseDto noteDto = NoteResponseDto.fromNote(maybeNote.get(), uriInfo);
-        return Response.ok(new GenericEntity<NoteResponseDto>(noteDto){}).build();
+        return Response.ok(noteDto).build();
     }
 
     @GET

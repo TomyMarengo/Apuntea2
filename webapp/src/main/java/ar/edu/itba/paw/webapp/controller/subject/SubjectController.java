@@ -46,7 +46,7 @@ public class SubjectController {
     @Produces(value = {ApunteaMediaType.SUBJECT_V1 })
     public Response getSubject(@PathParam("subjectId") final UUID subjectId){
         Subject sub = subjectService.getSubject(subjectId).orElseThrow(SubjectNotFoundException::new);
-        return Response.ok(new GenericEntity<SubjectResponseDto>(SubjectResponseDto.fromSubject(sub, uriInfo)){}).build();
+        return Response.ok(SubjectResponseDto.fromSubject(sub, uriInfo)).build();
     }
 
     @POST

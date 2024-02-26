@@ -46,7 +46,7 @@ public class DirectoryController {
         if (!maybeDirectory.isPresent())
             return Response.status(Response.Status.NOT_FOUND).build();
         final DirectoryResponseDto directoryDto = DirectoryResponseDto.fromDirectory(maybeDirectory.get(), uriInfo);
-        return Response.ok(new GenericEntity<DirectoryResponseDto>(directoryDto){}).build();
+        return Response.ok(directoryDto).build();
     }
 
     @GET

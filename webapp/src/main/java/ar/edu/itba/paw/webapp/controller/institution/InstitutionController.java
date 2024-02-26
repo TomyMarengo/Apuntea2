@@ -18,6 +18,7 @@ import ar.edu.itba.paw.webapp.controller.institution.dtos.InstitutionDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerCreationDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerResponseDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerUpdateDto;
+import ar.edu.itba.paw.webapp.controller.utils.CacheUtils;
 import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -33,7 +34,6 @@ import java.util.stream.Collectors;
 @Path("institutions")
 @Component
 public class InstitutionController {
-
     private final InstitutionService institutionService;
     private final CareerService careerService;
     private final SubjectService subjectService;
@@ -52,21 +52,25 @@ public class InstitutionController {
     @GET
     @Path("/{institutionId}")
     @Produces(value = { ApunteaMediaType.INSTITUTION_V1})
-    public Response getInstitution(@ValidUuid @PathParam("institutionId") final UUID institutionId) {
+    public Response getInstitution(@Context final Request request, @ValidUuid @PathParam("institutionId") final UUID institutionId) {
         final Institution institution = institutionService.getInstitution(institutionId).orElseThrow(InstitutionNotFoundException::new);
         final InstitutionDto dtoInstitution = InstitutionDto.fromInstitution(institution, uriInfo);
-        return Response.ok(new GenericEntity<InstitutionDto>(dtoInstitution) {}).build();
+        return CacheUtils.conditionalCache(Response.ok(dtoInstitution), request, institution.hashCode()).build();
     }
 
     @GET
     @Produces(value = { ApunteaMediaType.INSTITUTION_COLLECTION_V1}) // TODO: Add versions
-    public Response listAllInstitutions() {
+    public Response listAllInstitutions(@Context final Request request) {
         final Collection<Institution> allInstitutions = institutionService.getInstitutions();
         final Collection<InstitutionDto> dtoInstitutions = allInstitutions
                 .stream()
                 .map(i -> InstitutionDto.fromInstitution(i, uriInfo))
                 .collect(Collectors.toList());
-        return Response.ok(new GenericEntity<Collection<InstitutionDto>>(dtoInstitutions) {}).build();
+        return CacheUtils.conditionalCache(
+                Response.ok(new GenericEntity<Collection<InstitutionDto>>(dtoInstitutions) {}),
+                request,
+                allInstitutions.hashCode()
+        ).build();
     }
 
 
@@ -74,22 +78,22 @@ public class InstitutionController {
     @GET
     @Path("/{institutionId}/careers/{careerId}")
     @Produces(value = { ApunteaMediaType.CAREER_V1})
-    public Response getCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams) {
+    public Response getCareer(@Context final Request request, @Valid @BeanParam final InstitutionCareerPathParams instCarParams) {
         final Career career = careerService.getCareerById(instCarParams.getCareerId()).orElseThrow(CareerNotFoundException::new);
         final CareerDto dtoCareer = CareerDto.fromCareer(career, uriInfo);
-        return Response.ok(new GenericEntity<CareerDto>(dtoCareer) {}).build();
+        return CacheUtils.conditionalCache(Response.ok(dtoCareer), request, career.hashCode()).build();
     }
 
     @GET
     @Path("/{institutionId}/careers")
     @Produces(value = { ApunteaMediaType.CAREER_COLLECTION_V1 })
-    public Response listAllCareers(@ValidUuid @PathParam("institutionId") final UUID institutionId) {
+    public Response listAllCareers(@Context Request request, @ValidUuid @PathParam("institutionId") final UUID institutionId) {
         final Collection<Career> allCareers = careerService.getCareers(institutionId);
         final Collection<CareerDto> dtoCareers = allCareers
                 .stream()
                 .map(c -> CareerDto.fromCareer(c, uriInfo))
                 .collect(Collectors.toList());
-        return Response.ok(new GenericEntity<Collection<CareerDto>>(dtoCareers) {}).build();
+        return CacheUtils.conditionalCache(Response.ok(new GenericEntity<Collection<CareerDto>>(dtoCareers) {}), request, allCareers.hashCode()).build();
     }
 
     @GET
@@ -98,7 +102,7 @@ public class InstitutionController {
     public Response getSubjectCareer(final @Valid @BeanParam InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
         final SubjectCareer sc = subjectService.getSubjectCareer(subjectId, instCarParams.getCareerId()).orElseThrow(SubjectCareerNotFoundException::new);
         final SubjectCareerResponseDto scDto = SubjectCareerResponseDto.fromSubjectCareer(sc, uriInfo);
-        return Response.ok(new GenericEntity<SubjectCareerResponseDto>(scDto) {}).build();
+        return Response.ok(scDto).build();
     }
 
     @POST
@@ -118,8 +122,8 @@ public class InstitutionController {
     @Secured({"ROLE_ADMIN"})
     public Response updateSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId, @Valid final SubjectCareerUpdateDto subjectCareerDto) {
         subjectService.updateSubjectCareer(subjectId, instCarParams.getCareerId(), subjectCareerDto.getYear());
-        return Response.ok(new GenericEntity<SubjectCareerResponseDto>(
-                new SubjectCareerResponseDto(subjectCareerDto.getYear(), instCarParams.getInstitutionId(), instCarParams.getCareerId(), subjectId, uriInfo)){}
+        return Response.ok(
+                new SubjectCareerResponseDto(subjectCareerDto.getYear(), instCarParams.getInstitutionId(), instCarParams.getCareerId(), subjectId, uriInfo)
         ).build();
     }
 

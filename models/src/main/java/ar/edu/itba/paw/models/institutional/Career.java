@@ -5,6 +5,7 @@ package ar.edu.itba.paw.models.institutional;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -64,7 +65,7 @@ public class Career {
 
     @Override
     public int hashCode() {
-        return careerId.hashCode();
+        return Objects.hash(careerId, name);
     }
 
     @Override

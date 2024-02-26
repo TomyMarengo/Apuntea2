@@ -43,10 +43,10 @@ public class ReviewController {
     @GET
     @Path("/{noteId}_{userId}")
     @Produces(value = { ApunteaMediaType.REVIEW_V1 }) // TODO: Add versions
-    public Response listReviews(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId) {
+    public Response getReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId) {
         final Review review = noteService.getReview(noteId, userId).orElseThrow(ReviewNotFoundException::new);
         final ReviewResponseDto reviewRespDto = ReviewResponseDto.fromReview(review, uriInfo);
-        return Response.ok(new GenericEntity<ReviewResponseDto>(reviewRespDto){}).build();
+        return Response.ok(reviewRespDto).build();
     }
 
     @GET

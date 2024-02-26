@@ -53,7 +53,7 @@ public class UserController {
     @Produces(value = { ApunteaMediaType.USER_V1 })
     public Response getUser(@PathParam("id") final UUID id) {
         final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
-        return Response.ok(new GenericEntity<UserResponseDto>(UserResponseDto.fromUser(user, uriInfo)){}).build();
+        return Response.ok(UserResponseDto.fromUser(user, uriInfo)).build();
     }
 
     @GET
@@ -127,9 +127,8 @@ public class UserController {
     @Path("/{id}/followers/{followerId}")
     @PreAuthorize("@userPermissions.isCurrentUser(#followerId)")
     public Response isFollowing(@PathParam("id") final UUID id, @PathParam("followerId") final UUID followerId) {
-        if (userService.isFollowing(id)) {
+        if (userService.isFollowing(id))
             return Response.noContent().build();
-        }
         throw new FavoriteNotFoundException();
     }
 

@@ -26,7 +26,7 @@ public class CareerJpaDao implements CareerDao {
 
     @Override
     public Collection<Career> getCareers(UUID institutionId) {
-        return em.createQuery("SELECT c FROM Career c WHERE c.institution.institutionId = :institutionId", Career.class)
+        return em.createQuery("SELECT c FROM Career c WHERE c.institution.institutionId = :institutionId ORDER BY c.name", Career.class)
                 .setParameter("institutionId", institutionId)
                 .getResultList();
     }
@@ -41,7 +41,7 @@ public class CareerJpaDao implements CareerDao {
 
     @Override
     public List<Career> getCareersByUserInstitution(User user) {
-        return em.createQuery("SELECT DISTINCT c FROM Career c WHERE c.institution = (SELECT u.career.institution FROM User u WHERE u = :user)", Career.class)
+        return em.createQuery("SELECT DISTINCT c FROM Career c WHERE c.institution = (SELECT u.career.institution FROM User u WHERE u = :user) ORDER BY c.name asc", Career.class)
                 .setParameter("user", user)
                 .getResultList();
     }

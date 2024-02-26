@@ -37,7 +37,7 @@ public class Institution {
 
     @Override
     public int hashCode() {
-        return institutionId.hashCode();
+        return name.hashCode();
     }
 
     @Override

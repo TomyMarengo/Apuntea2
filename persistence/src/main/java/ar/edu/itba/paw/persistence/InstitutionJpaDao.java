@@ -19,7 +19,7 @@ public class InstitutionJpaDao implements InstitutionDao{
 
     @Override
     public Collection<Institution> getInstitutions() {
-        return em.createQuery("SELECT i FROM Institution i", Institution.class).getResultList();
+        return em.createQuery("SELECT i FROM Institution i ORDER BY i.name asc ", Institution.class).getResultList();
     }
 
 
