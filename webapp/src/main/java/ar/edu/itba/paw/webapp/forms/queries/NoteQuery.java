@@ -5,11 +5,9 @@ import ar.edu.itba.paw.webapp.validation.EitherAttribute;
 import javax.validation.constraints.Pattern;
 import javax.ws.rs.QueryParam;
 
-//@EitherAttribute(fieldGroup1 = {"institutionId", "careerId", "subjectId"}, fieldGroup2 = {"parentId", "favBy"})
-
 public class NoteQuery extends SearchableQuery {
     @QueryParam("category")
-    @Pattern(regexp = "note|directory|theory|practice|exam|other|all")
+    @Pattern(regexp = "NOTE|DIRECTORY|THEORY|PRACTICE|EXAM|OTHER|ALL", message = "error.note.invalidCategory")
     private String category;
 
     @QueryParam("sortBy")

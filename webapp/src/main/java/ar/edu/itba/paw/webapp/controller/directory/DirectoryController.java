@@ -72,7 +72,7 @@ public class DirectoryController {
                 .collect(Collectors.toList());
 
         return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<DirectoryResponseDto>>(dtoDirectories) {}),
-                uriInfo.getBaseUriBuilder().path("directories"),
+                uriInfo,
                 directoryPage).build();
     }
 

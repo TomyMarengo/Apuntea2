@@ -70,7 +70,7 @@ public class UserController {
                 .map(u -> UserResponseDto.fromUser(u, uriInfo))
                 .collect(Collectors.toList());
         return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<UserResponseDto>>(dtoUsers) {}),
-                uriInfo.getBaseUriBuilder().path("users"),
+                uriInfo,
                 userPage).build();
     }
 

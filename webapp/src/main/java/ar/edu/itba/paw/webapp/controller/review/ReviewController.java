@@ -68,7 +68,7 @@ public class ReviewController {
                 .map(d -> ReviewResponseDto.fromReview(d, uriInfo))
                 .collect(Collectors.toList());
         return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<ReviewResponseDto>>(reviewDtos) {}),
-                uriInfo.getBaseUriBuilder().path("reviews"),
+                uriInfo,
                 reviewPage).build();
     }
 

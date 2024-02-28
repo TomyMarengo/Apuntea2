@@ -76,7 +76,7 @@ public class NoteController {
                 .collect(Collectors.toList());
 
         return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<NoteResponseDto>>(noteDtos) {}),
-                uriInfo.getBaseUriBuilder().path("notes"),
+                uriInfo,
                 notePage).build();
     }
 

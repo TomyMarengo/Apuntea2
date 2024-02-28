@@ -117,7 +117,7 @@ public class SearchArguments {
 
         public SearchArgumentsBuilder category(String category) {
             if (category != null && !category.isEmpty())
-                this.category = Category.valueOf(category.toUpperCase());
+                this.category = Category.valueOf(category);
             return this;
         }
 
