@@ -6,7 +6,6 @@ import ar.edu.itba.paw.models.exceptions.note.ReviewNotFoundException;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.controller.note.dtos.NoteResponseDto;
 import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewCreationDto;
 import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewResponseDto;
 import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewUpdateDto;
@@ -22,7 +21,6 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,7 +40,7 @@ public class ReviewController {
 
     @GET
     @Path("/{noteId}_{userId}")
-    @Produces(value = { ApunteaMediaType.REVIEW_V1 }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.REVIEW })
     public Response getReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId) {
         final Review review = noteService.getReview(noteId, userId).orElseThrow(ReviewNotFoundException::new);
         final ReviewResponseDto reviewRespDto = ReviewResponseDto.fromReview(review, uriInfo);
@@ -50,7 +48,7 @@ public class ReviewController {
     }
 
     @GET
-    @Produces(value = { ApunteaMediaType.REVIEW_COLLECTION_V1 }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.REVIEW_COLLECTION })
     public Response listReviews(@Valid @BeanParam final ReviewQuery reviewQuery) {
         Page<Review> reviewPage;
         reviewPage = (reviewQuery.getTargetUser() != null)?
@@ -75,7 +73,7 @@ public class ReviewController {
     }
 
     @POST
-    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Consumes(value = { ApunteaMediaType.REVIEW_CREATE })
     public Response createReview(@Valid final ReviewCreationDto reviewCreationDto) {
         final Review review = noteService.createReview(
                 reviewCreationDto.getNoteId(),
@@ -89,7 +87,7 @@ public class ReviewController {
 
     @PATCH
     @Path("/{noteId}_{userId}")
-    @Produces(value = { ApunteaMediaType.REVIEW_V1 })
+    @Produces(value = { ApunteaMediaType.REVIEW_UPDATE })
     @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
     public Response updateReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Valid final ReviewUpdateDto reviewUpdateDto) {
         noteService.updateReview(noteId, reviewUpdateDto.getScore(), reviewUpdateDto.getContent());
@@ -98,7 +96,7 @@ public class ReviewController {
 
     @DELETE
     @Path("/{noteId}_{userId}")
-    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Consumes(value = {MediaType.APPLICATION_JSON}) // TODO: Change
     @Secured("ROLE_ADMIN")
     public Response deleteReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Length(max = 255) final String reason) {
         noteService.deleteReview(noteId, userId, reason);

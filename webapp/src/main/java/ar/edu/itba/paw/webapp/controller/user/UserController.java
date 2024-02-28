@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller.user;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
 import ar.edu.itba.paw.models.exceptions.FavoriteNotFoundException;
-import ar.edu.itba.paw.models.exceptions.user.InvalidVerificationCodeException;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.models.user.User;
@@ -24,9 +23,7 @@ import org.springframework.stereotype.Component;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -50,14 +47,14 @@ public class UserController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = { ApunteaMediaType.USER_V1 })
+    @Produces(value = { ApunteaMediaType.USER })
     public Response getUser(@PathParam("id") final UUID id) {
         final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
         return Response.ok(UserResponseDto.fromUser(user, uriInfo)).build();
     }
 
     @GET
-    @Produces(value = {ApunteaMediaType.USER_COLLECTION_V1})
+    @Produces(value = { ApunteaMediaType.USER_COLLECTION })
     public Response listUsers(@Valid @BeanParam final UserQuery userQuery) {
         final Page<User> userPage = (userQuery.getEmail() != null) ?
            Page.fromOptional(userService.findByEmail(userQuery.getEmail())) :
@@ -79,7 +76,7 @@ public class UserController {
 
 
     @POST
-    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Consumes(value = { ApunteaMediaType.USER_CREATE })
     public Response createUser(@Valid final UserCreationDto userDto) {
         final UUID userId = userService.create(userDto.getEmail(), userDto.getPassword(), userDto.getCareerId(), Role.ROLE_STUDENT);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
@@ -88,7 +85,7 @@ public class UserController {
     @PATCH
     @Path("/{id}")
     @PreAuthorize("@userPermissions.isCurrentUser(#id)")
-    @Consumes(value = { MediaType.MULTIPART_FORM_DATA })
+    @Consumes(value = { ApunteaMediaType.USER_UPDATE })
     public Response updateUser(@PathParam("id") final UUID id, @Valid @BeanParam final UserUpdateDto userDto) {
         userService.updateProfile(userDto.getFirstName(),
                 userDto.getLastName(),
@@ -106,7 +103,7 @@ public class UserController {
     @PATCH
     @Path("/{id}")
     @Secured("ROLE_ADMIN")
-    @Consumes(value = { ApunteaMediaType.USER_UPDATE_STATUS_V1 })
+    @Consumes(value = { ApunteaMediaType.USER_UPDATE_STATUS })
     public Response updateUserStatus(@PathParam("id") final UUID id, @Valid final UserStatusDto userStatusDto) {
         if (userStatusDto.getUserStatus().equals(UserStatus.BANNED))
             userService.banUser(id, userStatusDto.getReason());
@@ -117,7 +114,7 @@ public class UserController {
 
     @POST
     @Secured("ROLE_ANONYMOUS")
-    @Consumes(value = { MediaType.TEXT_PLAIN })
+    @Consumes(value = { ApunteaMediaType.EMAIL })
     public Response requestPasswordChange(@Valid @Email final String email) {
         verificationCodesService.sendForgotPasswordCode(email);
         return Response.noContent().build();

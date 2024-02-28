@@ -51,7 +51,7 @@ public class InstitutionController {
 
     @GET
     @Path("/{institutionId}")
-    @Produces(value = { ApunteaMediaType.INSTITUTION_V1})
+    @Produces(value = { ApunteaMediaType.INSTITUTION })
     public Response getInstitution(@Context final Request request, @ValidUuid @PathParam("institutionId") final UUID institutionId) {
         final Institution institution = institutionService.getInstitution(institutionId).orElseThrow(InstitutionNotFoundException::new);
         final InstitutionDto dtoInstitution = InstitutionDto.fromInstitution(institution, uriInfo);
@@ -59,7 +59,7 @@ public class InstitutionController {
     }
 
     @GET
-    @Produces(value = { ApunteaMediaType.INSTITUTION_COLLECTION_V1}) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.INSTITUTION_COLLECTION })
     public Response listAllInstitutions(@Context final Request request) {
         final Collection<Institution> allInstitutions = institutionService.getInstitutions();
         final Collection<InstitutionDto> dtoInstitutions = allInstitutions
@@ -73,11 +73,9 @@ public class InstitutionController {
         ).build();
     }
 
-
-    // TODO: Validate that the career belongs to the institution
     @GET
     @Path("/{institutionId}/careers/{careerId}")
-    @Produces(value = { ApunteaMediaType.CAREER_V1})
+    @Produces(value = { ApunteaMediaType.CAREER })
     public Response getCareer(@Context final Request request, @Valid @BeanParam final InstitutionCareerPathParams instCarParams) {
         final Career career = careerService.getCareerById(instCarParams.getCareerId()).orElseThrow(CareerNotFoundException::new);
         final CareerDto dtoCareer = CareerDto.fromCareer(career, uriInfo);
@@ -86,7 +84,7 @@ public class InstitutionController {
 
     @GET
     @Path("/{institutionId}/careers")
-    @Produces(value = { ApunteaMediaType.CAREER_COLLECTION_V1 })
+    @Produces(value = { ApunteaMediaType.CAREER_COLLECTION })
     public Response listAllCareers(@Context Request request, @ValidUuid @PathParam("institutionId") final UUID institutionId) {
         final Collection<Career> allCareers = careerService.getCareers(institutionId);
         final Collection<CareerDto> dtoCareers = allCareers
@@ -98,7 +96,7 @@ public class InstitutionController {
 
     @GET
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
-    @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.SUBJECT_CAREER }) // TODO: Add versions
     public Response getSubjectCareer(final @Valid @BeanParam InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
         final SubjectCareer sc = subjectService.getSubjectCareer(subjectId, instCarParams.getCareerId()).orElseThrow(SubjectCareerNotFoundException::new);
         final SubjectCareerResponseDto scDto = SubjectCareerResponseDto.fromSubjectCareer(sc, uriInfo);
@@ -107,7 +105,7 @@ public class InstitutionController {
 
     @POST
     @Path("/{institutionId}/careers/{careerId}/subjectcareers")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Consumes(value = { ApunteaMediaType.SUBJECT_CAREER_CREATE })
     @Secured({"ROLE_ADMIN"})
     public Response addSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @Valid final SubjectCareerCreationDto scDto) {
         if (subjectService.linkSubjectToCareer(scDto.getSubjectId(), instCarParams.getCareerId(), scDto.getYear()))
@@ -117,8 +115,8 @@ public class InstitutionController {
 
     @PUT
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
-    @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
+    @Consumes(value = { ApunteaMediaType.SUBJECT_CAREER_UPDATE })
+    @Produces(value = { ApunteaMediaType.SUBJECT_CAREER }) // TODO: Add versions
     @Secured({"ROLE_ADMIN"})
     public Response updateSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId, @Valid final SubjectCareerUpdateDto subjectCareerDto) {
         subjectService.updateSubjectCareer(subjectId, instCarParams.getCareerId(), subjectCareerDto.getYear());

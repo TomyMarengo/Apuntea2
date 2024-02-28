@@ -38,7 +38,7 @@ public class ApunteaAccessDeniedHandler implements AccessDeniedHandler {
         ApiErrorDto apiErrorDto = new ApiErrorDto(messageSource.getMessage("forbidden", null, LocaleHelper.getLocale()));
 
         response.setStatus(HttpStatus.FORBIDDEN.value());
-        response.setContentType(ApunteaMediaType.ERROR_V1);
+        response.setContentType(ApunteaMediaType.ERROR);
 
         mapper.writeValue(response.getWriter(), apiErrorDto);
     }

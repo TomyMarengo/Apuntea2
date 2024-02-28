@@ -40,7 +40,7 @@ public class DirectoryController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = { ApunteaMediaType.DIRECTORY_V1 }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.DIRECTORY })
     public Response getDirectory(@PathParam("id") final UUID id) {
         final Optional<Directory> maybeDirectory = directoryService.getDirectoryById(id);
         if (!maybeDirectory.isPresent())
@@ -50,7 +50,7 @@ public class DirectoryController {
     }
 
     @GET
-    @Produces(value = { ApunteaMediaType.DIRECTORY_COLLECTION_V1 }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.DIRECTORY_COLLECTION })
     public Response listDirectories(@Valid @BeanParam DirectoryQuery directoryQuery) {
         final Page<Directory> directoryPage = directoryService.getDirectories(
                 directoryQuery.getParentId(),
@@ -77,7 +77,7 @@ public class DirectoryController {
     }
 
     @POST
-    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Consumes(value = { ApunteaMediaType.DIRECTORY_CREATE })
     public Response createDirectory(@Valid final DirectoryCreationDto directoryDto) {
         final UUID DirectoryId = directoryService.create(
             directoryDto.getName(),
@@ -90,7 +90,7 @@ public class DirectoryController {
 
     @PATCH
     @Path("/{id}")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Consumes(value = { ApunteaMediaType.DIRECTORY_UPDATE })
     public Response updateDirectory(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final DirectoryUpdateDto directoryDto) {
         directoryService.update(id, directoryDto.getName(), directoryDto.getVisible(), directoryDto.getIconColor());
         return Response.noContent().build();
@@ -129,7 +129,5 @@ public class DirectoryController {
         directoryService.removeFavorite(id);
         return Response.noContent().build();
     }
-
-
 }
 

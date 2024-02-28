@@ -32,7 +32,7 @@ public class SubjectController {
     }
 
     @GET
-    @Produces(value = { MediaType.APPLICATION_JSON }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.SUBJECT_COLLECTION }) // TODO: Add versions
     public Response listSubjects(@Valid @BeanParam final SubjectQuery subjectQuery){
         List<Subject> subjects = (subjectQuery.getCareerId() != null || subjectQuery.getUserId() != null )?
                 subjectService.getSubjects(subjectQuery.getCareerId(), subjectQuery.getYear(), subjectQuery.getUserId()):
@@ -43,14 +43,14 @@ public class SubjectController {
 
     @GET
     @Path("/{subjectId}")
-    @Produces(value = {ApunteaMediaType.SUBJECT_V1 })
+    @Produces(value = { ApunteaMediaType.SUBJECT})
     public Response getSubject(@PathParam("subjectId") final UUID subjectId){
         Subject sub = subjectService.getSubject(subjectId).orElseThrow(SubjectNotFoundException::new);
         return Response.ok(SubjectResponseDto.fromSubject(sub, uriInfo)).build();
     }
 
     @POST
-    @Consumes(value = { MediaType.TEXT_PLAIN })
+    @Consumes(value = { ApunteaMediaType.SUBJECT_NAME})
     @Secured({"ROLE_ADMIN"})
     public Response createSubject(@Valid @NotNull @NotEmpty @Pattern(regexp = RegexUtils.FILE_REGEX) final String name){
         UUID subjectId = subjectService.createSubject(name);
@@ -59,7 +59,7 @@ public class SubjectController {
 
     @PATCH
     @Path("/{subjectId}")
-    @Consumes(value = { MediaType.TEXT_PLAIN })
+    @Consumes(value = { ApunteaMediaType.SUBJECT_NAME})
     @Secured({"ROLE_ADMIN"})
     public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @Valid @NotNull @NotEmpty @Pattern(regexp = RegexUtils.FILE_REGEX) final String name) {
         subjectService.updateSubject(subjectId, name);

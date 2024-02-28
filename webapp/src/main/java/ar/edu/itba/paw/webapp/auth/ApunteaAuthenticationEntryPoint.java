@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.auth;
 
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.auth.handlers.ApunteaAccessDeniedHandler;
 import ar.edu.itba.paw.webapp.dto.ApiErrorDto;
 import ar.edu.itba.paw.webapp.helpers.LocaleHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +36,7 @@ public class ApunteaAuthenticationEntryPoint implements AuthenticationEntryPoint
         ApiErrorDto apiErrorDto = new ApiErrorDto(messageSource.getMessage("authRequired", null, LocaleHelper.getLocale()));
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType(ApunteaMediaType.ERROR_V1);
+        response.setContentType(ApunteaMediaType.ERROR);
 
         mapper.writeValue(response.getWriter(), apiErrorDto);
     }

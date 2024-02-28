@@ -44,7 +44,7 @@ public class NoteController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = { ApunteaMediaType.NOTE_V1 })
+    @Produces(value = { ApunteaMediaType.NOTE })
     public Response getNote(@PathParam("id") final UUID id) {
         final Optional<Note> maybeNote = noteService.getNoteById(id);
         if (!maybeNote.isPresent())
@@ -54,7 +54,7 @@ public class NoteController {
     }
 
     @GET
-    @Produces(value = { ApunteaMediaType.NOTE_COLLECTION_V1 })
+    @Produces(value = { ApunteaMediaType.NOTE_COLLECTION })
     public Response listNotes(@Valid @BeanParam NoteQuery noteQuery) {
         final Page<Note> notePage = noteService.getNotes(
                 noteQuery.getParentId(),
@@ -81,7 +81,7 @@ public class NoteController {
     }
 
     @POST
-    @Consumes(value = { MediaType.MULTIPART_FORM_DATA })
+    @Consumes(value = { ApunteaMediaType.NOTE_CREATE })
     public  Response createNote(@Valid @NotNull(message = "error.body.empty") @BeanParam final NoteCreationDto noteDto) {
         final UUID noteId = noteService.createNote(
                 noteDto.getName(),
@@ -96,7 +96,7 @@ public class NoteController {
 
     @PATCH
     @Path("/{id}")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Consumes(value = { ApunteaMediaType.NOTE_UPDATE })
     public Response updateNote(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final NoteUpdateDto noteDto) {
         noteService.update(id, noteDto.getName(), noteDto.getVisible(), noteDto.getCategory());
         return Response.noContent().build();
@@ -105,6 +105,7 @@ public class NoteController {
     @DELETE
     @Path("/{id}")
     @Consumes(value = { MediaType.APPLICATION_JSON })
+    // TODO: Ask if delete requests should be allowed to have a body
     public Response deleteNote(@PathParam("id") final UUID id, @QueryParam("reason") final String reason) {
         noteService.delete(id, reason);
         return Response.noContent().build();
