@@ -15,6 +15,7 @@ import ar.edu.itba.paw.webapp.controller.note.dtos.NoteResponseDto;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteUpdateDto;
 import ar.edu.itba.paw.webapp.forms.queries.NoteQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
@@ -102,11 +103,20 @@ public class NoteController {
         return Response.noContent().build();
     }
 
-    @DELETE
+    // Delete with body is not standard according to RFC 9110
+    @POST
     @Path("/{id}")
-    @Consumes(value = { MediaType.APPLICATION_JSON })
-    // TODO: Ask if delete requests should be allowed to have a body
-    public Response deleteNote(@PathParam("id") final UUID id, @QueryParam("reason") final String reason) {
+    @Consumes(value = { ApunteaMediaType.DELETE_REASON })
+    @Secured("ROLE_ADMIN")
+    public Response deleteNoteAdminPost(@PathParam("id") final UUID id, final String reason) {
+        noteService.delete(id, reason);
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Consumes(value = { ApunteaMediaType.DELETE_REASON })
+    @Path("/{id}")
+    public Response deleteNote(@PathParam("id") final UUID id, final String reason) {
         noteService.delete(id, reason);
         return Response.noContent().build();
     }

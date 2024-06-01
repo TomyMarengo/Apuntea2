@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryResponseDto;
 import ar.edu.itba.paw.webapp.forms.queries.DirectoryQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
@@ -96,9 +97,20 @@ public class DirectoryController {
         return Response.noContent().build();
     }
 
+
+    @POST
+    @Path("/{id}")
+    @Secured("ROLE_ADMIN")
+    @Consumes(value = { ApunteaMediaType.DELETE_REASON })
+    public Response deleteDirectoryAdmin(@PathParam("id") final UUID id, final String reason) {
+        directoryService.delete(id, reason);
+        return Response.noContent().build();
+    }
+
     @DELETE
     @Path("/{id}")
-    public Response deleteDirectory(@PathParam("id") final UUID id, @QueryParam("reason") final String reason) {
+    @Consumes(value = { ApunteaMediaType.DELETE_REASON })
+    public Response deleteDirectory(@PathParam("id") final UUID id, final String reason) {
         directoryService.delete(id, reason);
         return Response.noContent().build();
     }
