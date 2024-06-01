@@ -116,7 +116,7 @@ public class InstitutionController {
     @PUT
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
     @Consumes(value = { ApunteaMediaType.SUBJECT_CAREER_UPDATE })
-    @Produces(value = { ApunteaMediaType.SUBJECT_CAREER }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.SUBJECT_CAREER })
     @Secured({"ROLE_ADMIN"})
     public Response updateSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId, @Valid final SubjectCareerUpdateDto subjectCareerDto) {
         subjectService.updateSubjectCareer(subjectId, instCarParams.getCareerId(), subjectCareerDto.getYear());

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.exceptions.institutional.SubjectNotFoundException;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
+import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectResponseDto;
 import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import ar.edu.itba.paw.webapp.forms.queries.SubjectQuery;
@@ -50,19 +51,19 @@ public class SubjectController {
     }
 
     @POST
-    @Consumes(value = { ApunteaMediaType.SUBJECT_NAME})
+    @Consumes(value = { ApunteaMediaType.SUBJECT })
     @Secured({"ROLE_ADMIN"})
-    public Response createSubject(@Valid @NotNull @NotEmpty @Pattern(regexp = RegexUtils.FILE_REGEX) final String name){
-        UUID subjectId = subjectService.createSubject(name);
+    public Response createSubject(@Valid final SubjectDto subjectDto) {
+        UUID subjectId = subjectService.createSubject(subjectDto.getName());
         return Response.created(uriInfo.getAbsolutePathBuilder().path(subjectId.toString()).build()).build();
     }
 
     @PATCH
     @Path("/{subjectId}")
-    @Consumes(value = { ApunteaMediaType.SUBJECT_NAME})
+    @Consumes(value = { ApunteaMediaType.SUBJECT })
     @Secured({"ROLE_ADMIN"})
-    public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @Valid @NotNull @NotEmpty @Pattern(regexp = RegexUtils.FILE_REGEX) final String name) {
-        subjectService.updateSubject(subjectId, name);
+    public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @Valid SubjectDto subjectDto) {
+        subjectService.updateSubject(subjectId, subjectDto.getName());
         return Response.noContent().build();
     }
 

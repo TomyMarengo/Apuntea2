@@ -21,7 +21,6 @@ public class ApunteaMediaType {
     public static final String SUBJECT_CAREER_COLLECTION = "application/vnd.apuntea.subject-career-collection-v1.0+json";
     public static final String SUBJECT_CAREER_CREATE = "application/vnd.apuntea.subject-career-create-v1.0+json";
     public static final String SUBJECT_CAREER_UPDATE = "application/vnd.apuntea.subject-career-update-v1.0+json";
-    public static final String SUBJECT_NAME = "text/vnd.apuntea.subject-name-v1.0+plain";
 
     public static final String DIRECTORY = "application/vnd.apuntea.directory-v1.0+json";
     public static final String DIRECTORY_COLLECTION = "application/vnd.apuntea.directory-collection-v1.0+json";
