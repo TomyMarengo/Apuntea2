@@ -131,11 +131,12 @@ class UserJpaDao implements UserDao {
     }
 
     @Override
-    public void updateProfilePicture(User user, Image img) {
+    public UUID updateProfilePicture(User user, Image img) {
         Image oldImg = user.getProfilePicture();
         if (oldImg != null) em.remove(oldImg);
         em.persist(img);
         user.setProfilePicture(img);
+        return img.getImageId();
     }
 
     @Override

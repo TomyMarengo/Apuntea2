@@ -86,13 +86,8 @@ public class UserController {
     @Path("/{id}")
     @PreAuthorize("@userPermissions.isCurrentUser(#id)")
     @Consumes(value = { ApunteaMediaType.USER_UPDATE })
-    public Response updateUser(@PathParam("id") final UUID id, @Valid @BeanParam final UserUpdateDto userDto) {
-        userService.updateProfile(userDto.getFirstName(),
-                userDto.getLastName(),
-                userDto.getUsername(),
-                userDto.getProfilePictureBytes(),
-                userDto.getProfilePictureExtension(),
-                userDto.getCareerId());
+    public Response updateUser(@PathParam("id") final UUID id, @Valid final UserUpdateDto userDto) {
+        userService.updateProfile(userDto.getFirstName(), userDto.getLastName(), userDto.getUsername(), userDto.getCareerId());
         if (userDto.getPassword() != null)
             userService.updateCurrentUserPassword(userDto.getPassword());
         if (userDto.getNotificationsEnabled() != null)

@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateProfile(String firstName, String lastName, String username, byte[] profilePictureBytes, String imageExtension, UUID careerId) {
+    public void updateProfile(String firstName, String lastName, String username, UUID careerId) {
         User user = securityService.getCurrentUserOrThrow();
         if (firstName != null) user.setFirstName(firstName);
         if (lastName != null) user.setLastName(lastName);
@@ -133,18 +133,21 @@ public class UserServiceImpl implements UserService {
             Career career = careerDao.getCareerById(careerId).orElseThrow(InvalidCareerException::new);
             user.setCareer(career);
         }
-        if (profilePictureBytes != null) {
-            if (Arrays.stream(ALLOWED_EXTENSIONS).noneMatch(imageExtension::equalsIgnoreCase)) {
-                LOGGER.warn("Invalid image extension: {}", imageExtension);
-                throw new FileExtensionException(ALLOWED_EXTENSIONS);
-            }
-            if (profilePictureBytes.length > MAX_PROFILE_PICTURE_SIZE) {
-                LOGGER.warn("Image too large: {}", profilePictureBytes.length);
-                throw new FileSizeException(MAX_PROFILE_PICTURE_SIZE);
-            }
-            userDao.updateProfilePicture(user, new Image(profilePictureBytes));
+    }
 
+    @Transactional
+    @Override
+    public UUID updateProfilePicture(byte[] profilePictureBytes, String imageExtension) {
+        User user = securityService.getCurrentUserOrThrow();
+        if (Arrays.stream(ALLOWED_EXTENSIONS).noneMatch(imageExtension::equalsIgnoreCase)) {
+            LOGGER.warn("Invalid image extension: {}", imageExtension);
+            throw new FileExtensionException(ALLOWED_EXTENSIONS);
         }
+        if (profilePictureBytes.length > MAX_PROFILE_PICTURE_SIZE) {
+            LOGGER.warn("Image too large: {}", profilePictureBytes.length);
+            throw new FileSizeException(MAX_PROFILE_PICTURE_SIZE);
+        }
+        return userDao.updateProfilePicture(user, new Image(profilePictureBytes));
     }
 
     @Transactional(readOnly = true)

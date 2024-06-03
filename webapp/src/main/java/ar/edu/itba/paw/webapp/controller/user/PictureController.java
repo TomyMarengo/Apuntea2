@@ -1,14 +1,14 @@
 package ar.edu.itba.paw.webapp.controller.user;
 
 import ar.edu.itba.paw.services.UserService;
+import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
+import ar.edu.itba.paw.webapp.controller.user.dto.PictureDto;
 import ar.edu.itba.paw.webapp.controller.utils.CacheUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.validation.Valid;
+import javax.ws.rs.*;
 
 import javax.ws.rs.core.*;
 import java.util.Optional;
@@ -35,5 +35,12 @@ public class PictureController {
             return Response.status(Response.Status.NOT_FOUND).build();
         final Response.ResponseBuilder response = Response.ok(maybeFile.get());
         return CacheUtils.unconditionalCache(response).build();
+    }
+
+    @POST
+    @Consumes(value = {ApunteaMediaType.PICTURE_UPDATE})
+    public Response createProfilePicture(@Valid @BeanParam final PictureDto pictureDto){
+        UUID pictureId = userService.updateProfilePicture(pictureDto.getProfilePictureBytes(), pictureDto.getProfilePictureExtension());
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(pictureId.toString()).build()).build();
     }
 }

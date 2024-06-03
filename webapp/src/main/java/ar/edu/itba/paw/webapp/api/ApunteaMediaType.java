@@ -9,8 +9,8 @@ public class ApunteaMediaType {
     public static final String USER_REQUEST_PASSWORD_CHANGE = "application/vnd.apuntea.request-password-change-v1.0+json";
     public static final String USER_COLLECTION = "application/vnd.apuntea.user-collection-v1.0+json";
     public static final String USER_CREATE = "application/vnd.apuntea.user-create-v1.0+json";
-    public static final String USER_UPDATE = "multipart/vnd.apuntea.user-update-v1.0";
-
+    public static final String USER_UPDATE = "application/vnd.apuntea.user-update-v1.0+json";
+    public static final String PICTURE_UPDATE = "multipart/form-data";
     public static final String INSTITUTION = "application/vnd.apuntea.institution-v1.0+json";
     public static final String INSTITUTION_COLLECTION = "application/vnd.apuntea.institution-collection-v1.0+json";
     public static final String CAREER = "application/vnd.apuntea.career-v1.0+json";
