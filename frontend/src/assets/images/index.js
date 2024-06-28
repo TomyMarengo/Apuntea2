@@ -10,20 +10,5 @@ import noTask from './no-task.png';
 import pageNotFound from './page_not_found.png';
 import pdf from './pdf.png';
 import png from './png.png';
-import profilePicture from './profile-picture.jpeg';
 
-export {
-  accessDenied,
-  apunteaIcon,
-  badRequest,
-  internalServer,
-  jpeg,
-  jpg,
-  mp3,
-  mp4,
-  noTask,
-  pageNotFound,
-  pdf,
-  png,
-  profilePicture,
-};
+export { accessDenied, apunteaIcon, badRequest, internalServer, jpeg, jpg, mp3, mp4, noTask, pageNotFound, pdf, png };

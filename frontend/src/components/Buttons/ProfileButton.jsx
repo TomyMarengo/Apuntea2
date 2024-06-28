@@ -24,8 +24,8 @@ const ProfileButton = () => {
           type="button"
           className="nav-profile-button flex justify-between items-center gap-2 py-2 px-4 bg-dark-pri rounded-3xl hover:bg-transparent transition-all duration-300"
         >
-          <UserIcon className="icon-s fill-bg" />
-          <ChevronDownIcon className="icon-s fill-bg" />
+          <UserIcon className="icon-xs fill-bg" />
+          <ChevronDownIcon className="icon-xs fill-bg" />
         </button>
       }
       menu={[

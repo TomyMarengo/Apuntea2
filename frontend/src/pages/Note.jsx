@@ -1,5 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { DeleteButton, FavoriteButton, DownloadButton, ReviewsContainer, RequireAuth } from '../components/index';
+import {
+  DeleteButton,
+  FavoriteButton,
+  DownloadButton,
+  ReviewsContainer,
+  RequireAuth,
+  BottomNavbar,
+  EditButton,
+  Modal,
+  EditNoteForm,
+} from '../components/index';
 import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import {
@@ -11,7 +21,7 @@ import {
 import { useGetUserQuery } from '../store/slices/usersApiSlice';
 import { useSelector } from 'react-redux';
 import { selectCurrentUserId } from '../store/slices/authSlice';
-import { BottomNavbar } from '../components/index';
+import { useState, useRef } from 'react';
 
 const Note = () => {
   const { t } = useTranslation();
@@ -20,7 +30,7 @@ const Note = () => {
   const { noteId } = useParams();
   const { data: note, isLoading: isLoadingNote, error: errorNote } = useGetNoteQuery({ noteId });
 
-  console.log(note);
+  console.log('note', note);
   const {
     data: noteOwner,
     isLoading: isLoadingNoteOwner,
@@ -32,17 +42,44 @@ const Note = () => {
     { skip: !userId || !noteId }
   );
 
+  // Favorite
   const [addFavorite, { isLoading: isLoadingAdd }] = useAddFavoriteNoteMutation();
   const [removeFavorite, { isLoading: isLoadingRemove }] = useRemoveFavoriteNoteMutation();
 
   const addFavoriteHandler = () => {
-    console.log('add');
     addFavorite({ noteId });
   };
 
   const removeFavoriteHandler = () => {
-    console.log('remove');
     removeFavorite({ noteId, userId });
+  };
+
+  // Modal
+  const [editModalIsOpen, setEditModalIsOpen] = useState(false);
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+
+  const openEditModal = () => {
+    setEditModalIsOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setEditModalIsOpen(false);
+  };
+
+  const openDeleteModal = () => {
+    setDeleteModalIsOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalIsOpen(false);
+  };
+
+  const editNoteFormRef = useRef(null);
+
+  const handleEditNoteFormSubmit = () => {
+    if (editNoteFormRef.current) {
+      editNoteFormRef.current.requestSubmit();
+    }
   };
 
   return (
@@ -74,14 +111,41 @@ const Note = () => {
                   <span>...</span>
                 ) : (
                   <FavoriteButton
+                    className="icon-xs fill-dark-text"
                     isFavorite={!errorIsFavorite && userId}
                     addFavorite={addFavoriteHandler}
                     removeFavorite={removeFavoriteHandler}
                   />
                 )}
               </RequireAuth>
-              <DownloadButton link={note.file} />
-              {userId === note.owner.id && <DeleteButton />}
+              <DownloadButton
+                link={note.file}
+                fileName={note.name}
+                fileType={note.fileType}
+                className="icon-xs fill-dark-text"
+              />
+
+              {userId === noteOwner.id && (
+                <>
+                  <EditButton className="icon-xs fill-dark-text" onClick={openEditModal} />
+                  <Modal
+                    isOpen={editModalIsOpen}
+                    onClose={closeEditModal}
+                    title={t('actions.editNote')}
+                    action={t('actions.update')}
+                    onSubmit={handleEditNoteFormSubmit}
+                  >
+                    <EditNoteForm note={note} ref={editNoteFormRef} />
+                  </Modal>
+                  <DeleteButton className="icon-xs fill-dark-text" onClick={openDeleteModal} />
+                  <Modal
+                    isOpen={deleteModalIsOpen}
+                    onClose={closeDeleteModal}
+                    title={t('actions.deleteNote')}
+                    action={t('actions.delete')}
+                  ></Modal>
+                </>
+              )}
             </div>
           </div>
           <div className="note-frame">

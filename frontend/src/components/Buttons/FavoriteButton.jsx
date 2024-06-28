@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { FilledHeartIcon, EmptyHeartIcon } from '../Utils/Icons';
-
-const FavoriteButton = ({ addFavorite, removeFavorite, isFavorite }) => {
+const FavoriteButton = ({ addFavorite, removeFavorite, isFavorite, className }) => {
   const [isFavorited, setIsFavorited] = useState(isFavorite);
 
   const handleFavorite = () => {
@@ -15,7 +14,7 @@ const FavoriteButton = ({ addFavorite, removeFavorite, isFavorite }) => {
 
   return (
     <button className="icon-button" onClick={handleFavorite}>
-      {isFavorited ? <FilledHeartIcon className="icon-s" /> : <EmptyHeartIcon className="icon-s" />}
+      {isFavorited ? <FilledHeartIcon className={className} /> : <EmptyHeartIcon className={className} />}
     </button>
   );
 };

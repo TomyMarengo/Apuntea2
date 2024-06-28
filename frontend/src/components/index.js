@@ -5,6 +5,7 @@ import DarkModeButton from './Buttons/DarkModeButton';
 import DeleteButton from './Buttons/DeleteButton';
 import DownloadButton from './Buttons/DownloadButton';
 import Dropdown from './Buttons/Dropdown';
+import EditButton from './Buttons/EditButton';
 import FavoriteButton from './Buttons/FavoriteButton';
 import ProfileButton from './Buttons/ProfileButton';
 import SearchPill from './Buttons/SearchPill';
@@ -19,11 +20,19 @@ import ProfileForm from './Forms/ProfileForm';
 import RegisterForm from './Forms/RegisterForm';
 import SearchForm from './Forms/SearchForm';
 
+/* IconButtons */
+import DirectoryIconButton from './Buttons/DirectoryIconButton';
+import NoteIconButton from './Buttons/NoteIconButton';
+
 /* Menu */
 import BottomNavbar from './Menu/BottomNavbar';
 import Navbar from './Menu/Navbar';
 import NavSearchButton from './Menu/NavSearchButton';
 import Sidebar from './Menu/Sidebar';
+
+/* Modal */
+import EditNoteForm from './Modal/EditNoteForm';
+import Modal from './Modal/Modal';
 
 /* Reviews */
 import ReviewBox from './Reviews/ReviewBox';
@@ -42,7 +51,10 @@ import Input from './Utils/Input';
 import InputAutocomplete from './Utils/InputAutocomplete';
 import RequireAuth from './Utils/RequireAuth';
 import SearchTable from './Utils/SearchTable';
+import Select from './Utils/Select';
 import Spinner from './Utils/Spinner';
+import TabbedCard from './Utils/TabbedCard';
+import TabContent from './Utils/TabContent';
 
 export {
   /* Buttons */
@@ -50,9 +62,12 @@ export {
   CopyButton,
   DarkModeButton,
   DeleteButton,
+  DirectoryIconButton,
   DownloadButton,
   Dropdown,
+  EditButton,
   FavoriteButton,
+  NoteIconButton,
   ProfileButton,
   SearchPill,
   SortBySelect,
@@ -72,6 +87,10 @@ export {
   NavSearchButton,
   Sidebar,
 
+  /* Modal */
+  EditNoteForm,
+  Modal,
+
   /* Reviews */
   ReviewBox,
   ReviewCard,
@@ -89,5 +108,8 @@ export {
   InputAutocomplete,
   RequireAuth,
   SearchTable,
+  Select,
   Spinner,
+  TabbedCard,
+  TabContent,
 };

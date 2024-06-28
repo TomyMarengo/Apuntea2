@@ -31,7 +31,7 @@ const ReviewCard = ({ user, score, content }) => {
         <div className="link text-xl">
           {isLoadingOwner ? <Spinner /> : <NavLink to={owner.self + '/noteboard'}>{owner.username}</NavLink>}
         </div>
-        <DeleteButton />
+        <DeleteButton className="icon-s fill-dark-text" />
       </div>
       <div>
         {Array.from({ length: score }, (_, i) => (

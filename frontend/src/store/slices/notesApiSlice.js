@@ -24,11 +24,19 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Notes'],
     }),
     updateNote: builder.mutation({
-      query: ({ noteId, note, url }) => ({
-        url: url || `/notes/${noteId}`,
-        method: 'PATCH',
-        body: note,
-      }),
+      query: ({ noteId, name, category, visible, url }) => {
+        const data = {};
+        if (name !== undefined) data['name'] = name;
+        if (category !== undefined) data['category'] = category;
+        if (visible !== undefined) data['visible'] = visible === 'true';
+
+        console.log(data);
+        return {
+          url: url || `/notes/${noteId}`,
+          method: 'PATCH',
+          body: data,
+        };
+      },
       invalidatesTags: ['Notes'],
     }),
     getUserNotesFavorites: builder.query({
@@ -50,6 +58,9 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    getLatestNotes: builder.query({
+      query: ({ userId, url }) => url || `/notes?user=${userId}&sortBy=date`,
+    }),
   }),
 });
 
@@ -62,4 +73,5 @@ export const {
   useGetIsFavoriteNoteQuery,
   useAddFavoriteNoteMutation,
   useRemoveFavoriteNoteMutation,
+  useGetLatestNotesQuery,
 } = notesApiSlice;

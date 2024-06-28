@@ -26,7 +26,7 @@ const NavSearchButton = () => {
   return (
     <div className="search-container">
       <div className="icon-button search-icon" onClick={navigateToSearch}>
-        <SearchIcon className="icon-s fill-dark-pri" />
+        <SearchIcon className="icon-xs fill-dark-pri" />
       </div>
       <input
         type="text"

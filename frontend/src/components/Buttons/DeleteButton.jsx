@@ -1,14 +1,9 @@
 import { TrashIcon } from '../Utils/Icons';
 
-const DeleteButton = () => {
+const DeleteButton = ({ onClick, className }) => {
   return (
-    <button
-      className="icon-button"
-      onClick={() => {
-        //TODO
-      }}
-    >
-      <TrashIcon className="icon-s" />
+    <button className="icon-button" onClick={onClick}>
+      <TrashIcon className={className} />
     </button>
   );
 };

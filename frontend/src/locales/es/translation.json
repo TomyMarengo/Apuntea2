@@ -125,11 +125,12 @@
       "title": "Error interno del servidor"
     },
     "careerId": "La carrera no es válida",
-    "content": "El comentario debe tener entre 1 y 255 caracteres",
+    "content": "El comentario debe tener a lo sumo 255 caracteres",
     "email": "El correo electrónico no es válido",
     "firstName": "El nombre debe tener entre 4 y 25 caracteres, que pueden ser letras o espacios.",
     "institutionId": "La institución no es válida",
     "lastName": "El apellido debe tener entre 4 y 25 caracteres, que pueden ser letras o espacios.",
+    "noteId": "El apunte no es válido",
     "password": {
       "length": "La contraseña puede contener hasta 50 caracteres",
       "regex": "La contraseña debe contener al menos una letra mayúscula, una letra minúscula y un número."
@@ -363,6 +364,7 @@
     "firstName": "Nombre",
     "institutionId": "Institución",
     "lastName": "Apellido",
+    "name": "Nombre",
     "password": "Contraseña",
     "subjectId": "Materia",
     "username": "Nombre de usuario",

@@ -126,11 +126,12 @@
       "title": "Internal server error"
     },
     "careerId": "Invalid career",
-    "content": "Content must be between 1 and 255 characters",
+    "content": "Content must have up to 255 characters",
     "email": "Invalid email",
     "firstName": "First name must be between 4 and 25 characters and can be letters or spaces.",
     "institutionId": "Invalid institution",
     "lastName": "Last name must be between 4 and 25 characters and can be letters or spaces.",
+    "noteId": "Invalid note",
     "password": {
       "length": "Password can contain up to 50 characters",
       "regex": "Password must contain at least one uppercase letter, one lowercase letter and one number."
@@ -364,6 +365,7 @@
     "firstName": "First Name",
     "institutionId": "Institution",
     "lastName": "Last Name",
+    "name": "Name",
     "password": "Password",
     "subjectId": "Subject",
     "username": "Username",

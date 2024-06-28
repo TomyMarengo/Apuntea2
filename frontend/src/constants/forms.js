@@ -87,14 +87,38 @@ const institutionInputs = [
     name: 'subjectId',
     placeholder: 'placeholders.subjectId',
   },
-]
+];
+
+const noteInputs = [
+  {
+    id: 'name',
+    name: 'name',
+    placeholder: 'placeholders.name',
+    autoFocus: true,
+  },
+  {
+    id: 'file',
+    name: 'file',
+    placeholder: 'placeholders.file',
+  },
+  {
+    id: 'category',
+    name: 'category',
+    placeholder: 'placeholders.category',
+  },
+  {
+    id: 'visible',
+    name: 'visible',
+    placeholder: 'placeholders.visible',
+  },
+];
 
 const searchInputs = [
   {
     id: 'word',
     name: 'word',
     placeholder: 'placeholders.word',
-  }
+  },
 ];
 
 const reviewInputs = [
@@ -108,5 +132,4 @@ const reviewInputs = [
     name: 'score',
   },
 ];
-export { loginInputs, registerInputs, profileInputs, institutionInputs, searchInputs, reviewInputs };
-
+export { loginInputs, registerInputs, profileInputs, institutionInputs, noteInputs, searchInputs, reviewInputs };
