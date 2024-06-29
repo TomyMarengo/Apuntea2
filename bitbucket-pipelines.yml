@@ -7,8 +7,8 @@ pipelines:
         caches:
           - maven
         script:
-          - mvn clean install -DskipTests=false
-          - mvn test
+          - mvn clean install -DskipTests=false -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true
+          - mvn test -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true
         artifacts:
           - target/**
         services:
