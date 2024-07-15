@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setCredentials, logOut, invalidateToken } from './authSlice';
 import { decode } from '../../functions/utils';
 
+// TODO: Ver si se puede cambiar por un users?email=...
 const getTokenUrl = '/users?pageSize=4';
 const baseUrl = 'http://localhost:8080/paw-2023b-12/api'; //TODO mover a .env
 
@@ -25,9 +26,9 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     api.dispatch(invalidateToken());
 
     const data = await baseQuery(getTokenUrl, api, extraOptions);
-    let token = data.meta.response.headers.get('Access-Token').split(' ')[1];
+    let token = data.meta.response.headers.get('Access-Token')?.split(' ')[1];
     token = decode(token);
-    const refreshToken = data.meta.response.headers.get('Refresh-Token').split(' ')[1];
+    const refreshToken = data.meta.response.headers.get('Refresh-Token')?.split(' ')[1];
     if (token && refreshToken) {
       // store the new token
       api.dispatch(setCredentials({ token, refreshToken }));
@@ -44,7 +45,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   // eslint-disable-next-line no-unused-vars
-  endpoints: (builder) => ({}),
+  endpoints: (_) => ({}),
   keepUnusedDataFor: 2,
   tagTypes: ['Institutions', 'Careers', 'Subjects', 'Notes', 'Directories', 'Users', 'ProfilePicture', 'Reviews'],
 });

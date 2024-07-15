@@ -4,7 +4,7 @@ export const LoginSchema = z.object({
   email: z.string().email({ message: 'errors.email' }),
   password: z
     .string()
-    .regex(new RegExp('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$'), 'errors.password.regex')
+    // .regex(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$'), 'errors.password.regex')
     .max(50, { message: 'errors.password.length' }),
 });
 

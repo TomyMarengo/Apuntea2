@@ -53,9 +53,9 @@ const useForm = ({ args, initialValues, submitCallback, dispatchCallback, schema
       setMessage(error.message);
       toast.error(error.message);
       if (redirectErrorUrl) navigate(redirectErrorUrl);
-    } finally {
+    } /*finally {
       setForm(initialValues);
-    }
+    }*/
   };
 
   return { form, setFormValues, resetForm, message, errors, handleChange, handleSubmit };

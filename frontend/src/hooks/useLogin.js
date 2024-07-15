@@ -1,25 +1,25 @@
 import { useLazyLoginQuery } from '../store/slices/authApiSlice';
-import { useLazyGetUserQuery } from '../store/slices/usersApiSlice';
+// import { useLazyGetUserQuery } from '../store/slices/usersApiSlice';
 import { decode } from '../functions/utils';
 import { setCredentials } from '../store/slices/authSlice';
 import { useDispatch } from 'react-redux';
 
 const useLogin = () => {
   const [login] = useLazyLoginQuery();
-  const [getUser] = useLazyGetUserQuery();
+  // const [getUser] = useLazyGetUserQuery();
   const dispatch = useDispatch();
 
   const getSession = async (credentials) => {
     try {
-      let { token, refreshToken } = await login(credentials).unwrap();
+      let { token, refreshToken, user } = await login(credentials).unwrap();
       token = decode(token);
-      const {
-        payload: { userId },
-      } = token;
+      // const {
+      //   payload: { userId },
+      // } = token;
 
-      dispatch(setCredentials({ token, refreshToken }));
+      dispatch(setCredentials({ token, refreshToken, user }));
 
-      const user = await getUser({ userId }).unwrap();
+      // const user = await getUser({ userId }).unwrap();
 
       return { token, refreshToken, user };
     } catch (error) {
