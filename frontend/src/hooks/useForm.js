@@ -19,7 +19,6 @@ const useForm = ({ args, initialValues, submitCallback, dispatchCallback, schema
       if (!validatedField.success) {
         const debouncedSetErrors = debounce((errors) => setErrors(errors), 250);
         debouncedSetErrors({ ...errors, ...validatedField.error.flatten().fieldErrors });
-        return;
       }
       setErrors({ ...errors, [name]: '' });
     }
