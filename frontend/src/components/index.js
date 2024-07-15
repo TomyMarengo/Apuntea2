@@ -31,6 +31,7 @@ import NavSearchButton from './Menu/NavSearchButton';
 import Sidebar from './Menu/Sidebar';
 
 /* Modal */
+import DeleteNoteForm from './Modal/DeleteNoteForm';
 import EditNoteForm from './Modal/EditNoteForm';
 import Modal from './Modal/Modal';
 
@@ -88,6 +89,7 @@ export {
   Sidebar,
 
   /* Modal */
+  DeleteNoteForm,
   EditNoteForm,
   Modal,
 

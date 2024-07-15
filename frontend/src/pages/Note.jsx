@@ -9,6 +9,7 @@ import {
   EditButton,
   Modal,
   EditNoteForm,
+  DeleteNoteForm,
 } from '../components/index';
 import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
@@ -56,7 +57,6 @@ const Note = () => {
 
   // Modal
   const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
 
   const openEditModal = () => {
     setEditModalIsOpen(true);
@@ -66,6 +66,16 @@ const Note = () => {
     setEditModalIsOpen(false);
   };
 
+  const editNoteFormRef = useRef(null);
+
+  const handleEditNoteFormSubmit = () => {
+    if (editNoteFormRef.current) {
+      editNoteFormRef.current.requestSubmit();
+    }
+  };
+
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+
   const openDeleteModal = () => {
     setDeleteModalIsOpen(true);
   };
@@ -74,11 +84,11 @@ const Note = () => {
     setDeleteModalIsOpen(false);
   };
 
-  const editNoteFormRef = useRef(null);
+  const deleteNoteFormRef = useRef(null);
 
-  const handleEditNoteFormSubmit = () => {
-    if (editNoteFormRef.current) {
-      editNoteFormRef.current.requestSubmit();
+  const handleDeleteNoteFormSubmit = () => {
+    if (deleteNoteFormRef.current) {
+      deleteNoteFormRef.current.requestSubmit();
     }
   };
 
@@ -143,7 +153,10 @@ const Note = () => {
                     onClose={closeDeleteModal}
                     title={t('actions.deleteNote')}
                     action={t('actions.delete')}
-                  ></Modal>
+                    onSubmit={handleDeleteNoteFormSubmit}
+                  >
+                    <DeleteNoteForm note={note} ref={deleteNoteFormRef} />
+                  </Modal>
                 </>
               )}
             </div>

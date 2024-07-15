@@ -34,7 +34,10 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         return {
           url: url || `/notes/${noteId}`,
           method: 'PATCH',
-          body: data,
+          headers: {
+            'Content-Type': 'application/vnd.apuntea.note-update-v1.0+json',
+          },
+          body: JSON.stringify(data),
         };
       },
       invalidatesTags: ['Notes'],

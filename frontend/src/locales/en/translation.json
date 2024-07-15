@@ -270,6 +270,9 @@
       "reviews": {
         "noReviews": "There are no reviews yet.",
         "seeMore": "See more reviews"
+      },
+      "deleteForm": {
+        "confirm": "Are you sure you want to delete this note?"
       }
     },
     "profile": {

@@ -31,7 +31,8 @@ public class ApunteaMediaType {
     public static final String NOTE_COLLECTION = "application/vnd.apuntea.note-collection-v1.0+json";
 
     // NOTE_CREATE is multipart form data
-    public static final String NOTE_CREATE = "multipart/vnd.apuntea.note-create-v1.0";
+//    public static final String NOTE_CREATE = "multipart/vnd.apuntea.note-create-v1.0";
+    public static final String NOTE_CREATE = "multipart/form-data";
     public static final String NOTE_UPDATE = "application/vnd.apuntea.note-update-v1.0+json";
     public static final String DELETE_REASON = "application/vnd.apuntea.delete-reason-v1.0+plain";
 
