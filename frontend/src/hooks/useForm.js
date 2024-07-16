@@ -40,7 +40,7 @@ const useForm = ({ args, initialValues, submitCallback, dispatchCallback, schema
         const validatedFields = schema.safeParse(form);
         if (!validatedFields.success) {
           setErrors(validatedFields.error.flatten().fieldErrors);
-          throw new Error("Form doesn't match schema");
+          // throw new Error("Form doesn't match schema");
         }
       }
       const response = await submitCallback({ ...args, ...form });

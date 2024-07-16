@@ -22,7 +22,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = {EmailValidator.class, UnusedEmail.UnusedEmailValidator.class})
 public @interface UnusedEmail {
-    String message() default "{ar.edu.itba.paw.webapp.validation.UnusedEmail.message}";
+    String message() default "UnusedEmail.userForm.email";
 
     String regex() default RegexUtils.EMAIL_REGEX;
 

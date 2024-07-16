@@ -49,12 +49,18 @@ const InstitutionDataInputs = ({
   const onChangeInstitution = (e) => {
     if (isUuid(e.target.value)) setInstitution(institutions.find((institution) => institution.id === e.target.value));
     else if (e.target.value === '') setInstitution({});
+    if (!skipCareers) setCareer({});
+    if (careerRef.current) careerRef.current.disabled = !e.target.value
+    if (!skipSubjects) setSubject({});
+    if (subjectRef.current) subjectRef.current.disabled = !e.target.value
     onChange(e);
   };
 
   const onChangeCareer = (e) => {
     if (isUuid(e.target.value)) setCareer(careers.find((career) => career.id === e.target.value));
     else if (e.target.value === '') setCareer({});
+    if (!skipSubjects) setSubject({});
+    if (subjectRef.current) subjectRef.current.disabled = !e.target.value
     onChange(e);
   };
 
@@ -79,6 +85,7 @@ const InstitutionDataInputs = ({
       if (career?.name) {
         careerRef.current.value = career?.name;
       } else {
+        if (!skipInstitutions) careerRef.current.disabled = true;
         careerRef.current.value = '';
       }
     }
@@ -89,6 +96,7 @@ const InstitutionDataInputs = ({
       if (subject?.name) {
         subjectRef.current.value = subject?.name;
       } else {
+        if (!skipCareers) subjectRef.current.disabled = true;
         subjectRef.current.value = '';
       }
     }
