@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NoteIconButton, TabContent } from '../index';
+import { TabContent } from '../index';
 
 const TabbedCard = ({ tabs }) => {
   const [activeTab, setActiveTab] = useState(0);
@@ -23,10 +23,8 @@ const TabbedCard = ({ tabs }) => {
       </div>
 
       {tabs.map((tab, index) => (
-        <TabContent key={index} style={{ display: activeTab === index ? 'block' : 'none' }}>
-          {tab.content.map((note, index) => (
-            <NoteIconButton key={index} name={note.name} fileType={note.fileType} noteId={note.id} />
-          ))}
+        <TabContent key={index} active={activeTab === index}>
+          {tab.content}
         </TabContent>
       ))}
     </div>

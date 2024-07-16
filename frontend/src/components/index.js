@@ -57,6 +57,10 @@ import Spinner from './Utils/Spinner';
 import TabbedCard from './Utils/TabbedCard';
 import TabContent from './Utils/TabContent';
 
+/* Tabs */
+import CareerSubjectsByYear from './Tabs/CareerSubjectsByYear';
+import LatestNotes from './Tabs/LatestNotes';
+
 export {
   /* Buttons */
   Button,
@@ -114,4 +118,8 @@ export {
   Spinner,
   TabbedCard,
   TabContent,
+
+  /* Tabs */
+  CareerSubjectsByYear,
+  LatestNotes,
 };
