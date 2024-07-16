@@ -85,7 +85,7 @@ const InstitutionDataInputs = ({
       if (career?.name) {
         careerRef.current.value = career?.name;
       } else {
-        if (!skipInstitutions) careerRef.current.disabled = true;
+        if (!skipInstitutions) careerRef.current.disabled = !institutionRef?.current?.value
         careerRef.current.value = '';
       }
     }
@@ -96,7 +96,7 @@ const InstitutionDataInputs = ({
       if (subject?.name) {
         subjectRef.current.value = subject?.name;
       } else {
-        if (!skipCareers) subjectRef.current.disabled = true;
+        if (!skipCareers) subjectRef.current.disabled = !careerRef?.current?.value;
         subjectRef.current.value = '';
       }
     }
