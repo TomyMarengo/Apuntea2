@@ -15,7 +15,7 @@ const useRegister = () => {
       return { user, token, refreshToken };
     } catch (error) {
       console.error('Error during register:', error);
-      throw new Error('Failed to register');
+      throw new Error(error.data[0].message); // TODO: Throw all error messages?
     }
   };
 

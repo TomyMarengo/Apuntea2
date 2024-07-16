@@ -54,7 +54,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       query: userInfo => ({
         url: '/users',
         method: 'POST',
-        body: userInfo,
+        body: JSON.stringify(userInfo),
+        headers: {
+            'Content-Type': "application/vnd.apuntea.user-create-v1.0+json"
+        }
       }),
       transformResponse: async (response, meta) => {
         return { location: meta.response.headers.get('Location') }

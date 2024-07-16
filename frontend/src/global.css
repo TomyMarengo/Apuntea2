@@ -213,6 +213,10 @@ select {
   @apply block w-full pl-4 pr-7 py-2 border rounded-md focus:ring-4 focus:outline-none;
 }
 
+input:disabled {
+  @apply bg-text/10 text-dark-text/50;
+}
+
 input::placeholder {
   @apply text-dark-text/50;
 }

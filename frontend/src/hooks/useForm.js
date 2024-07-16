@@ -19,7 +19,6 @@ const useForm = ({ args, initialValues, submitCallback, dispatchCallback, schema
       if (!validatedField.success) {
         const debouncedSetErrors = debounce((errors) => setErrors(errors), 250);
         debouncedSetErrors({ ...errors, ...validatedField.error.flatten().fieldErrors });
-        return;
       }
       setErrors({ ...errors, [name]: '' });
     }
@@ -41,7 +40,7 @@ const useForm = ({ args, initialValues, submitCallback, dispatchCallback, schema
         const validatedFields = schema.safeParse(form);
         if (!validatedFields.success) {
           setErrors(validatedFields.error.flatten().fieldErrors);
-          throw new Error("Form doesn't match schema");
+          // throw new Error("Form doesn't match schema");
         }
       }
       const response = await submitCallback({ ...args, ...form });
@@ -53,9 +52,9 @@ const useForm = ({ args, initialValues, submitCallback, dispatchCallback, schema
       setMessage(error.message);
       toast.error(error.message);
       if (redirectErrorUrl) navigate(redirectErrorUrl);
-    } finally {
+    } /*finally {
       setForm(initialValues);
-    }
+    }*/
   };
 
   return { form, setFormValues, resetForm, message, errors, handleChange, handleSubmit };
