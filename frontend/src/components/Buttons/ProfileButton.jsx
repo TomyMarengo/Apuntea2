@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { logOut, selectCurrentUser } from '../../store/slices/authSlice';
 import { UserIcon, ChevronDownIcon } from '../Utils/Icons';
 import { Button, Dropdown } from '../index';
+import { useTranslation } from 'react-i18next';
 
 const ProfileButton = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
+  const { t } = useTranslation();
 
   const handleLogOut = () => {
     dispatch(logOut());
@@ -35,14 +37,14 @@ const ProfileButton = () => {
         </div>,
         <hr key="Divider1" className="dropdown-divider" />,
         <Button key="Profile" to="/profile">
-          Profile
+          {t('pages.profile.title')}
         </Button>,
         <Button key="Settings" to="/settings">
-          Settings
+          {t('pages.settings.title')}
         </Button>,
         <hr key="Divider2" className="dropdown-divider" />,
         <Button key="SignOut" onClick={handleLogOut}>
-          Sign out
+          {t('actions.logout')}
         </Button>,
       ]}
     />

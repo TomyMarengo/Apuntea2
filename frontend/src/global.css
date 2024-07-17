@@ -5,6 +5,7 @@
 @import url('./styles/modal.css');
 @import url('./styles/note.css');
 @import url('./styles/profile.css');
+@import url('./styles/settings.css');
 @import url('./styles/tabbed-card.css');
 
 @tailwind base;

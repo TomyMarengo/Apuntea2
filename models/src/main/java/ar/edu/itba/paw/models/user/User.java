@@ -42,33 +42,6 @@ public class User {
     @JoinColumn(name = "profile_picture_id")
     private Image profilePicture;
 
-    /*@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OrderBy("name ASC")
-    @JoinTable(
-            name = "Note_Favorites",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "note_id" )}
-    )
-    private Set<Note> noteFavorites = new HashSet<>();*/
-
-    /*@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OrderBy("name ASC")
-    @JoinTable(
-            name = "Directory_Favorites",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "directory_id" )}
-    )
-    private Set<Directory> directoryFavorites = new HashSet<>();*/
-
-    /*@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @OrderBy("email ASC")
-    @JoinTable(
-            name = "Follows",
-            joinColumns = { @JoinColumn(name = "follower_id") },
-            inverseJoinColumns = { @JoinColumn(name = "followed_id")}
-    )
-    private Set<User> usersFollowing = new HashSet<>();*/
-
     /* package-private */ User() {
     }
 

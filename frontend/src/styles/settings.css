@@ -1,0 +1,25 @@
+.settings-cards {
+    display: flex;
+    flex-direction: row;
+}
+
+.settings-form {
+  display: grid;
+  grid-template-areas: 'header' 'main' 'footer';
+  justify-items: center;
+}
+
+.settings-inputs {
+  grid-area: main;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  grid-auto-flow: column;
+  width: 100%;
+  column-gap: 2rem;
+  row-gap: 1rem;
+}
+
+.settings-footer {
+  grid-area: footer;
+  max-width: 3rem;
+}
