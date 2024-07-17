@@ -1,0 +1,37 @@
+.settings-cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 3rem !important;
+    flex-wrap: wrap;
+}
+
+.settings-form {
+  display: grid;
+  grid-template-areas: 'header' 'main' 'footer';
+  justify-items: center;
+}
+
+.settings-inputs {
+  grid-area: main;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  grid-auto-flow: column;
+  width: 100%;
+  column-gap: 2rem;
+  row-gap: 1rem;
+}
+
+.settings-footer {
+  grid-area: footer;
+  max-width: 3rem;
+}
+
+.settings-input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: 0.125rem;
+}

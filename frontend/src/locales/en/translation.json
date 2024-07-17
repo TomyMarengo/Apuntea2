@@ -142,7 +142,8 @@
     "score": "Score must be between 1 and 5",
     "sortBy": "Invalid sort",
     "subjectId": "Invalid subject",
-    "username": "Username must be between 4 and 30 characters and can contain letters (uppercase or lowercase), numbers, periods, underscores, or hyphens."
+    "username": "Username must be between 4 and 30 characters and can contain letters (uppercase or lowercase), numbers, periods, underscores, or hyphens.",
+    "invalidPassword": "The old password is incorrect"
   },
   "follows": {
     "noContent": {

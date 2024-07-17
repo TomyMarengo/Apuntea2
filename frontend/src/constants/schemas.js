@@ -27,6 +27,14 @@ export const UserSchema = z.object({
 
 export const PatchUserSchema = UserSchema.partial();
 
+export const ChangePasswordSchema = z.object({
+  oldPassword: z.string().max(50, { message: 'errors.password.length' }),
+  password: z
+    .string()
+    .regex(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$'), 'errors.password.regex')
+    .max(50, { message: 'errors.password.length' }),
+});
+
 const MIN_PAGE_SIZE = 4;
 const MAX_PAGE_SIZE = 36;
 

@@ -71,6 +71,21 @@ const profileInputs = [
   },
 ];
 
+const settingsInputs = [
+  {
+    id: 'oldPassword',
+    name: 'oldPassword',
+    placeholder: 'placeholders.password',
+    password: true,
+  },
+  {
+    id: 'password',
+    name: 'password',
+    placeholder: 'placeholders.password',
+    password: true,
+  }
+]
+
 const institutionInputs = [
   {
     id: 'institutionId',
@@ -132,4 +147,4 @@ const reviewInputs = [
     name: 'score',
   },
 ];
-export { loginInputs, registerInputs, profileInputs, institutionInputs, noteInputs, searchInputs, reviewInputs };
+export { loginInputs, registerInputs, profileInputs, institutionInputs, noteInputs, searchInputs, reviewInputs, settingsInputs};

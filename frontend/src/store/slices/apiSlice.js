@@ -8,19 +8,24 @@ const baseQuery = fetchBaseQuery({
   baseUrl,
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
-    const token = getState().auth.token;
-    const refreshToken = getState().auth.refreshToken;
-    if (token || refreshToken) {
-      headers.set('Authorization', 'Bearer ' + (token?.raw || refreshToken));
+    if (!headers.has('Authorization')) {
+      const token = getState().auth.token;
+      const refreshToken = getState().auth.refreshToken;
+      if (token || refreshToken) {
+        headers.set('Authorization', 'Bearer ' + (token?.raw || refreshToken));
+      }
     }
     return headers;
-  },
+  }
 });
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result?.error?.status === 401) {
+  if (result?.error?.status === 401 && api.getState().auth.user) {
+    if (args?.headers && Object.keys(args.headers).includes('Content-Type') && args.headers['Content-Type'] === 'application/vnd.apuntea.user-update-v1.0+json') {
+      throw new Error('InvalidPassword');
+    }
     api.dispatch(invalidateToken());
 
     const data = await baseQuery(api.getState().auth.user.self, api, extraOptions);

@@ -102,7 +102,7 @@ const InputAutocomplete = forwardRef(function InputAutocomplete({ list, onChange
             <CrossIcon className="w-[10px] h-[10px] fill-text/50" />
           </button>
         </label>
-        {open && list && (
+        {open && list && listItems?.length > 0 && (
           <ul className="dropdown-autocomplete">
             {listItems.map((item, index) => {
               const matchIndex = 0;

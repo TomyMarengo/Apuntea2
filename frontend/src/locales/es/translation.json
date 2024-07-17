@@ -141,7 +141,8 @@
     "score": "La calificación debe ser un número entre 1 y 5",
     "sortBy": "El ordenamiento no es válido",
     "subjectId": "La materia no es válida",
-    "username": "El nombre de usuario debe tener entre 4 y 30 caracteres y puede contener letras (mayúsculas o minúsculas), números, puntos, guiones bajos o guiones."
+    "username": "El nombre de usuario debe tener entre 4 y 30 caracteres y puede contener letras (mayúsculas o minúsculas), números, puntos, guiones bajos o guiones.",
+    "invalidPassword": "La contraseña anterior es incorrecta"
   },
   "follows": {
     "noContent": {

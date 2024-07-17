@@ -19,36 +19,46 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     updateUser: builder.mutation({
       query: ({
         userId,
+        email, 
         firstName,
         lastName,
         username,
         careerId,
-        profilePicture,
+        // profilePicture,
         password,
         notificationsEnabled,
         url,
+        oldPassword
       }) => {
-        const formData = new FormData();
+        // const formData = new FormData();
+        let headers = {};
+        const data = {};
+        // const aditionalHeaders = {};
 
-        if (firstName !== undefined) formData.append('firstName', firstName);
-        if (lastName !== undefined) formData.append('lastName', lastName);
-        if (username !== undefined) formData.append('username', username);
-        if (careerId !== undefined) formData.append('careerId', careerId);
-        if (profilePicture !== undefined) formData.append('profilePicture', profilePicture);
-        if (password !== undefined) formData.append('password', password);
-        if (notificationsEnabled !== undefined) formData.append('notificationsEnabled', notificationsEnabled);
+        if (firstName !== undefined) data.firstName = firstName;
+        if (lastName !== undefined) data.lastName = lastName;
+        if (username !== undefined) data.username = username;
+        if (careerId !== undefined) data.careerId = careerId;
+        // TODO: Refactor profilePicture
+        // if (profilePicture !== undefined) formData.append('profilePicture', profilePicture);
+        if (password !== undefined && oldPassword !== undefined) {
+          data.password = password;
+          headers = {
+            Authorization: `Basic ${btoa(`${email}:${oldPassword}`)}`
+          } 
+        }
+        if (notificationsEnabled !== undefined) data.notificationsEnabled = notificationsEnabled;
+
+        headers['Content-Type'] = "application/vnd.apuntea.user-update-v1.0+json";
 
         return {
           url: url || `/users/${userId}`,
           method: 'PATCH',
-          body: formData,
-          headers: {
-            // Do not set Content-Type for FormData, as it will be automatically set
-          },
-          formData: true,
+          body: JSON.stringify(data),
+          headers 
         };
       },
-      invalidatesTags: ['Users', 'ProfilePicture'],
+      invalidatesTags: ['Users'],
     }),
     createUser: builder.mutation({
       query: userInfo => ({
