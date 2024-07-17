@@ -1,13 +1,11 @@
 import { useTranslation } from 'react-i18next';
 
-// import { useUpdateUserMutation } from '../../store/slices/usersApiSlice';
 import { useForm, useUserData } from '../../hooks/index';
 import { Input, Button } from '../index';
 import { settingsInputs } from '../../constants/forms';
 import { ChangePasswordSchema } from '../../constants/schemas';
 
 const ChangePasswordForm = ({ user }) => {
-  // const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
   const { t } = useTranslation();
   const { updateUser, isLoadingUpdate } = useUserData();
 
@@ -31,6 +29,7 @@ const ChangePasswordForm = ({ user }) => {
               {...settingsInputs.find((input) => input.name === 'oldPassword')}
               onChange={handleChange}
               errors={errors?.oldPassword}
+              required
             />
           </div>
           <div className="flex flex-col gap-1">
@@ -39,6 +38,7 @@ const ChangePasswordForm = ({ user }) => {
               {...settingsInputs.find((input) => input.name === 'password')}
               onChange={handleChange}
               errors={errors?.password}
+              required
             />
           </div>
         </div>

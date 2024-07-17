@@ -20,6 +20,7 @@ import ProfileForm from './Forms/ProfileForm';
 import RegisterForm from './Forms/RegisterForm';
 import SearchForm from './Forms/SearchForm';
 import ChangePasswordForm from './Forms/ChangePasswordForm';
+import OtherConfigurationsForm from './Forms/OtherConfigurationsForm';
 
 /* IconButtons */
 import DirectoryIconButton from './Buttons/DirectoryIconButton';
@@ -87,6 +88,7 @@ export {
   RegisterForm,
   SearchForm,
   ChangePasswordForm,
+  OtherConfigurationsForm,
 
   /* Menu */
   BottomNavbar,
