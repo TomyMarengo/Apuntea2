@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { useUpdateUserMutation } from '../../store/slices/usersApiSlice';
+import { useUpdateUserMutation, useUpdatePictureMutation } from '../../store/slices/usersApiSlice';
 import { useForm } from '../../hooks/index';
 import { Input, Button, EditableImage, InstitutionDataInputs } from '../index';
 import { profileInputs } from '../../constants/forms';
@@ -8,10 +8,16 @@ import { PatchUserSchema } from '../../constants/schemas';
 
 const ProfileForm = ({ user, institution, career }) => {
   const [updateUser, { isLoading: isLoadingUpdate }] = useUpdateUserMutation();
+  const [updatePicture, { isLoading: isLoadingPicture }] = useUpdatePictureMutation();
   const { t } = useTranslation();
 
+  const update = ({ userId, profilePicture, ...args }) => {
+    if (Object.keys(args).length > 0) updateUser({userId, ...args});
+    if (profilePicture) updatePicture({ profilePicture });
+  };
+
   const { handleChange, handleSubmit, errors } = useForm({
-    submitCallback: updateUser,
+    submitCallback: update,
     args: {
       userId: user.id,
     },
@@ -69,7 +75,7 @@ const ProfileForm = ({ user, institution, career }) => {
           </div>
         </div>
         <Button type="submit" className="profile-footer">
-          {isLoadingUpdate ? t('actions.loading') : t('actions.save')}
+          {isLoadingUpdate || isLoadingPicture ? t('actions.loading') : t('actions.save')}
         </Button>
       </form>
     </div>

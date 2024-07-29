@@ -16,6 +16,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       providesTags: ['ProfilePicture'],
     }),
+    updatePicture: builder.mutation({
+      query: ({ url, profilePicture }) => {
+        const formData = new FormData();
+        formData.append('profilePicture', profilePicture);
+        return {
+          url: url || '/pictures',
+          method: 'POST',
+          body: formData,
+        };
+      },
+    }),
     updateUser: builder.mutation({
       query: ({
         userId,
@@ -76,5 +87,5 @@ export const usersApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetUsersQuery, useGetUserQuery, useGetUserPictureQuery, useLazyGetUserQuery, useUpdateUserMutation, useCreateUserMutation } =
+export const { useGetUsersQuery, useGetUserQuery, useGetUserPictureQuery, useLazyGetUserQuery, useUpdateUserMutation, useUpdatePictureMutation, useCreateUserMutation } =
   usersApiSlice;

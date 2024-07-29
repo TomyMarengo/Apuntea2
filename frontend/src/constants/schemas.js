@@ -18,8 +18,8 @@ export const RegisterSchema = LoginSchema.extend({
 });
 
 export const UserSchema = z.object({
-  firstName: z.string().regex(new RegExp('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]{4,20}$'), 'errors.firstName'),
-  lastName: z.string().regex(new RegExp('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]{4,20}$'), 'errors.firstName'),
+  firstName: z.string().regex(new RegExp('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]{2,20}$'), 'errors.firstName'),
+  lastName: z.string().regex(new RegExp('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]{2,20}$'), 'errors.lastName'),
   username: z.string().regex(new RegExp('^(?![\\d-_.]{4,30}$)[a-zA-Z\\d-_.]{4,30}$'), 'errors.username'),
   institutionId: z.string().uuid({ message: 'errors.institutionId' }),
   careerId: z.string().uuid({ message: 'errors.careerId' }),

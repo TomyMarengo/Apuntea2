@@ -128,9 +128,9 @@
     "careerId": "Invalid career",
     "content": "Content must have up to 255 characters",
     "email": "Invalid email",
-    "firstName": "First name must be between 4 and 25 characters and can be letters or spaces.",
+    "firstName": "First name must be between 2 and 25 characters and can be letters or spaces.",
     "institutionId": "Invalid institution",
-    "lastName": "Last name must be between 4 and 25 characters and can be letters or spaces.",
+    "lastName": "Last name must be between 2 and 25 characters and can be letters or spaces.",
     "noteId": "Invalid note",
     "password": {
       "length": "Password can contain up to 50 characters",
