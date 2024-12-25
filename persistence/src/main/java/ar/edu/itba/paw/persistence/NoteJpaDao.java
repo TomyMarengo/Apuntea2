@@ -236,8 +236,8 @@ public class NoteJpaDao implements NoteDao {
     public List<Note> search(SearchArguments sa) {
         SortArguments sortArgs = sa.getSortArguments();
 
-        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36))")
-                .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) as id")
+                .append(", " + DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Notes t ")
                 .append("INNER JOIN Subjects s ON t.subject_id = s.subject_id ")
                 .append("INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id ")
@@ -312,7 +312,7 @@ public class NoteJpaDao implements NoteDao {
         queryCreator.getParams().forEach(query::setParameter);
 
         @SuppressWarnings("unchecked")
-        List<UUID> noteIds = ((List<String>) query.getResultList()).stream().map(UUID::fromString).collect(Collectors.toList());
+        List<UUID> noteIds = ((List<Object[]>) query.getResultList()).stream().map(r -> UUID.fromString(r[0].toString())).collect(Collectors.toList());
 
         return findNotesByIds(noteIds, sortArgs);
         // TODO: Polemicardo in the bar

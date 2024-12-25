@@ -178,8 +178,8 @@ public class DirectoryJpaDao implements DirectoryDao {
     public List<Directory> search(SearchArguments sa) {
         SortArguments sortArgs = sa.getSortArguments();
 
-        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36))")
-                .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) as id")
+                .append(", " + DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Directories t ")
                 .append("INNER JOIN Subjects s ON t.parent_id = s.root_directory_id ")
                 .append("INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id ")
@@ -254,7 +254,7 @@ public class DirectoryJpaDao implements DirectoryDao {
         queryCreator.getParams().forEach(query::setParameter);
 
         @SuppressWarnings("unchecked")
-        List<UUID> directoryIds = ((List<String>) query.getResultList()).stream().map(UUID::fromString).collect(Collectors.toList());
+        List<UUID> directoryIds = ((List<Object[]>) query.getResultList()).stream().map(r -> UUID.fromString(r[0].toString())).collect(Collectors.toList());
 
         return findDirectoriesByIds(directoryIds, sortArgs);
         // TODO: Polemicardo in the bar
