@@ -9,6 +9,28 @@ interface DirectoryQueryArgs {
   url?: string;
 }
 
+interface CreateDirectoryArgs {
+  name: string;
+  parentId: string;
+  visible: boolean;
+  iconColor: string;
+  url?: string;
+}
+
+interface UpdateDirectoryArgs {
+  name?: string;
+  parentId?: string;
+  visible?: boolean;
+  iconColor?: string;
+  url?: string;
+}
+
+interface DeleteDirectoryArgs {
+  directoryId?: string;
+  reason?: string;
+  url?: string;
+}
+
 interface FavoritesArgs {
   userId?: string;
   url?: string;
@@ -24,6 +46,63 @@ interface FavoriteDirectoryArgs {
 
 export const directoriesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    createDirectory: builder.mutation<boolean, CreateDirectoryArgs>({
+      queryFn: async (
+        { name, parentId, visible, iconColor, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const result = await baseQuery({
+          url: url || '/directories',
+          method: 'POST',
+          body: { name, parentId, visible, iconColor },
+        });
+        return { data: result.error !== undefined };
+      },
+      invalidatesTags: ['Directories'],
+    }),
+    updateDirectory: builder.mutation<boolean, UpdateDirectoryArgs>({
+      queryFn: async (
+        { name, parentId, visible, iconColor, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const body: any = {};
+        if (name !== undefined) body.name = name;
+        if (parentId !== undefined) body.parentId = parentId;
+        if (visible !== undefined) body.visible = visible;
+        if (iconColor !== undefined) body.iconColor = iconColor;
+
+        const result = await baseQuery({
+          url: url || `/directories/${parentId}`,
+          method: 'PATCH',
+          body,
+        });
+        return { data: result.error !== undefined };
+      },
+      invalidatesTags: ['Directories'],
+    }),
+    deleteDirectory: builder.mutation<boolean, DeleteDirectoryArgs>({
+      queryFn: async (
+        { directoryId, reason, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const body: any = {};
+        if (reason !== undefined) body.reason = reason;
+
+        const result = await baseQuery({
+          url: url || `/directories/${directoryId}`,
+          method: 'POST',
+          body,
+        });
+        return { data: result.error !== undefined };
+      },
+      invalidatesTags: ['Directories'],
+    }),
     getDirectory: builder.query<Directory, DirectoryQueryArgs>({
       query: ({ directoryId, url }) => url || `/directories/${directoryId}`,
       transformResponse: (response: any) => {
@@ -50,34 +129,43 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
         _extraOptions,
         baseQuery,
       ) => {
-        const endpoint =
-          url || `/directories/${directoryId}/favorites/${userId}`;
-        const result = await baseQuery(endpoint);
-        if (result.error) {
-          if (result.error.status === 404) {
-            return { data: false };
-          }
-          return { error: result.error };
-        }
-        return { data: true };
+        const result = await baseQuery({
+          url: url || `/directories/${directoryId}/favorites/${userId}`,
+          method: 'GET',
+        });
+        return { data: result.error !== undefined };
       },
     }),
-    addFavoriteDirectory: builder.mutation<void, DirectoryQueryArgs>({
-      query: ({ directoryId, url }) => ({
-        url: url || `/directories/${directoryId}/favorites`,
-        method: 'POST',
-      }),
+    addFavoriteDirectory: builder.mutation<boolean, DirectoryQueryArgs>({
+      queryFn: async ({ directoryId, url }, _api, _extraOptions, baseQuery) => {
+        const result = await baseQuery({
+          url: url || `/directories/${directoryId}/favorites`,
+          method: 'POST',
+        });
+        return { data: result.error !== undefined };
+      },
     }),
-    removeFavoriteDirectory: builder.mutation<void, FavoriteDirectoryArgs>({
-      query: ({ directoryId, userId, url }) => ({
-        url: url || `/directories/${directoryId}/favorites/${userId}`,
-        method: 'DELETE',
-      }),
+    removeFavoriteDirectory: builder.mutation<boolean, FavoriteDirectoryArgs>({
+      queryFn: async (
+        { directoryId, userId, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const result = await baseQuery({
+          url: url || `/directories/${directoryId}/favorites/${userId}`,
+          method: 'DELETE',
+        });
+        return { data: result.error !== undefined };
+      },
     }),
   }),
 });
 
 export const {
+  useCreateDirectoryMutation,
+  useUpdateDirectoryMutation,
+  useDeleteDirectoryMutation,
   useGetDirectoryQuery,
   useGetUserDirectoriesFavoritesQuery,
   useGetIsFavoriteDirectoryQuery,

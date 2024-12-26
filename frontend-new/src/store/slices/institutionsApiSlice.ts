@@ -14,18 +14,18 @@ import {
  * - We can pass either { institutionId, careerId, subjectId }
  * - Or { url }
  */
-interface InstitutionArgs {
+interface InstitutionQueryArgs {
   institutionId?: string;
   url?: string;
 }
 
-interface CareerArgs {
+interface CareerQueryArgs {
   institutionId?: string;
   careerId?: string;
   url?: string;
 }
 
-interface SubjectArgs {
+interface SubjectQueryArgs {
   subjectId?: string;
   url?: string;
 }
@@ -42,6 +42,45 @@ interface CareerSubjectsByYearArgs {
   url?: string;
 }
 
+interface CreateSubjectArgs {
+  name: string;
+  year: number;
+  institutionId?: string;
+  careerId?: string;
+  url?: string;
+}
+
+interface UpdateSubjectArgs {
+  name?: string;
+  year?: number;
+  institutionId?: string;
+  careerId?: string;
+  subjectId?: string;
+  url?: string;
+}
+
+interface DeleteSubjectArgs {
+  institutionId?: string;
+  careerId?: string;
+  subjectId?: string;
+  url?: string;
+}
+
+interface LinkSubjecArgs {
+  year: number;
+  institutionId?: string;
+  careerId?: string;
+  subjectId?: string;
+  url?: string;
+}
+
+interface UnlinkSubjectArgs {
+  institutionId?: string;
+  careerId?: string;
+  subjectId?: string;
+  url?: string;
+}
+
 export const institutionsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getInstitutions: builder.query<Institution[], void>({
@@ -55,13 +94,13 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       },
       keepUnusedDataFor: 86400,
     }),
-    getInstitution: builder.query<Institution, InstitutionArgs>({
+    getInstitution: builder.query<Institution, InstitutionQueryArgs>({
       query: ({ institutionId, url }) =>
         url || `/institutions/${institutionId}`,
       transformResponse: (response: any) => mapApiInstitution(response),
       keepUnusedDataFor: 86400,
     }),
-    getCareers: builder.query<Career[], InstitutionArgs>({
+    getCareers: builder.query<Career[], InstitutionQueryArgs>({
       query: ({ institutionId, url }) =>
         url || `/institutions/${institutionId}/careers`,
       transformResponse: (response: any) => {
@@ -73,12 +112,159 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       },
       keepUnusedDataFor: 86400,
     }),
-    getCareer: builder.query<Career, CareerArgs>({
+    getCareer: builder.query<Career, CareerQueryArgs>({
       query: ({ institutionId, careerId, url }) =>
         url || `/institutions/${institutionId}/careers/${careerId}`,
       transformResponse: (response: any) => mapApiCareer(response),
       keepUnusedDataFor: 86400,
     }),
+
+    getSubject: builder.query<Subject, SubjectQueryArgs>({
+      query: ({ subjectId, url }) => url || `/subjects/${subjectId}`,
+      transformResponse: (response: any) => mapApiSubject(response),
+      keepUnusedDataFor: 86400,
+    }),
+    createSubject: builder.mutation<boolean, CreateSubjectArgs>({
+      async queryFn(
+        { name, year, institutionId, careerId, url },
+        _queryApi,
+        _extraOptions,
+        baseQuery,
+      ) {
+        try {
+          // Step 1: Create the subject
+          const subjectResult = await baseQuery({
+            url: url || '/subjects',
+            method: 'POST',
+            body: { name },
+          });
+          if (subjectResult.error) return { data: false }; // Return false if there's an error
+
+          const subjectData = subjectResult.data as { id: string };
+          const subjectId = subjectData.id;
+
+          // Step 2: Associate the subject with the career and year
+          if (institutionId && careerId) {
+            const subjectCareerResult = await baseQuery({
+              url: `/${institutionId}/careers/${careerId}/subjectcareers`,
+              method: 'POST',
+              body: { subjectId, year },
+            });
+            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
+          }
+
+          return { data: true }; // Return true if everything was successful
+        } catch (error: any) {
+          return { data: false }; // Return false if an exception occurs
+        }
+      },
+    }),
+    updateSubject: builder.mutation<boolean, UpdateSubjectArgs>({
+      async queryFn(
+        { name, year, institutionId, careerId, subjectId, url },
+        _queryApi,
+        _extraOptions,
+        baseQuery,
+      ) {
+        try {
+          // Step 1: Update the subject
+          const subjectResult = await baseQuery({
+            url: url || `/subjects/${subjectId}`,
+            method: 'PATCH',
+            body: { name },
+          });
+          if (subjectResult.error) return { data: false }; // Return false if there's an error
+
+          // Step 2: Associate the subject with the career and year
+          if (institutionId && careerId) {
+            const subjectCareerResult = await baseQuery({
+              url: `/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
+              method: 'PATCH',
+              body: { year },
+            });
+            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
+          }
+          return { data: true }; // Return true if everything was successful
+        } catch (error: any) {
+          return { data: false }; // Return false if an exception occurs
+        }
+      },
+    }),
+    deleteSubject: builder.mutation<boolean, DeleteSubjectArgs>({
+      async queryFn(
+        { institutionId, careerId, subjectId, url },
+        _queryApi,
+        _extraOptions,
+        baseQuery,
+      ) {
+        try {
+          if (institutionId && careerId) {
+            const subjectCareerResult = await baseQuery({
+              url: `/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
+              method: 'DELETE',
+            });
+            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
+          }
+
+          const subjectResult = await baseQuery({
+            url: url || `/subjects/${subjectId}`,
+            method: 'DELETE',
+          });
+          if (subjectResult.error) return { data: false }; // Return false if there's an error
+
+          return { data: true }; // Return true if everything was successful
+        } catch (error: any) {
+          return { data: false }; // Return false if an exception occurs
+        }
+      },
+    }),
+    linkSubject: builder.mutation<boolean, LinkSubjecArgs>({
+      async queryFn(
+        { year, institutionId, careerId, subjectId, url },
+        _queryApi,
+        _extraOptions,
+        baseQuery,
+      ) {
+        try {
+          if (institutionId && careerId) {
+            const subjectCareerResult = await baseQuery({
+              url:
+                url || `/${institutionId}/careers/${careerId}/subjectcareers`,
+              method: 'POST',
+              body: { subjectId, year },
+            });
+            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
+          }
+          return { data: true }; // Return true if everything was successful
+        } catch (error: any) {
+          return { data: false }; // Return false if an exception occurs
+        }
+      },
+    }),
+    unlinkSubject: builder.mutation<boolean, UnlinkSubjectArgs>({
+      async queryFn(
+        { institutionId, careerId, subjectId, url },
+        _queryApi,
+        _extraOptions,
+        baseQuery,
+      ) {
+        try {
+          if (institutionId && careerId) {
+            const subjectCareerResult = await baseQuery({
+              url:
+                url ||
+                `/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
+              method: 'DELETE',
+            });
+            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
+          }
+          return { data: true }; // Return true if everything was successful
+        } catch (error: any) {
+          return { data: false }; // Return false if an exception occurs
+        }
+      },
+    }),
+
     getSubjectsByCareer: builder.query<Subject[], SubjectsByCareerArgs>({
       query: ({ careerId, url }) => url || `/subjects?careerId=${careerId}`,
       transformResponse: (response: any): Subject[] => {
@@ -89,14 +275,9 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       },
       keepUnusedDataFor: 86400,
     }),
-    getSubject: builder.query<Subject, SubjectArgs>({
-      query: ({ subjectId, url }) => url || `/subjects/${subjectId}`,
-      transformResponse: (response: any) => mapApiSubject(response),
-      keepUnusedDataFor: 86400,
-    }),
     getSubjectCareer: builder.query<
       SubjectCareer,
-      CareerArgs & { subjectId?: string }
+      CareerQueryArgs & { subjectId?: string }
     >({
       query: ({ institutionId, careerId, subjectId, url }) =>
         url ||
@@ -122,18 +303,14 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetInstitutionsQuery,
-  useLazyGetInstitutionsQuery,
   useGetInstitutionQuery,
-  useLazyGetInstitutionQuery,
   useGetCareersQuery,
-  useLazyGetCareersQuery,
   useGetCareerQuery,
-  useLazyGetCareerQuery,
-  useGetSubjectsByCareerQuery,
-  useLazyGetSubjectsByCareerQuery,
   useGetSubjectQuery,
-  useLazyGetSubjectQuery,
+  useCreateSubjectMutation,
+  useUpdateSubjectMutation,
+  useDeleteSubjectMutation,
+  useGetSubjectsByCareerQuery,
   useGetSubjectCareerQuery,
-  useLazyGetSubjectCareerQuery,
   useGetCareerSubjectsByYearQuery,
 } = institutionsApiSlice;

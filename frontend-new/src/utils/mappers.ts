@@ -115,7 +115,7 @@ export const mapApiUser = (apiUser: any): User => {
     careerUrl: apiUser.career,
     subjectFavoritesUrl: apiUser.subjectFavorites,
     noteFavoritesUrl: apiUser.noteFavorites,
-    noteGroupsUrl: apiUser.noteGroups,
+    subjectsUrl: apiUser.subjects,
     reviewsReceivedUrl: apiUser.reviewsReceived,
     directoryFavoritesUrl: apiUser.directoryFavorites,
     followingUrl: apiUser.following,

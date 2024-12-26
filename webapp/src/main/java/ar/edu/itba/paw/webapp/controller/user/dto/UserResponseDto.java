@@ -141,8 +141,8 @@ public class UserResponseDto {
         this.notes = notes;
     }
 
-    public void setNoteGroups(URI noteGroups) {
-        this.subjects = noteGroups;
+    public void setSubjects(URI subjects) {
+        this.subjects = subjects;
     }
 
     public void setReviewsReceived(URI reviewsReceived) {
@@ -209,7 +209,7 @@ public class UserResponseDto {
         return notes;
     }
 
-    public URI getNoteGroups() {
+    public URI getSubjects() {
         return subjects;
     }
 

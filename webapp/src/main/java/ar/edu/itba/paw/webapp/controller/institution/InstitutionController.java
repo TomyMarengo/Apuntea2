@@ -126,7 +126,7 @@ public class InstitutionController {
     }
 
     @DELETE
-    @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
+    @Path("/{institutionId}/careers/{careerId}/subjectcareers/{suusbjectId}")
     @Secured({"ROLE_ADMIN"})
     public Response deleteSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
         subjectService.unlinkSubjectFromCareer(subjectId, instCarParams.getCareerId());

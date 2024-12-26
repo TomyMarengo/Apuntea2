@@ -21,7 +21,7 @@ export interface User {
   careerUrl?: string;
   subjectFavoritesUrl?: string;
   noteFavoritesUrl?: string;
-  noteGroupsUrl?: string;
+  subjectsUrl?: string;
   reviewsReceivedUrl?: string;
   directoryFavoritesUrl?: string;
   followingUrl?: string;

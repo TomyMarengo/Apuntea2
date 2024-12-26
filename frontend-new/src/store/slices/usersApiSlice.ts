@@ -103,7 +103,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             careerUrl: userData.career,
             subjectFavoritesUrl: userData.subjectFavorites,
             noteFavoritesUrl: userData.noteFavorites,
-            noteGroupsUrl: userData.noteGroups,
+            subjectsUrl: userData.subjects,
             reviewsReceivedUrl: userData.reviewsReceived,
             directoryFavoritesUrl: userData.directoryFavorites,
             followingUrl: userData.following,

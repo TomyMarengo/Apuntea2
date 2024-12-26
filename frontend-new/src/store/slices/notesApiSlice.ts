@@ -10,11 +10,26 @@ interface NoteQueryArgs {
   fileType?: string;
 }
 
-interface NoteUpdateArgs {
+interface CreateNoteArgs {
+  name: string;
+  parentId: string;
+  visible: boolean;
+  file: File;
+  category: Category;
+  url?: string;
+}
+
+interface UpdateNoteArgs {
   noteId?: string;
   name?: string;
-  category?: Category;
   visible?: boolean;
+  category?: Category;
+  url?: string;
+}
+
+interface DeleteNoteArgs {
+  noteId?: string;
+  reason?: string;
   url?: string;
 }
 
@@ -24,7 +39,7 @@ interface FavoriteNoteArgs {
   url?: string;
 }
 
-interface UserFavoriteNotesArgs {
+interface UserNotesFavoritesArgs {
   userId?: string;
   url?: string;
 }
@@ -40,36 +55,63 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         { type: 'Notes', id: noteId },
       ],
     }),
-    deleteNote: builder.mutation<void, NoteQueryArgs>({
-      query: ({ noteId, url }) => ({
-        url: url || `/notes/${noteId}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: (result, error, { noteId }) => [
-        { type: 'Notes', id: noteId },
-      ],
+    createNote: builder.mutation<boolean, CreateNoteArgs>({
+      queryFn: async (
+        { name, parentId, visible, file, category },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const result = await baseQuery({
+          url: '/notes',
+          method: 'POST',
+          body: { name, parentId, visible, file, category },
+        });
+        return { data: result.error !== undefined };
+      },
+      invalidatesTags: ['Directories'],
     }),
-    updateNote: builder.mutation<void, NoteUpdateArgs>({
-      query: ({ noteId, name, category, visible, url }) => {
-        const data: Record<string, any> = {};
-        if (name !== undefined) data.name = name;
-        if (category !== undefined) data.category = category;
-        if (visible !== undefined) data.visible = visible === true;
+    updateNote: builder.mutation<boolean, UpdateNoteArgs>({
+      queryFn: async (
+        { noteId, name, visible, category, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const body: any = {};
+        if (name !== undefined) body.name = name;
+        if (visible !== undefined) body.visible = visible;
+        if (category !== undefined) body.category = category;
 
-        return {
+        const result = await baseQuery({
           url: url || `/notes/${noteId}`,
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/vnd.apuntea.note-update-v1.0+json',
-          },
-          body: JSON.stringify(data),
-        };
+          body,
+        });
+        return { data: result.error !== undefined };
       },
-      invalidatesTags: (result, error, { noteId }) => [
-        { type: 'Notes', id: noteId },
-      ],
+      invalidatesTags: ['Notes'],
     }),
-    getUserNotesFavorites: builder.query<Note[], UserFavoriteNotesArgs>({
+    deleteNote: builder.mutation<boolean, DeleteNoteArgs>({
+      queryFn: async (
+        { noteId, reason, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const body: any = {};
+        if (reason !== undefined) body.reason = reason;
+
+        const result = await baseQuery({
+          url: url || `/notes/${noteId}`,
+          method: 'POST',
+          body,
+        });
+        return { data: result.error !== undefined };
+      },
+      invalidatesTags: ['Notes'],
+    }),
+    getUserNotesFavorites: builder.query<Note[], UserNotesFavoritesArgs>({
       query: ({ userId, url }) => url || `/notes?favBy=${userId}`,
       transformResponse: (response: any) => {
         const notes: Note[] = Array.isArray(response)
@@ -88,26 +130,45 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       ) => {
         const endpoint = url || `/notes/${noteId}/favorites/${userId}`;
         const result = await baseQuery(endpoint);
-        if (result.error) {
-          if (result.error.status === 404) {
-            return { data: false };
-          }
-          return { error: result.error };
-        }
-        return { data: true };
+        return { data: result.error !== undefined };
       },
     }),
-    addFavoriteNote: builder.mutation<void, NoteQueryArgs>({
-      query: ({ noteId, url }) => ({
-        url: url || `/notes/${noteId}/favorites`,
-        method: 'POST',
-      }),
+    addFavoriteNote: builder.mutation<boolean, NoteQueryArgs>({
+      queryFn: async ({ noteId, url }, _api, _extraOptions, baseQuery) => {
+        const result = await baseQuery({
+          url: url || `/notes/${noteId}/favorites`,
+          method: 'POST',
+        });
+        return { data: result.error !== undefined };
+      },
     }),
-    removeFavoriteNote: builder.mutation<void, FavoriteNoteArgs>({
-      query: ({ noteId, userId, url }) => ({
-        url: url || `/notes/${noteId}/favorites/${userId}`,
-        method: 'DELETE',
-      }),
+    removeFavoriteNote: builder.mutation<boolean, FavoriteNoteArgs>({
+      queryFn: async (
+        { noteId, userId, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const result = await baseQuery({
+          url: url || `/notes/${noteId}/favorites/${userId}`,
+          method: 'DELETE',
+        });
+        return { data: result.error !== undefined };
+      },
+    }),
+    addInteractionNote: builder.mutation<boolean, FavoriteNoteArgs>({
+      queryFn: async (
+        { noteId, userId, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const result = await baseQuery({
+          url: url || `/notes/${noteId}/interactions/${userId}`,
+          method: 'POST',
+        });
+        return { data: result.error !== undefined };
+      },
     }),
     getLatestNotes: builder.query<Note[], NoteQueryArgs>({
       query: ({ userId, url }) => url || `/notes?user=${userId}&sortBy=date`,
@@ -124,11 +185,13 @@ export const notesApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetNoteQuery,
-  useDeleteNoteMutation,
+  useCreateNoteMutation,
   useUpdateNoteMutation,
+  useDeleteNoteMutation,
   useGetUserNotesFavoritesQuery,
   useGetIsFavoriteNoteQuery,
   useAddFavoriteNoteMutation,
   useRemoveFavoriteNoteMutation,
+  useAddInteractionNoteMutation,
   useGetLatestNotesQuery,
 } = notesApiSlice;
