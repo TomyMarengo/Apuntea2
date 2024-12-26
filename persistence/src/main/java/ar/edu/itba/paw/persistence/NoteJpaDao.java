@@ -236,8 +236,8 @@ public class NoteJpaDao implements NoteDao {
     public List<Note> search(SearchArguments sa) {
         SortArguments sortArgs = sa.getSortArguments();
 
-        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) as id")
-                .append(", " + DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) as id, ")
+                .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Notes t ")
                 .append("INNER JOIN Subjects s ON t.subject_id = s.subject_id ")
                 .append("INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id ")
@@ -271,7 +271,7 @@ public class NoteJpaDao implements NoteDao {
     public List<Note> navigate(SearchArguments sa) {
         SortArguments sortArgs = sa.getSortArguments();
 
-        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) ")
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) as id, ")
                 .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Notes t ")
                 .appendIfPresent(sa.getFavBy(), "INNER JOIN Note_Favorites nf ON t.id = nf.note_id AND nf.user_id = :favBy ")

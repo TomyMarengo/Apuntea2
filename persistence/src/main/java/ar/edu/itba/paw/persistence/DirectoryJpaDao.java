@@ -178,8 +178,8 @@ public class DirectoryJpaDao implements DirectoryDao {
     public List<Directory> search(SearchArguments sa) {
         SortArguments sortArgs = sa.getSortArguments();
 
-        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) as id")
-                .append(", " + DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) as id, ")
+                .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Directories t ")
                 .append("INNER JOIN Subjects s ON t.parent_id = s.root_directory_id ")
                 .append("INNER JOIN Subjects_Careers sc ON s.subject_id = sc.subject_id ")
@@ -213,7 +213,7 @@ public class DirectoryJpaDao implements DirectoryDao {
     public List<Directory> navigate(SearchArguments sa, boolean isRdir) {
         SortArguments sortArgs = sa.getSortArguments();
 
-        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) ")
+        DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) as id, ")
                 .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Directories t ")
                 .appendIfPresent(sa.getFavBy(), "INNER JOIN Directory_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
