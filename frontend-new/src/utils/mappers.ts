@@ -1,6 +1,17 @@
 // src/utils/mappers.ts
 
-import { FileType, Category, Note, Directory, Subject } from '../types';
+import {
+  FileType,
+  Category,
+  Note,
+  Directory,
+  Subject,
+  Institution,
+  Career,
+  SubjectCareer,
+  Review,
+  User,
+} from '../types';
 
 export const mapApiNote = (apiNote: any): Note => {
   return {
@@ -45,5 +56,68 @@ export const mapApiSubject = (apiSubject: any): Subject => {
     selfUrl: apiSubject.self,
     rootDirectoryUrl: apiSubject.rootDirectory,
     rootDirectoryId: apiSubject.rootDirectoryId,
+  };
+};
+
+export const mapApiInstitution = (apiInstitution: any): Institution => {
+  return {
+    id: apiInstitution.id,
+    name: apiInstitution.name,
+    selfUrl: apiInstitution.self,
+    careersUrl: apiInstitution.careers,
+  };
+};
+
+export const mapApiCareer = (apiCareer: any): Career => {
+  return {
+    id: apiCareer.id,
+    name: apiCareer.name,
+    selfUrl: apiCareer.self,
+    institutionUrl: apiCareer.institution,
+    subjectsUrl: apiCareer.subjects,
+    subjectCareersUrl: apiCareer.subjectCareers,
+    subjectsNotInCareerUrl: apiCareer.subjectsNotInCareer,
+  };
+};
+
+export const mapApiSubjectCareer = (apiSubjectCareer: any): SubjectCareer => {
+  return {
+    year: apiSubjectCareer.year,
+    selfUrl: apiSubjectCareer.self,
+    subjectUrl: apiSubjectCareer.subject,
+    careerUrl: apiSubjectCareer.career,
+  };
+};
+
+export const mapApiReview = (apiReview: any): Review => {
+  return {
+    userId: apiReview.userId,
+    noteId: apiReview.noteId,
+    content: apiReview.content,
+    score: apiReview.score,
+    createdAt: apiReview.createdAt,
+    selfUrl: apiReview.self,
+    noteUrl: apiReview.note,
+    userUrl: apiReview.user,
+  };
+};
+
+export const mapApiUser = (apiUser: any): User => {
+  return {
+    id: apiUser.id,
+    email: apiUser.email,
+    username: apiUser.username,
+    locale: apiUser.locale,
+    status: apiUser.status,
+    notificationsEnabled: apiUser.notificationsEnabled,
+    selfUrl: apiUser.self,
+    institutionUrl: apiUser.institution,
+    careerUrl: apiUser.career,
+    subjectFavoritesUrl: apiUser.subjectFavorites,
+    noteFavoritesUrl: apiUser.noteFavorites,
+    noteGroupsUrl: apiUser.noteGroups,
+    reviewsReceivedUrl: apiUser.reviewsReceived,
+    directoryFavoritesUrl: apiUser.directoryFavorites,
+    followingUrl: apiUser.following,
   };
 };

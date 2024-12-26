@@ -2,6 +2,7 @@
 
 import { apiSlice } from './apiSlice';
 import { Directory } from '../../types';
+import { mapApiDirectory } from '../../utils/mappers';
 
 interface DirectoryQueryArgs {
   directoryId?: string;
@@ -26,27 +27,23 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
     getDirectory: builder.query<Directory, DirectoryQueryArgs>({
       query: ({ directoryId, url }) => url || `/directories/${directoryId}`,
       transformResponse: (response: any) => {
-        const directory: Directory = {
-          id: response.id,
-          name: response.name,
-          visible: response.visible,
-          iconColor: response.iconColor,
-          createdAt: response.createdAt,
-          lastModifiedAt: response.lastModifiedAt,
-          selfUrl: response.self,
-          ownerUrl: response.owner,
-          parentUrl: response.parent,
-        };
-
-        return directory;
+        return mapApiDirectory(response);
+      },
+      providesTags: (result, error, { directoryId }) => [
+        { type: 'Directories', id: directoryId },
+      ],
+    }),
+    getUserDirectoriesFavorites: builder.query<Directory[], FavoritesArgs>({
+      query: ({ userId, url }) => url || `/directories?favBy=${userId}`,
+      transformResponse: (response: any) => {
+        const directories: Directory[] = Array.isArray(response)
+          ? response.map(mapApiDirectory)
+          : [];
+        return directories;
       },
       providesTags: ['Directories'],
     }),
-    getUserDirectoriesFavorites: builder.query<any, FavoritesArgs>({
-      query: ({ userId, url }) => url || `/directories?favBy=${userId}`,
-      providesTags: ['Directories'],
-    }),
-    getIsFavoriteDirectory: builder.query<any, FavoriteDirectoryArgs>({
+    getIsFavoriteDirectory: builder.query<boolean, FavoriteDirectoryArgs>({
       queryFn: async (
         { directoryId, userId, url },
         _queryApi,
@@ -65,16 +62,13 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
         return { data: true };
       },
     }),
-    addFavoriteDirectory: builder.mutation<
-      any,
-      Omit<FavoriteDirectoryArgs, 'userId'>
-    >({
+    addFavoriteDirectory: builder.mutation<void, DirectoryQueryArgs>({
       query: ({ directoryId, url }) => ({
         url: url || `/directories/${directoryId}/favorites`,
         method: 'POST',
       }),
     }),
-    removeFavoriteDirectory: builder.mutation<any, FavoriteDirectoryArgs>({
+    removeFavoriteDirectory: builder.mutation<void, FavoriteDirectoryArgs>({
       query: ({ directoryId, userId, url }) => ({
         url: url || `/directories/${directoryId}/favorites/${userId}`,
         method: 'DELETE',

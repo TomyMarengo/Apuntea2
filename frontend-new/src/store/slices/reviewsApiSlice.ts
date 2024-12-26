@@ -2,6 +2,10 @@
 
 import { apiSlice } from './apiSlice';
 
+import { Review } from '../../types';
+
+import { mapApiReview } from '../../utils/mappers';
+
 interface ReviewArgs {
   noteId?: string;
   userId?: string;
@@ -12,34 +16,43 @@ interface ReviewArgs {
 
 export const reviewsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getReviews: builder.query<any, { noteId?: string; url?: string }>({
-      query: ({ noteId, url }) => url || `/reviews?noteId=${noteId}`,
+    getReviews: builder.query<Review[], ReviewArgs>({
+      query: ({ noteId, userId, url }) =>
+        url || `/reviews?noteId=${noteId}&userId=${userId}`,
+      transformResponse: (response: any) => {
+        return Array.isArray(response) ? response.map(mapApiReview) : [];
+      },
       providesTags: ['Reviews'],
-      refetchOnMountOrArgChange: true,
     }),
-    getReview: builder.query<
-      any,
-      { noteId?: string; userId?: string; url?: string }
-    >({
+    getReview: builder.query<Review, ReviewArgs>({
       query: ({ noteId, userId, url }) => url || `/reviews/${noteId}_${userId}`,
-      providesTags: ['Reviews'],
-      refetchOnMountOrArgChange: true,
+      transformResponse: (response: any) => {
+        return mapApiReview(response);
+      },
+      providesTags: (result, error, { noteId, userId }) => [
+        { type: 'Reviews', id: `${noteId}_${userId}` },
+      ],
     }),
-    createReview: builder.mutation<any, Omit<ReviewArgs, 'userId'>>({
+    createReview: builder.mutation<void, ReviewArgs>({
       query: ({ noteId, score, content, url }) => ({
         url: url || '/reviews',
         method: 'POST',
         body: { noteId, score, content },
       }),
-      invalidatesTags: ['Reviews'],
+      invalidatesTags: (result, error, { noteId }) => [
+        { type: 'Reviews', id: noteId },
+      ],
     }),
-    updateReview: builder.mutation<any, Required<ReviewArgs>>({
+    updateReview: builder.mutation<void, ReviewArgs>({
       query: ({ noteId, userId, score, content, url }) => ({
         url: url || `/reviews/${noteId}_${userId}`,
         method: 'PUT',
         body: { score, content },
       }),
-      invalidatesTags: ['Reviews'],
+      invalidatesTags: (result, error, { noteId, userId }) => [
+        { type: 'Reviews', id: noteId },
+        { type: 'Reviews', id: `${noteId}_${userId}` },
+      ],
     }),
   }),
 });

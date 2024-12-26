@@ -10,7 +10,7 @@ import {
 import { setCredentials, logOut, invalidateToken } from './authSlice';
 import { decode } from '../../utils/helpers';
 
-const baseUrl = 'http://191.234.188.174:8080/webapp/api'; // TODO: move to .env
+const baseUrl = 'http://localhost:8080/paw-2023b-12/api'; // TODO: move to .env
 
 const baseQuery = fetchBaseQuery({
   baseUrl,
@@ -51,8 +51,10 @@ const baseQueryWithReauth: BaseQueryFn<
     dispatch(invalidateToken());
 
     const data = await baseQuery(state.auth.user.selfUrl, api, extraOptions);
-    let token = data.meta?.response?.headers.get('Access-Token')?.split(' ')[1];
-    token = decode(token);
+    let tokenStr = data.meta?.response?.headers
+      .get('Access-Token')
+      ?.split(' ')[1];
+    let token = decode(tokenStr);
     const refreshToken = data.meta?.response?.headers
       .get('Refresh-Token')
       ?.split(' ')[1];

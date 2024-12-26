@@ -108,3 +108,21 @@ export interface Directory {
   parentUrl?: string;
   subjectUrl?: string;
 }
+
+export interface SubjectCareer {
+  year: number;
+  selfUrl: string;
+  careerUrl: string;
+  subjectUrl: string;
+}
+
+export interface Review {
+  userId: string;
+  noteId: string;
+  content: string;
+  score: number;
+  createdAt: string;
+  selfUrl: string;
+  noteUrl: string;
+  userUrl: string;
+}

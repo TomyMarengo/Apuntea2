@@ -4,6 +4,8 @@ import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { apiSlice } from './apiSlice';
 import { User, Career, Institution } from '../../types';
 
+import { mapApiUser } from '../../utils/mappers';
+
 interface UserArgs {
   userId?: string;
   url?: string;
@@ -24,35 +26,35 @@ interface UpdateUserArgs {
 
 interface PictureArgs {
   url?: string;
+  pictureId?: string;
   profilePicture: File;
+  userId?: string;
+}
+
+interface CreateUserArgs {
+  email: string;
+  password: string;
+  institutionId: string;
+  careerId: string;
 }
 
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getUsers: builder.query<any, void>({
+    getUsers: builder.query<User[], void>({
       query: () => '/users',
+      transformResponse: (response: any) => {
+        return Array.isArray(response) ? response.map(mapApiUser) : [];
+      },
       providesTags: ['Users'],
     }),
     getOwner: builder.query<User, UserArgs>({
       query: ({ userId, url }) => url || `/users/${userId}`,
-      transformResponse: (response: any) => ({
-        id: response.id,
-        email: response.email,
-        username: response.username,
-        locale: response.locale,
-        status: response.status,
-        notificationsEnabled: response.notificationsEnabled,
-        selfUrl: response.self,
-        institutionUrl: response.institution,
-        careerUrl: response.career,
-        subjectFavoritesUrl: response.subjectFavorites,
-        noteFavoritesUrl: response.noteFavorites,
-        noteGroupsUrl: response.noteGroups,
-        reviewsReceivedUrl: response.reviewsReceived,
-        directoryFavoritesUrl: response.directoryFavorites,
-        followingUrl: response.following,
-      }),
-      providesTags: ['Users'],
+      transformResponse: (response: any) => {
+        return mapApiUser(response);
+      },
+      providesTags: (result, error, { userId }) => [
+        { type: 'Users', id: userId },
+      ],
     }),
     getUser: builder.query<User, UserArgs>({
       async queryFn({ userId, url }, _queryApi, _extraOptions, baseQuery) {
@@ -118,17 +120,18 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           };
         }
       },
-      providesTags: ['Users'],
+      providesTags: (result, error, { userId }) => [
+        { type: 'Users', id: userId },
+      ],
     }),
-    getUserPicture: builder.query<any, { pictureId: string; url?: string }>({
+    getUserPicture: builder.query<any, PictureArgs>({
       query: ({ pictureId, url }) => ({
         url: url || `/pictures/${pictureId}`,
       }),
       keepUnusedDataFor: 60 * 60 * 60 * 24 * 30, // 30 days
-      providesTags: ['ProfilePicture'],
     }),
-    updatePicture: builder.mutation<any, PictureArgs>({
-      query: ({ url, profilePicture }) => {
+    updatePicture: builder.mutation<void, PictureArgs>({
+      query: ({ url, profilePicture, userId }) => {
         const formData = new FormData();
         formData.append('profilePicture', profilePicture);
         return {
@@ -137,9 +140,11 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           body: formData,
         };
       },
-      invalidatesTags: ['Users', 'ProfilePicture'],
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'Users', id: userId },
+      ],
     }),
-    updateUser: builder.mutation<any, UpdateUserArgs>({
+    updateUser: builder.mutation<void, UpdateUserArgs>({
       query: ({
         userId,
         email,
@@ -180,7 +185,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['Users'],
     }),
-    createUser: builder.mutation<any, Record<string, any>>({
+    createUser: builder.mutation<void, CreateUserArgs>({
       query: (userInfo) => ({
         url: '/users',
         method: 'POST',
@@ -189,9 +194,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           'Content-Type': 'application/vnd.apuntea.user-create-v1.0+json',
         },
       }),
-      transformResponse: async (response: any, meta: any) => {
-        return { location: meta.response.headers.get('Location') };
-      },
+      invalidatesTags: ['Users'],
     }),
   }),
 });

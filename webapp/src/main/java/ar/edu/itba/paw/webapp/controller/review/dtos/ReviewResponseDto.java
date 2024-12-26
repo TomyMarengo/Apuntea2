@@ -4,12 +4,14 @@ import ar.edu.itba.paw.models.note.Review;
 
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class ReviewResponseDto {
     private UUID userId;
     private UUID noteId;
     private String content;
+    private LocalDateTime createdAt;
     private int score;
     private URI self;
     private URI note;
@@ -23,6 +25,7 @@ public class ReviewResponseDto {
         dto.userId = review.getUser().getUserId();
         dto.noteId = review.getNote().getId();
         dto.content = review.getContent();
+        dto.createdAt = review.getCreatedAt();
         dto.score = review.getScore();
         dto.self = uriInfo.getBaseUriBuilder().path("reviews").path(review.getUser().getUserId().toString() + "_" +review.getNote().getId().toString()).build();
         dto.note = uriInfo.getBaseUriBuilder().path("notes").path(review.getNote().getId().toString()).build();
@@ -52,6 +55,14 @@ public class ReviewResponseDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public int getScore() {
@@ -85,4 +96,6 @@ public class ReviewResponseDto {
     public void setUser(URI user) {
         this.user = user;
     }
+
+
 }

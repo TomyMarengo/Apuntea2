@@ -2,9 +2,10 @@
 
 import { apiSlice } from './apiSlice';
 import { Note, Category, FileType } from '../../types';
-
+import { mapApiNote } from '../../utils/mappers';
 interface NoteQueryArgs {
   noteId?: string;
+  userId?: string;
   url?: string;
   fileType?: string;
 }
@@ -17,8 +18,13 @@ interface NoteUpdateArgs {
   url?: string;
 }
 
-interface FavoritesArgs {
+interface FavoriteNoteArgs {
   noteId?: string;
+  userId?: string;
+  url?: string;
+}
+
+interface UserFavoriteNotesArgs {
   userId?: string;
   url?: string;
 }
@@ -28,48 +34,22 @@ export const notesApiSlice = apiSlice.injectEndpoints({
     getNote: builder.query<Note, NoteQueryArgs>({
       query: ({ noteId, url }) => url || `/notes/${noteId}`,
       transformResponse: (response: any) => {
-        const note: Note = {
-          id: response.id,
-          name: response.name,
-          visible: response.visible,
-          fileType: response.fileType as FileType,
-          category: response.category as Category,
-          avgScore: response.avgScore,
-          createdAt: response.createdAt,
-          lastModifiedAt: response.lastModifiedAt,
-          selfUrl: response.self,
-          fileUrl: response.file,
-          interactions: response.interactions,
-          interactionsUrl: response.interactionsUri,
-          ownerUrl: response.owner,
-          parentUrl: response.parent,
-          reviewsUrl: response.reviews,
-          subjectUrl: response.subject,
-        };
-
-        return note;
+        return mapApiNote(response);
       },
       providesTags: (result, error, { noteId }) => [
         { type: 'Notes', id: noteId },
       ],
     }),
-    getNoteFile: builder.query<any, NoteQueryArgs>({
-      query: ({ noteId, fileType, url }) => ({
-        url: url || `/notes/${noteId}/file`,
-        headers: {
-          'content-type': fileType || '',
-        },
-      }),
-      keepUnusedDataFor: 2592000, // 30 days
-    }),
-    deleteNote: builder.mutation<any, { noteId?: string; url?: string }>({
+    deleteNote: builder.mutation<void, NoteQueryArgs>({
       query: ({ noteId, url }) => ({
         url: url || `/notes/${noteId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['Notes'],
+      invalidatesTags: (result, error, { noteId }) => [
+        { type: 'Notes', id: noteId },
+      ],
     }),
-    updateNote: builder.mutation<any, NoteUpdateArgs>({
+    updateNote: builder.mutation<void, NoteUpdateArgs>({
       query: ({ noteId, name, category, visible, url }) => {
         const data: Record<string, any> = {};
         if (name !== undefined) data.name = name;
@@ -85,16 +65,21 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           body: JSON.stringify(data),
         };
       },
-      invalidatesTags: ['Notes'],
+      invalidatesTags: (result, error, { noteId }) => [
+        { type: 'Notes', id: noteId },
+      ],
     }),
-    getUserNotesFavorites: builder.query<
-      any,
-      { userId?: string; url?: string }
-    >({
+    getUserNotesFavorites: builder.query<Note[], UserFavoriteNotesArgs>({
       query: ({ userId, url }) => url || `/notes?favBy=${userId}`,
+      transformResponse: (response: any) => {
+        const notes: Note[] = Array.isArray(response)
+          ? response.map(mapApiNote)
+          : [];
+        return notes;
+      },
       providesTags: ['Notes'],
     }),
-    getIsFavoriteNote: builder.query<any, FavoritesArgs>({
+    getIsFavoriteNote: builder.query<boolean, FavoriteNoteArgs>({
       queryFn: async (
         { noteId, userId, url },
         _queryApi,
@@ -112,27 +97,33 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         return { data: true };
       },
     }),
-    addFavoriteNote: builder.mutation<any, { noteId?: string; url?: string }>({
+    addFavoriteNote: builder.mutation<void, NoteQueryArgs>({
       query: ({ noteId, url }) => ({
         url: url || `/notes/${noteId}/favorites`,
         method: 'POST',
       }),
     }),
-    removeFavoriteNote: builder.mutation<any, FavoritesArgs>({
+    removeFavoriteNote: builder.mutation<void, FavoriteNoteArgs>({
       query: ({ noteId, userId, url }) => ({
         url: url || `/notes/${noteId}/favorites/${userId}`,
         method: 'DELETE',
       }),
     }),
-    getLatestNotes: builder.query<any, { userId?: string; url?: string }>({
+    getLatestNotes: builder.query<Note[], NoteQueryArgs>({
       query: ({ userId, url }) => url || `/notes?user=${userId}&sortBy=date`,
+      transformResponse: (response: any) => {
+        const notes: Note[] = Array.isArray(response)
+          ? response.map(mapApiNote)
+          : [];
+        return notes;
+      },
+      providesTags: ['Notes'],
     }),
   }),
 });
 
 export const {
   useGetNoteQuery,
-  useGetNoteFileQuery,
   useDeleteNoteMutation,
   useUpdateNoteMutation,
   useGetUserNotesFavoritesQuery,
