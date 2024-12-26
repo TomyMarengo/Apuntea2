@@ -1,0 +1,121 @@
+{
+  "navbar": {
+    "appName": "Apuntea",
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "profileButton": {
+    "loggedInAs": "Logged in as",
+    "user": "User",
+    "profile": {
+      "title": "Profile"
+    },
+    "settings": {
+      "title": "Settings"
+    },
+    "logout": "Logout"
+  },
+  "parentDirectoryPage": {
+    "errorFetchingDirectory": "Error fetching directory",
+    "title": "Parent Directory",
+    "description": "Description of the parent directory.",
+    "search": {
+      "noContent": "No content found."
+    }
+  },
+  "loginPage": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "signup": "Sign Up",
+    "noAccount": "Don't have an account?",
+    "invalidEmail": "Invalid email",
+    "passwordMinLength": "Password must be at least 4 characters"
+  },
+  "notePage": {
+    "copySuccess": "Link copied to clipboard!",
+    "errorFetchingNote": "Error fetching note",
+    "noteLink": {
+      "title": "Note Link",
+      "description": "Share this link to access the note directly."
+    },
+    "copy": "Copy"
+  },
+  "registerPage": {
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "institution": "Institution",
+    "career": "Career",
+    "selectInstitution": "Select an institution",
+    "selectCareer": "Select a career",
+    "youMustSelectInstitution": "You must select an institution",
+    "youMustSelectCareer": "You must select a career",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "paginationBar": {
+    "totalCount": "Showing {{from}} to {{to}} of {{totalCount}} results"
+  },
+  "rowDirectory": {
+    "favorite": "Favorite",
+    "unfavorite": "Unfavorite",
+    "loginToFavorite": "Login to favorite",
+    "copyLink": "Copy Link",
+    "more": "More",
+    "openOwnersNotes": "Open Owner's Notes",
+    "openParentDirectory": "Open Parent Directory",
+    "openSubjectsDirectories": "Open Subject's Directories",
+    "favoriteRemoved": "Directory removed from favorites!",
+    "favoriteAdded": "Directory added to favorites!",
+    "alreadyDirectoryFavorited": "Directory is already favorited.",
+    "favoriteActionFailed": "Failed to update favorite status.",
+    "copySuccess": "Link copied to clipboard!",
+    "copyFailed": "Failed to copy link.",
+    "dataUnknown": "Unknown"
+  },
+  "rowNote": {
+    "favorite": "Favorite",
+    "unfavorite": "Unfavorite",
+    "loginToFavorite": "Login to favorite",
+    "download": "Download",
+    "copyLink": "Copy Link",
+    "more": "More",
+    "openOwnersNotes": "Open Owner's Notes",
+    "openParentDirectory": "Open Parent Directory",
+    "openSubjectsDirectories": "Open Subject's Directories",
+    "favoriteRemoved": "Note removed from favorites!",
+    "favoriteAdded": "Note added to favorites!",
+    "alreadyFavorited": "Note is already favorited.",
+    "favoriteActionFailed": "Failed to update favorite status.",
+    "downloadSuccess": "File downloaded successfully!",
+    "downloadFailed": "Failed to download file.",
+    "fileNotAvailable": "File not available.",
+    "copySuccess": "Link copied to clipboard!",
+    "copyFailed": "Failed to copy link.",
+    "dataUnknown": "Unknown"
+  },
+  "searchForm": {
+    "institution": "Institution",
+    "career": "Career",
+    "subject": "Subject",
+    "word": "Word",
+    "sortBy": "Sort By",
+    "name": "Name",
+    "lastModifiedAt": "Last Modified At",
+    "score": "Score",
+    "createdAt": "Created At",
+    "asc": "Ascending",
+    "desc": "Descending",
+    "folders": "Folders",
+    "notes": "Notes",
+    "selectInstitution": "Select an institution",
+    "selectCareer": "Select a career",
+    "selectSubject": "Select a subject"
+  },
+  "searchPage": {
+    "title": "Search",
+    "noContent": "No content found."
+  }
+}

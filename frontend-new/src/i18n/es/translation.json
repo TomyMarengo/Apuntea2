@@ -1,0 +1,121 @@
+{
+  "navbar": {
+    "appName": "Apuntea",
+    "login": "Iniciar Sesión",
+    "signup": "Registrarse"
+  },
+  "profileButton": {
+    "loggedInAs": "Has iniciado sesión como",
+    "user": "Usuario",
+    "profile": {
+      "title": "Perfil"
+    },
+    "settings": {
+      "title": "Configuración"
+    },
+    "logout": "Cerrar Sesión"
+  },
+  "parentDirectoryPage": {
+    "errorFetchingDirectory": "Error al obtener el directorio",
+    "title": "Directorio Padre",
+    "description": "Descripción del directorio padre.",
+    "search": {
+      "noContent": "No se encontró contenido."
+    }
+  },
+  "loginPage": {
+    "login": "Iniciar Sesión",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "signup": "Registrarse",
+    "noAccount": "¿No tienes una cuenta?",
+    "invalidEmail": "Correo electrónico inválido",
+    "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
+  },
+  "notePage": {
+    "copySuccess": "¡Enlace copiado al portapapeles!",
+    "errorFetchingNote": "Error al obtener la nota",
+    "noteLink": {
+      "title": "Enlace de la Nota",
+      "description": "Comparte este enlace para acceder directamente a la nota."
+    },
+    "copy": "Copiar"
+  },
+  "registerPage": {
+    "signup": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "institution": "Institución",
+    "career": "Carrera",
+    "selectInstitution": "Selecciona una institución",
+    "selectCareer": "Selecciona una carrera",
+    "youMustSelectInstitution": "Debes seleccionar una institución",
+    "youMustSelectCareer": "Debes seleccionar una carrera",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+  },
+  "paginationBar": {
+    "totalCount": "Mostrando {{from}} a {{to}} de {{totalCount}} resultados"
+  },
+  "rowDirectory": {
+    "favorite": "Favorito",
+    "unfavorite": "Eliminar Favorito",
+    "loginToFavorite": "Inicia sesión para agregar a favoritos",
+    "copyLink": "Copiar Enlace",
+    "more": "Más",
+    "openOwnersNotes": "Abrir Notas del Propietario",
+    "openParentDirectory": "Abrir Directorio Padre",
+    "openSubjectsDirectories": "Abrir Directorios de la Materia",
+    "favoriteRemoved": "¡Directorio eliminado de favoritos!",
+    "favoriteAdded": "¡Directorio agregado a favoritos!",
+    "alreadyDirectoryFavorited": "El directorio ya está en favoritos.",
+    "favoriteActionFailed": "Error al actualizar el estado de favorito.",
+    "copySuccess": "¡Enlace copiado al portapapeles!",
+    "copyFailed": "Error al copiar el enlace.",
+    "dataUnknown": "Desconocido"
+  },
+  "rowNote": {
+    "favorite": "Favorito",
+    "unfavorite": "Eliminar Favorito",
+    "loginToFavorite": "Inicia sesión para agregar a favoritos",
+    "download": "Descargar",
+    "copyLink": "Copiar Enlace",
+    "more": "Más",
+    "openOwnersNotes": "Abrir Notas del Propietario",
+    "openParentDirectory": "Abrir Directorio Padre",
+    "openSubjectsDirectories": "Abrir Directorios de la Materia",
+    "favoriteRemoved": "¡Nota eliminada de favoritos!",
+    "favoriteAdded": "¡Nota agregada a favoritos!",
+    "alreadyFavorited": "La nota ya está en favoritos.",
+    "favoriteActionFailed": "Error al actualizar el estado de favorito.",
+    "downloadSuccess": "¡Archivo descargado exitosamente!",
+    "downloadFailed": "Error al descargar el archivo.",
+    "fileNotAvailable": "Archivo no disponible.",
+    "copySuccess": "¡Enlace copiado al portapapeles!",
+    "copyFailed": "Error al copiar el enlace.",
+    "dataUnknown": "Desconocido"
+  },
+  "searchForm": {
+    "institution": "Institución",
+    "career": "Carrera",
+    "subject": "Materia",
+    "word": "Palabra",
+    "sortBy": "Ordenar Por",
+    "name": "Nombre",
+    "lastModifiedAt": "Última Modificación",
+    "score": "Puntuación",
+    "createdAt": "Creado En",
+    "asc": "Ascendente",
+    "desc": "Descendente",
+    "folders": "Carpetas",
+    "notes": "Notas",
+    "selectInstitution": "Selecciona una institución",
+    "selectCareer": "Selecciona una carrera",
+    "selectSubject": "Selecciona una materia"
+  },
+  "searchPage": {
+    "title": "Buscar",
+    "noContent": "No se encontró contenido."
+  }
+}
