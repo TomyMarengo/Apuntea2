@@ -19,6 +19,7 @@ public class DirectoryResponseDto {
     private URI self;
     private URI owner;
     private URI parent;
+    private URI subject;
 
     public static DirectoryResponseDto fromDirectory(Directory directory, UriInfo uriInfo){
         final DirectoryResponseDto directoryDto = new DirectoryResponseDto();
@@ -33,6 +34,8 @@ public class DirectoryResponseDto {
             directoryDto.owner = uriInfo.getBaseUriBuilder().path("users").path(directory.getUser().getUserId().toString()).build();
         if(directory.getParentId() != null)
             directoryDto.parent = uriInfo.getBaseUriBuilder().path("directories").path(directory.getParentId().toString()).build();
+        if (directory.getSubject() != null)
+            directoryDto.subject = uriInfo.getBaseUriBuilder().path("subjects").path(directory.getSubject().getSubjectId().toString()).build();
         return directoryDto;
     }
 
@@ -108,4 +111,11 @@ public class DirectoryResponseDto {
         this.parent = parent;
     }
 
+    public URI getSubject() {
+        return subject;
+    }
+
+    public void setSubject(URI subject) {
+        this.subject = subject;
+    }
 }
