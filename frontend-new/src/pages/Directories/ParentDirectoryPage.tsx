@@ -1,3 +1,5 @@
+// src/pages/Directories/ParentDirectoryPage.tsx
+
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';

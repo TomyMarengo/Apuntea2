@@ -287,7 +287,8 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify(data),
           headers: {
-            'Content-Type': 'application/vnd.apuntea.update-status-v1.0+json',
+            'Content-Type':
+              'application/vnd.apuntea.user-update-status-v1.0+json',
           },
         });
 

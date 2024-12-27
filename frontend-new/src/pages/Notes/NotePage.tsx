@@ -1,3 +1,5 @@
+// src/pages/Notes/NotePage.tsx
+
 import { useParams } from 'react-router-dom';
 import { useGetNoteQuery } from '../../store/slices/notesApiSlice';
 import { useState } from 'react';

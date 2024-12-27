@@ -191,7 +191,7 @@
     "hiddenNote": "Hidden Note",
     "score": "Score"
   },
-  "adminUserPage": {
+  "adminUsersPage": {
     "searchPlaceholder": "Search by email or name",
     "statusFilter": "Status",
     "statusOptions": {

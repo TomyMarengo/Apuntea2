@@ -1,4 +1,4 @@
-// src/pages/AdminUserPage.tsx
+// src/pages/Admin/AdminUsersPage.tsx
 
 import {
   Box,
@@ -21,7 +21,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import useDebounce from '../../hooks/useDebounce'; // Import the debounce hook
 
-const AdminUserPage: React.FC = () => {
+const AdminUsersPage: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -83,12 +83,12 @@ const AdminUserPage: React.FC = () => {
 
   // Define the table columns
   const columns: Column[] = [
-    { id: 'username', label: t('adminUserPage.columns.username') },
-    { id: 'query', label: t('adminUserPage.columns.query') }, // Ensure this matches the data being displayed
-    { id: 'status', label: t('adminUserPage.columns.status') },
+    { id: 'username', label: t('adminUsersPage.columns.username') },
+    { id: 'query', label: t('adminUsersPage.columns.query') }, // Ensure this matches the data being displayed
+    { id: 'status', label: t('adminUsersPage.columns.status') },
     {
       id: 'actions',
-      label: t('adminUserPage.columns.actions'),
+      label: t('adminUsersPage.columns.actions'),
       align: 'right',
     },
   ];
@@ -106,7 +106,7 @@ const AdminUserPage: React.FC = () => {
       >
         {/* Search Input Field */}
         <TextField
-          label={t('adminUserPage.searchPlaceholder')}
+          label={t('adminUsersPage.searchPlaceholder')}
           variant="outlined"
           value={searchInput}
           onChange={handleQueryChange}
@@ -116,22 +116,22 @@ const AdminUserPage: React.FC = () => {
         {/* Status Filter Dropdown */}
         <FormControl variant="outlined" sx={{ minWidth: 200 }}>
           <InputLabel id="status-filter-label">
-            {t('adminUserPage.statusFilter')}
+            {t('adminUsersPage.statusFilter')}
           </InputLabel>
           <Select
             labelId="status-filter-label"
             value={statusFilter}
             onChange={handleStatusChange}
-            label={t('adminUserPage.statusFilter')}
+            label={t('adminUsersPage.statusFilter')}
           >
             <MenuItem value="ALL">
-              {t('adminUserPage.statusOptions.all')}
+              {t('adminUsersPage.statusOptions.all')}
             </MenuItem>
             <MenuItem value={UserStatus.ACTIVE}>
-              {t('adminUserPage.statusOptions.active')}
+              {t('adminUsersPage.statusOptions.active')}
             </MenuItem>
             <MenuItem value={UserStatus.BANNED}>
-              {t('adminUserPage.statusOptions.banned')}
+              {t('adminUsersPage.statusOptions.banned')}
             </MenuItem>
           </Select>
         </FormControl>
@@ -143,7 +143,7 @@ const AdminUserPage: React.FC = () => {
           <TableRow>
             <TableCell colSpan={4}>
               <Box sx={{ textAlign: 'center', py: 5 }}>
-                {t('adminUserPage.loading')}
+                {t('adminUsersPage.loading')}
               </Box>
             </TableCell>
           </TableRow>
@@ -152,7 +152,7 @@ const AdminUserPage: React.FC = () => {
           <TableRow>
             <TableCell colSpan={4}>
               <Box sx={{ textAlign: 'center', py: 5 }}>
-                {t('adminUserPage.error')}
+                {t('adminUsersPage.error')}
               </Box>
             </TableCell>
           </TableRow>
@@ -174,4 +174,4 @@ const AdminUserPage: React.FC = () => {
   );
 };
 
-export default AdminUserPage;
+export default AdminUsersPage;

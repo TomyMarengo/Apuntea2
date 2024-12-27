@@ -78,6 +78,13 @@ export interface Subject {
   rootDirectoryUrl?: string;
 }
 
+export interface SubjectCareer {
+  year: number;
+  selfUrl: string;
+  careerUrl: string;
+  subjectUrl: string;
+}
+
 export enum FileType {
   PDF = 'pdf',
   DOCX = 'docx',
@@ -130,13 +137,6 @@ export interface Directory {
   ownerUrl?: string;
   parentUrl?: string;
   subjectUrl?: string;
-}
-
-export interface SubjectCareer {
-  year: number;
-  selfUrl: string;
-  careerUrl: string;
-  subjectUrl: string;
 }
 
 export interface Review {

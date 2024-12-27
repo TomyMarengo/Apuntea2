@@ -1,3 +1,5 @@
+// src/components/NoteCard.tsx
+
 import React from 'react';
 import { Card, CardContent, Typography, CardActionArea } from '@mui/material';
 import { Note } from '../types';

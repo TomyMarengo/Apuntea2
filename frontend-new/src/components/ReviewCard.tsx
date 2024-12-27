@@ -1,3 +1,5 @@
+// src/components/ReviewCard.tsx
+
 import React from 'react';
 import { Card, CardContent, Typography, CardActionArea } from '@mui/material';
 import { Review } from '../types';

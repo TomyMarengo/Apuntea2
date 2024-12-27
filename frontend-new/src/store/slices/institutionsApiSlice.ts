@@ -285,6 +285,21 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: any) => mapApiSubjectCareer(response),
       keepUnusedDataFor: 86400,
     }),
+    getSubjectCareers: builder.query<
+      SubjectCareer[],
+      CareerQueryArgs & { subjectId?: string }
+    >({
+      query: ({ institutionId, careerId, subjectId, url }) =>
+        url ||
+        `/institutions/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
+      transformResponse: (response: any) => {
+        const subjectCareers: SubjectCareer[] = Array.isArray(response)
+          ? response.map(mapApiSubjectCareer)
+          : [];
+        return subjectCareers;
+      },
+      keepUnusedDataFor: 86400,
+    }),
     getCareerSubjectsByYear: builder.query<Subject[], CareerSubjectsByYearArgs>(
       {
         query: ({ careerId, year, url }) =>
@@ -311,6 +326,9 @@ export const {
   useUpdateSubjectMutation,
   useDeleteSubjectMutation,
   useGetSubjectsByCareerQuery,
+  useLinkSubjectMutation,
+  useUnlinkSubjectMutation,
   useGetSubjectCareerQuery,
+  useGetSubjectCareersQuery,
   useGetCareerSubjectsByYearQuery,
 } = institutionsApiSlice;

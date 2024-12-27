@@ -9,7 +9,7 @@ import NotePage from '../pages/Notes/NotePage';
 import ParentDirectoryPage from '../pages/Directories/ParentDirectoryPage';
 import OwnerNotesPage from '../pages/Users/OwnerNotesPage';
 import ProfilePage from '../pages/Profile/ProfilePage';
-import AdminUserPage from '../pages/Admin/AdminUserPage';
+import AdminUsersPage from '../pages/Admin/AdminUsersPage';
 
 export default function AppRouter() {
   return (
@@ -22,7 +22,7 @@ export default function AppRouter() {
       <Route path="/users/:ownerId/notes" element={<OwnerNotesPage />} />
       <Route path="/directories/:id" element={<ParentDirectoryPage />} />
       <Route path="/profile" element={<ProfilePage />} />
-      <Route path="/admin/users" element={<AdminUserPage />} />
+      <Route path="/admin/users" element={<AdminUsersPage />} />
       {/* Add more routes as needed */}
     </Routes>
   );

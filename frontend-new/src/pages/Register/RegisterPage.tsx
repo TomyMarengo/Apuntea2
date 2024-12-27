@@ -1,3 +1,5 @@
+// src/pages/Register/RegisterPage.tsx
+
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,8 +28,6 @@ import {
   useGetCareersQuery,
 } from '../../store/slices/institutionsApiSlice';
 import useRegister from '../../hooks/useRegister';
-import { setCredentials } from '../../store/slices/authSlice';
-import { useDispatch } from 'react-redux';
 
 const registerSchema = z
   .object({
@@ -47,7 +47,6 @@ type RegisterForm = z.infer<typeof registerSchema>;
 export default function RegisterPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { registerUser } = useRegister();
 

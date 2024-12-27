@@ -191,7 +191,7 @@
     "hiddenNote": "Apunte oculto",
     "score": "Puntuación"
   },
-  "adminUserPage": {
+  "adminUsersPage": {
     "searchPlaceholder": "Buscar por correo electrónico o nombre",
     "statusFilter": "Estado",
     "statusOptions": {

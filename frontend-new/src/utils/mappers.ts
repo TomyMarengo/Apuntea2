@@ -13,6 +13,29 @@ import {
   User,
 } from '../types';
 
+export const mapApiUser = (apiUser: any): User => {
+  return {
+    id: apiUser.id,
+    email: apiUser.email,
+    username: apiUser.username,
+    firstName: apiUser.firstName,
+    lastName: apiUser.lastName,
+    locale: apiUser.locale,
+    status: apiUser.status,
+    notificationsEnabled: apiUser.notificationsEnabled,
+    selfUrl: apiUser.self,
+    institutionUrl: apiUser.institution,
+    careerUrl: apiUser.career,
+    subjectFavoritesUrl: apiUser.subjectFavorites,
+    noteFavoritesUrl: apiUser.noteFavorites,
+    subjectsUrl: apiUser.subjects,
+    reviewsReceivedUrl: apiUser.reviewsReceived,
+    directoryFavoritesUrl: apiUser.directoryFavorites,
+    followingUrl: apiUser.following,
+    profilePictureUrl: apiUser.profilePicture,
+  };
+};
+
 export const mapApiNote = (apiNote: any): Note => {
   return {
     id: apiNote.id,
@@ -49,16 +72,6 @@ export const mapApiDirectory = (apiDirectory: any): Directory => {
   };
 };
 
-export const mapApiSubject = (apiSubject: any): Subject => {
-  return {
-    id: apiSubject.id,
-    name: apiSubject.name,
-    selfUrl: apiSubject.self,
-    rootDirectoryUrl: apiSubject.rootDirectory,
-    rootDirectoryId: apiSubject.rootDirectoryId,
-  };
-};
-
 export const mapApiInstitution = (apiInstitution: any): Institution => {
   return {
     id: apiInstitution.id,
@@ -77,6 +90,16 @@ export const mapApiCareer = (apiCareer: any): Career => {
     subjectsUrl: apiCareer.subjects,
     subjectCareersUrl: apiCareer.subjectCareers,
     subjectsNotInCareerUrl: apiCareer.subjectsNotInCareer,
+  };
+};
+
+export const mapApiSubject = (apiSubject: any): Subject => {
+  return {
+    id: apiSubject.id,
+    name: apiSubject.name,
+    selfUrl: apiSubject.self,
+    rootDirectoryUrl: apiSubject.rootDirectory,
+    rootDirectoryId: apiSubject.rootDirectoryId,
   };
 };
 
@@ -99,28 +122,5 @@ export const mapApiReview = (apiReview: any): Review => {
     selfUrl: apiReview.self,
     noteUrl: apiReview.note,
     userUrl: apiReview.user,
-  };
-};
-
-export const mapApiUser = (apiUser: any): User => {
-  return {
-    id: apiUser.id,
-    email: apiUser.email,
-    username: apiUser.username,
-    firstName: apiUser.firstName,
-    lastName: apiUser.lastName,
-    locale: apiUser.locale,
-    status: apiUser.status,
-    notificationsEnabled: apiUser.notificationsEnabled,
-    selfUrl: apiUser.self,
-    institutionUrl: apiUser.institution,
-    careerUrl: apiUser.career,
-    subjectFavoritesUrl: apiUser.subjectFavorites,
-    noteFavoritesUrl: apiUser.noteFavorites,
-    subjectsUrl: apiUser.subjects,
-    reviewsReceivedUrl: apiUser.reviewsReceived,
-    directoryFavoritesUrl: apiUser.directoryFavorites,
-    followingUrl: apiUser.following,
-    profilePictureUrl: apiUser.profilePicture,
   };
 };

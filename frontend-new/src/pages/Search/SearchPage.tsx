@@ -1,3 +1,5 @@
+// src/pages/Search/SearchPage.tsx
+
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import SearchForm from './SearchForm';
