@@ -32,7 +32,7 @@ const Sidebar = () => {
     >
       <List sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Tooltip title={t('sidebar.mynotes')} placement="right" arrow>
-          <ListItem component={Link} to="/profile" sx={{ textAlign: 'center' }}>
+          <ListItem component={Link} to="/notes" sx={{ textAlign: 'center' }}>
             <ListItemIcon>
               <FolderSharedIcon sx={{ color: 'primary.main' }} />
             </ListItemIcon>

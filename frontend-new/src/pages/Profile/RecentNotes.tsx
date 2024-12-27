@@ -15,12 +15,7 @@ interface RecentNotesProps {
 const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
   const { t } = useTranslation();
 
-  const { data, isLoading, error } = useGetLatestNotesQuery(
-    { userId },
-    {
-      // Ajusta el endpoint si es necesario
-    },
-  );
+  const { data, isLoading, error } = useGetLatestNotesQuery({ userId });
 
   if (isLoading) {
     return (
@@ -45,7 +40,7 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
         <Typography variant="h6">{t('recentNotes.recentNotes')}</Typography>
         <Button
           component={RouterLink}
-          to="/profile/notes"
+          to="/notes"
           variant="outlined"
           size="small"
         >

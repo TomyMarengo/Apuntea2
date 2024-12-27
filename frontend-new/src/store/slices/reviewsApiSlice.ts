@@ -6,6 +6,12 @@ import { Review } from '../../types';
 
 import { mapApiReview } from '../../utils/mappers';
 
+interface getReviewsArgs {
+  noteId?: string;
+  userId?: string;
+  url?: string;
+}
+
 interface ReviewArgs {
   noteId?: string;
   userId?: string;
@@ -16,9 +22,15 @@ interface ReviewArgs {
 
 export const reviewsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getReviews: builder.query<Review[], ReviewArgs>({
-      query: ({ noteId, userId, url }) =>
-        url || `/reviews?noteId=${noteId}&userId=${userId}`,
+    getReviews: builder.query<Review[], getReviewsArgs>({
+      query: ({ noteId, userId, url }) => {
+        let queryUrl = url || '/reviews';
+        const params = new URLSearchParams();
+        if (noteId) params.append('noteId', noteId);
+        if (userId) params.append('userId', userId);
+        if (!url) queryUrl += `?${params.toString()}`;
+        return queryUrl;
+      },
       transformResponse: (response: any) => {
         return Array.isArray(response) ? response.map(mapApiReview) : [];
       },

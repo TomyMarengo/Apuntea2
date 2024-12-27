@@ -15,12 +15,7 @@ interface RecentReviewsProps {
 const RecentReviews: React.FC<RecentReviewsProps> = ({ userId }) => {
   const { t } = useTranslation();
 
-  const { data, isLoading, error } = useGetReviewsQuery(
-    { userId },
-    {
-      // Ajusta el endpoint si es necesario
-    },
-  );
+  const { data, isLoading, error } = useGetReviewsQuery({ userId });
 
   if (isLoading) {
     return (
@@ -45,7 +40,7 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ userId }) => {
         <Typography variant="h6">{t('recentReviews.recentReviews')}</Typography>
         <Button
           component={RouterLink}
-          to="/profile/reviews"
+          to="/reviews"
           variant="outlined"
           size="small"
         >
@@ -55,7 +50,7 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ userId }) => {
       {data && data.length > 0 ? (
         <Box>
           {data.slice(0, 5).map((review: Review) => (
-            <ReviewCard key={review.id} review={review} />
+            <ReviewCard key={review.userId + review.noteId} review={review} />
           ))}
         </Box>
       ) : (
