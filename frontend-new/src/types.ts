@@ -1,7 +1,23 @@
+export interface Header {
+  alg: string;
+  typ: string;
+}
+
+export interface Payload {
+  sub: string;
+  iat: number;
+  exp: number;
+  iss: string;
+  jti: string;
+  tokenType: string;
+  userId: string;
+  authorities: string[];
+}
+
 export interface Token {
   raw?: string;
-  header?: any;
-  payload?: any;
+  header?: Header;
+  payload?: Payload;
 }
 
 export enum UserStatus {
