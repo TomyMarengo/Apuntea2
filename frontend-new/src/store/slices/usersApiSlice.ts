@@ -1,9 +1,8 @@
 // store/slices/usersApiSlice.ts
 
-import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { apiSlice } from './apiSlice';
 import { User, Career, Institution } from '../../types';
-
+import { setCurrentUser } from './authSlice';
 import { mapApiUser } from '../../utils/mappers';
 
 interface UserArgs {
@@ -57,7 +56,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       ],
     }),
     getLoggedUser: builder.query<User, UserArgs>({
-      async queryFn({ userId, url }, _queryApi, _extraOptions, baseQuery) {
+      async queryFn({ userId, url }, queryApi, _extraOptions, baseQuery) {
         try {
           // Fetch user data
           const userResult = await baseQuery({
@@ -88,9 +87,11 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           }
 
           // Combine data into a single user object
-          const combinedUser: User = {
+          const user: User = {
             id: userData.id,
             email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
             username: userData.username,
             locale: userData.locale,
             status: userData.status,
@@ -110,7 +111,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             // Add other fields as necessary
           };
 
-          return { data: combinedUser };
+          queryApi.dispatch(setCurrentUser(user));
+
+          return { data: user };
         } catch (error) {
           return {
             error: {
@@ -177,7 +180,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           headers,
         };
       },
-      invalidatesTags: ['Users'],
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'Users', id: userId },
+      ],
     }),
     createUser: builder.mutation<{ userUrl: string }, CreateUserArgs>({
       query: (userInfo) => ({

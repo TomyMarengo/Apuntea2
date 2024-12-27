@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import ProfileCard from './ProfileCard';
 import RecentNotes from './RecentNotes';
 import RecentReviews from './RecentReviews';
-import { useGetUserQuery } from '../../store/slices/usersApiSlice';
+import { useGetLoggedUserQuery } from '../../store/slices/usersApiSlice';
 import { selectCurrentUserId } from '../../store/slices/authSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
@@ -20,7 +20,7 @@ const ProfilePage: React.FC = () => {
     isLoading,
     error,
     refetch,
-  } = useGetUserQuery({ userId }, { skip: !userId });
+  } = useGetLoggedUserQuery({ userId }, { skip: !userId });
 
   if (isLoading) {
     return (

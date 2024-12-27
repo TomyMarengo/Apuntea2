@@ -35,7 +35,7 @@ export default function useLogin() {
   const [getLoggedUser] = useLazyGetLoggedUserQuery();
   const dispatch = useDispatch();
 
-  async function getSession(credentials: Credentials) {
+  async function loginUser(credentials: Credentials) {
     try {
       // Perform authentication
       const result = await login(credentials).unwrap();
@@ -47,20 +47,18 @@ export default function useLogin() {
       }
 
       // Retrieve complete user data
-      const userData = await getLoggedUser({ userId: user.id }).unwrap();
+      await getLoggedUser({ userId: user.id }).unwrap();
 
       // Decode the token
       token = decode(token);
 
       // Update the state with the complete user data
-      dispatch(setCredentials({ user: userData, token, refreshToken }));
-
-      return { token, refreshToken, user: userData };
+      dispatch(setCredentials({ token, refreshToken }));
     } catch (error: any) {
       console.error('Error during login:', error);
       throw new Error(error?.data?.[0]?.message || 'Failed to log in');
     }
   }
 
-  return { getSession };
+  return { loginUser };
 }

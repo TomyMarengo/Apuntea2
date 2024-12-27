@@ -29,13 +29,13 @@ import {
   useUpdateUserMutation,
   useUpdatePictureMutation,
 } from '../../store/slices/usersApiSlice';
-import { Career } from '../../types';
+import { Career, User } from '../../types';
 import { useGetCareersQuery } from '../../store/slices/institutionsApiSlice';
 
 interface EditProfileDialogProps {
   open: boolean;
   handleClose: () => void;
-  user: any; // Idealmente, usa el tipo User
+  user: User;
   onUpdateSuccess: () => void;
 }
 
@@ -54,12 +54,12 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
   const [careerId, setCareerId] = useState(user.career?.id || '');
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
-  // Estados para las contraseñas
+  // States for passwords
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
-  // Estados para togglear visibilidad de contraseñas
+  // States to toggle password visibility
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
@@ -92,21 +92,21 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
 
   const handleSave = async () => {
     try {
-      // Validar si se está cambiando la contraseña
+      // Validate if the password is being changed
       if (newPassword && newPassword !== confirmNewPassword) {
         alert(t('editProfileDialog.passwordsDoNotMatch'));
         return;
       }
 
-      // Actualizar información del usuario
+      // Update user information
       await updateUser({
         userId: user.id,
         firstName,
         lastName,
         username,
         email,
-        careerId: careerId || undefined, // Evitar enviar string vacío
-        // Solo enviar nuevas contraseñas si se proporcionaron
+        careerId: careerId || undefined, // Avoid sending empty string
+        // Only send new passwords if provided
         ...(newPassword &&
           currentPassword && {
             password: newPassword,
@@ -114,18 +114,18 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           }),
       }).unwrap();
 
-      // Actualizar foto de perfil si se cambió
+      // Update profile picture if changed
       if (profilePicture) {
         await updatePicture({
           profilePicture,
         }).unwrap();
       }
 
-      onUpdateSuccess(); // Refrescar datos del usuario
+      onUpdateSuccess(); // Refresh user data
       handleClose();
     } catch (error: any) {
       console.error('Failed to update profile:', error);
-      // Opcional: mostrar mensajes de error al usuario
+      // Optional: show error messages to the user
       alert(
         error.data?.[0]?.message ||
           t('editProfileDialog.failedToUpdateProfile'),
@@ -158,7 +158,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        {/* Sección de foto de perfil */}
+        {/* Profile picture section */}
         <Box
           sx={{
             display: 'flex',
@@ -189,15 +189,13 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
                 <PhotoCamera />
               </IconButton>
               {profilePicture && (
-                <Typography variant="body2">
-                  {profilePicture.name}
-                </Typography>
+                <Typography variant="body2">{profilePicture.name}</Typography>
               )}
             </Box>
           </label>
         </Box>
 
-        {/* Sección de información del usuario */}
+        {/* User information section */}
         <Box component="form" noValidate autoComplete="off">
           <TextField
             label={t('editProfileDialog.firstName')}
@@ -251,7 +249,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           </FormControl>
         </Box>
 
-        {/* Sección de cambio de contraseña */}
+        {/* Password change section */}
         <Box sx={{ mt: 4 }}>
           <Typography variant="h6" gutterBottom>
             {t('editProfileDialog.changePassword')}

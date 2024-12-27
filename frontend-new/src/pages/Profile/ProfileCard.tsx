@@ -46,7 +46,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
       onUpdateSuccess();
     } catch (error) {
       console.error('Error updating notifications:', error);
-      // Opcional: mostrar una notificación de error al usuario
     }
   };
 
@@ -69,7 +68,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                 alignItems: 'center',
               }}
             >
-              {user.firstName && user.lastName ? (
+              {user.firstName || user.lastName ? (
                 <Typography variant="h5">
                   {user.firstName} {user.lastName}
                 </Typography>

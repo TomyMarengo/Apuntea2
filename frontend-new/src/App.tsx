@@ -40,6 +40,7 @@ function App() {
         <Box sx={{ gridArea: 'navbar' }}>
           <Navbar
             isDarkMode={isDarkMode}
+            language={user?.locale || 'en'}
             onToggleDarkMode={handleToggleDarkMode}
             isLoggedIn={isLoggedIn}
           />

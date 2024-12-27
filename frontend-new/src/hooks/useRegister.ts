@@ -58,15 +58,14 @@ export default function useRegister() {
       }
 
       // Get the complete user data
-      const userData = await getLoggedUser({ userId: user.id }).unwrap();
+      await getLoggedUser({ userId: user.id }).unwrap();
 
       // Decode the token
       token = decode(token);
 
       // Update the state with the complete user data
-      dispatch(setCredentials({ user: userData, token, refreshToken }));
-
-      return { user: userData, token, refreshToken };
+      dispatch(setCredentials({ token, refreshToken }));
+      
     } catch (error: any) {
       console.error('Error during registration:', error);
       throw new Error(
