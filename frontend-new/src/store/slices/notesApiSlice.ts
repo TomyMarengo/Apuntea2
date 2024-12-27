@@ -55,6 +55,16 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         { type: 'Notes', id: noteId },
       ],
     }),
+    getNotes: builder.query<Note[], NoteQueryArgs>({
+      query: ({ userId, url }) => url || `/notes?user=${userId}`,
+      transformResponse: (response: any) => {
+        const notes: Note[] = Array.isArray(response)
+          ? response.map(mapApiNote)
+          : [];
+        return notes;
+      },
+      providesTags: ['Notes'],
+    }),
     createNote: builder.mutation<boolean, CreateNoteArgs>({
       queryFn: async (
         { name, parentId, visible, file, category },

@@ -2,7 +2,7 @@
 
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { apiSlice } from './apiSlice';
-import { User, Career, Institution } from '../../types';
+import { User, Career, Institution, UserStatus } from '../../types';
 
 import { mapApiUser } from '../../utils/mappers';
 
@@ -36,6 +36,31 @@ interface CreateUserArgs {
   password: string;
   institutionId: string;
   careerId: string;
+  url?: string;
+}
+
+interface FollowUserArgs {
+  userId: string;
+  url?: string;
+}
+
+interface UnfollowUserArgs {
+  userId: string;
+  followerId: string;
+  url?: string;
+}
+
+interface IsFollowingUser {
+  userId: string;
+  followerId: string;
+  url?: string;
+}
+
+interface UpdateUserStatusArgs {
+  userId: string;
+  userStatus: UserStatus;
+  reason?: string;
+  url?: string;
 }
 
 export const usersApiSlice = apiSlice.injectEndpoints({
@@ -130,7 +155,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 60 * 60 * 60 * 24 * 30, // 30 days
     }),
-    updatePicture: builder.mutation<void, PictureArgs>({
+    updatePicture: builder.mutation<boolean, PictureArgs>({
       query: ({ url, profilePicture, userId }) => {
         const formData = new FormData();
         formData.append('profilePicture', profilePicture);
@@ -144,7 +169,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         { type: 'Users', id: userId },
       ],
     }),
-    updateUser: builder.mutation<void, UpdateUserArgs>({
+    updateUser: builder.mutation<boolean, UpdateUserArgs>({
       query: ({
         userId,
         email,
@@ -185,7 +210,29 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['Users'],
     }),
-    createUser: builder.mutation<void, CreateUserArgs>({
+    updateUserStatus: builder.mutation<boolean, UpdateUserStatusArgs>({
+      query: ({ userId, userStatus, reason, url }) => {
+        const data: Record<string, any> = { userStatus };
+
+        if (reason !== undefined && userStatus === UserStatus.BANNED) {
+          data.reason = reason;
+        }
+
+        return {
+          url: url || `/users/${userId}`,
+          method: 'PATCH',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type':
+              'application/vnd.apuntea.user-update-status-v1.0+json',
+          },
+        };
+      },
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'Users', id: userId },
+      ],
+    }),
+    createUser: builder.mutation<boolean, CreateUserArgs>({
       query: (userInfo) => ({
         url: '/users',
         method: 'POST',
@@ -196,17 +243,62 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['Users'],
     }),
+    followUser: builder.mutation<boolean, FollowUserArgs>({
+      queryFn: async ({ userId, url }, _api, _extraOptions, baseQuery) => {
+        const result = await baseQuery({
+          url: url || `/users/${userId}/followers`,
+          method: 'POST',
+        });
+        return { data: result.error === undefined };
+      },
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'Users', id: userId },
+      ],
+    }),
+    unfollowUser: builder.mutation<boolean, UnfollowUserArgs>({
+      queryFn: async (
+        { userId, followerId, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const result = await baseQuery({
+          url: url || `/users/${userId}/followers/${followerId}`,
+          method: 'DELETE',
+        });
+
+        return { data: result.error === undefined };
+      },
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'Users', id: userId },
+      ],
+    }),
+    isFollowingUser: builder.query<boolean, IsFollowingUser>({
+      queryFn: async (
+        { userId, followerId, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const result = await baseQuery({
+          url: url || `/users/${userId}/followers/${followerId}`,
+        });
+        return { data: result.error !== undefined };
+      },
+    }),
   }),
 });
 
 export const {
   useGetUsersQuery,
+  useGetOwnerQuery,
   useGetUserQuery,
   useGetUserPictureQuery,
-  useLazyGetUserQuery,
-  useUpdateUserMutation,
   useUpdatePictureMutation,
+  useUpdateUserMutation,
   useCreateUserMutation,
-  useGetOwnerQuery,
-  useLazyGetOwnerQuery,
+  useFollowUserMutation,
+  useUnfollowUserMutation,
+  useIsFollowingUserQuery,
+  useUpdateUserStatusMutation,
 } = usersApiSlice;

@@ -112,6 +112,16 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
         { type: 'Directories', id: directoryId },
       ],
     }),
+    getDirectories: builder.query<Directory[], DirectoryQueryArgs>({
+      query: ({ directoryId, url }) => url || `/directories/${directoryId}`,
+      transformResponse: (response: any) => {
+        const directories: Directory[] = Array.isArray(response)
+          ? response.map(mapApiDirectory)
+          : [];
+        return directories;
+      },
+      providesTags: ['Directories'],
+    }),
     getUserDirectoriesFavorites: builder.query<Directory[], FavoritesArgs>({
       query: ({ userId, url }) => url || `/directories?favBy=${userId}`,
       transformResponse: (response: any) => {
