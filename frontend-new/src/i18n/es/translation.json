@@ -172,5 +172,23 @@
     "cancel": "Cancelar",
     "saving": "Guardando...",
     "saveChanges": "Guardar Cambios"
+  },
+  "noteCard": {
+    "hiddenNote": "Apunte oculto",
+    "category": {
+      "NOTE": "Apunte",
+      "DIRECTORY": "Directorio",
+      "THEORY": "Teoría",
+      "PRACTICE": "Práctica",
+      "EXAM": "Examen",
+      "OTHER": "Otro"
+    },
+    "visible": "Visible",
+    "hidden": "Oculto",
+    "averageScore": "Puntuación Promedio"
+  },
+  "reviewCard": {
+    "hiddenNote": "Apunte oculto",
+    "score": "Puntuación"
   }
 }

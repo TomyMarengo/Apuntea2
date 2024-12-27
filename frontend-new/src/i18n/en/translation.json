@@ -172,5 +172,23 @@
     "cancel": "Cancel",
     "saving": "Saving...",
     "saveChanges": "Save Changes"
+  },
+  "noteCard": {
+    "hiddenNote": "Hidden Note",
+    "category": {
+      "NOTE": "Note",
+      "DIRECTORY": "Directory",
+      "THEORY": "Theory",
+      "PRACTICE": "Practice",
+      "EXAM": "Exam",
+      "OTHER": "Other"
+    },
+    "visible": "Visible",
+    "hidden": "Hidden",
+    "averageScore": "Average Score"
+  },
+  "reviewCard": {
+    "hiddenNote": "Hidden Note",
+    "score": "Score"
   }
 }

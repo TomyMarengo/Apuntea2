@@ -1,3 +1,5 @@
+// src/pages/Search/RowNote.tsx
+
 import {
   IconButton,
   Tooltip,

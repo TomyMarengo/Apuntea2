@@ -1,33 +1,34 @@
-// src/components/NoteCard.tsx
-
 import React from 'react';
 import { Card, CardContent, Typography, CardActionArea } from '@mui/material';
 import { Note } from '../types';
 import { Link as RouterLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 interface NoteCardProps {
   note: Note;
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
+  const { t } = useTranslation();
+
   return (
     <Card sx={{ mb: 2, boxShadow: 2 }}>
       <CardActionArea component={RouterLink} to={`/notes/${note.id}`}>
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            {note.name}
+            {note.name || t('noteCard.hiddenNote')}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             {new Date(note.createdAt).toLocaleDateString()}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {note.category} - {note.fileType}
+            {t(`noteCard.category.${note.category}`)} - {note.fileType}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {note.visible ? 'Visible' : 'Hidden'}
+            {note.visible ? t('noteCard.visible') : t('noteCard.hidden')}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Average Score: {note.avgScore.toFixed(2)}
+            {t('noteCard.averageScore')}: {note.avgScore.toFixed(2)}
           </Typography>
         </CardContent>
       </CardActionArea>
