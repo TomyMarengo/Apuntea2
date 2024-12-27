@@ -2,9 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useState, useEffect } from 'react';
+import { Locale } from '../types';
 
 interface LanguageToggleProps {
-  locale: 'es' | 'en';
+  locale: Locale;
 }
 
 export default function LanguageToggle({ locale }: LanguageToggleProps) {

@@ -14,11 +14,12 @@ import LanguageToggle from '../LanguageToggle';
 import ProfileButton from '../ProfileButton/ProfileButton';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
+import { Locale } from '../../types';
 
 interface NavbarProps {
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
-  locale: string;
+  locale: Locale;
   isLoggedIn: boolean;
 }
 
@@ -32,10 +33,12 @@ export default function Navbar({
   return (
     <AppBar
       position="static"
+      elevation={0}
       sx={{
         backgroundColor: 'background.paper',
         color: 'primary.main',
         boxShadow: 0,
+        backgroundImage: 'none',
       }}
     >
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>

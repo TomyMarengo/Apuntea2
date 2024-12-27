@@ -9,13 +9,18 @@ export enum UserStatus {
   BANNED = 'BANNED',
 }
 
+export enum Locale {
+  EN = 'en',
+  ES = 'es',
+}
+
 export interface User {
   id: string;
   email: string;
   username?: string;
   firstName?: string;
   lastName?: string;
-  locale?: string;
+  locale?: Locale;
   status?: UserStatus;
   notificationsEnabled?: boolean;
   selfUrl: string;
