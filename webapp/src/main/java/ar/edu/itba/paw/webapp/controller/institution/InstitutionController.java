@@ -108,7 +108,7 @@ public class InstitutionController {
 
     @GET
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
-    @Produces(value = { ApunteaMediaType.SUBJECT_CAREER }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.SUBJECT_CAREER })
     public Response getSubjectCareer(final @Valid @BeanParam InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
         final SubjectCareer sc = subjectService.getSubjectCareer(subjectId, instCarParams.getCareerId()).orElseThrow(SubjectCareerNotFoundException::new);
         final SubjectCareerResponseDto scDto = SubjectCareerResponseDto.fromSubjectCareer(sc, uriInfo);
@@ -127,18 +127,16 @@ public class InstitutionController {
 
     @PUT
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
-    @Consumes(value = { ApunteaMediaType.SUBJECT_CAREER_UPDATE })
+    @Consumes(value = { ApunteaMediaType.SUBJECT_CAREER })
     @Produces(value = { ApunteaMediaType.SUBJECT_CAREER })
     @Secured({"ROLE_ADMIN"})
     public Response updateSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId, @Valid final SubjectCareerUpdateDto subjectCareerDto) {
         subjectService.updateSubjectCareer(subjectId, instCarParams.getCareerId(), subjectCareerDto.getYear());
-        return Response.ok(
-                new SubjectCareerResponseDto(subjectCareerDto.getYear(), instCarParams.getInstitutionId(), instCarParams.getCareerId(), subjectId, uriInfo)
-        ).build();
+        return Response.noContent().build();
     }
 
     @DELETE
-    @Path("/{institutionId}/careers/{careerId}/subjectcareers/{suusbjectId}")
+    @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
     @Secured({"ROLE_ADMIN"})
     public Response deleteSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {
         subjectService.unlinkSubjectFromCareer(subjectId, instCarParams.getCareerId());

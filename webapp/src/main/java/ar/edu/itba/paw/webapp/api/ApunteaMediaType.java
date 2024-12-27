@@ -17,11 +17,9 @@ public class ApunteaMediaType {
     public static final String CAREER_COLLECTION = "application/vnd.apuntea.career-collection-v1.0+json";
     public static final String SUBJECT = "application/vnd.apuntea.subject-v1.0+json";
     public static final String SUBJECT_COLLECTION = "application/vnd.apuntea.subject-collection-v1.0+json";
-    public static final String SUBJECT_CAREER = "application/vnd.apuntea.subject-career-v1.0+json";
-    public static final String SUBJECT_CAREER_COLLECTION = "application/vnd.apuntea.subject-career-collection-v1.0+json";
-    public static final String SUBJECT_CAREER_CREATE = "application/vnd.apuntea.subject-career-create-v1.0+json";
-    public static final String SUBJECT_CAREER_UPDATE = "application/vnd.apuntea.subject-career-update-v1.0+json";
-
+    public static final String SUBJECT_CAREER = "application/vnd.apuntea.subjectcareer-v1.0+json";
+    public static final String SUBJECT_CAREER_COLLECTION = "application/vnd.apuntea.subjectcareer-collection-v1.0+json";
+    public static final String SUBJECT_CAREER_CREATE = "application/vnd.apuntea.subjectcareer-create-v1.0+json";
     public static final String DIRECTORY = "application/vnd.apuntea.directory-v1.0+json";
     public static final String DIRECTORY_COLLECTION = "application/vnd.apuntea.directory-collection-v1.0+json";
     public static final String DIRECTORY_CREATE = "application/vnd.apuntea.directory-create-v1.0+json";

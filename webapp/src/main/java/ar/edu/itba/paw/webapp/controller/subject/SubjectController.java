@@ -58,7 +58,7 @@ public class SubjectController {
         return Response.created(uriInfo.getAbsolutePathBuilder().path(subjectId.toString()).build()).build();
     }
 
-    @PATCH
+    @PUT
     @Path("/{subjectId}")
     @Consumes(value = { ApunteaMediaType.SUBJECT })
     @Secured({"ROLE_ADMIN"})
