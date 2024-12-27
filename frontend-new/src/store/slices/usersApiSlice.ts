@@ -251,14 +251,14 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           data.notificationsEnabled = notificationsEnabled;
         }
 
-        headers['Content-Type'] =
-          'application/vnd.apuntea.user-update-v1.0+json';
-
         const response = await baseQuery({
           url: url || `/users/${userId}`,
           method: 'PATCH',
           body: JSON.stringify(data),
-          headers,
+          headers: {
+            'Content-Type':
+              'application/vnd.apuntea.user-update-v1.0+json',
+          },
         });
 
         return { data: response.error === undefined };

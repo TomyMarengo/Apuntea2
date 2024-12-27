@@ -1,4 +1,4 @@
-// src/components/RowNote.tsx
+// src/components/Row/RowDirectory.tsx
 
 import {
   IconButton,
@@ -14,41 +14,38 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useState, MouseEvent } from 'react';
-import { useGetSubjectQuery } from '../store/slices/institutionsApiSlice';
-import { useGetUserQuery } from '../store/slices/usersApiSlice';
+import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import {
-  useAddFavoriteNoteMutation,
-  useRemoveFavoriteNoteMutation,
-  useGetIsFavoriteNoteQuery,
-} from '../store/slices/notesApiSlice';
-import { saveAs } from 'file-saver';
+  useAddFavoriteDirectoryMutation,
+  useRemoveFavoriteDirectoryMutation,
+  useGetIsFavoriteDirectoryQuery,
+} from '../../store/slices/directoriesApiSlice';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../store/slices/authSlice';
-import { Note, Subject } from '../types';
+import { selectCurrentUser } from '../../store/slices/authSlice';
+import { Directory, Subject } from '../../types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import DownloadIcon from '@mui/icons-material/Download';
 import LinkIcon from '@mui/icons-material/Link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Column } from './ResultsTable';
+import { Column } from '../ResultsTable';
 
-// Define and export ColumnNote
-export const ColumnNote: Column[] = [
+// Define and export ColumnDirectory
+export const ColumnDirectory: Column[] = [
   { id: 'name', label: 'Name' },
   { id: 'subject', label: 'Subject' },
   { id: 'owner', label: 'Owner' },
   { id: 'lastModifiedAt', label: 'Last Modified' },
-  { id: 'score', label: 'Score' },
   { id: 'actions', label: 'Actions', align: 'right' },
 ];
 
-interface RowNoteProps {
-  note: Note;
+interface RowDirectoryProps {
+  directory: Directory;
 }
 
-const RowNote: React.FC<RowNoteProps> = ({ note }) => {
+const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
@@ -58,29 +55,29 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
     data: subjectData,
     isLoading: subjectLoading,
     isError: subjectError,
-  } = useGetSubjectQuery({ url: note.subjectUrl });
+  } = useGetSubjectQuery({ url: directory?.subjectUrl });
 
   // Fetch owner data
   const {
     data: ownerData,
     isLoading: ownerLoading,
     isError: ownerError,
-  } = useGetUserQuery({ url: note.ownerUrl });
+  } = useGetUserQuery({ url: directory.ownerUrl });
 
   // Favorite queries and mutations
   const {
     data: isFavorite,
     refetch: refetchFavorite,
     isLoading: favoriteLoading,
-  } = useGetIsFavoriteNoteQuery(
-    user ? { noteId: note.id, userId: user.id } : {},
+  } = useGetIsFavoriteDirectoryQuery(
+    user ? { directoryId: directory.id, userId: user.id } : {},
     { skip: !user },
   );
 
-  const [addFavoriteNote, { isLoading: addingFavorite }] =
-    useAddFavoriteNoteMutation();
-  const [removeFavoriteNote, { isLoading: removingFavorite }] =
-    useRemoveFavoriteNoteMutation();
+  const [addFavoriteDirectory, { isLoading: addingFavorite }] =
+    useAddFavoriteDirectoryMutation();
+  const [removeFavoriteDirectory, { isLoading: removingFavorite }] =
+    useRemoveFavoriteDirectoryMutation();
 
   // Menu state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -102,68 +99,43 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
 
     try {
       if (isFavorite) {
-        await removeFavoriteNote({
-          noteId: note.id,
+        await removeFavoriteDirectory({
+          directoryId: directory.id,
           userId: user.id,
         }).unwrap();
-        toast.success(t('rowNote.favoriteRemoved'));
+        toast.success(t('rowDirectory.favoriteRemoved'));
       } else {
-        await addFavoriteNote({
-          noteId: note.id,
+        await addFavoriteDirectory({
+          directoryId: directory.id,
         }).unwrap();
-        toast.success(t('rowNote.favoriteAdded'));
+        toast.success(t('rowDirectory.favoriteAdded'));
       }
       refetchFavorite();
     } catch (error: any) {
       if (error.status === 409) {
-        toast.error(t('rowNote.alreadyFavorited'));
+        toast.error(t('rowDirectory.alreadyDirectoryFavorited'));
       } else {
-        toast.error(t('rowNote.favoriteActionFailed'));
+        toast.error(t('rowDirectory.favoriteActionFailed'));
       }
       console.error('Favorite action failed:', error);
-    }
-  };
-
-  // Handle download
-  const handleDownloadClick = async () => {
-    if (note.fileUrl) {
-      try {
-        const response = await fetch(note.fileUrl, {
-          method: 'GET',
-        });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const blob = await response.blob();
-        const fileName = note.fileType
-          ? `${note.name}.${note.fileType}`
-          : note.name;
-        saveAs(blob, fileName);
-        toast.success(t('rowNote.downloadSuccess'));
-      } catch (error) {
-        console.error('Download failed:', error);
-        toast.error(t('rowNote.downloadFailed'));
-      }
-    } else {
-      toast.error(t('rowNote.fileNotAvailable'));
     }
   };
 
   // Handle copy link
   const handleCopyLinkClick = async () => {
     try {
-      const link = `${window.location.origin}/notes/${note.id}`;
+      const link = `${window.location.origin}/directories/${directory.id}`;
       await navigator.clipboard.writeText(link);
-      toast.success(t('rowNote.copySuccess'));
+      toast.success(t('rowDirectory.copySuccess'));
     } catch (error) {
       console.error('Copy failed:', error);
-      toast.error(t('rowNote.copyFailed'));
+      toast.error(t('rowDirectory.copyFailed'));
     }
   };
 
   // Menu action handlers
   const handleOwnerNotes = () => {
-    const ownerId = note.ownerUrl?.split('/').pop();
+    const ownerId = directory.ownerUrl?.split('/').pop();
     if (ownerId) {
       navigate(`/users/${ownerId}/notes`);
     }
@@ -171,7 +143,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   };
 
   const handleOpenParent = () => {
-    const parentId = note.parentUrl?.split('/').pop();
+    const parentId = directory.parentUrl?.split('/').pop();
     if (parentId) {
       navigate(`/directories/${parentId}/`);
     }
@@ -188,28 +160,33 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   };
 
   // Determine subject name
-  let subjectName: string | JSX.Element = t('rowNote.dataUnknown');
+  let subjectName: string | JSX.Element = t('rowDirectory.dataUnknown');
   if (subjectLoading) subjectName = <Skeleton width={80} />;
-  else if (subjectError) subjectName = t('rowNote.dataUnknown');
+  else if (subjectError) subjectName = t('rowDirectory.dataUnknown');
   else if (subjectData?.name) subjectName = subjectData.name;
 
   // Determine owner name
-  let ownerName: string | JSX.Element = t('rowNote.dataUnknown');
+  let ownerName: string | JSX.Element = t('rowDirectory.dataUnknown');
   if (ownerLoading) ownerName = <Skeleton width={80} />;
-  else if (ownerError) ownerName = t('rowNote.dataUnknown');
+  else if (ownerError) ownerName = t('rowDirectory.dataUnknown');
   else if (ownerData?.username) ownerName = ownerData.username;
 
   return (
     <TableRow hover>
       <TableCell>
-        <MuiLink component={Link} to={`/notes/${note.id}`} underline="hover">
-          {note.name}
+        <MuiLink
+          component={Link}
+          to={`/directories/${directory.id}`}
+          underline="hover"
+        >
+          {directory.name}
         </MuiLink>
       </TableCell>
       <TableCell>{subjectName}</TableCell>
       <TableCell>{ownerName}</TableCell>
-      <TableCell>{new Date(note.lastModifiedAt).toLocaleString()}</TableCell>
-      <TableCell>{note.avgScore?.toFixed(2) ?? '-'}</TableCell>
+      <TableCell>
+        {new Date(directory.lastModifiedAt).toLocaleString()}
+      </TableCell>
       <TableCell
         align="right"
         sx={{
@@ -227,9 +204,9 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
               title={
                 user
                   ? isFavorite
-                    ? t('rowNote.unfavorite')
-                    : t('rowNote.favorite')
-                  : t('rowNote.loginToFavorite')
+                    ? t('rowDirectory.unfavorite')
+                    : t('rowDirectory.favorite')
+                  : t('rowDirectory.loginToFavorite')
               }
             >
               <span>
@@ -247,22 +224,15 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
               </span>
             </Tooltip>
 
-            {/* Download Button */}
-            <Tooltip title={t('rowNote.download')}>
-              <IconButton onClick={handleDownloadClick} size="small">
-                <DownloadIcon />
-              </IconButton>
-            </Tooltip>
-
             {/* Copy Link Button */}
-            <Tooltip title={t('rowNote.copyLink')}>
+            <Tooltip title={t('rowDirectory.copyLink')}>
               <IconButton onClick={handleCopyLinkClick} size="small">
                 <LinkIcon />
               </IconButton>
             </Tooltip>
 
             {/* More Menu */}
-            <Tooltip title={t('rowNote.more')}>
+            <Tooltip title={t('rowDirectory.more')}>
               <IconButton onClick={handleMenuClick} size="small">
                 <MoreVertIcon />
               </IconButton>
@@ -282,13 +252,13 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
               }}
             >
               <MenuItem onClick={handleOwnerNotes}>
-                {t('rowNote.openOwnersNotes')}
+                {t('rowDirectory.openOwnersNotes')}
               </MenuItem>
               <MenuItem onClick={handleOpenParent}>
-                {t('rowNote.openParentDirectory')}
+                {t('rowDirectory.openParentDirectory')}
               </MenuItem>
               <MenuItem onClick={handleSubjectDirectories}>
-                {t('rowNote.openSubjectsDirectories')}
+                {t('rowDirectory.openSubjectsDirectories')}
               </MenuItem>
             </Menu>
           </Box>
@@ -298,4 +268,4 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   );
 };
 
-export default RowNote;
+export default RowDirectory;

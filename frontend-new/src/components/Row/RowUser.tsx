@@ -1,4 +1,4 @@
-// src/components/RowUser.tsx
+// src/components/Row/RowUser.tsx
 
 import {
   IconButton,
@@ -14,8 +14,8 @@ import {
   Button,
 } from '@mui/material';
 import { FC, useState } from 'react';
-import { User, UserStatus } from '../types';
-import { useUpdateUserStatusMutation } from '../store/slices/usersApiSlice';
+import { User, UserStatus } from '../../types';
+import { useUpdateUserStatusMutation } from '../../store/slices/usersApiSlice';
 import { useTranslation } from 'react-i18next';
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';

@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import ResultsTable, { Column } from '../../components/ResultsTable';
-import RowUser from '../../components/RowUser';
+import RowUser from '../../components/Row/RowUser';
 import PaginationBar from '../../components/PaginationBar';
 import { useGetUsersQuery } from '../../store/slices/usersApiSlice';
 import { UserStatus } from '../../types';
