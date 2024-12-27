@@ -48,6 +48,8 @@
     "confirmPassword": "Confirm Password",
     "institution": "Institution",
     "career": "Career",
+    "invalidEmail": "Invalid email",
+    "passwordMinLength": "Password must be at least 4 characters",
     "selectInstitution": "Select an institution",
     "selectCareer": "Select a career",
     "youMustSelectInstitution": "You must select an institution",

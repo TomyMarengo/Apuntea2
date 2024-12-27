@@ -76,7 +76,7 @@ const Sidebar = () => {
             <Tooltip title={t('sidebar.adminuser')} placement="right" arrow>
               <ListItem
                 component={Link}
-                to="/admin-users"
+                to="/admin/users"
                 sx={{ textAlign: 'center' }}
               >
                 <ListItemIcon>
@@ -88,7 +88,7 @@ const Sidebar = () => {
             <Tooltip title={t('sidebar.admincareers')} placement="right" arrow>
               <ListItem
                 component={Link}
-                to="/admin-careers"
+                to="/admin/careers"
                 sx={{ textAlign: 'center' }}
               >
                 <ListItemIcon>

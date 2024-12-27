@@ -48,6 +48,8 @@
     "confirmPassword": "Confirmar Contraseña",
     "institution": "Institución",
     "career": "Carrera",
+    "invalidEmail": "Correo electrónico inválido",
+    "passwordMinLength": "La contraseña debe tener al menos 4 caracteres",
     "selectInstitution": "Selecciona una institución",
     "selectCareer": "Selecciona una carrera",
     "youMustSelectInstitution": "Debes seleccionar una institución",
