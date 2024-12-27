@@ -1,2 +1,0 @@
-GET http://localhost:8080/paw-2023b-12/users/64cf2517-4683-4016-b443-6d38d85939b3 HTTP/1.1
-Content-Type: application/json

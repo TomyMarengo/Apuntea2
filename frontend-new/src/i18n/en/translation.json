@@ -117,5 +117,13 @@
   "searchPage": {
     "title": "Search",
     "noContent": "No content found."
+  },
+  "sidebar": {
+    "mynotes": "My Notes",
+    "myreviews": "My Reviews",
+    "career": "My Career",
+    "myfavorites": "My Favorites",
+    "adminuser": "Admin Users",
+    "admincareers": "Admin Careers"
   }
 }

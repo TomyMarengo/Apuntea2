@@ -117,5 +117,13 @@
   "searchPage": {
     "title": "Buscar",
     "noContent": "No se encontró contenido."
+  },
+  "sidebar": {
+    "mynotes": "Mis Apuntes",
+    "myreviews": "Mis Reseñas",
+    "mycareer": "Mi Carrera",
+    "myfavorites": "Mis Favoritos",
+    "adminuser": "Administrar Usuarios",
+    "admincareers": "Administrar Carreras"
   }
 }

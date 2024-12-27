@@ -1,3 +1,5 @@
+// src/components/Navbar/Navbar.tsx
+
 import {
   AppBar,
   Toolbar,
@@ -26,17 +28,29 @@ export default function Navbar({
 }: NavbarProps) {
   const { t } = useTranslation();
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: 'background.paper',
+        color: 'primary.main',
+        boxShadow: 0,
+      }}
+    >
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         {/* Left Side: App Name */}
-        <Typography variant="h6" component={Link} to="/" color="inherit">
+        <Typography
+          variant="h4"
+          component={Link}
+          to="/"
+          sx={{ fontWeight: 'bold' }}
+        >
           {t('navbar.appName') /* "Apuntea" */}
         </Typography>
 
         {/* Right Side */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <IconButton component={Link} to="/search">
-            <SearchIcon />
+            <SearchIcon sx={{ color: 'primary.main' }} />
           </IconButton>
           <LanguageToggle />
           <DarkModeToggle isDarkMode={isDarkMode} onToggle={onToggleDarkMode} />

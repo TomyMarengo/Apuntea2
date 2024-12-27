@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from './store/slices/authSlice';
 import Navbar from './components/Navbar/Navbar';
+import Sidebar from './components/Navbar/Sidebar';
 import AppRouter from './routes/AppRouter';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
@@ -20,6 +21,7 @@ function App() {
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
+      {isLoggedIn && <Sidebar />}
       <Navbar
         isDarkMode={isDarkMode}
         onToggleDarkMode={handleToggleDarkMode}

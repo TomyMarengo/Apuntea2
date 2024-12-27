@@ -21,7 +21,7 @@ export default function LanguageToggle() {
   return (
     <>
       <IconButton onClick={handleOpen}>
-        <LanguageIcon />
+        <LanguageIcon sx={{ color: 'primary.main' }} />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
