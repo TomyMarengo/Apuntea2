@@ -15,10 +15,12 @@ import SearchForm from '../Search/SearchForm';
 import SearchResultsTable from '../Search/SearchResultsTable';
 import PaginationBar from '../../components/PaginationBar';
 import useSearch from '../../hooks/useSearch';
+import { useNavigate } from 'react-router-dom';
 
 export default function ParentDirectoryPage() {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const {
     data: directory,
     isLoading,
@@ -29,14 +31,15 @@ export default function ParentDirectoryPage() {
     if (id) {
       const newParams = new URLSearchParams(searchParams);
       newParams.set('parentId', id);
-      setSearchParams(newParams);
+      // setSearchParams(newParams);
+      navigate({ search: newParams.toString() }, { replace: true });
     }
   }, [id]);
 
   // Use useSearch with parentId
   const {
     searchParams,
-    setSearchParams,
+    // setSearchParams,
     notes,
     directories,
     isLoadingData,
@@ -81,7 +84,8 @@ export default function ParentDirectoryPage() {
     // Reset to the first page when changing search/filter
     newParams.set('page', '1');
 
-    setSearchParams(newParams);
+    // setSearchParams(newParams);
+    navigate({ search: newParams.toString() }, { replace: true });
   };
 
   if (isLoading || isLoadingData) {

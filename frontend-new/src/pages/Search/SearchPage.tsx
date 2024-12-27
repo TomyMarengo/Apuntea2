@@ -6,6 +6,7 @@ import SearchForm from './SearchForm';
 import SearchResultsTable from './SearchResultsTable';
 import PaginationBar from '../../components/PaginationBar';
 import useSearch from '../../hooks/useSearch';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Search Page:
@@ -16,11 +17,12 @@ import useSearch from '../../hooks/useSearch';
  */
 export default function SearchPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // 2) Now useSearch reads from final URL param
   const {
     searchParams,
-    setSearchParams,
+    // setSearchParams,
     notes,
     directories,
     isLoadingData,
@@ -58,7 +60,8 @@ export default function SearchPage() {
     // Reset to first page on search/filter change
     newParams.set('page', '1');
 
-    setSearchParams(newParams);
+    // setSearchParams(newParams);
+    navigate({ search: newParams.toString() }, { replace: true });
   };
 
   return (

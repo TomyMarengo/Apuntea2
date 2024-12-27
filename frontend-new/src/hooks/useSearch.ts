@@ -1,7 +1,7 @@
 // src/hooks/useSearch.ts
 
 import { useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
   useSearchNotesQuery,
   useSearchDirectoriesQuery,
@@ -11,7 +11,7 @@ import { selectCurrentUser } from '../store/slices/authSlice';
 
 interface UseSearchReturn {
   searchParams: URLSearchParams;
-  setSearchParams: (params: URLSearchParams) => void;
+  // setSearchParams: (params: URLSearchParams) => void;
   isLoadingData: boolean;
   notes: any[];
   directories: any[];
@@ -25,6 +25,7 @@ interface UseSearchReturn {
 
 export default function useSearch(userData: boolean = true): UseSearchReturn {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
 
   // User data
@@ -45,7 +46,8 @@ export default function useSearch(userData: boolean = true): UseSearchReturn {
       if (updated) {
         // Reset to first page on defaults set
         searchParams.set('page', '1');
-        setSearchParams(searchParams);
+        // setSearchParams(searchParams);
+        navigate({ search: searchParams.toString() }, { replace: true });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, searchParams, setSearchParams]);
@@ -119,7 +121,7 @@ export default function useSearch(userData: boolean = true): UseSearchReturn {
 
   return {
     searchParams,
-    setSearchParams,
+    // setSearchParams,
     isLoadingData,
     notes: notes || [],
     directories: directories || [],
