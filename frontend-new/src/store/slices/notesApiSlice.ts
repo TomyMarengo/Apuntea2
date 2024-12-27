@@ -67,7 +67,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: { name, parentId, visible, file, category },
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
       invalidatesTags: ['Directories'],
     }),
@@ -88,7 +88,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body,
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
       invalidatesTags: ['Notes'],
     }),
@@ -107,7 +107,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body,
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
       invalidatesTags: ['Notes'],
     }),
@@ -130,7 +130,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       ) => {
         const endpoint = url || `/notes/${noteId}/favorites/${userId}`;
         const result = await baseQuery(endpoint);
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
     }),
     addFavoriteNote: builder.mutation<boolean, NoteQueryArgs>({
@@ -139,7 +139,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           url: url || `/notes/${noteId}/favorites`,
           method: 'POST',
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
     }),
     removeFavoriteNote: builder.mutation<boolean, FavoriteNoteArgs>({
@@ -153,7 +153,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           url: url || `/notes/${noteId}/favorites/${userId}`,
           method: 'DELETE',
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
     }),
     addInteractionNote: builder.mutation<boolean, FavoriteNoteArgs>({
@@ -167,7 +167,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           url: url || `/notes/${noteId}/interactions/${userId}`,
           method: 'POST',
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
     }),
     getLatestNotes: builder.query<Note[], NoteQueryArgs>({
