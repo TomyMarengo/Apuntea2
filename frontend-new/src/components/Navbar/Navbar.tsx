@@ -1,3 +1,5 @@
+// src/components/Navbar/Navbar.tsx
+
 import {
   AppBar,
   Toolbar,
@@ -12,33 +14,50 @@ import LanguageToggle from '../LanguageToggle';
 import ProfileButton from '../ProfileButton/ProfileButton';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
+import { Locale } from '../../types';
 
 interface NavbarProps {
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
+  locale: Locale;
   isLoggedIn: boolean;
 }
 
 export default function Navbar({
   isDarkMode,
   onToggleDarkMode,
+  locale,
   isLoggedIn,
 }: NavbarProps) {
   const { t } = useTranslation();
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      elevation={0}
+      sx={{
+        backgroundColor: 'background.paper',
+        color: 'primary.main',
+        boxShadow: 0,
+        backgroundImage: 'none',
+      }}
+    >
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         {/* Left Side: App Name */}
-        <Typography variant="h6" component={Link} to="/" color="inherit">
+        <Typography
+          variant="h4"
+          component={Link}
+          to="/"
+          sx={{ fontWeight: 'bold' }}
+        >
           {t('navbar.appName') /* "Apuntea" */}
         </Typography>
 
         {/* Right Side */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <IconButton component={Link} to="/search">
-            <SearchIcon />
+            <SearchIcon sx={{ color: 'primary.main' }} />
           </IconButton>
-          <LanguageToggle />
+          <LanguageToggle locale={locale} />
           <DarkModeToggle isDarkMode={isDarkMode} onToggle={onToggleDarkMode} />
 
           {isLoggedIn ? (

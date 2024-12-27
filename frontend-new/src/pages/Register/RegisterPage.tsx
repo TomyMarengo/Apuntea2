@@ -88,15 +88,12 @@ export default function RegisterPage() {
       setLoading(true);
 
       // Pass ALL fields: email, password, institutionId, careerId
-      const { user, token, refreshToken } = await registerUser({
+      await registerUser({
         email: data.email,
         password: data.password,
         institutionId: data.institutionId,
         careerId: data.careerId,
       });
-
-      // Save them in Redux
-      dispatch(setCredentials({ user, token, refreshToken }));
 
       // Navigate away after success
       navigate('/');

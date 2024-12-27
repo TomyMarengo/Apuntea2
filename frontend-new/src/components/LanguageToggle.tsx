@@ -1,11 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Locale } from '../types';
 
-export default function LanguageToggle() {
+interface LanguageToggleProps {
+  locale: Locale;
+}
+
+export default function LanguageToggle({ locale }: LanguageToggleProps) {
   const { i18n } = useTranslation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    i18n.changeLanguage(locale);
+  }, [locale, i18n]);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -21,7 +30,7 @@ export default function LanguageToggle() {
   return (
     <>
       <IconButton onClick={handleOpen}>
-        <LanguageIcon />
+        <LanguageIcon sx={{ color: 'primary.main' }} />
       </IconButton>
       <Menu
         anchorEl={anchorEl}

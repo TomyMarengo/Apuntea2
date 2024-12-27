@@ -10,7 +10,7 @@ import {
 import { setCredentials, logOut, invalidateToken } from './authSlice';
 import { decode } from '../../utils/helpers';
 
-const baseUrl = 'http://localhost:8080/paw-2023b-12/api'; // TODO: move to .env
+const baseUrl = import.meta.env.VITE_API_URL as string;
 
 const baseQuery = fetchBaseQuery({
   baseUrl,

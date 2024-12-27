@@ -10,9 +10,6 @@
     "profile": {
       "title": "Perfil"
     },
-    "settings": {
-      "title": "Configuración"
-    },
     "logout": "Cerrar Sesión"
   },
   "parentDirectoryPage": {
@@ -48,6 +45,8 @@
     "confirmPassword": "Confirmar Contraseña",
     "institution": "Institución",
     "career": "Carrera",
+    "invalidEmail": "Correo electrónico inválido",
+    "passwordMinLength": "La contraseña debe tener al menos 4 caracteres",
     "selectInstitution": "Selecciona una institución",
     "selectCareer": "Selecciona una carrera",
     "youMustSelectInstitution": "Debes seleccionar una institución",
@@ -117,5 +116,79 @@
   "searchPage": {
     "title": "Buscar",
     "noContent": "No se encontró contenido."
+  },
+  "sidebar": {
+    "mynotes": "Mis Apuntes",
+    "myreviews": "Mis Reseñas",
+    "mycareer": "Mi Carrera",
+    "myfavorites": "Mis Favoritos",
+    "adminuser": "Administrar Usuarios",
+    "admincareers": "Administrar Carreras"
+  },
+  "profilePage": {
+    "profile": "Perfil",
+    "errorFetchingUser": "Error al obtener los datos del usuario.",
+    "noUserFound": "No se encontró ningún usuario."
+  },
+  "recentNotes": {
+    "loading": "Cargando...",
+    "errorFetchingNotes": "Error al obtener las notas.",
+    "recentNotes": "Notas Recientes",
+    "viewMore": "Ver Más",
+    "noRecentNotes": "No se encontraron notas recientes."
+  },
+  "recentReviews": {
+    "loading": "Cargando...",
+    "errorFetchingReviews": "Error al obtener las reseñas.",
+    "recentReviews": "Reseñas Recientes",
+    "viewMore": "Ver Más",
+    "noRecentReviews": "No se encontraron reseñas recientes."
+  },
+  "profileCard": {
+    "username": "Nombre de Usuario",
+    "email": "Correo Electrónico",
+    "career": "Carrera",
+    "institution": "Institución",
+    "notSet": "No Establecido",
+    "enableEmailNotifications": "Habilitar Notificaciones por Email",
+    "disableEmailNotifications": "Deshabilitar Notificaciones por Email"
+  },
+  "editProfileDialog": {
+    "editProfile": "Editar Perfil",
+    "close": "Cerrar",
+    "uploadPicture": "Subir Foto",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "username": "Nombre de Usuario",
+    "email": "Correo Electrónico",
+    "career": "Carrera",
+    "selectCareer": "Seleccionar Carrera",
+    "changePassword": "Cambiar Contraseña",
+    "currentPassword": "Contraseña Actual",
+    "newPassword": "Nueva Contraseña",
+    "confirmNewPassword": "Confirmar Nueva Contraseña",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+    "failedToUpdateProfile": "Error al actualizar el perfil.",
+    "cancel": "Cancelar",
+    "saving": "Guardando...",
+    "saveChanges": "Guardar Cambios"
+  },
+  "noteCard": {
+    "hiddenNote": "Apunte oculto",
+    "category": {
+      "NOTE": "Apunte",
+      "DIRECTORY": "Directorio",
+      "THEORY": "Teoría",
+      "PRACTICE": "Práctica",
+      "EXAM": "Examen",
+      "OTHER": "Otro"
+    },
+    "visible": "Visible",
+    "hidden": "Oculto",
+    "averageScore": "Puntuación Promedio"
+  },
+  "reviewCard": {
+    "hiddenNote": "Apunte oculto",
+    "score": "Puntuación"
   }
 }

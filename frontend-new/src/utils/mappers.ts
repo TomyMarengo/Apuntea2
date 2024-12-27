@@ -107,6 +107,8 @@ export const mapApiUser = (apiUser: any): User => {
     id: apiUser.id,
     email: apiUser.email,
     username: apiUser.username,
+    firstName: apiUser.firstName,
+    lastName: apiUser.lastName,
     locale: apiUser.locale,
     status: apiUser.status,
     notificationsEnabled: apiUser.notificationsEnabled,
@@ -119,5 +121,6 @@ export const mapApiUser = (apiUser: any): User => {
     reviewsReceivedUrl: apiUser.reviewsReceived,
     directoryFavoritesUrl: apiUser.directoryFavorites,
     followingUrl: apiUser.following,
+    profilePictureUrl: apiUser.profilePicture,
   };
 };

@@ -1,3 +1,5 @@
+// src/theme.ts
+
 import { createTheme } from '@mui/material/styles';
 import { PaletteColorOptions } from '@mui/material';
 
@@ -21,20 +23,13 @@ export const lightTheme = createTheme({
       main: '#FDC286',
       dark: '#FCAA6F',
     },
-    // text colors for "light mode"
     text: {
-      primary: '#5A5044', // default text color
+      primary: '#5A5044',
       secondary: '#302A24',
     },
-    // custom "tertiary" color
-    tertiary: {
-      main: '#FEFEFE',
-      dark: '#EBE3D8',
-    },
-    // You could also define background colors, etc.
     background: {
-      default: '#FEFEFE', // e.g. white-ish background
-      paper: '#FEFEFE',
+      default: '#FEFEFE',
+      paper: '#F9F1E7',
     },
   },
   typography: {
@@ -52,22 +47,20 @@ export const darkTheme = createTheme({
       dark: '#7FB58F',
     },
     secondary: {
-      main: '#DFE44A',
-      dark: '#B1B63B',
+      main: '#50C4EC',
+      dark: '#2F9CBB',
     },
-    // text colors for "dark mode"
-    text: {
-      primary: '#FEFEFE',
-      secondary: '#EBE3D8',
-    },
-    // custom "tertiary" color
     tertiary: {
       main: '#5A5044',
       dark: '#302A24',
     },
+    text: {
+      primary: '#FEFEFE',
+      secondary: '#F9F1E7',
+    },
     background: {
-      default: '#302A24', // or some darker background
-      paper: '#302A24',
+      default: '#454D55',
+      paper: '#0A0B10',
     },
   },
   typography: {

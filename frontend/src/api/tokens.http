@@ -1,3 +1,0 @@
-POST http://localhost:8080/paw-2023b-12/tokens HTTP/1.1
-Authorization: Basic bWFyZW5nb3RvbWFzQGdtYWlsLmNvbToxMjM0VG9tYXM=
-Content-Type: application/json

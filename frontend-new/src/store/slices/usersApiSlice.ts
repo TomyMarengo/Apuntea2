@@ -1,9 +1,8 @@
 // store/slices/usersApiSlice.ts
 
-import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { apiSlice } from './apiSlice';
 import { User, Career, Institution, UserStatus } from '../../types';
-
+import { setCurrentUser } from './authSlice';
 import { mapApiUser } from '../../utils/mappers';
 
 interface UserArgs {
@@ -72,7 +71,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       providesTags: ['Users'],
     }),
-    getOwner: builder.query<User, UserArgs>({
+    getUser: builder.query<User, UserArgs>({
       query: ({ userId, url }) => url || `/users/${userId}`,
       transformResponse: (response: any) => {
         return mapApiUser(response);
@@ -81,8 +80,8 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         { type: 'Users', id: userId },
       ],
     }),
-    getUser: builder.query<User, UserArgs>({
-      async queryFn({ userId, url }, _queryApi, _extraOptions, baseQuery) {
+    getLoggedUser: builder.query<User, UserArgs>({
+      async queryFn({ userId, url }, queryApi, _extraOptions, baseQuery) {
         try {
           const userResult = await baseQuery({
             url: url || `/users/${userId}`,
@@ -109,28 +108,34 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }
           }
 
-          const combinedUser: User = {
+          // Combine data into a single user object
+          const user: User = {
             id: userData.id,
             email: userData.email,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
             username: userData.username,
             locale: userData.locale,
             status: userData.status,
             notificationsEnabled: userData.notificationsEnabled,
-            profilePictureUrl: userData.profilePictureUrl || '',
-            career: careerData,
-            institution: institutionData,
+            profilePictureUrl: userData.profilePicture || '',
             selfUrl: userData.self,
-            institutionUrl: userData.institution,
-            careerUrl: userData.career,
             subjectFavoritesUrl: userData.subjectFavorites,
             noteFavoritesUrl: userData.noteFavorites,
             subjectsUrl: userData.subjects,
             reviewsReceivedUrl: userData.reviewsReceived,
             directoryFavoritesUrl: userData.directoryFavorites,
             followingUrl: userData.following,
+            careerUrl: userData.career,
+            institutionUrl: userData.institution,
+            career: careerData,
+            institution: institutionData,
+            // Add other fields as necessary
           };
 
-          return { data: combinedUser };
+          queryApi.dispatch(setCurrentUser(user));
+
+          return { data: user };
         } catch (error) {
           return {
             error: {
@@ -216,7 +221,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
         return { data: response.error === undefined };
       },
-      invalidatesTags: ['Users'],
+      invalidatesTags: (result, error, { userId }) => [
+        { type: 'Users', id: userId },
+      ],
     }),
     updateUserStatus: builder.mutation<boolean, UpdateUserStatusArgs>({
       queryFn: async (
@@ -247,18 +254,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         { type: 'Users', id: userId },
       ],
     }),
-    createUser: builder.mutation<boolean, CreateUserArgs>({
-      queryFn: async (userInfo, _api, _extraOptions, baseQuery) => {
-        const response = await baseQuery({
-          url: '/users',
-          method: 'POST',
-          body: JSON.stringify(userInfo),
-          headers: {
-            'Content-Type': 'application/vnd.apuntea.user-create-v1.0+json',
-          },
-        });
-
-        return { data: response.error === undefined };
+    createUser: builder.mutation<{ userUrl: string }, CreateUserArgs>({
+      query: (userInfo) => ({
+        url: '/users',
+        method: 'POST',
+        body: JSON.stringify(userInfo),
+        headers: {
+          'Content-Type': 'application/vnd.apuntea.user-create-v1.0+json',
+        },
+      }),
+      transformResponse: async (response: any, meta: any) => {
+        return { userUrl: meta.response.headers.get('Location') };
       },
       invalidatesTags: ['Users'],
     }),
@@ -310,9 +316,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetUsersQuery,
-  useGetOwnerQuery,
   useGetUserQuery,
   useGetUserPictureQuery,
+  useGetLoggedUserQuery,
+  useLazyGetLoggedUserQuery,
   useUpdatePictureMutation,
   useUpdateUserMutation,
   useCreateUserMutation,
@@ -320,4 +327,5 @@ export const {
   useUnfollowUserMutation,
   useIsFollowingUserQuery,
   useUpdateUserStatusMutation,
+  useLazyGetUserQuery,
 } = usersApiSlice;

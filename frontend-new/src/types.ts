@@ -1,7 +1,23 @@
+export interface Header {
+  alg: string;
+  typ: string;
+}
+
+export interface Payload {
+  sub: string;
+  iat: number;
+  exp: number;
+  iss: string;
+  jti: string;
+  tokenType: string;
+  userId: string;
+  authorities: string[];
+}
+
 export interface Token {
   raw?: string;
-  header?: any;
-  payload?: any;
+  header?: Header;
+  payload?: Payload;
 }
 
 export enum UserStatus {
@@ -9,23 +25,30 @@ export enum UserStatus {
   BANNED = 'BANNED',
 }
 
+export enum Locale {
+  EN = 'en',
+  ES = 'es',
+}
+
 export interface User {
-  id?: string;
-  email?: string;
+  id: string;
+  email: string;
   username?: string;
-  locale?: string;
+  firstName?: string;
+  lastName?: string;
+  locale?: Locale;
   status?: UserStatus;
   notificationsEnabled?: boolean;
-  selfUrl?: string;
-  institutionUrl?: string;
-  careerUrl?: string;
+  selfUrl: string;
+  institutionUrl: string;
+  careerUrl: string;
   subjectFavoritesUrl?: string;
   noteFavoritesUrl?: string;
   subjectsUrl?: string;
   reviewsReceivedUrl?: string;
   directoryFavoritesUrl?: string;
   followingUrl?: string;
-  profilePictureUrl?: string;
+  profilePictureUrl: string;
   career?: Career;
   institution?: Institution;
 }
@@ -80,13 +103,13 @@ export enum Category {
 export interface Note {
   id: string;
   name: string;
-  visible?: boolean;
+  visible: boolean;
   fileType?: FileType;
   category?: Category;
   createdAt: string;
   lastModifiedAt: string;
-  avgScore?: number;
-  selfUrl?: string;
+  avgScore: number;
+  selfUrl: string;
   fileUrl?: string;
   interactions?: number;
   interactionsUrl?: string;

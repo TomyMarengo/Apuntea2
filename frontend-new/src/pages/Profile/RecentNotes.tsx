@@ -1,46 +1,35 @@
 // src/pages/Profile/RecentNotes.tsx
 
 import React from 'react';
-import {
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Button,
-  CircularProgress,
-} from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { useGetLatestNotesQuery } from '../../store/slices/notesApiSlice';
 import { Note } from '../../types';
+import NoteCard from '../../components/NoteCard';
 
 interface RecentNotesProps {
-  userId: string;
+  userId?: string;
 }
 
 const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
   const { t } = useTranslation();
 
-  const { data, isLoading, error } = useGetLatestNotesQuery(
-    { userId },
-    {
-      // Adjust the API endpoint if necessary
-    },
-  );
+  const { data, isLoading, error } = useGetLatestNotesQuery({ userId });
 
   if (isLoading) {
     return (
-      <Typography variant="body1">
-        <CircularProgress size={24} /> {t('loading')}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <CircularProgress size={24} />{' '}
+        <Typography sx={{ ml: 2 }}>{t('recentNotes.loading')}</Typography>
+      </Box>
     );
   }
 
   if (error) {
     return (
       <Typography variant="body1" color="error">
-        {t('errorFetchingNotes')}
+        {t('recentNotes.errorFetchingNotes')}
       </Typography>
     );
   }
@@ -48,29 +37,24 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Typography variant="h6">{t('recentNotes')}</Typography>
+        <Typography variant="h6">{t('recentNotes.recentNotes')}</Typography>
         <Button
           component={RouterLink}
-          to="/profile/notes"
+          to="/notes"
           variant="outlined"
           size="small"
         >
-          {t('viewMore')}
+          {t('recentNotes.viewMore')}
         </Button>
       </Box>
       {data && data.length > 0 ? (
-        <List>
+        <Box>
           {data.slice(0, 5).map((note: Note) => (
-            <ListItem key={note.id} disablePadding>
-              <ListItemText
-                primary={note.name}
-                secondary={new Date(note.createdAt).toLocaleDateString()}
-              />
-            </ListItem>
+            <NoteCard key={note.id} note={note} />
           ))}
-        </List>
+        </Box>
       ) : (
-        <Typography>{t('noRecentNotes')}</Typography>
+        <Typography>{t('recentNotes.noRecentNotes')}</Typography>
       )}
     </Box>
   );

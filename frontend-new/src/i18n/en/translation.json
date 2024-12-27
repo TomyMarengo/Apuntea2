@@ -10,9 +10,6 @@
     "profile": {
       "title": "Profile"
     },
-    "settings": {
-      "title": "Settings"
-    },
     "logout": "Logout"
   },
   "parentDirectoryPage": {
@@ -48,6 +45,8 @@
     "confirmPassword": "Confirm Password",
     "institution": "Institution",
     "career": "Career",
+    "invalidEmail": "Invalid email",
+    "passwordMinLength": "Password must be at least 4 characters",
     "selectInstitution": "Select an institution",
     "selectCareer": "Select a career",
     "youMustSelectInstitution": "You must select an institution",
@@ -117,5 +116,79 @@
   "searchPage": {
     "title": "Search",
     "noContent": "No content found."
+  },
+  "sidebar": {
+    "mynotes": "My Notes",
+    "myreviews": "My Reviews",
+    "career": "My Career",
+    "myfavorites": "My Favorites",
+    "adminuser": "Admin Users",
+    "admincareers": "Admin Careers"
+  },
+  "profilePage": {
+    "profile": "Profile",
+    "errorFetchingUser": "Error fetching user data.",
+    "noUserFound": "No user found."
+  },
+  "recentNotes": {
+    "loading": "Loading...",
+    "errorFetchingNotes": "Error fetching notes.",
+    "recentNotes": "Recent Notes",
+    "viewMore": "View More",
+    "noRecentNotes": "No recent notes found."
+  },
+  "recentReviews": {
+    "loading": "Loading...",
+    "errorFetchingReviews": "Error fetching reviews.",
+    "recentReviews": "Recent Reviews",
+    "viewMore": "View More",
+    "noRecentReviews": "No recent reviews found."
+  },
+  "profileCard": {
+    "username": "Username",
+    "email": "Email",
+    "career": "Career",
+    "institution": "Institution",
+    "notSet": "Not Set",
+    "enableEmailNotifications": "Enable Email Notifications",
+    "disableEmailNotifications": "Disable Email Notifications"
+  },
+  "editProfileDialog": {
+    "editProfile": "Edit Profile",
+    "close": "Close",
+    "uploadPicture": "Upload Picture",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "username": "Username",
+    "email": "Email",
+    "career": "Career",
+    "selectCareer": "Select Career",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "passwordsDoNotMatch": "Passwords do not match.",
+    "failedToUpdateProfile": "Failed to update profile.",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes"
+  },
+  "noteCard": {
+    "hiddenNote": "Hidden Note",
+    "category": {
+      "NOTE": "Note",
+      "DIRECTORY": "Directory",
+      "THEORY": "Theory",
+      "PRACTICE": "Practice",
+      "EXAM": "Exam",
+      "OTHER": "Other"
+    },
+    "visible": "Visible",
+    "hidden": "Hidden",
+    "averageScore": "Average Score"
+  },
+  "reviewCard": {
+    "hiddenNote": "Hidden Note",
+    "score": "Score"
   }
 }

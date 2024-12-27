@@ -1,4 +1,4 @@
-// src/pages/Profile/Profile.tsx
+// src/pages/Profile/ProfilePage.tsx
 
 import React from 'react';
 import { Box, CircularProgress, Typography, Divider } from '@mui/material';
@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import ProfileCard from './ProfileCard';
 import RecentNotes from './RecentNotes';
 import RecentReviews from './RecentReviews';
-import { useGetUserQuery } from '../../store/slices/usersApiSlice';
+import { useGetLoggedUserQuery } from '../../store/slices/usersApiSlice';
 import { selectCurrentUserId } from '../../store/slices/authSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
@@ -20,7 +20,7 @@ const ProfilePage: React.FC = () => {
     isLoading,
     error,
     refetch,
-  } = useGetUserQuery({ userId }, { skip: !userId });
+  } = useGetLoggedUserQuery({ userId }, { skip: !userId });
 
   if (isLoading) {
     return (
@@ -48,7 +48,7 @@ const ProfilePage: React.FC = () => {
         }}
       >
         <Typography variant="h6" color="error">
-          {t('errorFetchingUser')}
+          {t('profilePage.errorFetchingUser')}
         </Typography>
       </Box>
     );
@@ -64,7 +64,7 @@ const ProfilePage: React.FC = () => {
           minHeight: '80vh',
         }}
       >
-        <Typography variant="h6">{t('noUserFound')}</Typography>
+        <Typography variant="h6">{t('profilePage.noUserFound')}</Typography>
       </Box>
     );
   }
@@ -72,7 +72,7 @@ const ProfilePage: React.FC = () => {
   return (
     <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
       <Typography variant="h4" gutterBottom>
-        {t('profile')}
+        {t('profilePage.profile')}
       </Typography>
 
       <ProfileCard user={user} onUpdateSuccess={refetch} />

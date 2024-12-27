@@ -34,7 +34,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 export default function LoginPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { getSession } = useLogin();
+  const { loginUser } = useLogin();
 
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -55,7 +55,7 @@ export default function LoginPage() {
     try {
       setLoading(true);
       setLoginError(null);
-      await getSession({ email: data.email, password: data.password });
+      await loginUser({ email: data.email, password: data.password });
       navigate('/');
     } catch (err: any) {
       setLoginError(err.message);
