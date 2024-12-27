@@ -58,7 +58,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: { name, parentId, visible, iconColor },
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
       invalidatesTags: ['Directories'],
     }),
@@ -80,7 +80,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body,
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
       invalidatesTags: ['Directories'],
     }),
@@ -99,7 +99,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body,
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
       invalidatesTags: ['Directories'],
     }),
@@ -111,16 +111,6 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, { directoryId }) => [
         { type: 'Directories', id: directoryId },
       ],
-    }),
-    getDirectories: builder.query<Directory[], DirectoryQueryArgs>({
-      query: ({ directoryId, url }) => url || `/directories/${directoryId}`,
-      transformResponse: (response: any) => {
-        const directories: Directory[] = Array.isArray(response)
-          ? response.map(mapApiDirectory)
-          : [];
-        return directories;
-      },
-      providesTags: ['Directories'],
     }),
     getUserDirectoriesFavorites: builder.query<Directory[], FavoritesArgs>({
       query: ({ userId, url }) => url || `/directories?favBy=${userId}`,
@@ -143,7 +133,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           url: url || `/directories/${directoryId}/favorites/${userId}`,
           method: 'GET',
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
     }),
     addFavoriteDirectory: builder.mutation<boolean, DirectoryQueryArgs>({
@@ -152,7 +142,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           url: url || `/directories/${directoryId}/favorites`,
           method: 'POST',
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
     }),
     removeFavoriteDirectory: builder.mutation<boolean, FavoriteDirectoryArgs>({
@@ -166,7 +156,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           url: url || `/directories/${directoryId}/favorites/${userId}`,
           method: 'DELETE',
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
     }),
   }),

@@ -84,7 +84,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     getUser: builder.query<User, UserArgs>({
       async queryFn({ userId, url }, _queryApi, _extraOptions, baseQuery) {
         try {
-          // Fetch user data
           const userResult = await baseQuery({
             url: url || `/users/${userId}`,
           });
@@ -92,8 +91,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
           const userData = userResult.data as any;
 
-          // Fetch career data if careerUrl is present
-          let careerData: Career | undefined = undefined;
+          let careerData: Career | undefined;
           if (userData.career) {
             const careerResult = await baseQuery({ url: userData.career });
             if (!careerResult.error) {
@@ -101,8 +99,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }
           }
 
-          // Fetch institution data if institutionUrl is present
-          let institutionData: Institution | undefined = undefined;
+          let institutionData: Institution | undefined;
           if (userData.institution) {
             const institutionResult = await baseQuery({
               url: userData.institution,
@@ -112,7 +109,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }
           }
 
-          // Combine data into a single user object
           const combinedUser: User = {
             id: userData.id,
             email: userData.email,
@@ -132,7 +128,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             reviewsReceivedUrl: userData.reviewsReceived,
             directoryFavoritesUrl: userData.directoryFavorites,
             followingUrl: userData.following,
-            // Add other fields as necessary
           };
 
           return { data: combinedUser };
@@ -156,32 +151,43 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 60 * 60 * 60 * 24 * 30, // 30 days
     }),
     updatePicture: builder.mutation<boolean, PictureArgs>({
-      query: ({ url, profilePicture, userId }) => {
+      queryFn: async (
+        { url, profilePicture, userId },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
         const formData = new FormData();
         formData.append('profilePicture', profilePicture);
-        return {
+        const response = await baseQuery({
           url: url || '/pictures',
           method: 'POST',
           body: formData,
-        };
+        });
+        return { data: response.error === undefined };
       },
       invalidatesTags: (result, error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
     updateUser: builder.mutation<boolean, UpdateUserArgs>({
-      query: ({
-        userId,
-        email,
-        firstName,
-        lastName,
-        username,
-        careerId,
-        password,
-        notificationsEnabled,
-        url,
-        oldPassword,
-      }) => {
+      queryFn: async (
+        {
+          userId,
+          email,
+          firstName,
+          lastName,
+          username,
+          careerId,
+          password,
+          notificationsEnabled,
+          oldPassword,
+          url,
+        },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
         const data: Record<string, any> = {};
         let headers: Record<string, string> = {};
 
@@ -201,24 +207,31 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         headers['Content-Type'] =
           'application/vnd.apuntea.user-update-v1.0+json';
 
-        return {
+        const response = await baseQuery({
           url: url || `/users/${userId}`,
           method: 'PATCH',
           body: JSON.stringify(data),
           headers,
-        };
+        });
+
+        return { data: response.error === undefined };
       },
       invalidatesTags: ['Users'],
     }),
     updateUserStatus: builder.mutation<boolean, UpdateUserStatusArgs>({
-      query: ({ userId, userStatus, reason, url }) => {
+      queryFn: async (
+        { userId, userStatus, reason, url },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
         const data: Record<string, any> = { userStatus };
 
         if (reason !== undefined && userStatus === UserStatus.BANNED) {
           data.reason = reason;
         }
 
-        return {
+        const response = await baseQuery({
           url: url || `/users/${userId}`,
           method: 'PATCH',
           body: JSON.stringify(data),
@@ -226,21 +239,27 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             'Content-Type':
               'application/vnd.apuntea.user-update-status-v1.0+json',
           },
-        };
+        });
+
+        return { data: response.error === undefined };
       },
       invalidatesTags: (result, error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
     createUser: builder.mutation<boolean, CreateUserArgs>({
-      query: (userInfo) => ({
-        url: '/users',
-        method: 'POST',
-        body: JSON.stringify(userInfo),
-        headers: {
-          'Content-Type': 'application/vnd.apuntea.user-create-v1.0+json',
-        },
-      }),
+      queryFn: async (userInfo, _api, _extraOptions, baseQuery) => {
+        const response = await baseQuery({
+          url: '/users',
+          method: 'POST',
+          body: JSON.stringify(userInfo),
+          headers: {
+            'Content-Type': 'application/vnd.apuntea.user-create-v1.0+json',
+          },
+        });
+
+        return { data: response.error === undefined };
+      },
       invalidatesTags: ['Users'],
     }),
     followUser: builder.mutation<boolean, FollowUserArgs>({
@@ -283,7 +302,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         const result = await baseQuery({
           url: url || `/users/${userId}/followers/${followerId}`,
         });
-        return { data: result.error !== undefined };
+        return { data: result.error === undefined };
       },
     }),
   }),

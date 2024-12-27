@@ -33,7 +33,6 @@ interface DeleteReviewArgs {
   reason?: string;
   url?: string;
 }
-
 export const reviewsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getReviews: builder.query<Review[], ReviewArgs>({
@@ -65,10 +64,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: { noteId, score, content },
         });
-        if (response.error) {
-          return { error: response.error };
-        }
-        return { data: true };
+        return { data: response.error === undefined };
       },
       invalidatesTags: (result, error, { noteId }) => [
         { type: 'Reviews', id: noteId },
@@ -86,10 +82,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           method: 'PUT',
           body: { score, content },
         });
-        if (response.error) {
-          return { error: response.error };
-        }
-        return { data: true };
+        return { data: response.error === undefined };
       },
       invalidatesTags: (result, error, { noteId, userId }) => [
         { type: 'Reviews', id: noteId },
@@ -108,10 +101,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           method: 'DELETE',
           body: { reason },
         });
-        if (response.error) {
-          return { error: response.error };
-        }
-        return { data: true };
+        return { data: response.error === undefined };
       },
       invalidatesTags: (result, error, { noteId, userId }) => [
         { type: 'Reviews', id: noteId },
