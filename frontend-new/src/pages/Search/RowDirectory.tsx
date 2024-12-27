@@ -13,7 +13,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useState, MouseEvent } from 'react';
 import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
-import { useGetOwnerQuery } from '../../store/slices/usersApiSlice';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import {
   useAddFavoriteDirectoryMutation,
   useRemoveFavoriteDirectoryMutation,
@@ -60,7 +60,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
     data: ownerData,
     isLoading: ownerLoading,
     isError: ownerError,
-  } = useGetOwnerQuery({ url: directory.ownerUrl });
+  } = useGetUserQuery({ url: directory.ownerUrl });
 
   // Favorite queries and mutations
   const {

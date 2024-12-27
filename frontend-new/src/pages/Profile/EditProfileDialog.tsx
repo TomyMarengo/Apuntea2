@@ -15,8 +15,15 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Typography,
+  InputAdornment,
 } from '@mui/material';
-import { Close as CloseIcon, PhotoCamera } from '@mui/icons-material';
+import {
+  Close as CloseIcon,
+  PhotoCamera,
+  Visibility,
+  VisibilityOff,
+} from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import {
   useUpdateUserMutation,
@@ -28,7 +35,7 @@ import { useGetCareersQuery } from '../../store/slices/institutionsApiSlice';
 interface EditProfileDialogProps {
   open: boolean;
   handleClose: () => void;
-  user: any; // Ideally, use the User type
+  user: any; // Idealmente, usa el tipo User
   onUpdateSuccess: () => void;
 }
 
@@ -47,6 +54,16 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
   const [careerId, setCareerId] = useState(user.career?.id || '');
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
+  // Estados para las contraseñas
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
+  // Estados para togglear visibilidad de contraseñas
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
   const [updateUser, { isLoading: isUpdatingUser }] = useUpdateUserMutation();
   const [updatePicture, { isLoading: isUpdatingPicture }] =
     useUpdatePictureMutation();
@@ -64,35 +81,55 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       setEmail(user.email || '');
       setCareerId(user.career?.id || '');
       setProfilePicture(null);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+      setShowCurrentPassword(false);
+      setShowNewPassword(false);
+      setShowConfirmNewPassword(false);
     }
   }, [open, user]);
 
   const handleSave = async () => {
     try {
-      // Update user info
+      // Validar si se está cambiando la contraseña
+      if (newPassword && newPassword !== confirmNewPassword) {
+        alert(t('editProfileDialog.passwordsDoNotMatch'));
+        return;
+      }
+
+      // Actualizar información del usuario
       await updateUser({
         userId: user.id,
         firstName,
         lastName,
         username,
         email,
-        careerId: careerId || undefined, // Avoid sending empty string
+        careerId: careerId || undefined, // Evitar enviar string vacío
+        // Solo enviar nuevas contraseñas si se proporcionaron
+        ...(newPassword &&
+          currentPassword && {
+            password: newPassword,
+            oldPassword: currentPassword,
+          }),
       }).unwrap();
 
-      // Update profile picture if changed
+      // Actualizar foto de perfil si se cambió
       if (profilePicture) {
         await updatePicture({
-          url: `/users/${user.id}/profile-picture`, // Adjust the endpoint as necessary
           profilePicture,
         }).unwrap();
       }
 
-      onUpdateSuccess(); // Refetch user data
+      onUpdateSuccess(); // Refrescar datos del usuario
       handleClose();
     } catch (error: any) {
-      // Handle error (e.g., show a notification)
       console.error('Failed to update profile:', error);
-      // Optionally, display error messages to the user
+      // Opcional: mostrar mensajes de error al usuario
+      alert(
+        error.data?.[0]?.message ||
+          t('editProfileDialog.failedToUpdateProfile'),
+      );
     }
   };
 
@@ -107,9 +144,9 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>
-        {t('editProfile')}
+        {t('editProfileDialog.editProfile')}
         <IconButton
-          aria-label={t('close')}
+          aria-label={t('editProfileDialog.close')}
           onClick={handleClose}
           sx={{
             position: 'absolute',
@@ -121,6 +158,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
+        {/* Sección de foto de perfil */}
         <Box
           sx={{
             display: 'flex',
@@ -142,21 +180,27 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
               hidden
               onChange={handleProfilePictureChange}
             />
-            <IconButton
-              color="primary"
-              aria-label="upload picture"
-              component="span"
-            >
-              <PhotoCamera />
-            </IconButton>
-            {profilePicture && (
-              <Typography variant="body2">{profilePicture.name}</Typography>
-            )}
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <IconButton
+                color="primary"
+                aria-label={t('editProfileDialog.uploadPicture')}
+                component="span"
+              >
+                <PhotoCamera />
+              </IconButton>
+              {profilePicture && (
+                <Typography variant="body2">
+                  {profilePicture.name}
+                </Typography>
+              )}
+            </Box>
           </label>
         </Box>
+
+        {/* Sección de información del usuario */}
         <Box component="form" noValidate autoComplete="off">
           <TextField
-            label={t('firstName')}
+            label={t('editProfileDialog.firstName')}
             variant="outlined"
             fullWidth
             margin="normal"
@@ -164,7 +208,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             onChange={(e) => setFirstName(e.target.value)}
           />
           <TextField
-            label={t('lastName')}
+            label={t('editProfileDialog.lastName')}
             variant="outlined"
             fullWidth
             margin="normal"
@@ -172,7 +216,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             onChange={(e) => setLastName(e.target.value)}
           />
           <TextField
-            label={t('username')}
+            label={t('editProfileDialog.username')}
             variant="outlined"
             fullWidth
             margin="normal"
@@ -180,7 +224,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
-            label={t('email')}
+            label={t('editProfileDialog.email')}
             variant="outlined"
             fullWidth
             margin="normal"
@@ -188,15 +232,15 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             onChange={(e) => setEmail(e.target.value)}
           />
           <FormControl fullWidth margin="normal" variant="outlined">
-            <InputLabel>{t('career')}</InputLabel>
+            <InputLabel>{t('editProfileDialog.career')}</InputLabel>
             <Select
-              label={t('career')}
+              label={t('editProfileDialog.career')}
               value={careerId}
               onChange={(e) => setCareerId(e.target.value)}
               disabled={isLoadingCareers}
             >
               <MenuItem value="">
-                <em>{t('selectCareer')}</em>
+                <em>{t('editProfileDialog.selectCareer')}</em>
               </MenuItem>
               {careers?.map((career: Career) => (
                 <MenuItem key={career.id} value={career.id}>
@@ -206,20 +250,98 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             </Select>
           </FormControl>
         </Box>
+
+        {/* Sección de cambio de contraseña */}
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            {t('editProfileDialog.changePassword')}
+          </Typography>
+          <TextField
+            label={t('editProfileDialog.currentPassword')}
+            variant="outlined"
+            type={showCurrentPassword ? 'text' : 'password'}
+            fullWidth
+            margin="normal"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    edge="end"
+                  >
+                    {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            label={t('editProfileDialog.newPassword')}
+            variant="outlined"
+            type={showNewPassword ? 'text' : 'password'}
+            fullWidth
+            margin="normal"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    edge="end"
+                  >
+                    {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            label={t('editProfileDialog.confirmNewPassword')}
+            variant="outlined"
+            type={showConfirmNewPassword ? 'text' : 'password'}
+            fullWidth
+            margin="normal"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() =>
+                      setShowConfirmNewPassword(!showConfirmNewPassword)
+                    }
+                    edge="end"
+                  >
+                    {showConfirmNewPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button
           onClick={handleClose}
           disabled={isUpdatingUser || isUpdatingPicture}
         >
-          {t('cancel')}
+          {t('editProfileDialog.cancel')}
         </Button>
         <Button
           onClick={handleSave}
           variant="contained"
           disabled={isUpdatingUser || isUpdatingPicture}
         >
-          {isUpdatingUser || isUpdatingPicture ? t('saving') : t('saveChanges')}
+          {isUpdatingUser || isUpdatingPicture
+            ? t('editProfileDialog.saving')
+            : t('editProfileDialog.saveChanges')}
         </Button>
       </DialogActions>
     </Dialog>

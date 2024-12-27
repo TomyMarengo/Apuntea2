@@ -13,7 +13,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useState, MouseEvent } from 'react';
 import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
-import { useGetOwnerQuery } from '../../store/slices/usersApiSlice';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import {
   useAddFavoriteNoteMutation,
   useRemoveFavoriteNoteMutation,
@@ -63,7 +63,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
     data: ownerData,
     isLoading: ownerLoading,
     isError: ownerError,
-  } = useGetOwnerQuery({ url: note.ownerUrl });
+  } = useGetUserQuery({ url: note.ownerUrl });
 
   // Favorite queries and mutations
   const {

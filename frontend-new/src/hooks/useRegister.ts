@@ -4,7 +4,7 @@ import { decode } from '../utils/helpers';
 import { useLazyRegisterQuery } from '../store/slices/authApiSlice';
 import {
   useCreateUserMutation,
-  useLazyGetUserQuery,
+  useLazyGetLoggedUserQuery,
 } from '../store/slices/usersApiSlice';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../store/slices/authSlice';
@@ -17,7 +17,7 @@ interface RegisterRequest {
 }
 
 interface RegisterResponse {
-  location?: string;
+  userUrl?: string;
 }
 
 interface RegisterSuccess {
@@ -36,20 +36,20 @@ interface RegisterSuccess {
 export default function useRegister() {
   const [createUser] = useCreateUserMutation();
   const [register] = useLazyRegisterQuery();
-  const [getUser] = useLazyGetUserQuery();
+  const [getLoggedUser] = useLazyGetLoggedUserQuery();
   const dispatch = useDispatch();
 
   async function registerUser(userInfo: RegisterRequest) {
     try {
       // Create the user
-      const { location } = (await createUser(
+      const { userUrl } = (await createUser(
         userInfo,
       ).unwrap()) as RegisterResponse;
 
       // Perform the registration
       let { user, token, refreshToken } = (await register({
         credentials: userInfo,
-        url: location,
+        url: userUrl,
       }).unwrap()) as RegisterSuccess;
 
       // Verify that the user was obtained
@@ -58,7 +58,7 @@ export default function useRegister() {
       }
 
       // Get the complete user data
-      const userData = await getUser({ userId: user.id }).unwrap();
+      const userData = await getLoggedUser({ userId: user.id }).unwrap();
 
       // Decode the token
       token = decode(token);

@@ -1,7 +1,7 @@
 // src/hooks/useLogin.ts
 
 import { useLazyLoginQuery } from '../store/slices/authApiSlice';
-import { useLazyGetUserQuery } from '../store/slices/usersApiSlice';
+import { useLazyGetLoggedUserQuery } from '../store/slices/usersApiSlice';
 import { decode } from '../utils/helpers';
 import { setCredentials } from '../store/slices/authSlice';
 import { useDispatch } from 'react-redux';
@@ -32,7 +32,7 @@ interface LoginResponse {
  */
 export default function useLogin() {
   const [login] = useLazyLoginQuery();
-  const [getUser] = useLazyGetUserQuery();
+  const [getLoggedUser] = useLazyGetLoggedUserQuery();
   const dispatch = useDispatch();
 
   async function getSession(credentials: Credentials) {
@@ -47,7 +47,7 @@ export default function useLogin() {
       }
 
       // Retrieve complete user data
-      const userData = await getUser({ userId: user.id }).unwrap();
+      const userData = await getLoggedUser({ userId: user.id }).unwrap();
 
       // Decode the token
       token = decode(token);

@@ -47,7 +47,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       providesTags: ['Users'],
     }),
-    getOwner: builder.query<User, UserArgs>({
+    getUser: builder.query<User, UserArgs>({
       query: ({ userId, url }) => url || `/users/${userId}`,
       transformResponse: (response: any) => {
         return mapApiUser(response);
@@ -56,7 +56,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         { type: 'Users', id: userId },
       ],
     }),
-    getUser: builder.query<User, UserArgs>({
+    getLoggedUser: builder.query<User, UserArgs>({
       async queryFn({ userId, url }, _queryApi, _extraOptions, baseQuery) {
         try {
           // Fetch user data
@@ -95,18 +95,18 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             locale: userData.locale,
             status: userData.status,
             notificationsEnabled: userData.notificationsEnabled,
-            profilePictureUrl: userData.profilePictureUrl || '',
-            career: careerData,
-            institution: institutionData,
+            profilePictureUrl: userData.profilePicture || '',
             selfUrl: userData.self,
-            institutionUrl: userData.institution,
-            careerUrl: userData.career,
             subjectFavoritesUrl: userData.subjectFavorites,
             noteFavoritesUrl: userData.noteFavorites,
             subjectsUrl: userData.subjects,
             reviewsReceivedUrl: userData.reviewsReceived,
             directoryFavoritesUrl: userData.directoryFavorites,
             followingUrl: userData.following,
+            careerUrl: userData.career,
+            institutionUrl: userData.institution,
+            career: careerData,
+            institution: institutionData,
             // Add other fields as necessary
           };
 
@@ -123,12 +123,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, error, { userId }) => [
         { type: 'Users', id: userId },
       ],
-    }),
-    getUserPicture: builder.query<any, PictureArgs>({
-      query: ({ pictureId, url }) => ({
-        url: url || `/pictures/${pictureId}`,
-      }),
-      keepUnusedDataFor: 60 * 60 * 60 * 24 * 30, // 30 days
     }),
     updatePicture: builder.mutation<void, PictureArgs>({
       query: ({ url, profilePicture, userId }) => {
@@ -185,7 +179,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['Users'],
     }),
-    createUser: builder.mutation<void, CreateUserArgs>({
+    createUser: builder.mutation<{ userUrl: string }, CreateUserArgs>({
       query: (userInfo) => ({
         url: '/users',
         method: 'POST',
@@ -194,6 +188,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           'Content-Type': 'application/vnd.apuntea.user-create-v1.0+json',
         },
       }),
+      transformResponse: async (response: any, meta: any) => {
+        return { userUrl: meta.response.headers.get('Location') };
+      },
       invalidatesTags: ['Users'],
     }),
   }),
@@ -201,12 +198,11 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetUsersQuery,
-  useGetUserQuery,
-  useGetUserPictureQuery,
-  useLazyGetUserQuery,
+  useGetLoggedUserQuery,
+  useLazyGetLoggedUserQuery,
   useUpdateUserMutation,
   useUpdatePictureMutation,
   useCreateUserMutation,
-  useGetOwnerQuery,
-  useLazyGetOwnerQuery,
+  useGetUserQuery,
+  useLazyGetUserQuery,
 } = usersApiSlice;

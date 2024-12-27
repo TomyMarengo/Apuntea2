@@ -10,22 +10,24 @@ export enum UserStatus {
 }
 
 export interface User {
-  id?: string;
-  email?: string;
+  id: string;
+  email: string;
   username?: string;
+  firstName?: string;
+  lastName?: string;
   locale?: string;
   status?: UserStatus;
   notificationsEnabled?: boolean;
-  selfUrl?: string;
-  institutionUrl?: string;
-  careerUrl?: string;
+  selfUrl: string;
+  institutionUrl: string;
+  careerUrl: string;
   subjectFavoritesUrl?: string;
   noteFavoritesUrl?: string;
   subjectsUrl?: string;
   reviewsReceivedUrl?: string;
   directoryFavoritesUrl?: string;
   followingUrl?: string;
-  profilePictureUrl?: string;
+  profilePictureUrl: string;
   career?: Career;
   institution?: Institution;
 }
@@ -80,13 +82,13 @@ export enum Category {
 export interface Note {
   id: string;
   name: string;
-  visible?: boolean;
+  visible: boolean;
   fileType?: FileType;
   category?: Category;
   createdAt: string;
   lastModifiedAt: string;
-  avgScore?: number;
-  selfUrl?: string;
+  avgScore: number;
+  selfUrl: string;
   fileUrl?: string;
   interactions?: number;
   interactionsUrl?: string;

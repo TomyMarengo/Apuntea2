@@ -1,4 +1,4 @@
-// src/pages/Profile/Profile.tsx
+// src/pages/Profile/ProfilePage.tsx
 
 import React from 'react';
 import { Box, CircularProgress, Typography, Divider } from '@mui/material';
@@ -48,7 +48,7 @@ const ProfilePage: React.FC = () => {
         }}
       >
         <Typography variant="h6" color="error">
-          {t('errorFetchingUser')}
+          {t('profilePage.errorFetchingUser')}
         </Typography>
       </Box>
     );
@@ -64,7 +64,7 @@ const ProfilePage: React.FC = () => {
           minHeight: '80vh',
         }}
       >
-        <Typography variant="h6">{t('noUserFound')}</Typography>
+        <Typography variant="h6">{t('profilePage.noUserFound')}</Typography>
       </Box>
     );
   }
@@ -72,7 +72,7 @@ const ProfilePage: React.FC = () => {
   return (
     <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
       <Typography variant="h4" gutterBottom>
-        {t('profile')}
+        {t('profilePage.profile')}
       </Typography>
 
       <ProfileCard user={user} onUpdateSuccess={refetch} />

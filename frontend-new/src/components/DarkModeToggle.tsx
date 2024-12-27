@@ -18,7 +18,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
       transform: 'translateX(22px)',
       // Moon (Dark Mode) Background and Icon
       '& .MuiSwitch-thumb': {
-        backgroundColor: theme.palette.secondary.main, // Moon circle background
+        backgroundColor: theme.palette.primary.main, // Moon circle background
         '&::before': {
           content: "''",
           position: 'absolute',
@@ -42,7 +42,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   '& .MuiSwitch-thumb': {
     width: 32,
     height: 32,
-    backgroundColor: theme.palette.secondary.main, // Sun circle background
+    backgroundColor: theme.palette.primary.main, // Sun circle background
     '&::before': {
       content: "''",
       position: 'absolute',

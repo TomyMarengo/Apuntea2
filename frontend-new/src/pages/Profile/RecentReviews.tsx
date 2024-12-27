@@ -1,22 +1,15 @@
 // src/pages/Profile/RecentReviews.tsx
 
 import React from 'react';
-import {
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Button,
-  CircularProgress,
-} from '@mui/material';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { useGetReviewsQuery } from '../../store/slices/reviewsApiSlice';
 import { Review } from '../../types';
+import ReviewCard from '../../components/ReviewCard';
 
 interface RecentReviewsProps {
-  userId: string;
+  userId?: string;
 }
 
 const RecentReviews: React.FC<RecentReviewsProps> = ({ userId }) => {
@@ -25,22 +18,23 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ userId }) => {
   const { data, isLoading, error } = useGetReviewsQuery(
     { userId },
     {
-      // Adjust the API endpoint if necessary
+      // Ajusta el endpoint si es necesario
     },
   );
 
   if (isLoading) {
     return (
-      <Typography variant="body1">
-        <CircularProgress size={24} /> {t('loading')}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <CircularProgress size={24} />{' '}
+        <Typography sx={{ ml: 2 }}>{t('recentReviews.loading')}</Typography>
+      </Box>
     );
   }
 
   if (error) {
     return (
       <Typography variant="body1" color="error">
-        {t('errorFetchingReviews')}
+        {t('recentReviews.errorFetchingReviews')}
       </Typography>
     );
   }
@@ -48,29 +42,24 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ userId }) => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Typography variant="h6">{t('recentReviews')}</Typography>
+        <Typography variant="h6">{t('recentReviews.recentReviews')}</Typography>
         <Button
           component={RouterLink}
           to="/profile/reviews"
           variant="outlined"
           size="small"
         >
-          {t('viewMore')}
+          {t('recentReviews.viewMore')}
         </Button>
       </Box>
       {data && data.length > 0 ? (
-        <List>
+        <Box>
           {data.slice(0, 5).map((review: Review) => (
-            <ListItem key={review.id} disablePadding>
-              <ListItemText
-                primary={`Review for Note ID: ${review.noteId}`}
-                secondary={`Score: ${review.score} - ${review.content.substring(0, 50)}...`}
-              />
-            </ListItem>
+            <ReviewCard key={review.id} review={review} />
           ))}
-        </List>
+        </Box>
       ) : (
-        <Typography>{t('noRecentReviews')}</Typography>
+        <Typography>{t('recentReviews.noRecentReviews')}</Typography>
       )}
     </Box>
   );
