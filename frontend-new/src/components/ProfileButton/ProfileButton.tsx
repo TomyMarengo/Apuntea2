@@ -114,7 +114,7 @@ const ProfileButton: React.FC = () => {
             {user?.username || t('profileButton.user')}
           </Typography>
         </Box>
-        <Divider />
+        <Divider sx={{ my: 1 }} />
         <MenuItem
           onClick={() => {
             navigate('/profile');
@@ -123,15 +123,7 @@ const ProfileButton: React.FC = () => {
         >
           {t('profileButton.profile.title')}
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            navigate('/settings');
-            handleMenuClose();
-          }}
-        >
-          {t('profileButton.settings.title')}
-        </MenuItem>
-        <Divider />
+        <Divider sx={{ my: 1 }} />
         <MenuItem onClick={handleLogOut}>{t('profileButton.logout')}</MenuItem>
       </Menu>
     </>

@@ -10,9 +10,6 @@
     "profile": {
       "title": "Profile"
     },
-    "settings": {
-      "title": "Settings"
-    },
     "logout": "Logout"
   },
   "parentDirectoryPage": {
