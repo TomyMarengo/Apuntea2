@@ -106,6 +106,13 @@ public class SubjectServiceImpl implements SubjectService {
     public Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId) {
         return subjectDao.getSubjectCareer(subjectId, careerId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<SubjectCareer> getSubjectCareers(UUID careerId) {
+        return subjectDao.getSubjectCareers(careerId);
+    }
+
     @Override
     @Transactional
     public boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year) {

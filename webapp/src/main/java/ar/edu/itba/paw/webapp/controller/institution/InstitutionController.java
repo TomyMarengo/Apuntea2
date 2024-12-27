@@ -95,6 +95,18 @@ public class InstitutionController {
     }
 
     @GET
+    @Path("/{institutionId}/careers/{careerId}/subjectcareers")
+    @Produces(value = { ApunteaMediaType.SUBJECT_CAREER_COLLECTION })
+    public Response listAllSubjectCareers(@Valid @BeanParam InstitutionCareerPathParams instCarParams) {
+        final Collection<SubjectCareer> allSubjectCareers = subjectService.getSubjectCareers(instCarParams.getCareerId());
+        final Collection<SubjectCareerResponseDto> dtoSubjectCareers = allSubjectCareers
+                .stream()
+                .map(sc -> SubjectCareerResponseDto.fromSubjectCareer(sc, uriInfo))
+                .collect(Collectors.toList());
+        return Response.ok(new GenericEntity<Collection<SubjectCareerResponseDto>>(dtoSubjectCareers) {}).build();
+    }
+
+    @GET
     @Path("/{institutionId}/careers/{careerId}/subjectcareers/{subjectId}")
     @Produces(value = { ApunteaMediaType.SUBJECT_CAREER }) // TODO: Add versions
     public Response getSubjectCareer(final @Valid @BeanParam InstitutionCareerPathParams instCarParams, @PathParam("subjectId") final UUID subjectId) {

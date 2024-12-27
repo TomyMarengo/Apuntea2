@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface SubjectDao {
     Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId);
+    List<SubjectCareer> getSubjectCareers(UUID careerId);
     Optional<Subject> getSubjectById(UUID subjectId);
     UUID getSubjectByRootDirectoryId(UUID rootDirectoryId);
     List<Subject> getSubjects(UUID careerId, Integer year, User user);

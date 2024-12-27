@@ -12,6 +12,7 @@ public interface SubjectService {
     Optional<Subject> getSubject(UUID subjectId);
     Optional<SubjectCareer> getSubjectCareer(UUID subjectId, UUID careerId);
     List<Subject> getSubjects(UUID careerId, Integer year, UUID userId);
+    List<SubjectCareer> getSubjectCareers(UUID careerId);
     List<Subject> getSubjectsByCareerComplemented(UUID careerId);
 //    Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId);
     UUID createSubject(String name);

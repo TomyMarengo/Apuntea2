@@ -30,6 +30,13 @@ public class SubjectJpaDao implements SubjectDao {
     }
 
     @Override
+    public List<SubjectCareer> getSubjectCareers(UUID careerId) {
+        return em.createQuery("FROM SubjectCareer sc WHERE sc.career.careerId = :careerId", SubjectCareer.class)
+                .setParameter("careerId", careerId)
+                .getResultList();
+    }
+
+    @Override
     public Optional<Subject> getSubjectById(UUID subjectId) {
         return Optional.ofNullable(em.find(Subject.class, subjectId));
     }
