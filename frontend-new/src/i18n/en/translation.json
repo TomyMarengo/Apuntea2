@@ -192,7 +192,7 @@
     "score": "Score"
   },
   "adminUserPage": {
-    "searchPlaceholder": "Search by email",
+    "searchPlaceholder": "Search by email or name",
     "statusFilter": "Status",
     "statusOptions": {
       "all": "All",

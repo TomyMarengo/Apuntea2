@@ -18,38 +18,57 @@ import PaginationBar from '../../components/PaginationBar';
 import { useGetUsersQuery } from '../../store/slices/usersApiSlice';
 import { UserStatus } from '../../types';
 import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import useDebounce from '../../hooks/useDebounce'; // Import the debounce hook
 
 const AdminUserPage: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Extract query parameters
-  const emailFilter = searchParams.get('email') || '';
+  // Extract query parameters from the URL
+  const queryFilter = searchParams.get('query') || '';
   const statusFilter =
     (searchParams.get('status') as UserStatus | 'ALL') || 'ALL';
   const page = parseInt(searchParams.get('page') || '1', 10);
-  const pageSize = 10; // You can make this configurable if needed
+  const pageSize = 10; // Configurable if needed
 
-  const { data, refetch, isLoading, isError } = useGetUsersQuery({
-    email: emailFilter || undefined,
+  // Local state for the search input
+  const [searchInput, setSearchInput] = useState(queryFilter);
+
+  // Apply the debounce hook with a 500ms delay
+  const debouncedSearchInput = useDebounce(searchInput, 500);
+
+  // Effect to update the URL when the debounced search input changes
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    if (debouncedSearchInput) {
+      params.set('query', debouncedSearchInput);
+    } else {
+      params.delete('query');
+    }
+    params.set('page', '1'); // Reset to first page on filter change
+    setSearchParams(params);
+  }, [debouncedSearchInput, setSearchParams, searchParams]);
+
+  // Sync the local search input state when the URL's query parameter changes externally
+  useEffect(() => {
+    setSearchInput(queryFilter);
+  }, [queryFilter]);
+
+  // Fetch users with the current filters and pagination
+  const { data, isLoading, isError } = useGetUsersQuery({
+    query: debouncedSearchInput || undefined, // Use debounced input for fetching
     status: statusFilter !== 'ALL' ? statusFilter : undefined,
     page,
     pageSize,
   });
 
-  // Update the URL when filters change
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newEmail = e.target.value;
-    const params = new URLSearchParams(searchParams);
-    if (newEmail) {
-      params.set('email', newEmail);
-    } else {
-      params.delete('email');
-    }
-    params.set('page', '1'); // Reset to first page on filter change
-    setSearchParams(params);
+  // Handle changes in the search input field
+  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
   };
 
+  // Handle changes in the status filter
   const handleStatusChange = (e: SelectChangeEvent<UserStatus | 'ALL'>) => {
     const newStatus = e.target.value as string;
     const params = new URLSearchParams(searchParams);
@@ -62,9 +81,10 @@ const AdminUserPage: React.FC = () => {
     setSearchParams(params);
   };
 
+  // Define the table columns
   const columns: Column[] = [
     { id: 'username', label: t('adminUserPage.columns.username') },
-    { id: 'email', label: t('adminUserPage.columns.email') },
+    { id: 'query', label: t('adminUserPage.columns.query') }, // Ensure this matches the data being displayed
     { id: 'status', label: t('adminUserPage.columns.status') },
     {
       id: 'actions',
@@ -75,6 +95,7 @@ const AdminUserPage: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
+      {/* Search and Filter Controls */}
       <Box
         sx={{
           display: 'flex',
@@ -83,13 +104,16 @@ const AdminUserPage: React.FC = () => {
           flexDirection: { xs: 'column', sm: 'row' },
         }}
       >
+        {/* Search Input Field */}
         <TextField
           label={t('adminUserPage.searchPlaceholder')}
           variant="outlined"
-          value={emailFilter}
-          onChange={handleEmailChange}
+          value={searchInput}
+          onChange={handleQueryChange}
           fullWidth
         />
+
+        {/* Status Filter Dropdown */}
         <FormControl variant="outlined" sx={{ minWidth: 200 }}>
           <InputLabel id="status-filter-label">
             {t('adminUserPage.statusFilter')}
@@ -113,6 +137,7 @@ const AdminUserPage: React.FC = () => {
         </FormControl>
       </Box>
 
+      {/* Results Table */}
       <ResultsTable columns={columns}>
         {isLoading && (
           <TableRow>
@@ -136,6 +161,7 @@ const AdminUserPage: React.FC = () => {
           data.users.map((user) => <RowUser key={user.id} user={user} />)}
       </ResultsTable>
 
+      {/* Pagination Bar */}
       {data && (
         <PaginationBar
           currentPage={page}

@@ -6,7 +6,7 @@ import { setCurrentUser } from './authSlice';
 import { mapApiUser } from '../../utils/mappers';
 
 interface GetUsersArgs {
-  email?: string;
+  query?: string;
   status?: UserStatus;
   page?: number;
   pageSize?: number;
@@ -79,9 +79,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       GetUsersArgs
     >({
-      query: ({ email, status, page = 1, pageSize = 10 }) => {
+      query: ({ query, status, page = 1, pageSize = 10 }) => {
         const params = new URLSearchParams();
-        if (email) params.append('email', email);
+        if (query) params.append('query', query);
         if (status) params.append('status', status.toLowerCase());
         params.append('page', String(page));
         params.append('pageSize', String(pageSize));

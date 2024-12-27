@@ -192,7 +192,7 @@
     "score": "Puntuación"
   },
   "adminUserPage": {
-    "searchPlaceholder": "Buscar por correo electrónico",
+    "searchPlaceholder": "Buscar por correo electrónico o nombre",
     "statusFilter": "Estado",
     "statusOptions": {
       "all": "Todos",
