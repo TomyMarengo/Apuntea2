@@ -1,8 +1,8 @@
 // src/pages/Search/SearchResultsTable.tsx
 
 import ResultsTable, { Column } from '../../components/ResultsTable';
-import RowNote, { ColumnNote } from './RowNote';
-import RowDirectory, { ColumnDirectory } from './RowDirectory';
+import RowNote, { ColumnNote } from '../../components/RowNote';
+import RowDirectory, { ColumnDirectory } from '../../components/RowDirectory';
 import { Note, Directory } from '../../types';
 
 interface Props {

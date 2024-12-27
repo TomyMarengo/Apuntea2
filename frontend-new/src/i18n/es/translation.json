@@ -176,12 +176,12 @@
   "noteCard": {
     "hiddenNote": "Apunte oculto",
     "category": {
-      "NOTE": "Apunte",
-      "DIRECTORY": "Directorio",
-      "THEORY": "Teoría",
-      "PRACTICE": "Práctica",
-      "EXAM": "Examen",
-      "OTHER": "Otro"
+      "note": "Apunte",
+      "directory": "Directorio",
+      "theory": "Teoría",
+      "practice": "Práctica",
+      "exam": "Examen",
+      "other": "Otro"
     },
     "visible": "Visible",
     "hidden": "Oculto",
@@ -190,5 +190,44 @@
   "reviewCard": {
     "hiddenNote": "Apunte oculto",
     "score": "Puntuación"
+  },
+  "adminUserPage": {
+    "searchPlaceholder": "Buscar por correo electrónico",
+    "statusFilter": "Estado",
+    "statusOptions": {
+      "all": "Todos",
+      "active": "Activo",
+      "banned": "Baneado"
+    },
+    "columns": {
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "loading": "Cargando...",
+    "error": "Ocurrió un error al obtener los usuarios."
+  },
+  "rowUser": {
+    "status": {
+      "active": "Activo",
+      "banned": "Baneado"
+    },
+    "actions": {
+      "ban": "Banear usuario",
+      "unban": "Desbanear usuario"
+    },
+    "modals": {
+      "ban": {
+        "title": "Banear Usuario",
+        "reasonLabel": "Razón para banear"
+      },
+      "unban": {
+        "title": "Desbanear Usuario",
+        "confirmation": "¿Estás seguro de que deseas desbanear a este usuario?"
+      },
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    }
   }
 }

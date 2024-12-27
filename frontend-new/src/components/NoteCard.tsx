@@ -22,7 +22,8 @@ const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
             {new Date(note.createdAt).toLocaleDateString()}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {t(`noteCard.category.${note.category}`)} - {note.fileType}
+            {t(`noteCard.category.${note.category?.toLowerCase()}`)} -{' '}
+            {note.fileType}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             {note.visible ? t('noteCard.visible') : t('noteCard.hidden')}

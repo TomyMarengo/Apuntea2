@@ -176,12 +176,12 @@
   "noteCard": {
     "hiddenNote": "Hidden Note",
     "category": {
-      "NOTE": "Note",
-      "DIRECTORY": "Directory",
-      "THEORY": "Theory",
-      "PRACTICE": "Practice",
-      "EXAM": "Exam",
-      "OTHER": "Other"
+      "note": "Note",
+      "directory": "Directory",
+      "theory": "Theory",
+      "practice": "Practice",
+      "exam": "Exam",
+      "other": "Other"
     },
     "visible": "Visible",
     "hidden": "Hidden",
@@ -190,5 +190,44 @@
   "reviewCard": {
     "hiddenNote": "Hidden Note",
     "score": "Score"
+  },
+  "adminUserPage": {
+    "searchPlaceholder": "Search by email",
+    "statusFilter": "Status",
+    "statusOptions": {
+      "all": "All",
+      "active": "Active",
+      "banned": "Banned"
+    },
+    "columns": {
+      "username": "Username",
+      "email": "Email",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "loading": "Loading...",
+    "error": "An error occurred while fetching users."
+  },
+  "rowUser": {
+    "status": {
+      "active": "Active",
+      "banned": "Banned"
+    },
+    "actions": {
+      "ban": "Ban User",
+      "unban": "Unban User"
+    },
+    "modals": {
+      "ban": {
+        "title": "Ban User",
+        "reasonLabel": "Reason for banning"
+      },
+      "unban": {
+        "title": "Unban User",
+        "confirmation": "Are you sure you want to unban this user?"
+      },
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    }
   }
 }

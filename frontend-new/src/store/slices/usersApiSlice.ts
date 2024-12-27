@@ -5,6 +5,13 @@ import { User, Career, Institution, UserStatus } from '../../types';
 import { setCurrentUser } from './authSlice';
 import { mapApiUser } from '../../utils/mappers';
 
+interface GetUsersArgs {
+  email?: string;
+  status?: UserStatus;
+  page?: number;
+  pageSize?: number;
+}
+
 interface UserArgs {
   userId?: string;
   url?: string;
@@ -57,19 +64,54 @@ interface IsFollowingUser {
 
 interface UpdateUserStatusArgs {
   userId: string;
-  userStatus: UserStatus;
-  reason?: string;
+  status: UserStatus;
+  banReason?: string;
   url?: string;
 }
 
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getUsers: builder.query<User[], void>({
-      query: () => '/users',
-      transformResponse: (response: any) => {
-        return Array.isArray(response) ? response.map(mapApiUser) : [];
+    getUsers: builder.query<
+      {
+        users: User[];
+        totalCount: number;
+        totalPages: number;
       },
-      providesTags: ['Users'],
+      GetUsersArgs
+    >({
+      query: ({ email, status, page = 1, pageSize = 10 }) => {
+        const params = new URLSearchParams();
+        if (email) params.append('email', email);
+        if (status) params.append('status', status.toLowerCase());
+        params.append('page', String(page));
+        params.append('pageSize', String(pageSize));
+
+        return `/users?${params.toString()}`;
+      },
+      transformResponse: (response: any, meta: any) => {
+        const totalCount = Number(
+          meta.response.headers.get('X-Total-Count') || '0',
+        );
+        const totalPages = Number(
+          meta.response.headers.get('X-Total-Pages') || '0',
+        );
+        const users: User[] = Array.isArray(response)
+          ? response.map(mapApiUser)
+          : [];
+
+        return {
+          users,
+          totalCount,
+          totalPages,
+        };
+      },
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.users.map(({ id }) => ({ type: 'Users' as const, id })),
+              { type: 'Users', id: 'PARTIAL-LIST' },
+            ]
+          : [{ type: 'Users', id: 'PARTIAL-LIST' }],
     }),
     getUser: builder.query<User, UserArgs>({
       query: ({ userId, url }) => url || `/users/${userId}`,
@@ -227,24 +269,25 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
     updateUserStatus: builder.mutation<boolean, UpdateUserStatusArgs>({
       queryFn: async (
-        { userId, userStatus, reason, url },
+        { userId, status, banReason, url },
         _api,
         _extraOptions,
         baseQuery,
       ) => {
-        const data: Record<string, any> = { userStatus };
+        const data: Record<string, any> = { status };
 
-        if (reason !== undefined && userStatus === UserStatus.BANNED) {
-          data.reason = reason;
+        if (banReason !== undefined && status === UserStatus.BANNED) {
+          data.reason = banReason;
         }
+
+        data.status = status.toLowerCase();
 
         const response = await baseQuery({
           url: url || `/users/${userId}`,
           method: 'PATCH',
           body: JSON.stringify(data),
           headers: {
-            'Content-Type':
-              'application/vnd.apuntea.user-update-status-v1.0+json',
+            'Content-Type': 'application/vnd.apuntea.update-status-v1.0+json',
           },
         });
 
