@@ -38,7 +38,6 @@ interface SubjectsByCareerArgs {
 interface CareerSubjectsByYearArgs {
   careerId?: string;
   year?: number;
-  userId?: string;
   url?: string;
 }
 
@@ -280,10 +279,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Subjects'],
       keepUnusedDataFor: 86400,
     }),
-    getSubjectCareers: builder.query<
-      SubjectCareer[],
-      CareerQueryArgs & { subjectId?: string }
-    >({
+    getSubjectCareers: builder.query<SubjectCareer[], CareerQueryArgs>({
       query: ({ institutionId, careerId, url }) =>
         url ||
         `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,

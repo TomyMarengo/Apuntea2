@@ -3,6 +3,7 @@
 import { apiSlice } from './apiSlice';
 import { Note, Category } from '../../types';
 import { mapApiNote } from '../../utils/mappers';
+
 interface NoteQueryArgs {
   noteId?: string;
   userId?: string;
@@ -38,9 +39,17 @@ interface FavoriteNoteArgs {
   url?: string;
 }
 
-interface UserNotesFavoritesArgs {
-  userId?: string;
+interface GetUserNotesFavoritesArgs {
+  userId: string;
+  page?: number;
+  pageSize?: number;
   url?: string;
+}
+
+interface PaginatedNotesResponse {
+  notes: Note[];
+  totalCount: number;
+  totalPages: number;
 }
 
 export const notesApiSlice = apiSlice.injectEndpoints({
@@ -113,15 +122,45 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['Notes'],
     }),
-    getUserNotesFavorites: builder.query<Note[], UserNotesFavoritesArgs>({
-      query: ({ userId, url }) => url || `/notes?favBy=${userId}`,
-      transformResponse: (response: any) => {
+    getUserNotesFavorites: builder.query<
+      PaginatedNotesResponse,
+      GetUserNotesFavoritesArgs
+    >({
+      query: ({ userId, page = 1, pageSize = 10, url }) => {
+        if (url) {
+          return url;
+        }
+        const params = new URLSearchParams();
+        params.append('favBy', userId);
+        params.append('page', String(page));
+        params.append('pageSize', String(pageSize));
+
+        return `/notes?${params.toString()}`;
+      },
+      transformResponse: (response: any, meta: any): PaginatedNotesResponse => {
+        const totalCount = Number(
+          meta.response.headers.get('X-Total-Count') || '0',
+        );
+        const totalPages = Number(
+          meta.response.headers.get('X-Total-Pages') || '0',
+        );
         const notes: Note[] = Array.isArray(response)
           ? response.map(mapApiNote)
           : [];
-        return notes;
+
+        return {
+          notes,
+          totalCount,
+          totalPages,
+        };
       },
-      providesTags: ['Notes'],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.notes.map(({ id }) => ({ type: 'Notes' as const, id })),
+              { type: 'Notes', id: 'PARTIAL-LIST' },
+            ]
+          : [{ type: 'Notes', id: 'PARTIAL-LIST' }],
     }),
     getIsFavoriteNote: builder.query<boolean, FavoriteNoteArgs>({
       queryFn: async (

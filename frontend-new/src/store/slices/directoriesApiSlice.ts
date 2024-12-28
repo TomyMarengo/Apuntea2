@@ -32,8 +32,16 @@ interface DeleteDirectoryArgs {
 }
 
 interface FavoritesArgs {
-  userId?: string;
+  userId: string;
+  page?: number;
+  pageSize?: number;
   url?: string;
+}
+
+interface PaginatedDirectoriesResponse {
+  directories: Directory[];
+  totalCount: number;
+  totalPages: number;
 }
 
 interface FavoriteDirectoryArgs {
@@ -112,15 +120,51 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
         { type: 'Directories', id: directoryId },
       ],
     }),
-    getUserDirectoriesFavorites: builder.query<Directory[], FavoritesArgs>({
-      query: ({ userId, url }) => url || `/directories?favBy=${userId}`,
-      transformResponse: (response: any) => {
+    getUserDirectoriesFavorites: builder.query<
+      PaginatedDirectoriesResponse,
+      FavoritesArgs
+    >({
+      query: ({ userId, page = 1, pageSize = 10, url }) => {
+        if (url) {
+          return url;
+        }
+        const params = new URLSearchParams();
+        params.append('favBy', userId);
+        params.append('page', String(page));
+        params.append('pageSize', String(pageSize));
+
+        return `/directories?${params.toString()}`;
+      },
+      transformResponse: (
+        response: any,
+        meta: any,
+      ): PaginatedDirectoriesResponse => {
+        const totalCount = Number(
+          meta.response.headers.get('X-Total-Count') || '0',
+        );
+        const totalPages = Number(
+          meta.response.headers.get('X-Total-Pages') || '0',
+        );
         const directories: Directory[] = Array.isArray(response)
           ? response.map(mapApiDirectory)
           : [];
-        return directories;
+
+        return {
+          directories,
+          totalCount,
+          totalPages,
+        };
       },
-      providesTags: ['Directories'],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.directories.map(({ id }) => ({
+                type: 'Directories' as const,
+                id,
+              })),
+              { type: 'Directories', id: 'PARTIAL-LIST' },
+            ]
+          : [{ type: 'Directories', id: 'PARTIAL-LIST' }],
     }),
     getIsFavoriteDirectory: builder.query<boolean, FavoriteDirectoryArgs>({
       queryFn: async (

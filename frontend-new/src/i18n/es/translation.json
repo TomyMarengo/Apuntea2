@@ -304,12 +304,13 @@
     }
   },
   "miniSidebar": {
+    "admin": "Administrar",
     "mynotes": "Mis Apuntes",
     "myreviews": "Mis Reseñas",
     "mycareer": "Mi Carrera",
     "myfavorites": "Mis Favoritos",
-    "adminuser": "Admin Usuarios",
-    "admincareers": "Admin Carreras"
+    "adminuser": "Usuarios",
+    "admincareers": "Carreras"
   },
   "createNoteFab": {
     "createNote": "Crear Apunte",
@@ -326,5 +327,16 @@
     "noDirectory": "No se encontró un directorio válido para la materia seleccionada.",
     "noteCreated": "¡Apunte creado con éxito!",
     "noteCreationFailed": "Error al crear el apunte."
+  },
+  "favoritesPage": {
+    "title": "Mis Favoritos",
+    "notes": "Apuntes",
+    "directories": "Carpetas",
+    "errorFetching": "Error al obtener favoritos.",
+    "noFavorites": "No se encontraron favoritos.",
+    "removeFavorite": "Quitar de favoritos",
+    "unfavorited": "¡Eliminado de favoritos exitosamente!",
+    "errorUnfavorite": "Error al quitar de favoritos.",
+    "mustLogin": "Debes iniciar sesión para ver los favoritos."
   }
 }

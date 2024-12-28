@@ -304,12 +304,13 @@
     }
   },
   "miniSidebar": {
+    "admin": "Admin",
     "mynotes": "My Notes",
     "myreviews": "My Reviews",
     "mycareer": "My Career",
     "myfavorites": "My Favorites",
-    "adminuser": "Admin Users",
-    "admincareers": "Admin Careers"
+    "adminuser": "Users",
+    "admincareers": "Careers"
   },
   "createNoteFab": {
     "createNote": "Create Note",
@@ -326,5 +327,16 @@
     "noDirectory": "No valid directory found for the selected subject.",
     "noteCreated": "Note created successfully!",
     "noteCreationFailed": "Failed to create note."
+  },
+  "favoritesPage": {
+    "title": "My Favorites",
+    "notes": "Notes",
+    "directories": "Directories",
+    "errorFetching": "Error fetching favorites.",
+    "noFavorites": "No favorites found.",
+    "removeFavorite": "Remove from favorites",
+    "unfavorited": "Removed from favorites successfully!",
+    "errorUnfavorite": "Failed to remove favorite.",
+    "mustLogin": "You must be logged in to view favorites."
   }
 }

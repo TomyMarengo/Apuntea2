@@ -11,6 +11,7 @@ import OwnerNotesPage from '../pages/Users/OwnerNotesPage';
 import ProfilePage from '../pages/Profile/ProfilePage';
 import AdminUsersPage from '../pages/Admin/AdminUsersPage';
 import AdminCareersPage from '../pages/Admin/AdminCareersPage';
+import FavoritesPage from '../pages/Favorites/FavoritesPage';
 
 export default function AppRouter() {
   return (
@@ -23,6 +24,7 @@ export default function AppRouter() {
       <Route path="/users/:ownerId/notes" element={<OwnerNotesPage />} />
       <Route path="/directories/:id" element={<ParentDirectoryPage />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/favorites" element={<FavoritesPage />} />
       <Route path="/admin/users" element={<AdminUsersPage />} />
       <Route path="/admin/careers" element={<AdminCareersPage />} />
       {/* Add more routes as needed */}
