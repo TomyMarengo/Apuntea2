@@ -19,7 +19,7 @@ import { useGetUsersQuery } from '../../store/slices/usersApiSlice';
 import { UserStatus } from '../../types';
 import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import useDebounce from '../../hooks/useDebounce'; // Import the debounce hook
+import useDebounce from '../../hooks/useDebounce';
 
 const AdminUsersPage: React.FC = () => {
   const { t } = useTranslation();
@@ -40,15 +40,19 @@ const AdminUsersPage: React.FC = () => {
 
   // Effect to update the URL when the debounced search input changes
   useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    if (debouncedSearchInput) {
-      params.set('query', debouncedSearchInput);
-    } else {
-      params.delete('query');
+    if (debouncedSearchInput !== queryFilter) {
+      const params = new URLSearchParams(searchParams);
+
+      if (debouncedSearchInput) {
+        params.set('query', debouncedSearchInput);
+      } else {
+        params.delete('query');
+      }
+      params.set('page', '1');
+
+      setSearchParams(params);
     }
-    params.set('page', '1'); // Reset to first page on filter change
-    setSearchParams(params);
-  }, [debouncedSearchInput, setSearchParams, searchParams]);
+  }, [debouncedSearchInput, queryFilter, searchParams, setSearchParams]);
 
   // Sync the local search input state when the URL's query parameter changes externally
   useEffect(() => {
@@ -77,14 +81,14 @@ const AdminUsersPage: React.FC = () => {
     } else {
       params.delete('status');
     }
-    params.set('page', '1'); // Reset to first page on filter change
+    params.set('page', '1');
     setSearchParams(params);
   };
 
   // Define the table columns
   const columns: Column[] = [
     { id: 'username', label: t('adminUsersPage.columns.username') },
-    { id: 'query', label: t('adminUsersPage.columns.query') }, // Ensure this matches the data being displayed
+    { id: 'email', label: t('adminUsersPage.columns.email') },
     { id: 'status', label: t('adminUsersPage.columns.status') },
     {
       id: 'actions',
