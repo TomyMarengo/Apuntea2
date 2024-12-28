@@ -19,12 +19,14 @@ interface DeleteNoteDialogProps {
   open: boolean;
   onClose: () => void;
   note: Note;
+  shouldShowReason: boolean;
 }
 
 const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
   open,
   onClose,
   note,
+  shouldShowReason,
 }) => {
   const { t } = useTranslation();
   const [deleteNote] = useDeleteNoteMutation();
@@ -34,7 +36,7 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
     try {
       const result = await deleteNote({
         noteId: note.id,
-        reason,
+        reason: shouldShowReason ? reason : undefined,
       }).unwrap();
       if (result) {
         toast.success(t('notePage.deleteSuccess'));
@@ -51,13 +53,15 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
       <DialogTitle>{t('notePage.deleteNoteTitle')}</DialogTitle>
       <DialogContent>
         <Typography>{t('notePage.deleteConfirmMessage')}</Typography>
-        <TextField
-          label={t('notePage.reason')}
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
+        {shouldShowReason && (
+          <TextField
+            label={t('notePage.reason')}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            fullWidth
+            margin="normal"
+          />
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t('notePage.cancel')}</Button>

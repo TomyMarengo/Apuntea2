@@ -1,7 +1,7 @@
 // src/store/slices/notesApiSlice.ts
 
 import { apiSlice } from './apiSlice';
-import { Note, Category } from '../../types';
+import { Note, NoteCategory } from '../../types';
 import { mapApiNote } from '../../utils/mappers';
 
 interface NoteQueryArgs {
@@ -20,7 +20,7 @@ interface CreateNoteArgs {
   parentId: string;
   visible: boolean;
   file: File;
-  category: Category;
+  category: NoteCategory;
   url?: string;
 }
 
@@ -28,7 +28,7 @@ interface UpdateNoteArgs {
   noteId?: string;
   name?: string;
   visible?: boolean;
-  category?: Category;
+  category?: NoteCategory;
   url?: string;
 }
 
@@ -65,7 +65,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         return mapApiNote(response);
       },
       providesTags: (result, error, { noteId }) => [
-        { type: 'Notes', id: noteId },
+        { type: 'Note', id: noteId },
       ],
     }),
     getNoteFile: builder.query<Blob, NoteFileArgs>({
@@ -81,17 +81,24 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         _extraOptions,
         baseQuery,
       ) => {
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('parentId', parentId);
+        formData.append('visible', String(visible));
+        formData.append('category', category);
+
+        if (file) {
+          formData.append('file', file);
+        }
+
         const result = await baseQuery({
           url: '/notes',
           method: 'POST',
-          body: JSON.stringify({ name, parentId, visible, file, category }),
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+          body: formData,
         });
         return { data: result.error === undefined };
       },
-      invalidatesTags: ['Directories'],
+      invalidatesTags: ['Notes'],
     }),
     updateNote: builder.mutation<boolean, UpdateNoteArgs>({
       queryFn: async (
@@ -127,11 +134,22 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         const body: any = {};
         if (reason !== undefined) body.reason = reason;
 
-        const result = await baseQuery({
-          url: url || `/notes/${noteId}`,
-          method: 'POST',
-          body,
-        });
+        let result;
+        if (reason) {
+          result = await baseQuery({
+            url: url || `/notes/${noteId}`,
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+              'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
+            },
+          });
+        } else {
+          result = await baseQuery({
+            url: url || `/notes/${noteId}`,
+            method: 'DELETE',
+          });
+        }
         return { data: result.error === undefined };
       },
       invalidatesTags: ['Notes'],

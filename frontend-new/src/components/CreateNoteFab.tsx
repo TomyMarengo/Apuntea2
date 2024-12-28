@@ -1,6 +1,6 @@
 // src/components/CreateNoteFab.tsx
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Box,
   Fab,
@@ -25,7 +25,7 @@ import { selectCurrentUser } from '../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useGetSubjectsByCareerQuery } from '../store/slices/institutionsApiSlice';
 import { useCreateNoteMutation } from '../store/slices/notesApiSlice';
-import { Category, Subject } from '../types';
+import { NoteCategory, Subject } from '../types';
 
 const CreateNoteFab: React.FC = () => {
   const { t } = useTranslation();
@@ -48,7 +48,7 @@ const CreateNoteFab: React.FC = () => {
   // Fields for creating a note
   const [noteName, setNoteName] = useState('');
   const [visible, setVisible] = useState(true);
-  const [category, setCategory] = useState<Category>(Category.NOTE);
+  const [category, setCategory] = useState<NoteCategory>(NoteCategory.THEORY);
   const [selectedSubject, setSelectedSubject] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
 
@@ -74,7 +74,7 @@ const CreateNoteFab: React.FC = () => {
   };
 
   const handleCategoryChange = (e: SelectChangeEvent) => {
-    setCategory(e.target.value as Category);
+    setCategory(e.target.value as NoteCategory);
   };
 
   const handleCreate = async () => {
@@ -131,8 +131,8 @@ const CreateNoteFab: React.FC = () => {
         ref={containerRef}
         sx={{
           position: 'fixed',
-          bottom: 16,
-          right: 16,
+          bottom: 32,
+          right: 32,
           zIndex: 1300,
         }}
       >
@@ -207,7 +207,7 @@ const CreateNoteFab: React.FC = () => {
                   disablePortal: true,
                 }}
               >
-                {Object.values(Category).map((c) => (
+                {Object.values(NoteCategory).map((c) => (
                   <MenuItem key={c} value={c}>
                     {c}
                   </MenuItem>

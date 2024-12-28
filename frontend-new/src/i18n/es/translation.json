@@ -66,7 +66,8 @@
     "editError": "Error al actualizar apunte.",
     "deleteSuccess": "¡Apunte eliminado con éxito!",
     "deleteError": "Error al eliminar apunte.",
-    "name": "Nombre"
+    "name": "Nombre",
+    "visible": "Visible"
   },
   "registerPage": {
     "signup": "Registrarse",
@@ -206,8 +207,6 @@
   "noteCard": {
     "hiddenNote": "Apunte oculto",
     "category": {
-      "note": "Apunte",
-      "directory": "Directorio",
       "theory": "Teoría",
       "practice": "Práctica",
       "exam": "Examen",

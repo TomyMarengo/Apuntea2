@@ -38,11 +38,15 @@ import {
   useGetReviewsQuery,
   useCreateReviewMutation,
 } from '../../store/slices/reviewsApiSlice';
+import { RootState } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
 
 const NotePage: React.FC = () => {
   const { t } = useTranslation();
   const { noteId } = useParams<{ noteId: string }>();
   const user = useSelector(selectCurrentUser);
+  const token = useSelector((state: RootState) => state.auth.token);
+  const navigate = useNavigate();
 
   /** 1) Basic note data */
   const {
@@ -71,6 +75,7 @@ const NotePage: React.FC = () => {
   }, [isFavData]);
 
   const isOwner = user && note && user.id === note.ownerUrl?.split('/').pop();
+  const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') as boolean;
 
   const handleToggleFavorite = async () => {
     if (!user) {
@@ -99,8 +104,6 @@ const NotePage: React.FC = () => {
   };
 
   /** 4) Get file using RTK Query (removed manual fetch) */
-  // If your API doesn't require anything special and you use the default URL -> /notes/:noteId/file
-  // You could skip if there is no noteId yet
   const {
     data: noteFileBlob,
     isLoading: noteFileLoading,
@@ -144,7 +147,10 @@ const NotePage: React.FC = () => {
   const handleCloseEdit = () => setOpenEdit(false);
 
   const handleOpenDelete = () => setOpenDelete(true);
-  const handleCloseDelete = () => setOpenDelete(false);
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+    navigate('/', { replace: true });
+  };
 
   /** 6) Reviews */
   const [reviewsPage, setReviewsPage] = useState(1);
@@ -230,7 +236,6 @@ const NotePage: React.FC = () => {
           xs: '1fr',
           md: '2fr 1fr',
         },
-        gap: 2,
         height: 'calc(100vh - 64px)',
       }}
     >
@@ -238,6 +243,9 @@ const NotePage: React.FC = () => {
       <Box
         sx={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
       >
+        <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+          <Typography variant="h5">{note.name}</Typography>
+        </Box>
         {/* Top bar */}
         <Box
           sx={{
@@ -283,20 +291,19 @@ const NotePage: React.FC = () => {
 
             {/* Edit/Delete if owner */}
             {isOwner && (
-              <>
-                <Tooltip title={t('notePage.edit')!}>
-                  <IconButton onClick={handleOpenEdit}>
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title={t('notePage.delete')!}>
-                  <IconButton onClick={handleOpenDelete}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </>
+              <Tooltip title={t('notePage.edit')!}>
+                <IconButton onClick={handleOpenEdit}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
             )}
-
+            {(isOwner || isAdmin) && (
+              <Tooltip title={t('notePage.delete')!}>
+                <IconButton onClick={handleOpenDelete}>
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            )}
             {/* Download always */}
             <Tooltip title={t('notePage.download')!}>
               <IconButton onClick={handleDownload}>
@@ -314,6 +321,7 @@ const NotePage: React.FC = () => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            p: 2,
           }}
         >
           {fileUrl ? (
@@ -351,7 +359,7 @@ const NotePage: React.FC = () => {
 
       {/* RIGHT side: reviews */}
       <Box
-        sx={(theme) => ({
+        sx={{
           borderLeft: {
             xs: 'none',
             md: '1px solid',
@@ -363,7 +371,7 @@ const NotePage: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-        })}
+        }}
       >
         <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
           <Typography variant="h6">{t('notePage.reviewsTitle')}</Typography>
@@ -434,11 +442,12 @@ const NotePage: React.FC = () => {
       )}
 
       {/* DELETE NOTE DIALOG */}
-      {isOwner && (
+      {(isOwner || isAdmin) && (
         <DeleteNoteDialog
           open={openDelete}
           onClose={handleCloseDelete}
           note={note}
+          shouldShowReason={isAdmin && !isOwner}
         />
       )}
     </Box>

@@ -1,6 +1,6 @@
 // src/pages/NotePage/dialogs/EditNoteDialog.tsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -8,9 +8,15 @@ import {
   DialogActions,
   Button,
   TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Switch,
+  FormControlLabel,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Note } from '../../../types';
+import { Note, NoteCategory } from '../../../types';
 import { useUpdateNoteMutation } from '../../../store/slices/notesApiSlice';
 import { toast } from 'react-toastify';
 
@@ -29,12 +35,24 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
   const [updateNote] = useUpdateNoteMutation();
 
   const [name, setName] = useState(note.name);
+  const [visible, setVisible] = useState(note.visible);
+  const [category, setCategory] = useState(note.category);
+
+  useEffect(() => {
+    if (open) {
+      setName(note.name);
+      setVisible(note.visible);
+      setCategory(note.category);
+    }
+  }, [open, note]);
 
   const handleSave = async () => {
     try {
       const result = await updateNote({
         noteId: note.id,
         name,
+        visible,
+        category,
       }).unwrap();
       if (result) {
         toast.success(t('notePage.editSuccess'));
@@ -49,6 +67,7 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <DialogTitle>{t('notePage.editNoteTitle')}</DialogTitle>
       <DialogContent>
+        {/* Name */}
         <TextField
           label={t('notePage.name')}
           value={name}
@@ -56,6 +75,34 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
           fullWidth
           margin="normal"
         />
+
+        {/* Visible */}
+        <FormControlLabel
+          control={
+            <Switch
+              checked={visible}
+              onChange={(e) => setVisible(e.target.checked)}
+              color="primary"
+            />
+          }
+          label={t('notePage.visible')}
+        />
+
+        {/* Category */}
+        <FormControl fullWidth margin="normal">
+          <InputLabel>{t('createNoteFab.category')}</InputLabel>
+          <Select
+            value={category}
+            label={t('createNoteFab.category')}
+            onChange={(e) => setCategory(e.target.value as NoteCategory)}
+          >
+            {Object.values(NoteCategory).map((cat) => (
+              <MenuItem key={cat} value={cat}>
+                {cat}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t('notePage.cancel')}</Button>

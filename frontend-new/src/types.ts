@@ -118,12 +118,19 @@ export enum Category {
   OTHER = 'OTHER',
 }
 
+export enum NoteCategory {
+  THEORY = 'THEORY',
+  PRACTICE = 'PRACTICE',
+  EXAM = 'EXAM',
+  OTHER = 'OTHER',
+}
+
 export interface Note {
   id: string;
   name: string;
   visible: boolean;
   fileType?: FileType;
-  category?: Category;
+  category?: NoteCategory;
   createdAt: string;
   lastModifiedAt: string;
   avgScore: number;

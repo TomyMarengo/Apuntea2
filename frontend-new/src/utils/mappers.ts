@@ -2,7 +2,7 @@
 
 import {
   FileType,
-  Category,
+  NoteCategory,
   Note,
   Directory,
   Subject,
@@ -42,7 +42,7 @@ export const mapApiNote = (apiNote: any): Note => {
     name: apiNote.name,
     visible: apiNote.visible,
     fileType: apiNote.fileType as FileType,
-    category: apiNote.category as Category,
+    category: apiNote.category as NoteCategory,
     createdAt: apiNote.createdAt,
     lastModifiedAt: apiNote.lastModifiedAt,
     avgScore: apiNote.avgScore,
