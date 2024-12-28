@@ -69,7 +69,9 @@
     "deleteSuccess": "¡Apunte eliminado con éxito!",
     "deleteError": "Error al eliminar apunte.",
     "name": "Nombre",
-    "visible": "Visible"
+    "visible": "Visible",
+    "moreReviewsHint": "¡Hay más reseñas disponibles abajo!",
+    "noMoreReviews": "No hay más reseñas disponibles."
   },
   "registerPage": {
     "signup": "Registrarse",

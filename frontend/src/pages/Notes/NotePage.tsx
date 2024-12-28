@@ -1,6 +1,4 @@
-// src/pages/NotePage/NotePage.tsx
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Box,
   Avatar,
@@ -17,6 +15,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -111,14 +110,13 @@ const NotePage: React.FC = () => {
     }
   };
 
-  /** 4) Get file using RTK Query */
+  /** 4) File fetch logic */
   const {
     data: noteFileBlob,
     isLoading: noteFileLoading,
     isError: noteFileError,
   } = useGetNoteFileQuery({ noteId: noteId! }, { skip: !noteId });
 
-  // Convert the blob into a temporary URL
   const [fileUrl, setFileUrl] = useState<string>('');
   useEffect(() => {
     if (noteFileBlob) {
@@ -130,7 +128,6 @@ const NotePage: React.FC = () => {
     }
   }, [noteFileBlob]);
 
-  /** 4.1) Handle download */
   const handleDownload = () => {
     if (!note || !noteFileBlob) {
       toast.error(t('notePage.downloadError'));
@@ -147,7 +144,7 @@ const NotePage: React.FC = () => {
     toast.success(t('notePage.downloadSuccess'));
   };
 
-  /** 5) Edit / Delete note with modals */
+  /** 5) Edit/Delete note with modals */
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -160,7 +157,7 @@ const NotePage: React.FC = () => {
     navigate('/', { replace: true });
   };
 
-  /** 6) Reviews - listing */
+  /** 6) Reviews - infinite scroll */
   const [reviewsPage, setReviewsPage] = useState(1);
   const pageSize = 5;
 
@@ -177,25 +174,67 @@ const NotePage: React.FC = () => {
     { skip: !noteId },
   );
 
-  const reviews = reviewData?.reviews || [];
+  // Consolidate pages in local state
+  const [allReviews, setAllReviews] = useState<Review[]>([]);
   const totalReviewPages = reviewData?.totalPages || 1;
+
+  useEffect(() => {
+    if (reviewData?.reviews) {
+      if (reviewsPage === 1) {
+        // First page -> replace
+        setAllReviews(reviewData.reviews);
+      } else {
+        // Next page -> append
+        setAllReviews((prev) => [...prev, ...reviewData.reviews]);
+      }
+    }
+  }, [reviewData, reviewsPage]);
+
   const canLoadMore = reviewsPage < totalReviewPages;
 
-  const handleLoadMore = () => {
-    if (canLoadMore) {
+  const handleLoadMore = useCallback(() => {
+    if (!loadingReviews && canLoadMore) {
       setReviewsPage((prev) => prev + 1);
     }
-  };
+  }, [loadingReviews, canLoadMore]);
 
-  /** 7) Create or Update review (if user is not owner) */
+  // Intersection Observer sentinel
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const firstEntry = entries[0];
+        if (firstEntry.isIntersecting) {
+          handleLoadMore();
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1,
+      },
+    );
+
+    observer.observe(sentinel);
+
+    return () => {
+      if (sentinel) {
+        observer.unobserve(sentinel);
+      }
+    };
+  }, [handleLoadMore]);
+
+  /** 7) Create or Update review (if not owner) */
   const [createReviewMutation] = useCreateReviewMutation();
   const [updateReviewMutation] = useUpdateReviewMutation();
 
-  // Local state for the review form
   const [score, setScore] = useState<number>(5);
   const [content, setContent] = useState('');
 
-  // Pre-fill the form if the user already has a review
   useEffect(() => {
     if (myReviewData) {
       setScore(myReviewData.score);
@@ -203,20 +242,16 @@ const NotePage: React.FC = () => {
     }
   }, [myReviewData]);
 
-  // Single function to handle both create & update
   const handleSaveReview = async () => {
     if (!user) {
       toast.error(t('notePage.mustLoginReview'));
       return;
     }
-    if (isOwner) {
-      // Owners shouldn't review their own notes
-      return;
-    }
+    if (isOwner) return; // Owners can't review their own note
     try {
       let result;
-      // If the user already has a review, update it
       if (myReviewData) {
+        // Update existing
         result = await updateReviewMutation({
           url: myReviewData.selfUrl,
           noteId: note?.id || '',
@@ -225,7 +260,7 @@ const NotePage: React.FC = () => {
           content,
         }).unwrap();
       } else {
-        // Otherwise, create a new review
+        // Create new
         result = await createReviewMutation({
           noteId: note?.id || '',
           userId: user.id,
@@ -240,7 +275,6 @@ const NotePage: React.FC = () => {
             ? t('notePage.reviewUpdated')
             : t('notePage.reviewCreated'),
         );
-        // Reset or refetch
         setReviewsPage(1);
         refetchReviews();
       }
@@ -340,6 +374,7 @@ const NotePage: React.FC = () => {
                 </IconButton>
               </Tooltip>
             )}
+
             {/* Download always */}
             <Tooltip title={t('notePage.download')!}>
               <IconButton onClick={handleDownload}>
@@ -412,24 +447,52 @@ const NotePage: React.FC = () => {
           <Typography variant="h6">{t('notePage.reviewsTitle')}</Typography>
         </Box>
 
+        {/* Reviews scroll container with custom scrollbar */}
         <Box
           sx={{
             flex: 1,
-            overflowY: 'auto',
             p: 2,
+            overflowY: 'auto',
+            /* Custom minimal scrollbar styling */
+            '&::-webkit-scrollbar': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: 'transparent',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: 'primary.main',
+              borderRadius: '3px',
+            },
           }}
         >
-          {reviews.map((rev: Review) => (
+          {allReviews.map((rev: Review) => (
             <ReviewCard key={`${rev.noteId}_${rev.userId}`} review={rev} />
           ))}
-          {canLoadMore && (
-            <Box sx={{ textAlign: 'center', mt: 2 }}>
-              {loadingReviews ? (
-                <CircularProgress size={24} />
+
+          {/* If still loading, show progress; otherwise show arrow or "no more" */}
+          {loadingReviews && (
+            <Box sx={{ textAlign: 'center', p: 1 }}>
+              <CircularProgress size={24} />
+            </Box>
+          )}
+
+          {/* If we can load more, show arrow & hint; if not, show "no more" */}
+          {!loadingReviews && (
+            <Box ref={sentinelRef} sx={{ textAlign: 'center', mt: 2, mb: 2 }}>
+              {canLoadMore ? (
+                <Box
+                  sx={{ display: 'inline-flex', alignItems: 'center', gap: 1 }}
+                >
+                  <KeyboardDoubleArrowDownIcon />
+                  <Typography variant="body2">
+                    {t('notePage.moreReviewsHint')}
+                  </Typography>
+                </Box>
               ) : (
-                <Button onClick={handleLoadMore}>
-                  {t('notePage.loadMoreReviews')}
-                </Button>
+                <Typography variant="body2" color="text.secondary">
+                  {t('notePage.noMoreReviews')}
+                </Typography>
               )}
             </Box>
           )}
@@ -447,11 +510,10 @@ const NotePage: React.FC = () => {
               gap: 1,
             }}
           >
-            {/* Dynamically change the title based on existing review */}
             <Typography variant="subtitle2">
               {myReviewData
                 ? t('notePage.updateReview')
-                : t('notePage.addReview')}{' '}
+                : t('notePage.addReview')}
             </Typography>
 
             <Rating
@@ -469,11 +531,10 @@ const NotePage: React.FC = () => {
               onChange={(e) => setContent(e.target.value)}
             />
 
-            {/* Dynamically change the button label as well */}
             <Button variant="contained" onClick={handleSaveReview}>
               {myReviewData
                 ? t('notePage.updateReview')
-                : t('notePage.sendReview')}{' '}
+                : t('notePage.sendReview')}
             </Button>
           </Box>
         )}

@@ -69,7 +69,9 @@
     "deleteSuccess": "Note deleted successfully!",
     "deleteError": "Error deleting note.",
     "name": "Name",
-    "visible": "Visible"
+    "visible": "Visible",
+    "moreReviewsHint": "More reviews below!",
+    "noMoreReviews": "No more reviews available."
   },
   "registerPage": {
     "signup": "Sign Up",
