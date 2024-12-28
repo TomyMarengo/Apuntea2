@@ -1,13 +1,12 @@
 // src/store/slices/notesApiSlice.ts
 
 import { apiSlice } from './apiSlice';
-import { Note, Category, FileType } from '../../types';
+import { Note, Category } from '../../types';
 import { mapApiNote } from '../../utils/mappers';
 interface NoteQueryArgs {
   noteId?: string;
   userId?: string;
   url?: string;
-  fileType?: string;
 }
 
 interface CreateNoteArgs {
@@ -66,6 +65,9 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           url: '/notes',
           method: 'POST',
           body: { name, parentId, visible, file, category },
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         });
         return { data: result.error === undefined };
       },

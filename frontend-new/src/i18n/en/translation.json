@@ -302,5 +302,29 @@
       "save": "Save",
       "confirm": "Confirm"
     }
+  },
+  "miniSidebar": {
+    "mynotes": "My Notes",
+    "myreviews": "My Reviews",
+    "mycareer": "My Career",
+    "myfavorites": "My Favorites",
+    "adminuser": "Admin Users",
+    "admincareers": "Admin Careers"
+  },
+  "createNoteFab": {
+    "createNote": "Create Note",
+    "createNewNote": "Create New Note",
+    "noteName": "Note Name",
+    "selectSubject": "Select Subject",
+    "category": "Category",
+    "visible": "Visible",
+    "hidden": "Hidden",
+    "chooseFile": "Choose File",
+    "submit": "Submit",
+    "loginRequired": "You need to log in to create a note.",
+    "missingFields": "Please provide note name, file, and subject.",
+    "noDirectory": "No valid directory found for the selected subject.",
+    "noteCreated": "Note created successfully!",
+    "noteCreationFailed": "Failed to create note."
   }
 }

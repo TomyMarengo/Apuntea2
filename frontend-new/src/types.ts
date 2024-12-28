@@ -1,3 +1,5 @@
+// src/types.ts
+
 export interface Header {
   alg: string;
   typ: string;

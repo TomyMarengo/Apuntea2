@@ -302,5 +302,29 @@
       "save": "Guardar",
       "confirm": "Confirmar"
     }
+  },
+  "miniSidebar": {
+    "mynotes": "Mis Apuntes",
+    "myreviews": "Mis Reseñas",
+    "mycareer": "Mi Carrera",
+    "myfavorites": "Mis Favoritos",
+    "adminuser": "Admin Usuarios",
+    "admincareers": "Admin Carreras"
+  },
+  "createNoteFab": {
+    "createNote": "Crear Apunte",
+    "createNewNote": "Crear Nuevo Apunte",
+    "noteName": "Nombre del Apunte",
+    "selectSubject": "Seleccionar Materia",
+    "category": "Categoría",
+    "visible": "Visible",
+    "hidden": "Oculto",
+    "chooseFile": "Elegir Archivo",
+    "submit": "Enviar",
+    "loginRequired": "Necesitas iniciar sesión para crear un apunte.",
+    "missingFields": "Por favor, ingresa el nombre, el archivo y la materia.",
+    "noDirectory": "No se encontró un directorio válido para la materia seleccionada.",
+    "noteCreated": "¡Apunte creado con éxito!",
+    "noteCreationFailed": "Error al crear el apunte."
   }
 }
