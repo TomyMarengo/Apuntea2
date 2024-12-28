@@ -73,7 +73,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         const result = await baseQuery({
           url: '/notes',
           method: 'POST',
-          body: { name, parentId, visible, file, category },
+          body: JSON.stringify({ name, parentId, visible, file, category }),
           headers: {
             'Content-Type': 'multipart/form-data',
           },

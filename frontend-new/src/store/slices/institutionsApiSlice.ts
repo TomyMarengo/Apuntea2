@@ -129,22 +129,23 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           const subjectResult = await baseQuery({
             url: url || '/subjects',
             method: 'POST',
-            body: { name },
+            body: JSON.stringify({ name }),
             headers: {
               'Content-Type': 'application/vnd.apuntea.subject-v1.0+json',
             },
           });
           if (subjectResult.error) return { data: false }; // Return false if there's an error
 
-          const subjectData = subjectResult.data as { id: string };
-          const subjectId = subjectData.id;
+          const subjectUrl =
+            subjectResult.meta?.response.headers.get('Location');
+          const subjectId = subjectUrl?.split('/').pop();
 
           // Step 2: Associate the subject with the career and year
           if (institutionId && careerId) {
             const subjectCareerResult = await baseQuery({
               url: `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
               method: 'POST',
-              body: { subjectId, year },
+              body: JSON.stringify({ subjectId, year }),
               headers: {
                 'Content-Type':
                   'application/vnd.apuntea.subjectcareer-create-v1.0+json',
@@ -176,7 +177,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             const subjectResult = await baseQuery({
               url: `/subjects/${subjectId}`,
               method: 'PUT',
-              body: { name },
+              body: JSON.stringify({ name }),
               headers: {
                 'Content-Type': 'application/vnd.apuntea.subject-v1.0+json',
               },
@@ -189,7 +190,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             const subjectCareerResult = await baseQuery({
               url: `/institutions/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
               method: 'PUT',
-              body: { year },
+              body: JSON.stringify({ year }),
               headers: {
                 'Content-Type':
                   'application/vnd.apuntea.subjectcareer-v1.0+json',
@@ -218,7 +219,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
                 url ||
                 `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
               method: 'POST',
-              body: { subjectId, year },
+              body: JSON.stringify({ subjectId, year }),
               headers: {
                 'Content-Type':
                   'application/vnd.apuntea.subjectcareer-create-v1.0+json',
