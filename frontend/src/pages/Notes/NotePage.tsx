@@ -17,8 +17,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
+import { RootState } from '../../store/store';
 import { selectCurrentUser } from '../../store/slices/authSlice';
 import {
   useGetNoteQuery,
@@ -28,26 +31,24 @@ import {
   useGetNoteFileQuery,
 } from '../../store/slices/notesApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
-import { Review } from '../../types';
-import { toast } from 'react-toastify';
-import EditNoteDialog from './dialogs/EditNoteDialog';
-import DeleteNoteDialog from './dialogs/DeleteNoteDialog';
-import ReviewCard from '../../components/ReviewCard';
 import {
   useGetReviewsQuery,
   useGetMyReviewQuery,
   useCreateReviewMutation,
   useUpdateReviewMutation,
 } from '../../store/slices/reviewsApiSlice';
-import { RootState } from '../../store/store';
-import { useNavigate } from 'react-router-dom';
+
+import { Review } from '../../types';
+import EditNoteDialog from './dialogs/EditNoteDialog';
+import DeleteNoteDialog from './dialogs/DeleteNoteDialog';
+import ReviewCard from '../../components/ReviewCard';
 
 const NotePage: React.FC = () => {
   const { t } = useTranslation();
   const { noteId } = useParams<{ noteId: string }>();
+  const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
   const token = useSelector((state: RootState) => state.auth.token);
-  const navigate = useNavigate();
 
   /** 1) Basic note data */
   const {
@@ -82,7 +83,7 @@ const NotePage: React.FC = () => {
   }, [isFavData]);
 
   const isOwner = user && note && user.id === note.ownerUrl?.split('/').pop();
-  const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') as boolean;
+  const isAdmin = token?.payload?.authorities?.includes('ROLE_ADMIN') ?? false;
 
   const handleToggleFavorite = async () => {
     if (!user) {
@@ -133,7 +134,7 @@ const NotePage: React.FC = () => {
       toast.error(t('notePage.downloadError'));
       return;
     }
-    const ext = note.fileType ? '.' + note.fileType : '';
+    const ext = note.fileType ? `.${note.fileType}` : '';
     const filename = note.name + ext;
     const blobUrl = URL.createObjectURL(noteFileBlob);
     const a = document.createElement('a');
@@ -161,11 +162,8 @@ const NotePage: React.FC = () => {
   const [reviewsPage, setReviewsPage] = useState(1);
   const pageSize = 5;
 
-  const {
-    data: reviewData,
-    isLoading: loadingReviews,
-    refetch: refetchReviews,
-  } = useGetReviewsQuery(
+  // Fetch paginated reviews, EXCLUDING the user's review
+  const { data: reviewData, isFetching } = useGetReviewsQuery(
     {
       noteId,
       page: reviewsPage,
@@ -174,33 +172,48 @@ const NotePage: React.FC = () => {
     { skip: !noteId },
   );
 
-  // Consolidate pages in local state
   const [allReviews, setAllReviews] = useState<Review[]>([]);
   const totalReviewPages = reviewData?.totalPages || 1;
 
+  // To avoid triggering the same page multiple times
+  const [lastFetchedPage, setLastFetchedPage] = useState<number>(0);
+
+  // Each time the current page data arrives, merge it with allReviews
   useEffect(() => {
     if (reviewData?.reviews) {
+      // Filter out the user's review (if it exists in the list)
+      const fetchedReviews = reviewData.reviews.filter(
+        (r) => r.userId !== user?.id,
+      );
+
       if (reviewsPage === 1) {
-        // First page -> replace
-        setAllReviews(reviewData.reviews);
+        setAllReviews(fetchedReviews);
       } else {
-        // Next page -> append
-        setAllReviews((prev) => [...prev, ...reviewData.reviews]);
+        setAllReviews((prev) => {
+          const combined = [...prev, ...fetchedReviews];
+          const uniqueById = Array.from(
+            new Map(
+              combined.map((item) => [item.noteId + '_' + item.userId, item]),
+            ).values(),
+          );
+          return uniqueById;
+        });
       }
     }
-  }, [reviewData, reviewsPage]);
+  }, [reviewData, reviewsPage, user?.id]);
 
   const canLoadMore = reviewsPage < totalReviewPages;
 
+  // handleLoadMore -> increments page if not fetching
   const handleLoadMore = useCallback(() => {
-    if (!loadingReviews && canLoadMore) {
+    if (!isFetching && canLoadMore && reviewsPage > lastFetchedPage) {
+      setLastFetchedPage(reviewsPage);
       setReviewsPage((prev) => prev + 1);
     }
-  }, [loadingReviews, canLoadMore]);
+  }, [isFetching, canLoadMore, reviewsPage, lastFetchedPage]);
 
-  // Intersection Observer sentinel
+  // IntersectionObserver -> triggers handleLoadMore
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
@@ -208,25 +221,24 @@ const NotePage: React.FC = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         const firstEntry = entries[0];
-        if (firstEntry.isIntersecting) {
+        if (firstEntry.isIntersecting && !isFetching) {
           handleLoadMore();
         }
       },
       {
         root: null,
-        rootMargin: '0px',
-        threshold: 0.1,
+        rootMargin: '0px 0px 300px 0px',
+        threshold: 0,
       },
     );
 
     observer.observe(sentinel);
-
     return () => {
       if (sentinel) {
         observer.unobserve(sentinel);
       }
     };
-  }, [handleLoadMore]);
+  }, [handleLoadMore, isFetching]);
 
   /** 7) Create or Update review (if not owner) */
   const [createReviewMutation] = useCreateReviewMutation();
@@ -251,7 +263,7 @@ const NotePage: React.FC = () => {
     try {
       let result;
       if (myReviewData) {
-        // Update existing
+        // Update
         result = await updateReviewMutation({
           url: myReviewData.selfUrl,
           noteId: note?.id || '',
@@ -260,7 +272,7 @@ const NotePage: React.FC = () => {
           content,
         }).unwrap();
       } else {
-        // Create new
+        // Create
         result = await createReviewMutation({
           noteId: note?.id || '',
           userId: user.id,
@@ -275,8 +287,6 @@ const NotePage: React.FC = () => {
             ? t('notePage.reviewUpdated')
             : t('notePage.reviewCreated'),
         );
-        setReviewsPage(1);
-        refetchReviews();
       }
     } catch (err) {
       toast.error(t('notePage.reviewError'));
@@ -340,7 +350,7 @@ const NotePage: React.FC = () => {
 
           {/* Actions */}
           <Box sx={{ display: 'flex', gap: 1 }}>
-            {/* Favorite if not owner */}
+            {/* Favorite if logged in */}
             {user && (
               <Tooltip
                 title={
@@ -359,7 +369,7 @@ const NotePage: React.FC = () => {
               </Tooltip>
             )}
 
-            {/* Edit/Delete if owner */}
+            {/* Edit if owner */}
             {isOwner && (
               <Tooltip title={t('notePage.edit')!}>
                 <IconButton onClick={handleOpenEdit}>
@@ -367,6 +377,8 @@ const NotePage: React.FC = () => {
                 </IconButton>
               </Tooltip>
             )}
+
+            {/* Delete if owner or admin */}
             {(isOwner || isAdmin) && (
               <Tooltip title={t('notePage.delete')!}>
                 <IconButton onClick={handleOpenDelete}>
@@ -453,7 +465,6 @@ const NotePage: React.FC = () => {
             flex: 1,
             p: 2,
             overflowY: 'auto',
-            /* Custom minimal scrollbar styling */
             '&::-webkit-scrollbar': {
               width: '6px',
             },
@@ -470,19 +481,23 @@ const NotePage: React.FC = () => {
             <ReviewCard key={`${rev.noteId}_${rev.userId}`} review={rev} />
           ))}
 
-          {/* If still loading, show progress; otherwise show arrow or "no more" */}
-          {loadingReviews && (
+          {/* Cargando la página actual */}
+          {isFetching && (
             <Box sx={{ textAlign: 'center', p: 1 }}>
               <CircularProgress size={24} />
             </Box>
           )}
 
-          {/* If we can load more, show arrow & hint; if not, show "no more" */}
-          {!loadingReviews && (
+          {/* Sentinel for infinite scroll */}
+          {!isFetching && (
             <Box ref={sentinelRef} sx={{ textAlign: 'center', mt: 2, mb: 2 }}>
               {canLoadMore ? (
                 <Box
-                  sx={{ display: 'inline-flex', alignItems: 'center', gap: 1 }}
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 1,
+                  }}
                 >
                   <KeyboardDoubleArrowDownIcon />
                   <Typography variant="body2">
