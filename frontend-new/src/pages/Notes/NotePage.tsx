@@ -29,14 +29,16 @@ import {
   useGetNoteFileQuery,
 } from '../../store/slices/notesApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
-import { Note, Review } from '../../types';
+import { Review } from '../../types';
 import { toast } from 'react-toastify';
 import EditNoteDialog from './dialogs/EditNoteDialog';
 import DeleteNoteDialog from './dialogs/DeleteNoteDialog';
 import ReviewCard from '../../components/ReviewCard';
 import {
   useGetReviewsQuery,
+  useGetMyReviewQuery,
   useCreateReviewMutation,
+  useUpdateReviewMutation,
 } from '../../store/slices/reviewsApiSlice';
 import { RootState } from '../../store/store';
 import { useNavigate } from 'react-router-dom';
@@ -59,6 +61,12 @@ const NotePage: React.FC = () => {
   const { data: ownerData } = useGetUserQuery(
     note?.ownerUrl ? { url: note.ownerUrl } : {},
     { skip: !note?.ownerUrl },
+  );
+
+  /** 2.1) Current user's existing review (if any) */
+  const { data: myReviewData } = useGetMyReviewQuery(
+    { url: note?.reviewsUrl, noteId: note?.id, userId: user?.id },
+    { skip: !note || !user },
   );
 
   /** 3) Favorite logic */
@@ -103,7 +111,7 @@ const NotePage: React.FC = () => {
     }
   };
 
-  /** 4) Get file using RTK Query (removed manual fetch) */
+  /** 4) Get file using RTK Query */
   const {
     data: noteFileBlob,
     isLoading: noteFileLoading,
@@ -122,7 +130,7 @@ const NotePage: React.FC = () => {
     }
   }, [noteFileBlob]);
 
-  /** 4.1) Handle download with RTK Query (no more manual fetch) */
+  /** 4.1) Handle download */
   const handleDownload = () => {
     if (!note || !noteFileBlob) {
       toast.error(t('notePage.downloadError'));
@@ -152,7 +160,7 @@ const NotePage: React.FC = () => {
     navigate('/', { replace: true });
   };
 
-  /** 6) Reviews */
+  /** 6) Reviews - listing */
   const [reviewsPage, setReviewsPage] = useState(1);
   const pageSize = 5;
 
@@ -171,7 +179,6 @@ const NotePage: React.FC = () => {
 
   const reviews = reviewData?.reviews || [];
   const totalReviewPages = reviewData?.totalPages || 1;
-
   const canLoadMore = reviewsPage < totalReviewPages;
 
   const handleLoadMore = () => {
@@ -180,31 +187,60 @@ const NotePage: React.FC = () => {
     }
   };
 
-  /** 7) Create review */
+  /** 7) Create or Update review (if user is not owner) */
   const [createReviewMutation] = useCreateReviewMutation();
+  const [updateReviewMutation] = useUpdateReviewMutation();
+
+  // Local state for the review form
   const [score, setScore] = useState<number>(5);
   const [content, setContent] = useState('');
 
-  const handleCreateReview = async () => {
+  // Pre-fill the form if the user already has a review
+  useEffect(() => {
+    if (myReviewData) {
+      setScore(myReviewData.score);
+      setContent(myReviewData.content);
+    }
+  }, [myReviewData]);
+
+  // Single function to handle both create & update
+  const handleSaveReview = async () => {
     if (!user) {
       toast.error(t('notePage.mustLoginReview'));
       return;
     }
     if (isOwner) {
+      // Owners shouldn't review their own notes
       return;
     }
     try {
-      const result = await createReviewMutation({
-        noteId: note?.id || '',
-        userId: user.id,
-        score,
-        content,
-      }).unwrap();
+      let result;
+      // If the user already has a review, update it
+      if (myReviewData) {
+        result = await updateReviewMutation({
+          url: myReviewData.selfUrl,
+          noteId: note?.id || '',
+          userId: user.id,
+          score,
+          content,
+        }).unwrap();
+      } else {
+        // Otherwise, create a new review
+        result = await createReviewMutation({
+          noteId: note?.id || '',
+          userId: user.id,
+          score,
+          content,
+        }).unwrap();
+      }
 
       if (result) {
-        toast.success(t('notePage.reviewCreated'));
-        setScore(5);
-        setContent('');
+        toast.success(
+          myReviewData
+            ? t('notePage.reviewUpdated')
+            : t('notePage.reviewCreated'),
+        );
+        // Reset or refetch
         setReviewsPage(1);
         refetchReviews();
       }
@@ -351,7 +387,6 @@ const NotePage: React.FC = () => {
           ) : noteFileError ? (
             <Typography color="error">{t('notePage.fileNotFound')}</Typography>
           ) : (
-            // It may be the case that there is no file at all
             <Typography>{t('notePage.fileNotFound')}</Typography>
           )}
         </Box>
@@ -400,7 +435,7 @@ const NotePage: React.FC = () => {
           )}
         </Box>
 
-        {/* Create Review if not owner, if user is logged in */}
+        {/* Create/Update Review if not owner, and user is logged in */}
         {user && !isOwner && (
           <Box
             sx={{
@@ -412,9 +447,13 @@ const NotePage: React.FC = () => {
               gap: 1,
             }}
           >
+            {/* Dynamically change the title based on existing review */}
             <Typography variant="subtitle2">
-              {t('notePage.addReview')}
+              {myReviewData
+                ? t('notePage.updateReview')
+                : t('notePage.addReview')}{' '}
             </Typography>
+
             <Rating
               name="score"
               value={score}
@@ -429,8 +468,12 @@ const NotePage: React.FC = () => {
               value={content}
               onChange={(e) => setContent(e.target.value)}
             />
-            <Button variant="contained" onClick={handleCreateReview}>
-              {t('notePage.sendReview')}
+
+            {/* Dynamically change the button label as well */}
+            <Button variant="contained" onClick={handleSaveReview}>
+              {myReviewData
+                ? t('notePage.updateReview')
+                : t('notePage.sendReview')}{' '}
             </Button>
           </Box>
         )}

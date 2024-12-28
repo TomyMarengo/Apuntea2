@@ -41,7 +41,9 @@ const store = configureStore({
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware()
+    getDefaultMiddleware({
+      serializableCheck: false,
+    })
       .concat(apiSlice.middleware)
       .concat(localStorageMiddleware),
   devTools: true,

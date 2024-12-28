@@ -94,6 +94,16 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Reviews', id: 'PARTIAL-LIST' }],
     }),
+    getMyReview: builder.query<Review, ReviewArgs>({
+      query: ({ noteId, userId, url }) => url + `&userId=${userId}`,
+      transformResponse: (response: any) => {
+        const review = Array.isArray(response) ? response[0] : response;
+        return mapApiReview(review);
+      },
+      providesTags: (result, error, { noteId, userId }) => [
+        { type: 'Reviews', id: `${noteId}_${userId}` },
+      ],
+    }),
     getReview: builder.query<Review, ReviewArgs>({
       query: ({ noteId, userId, url }) => url || `/reviews/${noteId}_${userId}`,
       transformResponse: (response: any) => {
@@ -113,7 +123,10 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
         const response = await fetchWithBQ({
           url: url || '/reviews',
           method: 'POST',
-          body: { noteId, score, content },
+          body: JSON.stringify({ noteId, score, content }),
+          headers: {
+            'Content-Type': 'application/vnd.apuntea.review-create-v1.0+json',
+          },
         });
         return { data: response.error === undefined };
       },
@@ -130,13 +143,15 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
       ) => {
         const response = await fetchWithBQ({
           url: url || `/reviews/${noteId}_${userId}`,
-          method: 'PUT',
-          body: { score, content },
+          method: 'PATCH',
+          body: JSON.stringify({ score, content }),
+          headers: {
+            'Content-Type': 'application/vnd.apuntea.review-update-v1.0+json',
+          },
         });
         return { data: response.error === undefined };
       },
       invalidatesTags: (result, error, { noteId, userId }) => [
-        { type: 'Reviews', id: noteId },
         { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),
@@ -149,13 +164,15 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
       ) => {
         const response = await fetchWithBQ({
           url: url || `/reviews/${noteId}_${userId}`,
-          method: 'DELETE',
-          body: { reason },
+          method: 'POST',
+          body: JSON.stringify({ reason }),
+          headers: {
+            'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
+          },
         });
         return { data: response.error === undefined };
       },
       invalidatesTags: (result, error, { noteId, userId }) => [
-        { type: 'Reviews', id: noteId },
         { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),
@@ -164,6 +181,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetReviewsQuery,
+  useGetMyReviewQuery,
   useGetReviewQuery,
   useCreateReviewMutation,
   useUpdateReviewMutation,
