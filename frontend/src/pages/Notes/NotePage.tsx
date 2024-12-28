@@ -17,7 +17,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -46,7 +46,6 @@ import ReviewCard from '../../components/ReviewCard';
 const NotePage: React.FC = () => {
   const { t } = useTranslation();
   const { noteId } = useParams<{ noteId: string }>();
-  const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
   const token = useSelector((state: RootState) => state.auth.token);
 
@@ -155,7 +154,6 @@ const NotePage: React.FC = () => {
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => {
     setOpenDelete(false);
-    navigate('/', { replace: true });
   };
 
   /** 6) Reviews - infinite scroll */

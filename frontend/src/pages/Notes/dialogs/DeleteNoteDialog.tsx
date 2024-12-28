@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { Note } from '../../../types';
 import { useDeleteNoteMutation } from '../../../store/slices/notesApiSlice';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 interface DeleteNoteDialogProps {
   open: boolean;
@@ -31,6 +32,7 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
   const { t } = useTranslation();
   const [deleteNote] = useDeleteNoteMutation();
   const [reason, setReason] = useState('');
+  const navigate = useNavigate();
 
   const handleConfirm = async () => {
     try {
@@ -41,7 +43,7 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
       if (result) {
         toast.success(t('notePage.deleteSuccess'));
         onClose();
-        // Possibly navigate away, e.g. to /notes
+        navigate('/', { replace: true });
       }
     } catch (err) {
       toast.error(t('notePage.deleteError'));
