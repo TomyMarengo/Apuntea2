@@ -51,12 +51,17 @@
     <javax.mail.version>1.6.2</javax.mail.version>
     <thymeleaf-version>3.0.11.RELEASE</thymeleaf-version>
 
-<!--    <gson-version>2.10.1</gson-version>-->
+    <!--    <gson-version>2.10.1</gson-version>-->
     <jackson.version>2.13.2</jackson.version>
+
+    <frontend.maven.version>1.14.2</frontend.maven.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <node.version>v22.12.0</node.version>
+    <npm.version>10.9.0</npm.version>
+    <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
   </properties>
 
   <repositories>
@@ -85,11 +90,11 @@
       </dependency>
 
       <!-- Spring dependencies -->
-<!--      <dependency>-->
-<!--        <groupId>org.springframework</groupId>-->
-<!--        <artifactId>spring-webmvc</artifactId>-->
-<!--        <version>${spring.version}</version>-->
-<!--      </dependency>-->
+      <!--      <dependency>-->
+      <!--        <groupId>org.springframework</groupId>-->
+      <!--        <artifactId>spring-webmvc</artifactId>-->
+      <!--        <version>${spring.version}</version>-->
+      <!--      </dependency>-->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
@@ -107,9 +112,9 @@
         <scope>compile</scope>
       </dependency>
       <dependency>
-          <groupId>org.springframework</groupId>
-          <artifactId>spring-aop</artifactId>
-          <version>${spring.version}</version>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aop</artifactId>
+        <version>${spring.version}</version>
       </dependency>
 
       <!-- Servlet dependencies -->
@@ -219,7 +224,7 @@
         <version>${jersey.version}</version>
       </dependency>
 
-<!--       Security dependencies -->
+      <!--       Security dependencies -->
       <dependency>
         <groupId>org.springframework.security</groupId>
         <artifactId>spring-security-core</artifactId>
@@ -248,11 +253,11 @@
         <version>${postgresql.version}</version>
       </dependency>
       <!-- JDBC -->
-<!--      <dependency>-->
-<!--        <groupId>org.springframework</groupId>-->
-<!--        <artifactId>spring-jdbc</artifactId>-->
-<!--        <version>${spring.version}</version>-->
-<!--      </dependency>-->
+      <!--      <dependency>-->
+      <!--        <groupId>org.springframework</groupId>-->
+      <!--        <artifactId>spring-jdbc</artifactId>-->
+      <!--        <version>${spring.version}</version>-->
+      <!--      </dependency>-->
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-orm</artifactId>
@@ -352,11 +357,11 @@
       </dependency>
 
       <!-- Json -->
-<!--      <dependency>-->
-<!--        <groupId>com.google.code.gson</groupId>-->
-<!--        <artifactId>gson</artifactId>-->
-<!--        <version>${gson-version}</version>-->
-<!--      </dependency>-->
+      <!--      <dependency>-->
+      <!--        <groupId>com.google.code.gson</groupId>-->
+      <!--        <artifactId>gson</artifactId>-->
+      <!--        <version>${gson-version}</version>-->
+      <!--      </dependency>-->
       <dependency>
         <groupId>com.fasterxml.jackson.module</groupId>
         <artifactId>jackson-module-parameter-names</artifactId>
@@ -382,6 +387,17 @@
     </dependencies>
   </dependencyManagement>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <!-- Use the latest released version:
+        https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ -->
+        <version>${frontend.maven.version}</version>
+      </plugin>
+    </plugins>
+  </build>
 
   <modules>
     <module>webapp</module>
@@ -389,6 +405,8 @@
     <module>interfaces</module>
     <module>persistence</module>
     <module>services</module>
+    <module>frontend</module>
   </modules>
+
 
 </project>
