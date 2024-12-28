@@ -30,11 +30,23 @@ function App() {
       <CssBaseline />
       <Box
         sx={{
+          display: 'grid',
+          gridTemplateColumns: isLoggedIn ? '48px 1fr' : '1fr',
+          gridTemplateRows: '64px 1fr',
           height: '100vh',
+          gridTemplateAreas: isLoggedIn
+            ? `
+              "navbar navbar"
+              "sidebar main"
+            `
+            : `
+              "navbar"
+              "main"
+            `,
         }}
       >
         {/* Navbar */}
-        <Box>
+        <Box sx={{ gridArea: 'navbar' }}>
           <Navbar
             isDarkMode={isDarkMode}
             locale={locale}
@@ -45,13 +57,13 @@ function App() {
 
         {/* MiniSidebar if logged in */}
         {isLoggedIn && (
-          <Box>
+          <Box sx={{ gridArea: 'sidebar' }}>
             <MiniSidebar isAdmin={isAdmin} />
           </Box>
         )}
 
         {/* Main Content */}
-        <Box>
+        <Box sx={{ gridArea: 'main', overflow: 'auto', position: 'relative' }}>
           <AppRouter />
           {/* Create Note Floating Button (appears on all pages) */}
           <CreateNoteFab />

@@ -61,14 +61,13 @@ const MiniSidebar: React.FC<MiniSidebarProps> = ({ isAdmin }) => {
   return (
     <Box
       sx={{
-        position: 'absolute',
-        top: '80px',
-        right: 0,
+        position: 'relative',
+        mt: 6,
         width: 48,
         height: 'auto',
         backgroundColor: 'background.paper',
-        borderTopLeftRadius: 8,
-        borderBottomLeftRadius: 8,
+        borderTopRightRadius: 8,
+        borderBottomRightRadius: 8,
         zIndex: 1100,
         '&:hover': {
           width: 180,
