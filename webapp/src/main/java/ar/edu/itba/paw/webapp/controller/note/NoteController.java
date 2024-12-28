@@ -8,6 +8,7 @@ import ar.edu.itba.paw.models.note.NoteFile;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
+import ar.edu.itba.paw.webapp.dto.DeleteReasonDto;
 import ar.edu.itba.paw.webapp.controller.utils.CacheUtils;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.note.dtos.NoteCreationDto;
@@ -108,16 +109,15 @@ public class NoteController {
     @Path("/{id}")
     @Consumes(value = { ApunteaMediaType.DELETE_REASON })
     @Secured("ROLE_ADMIN")
-    public Response deleteNoteAdminPost(@PathParam("id") final UUID id, final String reason) {
-        noteService.delete(id, reason);
+    public Response deleteNoteAdminPost(@PathParam("id") final UUID id, @Valid final DeleteReasonDto reasonDto) {
+        noteService.delete(id, reasonDto.getReason());
         return Response.noContent().build();
     }
 
     @DELETE
-    @Consumes(value = { ApunteaMediaType.DELETE_REASON })
     @Path("/{id}")
-    public Response deleteNote(@PathParam("id") final UUID id, final String reason) {
-        noteService.delete(id, reason);
+    public Response deleteNote(@PathParam("id") final UUID id) {
+        noteService.delete(id);
         return Response.noContent().build();
     }
 

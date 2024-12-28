@@ -129,6 +129,13 @@ public class  NoteServiceImpl implements NoteService {
             note.setCategory(Category.valueOf(category.toUpperCase()));
     }
 
+
+    @Transactional
+    @Override
+    public void delete(UUID noteId) {
+        delete(noteId, "");
+    }
+
     @Transactional
     @Override
     public void delete(UUID noteId, String reason) {

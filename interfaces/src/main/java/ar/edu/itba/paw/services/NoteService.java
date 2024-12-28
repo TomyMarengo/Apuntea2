@@ -26,6 +26,7 @@ public interface NoteService {
     void update(UUID noteId, String name, Boolean visible, String category);
 
     void delete(UUID noteId, String reason);
+    void delete(UUID noteId);
 
     Optional<Review> getReview(UUID noteId, UUID userId);
 

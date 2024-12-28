@@ -112,6 +112,12 @@ public class DirectoryServiceImpl implements DirectoryService {
 
     @Transactional
     @Override
+    public void delete(UUID directoryId) {
+        delete(directoryId, "");
+    }
+
+    @Transactional
+    @Override
     public void delete(UUID directoryId, String reason) {
         User currentUser = securityService.getCurrentUserOrThrow();
         Optional<Directory> maybeDirectory = directoryDao.getDirectoryById(directoryId, currentUser.getUserId());

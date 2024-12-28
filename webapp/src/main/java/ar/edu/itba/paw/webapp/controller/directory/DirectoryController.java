@@ -10,6 +10,7 @@ import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryCreationDto;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryUpdateDto;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryResponseDto;
+import ar.edu.itba.paw.webapp.dto.DeleteReasonDto;
 import ar.edu.itba.paw.webapp.forms.queries.DirectoryQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -102,16 +103,15 @@ public class DirectoryController {
     @Path("/{id}")
     @Secured("ROLE_ADMIN")
     @Consumes(value = { ApunteaMediaType.DELETE_REASON })
-    public Response deleteDirectoryAdmin(@PathParam("id") final UUID id, final String reason) {
-        directoryService.delete(id, reason);
+    public Response deleteDirectoryAdmin(@PathParam("id") final UUID id, @Valid final DeleteReasonDto reasonDto) {
+        directoryService.delete(id, reasonDto.getReason());
         return Response.noContent().build();
     }
 
     @DELETE
     @Path("/{id}")
-    @Consumes(value = { ApunteaMediaType.DELETE_REASON })
-    public Response deleteDirectory(@PathParam("id") final UUID id, final String reason) {
-        directoryService.delete(id, reason);
+    public Response deleteDirectory(@PathParam("id") final UUID id) {
+        directoryService.delete(id);
         return Response.noContent().build();
     }
 
