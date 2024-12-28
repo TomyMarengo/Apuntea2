@@ -33,7 +33,7 @@ public class SubjectController {
     }
 
     @GET
-    @Produces(value = { ApunteaMediaType.SUBJECT_COLLECTION }) // TODO: Add versions
+    @Produces(value = { ApunteaMediaType.SUBJECT_COLLECTION })
     public Response listSubjects(@Valid @BeanParam final SubjectQuery subjectQuery){
         List<Subject> subjects = (subjectQuery.getCareerId() != null || subjectQuery.getUserId() != null )?
                 subjectService.getSubjects(subjectQuery.getCareerId(), subjectQuery.getYear(), subjectQuery.getUserId()):

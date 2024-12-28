@@ -10,8 +10,8 @@ import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewCreationDto;
 import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewResponseDto;
 import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewUpdateDto;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
+import ar.edu.itba.paw.webapp.dto.DeleteReasonDto;
 import ar.edu.itba.paw.webapp.forms.queries.ReviewQuery;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -94,12 +94,12 @@ public class ReviewController {
         return Response.noContent().build();
     }
 
-    @DELETE
+    @POST
     @Path("/{noteId}_{userId}")
-    @Consumes(value = {MediaType.APPLICATION_JSON}) // TODO: Change
+    @Consumes(value = { ApunteaMediaType.DELETE_REASON })
     @Secured("ROLE_ADMIN")
-    public Response deleteReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Length(max = 255) final String reason) {
-        noteService.deleteReview(noteId, userId, reason);
+    public Response deleteReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Valid final DeleteReasonDto deleteReasonDto) {
+        noteService.deleteReview(noteId, userId, deleteReasonDto.getReason());
         return Response.noContent().build();
     }
 
