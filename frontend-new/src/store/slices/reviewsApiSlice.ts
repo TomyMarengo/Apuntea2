@@ -4,10 +4,18 @@ import { apiSlice } from './apiSlice';
 import { Review } from '../../types';
 import { mapApiReview } from '../../utils/mappers';
 
-interface getReviewsArgs {
+interface GetReviewsArgs {
   noteId?: string;
   userId?: string;
   url?: string;
+  page?: number;
+  pageSize?: number;
+}
+
+interface PaginatedReviews {
+  reviews: Review[];
+  totalCount: number;
+  totalPages: number;
 }
 
 interface ReviewArgs {
@@ -20,6 +28,7 @@ interface ReviewArgs {
 
 interface CreateReviewArgs {
   noteId: string;
+  userId: string;
   score: number;
   content?: string;
   url?: string;
@@ -41,19 +50,49 @@ interface DeleteReviewArgs {
 }
 export const reviewsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getReviews: builder.query<Review[], getReviewsArgs>({
-      query: ({ noteId, userId, url }) => {
+    getReviews: builder.query<PaginatedReviews, GetReviewsArgs>({
+      query: ({ noteId, userId, page = 1, pageSize = 10, url }) => {
         let queryUrl = url || '/reviews';
         const params = new URLSearchParams();
+
         if (noteId) params.append('noteId', noteId);
         if (userId) params.append('userId', userId);
-        if (!url) queryUrl += `?${params.toString()}`;
+        params.append('page', String(page));
+        params.append('pageSize', String(pageSize));
+
+        if (!url) {
+          queryUrl += `?${params.toString()}`;
+        }
+
         return queryUrl;
       },
-      transformResponse: (response: any) => {
-        return Array.isArray(response) ? response.map(mapApiReview) : [];
+      transformResponse: (response: any, meta: { response: Response }) => {
+        const totalCount = Number(
+          meta.response.headers.get('X-Total-Count') || '0',
+        );
+        const totalPages = Number(
+          meta.response.headers.get('X-Total-Pages') || '0',
+        );
+        const reviews = Array.isArray(response)
+          ? response.map(mapApiReview)
+          : [];
+
+        return {
+          reviews,
+          totalCount,
+          totalPages,
+        };
       },
-      providesTags: ['Reviews'],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.reviews.map(({ noteId, userId }) => ({
+                type: 'Reviews' as const,
+                id: `${noteId}_${userId}`,
+              })),
+              { type: 'Reviews', id: 'PARTIAL-LIST' },
+            ]
+          : [{ type: 'Reviews', id: 'PARTIAL-LIST' }],
     }),
     getReview: builder.query<Review, ReviewArgs>({
       query: ({ noteId, userId, url }) => url || `/reviews/${noteId}_${userId}`,
@@ -66,7 +105,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
     }),
     createReview: builder.mutation<boolean, CreateReviewArgs>({
       queryFn: async (
-        { noteId, score, content, url },
+        { noteId, userId, score, content, url },
         _queryApi,
         _extraOptions,
         fetchWithBQ,
@@ -78,8 +117,8 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
         });
         return { data: response.error === undefined };
       },
-      invalidatesTags: (result, error, { noteId }) => [
-        { type: 'Reviews', id: noteId },
+      invalidatesTags: (result, error, { noteId, userId }) => [
+        { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),
     updateReview: builder.mutation<boolean, UpdateReviewArgs>({

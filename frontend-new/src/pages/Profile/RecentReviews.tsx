@@ -47,9 +47,9 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ userId }) => {
           {t('recentReviews.viewMore')}
         </Button>
       </Box>
-      {data && data.length > 0 ? (
+      {data && data.reviews?.length > 0 ? (
         <Box>
-          {data.slice(0, 5).map((review: Review) => (
+          {data.reviews.slice(0, 5).map((review: Review) => (
             <ReviewCard key={review.userId + review.noteId} review={review} />
           ))}
         </Box>

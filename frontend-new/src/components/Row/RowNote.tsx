@@ -165,7 +165,11 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   const handleOwnerNotes = () => {
     const ownerId = note.ownerUrl?.split('/').pop();
     if (ownerId) {
-      navigate(`/users/${ownerId}/notes`);
+      if (user?.id === ownerId) {
+        navigate('/notes');
+      } else {
+        navigate(`/users/${ownerId}/notes`);
+      }
     }
     handleMenuClose();
   };

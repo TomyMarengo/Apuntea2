@@ -30,13 +30,43 @@
     "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
   },
   "notePage": {
-    "copySuccess": "¡Enlace copiado al portapapeles!",
-    "errorFetchingNote": "Error al obtener la nota",
-    "noteLink": {
-      "title": "Enlace de la Nota",
-      "description": "Comparte este enlace para acceder directamente a la nota."
-    },
-    "copy": "Copiar"
+    "noteNotFound": "Este apunte no existe.",
+    "fileNotFound": "No se encontró archivo para este apunte.",
+    "fileNotPreviewable": "Este archivo no se puede previsualizar.",
+    "download": "Descargar",
+    "downloadSuccess": "¡Archivo descargado!",
+    "downloadError": "No se puede descargar el archivo.",
+    "favorite": "Favorito",
+    "unfavorite": "Quitar favorito",
+    "favorited": "¡Agregado a favoritos!",
+    "unfavorited": "¡Eliminado de favoritos!",
+    "favoriteError": "Error al cambiar favorito.",
+    "mustLoginFavorite": "Debes iniciar sesión para marcar favorito.",
+    "mustLoginReview": "Por favor inicia sesión para reseñar.",
+    "editComingSoon": "¡Función de edición próximamente!",
+    "deleteComingSoon": "¡Función de eliminación próximamente!",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "reviewsTitle": "Reseñas",
+    "loadMoreReviews": "Cargar más reseñas",
+    "addReview": "Agrega tu reseña",
+    "reviewPlaceholder": "Escribe tu reseña...",
+    "sendReview": "Enviar reseña",
+    "reviewCreated": "¡Tu reseña fue creada!",
+    "reviewError": "Error al crear la reseña.",
+    "views": "{{count}} visualizaciones",
+    "ownerUnknown": "Propietario desconocido",
+    "editNoteTitle": "Editar Apunte",
+    "deleteNoteTitle": "Eliminar Apunte",
+    "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este apunte?",
+    "reason": "Razón",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "editSuccess": "¡Apunte actualizado con éxito!",
+    "editError": "Error al actualizar apunte.",
+    "deleteSuccess": "¡Apunte eliminado con éxito!",
+    "deleteError": "Error al eliminar apunte.",
+    "name": "Nombre"
   },
   "registerPage": {
     "signup": "Registrarse",
@@ -189,7 +219,10 @@
   },
   "reviewCard": {
     "hiddenNote": "Apunte oculto",
-    "score": "Puntuación"
+    "score": "Puntuación",
+    "errorLoadingUser": "Error al cargar el usuario.",
+    "errorLoadingNote": "Error al cargar el apunte.",
+    "unknownUser": "Usuario desconocido"
   },
   "adminUsersPage": {
     "searchPlaceholder": "Buscar por correo electrónico o nombre",

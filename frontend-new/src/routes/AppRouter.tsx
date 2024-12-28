@@ -20,9 +20,9 @@ export default function AppRouter() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/search" element={<SearchPage />} />
-      <Route path="/notes/:id" element={<NotePage />} />
+      <Route path="/notes/:noteId" element={<NotePage />} />
       <Route path="/users/:ownerId/notes" element={<OwnerNotesPage />} />
-      <Route path="/directories/:id" element={<ParentDirectoryPage />} />
+      <Route path="/directories/:directoryId" element={<ParentDirectoryPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/favorites" element={<FavoritesPage />} />
       <Route path="/admin/users" element={<AdminUsersPage />} />

@@ -30,13 +30,43 @@
     "passwordMinLength": "Password must be at least 4 characters"
   },
   "notePage": {
-    "copySuccess": "Link copied to clipboard!",
-    "errorFetchingNote": "Error fetching note",
-    "noteLink": {
-      "title": "Note Link",
-      "description": "Share this link to access the note directly."
-    },
-    "copy": "Copy"
+    "noteNotFound": "This note does not exist.",
+    "fileNotFound": "No file found for this note.",
+    "fileNotPreviewable": "This file cannot be previewed.",
+    "download": "Download",
+    "downloadSuccess": "File downloaded!",
+    "downloadError": "Cannot download file.",
+    "favorite": "Favorite",
+    "unfavorite": "Unfavorite",
+    "favorited": "Added to favorites!",
+    "unfavorited": "Removed from favorites!",
+    "favoriteError": "Error toggling favorite.",
+    "mustLoginFavorite": "You must log in to favorite this note.",
+    "mustLoginReview": "Please log in to post a review.",
+    "editComingSoon": "Edit feature coming soon!",
+    "deleteComingSoon": "Delete feature coming soon!",
+    "edit": "Edit",
+    "delete": "Delete",
+    "reviewsTitle": "Reviews",
+    "loadMoreReviews": "Load more reviews",
+    "addReview": "Add your review",
+    "reviewPlaceholder": "Write your review...",
+    "sendReview": "Submit Review",
+    "reviewCreated": "Your review was created!",
+    "reviewError": "Failed to create review.",
+    "views": "{{count}} views",
+    "ownerUnknown": "Unknown owner",
+    "editNoteTitle": "Edit Note",
+    "deleteNoteTitle": "Delete Note",
+    "deleteConfirmMessage": "Are you sure you want to delete this note?",
+    "reason": "Reason",
+    "cancel": "Cancel",
+    "save": "Save",
+    "editSuccess": "Note updated successfully!",
+    "editError": "Error updating note.",
+    "deleteSuccess": "Note deleted successfully!",
+    "deleteError": "Error deleting note.",
+    "name": "Name"
   },
   "registerPage": {
     "signup": "Sign Up",
@@ -189,7 +219,10 @@
   },
   "reviewCard": {
     "hiddenNote": "Hidden Note",
-    "score": "Score"
+    "score": "Score",
+    "errorLoadingUser": "Error loading user.",
+    "errorLoadingNote": "Error loading note.",
+    "unknownUser": "Unknown User"
   },
   "adminUsersPage": {
     "searchPlaceholder": "Search by email or name",

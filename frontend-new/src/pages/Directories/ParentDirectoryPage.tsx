@@ -18,23 +18,23 @@ import useSearch from '../../hooks/useSearch';
 import { useNavigate } from 'react-router-dom';
 
 export default function ParentDirectoryPage() {
-  const { id } = useParams<{ id: string }>();
+  const { directoryId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     data: directory,
     isLoading,
     isError,
-  } = useGetDirectoryQuery({ directoryId: id });
+  } = useGetDirectoryQuery({ directoryId });
 
   useEffect(() => {
-    if (id) {
+    if (directoryId) {
       const newParams = new URLSearchParams(searchParams);
-      newParams.set('parentId', id);
+      newParams.set('parentId', directoryId);
       // setSearchParams(newParams);
       navigate({ search: newParams.toString() }, { replace: true });
     }
-  }, [id]);
+  }, [directoryId]);
 
   // Use useSearch with parentId
   const {
@@ -56,7 +56,7 @@ export default function ParentDirectoryPage() {
     institutionId: '', // Hidden in this context
     careerId: '', // Hidden in this context
     subjectId: '', // Hidden in this context
-    parentId: id || '', // Added to filter by parentId
+    parentId: directoryId || '', // Added to filter by parentId
     word: searchParams.get('word') || '',
     category: (searchParams.get('category') as 'note' | 'directory') || 'note',
     sortBy: searchParams.get('sortBy') || 'modified',
@@ -75,8 +75,8 @@ export default function ParentDirectoryPage() {
     });
 
     // Ensure to keep the parentId
-    if (id) {
-      newParams.set('parentId', id);
+    if (directoryId) {
+      newParams.set('parentId', directoryId);
     } else {
       newParams.delete('parentId');
     }

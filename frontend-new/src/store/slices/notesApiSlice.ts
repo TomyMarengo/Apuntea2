@@ -10,6 +10,11 @@ interface NoteQueryArgs {
   url?: string;
 }
 
+interface NoteFileArgs {
+  noteId: string;
+  url?: string;
+}
+
 interface CreateNoteArgs {
   name: string;
   parentId: string;
@@ -63,6 +68,12 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         { type: 'Notes', id: noteId },
       ],
     }),
+    getNoteFile: builder.query<Blob, NoteFileArgs>({
+      query: ({ noteId, url }) => ({
+        url: url || `/notes/${noteId}/file`,
+        responseHandler: (res) => res.blob(),
+      }),
+    }),
     createNote: builder.mutation<boolean, CreateNoteArgs>({
       queryFn: async (
         { name, parentId, visible, file, category },
@@ -97,7 +108,10 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         const result = await baseQuery({
           url: url || `/notes/${noteId}`,
           method: 'PATCH',
-          body,
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/vnd.apuntea.note-update-v1.0+json',
+          },
         });
         return { data: result.error === undefined };
       },
@@ -226,6 +240,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetNoteQuery,
+  useGetNoteFileQuery,
   useCreateNoteMutation,
   useUpdateNoteMutation,
   useDeleteNoteMutation,
