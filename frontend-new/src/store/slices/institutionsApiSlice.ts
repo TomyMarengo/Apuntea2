@@ -53,20 +53,12 @@ interface CreateSubjectArgs {
 interface UpdateSubjectArgs {
   name?: string;
   year?: number;
-  institutionId?: string;
-  careerId?: string;
-  subjectId?: string;
-  url?: string;
+  institutionId: string;
+  careerId: string;
+  subjectId: string;
 }
 
-interface DeleteSubjectArgs {
-  institutionId?: string;
-  careerId?: string;
-  subjectId?: string;
-  url?: string;
-}
-
-interface LinkSubjecArgs {
+interface LinkSubjectArgs {
   year: number;
   institutionId?: string;
   careerId?: string;
@@ -80,6 +72,8 @@ interface UnlinkSubjectArgs {
   subjectId?: string;
   url?: string;
 }
+
+//TODO: Pensar mejor los invalidateTags y provideTags
 
 export const institutionsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -118,10 +112,10 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: any) => mapApiCareer(response),
       keepUnusedDataFor: 86400,
     }),
-
     getSubject: builder.query<Subject, SubjectQueryArgs>({
       query: ({ subjectId, url }) => url || `/subjects/${subjectId}`,
       transformResponse: (response: any) => mapApiSubject(response),
+      providesTags: ['Subjects'],
       keepUnusedDataFor: 86400,
     }),
     createSubject: builder.mutation<boolean, CreateSubjectArgs>({
@@ -137,6 +131,9 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             url: url || '/subjects',
             method: 'POST',
             body: { name },
+            headers: {
+              'Content-Type': 'application/vnd.apuntea.subject-v1.0+json',
+            },
           });
           if (subjectResult.error) return { data: false }; // Return false if there's an error
 
@@ -146,9 +143,13 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           // Step 2: Associate the subject with the career and year
           if (institutionId && careerId) {
             const subjectCareerResult = await baseQuery({
-              url: `/${institutionId}/careers/${careerId}/subjectcareers`,
+              url: `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
               method: 'POST',
               body: { subjectId, year },
+              headers: {
+                'Content-Type':
+                  'application/vnd.apuntea.subjectcareer-create-v1.0+json',
+              },
             });
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
           }
@@ -158,29 +159,42 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           return { data: false }; // Return false if an exception occurs
         }
       },
+      invalidatesTags: ['Subjects'],
     }),
     updateSubject: builder.mutation<boolean, UpdateSubjectArgs>({
       async queryFn(
-        { name, year, institutionId, careerId, subjectId, url },
+        { name, year, institutionId, careerId, subjectId },
         _queryApi,
         _extraOptions,
         baseQuery,
       ) {
         try {
+          console.log('name', name);
+          console.log('year', year);
+
           // Step 1: Update the subject
-          const subjectResult = await baseQuery({
-            url: url || `/subjects/${subjectId}`,
-            method: 'PATCH',
-            body: { name },
-          });
-          if (subjectResult.error) return { data: false }; // Return false if there's an error
+          if (name) {
+            const subjectResult = await baseQuery({
+              url: `/subjects/${subjectId}`,
+              method: 'PUT',
+              body: { name },
+              headers: {
+                'Content-Type': 'application/vnd.apuntea.subject-v1.0+json',
+              },
+            });
+            if (subjectResult.error) return { data: false }; // Return false if there's an error
+          }
 
           // Step 2: Associate the subject with the career and year
-          if (institutionId && careerId) {
+          if (year) {
             const subjectCareerResult = await baseQuery({
-              url: `/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
-              method: 'PATCH',
+              url: `/institutions/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
+              method: 'PUT',
               body: { year },
+              headers: {
+                'Content-Type':
+                  'application/vnd.apuntea.subjectcareer-v1.0+json',
+              },
             });
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
           }
@@ -189,36 +203,9 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           return { data: false }; // Return false if an exception occurs
         }
       },
+      invalidatesTags: ['Subjects'],
     }),
-    deleteSubject: builder.mutation<boolean, DeleteSubjectArgs>({
-      async queryFn(
-        { institutionId, careerId, subjectId, url },
-        _queryApi,
-        _extraOptions,
-        baseQuery,
-      ) {
-        try {
-          if (institutionId && careerId) {
-            const subjectCareerResult = await baseQuery({
-              url: `/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
-              method: 'DELETE',
-            });
-            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
-          }
-
-          const subjectResult = await baseQuery({
-            url: url || `/subjects/${subjectId}`,
-            method: 'DELETE',
-          });
-          if (subjectResult.error) return { data: false }; // Return false if there's an error
-
-          return { data: true }; // Return true if everything was successful
-        } catch (error: any) {
-          return { data: false }; // Return false if an exception occurs
-        }
-      },
-    }),
-    linkSubject: builder.mutation<boolean, LinkSubjecArgs>({
+    linkSubjectCareer: builder.mutation<boolean, LinkSubjectArgs>({
       async queryFn(
         { year, institutionId, careerId, subjectId, url },
         _queryApi,
@@ -226,12 +213,17 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
         baseQuery,
       ) {
         try {
-          if (institutionId && careerId) {
+          if (subjectId && year) {
             const subjectCareerResult = await baseQuery({
               url:
-                url || `/${institutionId}/careers/${careerId}/subjectcareers`,
+                url ||
+                `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
               method: 'POST',
               body: { subjectId, year },
+              headers: {
+                'Content-Type':
+                  'application/vnd.apuntea.subjectcareer-create-v1.0+json',
+              },
             });
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
           }
@@ -240,8 +232,9 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           return { data: false }; // Return false if an exception occurs
         }
       },
+      invalidatesTags: ['Subjects'],
     }),
-    unlinkSubject: builder.mutation<boolean, UnlinkSubjectArgs>({
+    unlinkSubjectCareer: builder.mutation<boolean, UnlinkSubjectArgs>({
       async queryFn(
         { institutionId, careerId, subjectId, url },
         _queryApi,
@@ -253,7 +246,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             const subjectCareerResult = await baseQuery({
               url:
                 url ||
-                `/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
+                `/institutions/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
               method: 'DELETE',
             });
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
@@ -263,8 +256,19 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           return { data: false }; // Return false if an exception occurs
         }
       },
+      invalidatesTags: ['Subjects'],
     }),
-
+    getSubjectsNotInCareer: builder.query<Subject[], CareerQueryArgs>({
+      query: ({ careerId, url }) => url || `/subjects?notInCareer=${careerId}`,
+      transformResponse: (response: any) => {
+        const subjects: Subject[] = Array.isArray(response)
+          ? response.map(mapApiSubject)
+          : [];
+        return subjects;
+      },
+      providesTags: ['Subjects'],
+      keepUnusedDataFor: 86400,
+    }),
     getSubjectsByCareer: builder.query<Subject[], SubjectsByCareerArgs>({
       query: ({ careerId, url }) => url || `/subjects?careerId=${careerId}`,
       transformResponse: (response: any): Subject[] => {
@@ -273,31 +277,23 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           : [];
         return subjects;
       },
-      keepUnusedDataFor: 86400,
-    }),
-    getSubjectCareer: builder.query<
-      SubjectCareer,
-      CareerQueryArgs & { subjectId?: string }
-    >({
-      query: ({ institutionId, careerId, subjectId, url }) =>
-        url ||
-        `/institutions/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
-      transformResponse: (response: any) => mapApiSubjectCareer(response),
+      providesTags: ['Subjects'],
       keepUnusedDataFor: 86400,
     }),
     getSubjectCareers: builder.query<
       SubjectCareer[],
       CareerQueryArgs & { subjectId?: string }
     >({
-      query: ({ institutionId, careerId, subjectId, url }) =>
+      query: ({ institutionId, careerId, url }) =>
         url ||
-        `/institutions/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
+        `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
       transformResponse: (response: any) => {
         const subjectCareers: SubjectCareer[] = Array.isArray(response)
           ? response.map(mapApiSubjectCareer)
           : [];
         return subjectCareers;
       },
+      providesTags: ['Subjects'],
       keepUnusedDataFor: 86400,
     }),
     getCareerSubjectsByYear: builder.query<Subject[], CareerSubjectsByYearArgs>(
@@ -324,11 +320,10 @@ export const {
   useGetSubjectQuery,
   useCreateSubjectMutation,
   useUpdateSubjectMutation,
-  useDeleteSubjectMutation,
+  useGetSubjectsNotInCareerQuery,
   useGetSubjectsByCareerQuery,
-  useLinkSubjectMutation,
-  useUnlinkSubjectMutation,
-  useGetSubjectCareerQuery,
+  useLinkSubjectCareerMutation,
+  useUnlinkSubjectCareerMutation,
   useGetSubjectCareersQuery,
   useGetCareerSubjectsByYearQuery,
 } = institutionsApiSlice;

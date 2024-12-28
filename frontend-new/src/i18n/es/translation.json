@@ -229,5 +229,78 @@
       "cancel": "Cancelar",
       "confirm": "Confirmar"
     }
+  },
+  "adminCareersPage": {
+    "title": "Página de Administración de Carreras",
+    "institution": "Institución",
+    "career": "Carrera",
+    "selectInstitution": "Selecciona una institución",
+    "selectCareer": "Selecciona una carrera",
+    "columns": {
+      "name": "Nombre de la Materia",
+      "year": "Año",
+      "actions": "Acciones"
+    },
+    "noSubjects": "No se encontraron materias para esta carrera.",
+    "filterYear": "Filtrar por año",
+    "yearOptions": {
+      "all": "Todos"
+    },
+    "sortBy": "Ordenar por",
+    "sortOptions": {
+      "year": "Año",
+      "name": "Nombre"
+    },
+    "sortOrder": "Alternar asc/desc",
+    "loadingSubjects": "Cargando materias...",
+    "addSubjectModal": {
+      "title": "Añadir una Materia existente",
+      "selectSubject": "Selecciona una materia",
+      "none": "Ninguno",
+      "yearLabel": "Año",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "createSubjectModal": {
+      "title": "Crear Nueva Materia",
+      "nameLabel": "Nombre de la Materia",
+      "yearLabel": "Año",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "toast": {
+      "addSubject": {
+        "success": "Materia añadida correctamente a la carrera.",
+        "error": "No se pudo añadir la materia a la carrera."
+      },
+      "createSubject": {
+        "success": "Materia creada y vinculada a la carrera exitosamente.",
+        "error": "No se pudo crear ni vincular la nueva materia."
+      }
+    }
+  },
+  "rowSubject": {
+    "actions": {
+      "edit": "Editar materia",
+      "unlink": "Desvincular de la carrera"
+    },
+    "modals": {
+      "edit": {
+        "title": "Editar Materia",
+        "nameLabel": "Nombre de la Materia",
+        "yearLabel": "Año",
+        "success": "Materia editada correctamente.",
+        "error": "No se pudo editar la materia."
+      },
+      "unlink": {
+        "title": "Desvincular Materia",
+        "confirmation": "¿Estás seguro de que deseas desvincular \"{{subjectName}}\" de esta carrera?",
+        "success": "Materia desvinculada correctamente de la carrera.",
+        "error": "No se pudo desvincular la materia de la carrera."
+      },
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "confirm": "Confirmar"
+    }
   }
 }

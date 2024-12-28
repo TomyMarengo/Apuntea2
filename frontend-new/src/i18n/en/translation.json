@@ -229,5 +229,78 @@
       "cancel": "Cancel",
       "confirm": "Confirm"
     }
+  },
+  "adminCareersPage": {
+    "title": "Admin Careers Page",
+    "institution": "Institution",
+    "career": "Career",
+    "selectInstitution": "Select an institution",
+    "selectCareer": "Select a career",
+    "columns": {
+      "name": "Subject Name",
+      "year": "Year",
+      "actions": "Actions"
+    },
+    "noSubjects": "No subjects found for this career.",
+    "filterYear": "Filter by year",
+    "yearOptions": {
+      "all": "All"
+    },
+    "sortBy": "Sort By",
+    "sortOptions": {
+      "year": "Year",
+      "name": "Name"
+    },
+    "sortOrder": "Toggle ascending/descending",
+    "loadingSubjects": "Loading subjects...",
+    "addSubjectModal": {
+      "title": "Add an existing Subject",
+      "selectSubject": "Select a subject",
+      "none": "None",
+      "yearLabel": "Year",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "createSubjectModal": {
+      "title": "Create New Subject",
+      "nameLabel": "Subject Name",
+      "yearLabel": "Year",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "toast": {
+      "addSubject": {
+        "success": "Subject successfully added to the career.",
+        "error": "Failed to add subject to the career."
+      },
+      "createSubject": {
+        "success": "Subject successfully created and linked to the career.",
+        "error": "Failed to create and link the new subject."
+      }
+    }
+  },
+  "rowSubject": {
+    "actions": {
+      "edit": "Edit subject",
+      "unlink": "Unlink from career"
+    },
+    "modals": {
+      "edit": {
+        "title": "Edit Subject",
+        "nameLabel": "Subject Name",
+        "yearLabel": "Year",
+        "success": "Subject successfully edited.",
+        "error": "Failed to edit the subject."
+      },
+      "unlink": {
+        "title": "Unlink Subject",
+        "confirmation": "Are you sure you want to unlink \"{{subjectName}}\" from this career?",
+        "success": "Subject successfully unlinked from the career.",
+        "error": "Failed to unlink the subject from the career."
+      },
+      "cancel": "Cancel",
+      "save": "Save",
+      "confirm": "Confirm"
+    }
   }
 }

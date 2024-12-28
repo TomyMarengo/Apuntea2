@@ -85,6 +85,15 @@ export interface SubjectCareer {
   subjectUrl: string;
 }
 
+export interface SubjectWithCareer {
+  subjectId: string;
+  name: string;
+  year: number;
+  subjectUrl?: string;
+  subjectCareerUrl?: string;
+  careerUrl?: string;
+}
+
 export enum FileType {
   PDF = 'pdf',
   DOCX = 'docx',
