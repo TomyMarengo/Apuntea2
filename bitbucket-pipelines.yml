@@ -22,7 +22,7 @@ pipelines:
           - chmod 600 ~/.ssh/id_rsa
           - ssh-keyscan $DEPLOY_HOST >> ~/.ssh/known_hosts
           - scp ./webapp/target/*.war $DEPLOY_USER@$DEPLOY_HOST:/home/$DEPLOY_USER
-          - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo cp /home/$DEPLOY_USER/*.war /opt/apache-tomcat-7.0.76/webapps/paw-2023b-12.war"
+          - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo cp /home/$DEPLOY_USER/webapp.war /opt/apache-tomcat-7.0.76/webapps/paw-2023b-12.war"
 
 definitions:
   caches:
