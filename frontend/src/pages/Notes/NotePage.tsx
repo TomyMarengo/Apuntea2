@@ -160,7 +160,7 @@ const NotePage: React.FC = () => {
 
   /** 6) Reviews - infinite scroll */
   const [reviewsPage, setReviewsPage] = useState(1);
-  const pageSize = 5;
+  const pageSize = 15;
 
   // Fetch paginated reviews, EXCLUDING the user's review
   const { data: reviewData, isFetching } = useGetReviewsQuery(
