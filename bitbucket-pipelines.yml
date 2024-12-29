@@ -1,32 +1,33 @@
 image: maven:3.8.4-openjdk-8
 
 pipelines:
-  default:
-    - step:
-        name: Build and Test
-        caches:
-          - maven
-        script:
-          - echo "$APP_PROPERTIES_BASE64" | base64 --decode > webapp/src/main/resources/application.properties
-          - echo "$ENV_BASE64" | base64 --decode > frontend/.env
-          - ls -la webapp/src/main/resources/
-          - ls -la frontend/
-          - mvn clean install -DskipTests=false -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true
-          - mvn test -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true
-        artifacts:
-          - target/**
-          - webapp/target/**
-        services:
-          - docker
-    - step:
-        name: Deploy to Server
-        script:
-          - mkdir -p ~/.ssh
-          - echo "$DEPLOY_KEY_BASE64" | base64 --decode > ~/.ssh/id_rsa
-          - chmod 600 ~/.ssh/id_rsa
-          - ssh-keyscan $DEPLOY_HOST >> ~/.ssh/known_hosts
-          - scp ./webapp/target/webapp.war $DEPLOY_USER@$DEPLOY_HOST:/home/$DEPLOY_USER
-          - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo cp /home/$DEPLOY_USER/webapp.war /opt/apache-tomcat-7.0.76/webapps/paw-2023b-12.war"
+  branches:
+    dev:
+      - step:
+          name: Build and Test
+          caches:
+            - maven
+          script:
+            - echo "$APP_PROPERTIES_BASE64" | base64 --decode > webapp/src/main/resources/application.properties
+            - echo "$ENV_BASE64" | base64 --decode > frontend/.env
+            - ls -la webapp/src/main/resources/
+            - ls -la frontend/
+            - mvn clean install -DskipTests=false -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true
+            - mvn test -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true
+          artifacts:
+            - target/**
+            - webapp/target/**
+          services:
+            - docker
+      - step:
+          name: Deploy to Server
+          script:
+            - mkdir -p ~/.ssh
+            - echo "$DEPLOY_KEY_BASE64" | base64 --decode > ~/.ssh/id_rsa
+            - chmod 600 ~/.ssh/id_rsa
+            - ssh-keyscan $DEPLOY_HOST >> ~/.ssh/known_hosts
+            - scp ./webapp/target/webapp.war $DEPLOY_USER@$DEPLOY_HOST:/home/$DEPLOY_USER
+            - ssh $DEPLOY_USER@$DEPLOY_HOST "sudo cp /home/$DEPLOY_USER/webapp.war /opt/apache-tomcat-7.0.76/webapps/paw-2023b-12.war"
 
 definitions:
   caches:
