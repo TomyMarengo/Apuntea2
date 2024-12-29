@@ -11,7 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import DarkModeToggle from '../DarkModeToggle';
 import LanguageToggle from '../LanguageToggle';
-import ProfileButton from '../ProfileButton/ProfileButton';
+import ProfileButton from '../ProfileButton';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 

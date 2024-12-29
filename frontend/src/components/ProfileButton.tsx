@@ -1,9 +1,9 @@
-// src/components/ProfileButton/ProfileButton.tsx
+// src/components/ProfileButton.tsx
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logOut, selectCurrentUser } from '../../store/slices/authSlice';
+import { logOut, selectCurrentUser } from '../store/slices/authSlice';
 import {
   Button,
   Menu,
@@ -12,8 +12,8 @@ import {
   Divider,
   Box,
   useTheme,
+  Avatar,
 } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useTranslation } from 'react-i18next';
@@ -78,11 +78,10 @@ const ProfileButton: React.FC = () => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
       >
-        <AccountCircleIcon
-          sx={{
-            color: 'background.paper',
-            borderRadius: '50%',
-          }}
+        <Avatar
+          src={user.profilePictureUrl || ''}
+          alt={user.username}
+          sx={{ borderRadius: '50%', width: 24, height: 24 }}
         />
       </Button>
 
