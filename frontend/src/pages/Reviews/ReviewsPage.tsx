@@ -121,7 +121,6 @@ const ReviewsPage: React.FC = () => {
               <ReviewCard
                 key={`${review.noteId}_${review.userId}_${review.createdAt}`}
                 review={review}
-                showUserLink={filter === 'received'}
               />
             ))
           : !isLoading && (

@@ -47,7 +47,9 @@ const NotePage: React.FC = () => {
   const { t } = useTranslation();
   const { noteId } = useParams<{ noteId: string }>();
   const user = useSelector(selectCurrentUser);
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token = useSelector(
+    (state: RootState & { auth: { token: Token } }) => state.auth.token,
+  );
 
   /** 1) Basic note data */
   const {
@@ -476,7 +478,11 @@ const NotePage: React.FC = () => {
           }}
         >
           {allReviews.map((rev: Review) => (
-            <ReviewCard key={`${rev.noteId}_${rev.userId}`} review={rev} />
+            <ReviewCard
+              key={`${rev.noteId}_${rev.userId}`}
+              review={rev}
+              noteId={note.id}
+            />
           ))}
 
           {/* Cargando la página actual */}

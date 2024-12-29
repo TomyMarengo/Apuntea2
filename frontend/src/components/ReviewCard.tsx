@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Box, Typography, Rating, Avatar, Link } from '@mui/material';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../store/slices/authSlice';
 import { Review } from '../types';
 import { Link as RouterLink } from 'react-router-dom';
 import { useGetUserQuery } from '../store/slices/usersApiSlice';
@@ -14,11 +16,12 @@ dayjs.extend(localizedFormat);
 
 interface ReviewCardProps {
   review: Review;
-  showUserLink: boolean; // Determines if the user name should be a link
+  noteId?: string;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ review, showUserLink }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ review, noteId }) => {
   const { t } = useTranslation();
+  const user = useSelector(selectCurrentUser);
 
   // Fetch user data if needed
   const { data: userData } = useGetUserQuery(
@@ -48,7 +51,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, showUserLink }) => {
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
         <Avatar src={userData?.profilePictureUrl || ''} />
-        {showUserLink ? (
+        {userData?.id !== user?.id ? (
           <Link
             component={RouterLink}
             to={`/users/${review.userId}`}
@@ -59,9 +62,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, showUserLink }) => {
             </Typography>
           </Link>
         ) : (
-          <Typography variant="subtitle2">
-            {t('reviewCard.you')}
-          </Typography>
+          <Typography variant="subtitle2">{t('reviewCard.you')}</Typography>
         )}
         <Rating value={review.score} readOnly size="small" />
       </Box>
@@ -75,7 +76,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, showUserLink }) => {
           alignItems: 'center',
         }}
       >
-        {noteData?.name ? (
+        {noteData && noteId !== noteData.id && (
           <Link
             component={RouterLink}
             to={`/notes/${review.noteId}`}
@@ -85,12 +86,17 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, showUserLink }) => {
               {noteData.name}
             </Typography>
           </Link>
-        ) : (
+        )}
+        {!noteData && (
           <Typography variant="caption" color="text.secondary">
             {t('reviewCard.hiddenNote')}
           </Typography>
         )}
-        <Typography variant="caption" color="text.secondary">
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ ml: 'auto' }}
+        >
           {formattedDate}
         </Typography>
       </Box>
