@@ -125,7 +125,7 @@
     "loginToFavorite": "Inicia sesión para agregar a favoritos",
     "copyLink": "Copiar Enlace",
     "more": "Más",
-    "openOwnersNotes": "Abrir Notas del Propietario",
+    "openOwnersNotes": "Abrir Apuntes del Propietario",
     "openParentDirectory": "Abrir Directorio Padre",
     "openSubjectsDirectories": "Abrir Directorios de la Materia",
     "favoriteRemoved": "¡Directorio eliminado de favoritos!",
@@ -143,12 +143,12 @@
     "download": "Descargar",
     "copyLink": "Copiar Enlace",
     "more": "Más",
-    "openOwnersNotes": "Abrir Notas del Propietario",
+    "openOwnersNotes": "Abrir Apuntes del Propietario",
     "openParentDirectory": "Abrir Directorio Padre",
     "openSubjectsDirectories": "Abrir Directorios de la Materia",
-    "favoriteRemoved": "¡Nota eliminada de favoritos!",
-    "favoriteAdded": "¡Nota agregada a favoritos!",
-    "alreadyFavorited": "La nota ya está en favoritos.",
+    "favoriteRemoved": "¡Apunte eliminado de favoritos!",
+    "favoriteAdded": "¡Apunte agregado a favoritos!",
+    "alreadyFavorited": "El apunte ya está en favoritos.",
     "favoriteActionFailed": "Error al actualizar el estado de favorito.",
     "downloadSuccess": "¡Archivo descargado exitosamente!",
     "downloadFailed": "Error al descargar el archivo.",
@@ -170,7 +170,7 @@
     "asc": "Ascendente",
     "desc": "Descendente",
     "folders": "Carpetas",
-    "notes": "Notas",
+    "notes": "Apuntes",
     "selectInstitution": "Selecciona una institución",
     "selectCareer": "Selecciona una carrera",
     "selectSubject": "Selecciona una materia"
@@ -194,10 +194,10 @@
   },
   "recentNotes": {
     "loading": "Cargando...",
-    "errorFetchingNotes": "Error al obtener las notas.",
-    "recentNotes": "Notas Recientes",
+    "errorFetchingNotes": "Error al obtener los apuntes.",
+    "recentNotes": "Apuntes Recientes",
     "viewMore": "Ver Más",
-    "noRecentNotes": "No se encontraron notas recientes."
+    "noRecentNotes": "No se encontraron apuntes recientes."
   },
   "recentReviews": {
     "loading": "Cargando...",

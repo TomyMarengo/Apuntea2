@@ -244,7 +244,16 @@ const CreateNoteFab: React.FC = () => {
                 variant="outlined"
                 component="label"
                 size="small"
-                sx={{ textTransform: 'none', flexShrink: 0 }}
+                sx={{
+                  textTransform: 'none',
+                  flexShrink: 0,
+                  maxWidth: '130px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  display: 'block',
+                  textAlign: 'left',
+                }}
               >
                 {file ? file.name : t('createNoteFab.chooseFile')}
                 <input
