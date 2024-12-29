@@ -16,6 +16,7 @@ import SearchResultsTable from '../Search/SearchResultsTable';
 import PaginationBar from '../../components/PaginationBar';
 import useSearch from '../../hooks/useSearch';
 import { useNavigate } from 'react-router-dom';
+import CreateNoteFab from '../../components/CreateNoteFab';
 
 export default function ParentDirectoryPage() {
   const { directoryId } = useParams();
@@ -173,6 +174,7 @@ export default function ParentDirectoryPage() {
           )}
         </>
       )}
+      {directoryId && <CreateNoteFab parentId={directoryId}/>}
     </Box>
   );
 }

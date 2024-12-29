@@ -18,39 +18,31 @@ import {
   SelectChangeEvent,
   CircularProgress,
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../store/slices/authSlice';
-import { useNavigate } from 'react-router-dom';
-import { useGetSubjectsByCareerQuery } from '../store/slices/institutionsApiSlice';
 import { useCreateNoteMutation } from '../store/slices/notesApiSlice';
-import { NoteCategory, Subject } from '../types';
+import { NoteCategory } from '../types';
 
-const CreateNoteFab: React.FC = () => {
+interface CreateNoteFabProps {
+  parentId: string;
+}
+
+const CreateNoteFab: React.FC<CreateNoteFabProps> = ({
+  parentId,
+}) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const user = useSelector(selectCurrentUser);
-  const isLoggedIn = !!user;
 
   const [createNote, { isLoading }] = useCreateNoteMutation();
 
-  const careerId = user?.career?.id;
 
   // Tracks if the form is expanded
   const [expanded, setExpanded] = useState(false);
-
-  const { data: subjectsData } = useGetSubjectsByCareerQuery(
-    { careerId: careerId || '' },
-    { skip: !careerId || !expanded },
-  );
 
   // Fields for creating a note
   const [noteName, setNoteName] = useState('');
   const [visible, setVisible] = useState(true);
   const [category, setCategory] = useState<NoteCategory>(NoteCategory.THEORY);
-  const [selectedSubject, setSelectedSubject] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
 
   // Reference to the wrapper for ClickAwayListener
@@ -69,34 +61,15 @@ const CreateNoteFab: React.FC = () => {
     }
   };
 
-  // Changing the subject or category from the <Select> without closing form
-  const handleSubjectChange = (e: SelectChangeEvent) => {
-    setSelectedSubject(e.target.value as string);
-  };
-
   const handleCategoryChange = (e: SelectChangeEvent) => {
     setCategory(e.target.value as NoteCategory);
   };
 
   const handleCreate = async () => {
-    if (!isLoggedIn) {
-      toast.info(t('createNoteFab.loginRequired'));
-      navigate('/login');
-      return;
-    }
-    if (!noteName || !file || !selectedSubject) {
+    if (!noteName || !file) {
       toast.error(t('createNoteFab.missingFields'));
       return;
     }
-
-    // Find the subject
-    const subjectObj = subjectsData?.find((s) => s.id === selectedSubject);
-    if (!subjectObj || !subjectObj.rootDirectoryUrl) {
-      toast.error(t('createNoteFab.noDirectory'));
-      return;
-    }
-    const splitted = subjectObj.rootDirectoryUrl.split('/');
-    const parentId = splitted[splitted.length - 1];
 
     try {
       const result = await createNote({
@@ -122,7 +95,6 @@ const CreateNoteFab: React.FC = () => {
     // Reset form and close
     setNoteName('');
     setFile(null);
-    setSelectedSubject('');
     setExpanded(false);
   };
 
@@ -146,7 +118,9 @@ const CreateNoteFab: React.FC = () => {
               cursor: 'pointer',
             }}
           >
-            <AddIcon />
+            <NoteAddIcon sx={{
+              color: 'background.paper'
+            }}/>
           </Fab>
         )}
 
@@ -160,7 +134,7 @@ const CreateNoteFab: React.FC = () => {
               boxShadow: 4,
               display: 'flex',
               flexDirection: 'column',
-              gap: 1,
+              gap: 2,
             }}
             elevation={8}
           >
@@ -176,26 +150,6 @@ const CreateNoteFab: React.FC = () => {
               onChange={(e) => setNoteName(e.target.value)}
               fullWidth
             />
-
-            {/* Subject */}
-            <FormControl fullWidth size="small">
-              <InputLabel>{t('createNoteFab.selectSubject')}</InputLabel>
-              <Select
-                label={t('createNoteFab.selectSubject')}
-                value={selectedSubject}
-                onChange={handleSubjectChange}
-                // Disable portal so the menu is inside this container
-                MenuProps={{
-                  disablePortal: true,
-                }}
-              >
-                {subjectsData?.map((sub: Subject) => (
-                  <MenuItem key={sub.id} value={sub.id}>
-                    {sub.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
 
             {/* Category */}
             <FormControl fullWidth size="small">

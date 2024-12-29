@@ -7,7 +7,6 @@ import javax.validation.constraints.Pattern;
 
 public class DirectoryCreationDto extends SearchableCreationDto {
     @Pattern(regexp = RegexUtils.AVAILABLE_FOLDER_COLORS_REGEX)
-
     private String iconColor = "BBBBBB";
 
     public String getIconColor() {
