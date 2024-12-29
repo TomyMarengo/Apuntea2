@@ -397,6 +397,21 @@
     "noteCreated": "Note created successfully!",
     "noteCreationFailed": "Failed to create note."
   },
+  "createDirectoryFab": {
+    "createNewDirectory": "Create New Directory",
+    "name": "Name",
+    "iconColor": "Icon Color",
+    "chooseColor": "Choose Color",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "visible": "Visible",
+    "hidden": "Hidden",
+    "missingFields": "Please fill in all required fields.",
+    "invalidName": "Invalid name format.",
+    "invalidColor": "Please select a valid icon color.",
+    "directoryCreated": "Directory created successfully!",
+    "directoryCreationFailed": "Failed to create directory."
+  },
   "favoritesPage": {
     "title": "My Favorites",
     "notes": "Notes",

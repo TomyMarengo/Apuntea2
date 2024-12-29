@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react';
 import {
   Box,
   Fab,
+  Tooltip,
   Typography,
   TextField,
   Button,
@@ -28,13 +29,10 @@ interface CreateNoteFabProps {
   parentId: string;
 }
 
-const CreateNoteFab: React.FC<CreateNoteFabProps> = ({
-  parentId,
-}) => {
+const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
   const { t } = useTranslation();
 
   const [createNote, { isLoading }] = useCreateNoteMutation();
-
 
   // Tracks if the form is expanded
   const [expanded, setExpanded] = useState(false);
@@ -100,28 +98,24 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({
 
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
-      <Box
-        ref={containerRef}
-        sx={{
-          position: 'fixed',
-          bottom: 32,
-          right: 32,
-          zIndex: 1300,
-        }}
-      >
+      <Box ref={containerRef}>
         {/* Floating Action Button (always visible) */}
         {!expanded && (
-          <Fab
-            color="primary"
-            onClick={handleFabClick}
-            sx={{
-              cursor: 'pointer',
-            }}
-          >
-            <NoteAddIcon sx={{
-              color: 'background.paper'
-            }}/>
-          </Fab>
+          <Tooltip title={t('createNoteFab.createNewNote')} placement="left">
+            <Fab
+              color="primary"
+              onClick={handleFabClick}
+              sx={{
+                cursor: 'pointer',
+              }}
+            >
+              <NoteAddIcon
+                sx={{
+                  color: 'background.paper',
+                }}
+              />
+            </Fab>
+          </Tooltip>
         )}
 
         {expanded && (

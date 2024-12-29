@@ -2,7 +2,10 @@
 
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../../store/slices/authSlice';
 import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import {
   Box,
   Typography,
@@ -17,16 +20,28 @@ import PaginationBar from '../../components/PaginationBar';
 import useSearch from '../../hooks/useSearch';
 import { useNavigate } from 'react-router-dom';
 import CreateNoteFab from '../../components/CreateNoteFab';
+import CreateDirectoryFab from '../../components/CreateDirectoryFab';
 
 export default function ParentDirectoryPage() {
   const { directoryId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const user = useSelector(selectCurrentUser);
+
   const {
     data: directory,
     isLoading,
     isError,
   } = useGetDirectoryQuery({ directoryId });
+
+  const {
+    data: ownerData,
+    isLoading: isLoadingOwner,
+    isError: isErrorOwner,
+  } = useGetUserQuery(
+    { url: directory?.ownerUrl },
+    { skip: !directory?.ownerUrl },
+  );
 
   const skipParent = !directory?.parentUrl;
   const {
@@ -174,7 +189,24 @@ export default function ParentDirectoryPage() {
           )}
         </>
       )}
-      {directoryId && <CreateNoteFab parentId={directoryId}/>}
+      {directoryId &&
+        user &&
+        (ownerData?.id === user.id || !directory.parentUrl) && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              position: 'fixed',
+              bottom: 32,
+              right: 32,
+              zIndex: 1300,
+              gap: 2,
+            }}
+          >
+            <CreateNoteFab parentId={directoryId} />
+            <CreateDirectoryFab parentId={directoryId} />
+          </Box>
+        )}
     </Box>
   );
 }

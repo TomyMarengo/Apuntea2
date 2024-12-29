@@ -396,6 +396,21 @@
     "noteCreated": "¡Apunte creado con éxito!",
     "noteCreationFailed": "Error al crear el apunte."
   },
+  "createDirectoryFab": {
+    "createNewDirectory": "Crear Nuevo Directorio",
+    "name": "Nombre",
+    "iconColor": "Color del Icono",
+    "chooseColor": "Elegir Color",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "visible": "Visible",
+    "hidden": "Oculto",
+    "missingFields": "Por favor, completa todos los campos requeridos.",
+    "invalidName": "Formato de nombre inválido.",
+    "invalidColor": "Por favor, selecciona un color de icono válido.",
+    "directoryCreated": "¡Directorio creado con éxito!",
+    "directoryCreationFailed": "Error al crear el directorio."
+  },
   "favoritesPage": {
     "title": "Mis Favoritos",
     "notes": "Apuntes",
