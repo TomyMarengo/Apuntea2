@@ -395,7 +395,11 @@
     "missingFields": "Please provide note name, file, and subject.",
     "noDirectory": "No valid directory found for the selected subject.",
     "noteCreated": "Note created successfully!",
-    "noteCreationFailed": "Failed to create note."
+    "noteCreationFailed": "Failed to create note.",
+    "theory": "Theory",
+    "practice": "Practice",
+    "exam": "Exam",
+    "other": "Other"
   },
   "createDirectoryFab": {
     "createNewDirectory": "Create New Directory",

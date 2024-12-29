@@ -6,7 +6,7 @@ import LoginPage from '../pages/Login/LoginPage';
 import RegisterPage from '../pages/Register/RegisterPage';
 import SearchPage from '../pages/Search/SearchPage';
 import NotePage from '../pages/Notes/NotePage';
-import ParentDirectoryPage from '../pages/Directories/ParentDirectoryPage';
+import DirectoryPage from '../pages/Directories/DirectoryPage';
 import NotesPage from '../pages/Notes/NotesPage';
 import ProfilePage from '../pages/Profile/ProfilePage';
 import AdminUsersPage from '../pages/Admin/AdminUsersPage';
@@ -26,10 +26,7 @@ export default function AppRouter() {
       <Route path="/reviews" element={<ReviewsPage />} />
       <Route path="/notes" element={<NotesPage />} />
       <Route path="/notes/:noteId" element={<NotePage />} />
-      <Route
-        path="/directories/:directoryId"
-        element={<ParentDirectoryPage />}
-      />
+      <Route path="/directories/:directoryId" element={<DirectoryPage />} />
       <Route path="/admin/users" element={<AdminUsersPage />} />
       <Route path="/admin/careers" element={<AdminCareersPage />} />
       {/* Add more routes as needed */}

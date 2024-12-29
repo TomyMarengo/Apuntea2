@@ -122,7 +122,6 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
           <Paper
             sx={{
               p: 2,
-              mt: 2,
               width: 300,
               borderRadius: 2,
               boxShadow: 4,

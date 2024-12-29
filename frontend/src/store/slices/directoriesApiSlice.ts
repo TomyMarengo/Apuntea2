@@ -61,10 +61,19 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
         _extraOptions,
         baseQuery,
       ) => {
+        // Remove # from iconColor if present
+        if (iconColor && iconColor.startsWith('#')) {
+          iconColor = iconColor.slice(1);
+        }
+
         const result = await baseQuery({
           url: url || '/directories',
           method: 'POST',
-          body: { name, parentId, visible, iconColor },
+          body: JSON.stringify({ name, parentId, visible, iconColor }),
+          headers: {
+            'Content-Type':
+              'application/vnd.apuntea.directory-create-v1.0+json',
+          },
         });
         return { data: result.error === undefined };
       },

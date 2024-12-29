@@ -22,7 +22,7 @@ import { useNavigate } from 'react-router-dom';
 import CreateNoteFab from '../../components/CreateNoteFab';
 import CreateDirectoryFab from '../../components/CreateDirectoryFab';
 
-export default function ParentDirectoryPage() {
+export default function DirectoryPage() {
   const { directoryId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -196,6 +196,7 @@ export default function ParentDirectoryPage() {
             sx={{
               display: 'flex',
               flexDirection: 'column',
+              alignItems: 'flex-end',
               position: 'fixed',
               bottom: 32,
               right: 32,
