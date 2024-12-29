@@ -1,37 +1,73 @@
-// src/pages/Favorites/FavoriteDirectoryCard.tsx
+// src/pages/Favorites/FavoriteNoteCard.tsx
 
 import React, { useEffect, useState } from 'react';
 import { Box, Tooltip, IconButton, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FolderIcon from '@mui/icons-material/Folder';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import DescriptionIcon from '@mui/icons-material/Description';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import ImageIcon from '@mui/icons-material/Image';
+import MovieIcon from '@mui/icons-material/Movie';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { useTranslation } from 'react-i18next';
 import {
-  useRemoveFavoriteDirectoryMutation,
-  useAddFavoriteDirectoryMutation,
-  useGetIsFavoriteDirectoryQuery,
-} from '../../store/slices/directoriesApiSlice';
-import { Directory } from '../../types';
+  useRemoveFavoriteNoteMutation,
+  useAddFavoriteNoteMutation,
+  useGetIsFavoriteNoteQuery,
+} from '../store/slices/notesApiSlice';
+import { Note, FileType } from '../types';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
-interface FavoriteDirectoryCardProps {
-  directory: Directory;
+function getFileIcon(fileType?: FileType) {
+  if (!fileType)
+    return <InsertDriveFileIcon sx={{ fontSize: 48 }} color="primary" />;
+
+  switch (fileType.toLowerCase()) {
+    case 'pdf':
+      return <PictureAsPdfIcon sx={{ fontSize: 48 }} color="primary" />;
+    case 'doc':
+    case 'docx':
+      return <DescriptionIcon sx={{ fontSize: 48 }} color="primary" />;
+    case 'ppt':
+    case 'pptx':
+      return <DescriptionIcon sx={{ fontSize: 48 }} color="primary" />;
+    case 'xls':
+    case 'xlsx':
+      return <DescriptionIcon sx={{ fontSize: 48 }} color="primary" />;
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+    case 'gif':
+      return <ImageIcon sx={{ fontSize: 48 }} color="primary" />;
+    case 'mp4':
+      return <MovieIcon sx={{ fontSize: 48 }} color="primary" />;
+    case 'mp3':
+      return <MusicNoteIcon sx={{ fontSize: 48 }} color="primary" />;
+    default:
+      return <InsertDriveFileIcon sx={{ fontSize: 48 }} color="primary" />;
+  }
+}
+
+interface FavoriteNoteCardProps {
+  note: Note;
   userId: string;
 }
 
-const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
-  directory,
+const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
+  note,
   userId,
 }) => {
   const { t } = useTranslation();
-  const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
-  const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
-  const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
-    { directoryId: directory.id, userId },
-    { skip: !userId || !directory.id },
+  const [removeFavoriteNote] = useRemoveFavoriteNoteMutation();
+  const [addFavoriteNote] = useAddFavoriteNoteMutation();
+  const { data: isFavApi, refetch } = useGetIsFavoriteNoteQuery(
+    { noteId: note.id, userId },
+    { skip: !userId || !note.id },
   );
 
+  // Local isFavorite state
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
 
   useEffect(() => {
@@ -40,28 +76,30 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
     }
   }, [isFavApi]);
 
+  // Toggle function
   const handleToggleFavorite = async () => {
     try {
       if (isFavorite) {
-        const result = await removeFavoriteDirectory({
-          directoryId: directory.id,
+        // call remove
+        const result = await removeFavoriteNote({
+          noteId: note.id,
           userId,
         }).unwrap();
         if (result) {
           toast.success(t('favoritesPage.unfavorited'));
         }
       } else {
-        const result = await addFavoriteDirectory({
-          directoryId: directory.id,
-        }).unwrap();
+        // call add
+        const result = await addFavoriteNote({ noteId: note.id }).unwrap();
         if (result) {
           toast.success(t('favoritesPage.favorited'));
         }
       }
+      // refetch to confirm
       refetch();
     } catch (error) {
       toast.error(t('favoritesPage.errorUnfavorite'));
-      console.error('Toggle favorite directory failed:', error);
+      console.error('Toggle favorite note failed:', error);
     }
   };
 
@@ -80,18 +118,13 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
         },
       }}
     >
-      {/* Link for directory icon */}
+      {/* Link area for note icon */}
       <Link
-        to={`/directories/${directory.id}`}
+        to={`/notes/${note.id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
         <Box sx={{ mb: 0.5, position: 'relative' }}>
-          <FolderIcon
-            sx={{
-              fontSize: 48,
-              color: `#${directory.iconColor}` || 'primary.main',
-            }}
-          />
+          {getFileIcon(note.fileType)}
         </Box>
       </Link>
 
@@ -121,6 +154,7 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
         </IconButton>
       </Tooltip>
 
+      {/* Name ellipsized */}
       <Typography
         variant="body2"
         sx={{
@@ -132,10 +166,10 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
           mt: 0.5,
         }}
       >
-        {directory.name}
+        {note.name}
       </Typography>
     </Box>
   );
 };
 
-export default FavoriteDirectoryCard;
+export default FavoriteNoteCard;

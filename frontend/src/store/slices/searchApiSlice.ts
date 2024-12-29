@@ -67,10 +67,12 @@ export const searchApiSlice = apiSlice.injectEndpoints({
         }
 
         const filteredParams = Object.fromEntries(
-          Object.entries(queryParams).filter(([_, value]) => value != null),
+          Object.entries(queryParams).filter(
+            ([_, value]) => value != null && value !== '' && value != undefined,
+          ),
         );
 
-        // Validación
+        // Validate UUIDs
         if (
           filteredParams.institutionId &&
           !isUuid(filteredParams.institutionId)
@@ -120,7 +122,6 @@ export const searchApiSlice = apiSlice.injectEndpoints({
         page,
         asc,
         sortBy,
-        category,
         pageSize,
         parentId,
         userId,
@@ -140,10 +141,12 @@ export const searchApiSlice = apiSlice.injectEndpoints({
         };
 
         const filteredParams = Object.fromEntries(
-          Object.entries(queryParams).filter(([_, value]) => value != null),
+          Object.entries(queryParams).filter(
+            ([_, value]) => value != null && value !== '' && value != undefined,
+          ),
         );
 
-        // Validación
+        // Validate UUIDs
         if (
           filteredParams.institutionId &&
           !isUuid(filteredParams.institutionId)
