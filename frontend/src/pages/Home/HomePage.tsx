@@ -16,7 +16,6 @@ export default function HomePage() {
         alignItems: 'center',
         textAlign: 'center',
         padding: 4,
-        minHeight: '100vh',
         background: 'background.default',
         overflow: 'hidden',
       }}

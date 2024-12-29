@@ -6,8 +6,8 @@ import { selectCurrentUser } from './store/slices/authSlice';
 import Navbar from './components/Navbar/Navbar';
 import MiniSidebar from './components/Navbar/MiniSidebar';
 import AppRouter from './routes/AppRouter';
-import { CssBaseline, Box } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, Box, GlobalStyles } from '@mui/material';
+import { ThemeProvider, useTheme } from '@mui/material/styles';
 import { lightTheme, darkTheme } from './theme';
 import { Locale } from './types';
 import CreateNoteFab from './components/CreateNoteFab';
@@ -25,9 +25,18 @@ function App() {
 
   const locale = user?.locale || ('en' as Locale);
 
+  const theme = isDarkMode ? darkTheme : lightTheme;
+
   return (
-    <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
+      <GlobalStyles
+        styles={{
+          ':root': {
+            ...theme.custom,
+          },
+        }}
+      />
       <Box
         sx={{
           display: 'grid',
@@ -36,13 +45,13 @@ function App() {
           height: '100vh',
           gridTemplateAreas: isLoggedIn
             ? `
-              "navbar navbar"
-              "sidebar main"
-            `
+                "navbar navbar"
+                "sidebar main"
+              `
             : `
-              "navbar"
-              "main"
-            `,
+                "navbar"
+                "main"
+              `,
         }}
       >
         {/* Navbar */}
@@ -63,7 +72,20 @@ function App() {
         )}
 
         {/* Main Content */}
-        <Box sx={{ gridArea: 'main', overflow: 'auto', position: 'relative' }}>
+        <Box
+          sx={{
+            gridArea: 'main',
+            overflow: 'auto',
+            position: 'relative',
+            background: `linear-gradient(
+              180deg,
+              var(--gradient-top) 0%,
+              var(--gradient-mid) 42.19%,
+              var(--gradient-bot) 99.99%
+            ) no-repeat fixed`,
+            backgroundBlendMode: 'lighten',
+          }}
+        >
           <AppRouter />
           {/* Create Note Floating Button (appears on all pages) */}
           <CreateNoteFab />

@@ -3,6 +3,7 @@
 import { createTheme } from '@mui/material/styles';
 import { PaletteColorOptions } from '@mui/material';
 
+// Extender la interfaz de Palette para incluir 'tertiary'
 declare module '@mui/material/styles' {
   interface Palette {
     tertiary: PaletteColorOptions;
@@ -32,10 +33,11 @@ export const lightTheme = createTheme({
       paper: '#F9F1E7',
     },
   },
-  typography: {
-    // Optionally override typography to ensure
-    // consistent text color usage, fonts, etc.
-    // e.g., fontFamily: 'Roboto, sans-serif'
+  typography: {},
+  custom: {
+    '--gradient-top': '#F9F1E7',
+    '--gradient-mid': '#F8EED8',
+    '--gradient-bot': '#F7E4BA',
   },
 });
 
@@ -50,10 +52,6 @@ export const darkTheme = createTheme({
       main: '#50C4EC',
       dark: '#2F9CBB',
     },
-    tertiary: {
-      main: '#5A5044',
-      dark: '#302A24',
-    },
     text: {
       primary: '#FEFEFE',
       secondary: '#F9F1E7',
@@ -63,7 +61,23 @@ export const darkTheme = createTheme({
       paper: '#0A0B10',
     },
   },
-  typography: {
-    // same or different overrides for dark mode
+  typography: {},
+  custom: {
+    '--gradient-top': '#0A0B10',
+    '--gradient-mid': '#0C0510',
+    '--gradient-bot': '#101214',
   },
 });
+
+declare module '@mui/material/styles' {
+  interface Theme {
+    custom: {
+      [key: string]: string;
+    };
+  }
+  interface ThemeOptions {
+    custom?: {
+      [key: string]: string;
+    };
+  }
+}
