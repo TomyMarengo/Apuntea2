@@ -1,121 +1,254 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
-  Box,
   TextField,
   Button,
+  IconButton,
+  InputAdornment,
+  Box,
   Typography,
+  Card,
+  CardContent,
   CircularProgress,
-  Divider,
 } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import {
-  useLazyGetUserByEmailQuery,
-  useRequestPasswordChangeMutation,
-  useUpdateUserPasswordMutation,
-} from '../../store/slices/usersApiSlice';
+  Close as CloseIcon,
+  Visibility,
+  VisibilityOff,
+} from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import useForgotPassword from '../../hooks/useForgotPassword';
 
-const ForgotPasswordPage: React.FC = () => {
+const emailSchema = z
+  .string()
+  .email('forgotPasswordPage.validationErrors.invalidEmail');
+const codeSchema = z
+  .string()
+  .min(1, 'forgotPasswordPage.validationErrors.codeRequired');
+const passwordSchema = z
+  .string()
+  .min(4, 'forgotPasswordPage.validationErrors.passwordLength');
+
+export default function ForgotPasswordPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { handleEmailSubmit, handleCodeSubmit } = useForgotPassword();
 
-  const [email, setEmail] = useState('');
-  const [code, setCode] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [userId, setUserId] = useState<string | null>(null);
   const [step, setStep] = useState<'email' | 'code'>('email');
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
-  const [getUserByEmail, { isLoading: isGettingUser }] = useLazyGetUserByEmailQuery();
-  const [requestPasswordChange, { isLoading: isRequestingPasswordChange }] = 
-    useRequestPasswordChangeMutation();
-  const [updateUserPassword, { isLoading: isUpdatingPassword }] =
-    useUpdateUserPasswordMutation();
+  const forgotPasswordSchema = z.object({
+    email: emailSchema,
+    code: step === 'code' ? codeSchema : z.string().optional(),
+    newPassword: step === 'code' ? passwordSchema : z.string().optional(),
+  });
 
-  const handleEmailSubmit = async () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    reset,
+    getValues,
+  } = useForm({
+    resolver: zodResolver(forgotPasswordSchema),
+  });
+
+  const handleEmail = async (data: any) => {
+    setLoading(true);
     try {
-      console.log('email', email);
-      const [ user ] = await getUserByEmail(email).unwrap();
-      setUserId(user.id);
-      await requestPasswordChange({ email }).unwrap();
+      await handleEmailSubmit(data.email);
+      toast.success(t('forgotPasswordPage.emailSent'));
       setStep('code');
-    } catch (error) {
-      console.error(error);
+      reset({ email: data.email });
+    } catch (error: any) {
+      toast.error(t('forgotPasswordPage.emailError'));
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleCodeSubmit = async () => {
-    if (!userId) return;
+  const handleCode = async (data: any) => {
+    setLoading(true);
     try {
-      await updateUserPassword({ userId, password: newPassword, email, code }).unwrap();
+      await handleCodeSubmit({
+        email: getValues('email'),
+        code: data.code,
+        newPassword: data.newPassword,
+      });
+      toast.success(t('forgotPasswordPage.passwordUpdated'));
       navigate('/login');
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      toast.error(error?.message || t('forgotPasswordPage.codeError'));
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Box sx={{ p: 4, maxWidth: 600, margin: '0 auto' }}>
-      <Typography variant="h4" gutterBottom>
-        {t('forgotPasswordPage.title')}
-      </Typography>
-
-      {step === 'email' && (
-        <Box>
-          <Typography variant="body1" gutterBottom>
-            {t('forgotPasswordPage.enterEmail')}
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '80vh',
+      }}
+    >
+      <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
+        <CardContent>
+          <Typography variant="h4" gutterBottom align="center">
+            {t('forgotPasswordPage.title')}
           </Typography>
-          <TextField
-            fullWidth
-            label={t('forgotPasswordPage.emailLabel')}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={handleEmailSubmit}
-            disabled={isGettingUser || isRequestingPasswordChange || !email}
-          >
-            {isGettingUser || isRequestingPasswordChange ? <CircularProgress size={24} /> : t('forgotPasswordPage.submitEmail')}
-          </Button>
-        </Box>
-      )}
 
-      {step === 'code' && (
-        <Box>
-          <Typography variant="body1" gutterBottom>
-            {t('forgotPasswordPage.enterCode')}
-          </Typography>
-          <TextField
-            fullWidth
-            label={t('forgotPasswordPage.codeLabel')}
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            fullWidth
-            label={t('forgotPasswordPage.newPasswordLabel')}
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <Button
-            variant="contained"
-            fullWidth
-            onClick={handleCodeSubmit}
-            disabled={isUpdatingPassword || !code || !newPassword}
-          >
-            {isUpdatingPassword ? <CircularProgress size={24} /> : t('forgotPasswordPage.submitCode')}
-          </Button>
-        </Box>
-      )}
+          {step === 'email' && (
+            <Box component="form" onSubmit={handleSubmit(handleEmail)}>
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label={t('forgotPasswordPage.emailLabel')}
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.email}
+                    helperText={
+                      <Box minHeight="1.5em">
+                        {errors.email ? t(errors.email.message as string) : ''}
+                      </Box>
+                    }
+                    InputProps={{
+                      endAdornment: field.value ? (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => setValue('email', '')}>
+                            <CloseIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ) : null,
+                    }}
+                  />
+                )}
+              />
 
-      <Divider sx={{ my: 4 }} />
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ mt: 2 }}
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  t('forgotPasswordPage.submitEmail')
+                )}
+              </Button>
+            </Box>
+          )}
+
+          {step === 'code' && (
+            <Box component="form" onSubmit={handleSubmit(handleCode)}>
+              <Controller
+                name="code"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label={t('forgotPasswordPage.codeLabel')}
+                    variant="outlined"
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.code}
+                    helperText={
+                      <Box minHeight="1.5em">
+                        {errors.code ? t(errors.code.message as string) : ''}
+                      </Box>
+                    }
+                    InputProps={{
+                      endAdornment: field.value ? (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => setValue('code', '')}>
+                            <CloseIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ) : null,
+                    }}
+                  />
+                )}
+              />
+
+              <Controller
+                name="newPassword"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label={t('forgotPasswordPage.newPasswordLabel')}
+                    variant="outlined"
+                    type={showPassword ? 'text' : 'password'}
+                    fullWidth
+                    margin="normal"
+                    error={!!errors.newPassword}
+                    helperText={
+                      <Box minHeight="1.5em">
+                        {errors.newPassword
+                          ? t(errors.newPassword.message as string)
+                          : ''}
+                      </Box>
+                    }
+                    InputProps={{
+                      endAdornment: (
+                        <>
+                          {field.value && (
+                            <InputAdornment position="end">
+                              <IconButton
+                                onClick={() => setValue('newPassword', '')}
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          )}
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => setShowPassword((prev) => !prev)}
+                            >
+                              {showPassword ? (
+                                <VisibilityOff />
+                              ) : (
+                                <Visibility />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+              />
+
+              <Button
+                variant="contained"
+                fullWidth
+                sx={{ mt: 2 }}
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  t('forgotPasswordPage.submitCode')
+                )}
+              </Button>
+            </Box>
+          )}
+        </CardContent>
+      </Card>
     </Box>
   );
-};
-
-export default ForgotPasswordPage;
+}

@@ -58,7 +58,6 @@
     "emailLabel": "Correo electrónico",
     "codeLabel": "Código de verificación",
     "passwordLabel": "Nueva contraseña",
-    "enterEmail": "Ingresa tu correo electrónico",
     "sendCode": "Enviar código",
     "emailSent": "Se envió un código a tu correo. Ingresa el código para continuar.",
     "enterCode": "Ingresa el código recibido",
@@ -76,7 +75,8 @@
       "emailRequired": "El correo electrónico es obligatorio.",
       "codeRequired": "El código es obligatorio.",
       "passwordRequired": "La contraseña es obligatoria.",
-      "passwordLength": "La contraseña debe tener al menos 8 caracteres."
+      "passwordLength": "La contraseña debe tener al menos 4 caracteres.",
+      "invalidEmail": "Correo electrónico inválido."
     },
     "buttons": {
       "resendCode": "Reenviar código",
