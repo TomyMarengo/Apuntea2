@@ -18,6 +18,7 @@ import { useUpdateUserStatusMutation } from '../../store/slices/usersApiSlice';
 import { useTranslation } from 'react-i18next';
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { toast } from 'react-toastify';
 
 interface RowUserProps {
   user: User;
@@ -46,9 +47,10 @@ const RowUser: FC<RowUserProps> = ({ user }) => {
         banReason, // Assuming your API accepts a banReason field
       }).unwrap();
       setOpenBanModal(false);
+      toast.success(t('rowUser.toast.ban.success')); // Success toast
     } catch (error) {
       console.error('Failed to ban user:', error);
-      // Optionally, handle error with a toast or similar
+      toast.error(t('rowUser.toast.ban.failure')); // Error toast
     }
   };
 
@@ -59,9 +61,10 @@ const RowUser: FC<RowUserProps> = ({ user }) => {
         status: UserStatus.ACTIVE,
       }).unwrap();
       setOpenUnbanModal(false);
+      toast.success(t('rowUser.toast.unban.success')); // Success toast
     } catch (error) {
       console.error('Failed to unban user:', error);
-      // Optionally, handle error with a toast or similar
+      toast.error(t('rowUser.toast.unban.failure')); // Error toast
     }
   };
 

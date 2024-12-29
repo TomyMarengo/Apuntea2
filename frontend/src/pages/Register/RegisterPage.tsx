@@ -28,7 +28,7 @@ import {
   useGetCareersQuery,
 } from '../../store/slices/institutionsApiSlice';
 import useRegister from '../../hooks/useRegister';
-
+import { toast } from 'react-toastify';
 const registerSchema = z
   .object({
     email: z.string().email('registerPage.invalidEmail'),
@@ -95,8 +95,10 @@ export default function RegisterPage() {
       });
 
       // Navigate away after success
+      toast.success(t('registerPage.toast.success'));
       navigate('/');
     } catch (err: any) {
+      toast.error(t('registerPage.toast.error'));
       setRegisterError(err.message);
     } finally {
       setLoading(false);

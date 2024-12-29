@@ -24,7 +24,6 @@ import useDebounce from '../../hooks/useDebounce';
 const AdminUsersPage: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-
   // Extract query parameters from the URL
   const queryFilter = searchParams.get('query') || '';
   const statusFilter =

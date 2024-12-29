@@ -105,7 +105,11 @@
     "youMustSelectInstitution": "You must select an institution",
     "youMustSelectCareer": "You must select a career",
     "passwordsDoNotMatch": "Passwords do not match",
-    "alreadyHaveAccount": "Already have an account?"
+    "alreadyHaveAccount": "Already have an account?",
+    "toast": {
+      "success": "Account created successfully!",
+      "error": "Failed to create account."
+    }
   },
   "paginationBar": {
     "totalCount": "Showing {{from}} to {{to}} of {{totalCount}} results"
@@ -204,7 +208,8 @@
     "institution": "Institution",
     "notSet": "Not Set",
     "enableEmailNotifications": "Enable Email Notifications",
-    "disableEmailNotifications": "Disable Email Notifications"
+    "disableEmailNotifications": "Disable Email Notifications",
+    "updateFailed": "Failed to update profile."
   },
   "editProfileDialog": {
     "editProfile": "Edit Profile",
@@ -224,7 +229,9 @@
     "failedToUpdateProfile": "Failed to update profile.",
     "cancel": "Cancel",
     "saving": "Saving...",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "profileUpdatedSuccessfully": "Profile updated successfully.",
+    "passwordChangedSuccessfully": "Password changed successfully."
   },
   "noteCard": {
     "hiddenNote": "Hidden Note",
@@ -282,6 +289,16 @@
       },
       "cancel": "Cancel",
       "confirm": "Confirm"
+    },
+    "toast": {
+      "ban": {
+        "success": "User successfully banned.",
+        "error": "Failed to ban user."
+      },
+      "unban": {
+        "success": "User successfully unbanned.",
+        "error": "Failed to unban user."
+      }
     }
   },
   "adminCareersPage": {
@@ -389,6 +406,7 @@
     "errorFetching": "Error fetching favorites.",
     "noFavorites": "No favorites found.",
     "removeFavorite": "Remove from favorites",
+    "favorited": "Added to favorites successfully!",
     "unfavorited": "Removed from favorites successfully!",
     "errorUnfavorite": "Failed to remove favorite.",
     "mustLogin": "You must be logged in to view favorites."
