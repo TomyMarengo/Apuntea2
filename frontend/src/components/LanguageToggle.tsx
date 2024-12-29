@@ -34,7 +34,6 @@ export default function LanguageToggle() {
       >
         <MenuItem onClick={() => handleClose('es' as Locale)}>Español</MenuItem>
         <MenuItem onClick={() => handleClose('en' as Locale)}>English</MenuItem>
-        {/* Agrega más idiomas si es necesario */}
       </Menu>
     </>
   );

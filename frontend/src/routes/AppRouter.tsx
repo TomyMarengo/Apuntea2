@@ -7,7 +7,7 @@ import RegisterPage from '../pages/Register/RegisterPage';
 import SearchPage from '../pages/Search/SearchPage';
 import NotePage from '../pages/Notes/NotePage';
 import ParentDirectoryPage from '../pages/Directories/ParentDirectoryPage';
-import OwnerNotesPage from '../pages/Users/OwnerNotesPage';
+import UserNotesPage from '../pages/Users/UserNotesPage';
 import ProfilePage from '../pages/Profile/ProfilePage';
 import AdminUsersPage from '../pages/Admin/AdminUsersPage';
 import AdminCareersPage from '../pages/Admin/AdminCareersPage';
@@ -21,8 +21,11 @@ export default function AppRouter() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/search" element={<SearchPage />} />
       <Route path="/notes/:noteId" element={<NotePage />} />
-      <Route path="/users/:ownerId/notes" element={<OwnerNotesPage />} />
-      <Route path="/directories/:directoryId" element={<ParentDirectoryPage />} />
+      <Route path="/users/:ownerId/notes" element={<UserNotesPage />} />
+      <Route
+        path="/directories/:directoryId"
+        element={<ParentDirectoryPage />}
+      />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/favorites" element={<FavoritesPage />} />
       <Route path="/admin/users" element={<AdminUsersPage />} />

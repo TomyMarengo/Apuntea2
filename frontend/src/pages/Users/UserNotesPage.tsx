@@ -1,12 +1,12 @@
-// src/pages/Users/OwnerNotesPage.tsx
+// src/pages/Users/UserNotesPage.tsx
 
 import { useParams } from 'react-router-dom';
 import { useSearchNotesQuery } from '../../store/slices/searchApiSlice';
-import { Box, Typography, CircularProgress, Alert, Grid } from '@mui/material';
+import { Box, Typography, CircularProgress, Alert } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import SearchResultsTable from '../Search/SearchResultsTable';
 
-export default function OwnerNotesPage() {
+export default function UserNotesPage() {
   const { ownerId } = useParams<{ ownerId: string }>();
   const { t } = useTranslation();
   const { data, isLoading, isError } = useSearchNotesQuery({

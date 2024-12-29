@@ -71,7 +71,6 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   const {
     data: isFavorite,
     refetch: refetchFavorite,
-    isLoading: favoriteLoading,
   } = useGetIsFavoriteNoteQuery(
     user ? { noteId: note.id, userId: user.id } : {},
     { skip: !user },

@@ -5,7 +5,6 @@ import {
   Tooltip,
   TableRow,
   TableCell,
-  Box,
   Dialog,
   DialogTitle,
   DialogContent,

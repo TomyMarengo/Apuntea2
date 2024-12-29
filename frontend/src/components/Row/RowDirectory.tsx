@@ -68,7 +68,6 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   const {
     data: isFavorite,
     refetch: refetchFavorite,
-    isLoading: favoriteLoading,
   } = useGetIsFavoriteDirectoryQuery(
     user ? { directoryId: directory.id, userId: user.id } : {},
     { skip: !user },

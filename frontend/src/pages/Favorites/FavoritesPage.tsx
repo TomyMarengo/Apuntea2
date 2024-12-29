@@ -1,6 +1,5 @@
 // src/pages/Favorites/FavoritesPage.tsx
 
-import React from 'react';
 import {
   Box,
   Button,

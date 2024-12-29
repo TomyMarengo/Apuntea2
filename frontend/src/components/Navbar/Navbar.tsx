@@ -14,7 +14,6 @@ import LanguageToggle from '../LanguageToggle';
 import ProfileButton from '../ProfileButton/ProfileButton';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
-import { Locale } from '../../types';
 
 interface NavbarProps {
   isLoggedIn: boolean;

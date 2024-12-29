@@ -61,7 +61,7 @@ const CreateNoteFab: React.FC = () => {
   };
 
   // If user clicks away outside the box, close if expanded
-  const handleClickAway = (event: MouseEvent | TouchEvent) => {
+  const handleClickAway = (_event: MouseEvent | TouchEvent) => {
     if (expanded) {
       // Only close if truly outside
       setExpanded(false);
