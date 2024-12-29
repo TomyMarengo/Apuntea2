@@ -98,6 +98,16 @@ public class UserController {
 
     @PATCH
     @Path("/{id}")
+    @Secured("ROLE_VERIFY")
+    @PreAuthorize("@userPermissions.isCurrentUser(#id)")
+    @Consumes(value = { ApunteaMediaType.USER_UPDATE_PASSWORD })
+    public Response updateUserPassword(@PathParam("id") final UUID id, @Valid final UserPasswordUpdateDto userDto) {
+        userService.updateCurrentUserPassword(userDto.getPassword());
+        return Response.noContent().build();
+    }
+
+    @PATCH
+    @Path("/{id}")
     @Secured("ROLE_ADMIN")
     @Consumes(value = { ApunteaMediaType.USER_UPDATE_STATUS })
     public Response updateUserStatus(@PathParam("id") final UUID id, @Valid final UserStatusDto userStatusDto) {
@@ -110,9 +120,9 @@ public class UserController {
 
     @POST
     @Secured("ROLE_ANONYMOUS")
-    @Consumes(value = { ApunteaMediaType.EMAIL })
-    public Response requestPasswordChange(@Valid @Email final String email) {
-        verificationCodesService.sendForgotPasswordCode(email);
+    @Consumes(value = { ApunteaMediaType.USER_REQUEST_PASSWORD_CHANGE })
+    public Response requestPasswordChange(@Valid final RequestPasswordChangeDto emailDto) {
+        verificationCodesService.sendForgotPasswordCode(emailDto.getEmail());
         return Response.noContent().build();
     }
 

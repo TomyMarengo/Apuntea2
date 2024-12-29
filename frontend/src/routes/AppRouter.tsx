@@ -13,12 +13,14 @@ import AdminUsersPage from '../pages/Admin/AdminUsersPage';
 import AdminCareersPage from '../pages/Admin/AdminCareersPage';
 import FavoritesPage from '../pages/Favorites/FavoritesPage';
 import ReviewsPage from '../pages/Reviews/ReviewsPage';
+import ForgotPasswordPage from '../pages/ForgotPassword/ForgotPasswordPage';
 
 export default function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/search" element={<SearchPage />} />
       <Route path="/profile" element={<ProfilePage />} />

@@ -165,6 +165,11 @@ export default function LoginPage() {
               {t('loginPage.signup')}
             </RouterLink>
           </Typography>
+          <Typography variant="body2" align="center" sx={{ mt: 1 }}>
+            <RouterLink to="/forgot-password" style={{ color: '#1976d2' }}>
+              {t('loginPage.forgotPassword')}
+            </RouterLink>
+          </Typography>
         </CardContent>
       </Card>
     </Box>

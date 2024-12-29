@@ -69,6 +69,13 @@ interface UpdateUserStatusArgs {
   url?: string;
 }
 
+interface UpdatePasswordArgs {
+  userId: string;
+  password: string;
+  email: string;
+  code: string;
+}
+
 export const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getUsers: builder.query<
@@ -352,6 +359,49 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         return { data: result.error === undefined };
       },
     }),
+    requestPasswordChange: builder.mutation<boolean, { email: string }>({
+      query: ({ email }) => ({
+        url: '/users',
+        method: 'POST',
+        body: JSON.stringify({ email }),
+        headers: {
+          'Content-Type':
+            'application/vnd.apuntea.request-password-change-v1.0+json',
+        },
+      }),
+    }),
+    updateUserPassword: builder.mutation<boolean, UpdatePasswordArgs>({
+      queryFn: async (
+        { userId, password, email, code },
+        _api,
+        _extraOptions,
+        baseQuery,
+      ) => {
+        const authorization = btoa(`${email}:${code}`);
+        const response = await baseQuery({
+          url: `/users/${userId}`,
+          method: 'PATCH',
+          body: JSON.stringify({ password }),
+          headers: {
+            'Content-Type':
+              'application/vnd.apuntea.user-update-password-v1.0+json',
+            Authorization: `Basic ${authorization}`,
+          },
+        });
+
+        // Return true if no error occurred (indicating a successful request), false otherwise
+        return { data: response.error === undefined };
+      },
+      invalidatesTags: (_result, _error, { userId }) => [
+        { type: 'Users', id: userId },
+      ],
+    }),
+    getUserByEmail: builder.query<User[], string>({
+      query: (email) => ({ url: `/users?email=${encodeURIComponent(email)}` }),
+      transformResponse: (response: any) => {
+        return Array.isArray(response) ? response.map(mapApiUser) : [];
+      },
+    }),
   }),
 });
 
@@ -369,4 +419,7 @@ export const {
   useIsFollowingUserQuery,
   useUpdateUserStatusMutation,
   useLazyGetUserQuery,
+  useLazyGetUserByEmailQuery,
+  useRequestPasswordChangeMutation,
+  useUpdateUserPasswordMutation,
 } = usersApiSlice;

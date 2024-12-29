@@ -49,8 +49,50 @@
     "password": "Password",
     "signup": "Sign Up",
     "noAccount": "Don't have an account?",
+    "forgotPassword": "Forgot Password",
     "invalidEmail": "Invalid email",
     "passwordMinLength": "Password must be at least 4 characters"
+  },
+  "forgotPasswordPage": {
+    "title": "Forgot My Password",
+    "emailLabel": "Email Address",
+    "codeLabel": "Verification Code",
+    "passwordLabel": "New Password",
+    "sendCode": "Send Code",
+    "emailSent": "A code has been sent to your email. Enter the code to continue.",
+    "enterCode": "Enter the received code",
+    "newPassword": "Enter your new password",
+    "updatePassword": "Update Password",
+    "emailError": "An error occurred while sending the code. Please check your email and try again.",
+    "codeError": "The entered code is invalid. Please verify and try again.",
+    "passwordUpdated": "Password updated successfully!",
+    "loading": "Loading...",
+    "errorFetchingUserId": "Could not fetch user. Please verify your email.",
+    "submitEmail": "Submit email",
+    "newPasswordLabel": "New password",
+    "submitCode": "Submit code",
+    "validationErrors": {
+      "emailRequired": "Email is required.",
+      "codeRequired": "Code is required.",
+      "passwordRequired": "Password is required.",
+      "passwordLength": "Password must be at least 4 characters long.",
+      "invalidEmail": "Invalid email"
+    },
+    "buttons": {
+      "resendCode": "Resend Code",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+    "sections": {
+      "emailSection": "Email Address",
+      "codeSection": "Verification Code",
+      "passwordSection": "New Password"
+    },
+    "placeholders": {
+      "email": "Your email address",
+      "code": "Your code",
+      "password": "Your new password"
+    }
   },
   "notePage": {
     "noteNotFound": "This note does not exist.",
