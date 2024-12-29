@@ -118,7 +118,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: any) => {
         return mapApiUser(response);
       },
-      providesTags: (result, error, { userId }) => [
+      providesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
@@ -187,7 +187,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           };
         }
       },
-      providesTags: (result, error, { userId }) => [
+      providesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
@@ -213,7 +213,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         });
         return { data: response.error === undefined };
       },
-      invalidatesTags: (result, error, { userId }) => [
+      invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
@@ -260,7 +260,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
         return { data: response.error === undefined };
       },
-      invalidatesTags: (result, error, { userId }) => [
+      invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
@@ -291,7 +291,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
         return { data: response.error === undefined };
       },
-      invalidatesTags: (result, error, { userId }) => [
+      invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
@@ -304,7 +304,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           'Content-Type': 'application/vnd.apuntea.user-create-v1.0+json',
         },
       }),
-      transformResponse: async (response: any, meta: any) => {
+      transformResponse: async (_response: any, meta: any) => {
         return { userUrl: meta.response.headers.get('Location') };
       },
       invalidatesTags: ['Users'],
@@ -317,7 +317,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         });
         return { data: result.error === undefined };
       },
-      invalidatesTags: (result, error, { userId }) => [
+      invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
@@ -335,7 +335,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
         return { data: result.error === undefined };
       },
-      invalidatesTags: (result, error, { userId }) => [
+      invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),

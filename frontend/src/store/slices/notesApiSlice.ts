@@ -244,7 +244,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       },
     }),
     getLatestNotes: builder.query<Note[], NoteQueryArgs>({
-      query: ({ userId, url }) => url || `/notes?user=${userId}&sortBy=date`,
+      query: ({ userId, url }) => url || `/notes?userId=${userId}&sortBy=date`,
       transformResponse: (response: any) => {
         const notes: Note[] = Array.isArray(response)
           ? response.map(mapApiNote)

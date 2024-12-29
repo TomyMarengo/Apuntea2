@@ -100,7 +100,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
         const review = Array.isArray(response) ? response[0] : response;
         return mapApiReview(review);
       },
-      providesTags: (result, error, { noteId, userId }) => [
+      providesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),
@@ -109,7 +109,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: any) => {
         return mapApiReview(response);
       },
-      providesTags: (result, error, { noteId, userId }) => [
+      providesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),
@@ -130,7 +130,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
         });
         return { data: response.error === undefined };
       },
-      invalidatesTags: (result, error, { noteId, userId }) => [
+      invalidatesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),
@@ -151,7 +151,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
         });
         return { data: response.error === undefined };
       },
-      invalidatesTags: (result, error, { noteId, userId }) => [
+      invalidatesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),
@@ -172,7 +172,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
         });
         return { data: response.error === undefined };
       },
-      invalidatesTags: (result, error, { noteId, userId }) => [
+      invalidatesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),

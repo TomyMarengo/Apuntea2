@@ -27,6 +27,19 @@ export default function ParentDirectoryPage() {
     isError,
   } = useGetDirectoryQuery({ directoryId });
 
+  const skipParent = !directory?.parentUrl;
+  const {
+    data: fetchedParentDirectory,
+    isLoading: isLoadingParent,
+    isError: isErrorParent,
+  } = useGetDirectoryQuery(
+    {
+      url: directory?.parentUrl,
+    },
+    { skip: skipParent, refetchOnMountOrArgChange: true },
+  );
+  const parentDirectory = skipParent ? undefined : fetchedParentDirectory;
+
   useEffect(() => {
     if (directoryId) {
       const newParams = new URLSearchParams(searchParams);
@@ -88,7 +101,7 @@ export default function ParentDirectoryPage() {
     navigate({ search: newParams.toString() }, { replace: true });
   };
 
-  if (isLoading || isLoadingData) {
+  if (isLoading || isLoadingData || isLoadingParent) {
     return (
       <Box display="flex" justifyContent="center" mt={5}>
         <CircularProgress />
@@ -96,7 +109,7 @@ export default function ParentDirectoryPage() {
     );
   }
 
-  if (isError || !directory) {
+  if (isError || isErrorParent || !directory) {
     return (
       <Box display="flex" justifyContent="center" mt={5}>
         <Alert severity="error">
@@ -109,20 +122,19 @@ export default function ParentDirectoryPage() {
   return (
     <Box sx={{ p: 2, maxWidth: 1200, margin: '0 auto' }}>
       <Typography variant="h4" sx={{ mb: 3 }}>
-        {t('parentDirectoryPage.title')}
+        {directory.name}
       </Typography>
-      <Typography variant="body1" sx={{ mb: 3 }}>
-        {t('parentDirectoryPage.description')}
-      </Typography>
-      <Box mt={2}>
-        <MuiLink
-          component={Link}
-          to={`/directories/${directory.parentUrl}`}
-          underline="hover"
-        >
-          {directory.name}
-        </MuiLink>
-      </Box>
+      {parentDirectory && (
+        <Box mt={2}>
+          <MuiLink
+            component={Link}
+            to={`/directories/${parentDirectory.id}`}
+            underline="hover"
+          >
+            {parentDirectory.name}
+          </MuiLink>
+        </Box>
+      )}
 
       {/* Search Component */}
       <SearchForm
