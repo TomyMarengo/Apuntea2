@@ -392,5 +392,19 @@
     "unfavorited": "Removed from favorites successfully!",
     "errorUnfavorite": "Failed to remove favorite.",
     "mustLogin": "You must be logged in to view favorites."
+  },
+  "notesPage": {
+    "mustLogin": "You must be logged in to view your notes.",
+    "title": "My Career Notes",
+    "year": "Year",
+    "notes": "Notes",
+    "noSubjects": "No subjects found.",
+    "noSubjectsForYear": "No subjects available for the selected year.",
+    "errorFetching": "Error fetching data. Please try again later.",
+    "yearButton": "Year {{year}}",
+    "subjectNotes": {
+      "notesCount": "{{count}} Notes",
+      "loadingNotes": "Loading notes..."
+    }
   }
 }

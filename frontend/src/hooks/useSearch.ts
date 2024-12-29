@@ -11,7 +11,6 @@ import { selectCurrentUser } from '../store/slices/authSlice';
 
 interface UseSearchReturn {
   searchParams: URLSearchParams;
-  // setSearchParams: (params: URLSearchParams) => void;
   isLoadingData: boolean;
   notes: any[];
   directories: any[];
@@ -60,27 +59,30 @@ export default function useSearch(userData: boolean = true): UseSearchReturn {
   const sortByParam = searchParams.get('sortBy') || 'modified';
   const categoryParam =
     (searchParams.get('category') as 'note' | 'directory') || 'note';
-  const wordParam = searchParams.get('word') || '';
-  const institutionIdParam = searchParams.get('institutionId') || '';
-  const careerIdParam = searchParams.get('careerId') || '';
-  const subjectIdParam = searchParams.get('subjectId') || '';
-  const parentIdParam = searchParams.get('parentId') || '';
+  const wordParam = searchParams.get('word');
+  const institutionIdParam = searchParams.get('institutionId');
+  const careerIdParam = searchParams.get('careerId');
+  const subjectIdParam = searchParams.get('subjectId');
+  const parentIdParam = searchParams.get('parentId');
+  const userId = searchParams.get('userId');
 
   const currentPage = Number(pageParam);
   const pageSize = Number(pageSizeParam);
 
-  const searchArgs = {
-    institutionId: institutionIdParam,
-    careerId: careerIdParam,
-    subjectId: subjectIdParam,
-    word: wordParam,
+  const searchArgs: Record<string, any> = {
     page: currentPage,
+    pageSize,
     asc: ascParam,
     sortBy: sortByParam,
     category: categoryParam,
-    parentId: parentIdParam,
-    pageSize,
   };
+
+  if (institutionIdParam) searchArgs.institutionId = institutionIdParam;
+  if (careerIdParam) searchArgs.careerId = careerIdParam;
+  if (subjectIdParam) searchArgs.subjectId = subjectIdParam;
+  if (wordParam) searchArgs.word = wordParam;
+  if (parentIdParam) searchArgs.parentId = parentIdParam;
+  if (userId) searchArgs.userId = userId;
 
   // Fetch notes or directories based on category
   const { data: dataNotes, isLoading: isLoadingNotes } = useSearchNotesQuery(
