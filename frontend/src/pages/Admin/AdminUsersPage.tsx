@@ -17,13 +17,14 @@ import RowUser from '../../components/Row/RowUser';
 import PaginationBar from '../../components/PaginationBar';
 import { useGetUsersQuery } from '../../store/slices/usersApiSlice';
 import { UserStatus } from '../../types';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import useDebounce from '../../hooks/useDebounce';
 
 const AdminUsersPage: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   // Extract query parameters from the URL
   const queryFilter = searchParams.get('query') || '';
   const statusFilter =
@@ -49,9 +50,9 @@ const AdminUsersPage: React.FC = () => {
       }
       params.set('page', '1');
 
-      setSearchParams(params);
+      navigate({ search: params.toString() }, { replace: true });
     }
-  }, [debouncedSearchInput, queryFilter, searchParams, setSearchParams]);
+  }, [debouncedSearchInput, queryFilter, searchParams]);
 
   // Sync the local search input state when the URL's query parameter changes externally
   useEffect(() => {
@@ -81,7 +82,7 @@ const AdminUsersPage: React.FC = () => {
       params.delete('status');
     }
     params.set('page', '1');
-    setSearchParams(params);
+    navigate({ search: params.toString() }, { replace: true });
   };
 
   // Define the table columns

@@ -45,7 +45,6 @@ export default function useSearch(userData: boolean = true): UseSearchReturn {
       if (updated) {
         // Reset to first page on defaults set
         searchParams.set('page', '1');
-        // setSearchParams(searchParams);
         navigate({ search: searchParams.toString() }, { replace: true });
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,7 +122,6 @@ export default function useSearch(userData: boolean = true): UseSearchReturn {
 
   return {
     searchParams,
-    // setSearchParams,
     isLoadingData,
     notes: notes || [],
     directories: directories || [],

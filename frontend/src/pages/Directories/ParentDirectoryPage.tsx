@@ -44,7 +44,6 @@ export default function ParentDirectoryPage() {
     if (directoryId) {
       const newParams = new URLSearchParams(searchParams);
       newParams.set('parentId', directoryId);
-      // setSearchParams(newParams);
       navigate({ search: newParams.toString() }, { replace: true });
     }
   }, [directoryId]);
@@ -52,7 +51,6 @@ export default function ParentDirectoryPage() {
   // Use useSearch with parentId
   const {
     searchParams,
-    // setSearchParams,
     notes,
     directories,
     isLoadingData,
@@ -97,7 +95,6 @@ export default function ParentDirectoryPage() {
     // Reset to the first page when changing search/filter
     newParams.set('page', '1');
 
-    // setSearchParams(newParams);
     navigate({ search: newParams.toString() }, { replace: true });
   };
 

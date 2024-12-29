@@ -22,7 +22,6 @@ export default function SearchPage() {
   // 2) Now useSearch reads from final URL param
   const {
     searchParams,
-    // setSearchParams,
     notes,
     directories,
     isLoadingData,
@@ -59,8 +58,7 @@ export default function SearchPage() {
 
     // Reset to first page on search/filter change
     newParams.set('page', '1');
-
-    // setSearchParams(newParams);
+    
     navigate({ search: newParams.toString() }, { replace: true });
   };
 

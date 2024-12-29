@@ -1,6 +1,6 @@
 // src/pages/Notes/NotesPage.tsx
 
-import React, { useMemo, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -11,6 +11,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import {
   useGetSubjectsByCareerQuery,
@@ -26,6 +27,7 @@ const DEFAULT_PAGE_SIZE = 10;
 
 export default function NotesPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   // Current logged user
   const user = useSelector(selectCurrentUser);
@@ -126,11 +128,7 @@ export default function NotesPage() {
   useEffect(() => {
     if (selectedYear === null && uniqueYears.length > 0) {
       const firstYear = uniqueYears[0];
-      setSearchParams((prev) => {
-        const newParams = new URLSearchParams(prev);
-        newParams.set('year', String(firstYear));
-        return newParams;
-      });
+      navigate({ search: `?year=${firstYear}&page=1` }, { replace: true });
     }
   }, [uniqueYears, selectedYear, setSearchParams]);
 
