@@ -41,10 +41,10 @@ public class UserServiceImplTest {
         final int PAGE_SIZE = 10;
         final int PAGE = 2;
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
-        Mockito.when(userDao.getUsersQuantity(Mockito.any(), Mockito.isNull(), Mockito.isNull())).thenReturn(TOTAL_RESULTS);
-        Mockito.when(userDao.getUsers(Mockito.any(), Mockito.isNull(), Mockito.isNull(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
+        Mockito.when(userDao.getUsersQuantity(Mockito.any(), Mockito.isNull(), Mockito.isNull(), Mockito.isNull())).thenReturn(TOTAL_RESULTS);
+        Mockito.when(userDao.getUsers(Mockito.any(), Mockito.isNull(), Mockito.isNull(), Mockito.isNull(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
 
-        Page<User> results = userService.getUsers(null, "all", null, PAGE, PAGE_SIZE);
+        Page<User> results = userService.getUsers(null, "all", null, null, PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -57,10 +57,10 @@ public class UserServiceImplTest {
         final int PAGE_SIZE = 10;
         final int PAGE = 6;
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
-        Mockito.when(userDao.getUsersQuantity(Mockito.any(), Mockito.isNull(), Mockito.isNull())).thenReturn(TOTAL_RESULTS);
-        Mockito.when(userDao.getUsers(Mockito.any(), Mockito.isNull(), Mockito.isNull(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
+        Mockito.when(userDao.getUsersQuantity(Mockito.any(), Mockito.isNull(), Mockito.isNull(), Mockito.isNull())).thenReturn(TOTAL_RESULTS);
+        Mockito.when(userDao.getUsers(Mockito.any(), Mockito.isNull(), Mockito.isNull(), Mockito.isNull(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
 
-        Page<User> results = userService.getUsers(null, "all", null, PAGE, PAGE_SIZE);
+        Page<User> results = userService.getUsers(null, "all", null, null, PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());
@@ -73,10 +73,10 @@ public class UserServiceImplTest {
         final int PAGE_SIZE = 10;
         final int PAGE = -6;
         final int TOTAL_RESULTS = PAGE_SIZE * 4 + 1;
-        Mockito.when(userDao.getUsersQuantity(Mockito.any(), Mockito.isNull(), Mockito.isNull())).thenReturn(TOTAL_RESULTS);
-        Mockito.when(userDao.getUsers(Mockito.any(), Mockito.isNull(), Mockito.isNull(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
+        Mockito.when(userDao.getUsersQuantity(Mockito.any(), Mockito.isNull(), Mockito.isNull(), Mockito.isNull())).thenReturn(TOTAL_RESULTS);
+        Mockito.when(userDao.getUsers(Mockito.any(), Mockito.isNull(), Mockito.isNull(), Mockito.isNull(), Mockito.anyInt(), Mockito.anyInt())).thenReturn(Collections.emptyList());
 
-        Page<User> results = userService.getUsers(null, "all", null, PAGE, PAGE_SIZE);
+        Page<User> results = userService.getUsers(null, "all", null, null, PAGE, PAGE_SIZE);
 
         assertEquals(TOTAL_RESULTS, results.getTotalResults());
         assertEquals(PAGE_SIZE, results.getPageSize());

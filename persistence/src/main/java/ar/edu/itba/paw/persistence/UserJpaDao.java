@@ -22,13 +22,16 @@ class UserJpaDao implements UserDao {
     private EntityManager em;
 
     @Override
-    public List<User> getUsers(String query, UserStatus status, UUID followedBy, int pageNum, int pageSize) {
+    public List<User> getUsers(String query, UserStatus status, UUID followedBy, UUID following, int pageNum, int pageSize) {
         final String searchWord = escapeLikeString(query);
         final StringBuilder queryBuilder = new StringBuilder();
 
         queryBuilder.append("SELECT CAST(user_id AS VARCHAR(36)) FROM users u " );
         if (followedBy != null)
             queryBuilder.append("JOIN Follows f ON u.user_id = f.followed_id AND f.follower_id = :followedBy ");
+        if (following != null)
+            queryBuilder.append("JOIN Follows f ON u.user_id = f.follower_id AND f.followed_id = :following ");
+
 
         //.append("WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') ")
         queryBuilder.append("WHERE (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!') ")
@@ -45,6 +48,9 @@ class UserJpaDao implements UserDao {
 
         if (followedBy != null)
             nQuery.setParameter("followedBy", followedBy);
+
+        if (following != null)
+            nQuery.setParameter("following", following);
         @SuppressWarnings("unchecked")
         List<UUID> userIds = ((List<String>) nQuery.getResultList()).stream().map(UUID::fromString).collect(Collectors.toList());
 
@@ -56,13 +62,16 @@ class UserJpaDao implements UserDao {
     }
 
     @Override
-    public int getUsersQuantity(String query, UserStatus status, UUID followedBy) {
+    public int getUsersQuantity(String query, UserStatus status, UUID followedBy, UUID following) {
         final String searchWord = escapeLikeString(query);
         final StringBuilder queryBuilder = new StringBuilder();
 
         queryBuilder.append("SELECT COUNT(user_id) FROM users u " );
         if (followedBy != null)
             queryBuilder.append("JOIN Follows f ON u.user_id = f.followed_id AND f.follower_id = :followedBy ");
+
+        if (following != null)
+            queryBuilder.append("JOIN Follows f ON u.user_id = f.follower_id AND f.followed_id = :following ");
 
         //.append("WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') ")
         queryBuilder.append("WHERE (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!') ")
@@ -76,6 +85,9 @@ class UserJpaDao implements UserDao {
 
         if (followedBy != null)
             nQuery.setParameter("followedBy", followedBy);
+
+        if (following != null)
+            nQuery.setParameter("following", following);
 
         return ((Number) nQuery.getSingleResult()).intValue();
 

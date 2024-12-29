@@ -74,12 +74,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public Page<User> getUsers(String query, String status, UUID followedBy, int page, int pageSize) {
+    public Page<User> getUsers(String query, String status, UUID followedBy, UUID following, int page, int pageSize) {
         if (query == null) query = "";
         UserStatus userStatus = UserStatus.fromString(status);
-        int countStudents = userDao.getUsersQuantity(query, userStatus, followedBy);
+        int countStudents = userDao.getUsersQuantity(query, userStatus, followedBy, following);
         int currentPage = Page.getSafePagePosition(page, countStudents, pageSize);
-        List<User> users = userDao.getUsers(query, userStatus, followedBy, currentPage, pageSize);
+        List<User> users = userDao.getUsers(query, userStatus, followedBy, following, currentPage, pageSize);
         return new Page<>(users, currentPage, pageSize, countStudents);
     }
 

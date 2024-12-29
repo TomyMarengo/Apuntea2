@@ -62,6 +62,7 @@ public class UserController {
                     userQuery.getQuery(),
                     userQuery.getStatus(),
                     userQuery.getFollowedBy(),
+                    userQuery.getFollowing(),
                     userQuery.getPage(),
                     userQuery.getPageSize()
             );

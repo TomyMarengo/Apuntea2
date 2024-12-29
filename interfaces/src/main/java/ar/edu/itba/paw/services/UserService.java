@@ -21,7 +21,6 @@ public interface UserService {
 
     UUID updateProfilePicture(byte[] profilePictureBytes, String imageExtension);
 
-
     Optional<byte[]> getProfilePictureByUserId(UUID userId);
 
     Optional<byte[]> getProfilePictureById(UUID pictureId);
@@ -34,7 +33,7 @@ public interface UserService {
 
     void banUser(UUID userId, String reason);
 
-    Page<User> getUsers(String query, String status, UUID followedBy, int page, int pageSize);
+    Page<User> getUsers(String query, String status, UUID followedBy, UUID following, int page, int pageSize);
 
     boolean isFollowing(UUID followedId);
 
@@ -42,10 +41,6 @@ public interface UserService {
 
     boolean unfollow(UUID followedId);
 
-//    Collection<User> getFollows();
-
-//    boolean isFollowing(UUID followedId);
-    
     void updateNotificationsEnabled(boolean notificationsEnabled);
 
     float getAvgScore(UUID userId);

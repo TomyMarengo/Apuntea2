@@ -28,6 +28,7 @@ public class UserResponseDto {
     private URI directoryFavorites;
     private URI subjectFavorites;
     private URI following;
+    private URI followedBy;
     private URI notes;
 
     private URI subjects;
@@ -52,13 +53,13 @@ public class UserResponseDto {
             userDto.institution = builder.path("institutions").path(career.getInstitutionId().toString()).build();
             userDto.career = builder.path("careers").path(career.getCareerId().toString()).build();
         }
-        // TODO: Check if this is efficient
         if (user.getProfilePicture() != null)
             userDto.profilePicture = uriInfo.getBaseUriBuilder().path("pictures").path(user.getProfilePicture().getImageId().toString()).build();
         userDto.noteFavorites = uriInfo.getBaseUriBuilder().path("notes").queryParam("favBy", user.getUserId()).build();
         userDto.directoryFavorites = uriInfo.getBaseUriBuilder().path("directories").queryParam("favBy", user.getUserId()).build();
         userDto.subjectFavorites = uriInfo.getBaseUriBuilder().path("directories").queryParam("favBy", user.getUserId()).queryParam("rdir", true).build();
-        userDto.following = uriInfo.getBaseUriBuilder().path("users").queryParam("favBy", user.getUserId().toString()).build();
+        userDto.following = uriInfo.getBaseUriBuilder().path("users").queryParam("following", user.getUserId().toString()).build();
+        userDto.followedBy = uriInfo.getBaseUriBuilder().path("users").queryParam("followedBy", user.getUserId().toString()).build();
         userDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("userId", user.getUserId().toString()).build();
         userDto.subjects = uriInfo.getBaseUriBuilder().path("subjects").queryParam("userId", user.getUserId().toString()).build();
         userDto.reviewsReceived = uriInfo.getBaseUriBuilder().path("reviews").queryParam("targetUser", user.getUserId()).build();
@@ -137,6 +138,10 @@ public class UserResponseDto {
         this.following = following;
     }
 
+    public void setFollowedBy(URI followedBy) {
+        this.followedBy = followedBy;
+    }
+
     public void setNotes(URI notes) {
         this.notes = notes;
     }
@@ -203,6 +208,10 @@ public class UserResponseDto {
 
     public URI getFollowing() {
         return following;
+    }
+
+    public URI getFollowedBy() {
+        return followedBy;
     }
 
     public URI getNotes() {

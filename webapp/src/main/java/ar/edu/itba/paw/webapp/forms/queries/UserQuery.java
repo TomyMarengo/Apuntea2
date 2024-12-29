@@ -13,6 +13,10 @@ public class UserQuery extends PageableQuery {
     @QueryParam("followedBy")
     private UUID followedBy;
 
+    @ValidUuid
+    @QueryParam("following")
+    private UUID following;
+
     @QueryParam("query")
     private String query;
 
@@ -53,5 +57,13 @@ public class UserQuery extends PageableQuery {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public UUID getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(UUID following) {
+        this.following = following;
     }
 }

@@ -24,8 +24,8 @@ public interface UserDao {
     int unbanUsers();
     boolean banUser(User user, User admin, LocalDateTime endDate, String reason);
     boolean unbanUser(User user);
-    List<User> getUsers(String query, UserStatus status, UUID followedBy, int pageNum, int pageSize);
-    int getUsersQuantity(String query, UserStatus status, UUID followedBy);
+    List<User> getUsers(String query, UserStatus status, UUID followedBy, UUID following, int pageNum, int pageSize);
+    int getUsersQuantity(String query, UserStatus status, UUID followedBy, UUID following);
     float getAvgScore(UUID userId);
 
     Optional<byte[]> getProfilePicture(UUID pictureId);
