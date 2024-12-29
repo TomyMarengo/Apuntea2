@@ -283,13 +283,13 @@ CREATE TABLE IF NOT EXISTS User_Note_Interactions (
 --FINAL
 
 CREATE OR REPLACE VIEW Normalized_Directories AS (
-    SELECT d.directory_id as id, d.directory_name as name, d.parent_id, d.user_id, d.created_at, d.last_modified_at, d.visible
+    SELECT d.directory_id as id, d.directory_name as name, d.parent_id, d.user_id, d.created_at, d.last_modified_at, d.visible, 0.0 as avg_score
     FROM Directories d
 );
 
 CREATE OR REPLACE VIEW Normalized_Notes AS (
-    SELECT n.note_id as id, n.note_name as name, n.parent_id, n.user_id, n.subject_id, n.category, n.created_at, n.last_modified_at, n.visible
-    FROM Notes n
+    SELECT n.note_id as id, n.note_name as name, n.parent_id, n.user_id, n.subject_id, n.category, n.created_at, n.last_modified_at, n.visible, COALESCE(AVG(r.score), 0.0) AS avg_score
+    FROM Notes n LEFT JOIN Reviews r ON n.note_id = r.note_id GROUP BY n.note_id
 );
 
 DROP VIEW IF EXISTS Search;
