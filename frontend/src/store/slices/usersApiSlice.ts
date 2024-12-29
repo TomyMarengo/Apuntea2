@@ -221,7 +221,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       queryFn: async (
         {
           userId,
-          email,
           firstName,
           lastName,
           username,
@@ -236,7 +235,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         baseQuery,
       ) => {
         const data: Record<string, any> = {};
-        let headers: Record<string, string> = {};
 
         if (firstName !== undefined) data.firstName = firstName;
         if (lastName !== undefined) data.lastName = lastName;
@@ -245,7 +243,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
         if (password !== undefined && oldPassword !== undefined) {
           data.password = password;
-          headers['Authorization'] = `Basic ${btoa(`${email}:${oldPassword}`)}`;
+          data.oldPassword = oldPassword;
         }
         if (notificationsEnabled !== undefined) {
           data.notificationsEnabled = notificationsEnabled;
@@ -256,8 +254,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify(data),
           headers: {
-            'Content-Type':
-              'application/vnd.apuntea.user-update-v1.0+json',
+            'Content-Type': 'application/vnd.apuntea.user-update-v1.0+json',
           },
         });
 
