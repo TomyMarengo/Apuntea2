@@ -195,14 +195,14 @@
   "recentNotes": {
     "loading": "Cargando...",
     "errorFetchingNotes": "Error al obtener los apuntes.",
-    "recentNotes": "Apuntes Recientes",
+    "recentNotes": "Apuntes recientes",
     "viewMore": "Ver Más",
     "noRecentNotes": "No se encontraron apuntes recientes."
   },
   "recentReviews": {
     "loading": "Cargando...",
     "errorFetchingReviews": "Error al obtener las reseñas.",
-    "recentReviews": "Reseñas Recientes",
+    "recentReviews": "Reseñas recientes",
     "viewMore": "Ver Más",
     "noRecentReviews": "No se encontraron reseñas recientes."
   },
@@ -212,8 +212,8 @@
     "career": "Carrera",
     "institution": "Institución",
     "notSet": "No Establecido",
-    "enableEmailNotifications": "Habilitar Notificaciones por Email",
-    "disableEmailNotifications": "Deshabilitar Notificaciones por Email"
+    "enableEmailNotifications": "Habilitar notificaciones por email",
+    "disableEmailNotifications": "Deshabilitar notificaciones por email"
   },
   "editProfileDialog": {
     "editProfile": "Editar Perfil",
@@ -248,13 +248,6 @@
     "visible": "Visible",
     "hidden": "Oculto",
     "averageScore": "Puntuación Promedio"
-  },
-  "reviewCard": {
-    "hiddenNote": "Apunte oculto",
-    "score": "Puntuación",
-    "errorLoadingUser": "Error al cargar el usuario.",
-    "errorLoadingNote": "Error al cargar el apunte.",
-    "unknownUser": "Usuario desconocido"
   },
   "adminUsersPage": {
     "searchPlaceholder": "Buscar por correo electrónico o nombre",
@@ -428,5 +421,17 @@
       "notesCount": "{{count}} Apuntes",
       "loadingNotes": "Cargando apuntes..."
     }
+  },
+  "reviewsPage": {
+    "title": "Reseñas",
+    "filterLabel": "Filtrar Reseñas",
+    "filterReceived": "Reseñas Recibidas",
+    "filterGiven": "Reseñas Realizadas",
+    "errorFetching": "Error al cargar las reseñas.",
+    "noReviews": "No hay reseñas para mostrar."
+  },
+  "reviewCard": {
+    "hiddenNote": "Apunte oculto",
+    "you": "Tú"
   }
 }

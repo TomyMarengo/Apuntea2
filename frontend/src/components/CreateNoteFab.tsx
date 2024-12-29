@@ -16,6 +16,7 @@ import {
   Paper,
   ClickAwayListener,
   SelectChangeEvent,
+  CircularProgress,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +34,7 @@ const CreateNoteFab: React.FC = () => {
   const user = useSelector(selectCurrentUser);
   const isLoggedIn = !!user;
 
-  const [createNote] = useCreateNoteMutation();
+  const [createNote, { isLoading }] = useCreateNoteMutation();
 
   const careerId = user?.career?.id;
 
@@ -276,14 +277,18 @@ const CreateNoteFab: React.FC = () => {
                 mt: 1,
               }}
             >
-              <Button
-                variant="contained"
-                size="small"
-                onClick={handleCreate}
-                sx={{ textTransform: 'none' }}
-              >
-                {t('createNoteFab.submit')}
-              </Button>
+              {isLoading ? (
+                <CircularProgress size={30} />
+              ) : (
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={handleCreate}
+                  sx={{ textTransform: 'none' }}
+                >
+                  {t('createNoteFab.submit')}
+                </Button>
+              )}
             </Box>
           </Paper>
         )}

@@ -195,14 +195,14 @@
   "recentNotes": {
     "loading": "Loading...",
     "errorFetchingNotes": "Error fetching notes.",
-    "recentNotes": "Recent Notes",
+    "recentNotes": "Recent notes",
     "viewMore": "View More",
     "noRecentNotes": "No recent notes found."
   },
   "recentReviews": {
     "loading": "Loading...",
     "errorFetchingReviews": "Error fetching reviews.",
-    "recentReviews": "Recent Reviews",
+    "recentReviews": "Recent reviews",
     "viewMore": "View More",
     "noRecentReviews": "No recent reviews found."
   },
@@ -212,8 +212,8 @@
     "career": "Career",
     "institution": "Institution",
     "notSet": "Not Set",
-    "enableEmailNotifications": "Enable Email Notifications",
-    "disableEmailNotifications": "Disable Email Notifications",
+    "enableEmailNotifications": "Enable email notifications",
+    "disableEmailNotifications": "Disable email notifications",
     "updateFailed": "Failed to update profile."
   },
   "editProfileDialog": {
@@ -249,13 +249,6 @@
     "visible": "Visible",
     "hidden": "Hidden",
     "averageScore": "Average Score"
-  },
-  "reviewCard": {
-    "hiddenNote": "Hidden Note",
-    "score": "Score",
-    "errorLoadingUser": "Error loading user.",
-    "errorLoadingNote": "Error loading note.",
-    "unknownUser": "Unknown User"
   },
   "adminUsersPage": {
     "searchPlaceholder": "Search by email or name",
@@ -429,5 +422,17 @@
       "notesCount": "{{count}} Notes",
       "loadingNotes": "Loading notes..."
     }
+  },
+  "reviewsPage": {
+    "title": "Reviews",
+    "filterLabel": "Filter Reviews",
+    "filterReceived": "Reviews Received",
+    "filterGiven": "Reviews Given",
+    "errorFetching": "Error fetching reviews.",
+    "noReviews": "No reviews to display."
+  },
+  "reviewCard": {
+    "hiddenNote": "Hidden Note",
+    "you": "You"
   }
 }

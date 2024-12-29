@@ -83,7 +83,7 @@ const ProfilePage: React.FC = () => {
 
       <Divider sx={{ my: 4 }} />
 
-      <RecentReviews userId={user.id} />
+      <RecentReviews targetId={user.id} />
     </Box>
   );
 };

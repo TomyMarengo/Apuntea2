@@ -9,13 +9,15 @@ import { Review } from '../../types';
 import ReviewCard from '../../components/ReviewCard';
 
 interface RecentReviewsProps {
-  userId?: string;
+  targetId?: string;
 }
 
-const RecentReviews: React.FC<RecentReviewsProps> = ({ userId }) => {
+const RecentReviews: React.FC<RecentReviewsProps> = ({ targetId }) => {
   const { t } = useTranslation();
 
-  const { data, isLoading, error } = useGetReviewsQuery({ userId });
+  const { data, isLoading, error } = useGetReviewsQuery({
+    targetUser: targetId,
+  });
 
   if (isLoading) {
     return (

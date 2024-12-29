@@ -12,6 +12,7 @@ import ProfilePage from '../pages/Profile/ProfilePage';
 import AdminUsersPage from '../pages/Admin/AdminUsersPage';
 import AdminCareersPage from '../pages/Admin/AdminCareersPage';
 import FavoritesPage from '../pages/Favorites/FavoritesPage';
+import ReviewsPage from '../pages/Reviews/ReviewsPage';
 
 export default function AppRouter() {
   return (
@@ -22,6 +23,7 @@ export default function AppRouter() {
       <Route path="/search" element={<SearchPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/favorites" element={<FavoritesPage />} />
+      <Route path="/reviews" element={<ReviewsPage />} />
       <Route path="/notes" element={<NotesPage />} />
       <Route path="/notes/:noteId" element={<NotePage />} />
       <Route

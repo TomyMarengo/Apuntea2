@@ -7,6 +7,7 @@ import { mapApiReview } from '../../utils/mappers';
 interface GetReviewsArgs {
   noteId?: string;
   userId?: string;
+  targetUser?: string;
   url?: string;
   page?: number;
   pageSize?: number;
@@ -51,12 +52,13 @@ interface DeleteReviewArgs {
 export const reviewsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getReviews: builder.query<PaginatedReviews, GetReviewsArgs>({
-      query: ({ noteId, userId, page = 1, pageSize = 10, url }) => {
+      query: ({ noteId, userId, targetUser, page = 1, pageSize = 10, url }) => {
         let queryUrl = url || '/reviews';
         const params = new URLSearchParams();
 
         if (noteId) params.append('noteId', noteId);
         if (userId) params.append('userId', userId);
+        if (targetUser) params.append('targetUser', targetUser);
         params.append('page', String(page));
         params.append('pageSize', String(pageSize));
 

@@ -1,84 +1,97 @@
 // src/components/ReviewCard.tsx
 
 import React from 'react';
-import {
-  Box,
-  Typography,
-  Rating,
-  CircularProgress,
-} from '@mui/material';
+import { Box, Typography, Rating, Avatar, Link } from '@mui/material';
 import { Review } from '../types';
-import { useGetNoteQuery } from '../store/slices/notesApiSlice';
+import { Link as RouterLink } from 'react-router-dom';
 import { useGetUserQuery } from '../store/slices/usersApiSlice';
+import { useGetNoteQuery } from '../store/slices/notesApiSlice';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+
+dayjs.extend(localizedFormat);
 
 interface ReviewCardProps {
   review: Review;
+  showUserLink: boolean; // Determines if the user name should be a link
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ review, showUserLink }) => {
   const { t } = useTranslation();
 
-  const {
-    data: note,
-    isLoading: noteLoading,
-    error: noteError,
-  } = useGetNoteQuery({ url: review.noteUrl });
+  // Fetch user data if needed
+  const { data: userData } = useGetUserQuery(
+    { url: review.userUrl },
+    { skip: !review.userUrl },
+  );
 
-  const {
-    data: user,
-    isLoading: userLoading,
-    error: userError,
-  } = useGetUserQuery({ url: review.userUrl });
+  // Fetch note data if needed
+  const { data: noteData } = useGetNoteQuery(
+    { url: review.noteUrl },
+    { skip: !review.noteUrl },
+  );
+
+  // Format the createdAt date
+  const formattedDate = dayjs(review.createdAt).format('LL'); // Example: December 29, 2024
 
   return (
-    <Box sx={{ mb: 2, boxShadow: 2, borderRadius: 1 }}>
+    <Box
+      sx={{
+        mb: 2,
+        p: 2,
+        border: 1,
+        borderColor: 'divider',
+        borderRadius: 1,
+        backgroundColor: 'background.paper',
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+        <Avatar src={userData?.profilePictureUrl || ''} />
+        {showUserLink ? (
+          <Link
+            component={RouterLink}
+            to={`/users/${review.userId}`}
+            underline="hover"
+          >
+            <Typography variant="subtitle2">
+              {userData?.username || `User ${review.userId}`}
+            </Typography>
+          </Link>
+        ) : (
+          <Typography variant="subtitle2">
+            {t('reviewCard.you')}
+          </Typography>
+        )}
+        <Rating value={review.score} readOnly size="small" />
+      </Box>
+      <Typography variant="body2" sx={{ mb: 1 }}>
+        {review.content}
+      </Typography>
       <Box
         sx={{
-          p: 2,
-          border: 1,
-          borderColor: 'divider',
-          borderRadius: 1,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
-        {/* Header: User name and rating */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="subtitle2">
-            {userLoading ? (
-              <CircularProgress size={16} />
-            ) : userError ? (
-              t('reviewCard.errorLoadingUser')
-            ) : (
-              user?.username || user?.email || t('reviewCard.unknownUser')
-            )}
+        {noteData?.name ? (
+          <Link
+            component={RouterLink}
+            to={`/notes/${review.noteId}`}
+            underline="hover"
+          >
+            <Typography variant="caption" color="primary">
+              {noteData.name}
+            </Typography>
+          </Link>
+        ) : (
+          <Typography variant="caption" color="text.secondary">
+            {t('reviewCard.hiddenNote')}
           </Typography>
-          <Rating value={review.score} readOnly size="small" />
-        </Box>
-
-        {/* Review content */}
-        <Typography variant="body2" sx={{ mt: 1 }}>
-          {review.content}
-        </Typography>
-
-        {/* Note name */}
-        <Typography
-          variant="caption"
-          color="textSecondary"
-          sx={{ mt: 1, display: 'block' }}
-        >
-          {noteLoading ? (
-            <CircularProgress size={14} />
-          ) : noteError ? (
-            t('reviewCard.errorLoadingNote')
-          ) : (
-            note?.name || t('reviewCard.hiddenNote')
-          )}
+        )}
+        <Typography variant="caption" color="text.secondary">
+          {formattedDate}
         </Typography>
       </Box>
     </Box>
