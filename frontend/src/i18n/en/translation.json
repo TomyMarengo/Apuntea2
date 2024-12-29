@@ -384,7 +384,7 @@
   "createNoteFab": {
     "createNote": "Create Note",
     "createNewNote": "Create New Note",
-    "noteName": "Note Name",
+    "noteName": "Name",
     "selectSubject": "Select Subject",
     "category": "Category",
     "visible": "Visible",

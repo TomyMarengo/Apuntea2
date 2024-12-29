@@ -192,6 +192,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
                       }
                     }}
                     aria-label="icon color"
+                    sx={{ gap: 1 }} // Adds spacing between the buttons
                   >
                     {colorOptions.map((color) => (
                       <ToggleButton
@@ -201,12 +202,14 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
                         sx={{
                           width: 40,
                           height: 40,
+                          minWidth: 40, // Ensures consistent sizing
+                          border: 'none', // Removes border when unselected
+                          borderRadius: '50%', // Makes the button circular
                           backgroundColor: color.value,
-                          border:
-                            field.value === color.value
-                              ? '2px solid #000'
-                              : '1px solid #ccc',
-                          '&:hover': {
+                          transition: 'transform 0.2s, border 0.2s', // Smooth transitions
+                          '&.Mui-selected, &.Mui-selected:hover, &:hover': {
+                            transform: 'scale(1.1)', // Slightly enlarges the selected button
+                            border: '2px solid #FFFFFF', // Adds a distinct white border when selected
                             backgroundColor: color.value,
                           },
                         }}

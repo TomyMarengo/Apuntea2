@@ -157,7 +157,7 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
               >
                 {Object.values(NoteCategory).map((c) => (
                   <MenuItem key={c} value={c}>
-                    {c}
+                    {t(`createNoteFab.${c.toLowerCase()}`)}
                   </MenuItem>
                 ))}
               </Select>

@@ -383,7 +383,7 @@
   "createNoteFab": {
     "createNote": "Crear Apunte",
     "createNewNote": "Crear Nuevo Apunte",
-    "noteName": "Nombre del Apunte",
+    "noteName": "Nombre",
     "selectSubject": "Seleccionar Materia",
     "category": "Categoría",
     "visible": "Visible",
