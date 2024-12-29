@@ -52,6 +52,13 @@ function App() {
                 "navbar"
                 "main"
               `,
+          background: `linear-gradient(
+                180deg,
+                var(--gradient-top) 0%,
+                var(--gradient-mid) 42.19%,
+                var(--gradient-bot) 99.99%
+              ) no-repeat fixed`,
+          backgroundBlendMode: 'lighten',
         }}
       >
         {/* Navbar */}
@@ -77,13 +84,6 @@ function App() {
             gridArea: 'main',
             overflow: 'auto',
             position: 'relative',
-            background: `linear-gradient(
-              180deg,
-              var(--gradient-top) 0%,
-              var(--gradient-mid) 42.19%,
-              var(--gradient-bot) 99.99%
-            ) no-repeat fixed`,
-            backgroundBlendMode: 'lighten',
           }}
         >
           <AppRouter />
