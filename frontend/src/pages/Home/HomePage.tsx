@@ -3,11 +3,12 @@ import { Folder, Search, Person } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import { selectCurrentUser } from '../../store/slices/authSlice';
 
 export default function HomePage() {
   const { t } = useTranslation();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const user = useSelector(selectCurrentUser);
+
   const isLoggedIn = !!user;
 
   const cards = [
@@ -60,7 +61,7 @@ export default function HomePage() {
         {isLoggedIn ? (
           <Trans
             i18nKey="homePage.welcomeUser"
-            values={{ username: user.username }}
+            values={{ username: user.username || user.email }}
             components={{
               appName: (
                 <Box
