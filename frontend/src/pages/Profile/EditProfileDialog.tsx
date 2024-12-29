@@ -31,6 +31,7 @@ import {
 } from '../../store/slices/usersApiSlice';
 import { Career, User } from '../../types';
 import { useGetCareersQuery } from '../../store/slices/institutionsApiSlice';
+import { toast } from 'react-toastify';
 
 interface EditProfileDialogProps {
   open: boolean;
@@ -94,9 +95,11 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
     try {
       // Validate if the password is being changed
       if (newPassword && newPassword !== confirmNewPassword) {
-        alert(t('editProfileDialog.passwordsDoNotMatch'));
+        toast.error(t('editProfileDialog.passwordsDoNotMatch'));
         return;
       }
+
+      let passwordChanged = false;
 
       // Update user information
       await updateUser({
@@ -113,6 +116,11 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           }),
       }).unwrap();
 
+      // If a new password was provided and changed successfully, set flag
+      if (newPassword) {
+        passwordChanged = true;
+      }
+
       // Update profile picture if changed
       if (profilePicture) {
         await updatePicture({
@@ -120,15 +128,24 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         }).unwrap();
       }
 
+      // Show appropriate success toast
+      if (passwordChanged) {
+        toast.success(t('editProfileDialog.passwordChangedSuccessfully'));
+      } else {
+        toast.success(t('editProfileDialog.profileUpdatedSuccessfully'));
+      }
+
       onUpdateSuccess(); // Refresh user data
       handleClose();
     } catch (error: any) {
       console.error('Failed to update profile:', error);
-      // Optional: show error messages to the user
-      alert(
-        error.data?.[0]?.message ||
-          t('editProfileDialog.failedToUpdateProfile'),
-      );
+
+      // Show error notifications
+      if (error.data?.[0]?.message) {
+        toast.error(error.data[0].message);
+      } else {
+        toast.error(t('editProfileDialog.failedToUpdateProfile'));
+      }
     }
   };
 

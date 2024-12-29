@@ -1,5 +1,3 @@
-// src/pages/Profile/ProfileCard.tsx
-
 import React, { useState } from 'react';
 import {
   Card,
@@ -13,6 +11,7 @@ import {
 } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify'; // Import toast
 import EditProfileDialog from './EditProfileDialog';
 import { User } from '../../types';
 import { useUpdateUserMutation } from '../../store/slices/usersApiSlice';
@@ -43,9 +42,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
         userId: user.id,
         notificationsEnabled: newValue,
       }).unwrap();
+      toast.success(
+        newValue
+          ? t('profileCard.enableEmailNotifications')
+          : t('profileCard.disableEmailNotifications'),
+      );
       onUpdateSuccess();
     } catch (error) {
-      console.error('Error updating notifications:', error);
+      toast.error(t('profileCard.updateFailed'));
     }
   };
 

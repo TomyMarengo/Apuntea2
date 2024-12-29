@@ -110,7 +110,11 @@
     "youMustSelectInstitution": "Debes seleccionar una institución",
     "youMustSelectCareer": "Debes seleccionar una carrera",
     "passwordsDoNotMatch": "Las contraseñas no coinciden",
-    "alreadyHaveAccount": "¿Ya tienes una cuenta?"
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "toast": {
+      "success": "¡Cuenta creada exitosamente!",
+      "error": "Error al crear la cuenta."
+    }
   },
   "paginationBar": {
     "totalCount": "Mostrando {{from}} a {{to}} de {{totalCount}} resultados"
@@ -229,7 +233,9 @@
     "failedToUpdateProfile": "Error al actualizar el perfil.",
     "cancel": "Cancelar",
     "saving": "Guardando...",
-    "saveChanges": "Guardar Cambios"
+    "saveChanges": "Guardar Cambios",
+    "profileUpdatedSuccessfully": "Perfil actualizado exitosamente.",
+    "passwordChangedSuccessfully": "Contraseña cambiada exitosamente."
   },
   "noteCard": {
     "hiddenNote": "Apunte oculto",
@@ -287,6 +293,16 @@
       },
       "cancel": "Cancelar",
       "confirm": "Confirmar"
+    },
+    "toast": {
+      "ban": {
+        "success": "Usuario baneado exitosamente.",
+        "error": "No se pudo banear al usuario."
+      },
+      "unban": {
+        "success": "Usuario desbaneado exitosamente.",
+        "error": "No se pudo desbanear al usuario."
+      }
     }
   },
   "adminCareersPage": {
@@ -329,7 +345,7 @@
     },
     "toast": {
       "addSubject": {
-        "success": "Materia añadida correctamente a la carrera.",
+        "success": "Materia añadida exitosamente a la carrera.",
         "error": "No se pudo añadir la materia a la carrera."
       },
       "createSubject": {
@@ -348,13 +364,13 @@
         "title": "Editar Materia",
         "nameLabel": "Nombre de la Materia",
         "yearLabel": "Año",
-        "success": "Materia editada correctamente.",
+        "success": "Materia editada exitosamente.",
         "error": "No se pudo editar la materia."
       },
       "unlink": {
         "title": "Desvincular Materia",
         "confirmation": "¿Estás seguro de que deseas desvincular \"{{subjectName}}\" de esta carrera?",
-        "success": "Materia desvinculada correctamente de la carrera.",
+        "success": "Materia desvinculada exitosamente de la carrera.",
         "error": "No se pudo desvincular la materia de la carrera."
       },
       "cancel": "Cancelar",
@@ -394,6 +410,7 @@
     "errorFetching": "Error al obtener favoritos.",
     "noFavorites": "No se encontraron favoritos.",
     "removeFavorite": "Quitar de favoritos",
+    "favorited": "¡Agregado a favoritos exitosamente!",
     "unfavorited": "¡Eliminado de favoritos exitosamente!",
     "errorUnfavorite": "Error al quitar de favoritos.",
     "mustLogin": "Debes iniciar sesión para ver los favoritos."
