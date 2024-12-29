@@ -49,8 +49,50 @@
     "password": "Contraseña",
     "signup": "Registrarse",
     "noAccount": "¿No tienes una cuenta?",
+    "forgotPassword": "Forgot Password",
     "invalidEmail": "Correo electrónico inválido",
     "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
+  },
+  "forgotPasswordPage": {
+    "title": "Olvidé mi contraseña",
+    "emailLabel": "Correo electrónico",
+    "codeLabel": "Código de verificación",
+    "passwordLabel": "Nueva contraseña",
+    "enterEmail": "Ingresa tu correo electrónico",
+    "sendCode": "Enviar código",
+    "emailSent": "Se envió un código a tu correo. Ingresa el código para continuar.",
+    "enterCode": "Ingresa el código recibido",
+    "newPassword": "Ingresa tu nueva contraseña",
+    "updatePassword": "Actualizar contraseña",
+    "emailError": "Hubo un error al enviar el código. Verifica tu correo e inténtalo de nuevo.",
+    "codeError": "El código ingresado no es válido. Por favor, verifica y vuelve a intentarlo.",
+    "passwordUpdated": "¡Contraseña actualizada exitosamente!",
+    "loading": "Cargando...",
+    "errorFetchingUserId": "No se pudo obtener el usuario. Por favor, verifica tu correo.",
+    "submitEmail": "Enviar correo",
+    "newPasswordLabel": "Nueva contraseña",
+    "submitCode": "Enviar código",
+    "validationErrors": {
+      "emailRequired": "El correo electrónico es obligatorio.",
+      "codeRequired": "El código es obligatorio.",
+      "passwordRequired": "La contraseña es obligatoria.",
+      "passwordLength": "La contraseña debe tener al menos 8 caracteres."
+    },
+    "buttons": {
+      "resendCode": "Reenviar código",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar"
+    },
+    "sections": {
+      "emailSection": "Correo electrónico",
+      "codeSection": "Código de verificación",
+      "passwordSection": "Nueva contraseña"
+    },
+    "placeholders": {
+      "email": "Tu correo electrónico",
+      "code": "Tu código",
+      "password": "Tu nueva contraseña"
+    }
   },
   "notePage": {
     "noteNotFound": "Este apunte no existe.",

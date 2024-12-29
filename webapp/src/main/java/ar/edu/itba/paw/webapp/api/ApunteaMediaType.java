@@ -10,6 +10,7 @@ public class ApunteaMediaType {
     public static final String USER_COLLECTION = "application/vnd.apuntea.user-collection-v1.0+json";
     public static final String USER_CREATE = "application/vnd.apuntea.user-create-v1.0+json";
     public static final String USER_UPDATE = "application/vnd.apuntea.user-update-v1.0+json";
+    public static final String USER_PASSWORD_UPDATE = "application/vnd.apuntea.user-password-v1.0+json";
     public static final String PICTURE_UPDATE = "multipart/form-data";
     public static final String INSTITUTION = "application/vnd.apuntea.institution-v1.0+json";
     public static final String INSTITUTION_COLLECTION = "application/vnd.apuntea.institution-collection-v1.0+json";

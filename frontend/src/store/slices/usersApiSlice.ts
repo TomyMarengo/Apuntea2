@@ -352,6 +352,37 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         return { data: result.error === undefined };
       },
     }),
+    requestPasswordChange: builder.mutation<boolean, { email: string }>({
+      query: ({ email }) => ({
+        url: '/users',
+        method: 'POST',
+        body: JSON.stringify({ email }),
+        headers: {
+          'Content-Type':
+            'application/vnd.apuntea.request-password-change-v1.0+json',
+        },
+      }),
+    }),
+    updateUserPassword: builder.mutation<
+      boolean,
+      { userId: string; password: string; email: string; code: string }
+    >({
+      query: ({ userId, password, email, code }) => {
+        const authorization = btoa(`${email}:${code}`); 
+        return {
+          url: `/users/${userId}`,
+          method: 'PATCH',
+          body: JSON.stringify({ password }),
+          headers: {
+            'Content-Type': 'application/vnd.apuntea.user-update-password-v1.0+json',
+            Authorization: `Basic ${authorization}`,
+          },
+        };
+      },
+    }),
+    getUserByEmail: builder.query<User[], string>({ 
+      query: (email) => ({ url: `/users?email=${encodeURIComponent(email)}`}),
+    }),
   }),
 });
 
@@ -369,4 +400,7 @@ export const {
   useIsFollowingUserQuery,
   useUpdateUserStatusMutation,
   useLazyGetUserQuery,
+  useLazyGetUserByEmailQuery,
+  useRequestPasswordChangeMutation,
+  useUpdateUserPasswordMutation,
 } = usersApiSlice;
