@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
-@AttributeDependence(baseField = "oldPassword", dependentField = "password")
+@AttributeDependence(baseField = "password", dependentField = "oldPassword")
 public class UserUpdateDto {
     @Pattern(regexp = RegexUtils.NAME_REGEX)
     @Size(max = 20)
@@ -29,6 +29,9 @@ public class UserUpdateDto {
     @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
     private String password;
 
+
+    @Size(min = 4, max = 50)
+    @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
     @MatchesCurrentUserPassword
     private String oldPassword;
 
