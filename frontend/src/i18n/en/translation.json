@@ -1,4 +1,22 @@
 {
+  "homePage": {
+    "welcome": "Welcome to <appName>Apuntea</appName>",
+    "tagline": "Connect your knowledge, expand your horizons",
+    "cards": {
+      "organizeNotes": {
+        "title": "Organize your notes",
+        "description": "Create folders and organize your notes"
+      },
+      "findNotes": {
+        "title": "Find notes",
+        "description": "Search notes from others, share, download, and review them"
+      },
+      "editProfile": {
+        "title": "Edit your profile",
+        "description": "Change your picture, name, and more"
+      }
+    }
+  },
   "navbar": {
     "appName": "Apuntea",
     "login": "Login",
