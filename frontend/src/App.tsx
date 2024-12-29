@@ -97,8 +97,8 @@ function App() {
           }}
         >
           <AppRouter />
-          {/* Create Note Floating Button (appears on all pages) */}
-          <CreateNoteFab />
+          {/* Create Note Floating Button (appears on all pages if logged in) */}
+          {isLoggedIn && <CreateNoteFab />}
         </Box>
       </Box>
     </ThemeProvider>

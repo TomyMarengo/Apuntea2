@@ -1,12 +1,39 @@
-// src/pages/Home/HomePage.tsx
-
 import { Box, Typography, Card, CardContent, Stack } from '@mui/material';
 import { Folder, Search, Person } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 export default function HomePage() {
   const { t } = useTranslation();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const isLoggedIn = !!user;
+
+  const cards = [
+    {
+      title: t('homePage.cards.organizeNotes.title'),
+      description: t('homePage.cards.organizeNotes.description'),
+      icon: <Folder sx={{ fontSize: 100 }} />,
+      link: isLoggedIn ? '/notes' : '/login',
+    },
+    {
+      title: t('homePage.cards.findNotes.title'),
+      description: t('homePage.cards.findNotes.description'),
+      icon: <Search sx={{ fontSize: 100 }} />,
+      link: '/search',
+    },
+    {
+      title: isLoggedIn
+        ? t('homePage.cards.editProfile.title')
+        : t('homePage.cards.register.title'),
+      description: isLoggedIn
+        ? t('homePage.cards.editProfile.description')
+        : t('homePage.cards.register.description'),
+      icon: <Person sx={{ fontSize: 100 }} />,
+      link: isLoggedIn ? '/profile' : '/register',
+    },
+  ];
 
   return (
     <Box
@@ -26,24 +53,42 @@ export default function HomePage() {
         sx={{
           fontWeight: 'bold',
           color: 'primary.text',
-          fontSize: '5rem',
+          fontSize: isLoggedIn ? '3.5rem' : '5rem',
           marginBottom: 1,
         }}
       >
-        <Trans
-          i18nKey="homePage.welcome"
-          components={{
-            appName: (
-              <Box
-                component="span"
-                sx={{
-                  color: 'primary.main',
-                }}
-              />
-            ),
-          }}
-        />
+        {isLoggedIn ? (
+          <Trans
+            i18nKey="homePage.welcomeUser"
+            values={{ username: user.username }}
+            components={{
+              appName: (
+                <Box
+                  component="span"
+                  sx={{
+                    color: 'primary.main',
+                  }}
+                />
+              ),
+            }}
+          />
+        ) : (
+          <Trans
+            i18nKey="homePage.welcome"
+            components={{
+              appName: (
+                <Box
+                  component="span"
+                  sx={{
+                    color: 'primary.main',
+                  }}
+                />
+              ),
+            }}
+          />
+        )}
       </Typography>
+
       <Typography
         variant="h5"
         gutterBottom
@@ -64,26 +109,7 @@ export default function HomePage() {
         alignItems="center"
         sx={{ maxWidth: '1200px', width: '100%' }}
       >
-        {[
-          {
-            title: t('homePage.cards.organizeNotes.title'),
-            description: t('homePage.cards.organizeNotes.description'),
-            icon: <Folder sx={{ fontSize: 100 }} />,
-            link: '/notes',
-          },
-          {
-            title: t('homePage.cards.findNotes.title'),
-            description: t('homePage.cards.findNotes.description'),
-            icon: <Search sx={{ fontSize: 100 }} />,
-            link: '/search',
-          },
-          {
-            title: t('homePage.cards.editProfile.title'),
-            description: t('homePage.cards.editProfile.description'),
-            icon: <Person sx={{ fontSize: 100 }} />,
-            link: '/profile',
-          },
-        ].map((card, index) => (
+        {cards.map((card, index) => (
           <Box
             key={index}
             sx={{
