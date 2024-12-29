@@ -17,18 +17,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import { Locale } from '../../types';
 
 interface NavbarProps {
-  isDarkMode: boolean;
-  onToggleDarkMode: () => void;
-  locale: Locale;
   isLoggedIn: boolean;
 }
 
-export default function Navbar({
-  isDarkMode,
-  onToggleDarkMode,
-  locale,
-  isLoggedIn,
-}: NavbarProps) {
+export default function Navbar({ isLoggedIn }: NavbarProps) {
   const { t } = useTranslation();
   return (
     <AppBar
@@ -57,8 +49,8 @@ export default function Navbar({
           <IconButton component={Link} to="/search">
             <SearchIcon sx={{ color: 'primary.main' }} />
           </IconButton>
-          <LanguageToggle locale={locale} />
-          <DarkModeToggle isDarkMode={isDarkMode} onToggle={onToggleDarkMode} />
+          <LanguageToggle />
+          <DarkModeToggle />
 
           {isLoggedIn ? (
             <ProfileButton />

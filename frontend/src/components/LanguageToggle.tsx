@@ -1,28 +1,23 @@
-import { useTranslation } from 'react-i18next';
+// src/components/LanguageToggle.tsx
+
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Locale } from '../types';
+import { useDispatch } from 'react-redux';
+import { setLocale } from '../store/slices/languageSlice';
 
-interface LanguageToggleProps {
-  locale: Locale;
-}
-
-export default function LanguageToggle({ locale }: LanguageToggleProps) {
-  const { i18n } = useTranslation();
+export default function LanguageToggle() {
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
-  useEffect(() => {
-    i18n.changeLanguage(locale);
-  }, [locale, i18n]);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (lang?: string) => {
+  const handleClose = (lang?: Locale) => {
     if (lang) {
-      i18n.changeLanguage(lang);
+      dispatch(setLocale(lang));
     }
     setAnchorEl(null);
   };
@@ -37,8 +32,9 @@ export default function LanguageToggle({ locale }: LanguageToggleProps) {
         open={Boolean(anchorEl)}
         onClose={() => handleClose()}
       >
-        <MenuItem onClick={() => handleClose('es')}>Español</MenuItem>
-        <MenuItem onClick={() => handleClose('en')}>English</MenuItem>
+        <MenuItem onClick={() => handleClose('es' as Locale)}>Español</MenuItem>
+        <MenuItem onClick={() => handleClose('en' as Locale)}>English</MenuItem>
+        {/* Agrega más idiomas si es necesario */}
       </Menu>
     </>
   );

@@ -3,52 +3,61 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from './slices/apiSlice';
 import authReducer from './slices/authSlice';
+import languageReducer from './slices/languageSlice';
+import themeReducer from './slices/themeSlice';
 
-// Function to save auth state to localStorage
-function saveAuthStateToLocalStorage(state: any) {
+function saveStateToLocalStorage(key: string, state: any) {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem('authState', serializedState);
+    localStorage.setItem(key, serializedState);
   } catch (e) {
-    console.warn(e);
+    console.warn(`Failed to save ${key} to localStorage:`, e);
   }
 }
 
-// Function to load auth state from localStorage
-function loadAuthStateFromLocalStorage(): any | undefined {
+function loadStateFromLocalStorage(key: string): any | undefined {
   try {
-    const serializedState = localStorage.getItem('authState');
+    const serializedState = localStorage.getItem(key);
     if (serializedState === null) return undefined;
     return JSON.parse(serializedState);
   } catch (e) {
-    console.warn(e);
+    console.warn(`Failed to load ${key} from localStorage:`, e);
     return undefined;
   }
 }
 
-// Middleware function
-const localStorageMiddleware = (store: any) => (next: any) => (action: any) => {
-  const result = next(action);
-  saveAuthStateToLocalStorage(store.getState().auth); // Only save auth state to localStorage
-  return result;
-};
+const createLocalStorageMiddleware =
+  (key: string) => (store: any) => (next: any) => (action: any) => {
+    const result = next(action);
+    const state = store.getState()[key];
+    saveStateToLocalStorage(key, state);
+    return result;
+  };
 
-const preloadedAuthState = loadAuthStateFromLocalStorage(); // Load only auth state from localStorage
+const preloadedLanguageState = loadStateFromLocalStorage('language');
+const preloadedThemeState = loadStateFromLocalStorage('theme');
+const preloadedAuthState = loadStateFromLocalStorage('auth');
 
 const store = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
+    language: languageReducer,
+    theme: themeReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     })
       .concat(apiSlice.middleware)
-      .concat(localStorageMiddleware),
+      .concat(createLocalStorageMiddleware('auth'))
+      .concat(createLocalStorageMiddleware('language'))
+      .concat(createLocalStorageMiddleware('theme')),
   devTools: true,
   preloadedState: {
-    auth: preloadedAuthState, // Provide preloadedState only for auth slice
+    auth: preloadedAuthState,
+    language: preloadedLanguageState,
+    theme: preloadedThemeState,
   },
 });
 

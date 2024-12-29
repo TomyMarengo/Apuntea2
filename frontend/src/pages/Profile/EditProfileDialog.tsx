@@ -105,8 +105,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         lastName,
         username,
         email,
-        careerId: careerId || undefined, // Avoid sending empty string
-        // Only send new passwords if provided
+        careerId: careerId || undefined,
         ...(newPassword &&
           currentPassword && {
             password: newPassword,

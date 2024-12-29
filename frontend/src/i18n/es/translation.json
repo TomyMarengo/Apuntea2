@@ -1,19 +1,19 @@
 {
   "homePage": {
-    "welcome": "Welcome to <appName>Apuntea</appName>",
-    "tagline": "Connect your knowledge, expand your horizons",
+    "welcome": "Bienvenido a <appName>Apuntea</appName>",
+    "tagline": "Conecta tu conocimiento, expande tus horizontes",
     "cards": {
       "organizeNotes": {
-        "title": "Organize your notes",
-        "description": "Create folders and organize your notes"
+        "title": "Organiza tus apuntes",
+        "description": "Crea carpetas y organiza tus apuntes"
       },
       "findNotes": {
-        "title": "Find notes",
-        "description": "Search notes from others, share, download, and review them"
+        "title": "Encuentra apuntes",
+        "description": "Busca apuntes de otros, compártelos, descárgalos y revísalos"
       },
       "editProfile": {
-        "title": "Edit your profile",
-        "description": "Change your picture, name, and more"
+        "title": "Edita tu perfil",
+        "description": "Cambia tu foto, nombre y más"
       }
     }
   },

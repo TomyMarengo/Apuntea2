@@ -2,11 +2,9 @@
 
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
-
-interface DarkModeToggleProps {
-  isDarkMode: boolean;
-  onToggle: () => void;
-}
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store/store';
+import { toggleDarkMode } from '../store/slices/themeSlice';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -67,9 +65,13 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function DarkModeToggle({
-  isDarkMode,
-  onToggle,
-}: DarkModeToggleProps) {
-  return <MaterialUISwitch checked={isDarkMode} onChange={onToggle} />;
+export default function DarkModeToggle() {
+  const dispatch = useDispatch();
+  const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
+
+  const handleToggle = () => {
+    dispatch(toggleDarkMode());
+  };
+
+  return <MaterialUISwitch checked={isDarkMode} onChange={handleToggle} />;
 }
