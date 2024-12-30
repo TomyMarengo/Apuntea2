@@ -210,25 +210,29 @@ public class DirectoryJpaDao implements DirectoryDao {
     }
 
     @Override
-    public List<Directory> navigate(SearchArguments sa, boolean isRdir) {
+    public List<Directory> navigate(SearchArguments sa, Boolean isRdir) {
         SortArguments sortArgs = sa.getSortArguments();
 
         DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT DISTINCT CAST(id as VARCHAR(36)) as id, ")
                 .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Directories t ")
                 .appendIfPresent(sa.getFavBy(), "INNER JOIN Directory_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
-                .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
+                .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");//u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
+        if (isRdir != null)
+            queryCreator.append("u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
         queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
         sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));
         return getSearchResults(queryCreator, sa);
     }
 
     @Override
-    public int countNavigationResults(SearchArguments sa, boolean isRdir) {
+    public int countNavigationResults(SearchArguments sa, Boolean isRdir) {
         DaoUtils.QueryCreator queryCreator = new DaoUtils.QueryCreator("SELECT COUNT(DISTINCT CAST(id as VARCHAR(36))) ")
                 .append(" FROM Normalized_Directories t ")
                 .appendIfPresent(sa.getFavBy(), "INNER JOIN Directory_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
-                .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
+                .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");
+        if (isRdir != null)
+            queryCreator.append("u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
         queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
         sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));
 

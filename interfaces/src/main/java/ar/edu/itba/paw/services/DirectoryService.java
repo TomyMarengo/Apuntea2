@@ -21,6 +21,6 @@ public interface DirectoryService {
     boolean isFavorite(UUID directoryId);
     boolean addFavorite(UUID directoryId);
     boolean removeFavorite(UUID directoryId);
-    Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, UUID institutionId, UUID careerId, UUID subjectId, boolean isRdir, String sortBy, boolean ascending, int page, int pageSize);
+    Page<Directory> getDirectories(UUID parentId, UUID userId, UUID favBy, String word, UUID institutionId, UUID careerId, UUID subjectId, Boolean isRdir, String sortBy, boolean ascending, int page, int pageSize);
 }
 

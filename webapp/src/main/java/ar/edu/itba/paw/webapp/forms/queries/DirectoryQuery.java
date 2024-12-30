@@ -12,7 +12,7 @@ public class DirectoryQuery extends SearchableQuery {
     private String sortBy = "modified";
 
     @QueryParam("rdir")
-    private boolean rdir = false;
+    private Boolean rdir = null;
 
     public DirectoryQuery() {
     }
@@ -25,11 +25,11 @@ public class DirectoryQuery extends SearchableQuery {
         this.sortBy = sortBy;
     }
 
-    public boolean isRdir() {
+    public Boolean isRdir() {
         return rdir;
     }
 
-    public void setRdir(boolean rdir) {
+    public void setRdir(Boolean rdir) {
         this.rdir = rdir;
     }
 }

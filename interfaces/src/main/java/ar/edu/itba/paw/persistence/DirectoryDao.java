@@ -35,14 +35,12 @@ public interface DirectoryDao {
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds);
 
-    //void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId);
-
     void loadRootDirsFileQuantity(List<UUID> directoryIds, UUID userToFilterId, UUID currentUserId);
 
     List<Directory> search(SearchArguments sa);
-    List<Directory> navigate(SearchArguments sa, boolean isRdir);
+    List<Directory> navigate(SearchArguments sa, Boolean isRdir);
 
     int countSearchResults(SearchArguments sa);
-    int countNavigationResults(SearchArguments sa, boolean isRdir);
+    int countNavigationResults(SearchArguments sa, Boolean isRdir);
 }
 
