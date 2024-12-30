@@ -18,8 +18,8 @@ interface CreateDirectoryArgs {
 }
 
 interface UpdateDirectoryArgs {
+  directoryId?: string;
   name?: string;
-  parentId?: string;
   visible?: boolean;
   iconColor?: string;
   url?: string;
@@ -82,26 +82,33 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
     }),
     updateDirectory: builder.mutation<boolean, UpdateDirectoryArgs>({
       queryFn: async (
-        { name, parentId, visible, iconColor, url },
+        { directoryId, name, visible, iconColor, url },
         _api,
         _extraOptions,
         baseQuery,
       ) => {
         const body: any = {};
         if (name !== undefined) body.name = name;
-        if (parentId !== undefined) body.parentId = parentId;
         if (visible !== undefined) body.visible = visible;
-        if (iconColor !== undefined) body.iconColor = iconColor;
+        if (iconColor !== undefined && iconColor.startsWith('#'))
+          body.iconColor = iconColor.slice(1);
 
         const result = await baseQuery({
-          url: url || `/directories/${parentId}`,
+          url: url || `/directories/${directoryId}`,
           method: 'PATCH',
-          body,
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type':
+              'application/vnd.apuntea.directory-update-v1.0+json',
+          },
         });
-        return { data: result.error === undefined };
+        return result.error ? { error: result.error } : { data: true };
       },
-      invalidatesTags: ['Directories'],
+      invalidatesTags: (result, error, { directoryId }) => [
+        { type: 'Directories', id: directoryId },
+      ],
     }),
+
     deleteDirectory: builder.mutation<boolean, DeleteDirectoryArgs>({
       queryFn: async (
         { directoryId, reason, url },

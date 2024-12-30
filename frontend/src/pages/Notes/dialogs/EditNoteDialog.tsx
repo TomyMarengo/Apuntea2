@@ -100,7 +100,7 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
           >
             {Object.values(NoteCategory).map((cat) => (
               <MenuItem key={cat} value={cat}>
-                {t(`categories.${cat}`)}
+                {t(`categories.${cat.toLowerCase()}`)}
               </MenuItem>
             ))}
           </Select>

@@ -34,8 +34,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LinkIcon from '@mui/icons-material/Link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Delete from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import DeleteDirectoryDialog from '../../pages/Directories/dialogs/DeleteDirectoryDialog';
 import { Column } from '../../types';
+import EditDirectoryDialog from '../../pages/Directories/dialogs/EditDirectoryDialog';
 
 export const ColumnDirectory: Column[] = [
   { id: 'name', label: 'name' },
@@ -145,6 +147,17 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
     setOpenDeleteModal(false);
   };
 
+  // Edit directory dialog state
+  const [openEdit, setOpenEditModal] = useState(false);
+
+  const handleEditClick = () => {
+    setOpenEditModal(true);
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEditModal(false);
+  };
+
   // Menu action handlers
   const handleOwnerNotes = () => {
     const ownerId = directory.ownerUrl?.split('/').pop();
@@ -249,6 +262,15 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
               </span>
             </Tooltip>
 
+            {/* Edit Button */}
+            {(isAdmin || isOwner) && (
+              <Tooltip title={t('rowDirectory.edit')}>
+                <IconButton onClick={handleEditClick} size="small">
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+
             {/* Copy Link Button */}
             <Tooltip title={t('copyLink')}>
               <IconButton onClick={handleCopyLinkClick} size="small">
@@ -305,6 +327,13 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
         onClose={handleCloseDelete}
         directory={directory}
         shouldShowReason={isAdmin && !isOwner}
+      />
+
+      {/* Edit Directory Dialog */}
+      <EditDirectoryDialog
+        open={openEdit}
+        onClose={handleCloseEdit}
+        directory={directory}
       />
     </TableRow>
   );

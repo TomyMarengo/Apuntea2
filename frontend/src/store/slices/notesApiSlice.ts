@@ -65,7 +65,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         return mapApiNote(response);
       },
       providesTags: (result, error, { noteId }) => [
-        { type: 'Note', id: noteId },
+        { type: 'Notes', id: noteId },
       ],
     }),
     getNoteFile: builder.query<Blob, NoteFileArgs>({
@@ -123,7 +123,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         return { data: result.error === undefined };
       },
       invalidatesTags: (result, error, { noteId }) => [
-        { type: 'Note', id: noteId },
+        { type: 'Notes', id: noteId },
       ],
     }),
     deleteNote: builder.mutation<boolean, DeleteNoteArgs>({
