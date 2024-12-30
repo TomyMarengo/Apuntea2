@@ -220,6 +220,7 @@ export const {
   useUpdateDirectoryMutation,
   useDeleteDirectoryMutation,
   useGetDirectoryQuery,
+  useLazyGetDirectoryQuery,
   useGetUserDirectoriesFavoritesQuery,
   useGetIsFavoriteDirectoryQuery,
   useAddFavoriteDirectoryMutation,

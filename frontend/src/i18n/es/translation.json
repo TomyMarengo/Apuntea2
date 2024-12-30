@@ -35,12 +35,16 @@
     },
     "logout": "Cerrar Sesión"
   },
-  "parentDirectoryPage": {
+  "directoryPage": {
     "errorFetchingDirectory": "Error al obtener el directorio",
     "title": "Directorio Padre",
     "description": "Descripción del directorio padre.",
     "search": {
       "noContent": "No se encontró contenido."
+    },
+    "breadcrumb": {
+      "parent": "Directorio Padre",
+      "isRoot": "Este es el directorio raíz."
     }
   },
   "loginPage": {

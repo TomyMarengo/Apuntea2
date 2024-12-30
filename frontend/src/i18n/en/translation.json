@@ -35,12 +35,16 @@
     },
     "logout": "Logout"
   },
-  "parentDirectoryPage": {
+  "directoryPage": {
     "errorFetchingDirectory": "Error fetching directory",
     "title": "Parent Directory",
     "description": "Description of the parent directory.",
     "search": {
       "noContent": "No content found."
+    },
+    "breadcrumb": {
+      "parent": "Parent Directory",
+      "isRoot": "Root Directory"
     }
   },
   "loginPage": {

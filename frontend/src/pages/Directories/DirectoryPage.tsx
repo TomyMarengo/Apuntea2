@@ -1,7 +1,7 @@
-// src/pages/Directories/ParentDirectoryPage.tsx
+// src/pages/Directories/DirectoryPage.tsx
 
-import { useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams, Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../store/slices/authSlice';
 import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
@@ -12,57 +12,59 @@ import {
   CircularProgress,
   Alert,
   Link as MuiLink,
+  Breadcrumbs,
+  IconButton,
+  Menu,
+  MenuItem,
 } from '@mui/material';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useTranslation } from 'react-i18next';
 import SearchForm from '../Search/SearchForm';
 import SearchResultsTable from '../Search/SearchResultsTable';
 import PaginationBar from '../../components/PaginationBar';
 import useSearch from '../../hooks/useSearch';
-import { useNavigate } from 'react-router-dom';
 import CreateNoteFab from '../../components/CreateNoteFab';
 import CreateDirectoryFab from '../../components/CreateDirectoryFab';
+import useDirectoryBreadcrumb from '../../hooks/useDirectoryBreadcrumb';
+import { Directory } from '../../types';
 
 export default function DirectoryPage() {
-  const { directoryId } = useParams();
+  const { directoryId } = useParams<{ directoryId: string }>();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
 
+  // Fetch the current directory
   const {
-    data: directory,
-    isLoading,
-    isError,
+    data: currentDirectory,
+    isLoading: isLoadingCurrentDirectory,
+    isError: isErrorCurrentDirectory,
   } = useGetDirectoryQuery({ directoryId }, { skip: !directoryId });
 
+  // Use the custom breadcrumb hook
+  const {
+    breadcrumb,
+    loading: isBreadcrumbLoading,
+    error: isBreadcrumbError,
+  } = useDirectoryBreadcrumb({
+    currentDirectory: currentDirectory as Directory,
+  });
+
+  const ownerUrl = currentDirectory?.ownerUrl || '';
   const {
     data: ownerData,
     isLoading: isLoadingOwner,
     isError: isErrorOwner,
-  } = useGetUserQuery(
-    { url: directory?.ownerUrl },
-    { skip: !directory?.ownerUrl },
-  );
-
-  const skipParent = !directory?.parentUrl;
-  const {
-    data: fetchedParentDirectory,
-    isLoading: isLoadingParent,
-    isError: isErrorParent,
-  } = useGetDirectoryQuery(
-    {
-      url: directory?.parentUrl,
-    },
-    { skip: skipParent, refetchOnMountOrArgChange: true },
-  );
-  const parentDirectory = skipParent ? undefined : fetchedParentDirectory;
+  } = useGetUserQuery({ url: ownerUrl }, { skip: !ownerUrl });
 
   useEffect(() => {
     if (directoryId) {
-      const newParams = new URLSearchParams(searchParams);
+      const newParams = new URLSearchParams(window.location.search);
       newParams.set('parentId', directoryId);
       navigate({ search: newParams.toString() }, { replace: true });
     }
-  }, [directoryId]);
+  }, [directoryId, navigate]);
 
   // Use useSearch with parentId
   const {
@@ -114,7 +116,21 @@ export default function DirectoryPage() {
     navigate({ search: newParams.toString() }, { replace: true });
   };
 
-  if (isLoading || isLoadingData || isLoadingParent) {
+  // Breadcrumb state for menu
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  if (
+    isLoadingCurrentDirectory ||
+    isBreadcrumbLoading ||
+    isLoadingData ||
+    isLoadingOwner
+  ) {
     return (
       <Box display="flex" justifyContent="center" mt={5}>
         <CircularProgress />
@@ -122,11 +138,16 @@ export default function DirectoryPage() {
     );
   }
 
-  if (isError || isErrorParent || !directory) {
+  if (
+    isErrorCurrentDirectory ||
+    isBreadcrumbError ||
+    isErrorOwner ||
+    !currentDirectory
+  ) {
     return (
       <Box display="flex" justifyContent="center" mt={5}>
         <Alert severity="error">
-          {t('parentDirectoryPage.errorFetchingDirectory')}
+          {t('directoryPage.errorFetchingDirectory')}
         </Alert>
       </Box>
     );
@@ -134,20 +155,107 @@ export default function DirectoryPage() {
 
   return (
     <Box sx={{ p: 2, maxWidth: 1200, margin: '0 auto' }}>
+      {/* Current Directory Name */}
       <Typography variant="h4" sx={{ mb: 3 }}>
-        {directory.name}
+        {currentDirectory.name}
       </Typography>
-      {parentDirectory && (
-        <Box mt={2}>
-          <MuiLink
-            component={Link}
-            to={`/directories/${parentDirectory.id}`}
-            underline="hover"
+
+      {/* Breadcrumb */}
+      <Box mb={3}>
+        {breadcrumb.length == 0 && (
+          <Typography color="text.primary">
+            {t('directoryPage.breadcrumb.isRoot')}
+          </Typography>
+        )}
+        {breadcrumb.length == 1 && (
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
+            sx={{ display: 'flex', alignItems: 'center' }}
           >
-            {parentDirectory.name}
-          </MuiLink>
-        </Box>
-      )}
+            {/* Root Ancestor */}
+            <MuiLink
+              component={RouterLink}
+              to={`/directories/${breadcrumb[0].id}`}
+              underline="hover"
+              color="inherit"
+            >
+              {breadcrumb[0].name}
+            </MuiLink>
+
+            {/* Current Directory Name as Typography */}
+            <Typography color="text.primary">
+              {currentDirectory.name}
+            </Typography>
+          </Breadcrumbs>
+        )}
+        {breadcrumb.length > 1 && (
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
+            {/* Root Ancestor */}
+            <MuiLink
+              component={RouterLink}
+              to={`/directories/${breadcrumb[0].id}`}
+              underline="hover"
+              color="inherit"
+            >
+              {breadcrumb[0].name}
+            </MuiLink>
+
+            {/* Ellipsis */}
+            {breadcrumb.length !== 2 && (
+              <>
+                <IconButton
+                  size="small"
+                  onClick={handleMenuOpen}
+                  aria-controls={anchorEl ? 'breadcrumb-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={anchorEl ? 'true' : undefined}
+                >
+                  <MoreHorizIcon />
+                </IconButton>
+
+                <Menu
+                  id="breadcrumb-menu"
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                >
+                  {breadcrumb.slice(1, -1).map((dir) => (
+                    <MenuItem
+                      key={dir.id}
+                      onClick={() => {
+                        navigate(`/directories/${dir.id}`);
+                        handleMenuClose();
+                      }}
+                    >
+                      {dir.name}
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+            )}
+
+            {/* Immediate Parent */}
+            <MuiLink
+              component={RouterLink}
+              to={`/directories/${breadcrumb[breadcrumb.length - 1].id}`}
+              underline="hover"
+              color="inherit"
+            >
+              {breadcrumb[breadcrumb.length - 1].name}
+            </MuiLink>
+
+            {/* Current Directory Name as Typography */}
+            <Typography color="text.primary">
+              {currentDirectory.name}
+            </Typography>
+          </Breadcrumbs>
+        )}
+      </Box>
 
       {/* Search Component */}
       <SearchForm
@@ -168,7 +276,7 @@ export default function DirectoryPage() {
           {(showNotes && notes.length === 0) ||
           (showDirectories && directories.length === 0) ? (
             <Typography variant="body1" sx={{ mt: 4, textAlign: 'center' }}>
-              {t('parentDirectoryPage.search.noContent')}
+              {t('directoryPage.search.noContent')}
             </Typography>
           ) : (
             <SearchResultsTable
@@ -190,9 +298,11 @@ export default function DirectoryPage() {
           )}
         </>
       )}
+
+      {/* FAB Buttons */}
       {directoryId &&
         user &&
-        (ownerData?.id === user.id || !directory.parentUrl) && (
+        (ownerData?.id === user.id || !currentDirectory.parentUrl) && (
           <Box
             sx={{
               display: 'flex',
