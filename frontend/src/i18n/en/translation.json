@@ -559,7 +559,10 @@
     "hiddenNote": "Hidden note"
   },
   "userPage": {
-    "userNotFound": "User not found."
+    "title": "Apuntea | @{{username}}",
+    "userNotFound": "User not found.",
+    "errorFetchingUser": "Error fetching user data.",
+    "loading": "Loading..."
   },
   "userNotes": {
     "mustHaveCareerInstitution": "You must have a career and institution set to view your notes.",

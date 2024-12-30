@@ -29,7 +29,6 @@ interface SearchArgs {
   pageSize?: string | number;
   parentId?: string;
   userId?: string;
-  rdir?: string;
   url?: string;
 }
 
@@ -126,7 +125,6 @@ export const searchApiSlice = apiSlice.injectEndpoints({
         pageSize,
         parentId,
         userId,
-        rdir,
         url,
       }) => {
         const queryParams: Record<string, any> = {
@@ -139,7 +137,6 @@ export const searchApiSlice = apiSlice.injectEndpoints({
           sortBy,
           pageSize,
           parentId,
-          rdir,
           userId,
         };
 
@@ -166,6 +163,7 @@ export const searchApiSlice = apiSlice.injectEndpoints({
         if (filteredParams.sortBy === 'score') {
           filteredParams.sortBy = 'modified';
         }
+        filteredParams.rdir = 'false';
 
         const queryString = new URLSearchParams(filteredParams).toString();
         return url || `/directories?${queryString}`;

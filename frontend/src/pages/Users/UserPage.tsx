@@ -14,6 +14,7 @@ import UserProfileCard from './UserProfileCard';
 import UserNotes from './UserNotes';
 import { useTranslation } from 'react-i18next';
 import { User } from '../../types';
+import { Helmet } from 'react-helmet-async';
 
 const UserPage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -57,40 +58,52 @@ const UserPage: React.FC = () => {
     institution: institutionData,
   } as User;
 
+  let pageTitle = t('userPage.title', { username: targetUser?.username || '' });
   if (isLoading) {
-    return (
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" color="error">
-          {`Error fetching user: ${error}`}
-        </Typography>
-      </Box>
-    );
-  }
-
-  if (!targetUser) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6">{t('userPage.userNotFound')}</Typography>
-      </Box>
-    );
+    pageTitle = t('userPage.loading');
+  } else if (isError) {
+    pageTitle = t('userPage.errorFetchingUser', { error: String(error) });
+  } else if (!targetUser) {
+    pageTitle = t('userPage.userNotFound');
   }
 
   return (
-    <Box sx={{ p: 2 }}>
-      {/* User Profile */}
-      <UserProfileCard user={targetUserWithDetails} />
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Box sx={{ p: 2 }}>
+        {/* Loading State */}
+        {isLoading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>
+        )}
 
-      {/* User Notes */}
-      <UserNotes user={targetUserWithDetails} />
-    </Box>
+        {/* Error State */}
+        {isError && (
+          <Typography variant="h6" color="error">
+            {t('userPage.errorFetching', { error: String(error) })}
+          </Typography>
+        )}
+
+        {/* User Not Found */}
+        {!isLoading && !isError && !targetUser && (
+          <Typography variant="h6">{t('userPage.userNotFound')}</Typography>
+        )}
+
+        {/* Main Content */}
+        {!isLoading && !isError && targetUser && (
+          <>
+            {/* User Profile */}
+            <UserProfileCard user={targetUserWithDetails} />
+
+            {/* User Notes */}
+            <UserNotes user={targetUserWithDetails} />
+          </>
+        )}
+      </Box>
+    </>
   );
 };
 

@@ -557,7 +557,10 @@
     }
   },
   "userPage": {
-    "userNotFound": "Usuario no encontrado."
+    "title": "Apuntea | @{{username}}",
+    "userNotFound": "Usuario no encontrado.",
+    "errorFetchingUser": "Error al obtener el usuario.",
+    "loading": "Cargando..."
   },
   "userNotes": {
     "mustHaveCareerInstitution": "Debes tener una carrera e institución para ver tus apuntes.",

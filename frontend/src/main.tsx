@@ -1,3 +1,5 @@
+// src/main.tsx
+
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -8,14 +10,17 @@ import App from './App.tsx';
 import './i18n';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { HelmetProvider } from 'react-helmet-async';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Provider store={store}>
-      <BrowserRouter basename="/paw-2023b-12">
-        <App />
-        <ToastContainer />
-      </BrowserRouter>
-    </Provider>
+    <HelmetProvider>
+      <Provider store={store}>
+        <BrowserRouter basename="/paw-2023b-12">
+          <App />
+          <ToastContainer />
+        </BrowserRouter>
+      </Provider>
+    </HelmetProvider>
   </StrictMode>,
 );

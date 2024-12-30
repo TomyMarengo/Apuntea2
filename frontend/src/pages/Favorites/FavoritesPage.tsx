@@ -47,7 +47,7 @@ export default function FavoritesPage() {
 
   // Query args
   const notesQueryArgs = { userId, page, pageSize };
-  const dirsQueryArgs = { userId, page, pageSize };
+  const dirsQueryArgs = { userId, page, pageSize, rdir: 'false' };
   const subjectsQueryArgs = { userId, page, pageSize, rdir: 'true' };
 
   // Favorite notes
