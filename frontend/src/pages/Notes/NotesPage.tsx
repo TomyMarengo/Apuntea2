@@ -179,7 +179,7 @@ export default function NotesPage() {
       </Typography>
 
       {/* Row with Year Buttons */}
-      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
         {uniqueYears.length === 0 ? (
           <Typography variant="body1">{t('notesPage.noSubjects')}</Typography>
         ) : (

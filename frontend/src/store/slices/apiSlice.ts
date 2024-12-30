@@ -83,6 +83,7 @@ export const apiSlice = createApi({
     'Directories',
     'User',
     'Users',
+    'Followers',
     'ProfilePicture',
     'Review',
     'Reviews',

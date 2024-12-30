@@ -1,4 +1,4 @@
-// store/slices/usersApiSlice.ts
+// src/store/slices/usersApiSlice.ts
 
 import { apiSlice } from './apiSlice';
 import { User, Career, Institution, UserStatus } from '../../types';
@@ -6,7 +6,10 @@ import { setCurrentUser } from './authSlice';
 import { mapApiUser } from '../../utils/mappers';
 
 interface GetUsersArgs {
+  url?: string;
   query?: string;
+  followedBy?: string;
+  following?: string;
   status?: UserStatus;
   page?: number;
   pageSize?: number;
@@ -86,7 +89,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       GetUsersArgs
     >({
-      query: ({ query, status, page = 1, pageSize = 10 }) => {
+      query: ({ url, query, status, page = 1, pageSize = 10 }) => {
+        if (url) return url;
+
         const params = new URLSearchParams();
         if (query) params.append('query', query);
         if (status) params.append('status', status.toLowerCase());
@@ -157,29 +162,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             }
           }
 
-          // Combine data into a single user object
+          // Map user data and then add career and institution fields
+          const mappedUser = mapApiUser(userData);
           const user: User = {
-            id: userData.id,
-            email: userData.email,
-            firstName: userData.firstName,
-            lastName: userData.lastName,
-            username: userData.username,
-            locale: userData.locale,
-            status: userData.status,
-            notificationsEnabled: userData.notificationsEnabled,
-            profilePictureUrl: userData.profilePicture || '',
-            selfUrl: userData.self,
-            subjectFavoritesUrl: userData.subjectFavorites,
-            noteFavoritesUrl: userData.noteFavorites,
-            subjectsUrl: userData.subjects,
-            reviewsReceivedUrl: userData.reviewsReceived,
-            directoryFavoritesUrl: userData.directoryFavorites,
-            followingUrl: userData.following,
-            careerUrl: userData.career,
-            institutionUrl: userData.institution,
+            ...mappedUser,
             career: careerData,
             institution: institutionData,
-            // Add other fields as necessary
           };
 
           queryApi.dispatch(setCurrentUser(user));
@@ -316,6 +304,76 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['Users'],
     }),
+    getFollowers: builder.query<
+      {
+        users: User[];
+        totalCount: number;
+        totalPages: number;
+      },
+      GetUsersArgs
+    >({
+      query: ({ url, page = 1, pageSize = 10 }) => {
+        if (url) return url;
+
+        const params = new URLSearchParams();
+        params.append('page', String(page));
+        params.append('pageSize', String(pageSize));
+
+        return `/users?${params.toString()}`;
+      },
+      transformResponse: (response: any, meta: any) => {
+        const totalCount = Number(
+          meta.response.headers.get('X-Total-Count') || '0',
+        );
+        const totalPages = Number(
+          meta.response.headers.get('X-Total-Pages') || '0',
+        );
+        const users: User[] = Array.isArray(response)
+          ? response.map(mapApiUser)
+          : [];
+
+        return {
+          users,
+          totalCount,
+          totalPages,
+        };
+      },
+    }),
+    getFollowings: builder.query<
+      {
+        users: User[];
+        totalCount: number;
+        totalPages: number;
+      },
+      GetUsersArgs
+    >({
+      query: ({ url, page = 1, pageSize = 10 }) => {
+        if (url) return url;
+
+        const params = new URLSearchParams();
+        params.append('page', String(page));
+        params.append('pageSize', String(pageSize));
+
+        return `/users?${params.toString()}`;
+      },
+      transformResponse: (response: any, meta: any) => {
+        const totalCount = Number(
+          meta.response.headers.get('X-Total-Count') || '0',
+        );
+        const totalPages = Number(
+          meta.response.headers.get('X-Total-Pages') || '0',
+        );
+        const users: User[] = Array.isArray(response)
+          ? response.map(mapApiUser)
+          : [];
+
+        return {
+          users,
+          totalCount,
+          totalPages,
+        };
+      },
+    }),
     followUser: builder.mutation<boolean, FollowUserArgs>({
       queryFn: async ({ userId, url }, _api, _extraOptions, baseQuery) => {
         const result = await baseQuery({
@@ -325,7 +383,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         return { data: result.error === undefined };
       },
       invalidatesTags: (_result, _error, { userId }) => [
-        { type: 'Users', id: userId },
+        { type: 'Followers', id: userId },
       ],
     }),
     unfollowUser: builder.mutation<boolean, UnfollowUserArgs>({
@@ -343,7 +401,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         return { data: result.error === undefined };
       },
       invalidatesTags: (_result, _error, { userId }) => [
-        { type: 'Users', id: userId },
+        { type: 'Followers', id: userId },
       ],
     }),
     isFollowingUser: builder.query<boolean, IsFollowingUser>({
@@ -358,6 +416,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         });
         return { data: result.error === undefined };
       },
+      providesTags: (_result, _error, { userId }) => [
+        { type: 'Followers', id: userId },
+      ],
     }),
     requestPasswordChange: builder.mutation<boolean, { email: string }>({
       query: ({ email }) => ({
@@ -414,6 +475,8 @@ export const {
   useUpdatePictureMutation,
   useUpdateUserMutation,
   useCreateUserMutation,
+  useGetFollowersQuery,
+  useGetFollowingsQuery,
   useFollowUserMutation,
   useUnfollowUserMutation,
   useIsFollowingUserQuery,

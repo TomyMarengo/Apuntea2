@@ -249,13 +249,32 @@
     "noRecentReviews": "No se encontraron reseñas recientes."
   },
   "profileCard": {
-    "username": "Nombre de Usuario",
-    "email": "Correo Electrónico",
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
     "career": "Carrera",
     "institution": "Institución",
-    "notSet": "No Establecido",
-    "enableEmailNotifications": "Habilitar notificaciones por email",
-    "disableEmailNotifications": "Deshabilitar notificaciones por email"
+    "notSet": "No establecido",
+    "enableEmailNotifications": "Habilitar notificaciones por correo",
+    "disableEmailNotifications": "Deshabilitar notificaciones por correo",
+    "updateFailed": "Actualización fallida",
+    "followers": "Seguidores",
+    "following": "Siguiendo"
+  },
+  "follow": {
+    "follow": "Seguir",
+    "unfollow": "Dejar de seguir",
+    "followers": "Seguidores",
+    "following": "Siguiendo",
+    "noFollowers": "No tiene seguidores",
+    "noFollowing": "No sigue a nadie",
+    "errorLoadingFollowers": "Error al cargar seguidores.",
+    "errorLoadingFollowing": "Error al cargar seguidos.",
+    "errorLoadingUser": "Error al cargar usuario.",
+    "successFollow": "Usuario seguido exitosamente.",
+    "errorFollow": "Error al seguir usuario.",
+    "successUnfollow": "Usuario dejado de seguir exitosamente.",
+    "errorUnfollow": "Error al dejar de seguir usuario.",
+    "loading": "Cargando..."
   },
   "editProfileDialog": {
     "editProfile": "Editar Perfil",

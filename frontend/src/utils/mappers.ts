@@ -31,6 +31,7 @@ export const mapApiUser = (apiUser: any): User => {
     subjectsUrl: apiUser.subjects,
     reviewsReceivedUrl: apiUser.reviewsReceived,
     directoryFavoritesUrl: apiUser.directoryFavorites,
+    followedByUrl: apiUser.followedBy,
     followingUrl: apiUser.following,
     profilePictureUrl: apiUser.profilePicture,
   };

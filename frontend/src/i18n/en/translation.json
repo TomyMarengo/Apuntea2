@@ -253,10 +253,28 @@
     "email": "Email",
     "career": "Career",
     "institution": "Institution",
-    "notSet": "Not Set",
-    "enableEmailNotifications": "Enable email notifications",
-    "disableEmailNotifications": "Disable email notifications",
-    "updateFailed": "Failed to update profile."
+    "notSet": "Not set",
+    "enableEmailNotifications": "Enable Email Notifications",
+    "disableEmailNotifications": "Disable Email Notifications",
+    "updateFailed": "Update failed",
+    "followers": "Followers",
+    "following": "Following"
+  },
+  "follow": {
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "followers": "Followers",
+    "following": "Following",
+    "noFollowers": "No followers",
+    "noFollowing": "Not following anyone",
+    "errorLoadingFollowers": "Error loading followers.",
+    "errorLoadingFollowing": "Error loading following.",
+    "errorLoadingUser": "Error loading user.",
+    "successFollow": "Successfully followed user.",
+    "errorFollow": "Failed to follow user.",
+    "successUnfollow": "Successfully unfollowed user.",
+    "errorUnfollow": "Failed to unfollow user.",
+    "loading": "Loading..."
   },
   "editProfileDialog": {
     "editProfile": "Edit Profile",

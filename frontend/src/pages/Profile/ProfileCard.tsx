@@ -1,3 +1,5 @@
+// src/pages/Profile/ProfileCard.tsx
+
 import React, { useState } from 'react';
 import {
   Card,
@@ -8,13 +10,21 @@ import {
   Switch,
   FormControlLabel,
   Grid,
+  Button,
+  CircularProgress,
 } from '@mui/material';
 import { Edit as EditIcon } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify'; // Import toast
+import { toast } from 'react-toastify';
 import EditProfileDialog from './EditProfileDialog';
 import { User } from '../../types';
-import { useUpdateUserMutation } from '../../store/slices/usersApiSlice';
+import {
+  useUpdateUserMutation,
+  useGetFollowersQuery,
+  useGetFollowingsQuery,
+} from '../../store/slices/usersApiSlice';
+import FollowersModal from '../../components/Follow/FollowersModal';
+import FollowingModal from '../../components/Follow/FollowingModal';
 
 interface ProfileCardProps {
   user: User;
@@ -23,14 +33,16 @@ interface ProfileCardProps {
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [followersModalOpen, setFollowersModalOpen] = useState(false);
+  const [followingModalOpen, setFollowingModalOpen] = useState(false);
   const [updateUser] = useUpdateUserMutation();
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     user.notificationsEnabled,
   );
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleEditClick = () => setEditModalOpen(true);
+  const handleEditModalClose = () => setEditModalOpen(false);
 
   const handleToggleNotifications = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -51,6 +63,37 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
     } catch (error) {
       toast.error(t('profileCard.updateFailed'));
     }
+  };
+
+  const { data: followersData, isLoading: isLoadingFollowers } =
+    useGetFollowersQuery({
+      url: user.followingUrl,
+      page: 1,
+      pageSize: 1,
+    });
+
+  const { data: followingsData, isLoading: isLoadingFollowings } =
+    useGetFollowingsQuery({
+      url: user.followedByUrl,
+      page: 1,
+      pageSize: 1,
+    });
+
+  const handleFollowersClick = () => {
+    setFollowersModalOpen(true);
+  };
+
+  const handleFollowersModalClose = () => {
+    setFollowersModalOpen(false);
+  };
+
+  // Handlers para FollowingModal
+  const handleFollowingClick = () => {
+    setFollowingModalOpen(true);
+  };
+
+  const handleFollowingModalClose = () => {
+    setFollowingModalOpen(false);
   };
 
   return (
@@ -79,7 +122,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
               ) : (
                 <Typography variant="h5">{user.username}</Typography>
               )}
-              <IconButton onClick={handleOpen}>
+              <IconButton onClick={handleEditClick}>
                 <EditIcon />
               </IconButton>
             </Box>
@@ -113,16 +156,42 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                 }
                 sx={{ mt: 2 }}
               />
+              <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+                <Button onClick={handleFollowersClick}>
+                  {t('profileCard.followers')} {': '}
+                  {!isLoadingFollowers && (followersData?.totalCount || 0)}
+                  {isLoadingFollowers && <CircularProgress size={20} />}
+                </Button>
+                <Button onClick={handleFollowingClick}>
+                  {t('profileCard.following')} {': '}
+                  {!isLoadingFollowings && (followingsData?.totalCount || 0)}
+                  {isLoadingFollowings && <CircularProgress size={20} />}
+                </Button>
+              </Box>
             </Box>
           </Grid>
         </Grid>
       </Card>
 
       <EditProfileDialog
-        open={open}
-        handleClose={handleClose}
+        open={editModalOpen}
+        handleClose={handleEditModalClose}
         user={user}
         onUpdateSuccess={onUpdateSuccess}
+      />
+
+      <FollowersModal
+        open={followersModalOpen}
+        handleClose={handleFollowersModalClose}
+        userId={user.id}
+        followingUrl={user.followingUrl}
+      />
+
+      <FollowingModal
+        open={followingModalOpen}
+        handleClose={handleFollowingModalClose}
+        userId={user.id}
+        followedByUrl={user.followedByUrl}
       />
     </>
   );
