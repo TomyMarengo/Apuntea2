@@ -3,13 +3,12 @@ package ar.edu.itba.paw.services;
 import ar.edu.itba.paw.models.exceptions.FileExtensionException;
 import ar.edu.itba.paw.models.exceptions.FileSizeException;
 import ar.edu.itba.paw.models.exceptions.institutional.InvalidCareerException;
-import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.user.Image;
 import ar.edu.itba.paw.models.user.Role;
-import ar.edu.itba.paw.models.exceptions.user.InvalidUserException;
+import ar.edu.itba.paw.models.exceptions.user.InvalidUserFollowException;
 import ar.edu.itba.paw.models.user.UserStatus;
 import ar.edu.itba.paw.persistence.CareerDao;
 import ar.edu.itba.paw.persistence.UserDao;
@@ -86,8 +85,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean follow(UUID followedId) {
+        final User currentUser = securityService.getCurrentUserOrThrow();
+        if (currentUser.getUserId().equals(followedId)) {
+            LOGGER.warn("User with id {} tried to follow themselves", currentUser.getUserId());
+            throw new InvalidUserFollowException();
+        }
         userDao.findById(followedId).orElseThrow(UserNotFoundException::new);
-        return userDao.follow(securityService.getCurrentUserOrThrow().getUserId(), followedId);
+        return userDao.follow(currentUser.getUserId(), followedId);
     }
 
     @Transactional
@@ -97,13 +101,6 @@ public class UserServiceImpl implements UserService {
         return userDao.unfollow(securityService.getCurrentUserOrThrow().getUserId(), followedId);
     }
 
-    /*@Transactional
-    @Override
-    public Collection<User> getFollows() {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        return currentUser.getUsersFollowing();
-    }
-    */
     @Transactional(readOnly = true)
     @Override
     public boolean isFollowing(UUID followedId) {

@@ -94,14 +94,16 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Transactional
     @Override
     public void update(UUID directoryId, String name, Boolean visible, String iconColor) {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        Directory directory = directoryDao
+        final User currentUser = securityService.getCurrentUserOrThrow();
+        final Directory directory = directoryDao
                 .getDirectoryById(directoryId, currentUser.getUserId())
                 .orElseThrow(DirectoryNotFoundException::new);
         if (!currentUser.equals(directory.getUser()))
             throw new UserNotOwnerException();
         if (name != null) {
-            if (searchService.findByName(directory.getParentId(), name).isPresent()) throw new UnavailableNameException();
+            final Optional<UUID> maybeSearchableId = searchService.findByName(directory.getParentId(), name);
+            if (maybeSearchableId.map(id -> !id.equals(directoryId)).orElse(false))
+                throw new UnavailableNameException();
             directory.setName(name);
         }
         if (visible != null)

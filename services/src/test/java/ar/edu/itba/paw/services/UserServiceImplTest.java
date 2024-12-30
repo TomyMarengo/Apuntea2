@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.Page;
-import ar.edu.itba.paw.models.exceptions.user.InvalidUserException;
+import ar.edu.itba.paw.models.exceptions.user.InvalidUserFollowException;
 import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.persistence.CareerDao;
@@ -84,33 +84,15 @@ public class UserServiceImplTest {
         assertEquals(5, results.getTotalPages());
     }
 
-//    @Test(expected = InvalidFileException.class)
-//    public void testInvalidFileUpdatingProfile() {
-//        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-//        CommonsMultipartFile profilePicture = Mockito.mock(CommonsMultipartFile.class);
-//        Mockito.when(profilePicture.isEmpty()).thenReturn(false);
-//        given(profilePicture.getBytes()).willAnswer(invocation -> {throw new IOException();});
-//        Mockito.when(careerDao.getCareerById(Mockito.any())).thenReturn(Optional.of(mockCareer()));
-//        userService.updateProfile("firstName", "lastName", "username", profilePicture, UUID.randomUUID());
-//        fail();
-//    }
+    @Test(expected = InvalidUserFollowException.class)
+    public void testFollowUserFollowsHimself() {
+        User mockUser = mockUser();
+        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser);
 
-    /*@Test(expected = InvalidUserException.class)
-    public void testBanUserError() {
-        Mockito.when(userDao.findById(Mockito.any())).thenReturn(Optional.of(mockUser()));
-        Mockito.when(securityService.getAdminOrThrow()).thenReturn(mockAdmin());
-        Mockito.when(userDao.banUser(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any())).thenReturn(false);
-        userService.banUser(UUID.randomUUID(), "Hm?");
+        userService.follow(mockUser.getUserId());
+
         fail();
     }
-
-    @Test(expected = InvalidUserException.class)
-    public void testUnbanUserError() {
-        Mockito.when(userDao.findById(Mockito.any())).thenReturn(Optional.of(mockUser()));
-        Mockito.when(userDao.unbanUser(Mockito.any())).thenReturn(false);
-        userService.unbanUser(UUID.randomUUID());
-        fail();
-    }*/
 
     @Test(expected = UserNotFoundException.class)
     public void testGetProfilePictureUserNotFound() {

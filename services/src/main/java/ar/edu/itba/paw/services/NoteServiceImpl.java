@@ -5,7 +5,6 @@ import ar.edu.itba.paw.models.Page;
 import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.exceptions.*;
 import ar.edu.itba.paw.models.exceptions.directory.InvalidDirectoryException;
-import ar.edu.itba.paw.models.exceptions.note.InvalidNoteException;
 import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.exceptions.note.NoteNotFoundException;
 import ar.edu.itba.paw.models.exceptions.note.ReviewNotFoundException;
@@ -93,7 +92,7 @@ public class  NoteServiceImpl implements NoteService {
         final Optional<User> maybeUser = securityService.getCurrentUser();
         maybeUser.ifPresent(u -> sab.currentUserId(u.getUserId()));
 
-        boolean navigate = parentId != null || favBy != null; // Maybe this should be an additional parameter
+        boolean navigate = parentId != null || favBy != null;
 
         SearchArguments searchArgumentsWithoutPaging = sab.build();
         int countTotalResults = navigate? noteDao.countNavigationResults(searchArgumentsWithoutPaging) : noteDao.countSearchResults(searchArgumentsWithoutPaging);
@@ -115,12 +114,14 @@ public class  NoteServiceImpl implements NoteService {
     @Transactional
     @Override
     public void update(UUID noteId, String name, Boolean visible, String category) {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        Note note = noteDao.getNoteById(noteId, currentUser.getUserId()).orElseThrow(NoteNotFoundException::new);
+        final User currentUser = securityService.getCurrentUserOrThrow();
+        final Note note = noteDao.getNoteById(noteId, currentUser.getUserId()).orElseThrow(NoteNotFoundException::new);
         if (!currentUser.equals(note.getUser()))
             throw new UserNotOwnerException();
         if (name != null) {
-            if (searchService.findByName(note.getParentId(), name).isPresent()) throw new UnavailableNameException();
+            final Optional<UUID> maybeSearchableId = searchService.findByName(note.getParentId(), name);
+            if (maybeSearchableId.map(id -> !id.equals(noteId)).orElse(false))
+                throw new UnavailableNameException();
             note.setName(name);
         }
         if (visible != null)
