@@ -25,7 +25,7 @@ const useDirectoryBreadcrumb = ({
 
       setLoading(true);
       setError(false);
-      const directories: Directory[] = [];
+      const directories: Directory[] = [currentDirectory];
 
       let currentParentUrl: string | undefined = currentDirectory.parentUrl;
 

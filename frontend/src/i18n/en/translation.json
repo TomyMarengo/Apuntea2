@@ -44,7 +44,8 @@
     },
     "breadcrumb": {
       "parent": "Parent Directory",
-      "isRoot": "Root Directory"
+      "isRoot": "Root Directory",
+      "isLoading": "Loading directories..."
     }
   },
   "loginPage": {

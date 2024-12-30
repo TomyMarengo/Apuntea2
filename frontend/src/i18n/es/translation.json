@@ -44,7 +44,8 @@
     },
     "breadcrumb": {
       "parent": "Directorio Padre",
-      "isRoot": "Este es el directorio raíz."
+      "isRoot": "Este es el directorio raíz.",
+      "isLoading": "Cargando directorios..."
     }
   },
   "loginPage": {

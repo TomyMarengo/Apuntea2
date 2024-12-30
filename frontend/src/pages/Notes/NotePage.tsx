@@ -30,6 +30,7 @@ import {
   useGetIsFavoriteNoteQuery,
   useGetNoteFileQuery,
 } from '../../store/slices/notesApiSlice';
+import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import {
   useGetReviewsQuery,
@@ -42,6 +43,7 @@ import { Review } from '../../types';
 import EditNoteDialog from './dialogs/EditNoteDialog';
 import DeleteNoteDialog from './dialogs/DeleteNoteDialog';
 import ReviewCard from '../../components/ReviewCard';
+import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
 
 const NotePage: React.FC = () => {
   const { t } = useTranslation();
@@ -57,6 +59,12 @@ const NotePage: React.FC = () => {
     isLoading: noteLoading,
     isError: noteError,
   } = useGetNoteQuery({ noteId: noteId || '' }, { skip: !noteId });
+
+  /** 1.1) Directory data */
+  const { data: directoryData } = useGetDirectoryQuery(
+    { url: note?.parentUrl },
+    { skip: !note?.parentUrl },
+  );
 
   /** 2) Owner user data (via note?.ownerUrl) */
   const { data: ownerData } = useGetUserQuery(
@@ -316,7 +324,10 @@ const NotePage: React.FC = () => {
           xs: '1fr',
           md: '2fr 1fr',
         },
-        height: 'calc(100vh - 64px)',
+        height: {
+          xs: 'auto',
+          md: 'calc(100vh - 64px)',
+        },
       }}
     >
       {/* LEFT side */}
@@ -324,7 +335,12 @@ const NotePage: React.FC = () => {
         sx={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
       >
         <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-          <Typography variant="h5">{note.name}</Typography>
+          {directoryData && note && (
+            <DirectoryBreadcrumbs
+              currentDirectory={directoryData}
+              note={note}
+            />
+          )}
         </Box>
         {/* Top bar */}
         <Box
@@ -405,6 +421,9 @@ const NotePage: React.FC = () => {
             justifyContent: 'center',
             alignItems: 'center',
             p: 2,
+            minHeight: {
+              xs: 600,
+            },
           }}
         >
           {fileUrl ? (
@@ -459,104 +478,109 @@ const NotePage: React.FC = () => {
           <Typography variant="h6">{t('notePage.reviewsTitle')}</Typography>
         </Box>
 
-        {/* Reviews scroll container with custom scrollbar */}
         <Box
           sx={{
-            flex: 1,
-            p: 2,
-            overflowY: 'auto',
-            '&::-webkit-scrollbar': {
-              width: '6px',
+            display: 'flex',
+            flexDirection: {
+              xs: 'column-reverse',
+              md: 'column',
             },
-            '&::-webkit-scrollbar-track': {
-              backgroundColor: 'transparent',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: 'primary.main',
-              borderRadius: '3px',
-            },
+            overflow: 'hidden',
           }}
         >
-          {allReviews.map((rev: Review) => (
-            <ReviewCard
-              key={`${rev.noteId}_${rev.userId}`}
-              review={rev}
-              noteId={note.id}
-            />
-          ))}
+          {/* Reviews scroll container with custom scrollbar */}
+          <Box
+            sx={{
+              flex: 1,
+              p: 2,
+              overflowY: 'auto',
+              '&::-webkit-scrollbar': {
+                width: '6px',
+              },
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: 'transparent',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'primary.main',
+                borderRadius: '3px',
+              },
+            }}
+          >
+            {allReviews.map((rev: Review) => (
+              <ReviewCard
+                key={`${rev.noteId}_${rev.userId}`}
+                review={rev}
+                noteId={note.id}
+              />
+            ))}
 
-          {/* Cargando la página actual */}
-          {isFetching && (
-            <Box sx={{ textAlign: 'center', p: 1 }}>
-              <CircularProgress size={24} />
-            </Box>
-          )}
+            {/* Cargando la página actual */}
+            {isFetching && (
+              <Box sx={{ textAlign: 'center', p: 1 }}>
+                <CircularProgress size={24} />
+              </Box>
+            )}
 
-          {/* Sentinel for infinite scroll */}
-          {!isFetching && (
-            <Box ref={sentinelRef} sx={{ textAlign: 'center', mt: 2, mb: 2 }}>
-              {canLoadMore ? (
-                <Box
-                  sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 1,
-                  }}
-                >
-                  <KeyboardDoubleArrowDownIcon />
-                  <Typography variant="body2">
-                    {t('notePage.moreReviewsHint')}
+            {/* Sentinel for infinite scroll */}
+            {!isFetching && (
+              <Box ref={sentinelRef} sx={{ textAlign: 'center', mt: 2, mb: 2 }}>
+                {canLoadMore ? (
+                  <Box
+                    sx={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 1,
+                    }}
+                  >
+                    <KeyboardDoubleArrowDownIcon />
+                    <Typography variant="body2">
+                      {t('notePage.moreReviewsHint')}
+                    </Typography>
+                  </Box>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    {t('notePage.noMoreReviews')}
                   </Typography>
-                </Box>
-              ) : (
-                <Typography variant="body2" color="text.secondary">
-                  {t('notePage.noMoreReviews')}
-                </Typography>
-              )}
+                )}
+              </Box>
+            )}
+          </Box>
+
+          {/* Create/Update Review if not owner, and user is logged in */}
+          {user && !isOwner && (
+            <Box
+              sx={{
+                borderTop: 1,
+                borderColor: 'divider',
+                p: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 1,
+              }}
+            >
+              <Rating
+                name="score"
+                value={score}
+                onChange={(_, newValue) => {
+                  if (newValue) setScore(newValue);
+                }}
+              />
+              <TextField
+                multiline
+                rows={2}
+                placeholder={t('notePage.reviewPlaceholder')!}
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+              />
+
+              <Button variant="contained" onClick={handleSaveReview}>
+                {myReviewData
+                  ? t('notePage.updateReview')
+                  : t('notePage.sendReview')}
+              </Button>
             </Box>
           )}
         </Box>
-
-        {/* Create/Update Review if not owner, and user is logged in */}
-        {user && !isOwner && (
-          <Box
-            sx={{
-              borderTop: 1,
-              borderColor: 'divider',
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1,
-            }}
-          >
-            <Typography variant="subtitle2">
-              {myReviewData
-                ? t('notePage.updateReview')
-                : t('notePage.addReview')}
-            </Typography>
-
-            <Rating
-              name="score"
-              value={score}
-              onChange={(_, newValue) => {
-                if (newValue) setScore(newValue);
-              }}
-            />
-            <TextField
-              multiline
-              rows={2}
-              placeholder={t('notePage.reviewPlaceholder')!}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-            />
-
-            <Button variant="contained" onClick={handleSaveReview}>
-              {myReviewData
-                ? t('notePage.updateReview')
-                : t('notePage.sendReview')}
-            </Button>
-          </Box>
-        )}
       </Box>
 
       {/* EDIT NOTE DIALOG */}
