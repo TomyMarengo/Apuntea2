@@ -54,6 +54,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
   const [email, setEmail] = useState(user.email || '');
   const [careerId, setCareerId] = useState(user.career?.id || '');
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   // States for passwords
   const [currentPassword, setCurrentPassword] = useState('');
@@ -82,6 +83,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       setEmail(user.email || '');
       setCareerId(user.career?.id || '');
       setProfilePicture(null);
+      setPreview(null);
       setCurrentPassword('');
       setNewPassword('');
       setConfirmNewPassword('');
@@ -90,6 +92,20 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       setShowConfirmNewPassword(false);
     }
   }, [open, user]);
+
+  useEffect(() => {
+    if (profilePicture) {
+      const objectUrl = URL.createObjectURL(profilePicture);
+      setPreview(objectUrl);
+
+      // Clean up the URL when the component unmounts or when profilePicture changes
+      return () => {
+        URL.revokeObjectURL(objectUrl);
+      };
+    } else {
+      setPreview(null);
+    }
+  }, [profilePicture]);
 
   const handleSave = async () => {
     try {
@@ -184,7 +200,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           }}
         >
           <Avatar
-            src={user.profilePictureUrl || ''}
+            src={preview || user.profilePictureUrl || ''}
             alt={user.username}
             sx={{ width: 100, height: 100, mb: 2 }}
           />

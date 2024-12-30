@@ -28,7 +28,7 @@ export default function FavoritesPage() {
   const userId = user?.id;
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const favtype = searchParams.get('favtype') || 'notes'; // 'notes' or 'directories'
+  const favtype = searchParams.get('favtype') || 'notes'; // 'notes', 'directories', or 'subjects'
   const page = parseInt(searchParams.get('page') || '1', 10);
   const pageSize = parseInt(
     searchParams.get('pageSize') || String(DEFAULT_PAGE_SIZE),
@@ -48,7 +48,9 @@ export default function FavoritesPage() {
   // Query args
   const notesQueryArgs = { userId, page, pageSize };
   const dirsQueryArgs = { userId, page, pageSize };
+  const subjectsQueryArgs = { userId, page, pageSize, rdir: 'true' };
 
+  // Favorite notes
   const {
     data: notesResult,
     isLoading: notesLoading,
@@ -58,6 +60,7 @@ export default function FavoritesPage() {
     skip: favtype !== 'notes',
   });
 
+  // Favorite directories
   const {
     data: dirsResult,
     isLoading: dirsLoading,
@@ -67,12 +70,26 @@ export default function FavoritesPage() {
     skip: favtype !== 'directories',
   });
 
+  // Favorite subjects
+  const {
+    data: subjectsResult,
+    isLoading: subjectsLoading,
+    isError: subjectsError,
+    refetch: refetchSubjects,
+  } = useGetUserDirectoriesFavoritesQuery(subjectsQueryArgs, {
+    skip: favtype !== 'subjects',
+  });
+
+  // Gestión de estados de carga y error
   const isLoading =
     (favtype === 'notes' && notesLoading) ||
-    (favtype === 'directories' && dirsLoading);
+    (favtype === 'directories' && dirsLoading) ||
+    (favtype === 'subjects' && subjectsLoading);
+
   const isError =
     (favtype === 'notes' && notesError) ||
-    (favtype === 'directories' && dirsError);
+    (favtype === 'directories' && dirsError) ||
+    (favtype === 'subjects' && subjectsError);
 
   let items: any[] = [];
   let totalCount = 0;
@@ -86,6 +103,10 @@ export default function FavoritesPage() {
     items = dirsResult.directories;
     totalCount = dirsResult.totalCount;
     totalPages = dirsResult.totalPages;
+  } else if (favtype === 'subjects' && subjectsResult) {
+    items = subjectsResult.directories;
+    totalCount = subjectsResult.totalCount;
+    totalPages = subjectsResult.totalPages;
   }
 
   // Toggle favorite type
@@ -100,8 +121,10 @@ export default function FavoritesPage() {
   const handleRefresh = () => {
     if (favtype === 'notes') {
       refetchNotes();
-    } else {
+    } else if (favtype === 'directories') {
       refetchDirs();
+    } else if (favtype === 'subjects') {
+      refetchSubjects();
     }
   };
 
@@ -129,7 +152,7 @@ export default function FavoritesPage() {
         {t('favoritesPage.title')}
       </Typography>
 
-      {/* Toggle row: notes / directories + refresh */}
+      {/* Row of buttons: notes / directories / subjects + refresh */}
       <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
         <Button
           variant={favtype === 'notes' ? 'contained' : 'outlined'}
@@ -143,6 +166,12 @@ export default function FavoritesPage() {
         >
           {t('favoritesPage.directories')}
         </Button>
+        <Button
+          variant={favtype === 'subjects' ? 'contained' : 'outlined'}
+          onClick={() => handleFavTypeChange('subjects')}
+        >
+          {t('favoritesPage.subjects')}
+        </Button>
 
         {/* Refresh button */}
         <IconButton onClick={handleRefresh} sx={{ ml: 'auto' }}>
@@ -150,16 +179,26 @@ export default function FavoritesPage() {
         </IconButton>
       </Stack>
 
-      {/* Items */}
-      {items.length === 0 ? (
+      {/* No favorites */}
+      {favtype === 'notes' && items.length === 0 && (
         <Typography>{t('favoritesPage.noFavorites')}</Typography>
-      ) : (
+      )}
+      {favtype === 'directories' && items.length === 0 && (
+        <Typography>{t('favoritesPage.noFavorites')}</Typography>
+      )}
+      {favtype === 'subjects' && items.length === 0 && (
+        <Typography>{t('favoritesPage.noFavorites')}</Typography>
+      )}
+
+      {/* Items */}
+      {items.length > 0 && (
         <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 180px))',
             gap: 2,
             justifyContent: 'center',
+            mb: 4,
           }}
         >
           {favtype === 'notes'

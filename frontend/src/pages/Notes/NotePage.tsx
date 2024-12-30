@@ -74,7 +74,7 @@ const NotePage: React.FC = () => {
   );
 
   /** 2.1) Current user's existing review (if any) */
-  const { data: myReviewData } = useGetMyReviewQuery(
+  const { data: myReviewData, refetch: refetchMyReview } = useGetMyReviewQuery(
     { url: note?.reviewsUrl, noteId: note?.id, userId: user?.id },
     { skip: !note || !user },
   );
@@ -304,6 +304,7 @@ const NotePage: React.FC = () => {
             ? t('notePage.reviewUpdated')
             : t('notePage.reviewCreated'),
         );
+        refetchMyReview();
       } else {
         toast.error(t('notePage.reviewError'));
       }

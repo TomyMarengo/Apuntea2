@@ -35,19 +35,6 @@
     },
     "logout": "Cerrar Sesión"
   },
-  "directoryPage": {
-    "errorFetchingDirectory": "Error al obtener el directorio",
-    "title": "Directorio Padre",
-    "description": "Descripción del directorio padre.",
-    "search": {
-      "noContent": "No se encontró contenido."
-    },
-    "breadcrumb": {
-      "parent": "Directorio Padre",
-      "isRoot": "Este es el directorio raíz.",
-      "isLoading": "Cargando directorios..."
-    }
-  },
   "loginPage": {
     "login": "Iniciar Sesión",
     "email": "Correo Electrónico",
@@ -505,6 +492,7 @@
     "title": "Mis Favoritos",
     "notes": "Apuntes",
     "directories": "Carpetas",
+    "subjects": "Materias",
     "errorFetching": "Error al obtener favoritos.",
     "noFavorites": "No se encontraron favoritos.",
     "removeFavorite": "Quitar de favoritos",
@@ -555,7 +543,18 @@
     "deleteConfirmMessage": "¿Está seguro de que desea eliminar este directorio?",
     "deleteSuccess": "¡Directorio eliminado exitosamente!",
     "deleteError": "Error al eliminar el directorio.",
-    "reason": "Razón"
+    "reason": "Razón",
+    "errorFetchingDirectory": "Error al obtener el directorio",
+    "title": "Directorio Padre",
+    "description": "Descripción del directorio padre.",
+    "search": {
+      "noContent": "No se encontró contenido."
+    },
+    "breadcrumb": {
+      "parent": "Directorio Padre",
+      "isRoot": "Este es el directorio raíz.",
+      "isLoading": "Cargando directorios..."
+    }
   },
   "userPage": {
     "userNotFound": "Usuario no encontrado."

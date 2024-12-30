@@ -29,6 +29,7 @@ interface SearchArgs {
   pageSize?: string | number;
   parentId?: string;
   userId?: string;
+  rdir?: string;
   url?: string;
 }
 
@@ -125,6 +126,7 @@ export const searchApiSlice = apiSlice.injectEndpoints({
         pageSize,
         parentId,
         userId,
+        rdir,
         url,
       }) => {
         const queryParams: Record<string, any> = {
@@ -137,6 +139,7 @@ export const searchApiSlice = apiSlice.injectEndpoints({
           sortBy,
           pageSize,
           parentId,
+          rdir,
           userId,
         };
 

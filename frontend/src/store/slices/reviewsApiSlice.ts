@@ -85,16 +85,16 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           totalPages,
         };
       },
-      providesTags: (result) =>
+      providesTags: (result, _error, { noteId }) =>
         result
           ? [
               ...result.reviews.map(({ noteId, userId }) => ({
                 type: 'Reviews' as const,
                 id: `${noteId}_${userId}`,
               })),
-              { type: 'Reviews', id: 'PARTIAL-LIST' },
+              { type: 'Reviews', id: `LIST_${noteId}` },
             ]
-          : [{ type: 'Reviews', id: 'PARTIAL-LIST' }],
+          : [{ type: 'Reviews', id: `LIST_${noteId}` }],
     }),
     getMyReview: builder.query<Review, ReviewArgs>({
       query: ({ noteId, userId, url }) => url + `&userId=${userId}`,
@@ -104,6 +104,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
       },
       providesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },
+        { type: 'Reviews', id: `LIST_${noteId}` },
       ],
     }),
     getReview: builder.query<Review, ReviewArgs>({
@@ -134,6 +135,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },
+        { type: 'Reviews', id: `LIST_${noteId}` },
       ],
     }),
     updateReview: builder.mutation<boolean, UpdateReviewArgs>({

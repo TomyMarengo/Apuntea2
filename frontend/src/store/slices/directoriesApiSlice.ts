@@ -36,6 +36,7 @@ interface FavoritesArgs {
   page?: number;
   pageSize?: number;
   url?: string;
+  rdir?: string;
 }
 
 interface PaginatedDirectoriesResponse {
@@ -145,7 +146,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
       PaginatedDirectoriesResponse,
       FavoritesArgs
     >({
-      query: ({ userId, page = 1, pageSize = 10, url }) => {
+      query: ({ userId, rdir, page = 1, pageSize = 10, url }) => {
         if (url) {
           return url;
         }
@@ -153,6 +154,9 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
         params.append('favBy', userId);
         params.append('page', String(page));
         params.append('pageSize', String(pageSize));
+        if (rdir) {
+          params.append('rdir', rdir);
+        }
 
         return `/directories?${params.toString()}`;
       },
