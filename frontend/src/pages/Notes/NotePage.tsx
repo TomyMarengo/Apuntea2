@@ -44,6 +44,7 @@ import EditNoteDialog from './dialogs/EditNoteDialog';
 import DeleteNoteDialog from './dialogs/DeleteNoteDialog';
 import ReviewCard from '../../components/ReviewCard';
 import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
+import { Token } from '../../types';
 
 const NotePage: React.FC = () => {
   const { t } = useTranslation();
@@ -516,7 +517,7 @@ const NotePage: React.FC = () => {
               />
             ))}
 
-            {/* Cargando la página actual */}
+            {/* Loading spinner */}
             {isFetching && (
               <Box sx={{ textAlign: 'center', p: 1 }}>
                 <CircularProgress size={24} />
