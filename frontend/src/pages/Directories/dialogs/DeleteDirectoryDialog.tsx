@@ -1,5 +1,3 @@
-// src/pages/NotePage/dialogs/DeleteNoteDialog.tsx
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -11,57 +9,53 @@ import {
   Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Note } from '../../../types';
-import { useDeleteNoteMutation } from '../../../store/slices/notesApiSlice';
+import { useDeleteDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
-interface DeleteNoteDialogProps {
+import { Directory } from '../../../types';
+
+interface DeleteDirectoryDialogProps {
   open: boolean;
   onClose: () => void;
-  note: Note;
+  directory: Directory;
   shouldShowReason: boolean;
-  navigateBack?: boolean;
 }
 
-const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
+const DeleteDirectoryDialog: React.FC<DeleteDirectoryDialogProps> = ({
   open,
   onClose,
-  note,
+  directory,
   shouldShowReason,
-  navigateBack = false,
 }) => {
   const { t } = useTranslation();
-  const [deleteNote] = useDeleteNoteMutation();
+  const [deleteDirectory] = useDeleteDirectoryMutation();
   const [reason, setReason] = useState('');
-  const navigate = useNavigate();
 
   const handleConfirm = async () => {
     try {
-      const result = await deleteNote({
-        noteId: note.id,
+      const result = await deleteDirectory({
+        directoryId: directory.id,
         reason: shouldShowReason ? reason : undefined,
       }).unwrap();
       if (result) {
-        toast.success(t('notePage.deleteSuccess'));
+        toast.success(t('directoryPage.deleteSuccess'));
         onClose();
-        if (navigateBack) navigate('/', { replace: true });
       } else {
-        toast.error(t('notePage.deleteError'));
+        toast.error(t('directoryPage.deleteError'));
       }
     } catch (err) {
-      toast.error(t('notePage.deleteError'));
+      toast.error(t('directoryPage.deleteError'));
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{t('notePage.deleteNoteTitle')}</DialogTitle>
+      <DialogTitle>{t('directoryPage.deleteDirectoryTitle')}</DialogTitle>
       <DialogContent>
-        <Typography>{t('notePage.deleteConfirmMessage')}</Typography>
+        <Typography>{t('directoryPage.deleteConfirmMessage')}</Typography>
         {shouldShowReason && (
           <TextField
-            label={t('notePage.reason')}
+            label={t('directoryPage.reason')}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             fullWidth
@@ -70,13 +64,13 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>{t('notePage.cancel')}</Button>
+        <Button onClick={onClose}>{t('directoryPage.cancel')}</Button>
         <Button onClick={handleConfirm} variant="contained" color="error">
-          {t('notePage.delete')}
+          {t('directoryPage.delete')}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default DeleteNoteDialog;
+export default DeleteDirectoryDialog;

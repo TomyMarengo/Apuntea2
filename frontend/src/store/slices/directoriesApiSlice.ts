@@ -111,15 +111,27 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
         const body: any = {};
         if (reason !== undefined) body.reason = reason;
 
-        const result = await baseQuery({
-          url: url || `/directories/${directoryId}`,
-          method: 'POST',
-          body,
-        });
+        let result;
+        if (reason) {
+          result = await baseQuery({
+            url: url || `/directories/${directoryId}`,
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+              'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
+            },
+          });
+        } else {
+          result = await baseQuery({
+            url: url || `/directories/${directoryId}`,
+            method: 'DELETE',
+          });
+        }
         return { data: result.error === undefined };
       },
       invalidatesTags: ['Directories'],
     }),
+
     getDirectory: builder.query<Directory, DirectoryQueryArgs>({
       query: ({ directoryId, url }) => url || `/directories/${directoryId}`,
       transformResponse: (response: any) => {

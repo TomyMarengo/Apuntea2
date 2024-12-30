@@ -1,5 +1,3 @@
-// src/pages/NotePage/dialogs/DeleteNoteDialog.tsx
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -11,57 +9,54 @@ import {
   Typography,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Note } from '../../../types';
-import { useDeleteNoteMutation } from '../../../store/slices/notesApiSlice';
+import { useDeleteReviewMutation } from '../../../store/slices/reviewsApiSlice';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
-interface DeleteNoteDialogProps {
+import { Review } from '../../../types';
+
+interface DeleteReviewDialogProps {
   open: boolean;
   onClose: () => void;
-  note: Note;
+  review: Review;
   shouldShowReason: boolean;
-  navigateBack?: boolean;
 }
 
-const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
+const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
   open,
   onClose,
-  note,
+  review,
   shouldShowReason,
-  navigateBack = false,
 }) => {
   const { t } = useTranslation();
-  const [deleteNote] = useDeleteNoteMutation();
+  const [deleteReview] = useDeleteReviewMutation();
   const [reason, setReason] = useState('');
-  const navigate = useNavigate();
 
   const handleConfirm = async () => {
     try {
-      const result = await deleteNote({
-        noteId: note.id,
+      const result = await deleteReview({
+        noteId: review.noteId,
+        userId: review.userId,
         reason: shouldShowReason ? reason : undefined,
       }).unwrap();
       if (result) {
-        toast.success(t('notePage.deleteSuccess'));
+        toast.success(t('reviewCard.deleteSuccess'));
         onClose();
-        if (navigateBack) navigate('/', { replace: true });
       } else {
-        toast.error(t('notePage.deleteError'));
+        toast.error(t('reviewCard.deleteError'));
       }
     } catch (err) {
-      toast.error(t('notePage.deleteError'));
+      toast.error(t('reviewCard.deleteError'));
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{t('notePage.deleteNoteTitle')}</DialogTitle>
+      <DialogTitle>{t('reviewCard.deleteReviewTitle')}</DialogTitle>
       <DialogContent>
-        <Typography>{t('notePage.deleteConfirmMessage')}</Typography>
+        <Typography>{t('reviewCard.deleteConfirmMessage')}</Typography>
         {shouldShowReason && (
           <TextField
-            label={t('notePage.reason')}
+            label={t('reviewCard.reason')}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             fullWidth
@@ -70,13 +65,13 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>{t('notePage.cancel')}</Button>
+        <Button onClick={onClose}>{t('reviewCard.cancel')}</Button>
         <Button onClick={handleConfirm} variant="contained" color="error">
-          {t('notePage.delete')}
+          {t('reviewCard.delete')}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default DeleteNoteDialog;
+export default DeleteReviewDialog;

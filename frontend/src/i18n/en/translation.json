@@ -181,7 +181,16 @@
     "favoriteActionFailed": "Failed to update favorite status.",
     "copySuccess": "Link copied to clipboard!",
     "copyFailed": "Failed to copy link.",
-    "dataUnknown": "Unknown"
+    "dataUnknown": "Unknown",
+    "delete": "Delete",
+    "deleteDirectory": "Delete Directory",
+    "confirmDelete": "Are you sure you want to delete this directory?",
+    "deleteReason": "Reason",
+    "cancel": "Cancel",
+    "deleting": "Deleting...",
+    "confirm": "Confirm",
+    "deleteSuccess": "Directory deleted successfully!",
+    "deleteError": "Error deleting directory."
   },
   "rowNote": {
     "favorite": "Favorite",
@@ -202,7 +211,16 @@
     "fileNotAvailable": "File not available.",
     "copySuccess": "Link copied to clipboard!",
     "copyFailed": "Failed to copy link.",
-    "dataUnknown": "Unknown"
+    "dataUnknown": "Unknown",
+    "delete": "Delete",
+    "deleteNote": "Delete Note",
+    "confirmDelete": "Are you sure you want to delete this note?",
+    "deleteReason": "Reason",
+    "cancel": "Cancel",
+    "deleting": "Deleting...",
+    "confirm": "Confirm",
+    "deleteSuccess": "Note deleted successfully!",
+    "deleteError": "Error deleting note."
   },
   "searchForm": {
     "institution": "Institution",
@@ -211,9 +229,9 @@
     "word": "Word",
     "sortBy": "Sort By",
     "name": "Name",
-    "lastModifiedAt": "Last Modified At",
+    "lastModification": "Last modification",
     "score": "Score",
-    "createdAt": "Created At",
+    "creation": "Creation",
     "asc": "Ascending",
     "desc": "Descending",
     "folders": "Folders",
@@ -516,8 +534,28 @@
     "noReviews": "No reviews to display."
   },
   "reviewCard": {
-    "hiddenNote": "Hidden Note",
-    "you": "You"
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "deleteReviewTitle": "Delete Review",
+    "deleteConfirmMessage": "Are you sure you want to delete this review?",
+    "deleteSuccess": "Review deleted successfully!",
+    "deleteError": "Failed to delete review.",
+    "reason": "Reason",
+    "you": "You",
+    "hiddenNote": "Hidden note"
+  },
+  "directoryPage": {
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "deleteDirectoryTitle": "Delete Directory",
+    "deleteConfirmMessage": "Are you sure you want to delete this directory?",
+    "deleteSuccess": "Directory deleted successfully!",
+    "deleteError": "Error deleting directory.",
+    "reason": "Reason",
+    "you": "You",
+    "hiddenNote": "Hidden note"
   },
   "userPage": {
     "userNotFound": "User not found."

@@ -160,19 +160,31 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
     deleteReview: builder.mutation<boolean, DeleteReviewArgs>({
       queryFn: async (
         { noteId, userId, reason, url },
-        _queryApi,
+        _api,
         _extraOptions,
-        fetchWithBQ,
+        baseQuery,
       ) => {
-        const response = await fetchWithBQ({
-          url: url || `/reviews/${noteId}_${userId}`,
-          method: 'POST',
-          body: JSON.stringify({ reason }),
-          headers: {
-            'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
-          },
-        });
-        return { data: response.error === undefined };
+        const body: any = {};
+        if (reason !== undefined) body.reason = reason;
+
+        let result;
+        if (reason) {
+          result = await baseQuery({
+            url: url || `/reviews/${noteId}_${userId}`,
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+              'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
+            },
+          });
+        } else {
+          result = await baseQuery({
+            url: url || `/reviews/${noteId}_${userId}`,
+            method: 'DELETE',
+          });
+        }
+
+        return { data: result.error === undefined };
       },
       invalidatesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },

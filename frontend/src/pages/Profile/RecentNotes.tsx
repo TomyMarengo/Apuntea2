@@ -1,5 +1,3 @@
-// src/pages/Profile/RecentNotes.tsx
-
 import React from 'react';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -34,20 +32,24 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
     );
   }
 
+  const hasNotes = data && data.length > 0;
+
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
         <Typography variant="h6">{t('recentNotes.recentNotes')}</Typography>
-        <Button
-          component={RouterLink}
-          to="/notes"
-          variant="outlined"
-          size="small"
-        >
-          {t('recentNotes.viewMore')}
-        </Button>
+        {hasNotes && (
+          <Button
+            component={RouterLink}
+            to="/notes"
+            variant="outlined"
+            size="small"
+          >
+            {t('recentNotes.viewMore')}
+          </Button>
+        )}
       </Box>
-      {data && data.length > 0 ? (
+      {hasNotes ? (
         <Box>
           {data.slice(0, 5).map((note: Note) => (
             <NoteCard key={note.id} note={note} />

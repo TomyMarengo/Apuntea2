@@ -295,6 +295,8 @@ const NotePage: React.FC = () => {
             ? t('notePage.reviewUpdated')
             : t('notePage.reviewCreated'),
         );
+      } else {
+        toast.error(t('notePage.reviewError'));
       }
     } catch (err) {
       toast.error(t('notePage.reviewError'));
@@ -595,6 +597,7 @@ const NotePage: React.FC = () => {
           onClose={handleCloseDelete}
           note={note}
           shouldShowReason={isAdmin && !isOwner}
+          navigateBack={true}
         />
       )}
     </Box>

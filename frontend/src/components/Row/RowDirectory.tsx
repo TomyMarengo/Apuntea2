@@ -1,5 +1,3 @@
-// src/components/Row/RowDirectory.tsx
-
 import {
   IconButton,
   Tooltip,
@@ -30,14 +28,17 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LinkIcon from '@mui/icons-material/Link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Delete from '@mui/icons-material/Delete';
 import { Column } from '../ResultsTable';
+import DeleteDirectoryDialog from '../../pages/Directories/dialogs/DeleteDirectoryDialog';
+import { RootState } from '../../store/store';
 
 // Define and export ColumnDirectory
 export const ColumnDirectory: Column[] = [
   { id: 'name', label: 'Name' },
   { id: 'subject', label: 'Subject' },
   { id: 'owner', label: 'Owner' },
-  { id: 'lastModifiedAt', label: 'Last Modified' },
+  { id: 'lastModification', label: 'Last modification' },
   { id: 'actions', label: 'Actions', align: 'right' },
 ];
 
@@ -130,6 +131,17 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
     }
   };
 
+  // Delete directory dialog state
+  const [openDelete, setOpenDeleteModal] = useState(false);
+
+  const handleDeleteClick = () => {
+    setOpenDeleteModal(true);
+  };
+
+  const handleCloseDelete = () => {
+    setOpenDeleteModal(false);
+  };
+
   // Menu action handlers
   const handleOwnerNotes = () => {
     const ownerId = directory.ownerUrl?.split('/').pop();
@@ -167,6 +179,11 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   if (ownerLoading) ownerName = <Skeleton width={80} />;
   else if (ownerError) ownerName = t('rowDirectory.dataUnknown');
   else if (ownerData?.username) ownerName = ownerData.username;
+
+  const token = useSelector((state: RootState) => state.auth.token);
+
+  const isOwner = user?.id === directory.ownerUrl?.split('/').pop();
+  const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;
 
   return (
     <TableRow hover>
@@ -236,6 +253,15 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
               </IconButton>
             </Tooltip>
 
+            {/* Delete Button */}
+            {(isAdmin || isOwner) && (
+              <Tooltip title={t('rowDirectory.delete')}>
+                <IconButton onClick={handleDeleteClick} size="small">
+                  <Delete />
+                </IconButton>
+              </Tooltip>
+            )}
+
             {/* More Menu */}
             <Tooltip title={t('rowDirectory.more')}>
               <IconButton onClick={handleMenuClick} size="small">
@@ -269,6 +295,14 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
           </Box>
         </Box>
       </TableCell>
+
+      {/* Delete Directory Dialog */}
+      <DeleteDirectoryDialog
+        open={openDelete}
+        onClose={handleCloseDelete}
+        directory={directory}
+        shouldShowReason={isAdmin && !isOwner}
+      />
     </TableRow>
   );
 };

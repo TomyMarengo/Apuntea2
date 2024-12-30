@@ -1,5 +1,3 @@
-// src/pages/Profile/RecentReviews.tsx
-
 import React from 'react';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -36,20 +34,24 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ targetId }) => {
     );
   }
 
+  const hasReviews = data && data.reviews?.length > 0;
+
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
         <Typography variant="h6">{t('recentReviews.recentReviews')}</Typography>
-        <Button
-          component={RouterLink}
-          to="/reviews"
-          variant="outlined"
-          size="small"
-        >
-          {t('recentReviews.viewMore')}
-        </Button>
+        {hasReviews && (
+          <Button
+            component={RouterLink}
+            to="/reviews"
+            variant="outlined"
+            size="small"
+          >
+            {t('recentReviews.viewMore')}
+          </Button>
+        )}
       </Box>
-      {data && data.reviews?.length > 0 ? (
+      {hasReviews ? (
         <Box>
           {data.reviews.slice(0, 5).map((review: Review) => (
             <ReviewCard key={review.userId + review.noteId} review={review} />

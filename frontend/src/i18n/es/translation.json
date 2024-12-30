@@ -134,9 +134,9 @@
     "reason": "Razón",
     "cancel": "Cancelar",
     "save": "Guardar",
-    "editSuccess": "¡Apunte actualizado con éxito!",
+    "editSuccess": "¡Apunte actualizado exitosamente!",
     "editError": "Error al actualizar apunte.",
-    "deleteSuccess": "¡Apunte eliminado con éxito!",
+    "deleteSuccess": "¡Apunte eliminado exitosamente!",
     "deleteError": "Error al eliminar apunte.",
     "name": "Nombre",
     "visible": "Visible",
@@ -181,7 +181,16 @@
     "favoriteActionFailed": "Error al actualizar el estado de favorito.",
     "copySuccess": "¡Enlace copiado al portapapeles!",
     "copyFailed": "Error al copiar el enlace.",
-    "dataUnknown": "Desconocido"
+    "dataUnknown": "Desconocido",
+    "delete": "Eliminar",
+    "deleteDirectory": "Eliminar Directorio",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar este directorio?",
+    "deleteReason": "Razón",
+    "cancel": "Cancelar",
+    "deleting": "Eliminando...",
+    "confirm": "Confirmar",
+    "deleteSuccess": "¡Directorio eliminado exitosamente!",
+    "deleteError": "Error al eliminar el directorio."
   },
   "rowNote": {
     "favorite": "Favorito",
@@ -202,7 +211,16 @@
     "fileNotAvailable": "Archivo no disponible.",
     "copySuccess": "¡Enlace copiado al portapapeles!",
     "copyFailed": "Error al copiar el enlace.",
-    "dataUnknown": "Desconocido"
+    "dataUnknown": "Desconocido",
+    "delete": "Eliminar",
+    "deleteNote": "Eliminar Apunte",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar este apunte?",
+    "deleteReason": "Razón",
+    "cancel": "Cancelar",
+    "deleting": "Eliminando...",
+    "confirm": "Confirmar",
+    "deleteSuccess": "¡Apunte eliminado exitosamente!",
+    "deleteError": "Error al eliminar el apunte."
   },
   "searchForm": {
     "institution": "Institución",
@@ -211,9 +229,9 @@
     "word": "Palabra",
     "sortBy": "Ordenar Por",
     "name": "Nombre",
-    "lastModifiedAt": "Última Modificación",
+    "lastModification": "Última Modificación",
     "score": "Puntuación",
-    "createdAt": "Creado En",
+    "creation": "Creación",
     "asc": "Ascendente",
     "desc": "Descendente",
     "folders": "Carpetas",
@@ -459,7 +477,7 @@
     "loginRequired": "Necesitas iniciar sesión para crear un apunte.",
     "missingFields": "Por favor, ingresa el nombre, el archivo y la materia.",
     "noDirectory": "No se encontró un directorio válido para la materia seleccionada.",
-    "noteCreated": "¡Apunte creado con éxito!",
+    "noteCreated": "¡Apunte creado exitosamente!",
     "noteCreationFailed": "Error al crear el apunte.",
     "theory": "Teoría",
     "practice": "Práctica",
@@ -478,7 +496,7 @@
     "missingFields": "Por favor, completa todos los campos requeridos.",
     "invalidName": "Formato de nombre inválido.",
     "invalidColor": "Por favor, selecciona un color de icono válido.",
-    "directoryCreated": "¡Directorio creado con éxito!",
+    "directoryCreated": "¡Directorio creado exitosamente!",
     "directoryCreationFailed": "Error al crear el directorio."
   },
   "favoritesPage": {
@@ -516,8 +534,26 @@
     "noReviews": "No hay reseñas para mostrar."
   },
   "reviewCard": {
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "deleteReviewTitle": "Eliminar Reseña",
+    "deleteConfirmMessage": "¿Está seguro de que desea eliminar esta reseña?",
+    "deleteSuccess": "Reseña eliminada exitosamente!",
+    "deleteError": "Error al eliminar la reseña.",
+    "reason": "Razón",
     "hiddenNote": "Apunte oculto",
     "you": "Tú"
+  },
+  "directoryPage": {
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "deleteDirectoryTitle": "Eliminar Directorio",
+    "deleteConfirmMessage": "¿Está seguro de que desea eliminar este directorio?",
+    "deleteSuccess": "¡Directorio eliminado exitosamente!",
+    "deleteError": "Error al eliminar el directorio.",
+    "reason": "Razón"
   },
   "userPage": {
     "userNotFound": "Usuario no encontrado."

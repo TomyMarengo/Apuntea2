@@ -1,6 +1,6 @@
-// src/components/Row/RowNote.tsx
-
+import React, { useState } from 'react';
 import {
+  Box,
   IconButton,
   Tooltip,
   Menu,
@@ -9,11 +9,9 @@ import {
   Link as MuiLink,
   TableRow,
   TableCell,
-  Box,
 } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useState, MouseEvent } from 'react';
 import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import {
@@ -32,7 +30,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import DownloadIcon from '@mui/icons-material/Download';
 import LinkIcon from '@mui/icons-material/Link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Delete from '@mui/icons-material/Delete';
+import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
 import { Column } from '../ResultsTable';
+import { RootState } from '../../store/store';
 
 // Define and export ColumnNote
 export const ColumnNote: Column[] = [
@@ -46,6 +47,7 @@ export const ColumnNote: Column[] = [
 
 interface RowNoteProps {
   note: Note;
+  led?: boolean;
 }
 
 const RowNote: React.FC<RowNoteProps> = ({ note }) => {
@@ -83,7 +85,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
 
-  const handleMenuClick = (event: MouseEvent<HTMLElement>) => {
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleMenuClose = () => {
@@ -200,6 +202,22 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   else if (ownerError) ownerName = t('rowNote.dataUnknown');
   else if (ownerData?.username) ownerName = ownerData.username;
 
+  // Delete modal state
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const handleDeleteClick = () => {
+    setOpenDelete(true);
+  };
+
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+
+  const token = useSelector((state: RootState) => state.auth.token);
+
+  const isOwner = user?.id === note.ownerUrl?.split('/').pop();
+  const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;
+
   return (
     <TableRow hover>
       <TableCell>
@@ -270,6 +288,14 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
               </IconButton>
             </Tooltip>
 
+            {(isAdmin || isOwner) && (
+              <Tooltip title={t('rowNote.delete')}>
+                <IconButton onClick={handleDeleteClick} size="small">
+                  <Delete />
+                </IconButton>
+              </Tooltip>
+            )}
+
             {/* More Menu */}
             <Tooltip title={t('rowNote.more')}>
               <IconButton onClick={handleMenuClick} size="small">
@@ -303,6 +329,14 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
           </Box>
         </Box>
       </TableCell>
+
+      {/* DeleteNoteDialog component */}
+      <DeleteNoteDialog
+        open={openDelete}
+        onClose={handleCloseDelete}
+        note={note}
+        shouldShowReason={isAdmin && !isOwner}
+      />
     </TableRow>
   );
 };
