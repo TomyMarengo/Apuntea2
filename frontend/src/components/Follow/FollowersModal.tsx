@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useGetFollowersQuery } from '../../store/slices/usersApiSlice';
-import FollowerItem from './FollowerItem';
+import FollowItem from './FollowItem';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
@@ -62,7 +62,11 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>{t('follow.followers')}</DialogTitle>
+      <DialogTitle>
+        {t('follow.followers')}
+        {': '}
+        {data?.totalCount}
+      </DialogTitle>
       <DialogContent
         id="scrollableDiv"
         style={{ height: '60vh', overflow: 'auto', padding: 0 }}
@@ -95,9 +99,9 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
           >
             <List>
               {data?.users.map((follower) => (
-                <FollowerItem
+                <FollowItem
                   key={follower.id}
-                  followerId={follower.id}
+                  followId={follower.id}
                   currentUserId={userId}
                 />
               ))}

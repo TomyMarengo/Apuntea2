@@ -158,12 +158,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
               />
               <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
                 <Button onClick={handleFollowersClick}>
-                  {t('profileCard.followers')} {': '}
+                  {t('profileCard.followers')}
+                  {': '}
                   {!isLoadingFollowers && (followersData?.totalCount || 0)}
                   {isLoadingFollowers && <CircularProgress size={20} />}
                 </Button>
                 <Button onClick={handleFollowingClick}>
-                  {t('profileCard.following')} {': '}
+                  {t('profileCard.following')}
+                  {': '}
                   {!isLoadingFollowings && (followingsData?.totalCount || 0)}
                   {isLoadingFollowings && <CircularProgress size={20} />}
                 </Button>

@@ -8,10 +8,12 @@ import {
   List,
   CircularProgress,
   Box,
+  IconButton,
 } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useGetFollowingsQuery } from '../../store/slices/usersApiSlice';
-import FollowingItem from './FollowingItem';
+import FollowItem from './FollowItem';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
@@ -60,9 +62,28 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
     }
   }, [open]);
 
+  // Handle manual refresh
+  const handleRefresh = () => {
+    setPage(1);
+    refetch();
+  };
+
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-      <DialogTitle>{t('follow.following')}</DialogTitle>
+      <DialogTitle
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        {t('follow.following')}
+        {': '}
+        {data?.totalCount}
+        <IconButton onClick={handleRefresh} aria-label={t('follow.refresh')}>
+          <RefreshIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent
         id="scrollableDivFollowing"
         style={{ height: '60vh', overflow: 'auto', padding: 0 }}
@@ -95,9 +116,9 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
           >
             <List>
               {data?.users.map((following) => (
-                <FollowingItem
+                <FollowItem
                   key={following.id}
-                  followingId={following.id}
+                  followId={following.id}
                   currentUserId={userId}
                 />
               ))}

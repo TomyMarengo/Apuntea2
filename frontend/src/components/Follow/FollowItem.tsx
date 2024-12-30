@@ -1,6 +1,6 @@
-// src/components/Follow/FollowingItem.tsx
+// src/components/Follow/FollowItem.tsx
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ListItem,
   ListItemAvatar,
@@ -11,40 +11,60 @@ import {
 } from '@mui/material';
 import {
   useGetUserQuery,
+  useIsFollowingUserQuery,
+  useFollowUserMutation,
   useUnfollowUserMutation,
 } from '../../store/slices/usersApiSlice';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-interface FollowingItemProps {
-  followingId: string;
+interface FollowItemProps {
+  followId: string;
   currentUserId: string;
 }
 
-const FollowingItem: React.FC<FollowingItemProps> = ({
-  followingId,
-  currentUserId,
-}) => {
+const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
   const { t } = useTranslation();
-  const [isFollowing, setIsFollowing] = useState(true);
 
   const {
-    data: followingUser,
+    data: followUserData,
     error: userError,
     isLoading: userLoading,
-  } = useGetUserQuery({ userId: followingId });
+  } = useGetUserQuery({ userId: followId });
 
+  const { data: isFollowing, refetch } = useIsFollowingUserQuery(
+    { userId: followId, followerId: currentUserId },
+    { skip: !followId || !currentUserId },
+  );
+
+  const [followUser] = useFollowUserMutation();
   const [unfollowUser] = useUnfollowUserMutation();
+
+  const handleFollow = async () => {
+    try {
+      const result = await followUser({
+        userId: followId,
+      }).unwrap();
+      if (result) {
+        toast.success(t('follow.successFollow'));
+        refetch();
+      } else {
+        toast.error(t('follow.errorFollow'));
+      }
+    } catch (error) {
+      toast.error(t('follow.errorFollow'));
+    }
+  };
 
   const handleUnfollow = async () => {
     try {
       const result = await unfollowUser({
-        userId: followingId,
+        userId: followId,
         followerId: currentUserId,
       }).unwrap();
       if (result) {
         toast.success(t('follow.successUnfollow'));
-        setIsFollowing(false);
+        refetch();
       } else {
         toast.error(t('follow.errorUnfollow'));
       }
@@ -64,7 +84,7 @@ const FollowingItem: React.FC<FollowingItemProps> = ({
     );
   }
 
-  if (userError || !followingUser) {
+  if (userError || !followUserData) {
     return (
       <ListItem>
         <ListItemText primary={t('follow.errorLoadingUser')} />
@@ -76,17 +96,21 @@ const FollowingItem: React.FC<FollowingItemProps> = ({
     <ListItem>
       <ListItemAvatar>
         <Avatar
-          src={followingUser.profilePictureUrl}
-          alt={followingUser.username}
+          src={followUserData.profilePictureUrl}
+          alt={followUserData.username}
         />
       </ListItemAvatar>
       <ListItemText
-        primary={`${followingUser.firstName || ''} ${followingUser.lastName || followingUser.username}`}
+        primary={`${followUserData.firstName || ''} ${followUserData.lastName || followUserData.username}`}
       />
       <Box>
-        {isFollowing && (
+        {isFollowing ? (
           <Button variant="outlined" color="primary" onClick={handleUnfollow}>
             {t('follow.unfollow')}
+          </Button>
+        ) : (
+          <Button variant="contained" color="primary" onClick={handleFollow}>
+            {t('follow.follow')}
           </Button>
         )}
       </Box>
@@ -94,4 +118,4 @@ const FollowingItem: React.FC<FollowingItemProps> = ({
   );
 };
 
-export default FollowingItem;
+export default FollowItem;
