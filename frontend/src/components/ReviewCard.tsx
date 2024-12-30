@@ -42,7 +42,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, noteId }) => {
   );
 
   // Modal y estado de eliminación
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openDelete, setOpenDeleteModal] = useState(false);
+
+  const handleCloseDelete = () => {
+    setOpenDeleteModal(false);
+  };
 
   const handleDeleteClick = () => {
     setOpenDeleteModal(true);
@@ -148,8 +152,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, noteId }) => {
 
       {/* Modal de eliminación */}
       <DeleteReviewDialog
-        open={openDeleteModal}
-        onClose={() => setOpenDeleteModal(false)}
+        open={openDelete}
+        onClose={handleCloseDelete}
         review={review}
         shouldShowReason={true} // Puedes ajustar esto si no quieres mostrar la razón
       />
