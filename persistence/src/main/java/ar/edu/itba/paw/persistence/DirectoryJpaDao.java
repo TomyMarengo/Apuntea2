@@ -219,7 +219,7 @@ public class DirectoryJpaDao implements DirectoryDao {
                 .appendIfPresent(sa.getFavBy(), "INNER JOIN Directory_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
                 .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");//u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
         if (isRdir != null)
-            queryCreator.append("u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
+            queryCreator.append(" AND u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
         queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
         sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));
         return getSearchResults(queryCreator, sa);
@@ -232,7 +232,7 @@ public class DirectoryJpaDao implements DirectoryDao {
                 .appendIfPresent(sa.getFavBy(), "INNER JOIN Directory_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
                 .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");
         if (isRdir != null)
-            queryCreator.append("u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
+            queryCreator.append(" AND u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
         queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());
         sa.getFavBy().ifPresent(favBy -> queryCreator.addParameter(FAV_BY, favBy));
 
