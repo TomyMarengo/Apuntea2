@@ -29,7 +29,7 @@ interface SearchFormProps {
     word: string;
     category: 'note' | 'directory';
     sortBy: string;
-    asc: boolean;
+    asc: string;
     parentId?: string;
   };
   onSearch: (params: Record<string, string>) => void;
@@ -101,7 +101,7 @@ export default function SearchForm({
         word: localWord,
         category,
         sortBy,
-        asc: String(asc),
+        asc,
       });
     }, 350);
 
@@ -134,7 +134,7 @@ export default function SearchForm({
       word: localWord,
       category,
       sortBy,
-      asc: String(asc),
+      asc,
     });
   };
 
@@ -152,7 +152,7 @@ export default function SearchForm({
       word: localWord,
       category,
       sortBy,
-      asc: String(asc),
+      asc,
     });
   };
 
@@ -169,7 +169,7 @@ export default function SearchForm({
       word: localWord,
       category,
       sortBy,
-      asc: String(asc),
+      asc,
     });
   };
 
@@ -185,7 +185,7 @@ export default function SearchForm({
 
   // Toggle ascending/descending
   const toggleAsc = () => {
-    onSearch({ asc: String(!asc) });
+    onSearch({ asc: asc === 'true' ? 'false' : 'true' });
   };
 
   // Clear word input
@@ -199,7 +199,7 @@ export default function SearchForm({
       word: '',
       category,
       sortBy,
-      asc: String(asc),
+      asc,
     });
   };
 
@@ -332,7 +332,9 @@ export default function SearchForm({
             onChange={handleSortByChange}
           >
             <MenuItem value="name">{t('searchForm.name')}</MenuItem>
-            <MenuItem value="modified">{t('searchForm.lastModifiedAt')}</MenuItem>
+            <MenuItem value="modified">
+              {t('searchForm.lastModifiedAt')}
+            </MenuItem>
             <MenuItem value="score">{t('searchForm.score')}</MenuItem>
             <MenuItem value="date">{t('searchForm.createdAt')}</MenuItem>
           </Select>
@@ -340,7 +342,7 @@ export default function SearchForm({
 
         {/* Ascending/Descending Button */}
         <Button variant="outlined" onClick={toggleAsc}>
-          {asc ? t('searchForm.asc') : t('searchForm.desc')}
+          {asc === 'true' ? t('searchForm.asc') : t('searchForm.desc')}
         </Button>
       </Box>
     </Box>

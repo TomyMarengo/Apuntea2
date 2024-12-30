@@ -41,7 +41,7 @@ export default function SearchPage() {
     word: searchParams.get('word') || '',
     category: (searchParams.get('category') as 'note' | 'directory') || 'note',
     sortBy: searchParams.get('sortBy') || 'modified',
-    asc: searchParams.get('asc') === 'true',
+    asc: searchParams.get('asc') || 'true',
     parentId: searchParams.get('parentId') || '',
   };
 
@@ -58,7 +58,7 @@ export default function SearchPage() {
 
     // Reset to first page on search/filter change
     newParams.set('page', '1');
-    
+
     navigate({ search: newParams.toString() }, { replace: true });
   };
 
@@ -89,7 +89,8 @@ export default function SearchPage() {
             />
           )}
 
-          {totalPages > 1 && (
+          {((showNotes && notes.length > 0) ||
+            (showDirectories && directories.length > 0)) && (
             <PaginationBar
               currentPage={currentPage}
               pageSize={pageSize}

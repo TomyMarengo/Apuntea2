@@ -14,6 +14,7 @@ import AdminCareersPage from '../pages/Admin/AdminCareersPage';
 import FavoritesPage from '../pages/Favorites/FavoritesPage';
 import ReviewsPage from '../pages/Reviews/ReviewsPage';
 import ForgotPasswordPage from '../pages/ForgotPassword/ForgotPasswordPage';
+import UserPage from '../pages/Users/UserPage';
 
 export default function AppRouter() {
   return (
@@ -31,6 +32,7 @@ export default function AppRouter() {
       <Route path="/directories/:directoryId" element={<DirectoryPage />} />
       <Route path="/admin/users" element={<AdminUsersPage />} />
       <Route path="/admin/careers" element={<AdminCareersPage />} />
+      <Route path="/users/:userId" element={<UserPage />} />
       {/* Add more routes as needed */}
     </Routes>
   );

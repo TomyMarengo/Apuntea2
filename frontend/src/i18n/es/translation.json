@@ -513,5 +513,26 @@
   "reviewCard": {
     "hiddenNote": "Apunte oculto",
     "you": "Tú"
+  },
+  "userPage": {
+    "userNotFound": "Usuario no encontrado."
+  },
+  "userNotes": {
+    "mustHaveCareerInstitution": "Debes tener una carrera e institución para ver tus apuntes.",
+    "errorFetching": "Error al obtener los apuntes.",
+    "notes": "Apuntes",
+    "noSubjects": "No se encontraron asignaturas.",
+    "yearButton": "Año {{year}}",
+    "noSubjectsForYear": "No hay asignaturas disponibles para el año seleccionado."
+  },
+  "userProfileCard": {
+    "follow": "Seguir",
+    "unfollow": "Dejar de seguir",
+    "followed": "Has seguido a este usuario.",
+    "unfollowed": "Has dejado de seguir a este usuario.",
+    "followFailed": "Error al seguir al usuario.",
+    "unfollowFailed": "Error al dejar de seguir al usuario.",
+    "noCareer": "Carrera no establecida.",
+    "noInstitution": "Institución no establecida."
   }
 }

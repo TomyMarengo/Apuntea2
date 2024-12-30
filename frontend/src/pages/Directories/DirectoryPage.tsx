@@ -32,7 +32,7 @@ export default function DirectoryPage() {
     data: directory,
     isLoading,
     isError,
-  } = useGetDirectoryQuery({ directoryId });
+  } = useGetDirectoryQuery({ directoryId }, { skip: !directoryId });
 
   const {
     data: ownerData,
@@ -87,7 +87,7 @@ export default function DirectoryPage() {
     word: searchParams.get('word') || '',
     category: (searchParams.get('category') as 'note' | 'directory') || 'note',
     sortBy: searchParams.get('sortBy') || 'modified',
-    asc: searchParams.get('asc') === 'true',
+    asc: searchParams.get('asc') || 'true',
   };
 
   const handleSearchChange = (params: Record<string, string>) => {
@@ -179,7 +179,8 @@ export default function DirectoryPage() {
             />
           )}
 
-          {totalPages > 1 && (
+          {((showNotes && notes.length > 0) ||
+            (showDirectories && directories.length > 0)) && (
             <PaginationBar
               currentPage={currentPage}
               pageSize={pageSize}

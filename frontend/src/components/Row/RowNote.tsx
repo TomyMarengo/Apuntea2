@@ -68,13 +68,11 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   } = useGetUserQuery({ url: note.ownerUrl });
 
   // Favorite queries and mutations
-  const {
-    data: isFavorite,
-    refetch: refetchFavorite,
-  } = useGetIsFavoriteNoteQuery(
-    user ? { noteId: note.id, userId: user.id } : {},
-    { skip: !user },
-  );
+  const { data: isFavorite, refetch: refetchFavorite } =
+    useGetIsFavoriteNoteQuery(
+      user ? { noteId: note.id, userId: user.id } : {},
+      { skip: !user },
+    );
 
   const [addFavoriteNote, { isLoading: addingFavorite }] =
     useAddFavoriteNoteMutation();
@@ -167,7 +165,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
       if (user?.id === ownerId) {
         navigate('/notes');
       } else {
-        navigate(`/users/${ownerId}/notes`);
+        navigate(`/users/${ownerId}`);
       }
     }
     handleMenuClose();
@@ -210,7 +208,15 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
         </MuiLink>
       </TableCell>
       <TableCell>{subjectName}</TableCell>
-      <TableCell>{ownerName}</TableCell>
+      <TableCell>
+        <MuiLink
+          component={Link}
+          to={`/users/${ownerData?.id}`}
+          underline="hover"
+        >
+          {ownerName}
+        </MuiLink>
+      </TableCell>
       <TableCell>{new Date(note.lastModifiedAt).toLocaleString()}</TableCell>
       <TableCell>{note.avgScore?.toFixed(2) ?? '-'}</TableCell>
       <TableCell

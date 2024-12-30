@@ -65,13 +65,11 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   } = useGetUserQuery({ url: directory.ownerUrl });
 
   // Favorite queries and mutations
-  const {
-    data: isFavorite,
-    refetch: refetchFavorite,
-  } = useGetIsFavoriteDirectoryQuery(
-    user ? { directoryId: directory.id, userId: user.id } : {},
-    { skip: !user },
-  );
+  const { data: isFavorite, refetch: refetchFavorite } =
+    useGetIsFavoriteDirectoryQuery(
+      user ? { directoryId: directory.id, userId: user.id } : {},
+      { skip: !user },
+    );
 
   const [addFavoriteDirectory, { isLoading: addingFavorite }] =
     useAddFavoriteDirectoryMutation();
@@ -136,7 +134,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   const handleOwnerNotes = () => {
     const ownerId = directory.ownerUrl?.split('/').pop();
     if (ownerId) {
-      navigate(`/users/${ownerId}/notes`);
+      navigate(`/users/${ownerId}`);
     }
     handleMenuClose();
   };
@@ -182,7 +180,15 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
         </MuiLink>
       </TableCell>
       <TableCell>{subjectName}</TableCell>
-      <TableCell>{ownerName}</TableCell>
+      <TableCell>
+        <MuiLink
+          component={Link}
+          to={`/users/${ownerData?.id}`}
+          underline="hover"
+        >
+          {ownerName}
+        </MuiLink>
+      </TableCell>
       <TableCell>
         {new Date(directory.lastModifiedAt).toLocaleString()}
       </TableCell>

@@ -166,7 +166,7 @@ const AdminUsersPage: React.FC = () => {
       </ResultsTable>
 
       {/* Pagination Bar */}
-      {data && (
+      {data && data.users.length > 0 && (
         <PaginationBar
           currentPage={page}
           pageSize={pageSize}

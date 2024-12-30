@@ -183,7 +183,7 @@ const AdminCareersPage: React.FC = () => {
     });
 
     return merged;
-  }, [subjects, subjectCareers]);
+  }, [subjects, subjectCareers, yearFilter, sortBy, sortAsc]);
 
   // Compute the maximum year from subjectCareers
   const maxYearInCareer = useMemo(() => {

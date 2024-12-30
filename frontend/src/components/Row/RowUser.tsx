@@ -11,8 +11,10 @@ import {
   DialogActions,
   TextField,
   Button,
+  Link as MuiLink,
 } from '@mui/material';
 import { FC, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { User, UserStatus } from '../../types';
 import { useUpdateUserStatusMutation } from '../../store/slices/usersApiSlice';
 import { useTranslation } from 'react-i18next';
@@ -72,7 +74,11 @@ const RowUser: FC<RowUserProps> = ({ user }) => {
     <>
       <TableRow hover>
         <TableCell>{user.username || '-'}</TableCell>
-        <TableCell>{user.email}</TableCell>
+        <TableCell>
+          <MuiLink component={Link} to={`/users/${user?.id}`} underline="hover">
+            {user.email}
+          </MuiLink>
+        </TableCell>
         <TableCell>
           {t(`rowUser.status.${user.status?.toLowerCase()}`)}
         </TableCell>

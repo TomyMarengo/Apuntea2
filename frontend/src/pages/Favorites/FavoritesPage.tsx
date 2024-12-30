@@ -177,12 +177,14 @@ export default function FavoritesPage() {
       )}
 
       {/* Pagination */}
-      <PaginationBar
-        currentPage={page}
-        pageSize={pageSize}
-        totalPages={totalPages}
-        totalCount={totalCount}
-      />
+      {items.length > 0 && (
+        <PaginationBar
+          currentPage={page}
+          pageSize={pageSize}
+          totalPages={totalPages}
+          totalCount={totalCount}
+        />
+      )}
     </Box>
   );
 }

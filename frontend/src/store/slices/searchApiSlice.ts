@@ -23,7 +23,7 @@ interface SearchArgs {
   subjectId?: string;
   word?: string;
   page?: string | number;
-  asc?: string | boolean;
+  asc?: string;
   sortBy?: string;
   category?: string;
   pageSize?: string | number;

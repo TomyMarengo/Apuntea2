@@ -131,7 +131,7 @@ const ReviewsPage: React.FC = () => {
       </Box>
 
       {/* Pagination Bar */}
-      {data && data.totalPages > 1 && (
+      {data && data.reviews.length > 0 && (
         <PaginationBar
           currentPage={page}
           pageSize={pageSize}
