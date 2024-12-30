@@ -35,14 +35,13 @@ import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
 import { Column } from '../ResultsTable';
 import { RootState } from '../../store/store';
 
-// Define and export ColumnNote
 export const ColumnNote: Column[] = [
-  { id: 'name', label: 'Name' },
-  { id: 'subject', label: 'Subject' },
-  { id: 'owner', label: 'Owner' },
-  { id: 'lastModifiedAt', label: 'Last Modified' },
-  { id: 'score', label: 'Score' },
-  { id: 'actions', label: 'Actions', align: 'right' },
+  { id: 'name', label: 'searchForm.name' },
+  { id: 'subject', label: 'searchForm.subject' },
+  { id: 'owner', label: 'searchForm.owner' },
+  { id: 'lastModifiedAt', label: 'searchForm.lastModifiedAt' },
+  { id: 'score', label: 'searchForm.score' },
+  { id: 'actions', label: 'searchForm.actions', align: 'right' },
 ];
 
 interface RowNoteProps {

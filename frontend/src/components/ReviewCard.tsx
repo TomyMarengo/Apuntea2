@@ -25,9 +25,14 @@ dayjs.extend(localizedFormat);
 interface ReviewCardProps {
   review: Review;
   noteId?: string;
+  onDeleteSuccess?: (review: Review) => void;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ review, noteId }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({
+  review,
+  noteId,
+  onDeleteSuccess,
+}) => {
   const { t } = useTranslation();
   const user = useSelector(selectCurrentUser);
 
@@ -41,7 +46,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, noteId }) => {
     { skip: !review.noteUrl },
   );
 
-  // Modal y estado de eliminación
   const [openDelete, setOpenDeleteModal] = useState(false);
 
   const handleCloseDelete = () => {
@@ -59,105 +63,105 @@ const ReviewCard: React.FC<ReviewCardProps> = ({ review, noteId }) => {
   const isAdmin = token?.payload?.authorities?.includes('ROLE_ADMIN') ?? false;
 
   return (
-    <>
+    <Box
+      sx={{
+        mb: 2,
+        p: 2,
+        border: 1,
+        borderColor: 'divider',
+        borderRadius: 1,
+        backgroundColor: 'background.paper',
+      }}
+    >
       <Box
         sx={{
-          mb: 2,
-          p: 2,
-          border: 1,
-          borderColor: 'divider',
-          borderRadius: 1,
-          backgroundColor: 'background.paper',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
+            gap: 1,
+            flexWrap: 'wrap',
           }}
         >
-          {/* Izquierda: Avatar, nombre y estrellas */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Avatar src={userData?.profilePictureUrl || ''} />
-            {userData?.id !== user?.id ? (
-              <Link
-                component={RouterLink}
-                to={`/users/${review.userId}`}
-                underline="hover"
-              >
-                <Typography variant="subtitle2">
-                  {userData?.username || `User ${review.userId}`}
-                </Typography>
-              </Link>
-            ) : (
-              <Typography variant="subtitle2">{t('reviewCard.you')}</Typography>
-            )}
-            <Rating value={review.score} readOnly size="small" />
-          </Box>
-
-          {/* Derecha: Tacho de basura */}
-          {isAdmin && (
-            <IconButton onClick={handleDeleteClick}>
-              <DeleteIcon />
-            </IconButton>
-          )}
-        </Box>
-
-        {/* Contenido del review */}
-        <Typography
-          variant="body2"
-          sx={{
-            mb: 1,
-            mt: 2,
-            overflowWrap: 'break-word',
-          }}
-        >
-          {review.content}
-        </Typography>
-
-        {/* Nota y fecha */}
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          {noteData && noteId !== noteData.id && (
+          <Avatar src={userData?.profilePictureUrl || ''} />
+          {userData?.id !== user?.id ? (
             <Link
               component={RouterLink}
-              to={`/notes/${review.noteId}`}
+              to={`/users/${review.userId}`}
               underline="hover"
             >
-              <Typography variant="caption" color="primary">
-                {noteData.name}
+              <Typography variant="subtitle2">
+                {userData?.username || `User ${review.userId}`}
               </Typography>
             </Link>
+          ) : (
+            <Typography variant="subtitle2">{t('reviewCard.you')}</Typography>
           )}
-          {!noteData && (
-            <Typography variant="caption" color="text.secondary">
-              {t('reviewCard.hiddenNote')}
-            </Typography>
-          )}
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ ml: 'auto' }}
-          >
-            {formattedDate}
-          </Typography>
+          <Rating value={review.score} readOnly size="small" />
         </Box>
+
+        {isAdmin && (
+          <IconButton onClick={handleDeleteClick}>
+            <DeleteIcon />
+          </IconButton>
+        )}
       </Box>
 
-      {/* Modal de eliminación */}
+      <Typography
+        variant="body2"
+        sx={{
+          mb: 1,
+          mt: 2,
+          overflowWrap: 'break-word',
+        }}
+      >
+        {review.content}
+      </Typography>
+
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        {noteData && noteId !== noteData.id && (
+          <Link
+            component={RouterLink}
+            to={`/notes/${review.noteId}`}
+            underline="hover"
+          >
+            <Typography variant="caption" color="primary">
+              {noteData.name}
+            </Typography>
+          </Link>
+        )}
+        {!noteData && (
+          <Typography variant="caption" color="text.secondary">
+            {t('reviewCard.hiddenNote')}
+          </Typography>
+        )}
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ ml: 'auto' }}
+        >
+          {formattedDate}
+        </Typography>
+      </Box>
       <DeleteReviewDialog
         open={openDelete}
         onClose={handleCloseDelete}
         review={review}
-        shouldShowReason={true} // Puedes ajustar esto si no quieres mostrar la razón
+        shouldShowReason={true}
+        onDeleteSuccess={onDeleteSuccess}
       />
-    </>
+    </Box>
   );
 };
 

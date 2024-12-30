@@ -29,17 +29,16 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LinkIcon from '@mui/icons-material/Link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Delete from '@mui/icons-material/Delete';
-import { Column } from '../ResultsTable';
 import DeleteDirectoryDialog from '../../pages/Directories/dialogs/DeleteDirectoryDialog';
 import { RootState } from '../../store/store';
+import { Column } from '../ResultsTable';
 
-// Define and export ColumnDirectory
 export const ColumnDirectory: Column[] = [
-  { id: 'name', label: 'Name' },
-  { id: 'subject', label: 'Subject' },
-  { id: 'owner', label: 'Owner' },
-  { id: 'lastModification', label: 'Last modification' },
-  { id: 'actions', label: 'Actions', align: 'right' },
+  { id: 'name', label: 'searchForm.name' },
+  { id: 'subject', label: 'searchForm.subject' },
+  { id: 'owner', label: 'searchForm.owner' },
+  { id: 'lastModifiedAt', label: 'searchForm.lastModifiedAt' },
+  { id: 'actions', label: 'searchForm.actions', align: 'right' },
 ];
 
 interface RowDirectoryProps {

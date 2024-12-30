@@ -256,6 +256,14 @@ const NotePage: React.FC = () => {
   const [score, setScore] = useState<number>(5);
   const [content, setContent] = useState('');
 
+  const handleDeleteSuccess = (review: Review) => {
+    setAllReviews((prev) =>
+      prev.filter(
+        (r) => r.noteId !== review.noteId || r.userId !== review.userId,
+      ),
+    );
+  };
+
   useEffect(() => {
     if (myReviewData) {
       setScore(myReviewData.score);
@@ -514,6 +522,7 @@ const NotePage: React.FC = () => {
                 key={`${rev.noteId}_${rev.userId}`}
                 review={rev}
                 noteId={note.id}
+                onDeleteSuccess={handleDeleteSuccess}
               />
             ))}
 
@@ -598,7 +607,7 @@ const NotePage: React.FC = () => {
           onClose={handleCloseDelete}
           note={note}
           shouldShowReason={isAdmin && !isOwner}
-          navigateBack={true}
+          navigateBack
         />
       )}
     </Box>

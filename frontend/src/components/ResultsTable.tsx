@@ -9,6 +9,7 @@ import {
   Paper,
 } from '@mui/material';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface Column {
   id: string;
@@ -22,6 +23,8 @@ interface ResultsTableProps {
 }
 
 const ResultsTable: FC<ResultsTableProps> = ({ columns, children }) => {
+  const { t } = useTranslation();
+
   return (
     <Paper sx={{ mt: 3 }}>
       <Table>
@@ -29,7 +32,7 @@ const ResultsTable: FC<ResultsTableProps> = ({ columns, children }) => {
           <TableRow>
             {columns.map((column) => (
               <TableCell key={column.id} align={column.align || 'left'}>
-                {column.label}
+                {t(column.label)}
               </TableCell>
             ))}
           </TableRow>

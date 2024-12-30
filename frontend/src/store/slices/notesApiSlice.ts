@@ -122,7 +122,9 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         });
         return { data: result.error === undefined };
       },
-      invalidatesTags: ['Notes'],
+      invalidatesTags: (result, error, { noteId }) => [
+        { type: 'Note', id: noteId },
+      ],
     }),
     deleteNote: builder.mutation<boolean, DeleteNoteArgs>({
       queryFn: async (

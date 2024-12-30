@@ -6,6 +6,7 @@ import RowDirectory, {
   ColumnDirectory,
 } from '../../components/Row/RowDirectory';
 import { Note, Directory } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   showNotes: boolean;

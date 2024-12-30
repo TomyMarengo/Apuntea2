@@ -12,7 +12,7 @@ import {
   InputAdornment,
   Button,
 } from '@mui/material';
-import { VisibilityOff } from '@mui/icons-material';
+import { Close } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import {
   useGetInstitutionsQuery,
@@ -294,7 +294,7 @@ export default function SearchForm({
             endAdornment: localWord && (
               <InputAdornment position="end">
                 <IconButton onClick={handleClearWord}>
-                  <VisibilityOff />
+                  <Close />
                 </IconButton>
               </InputAdornment>
             ),
@@ -335,7 +335,10 @@ export default function SearchForm({
             <MenuItem value="modified">
               {t('searchForm.lastModifiedAt')}
             </MenuItem>
-            <MenuItem value="score">{t('searchForm.score')}</MenuItem>
+            {/* show score only if note category */}
+            {category === 'note' && (
+              <MenuItem value="score">{t('searchForm.score')}</MenuItem>
+            )}
             <MenuItem value="date">{t('searchForm.createdAt')}</MenuItem>
           </Select>
         </FormControl>

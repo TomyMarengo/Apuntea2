@@ -27,7 +27,7 @@ public class ReviewResponseDto {
         dto.content = review.getContent();
         dto.createdAt = review.getCreatedAt();
         dto.score = review.getScore();
-        dto.self = uriInfo.getBaseUriBuilder().path("reviews").path(review.getUser().getUserId().toString() + "_" +review.getNote().getId().toString()).build();
+        dto.self = uriInfo.getBaseUriBuilder().path("reviews").path(review.getNote().getId().toString() + "_" +review.getUser().getUserId().toString()).build();
         dto.note = uriInfo.getBaseUriBuilder().path("notes").path(review.getNote().getId().toString()).build();
         dto.user = uriInfo.getBaseUriBuilder().path("users").path(review.getUser().getUserId().toString()).build();
         return dto;

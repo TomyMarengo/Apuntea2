@@ -19,6 +19,7 @@ interface DeleteReviewDialogProps {
   onClose: () => void;
   review: Review;
   shouldShowReason: boolean;
+  onDeleteSuccess?: (review: Review) => void;
 }
 
 const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
@@ -26,6 +27,7 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
   onClose,
   review,
   shouldShowReason,
+  onDeleteSuccess,
 }) => {
   const { t } = useTranslation();
   const [deleteReview] = useDeleteReviewMutation();
@@ -41,6 +43,7 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
       if (result) {
         toast.success(t('reviewCard.deleteSuccess'));
         onClose();
+        if (onDeleteSuccess) onDeleteSuccess(review);
       } else {
         toast.error(t('reviewCard.deleteError'));
       }

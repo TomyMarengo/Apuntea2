@@ -167,28 +167,17 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
         const body: any = {};
         if (reason !== undefined) body.reason = reason;
 
-        let result;
-        if (reason) {
-          result = await baseQuery({
-            url: url || `/reviews/${noteId}_${userId}`,
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-              'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
-            },
-          });
-        } else {
-          result = await baseQuery({
-            url: url || `/reviews/${noteId}_${userId}`,
-            method: 'DELETE',
-          });
-        }
+        const result = await baseQuery({
+          url: url || `/reviews/${noteId}_${userId}`,
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: {
+            'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
+          },
+        });
 
         return { data: result.error === undefined };
       },
-      invalidatesTags: (_result, _error, { noteId, userId }) => [
-        { type: 'Reviews', id: `${noteId}_${userId}` },
-      ],
     }),
   }),
 });
