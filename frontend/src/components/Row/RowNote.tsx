@@ -212,7 +212,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
     setOpenDelete(false);
   };
 
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token = useSelector(selectCurrentToken);
 
   const isOwner = user?.id === note.ownerUrl?.split('/').pop();
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;

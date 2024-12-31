@@ -20,7 +20,10 @@ import {
   useGetIsFavoriteDirectoryQuery,
 } from '../../store/slices/directoriesApiSlice';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../store/slices/authSlice';
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+} from '../../store/slices/authSlice';
 import { Directory, Subject } from '../../types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -179,7 +182,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   else if (ownerError) ownerName = t('rowDirectory.dataUnknown');
   else if (ownerData?.username) ownerName = ownerData.username;
 
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token = useSelector(selectCurrentToken);
 
   const isOwner = user?.id === directory.ownerUrl?.split('/').pop();
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;

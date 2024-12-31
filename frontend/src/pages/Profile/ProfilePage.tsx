@@ -9,12 +9,11 @@ import RecentReviews from './RecentReviews';
 import { useGetLoggedUserQuery } from '../../store/slices/usersApiSlice';
 import { selectCurrentUserId } from '../../store/slices/authSlice';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 import { Helmet } from 'react-helmet-async';
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
-  const userId = useSelector((state: RootState) => selectCurrentUserId(state));
+  const userId = useSelector(selectCurrentUserId);
 
   const {
     data: user,

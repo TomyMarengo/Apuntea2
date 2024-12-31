@@ -8,7 +8,10 @@ import {
   IconButton,
 } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../store/slices/authSlice';
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+} from '../store/slices/authSlice';
 import { Review } from '../types';
 import { Link as RouterLink } from 'react-router-dom';
 import { useGetUserQuery } from '../store/slices/usersApiSlice';
@@ -18,7 +21,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import DeleteReviewDialog from '../pages/Reviews/dialogs/DeleteReviewDialog';
-import { RootState } from '../store/store';
 
 dayjs.extend(localizedFormat);
 
@@ -58,7 +60,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
   const formattedDate = dayjs(review.createdAt).format('LL');
 
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token = useSelector(selectCurrentToken);
 
   const isAdmin = token?.payload?.authorities?.includes('ROLE_ADMIN') ?? false;
 
