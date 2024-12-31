@@ -1,12 +1,16 @@
-// src/pages/Directories/DirectoryPage.tsx
-
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../store/slices/authSlice';
 import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
-import { Box, Typography, CircularProgress, Alert } from '@mui/material';
+import {
+  Box,
+  Typography,
+  CircularProgress,
+  Alert,
+  IconButton,
+} from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import SearchForm from '../Search/SearchForm';
 import SearchResultsTable from '../Search/SearchResultsTable';
@@ -16,6 +20,8 @@ import CreateNoteFab from '../../components/CreateNoteFab';
 import CreateDirectoryFab from '../../components/CreateDirectoryFab';
 import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
 import { Helmet } from 'react-helmet-async';
+import EditDirectoryDialog from './dialogs/EditDirectoryDialog';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function DirectoryPage() {
   const { directoryId } = useParams<{ directoryId: string }>();
@@ -36,6 +42,8 @@ export default function DirectoryPage() {
     isLoading: isLoadingOwner,
     isError: isErrorOwner,
   } = useGetUserQuery({ url: ownerUrl }, { skip: !ownerUrl });
+
+  const [openEditDialog, setOpenEditDialog] = useState(false); // State to manage dialog visibility
 
   useEffect(() => {
     if (directoryId) {
@@ -103,6 +111,14 @@ export default function DirectoryPage() {
     pageTitle = t('errorFetchingDirectory');
   }
 
+  const handleEditClick = () => {
+    setOpenEditDialog(true); // Open the dialog when the edit button is clicked
+  };
+
+  const handleCloseDialog = () => {
+    setOpenEditDialog(false); // Close the dialog
+  };
+
   return (
     <>
       <Helmet>
@@ -132,6 +148,9 @@ export default function DirectoryPage() {
             <>
               {/* Directory Title */}
               <Typography variant="h4">{currentDirectory.name}</Typography>
+              <IconButton onClick={handleEditClick} sx={{ ml: 2 }}>
+                <EditIcon />
+              </IconButton>
 
               {/* Directory Breadcrumbs */}
               <DirectoryBreadcrumbs currentDirectory={currentDirectory} />
@@ -198,6 +217,14 @@ export default function DirectoryPage() {
                     <CreateDirectoryFab parentId={directoryId} />
                   </Box>
                 )}
+
+              {/* Edit Directory Dialog */}
+              <EditDirectoryDialog
+                open={openEditDialog}
+                onClose={handleCloseDialog}
+                directory={currentDirectory}
+                showNameOnly
+              />
             </>
           )}
       </Box>

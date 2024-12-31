@@ -29,12 +29,14 @@ interface DirectoryPageProps {
   open: boolean;
   onClose: () => void;
   directory: Directory;
+  showNameOnly?: boolean;
 }
 
 const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
   open,
   onClose,
   directory,
+  showNameOnly = false,
 }) => {
   const { t } = useTranslation();
   const [updateDirectory] = useUpdateDirectoryMutation();
@@ -80,54 +82,58 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
           onChange={(e) => setName(e.target.value)}
         />
         {/* Selector de color agregado */}
-        <Box sx={{ mb: 1 }}>
-          <Typography variant="subtitle2" sx={{ mb: 1 }}>
-            {t('directoryPage.iconColor')}
-          </Typography>
-          <ToggleButtonGroup
-            value={iconColor}
-            exclusive
-            onChange={(_, value) => {
-              if (value !== null) {
-                setIconColor(value);
-              }
-            }}
-            aria-label="icon color"
-            sx={{ gap: 1 }}
-          >
-            {colorOptions.map((color) => (
-              <ToggleButton
-                key={color.value}
-                value={color.value}
-                aria-label={color.label}
-                sx={{
-                  width: 40,
-                  height: 40,
-                  minWidth: 40,
-                  border: 'none',
-                  borderRadius: '50%',
-                  backgroundColor: color.value,
-                  transition: 'transform 0.2s, border 0.2s',
-                  '&.Mui-selected, &.Mui-selected:hover, &:hover': {
-                    transform: 'scale(1.1)',
-                    border: '2px solid #FFFFFF',
-                    backgroundColor: color.value,
-                  },
+        {!showNameOnly && (
+          <>
+            <Box sx={{ mb: 1 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                {t('directoryPage.iconColor')}
+              </Typography>
+              <ToggleButtonGroup
+                value={iconColor}
+                exclusive
+                onChange={(_, value) => {
+                  if (value !== null) {
+                    setIconColor(value);
+                  }
                 }}
-              />
-            ))}
-          </ToggleButtonGroup>
-        </Box>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={visible}
-              onChange={(e) => setVisible(e.target.checked)}
-              color="primary"
+                aria-label="icon color"
+                sx={{ gap: 1 }}
+              >
+                {colorOptions.map((color) => (
+                  <ToggleButton
+                    key={color.value}
+                    value={color.value}
+                    aria-label={color.label}
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      minWidth: 40,
+                      border: 'none',
+                      borderRadius: '50%',
+                      backgroundColor: color.value,
+                      transition: 'transform 0.2s, border 0.2s',
+                      '&.Mui-selected, &.Mui-selected:hover, &:hover': {
+                        transform: 'scale(1.1)',
+                        border: '2px solid #FFFFFF',
+                        backgroundColor: color.value,
+                      },
+                    }}
+                  />
+                ))}
+              </ToggleButtonGroup>
+            </Box>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={visible}
+                  onChange={(e) => setVisible(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label={t('directoryPage.visible')}
             />
-          }
-          label={t('directoryPage.visible')}
-        />
+          </>
+        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
