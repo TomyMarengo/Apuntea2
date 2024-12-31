@@ -19,7 +19,7 @@ import { Helmet } from 'react-helmet-async';
 
 export default function DirectoryPage() {
   const { directoryId } = useParams<{ directoryId: string }>();
-  const { t } = useTranslation();
+  const { t } = useTranslation('directoryPage');
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
 
@@ -95,11 +95,12 @@ export default function DirectoryPage() {
     navigate({ search: newParams.toString() }, { replace: true });
   };
 
-  let pageTitle = t('directoryPage.titlePage');
+  // Determine the page title based on the state
+  let pageTitle = t('titlePage');
   if (isLoadingCurrentDirectory || isLoadingData || isLoadingOwner) {
-    pageTitle = t('directoryPage.loading');
+    pageTitle = t('loading');
   } else if (isErrorCurrentDirectory || isErrorOwner) {
-    pageTitle = t('directoryPage.errorFetchingDirectory');
+    pageTitle = t('errorFetchingDirectory');
   }
 
   return (
@@ -117,9 +118,7 @@ export default function DirectoryPage() {
 
         {(isErrorCurrentDirectory || isErrorOwner) && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
-            <Alert severity="error">
-              {t('directoryPage.errorFetchingDirectory')}
-            </Alert>
+            <Alert severity="error">{t('errorFetchingDirectory')}</Alert>
           </Box>
         )}
 
@@ -156,7 +155,7 @@ export default function DirectoryPage() {
                       variant="body1"
                       sx={{ mt: 4, textAlign: 'center' }}
                     >
-                      {t('directoryPage.search.noContent')}
+                      {t('noResults')}
                     </Typography>
                   ) : (
                     <SearchResultsTable

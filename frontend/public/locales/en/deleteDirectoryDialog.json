@@ -1,0 +1,9 @@
+{
+  "deleteSuccess": "Directory deleted successfully.",
+  "deleteError": "Error deleting the directory.",
+  "deleteDirectoryTitle": "Delete Directory",
+  "deleteConfirmMessage": "Are you sure you want to delete this directory?",
+  "reason": "Reason for deletion",
+  "cancel": "Cancel",
+  "delete": "Delete"
+}

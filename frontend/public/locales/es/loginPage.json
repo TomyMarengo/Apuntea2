@@ -7,7 +7,7 @@
   "password": "Contraseña",
   "signup": "Registrarse",
   "noAccount": "¿No tienes una cuenta?",
-  "forgotPassword": "Forgot Password",
+  "forgotPassword": "Olvidé mi contraseña",
   "invalidEmail": "Correo electrónico inválido",
   "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
 }

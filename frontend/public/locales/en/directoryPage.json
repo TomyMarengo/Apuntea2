@@ -2,20 +2,5 @@
   "titlePage": "Directory | Apuntea",
   "loading": "Loading...",
   "errorFetchingDirectory": "Error fetching directory.",
-  "delete": "Delete",
-  "cancel": "Cancel",
-  "confirm": "Confirm",
-  "deleteDirectoryTitle": "Delete Directory",
-  "deleteConfirmMessage": "Are you sure you want to delete this directory?",
-  "deleteSuccess": "Directory deleted successfully!",
-  "deleteError": "Error deleting directory.",
-  "reason": "Reason",
-  "search": {
-    "noContent": "No content found."
-  },
-  "breadcrumb": {
-    "parent": "Parent Directory",
-    "isRoot": "Root Directory",
-    "isLoading": "Loading directories..."
-  }
+  "noResults": "No content found."
 }

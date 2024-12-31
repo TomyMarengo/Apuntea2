@@ -17,23 +17,23 @@ export default function HomePage() {
   const cards = [
     {
       title: t('cards.organizeNotes.title'),
-      description: t('homePage.cards.organizeNotes.description'),
+      description: t('cards.organizeNotes.description'),
       icon: <Folder sx={{ fontSize: 100 }} />,
       link: isLoggedIn ? '/notes' : '/login',
     },
     {
-      title: t('homePage.cards.findNotes.title'),
-      description: t('homePage.cards.findNotes.description'),
+      title: t('cards.findNotes.title'),
+      description: t('cards.findNotes.description'),
       icon: <Search sx={{ fontSize: 100 }} />,
       link: '/search',
     },
     {
       title: isLoggedIn
-        ? t('homePage.cards.editProfile.title')
-        : t('homePage.cards.register.title'),
+        ? t('cards.editProfile.title')
+        : t('cards.register.title'),
       description: isLoggedIn
-        ? t('homePage.cards.editProfile.description')
-        : t('homePage.cards.register.description'),
+        ? t('cards.editProfile.description')
+        : t('cards.register.description'),
       icon: <Person sx={{ fontSize: 100 }} />,
       link: isLoggedIn ? '/profile' : '/register',
     },
@@ -42,7 +42,7 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>{t('homePage.titlePage')}</title>
+        <title>{t('titlePage')}</title>
       </Helmet>
       <Box
         sx={{
@@ -68,7 +68,7 @@ export default function HomePage() {
         >
           {isLoggedIn ? (
             <Trans
-              i18nKey="homePage.welcomeUser"
+              i18nKey="welcomeUser"
               values={{ username: user.username || user.email }}
               components={{
                 appName: (
@@ -83,7 +83,7 @@ export default function HomePage() {
             />
           ) : (
             <Trans
-              i18nKey="homePage.welcome"
+              i18nKey="welcome"
               components={{
                 appName: (
                   <Box
@@ -109,7 +109,7 @@ export default function HomePage() {
             marginTop: 0,
           }}
         >
-          {t('homePage.tagline')}
+          {t('tagline')}
         </Typography>
 
         {/* Feature Cards */}

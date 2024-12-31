@@ -24,7 +24,8 @@ import { Helmet } from 'react-helmet-async';
 const DEFAULT_PAGE_SIZE = 10;
 
 export default function FavoritesPage() {
-  const { t } = useTranslation();
+  // Initialize translation with the 'favoritesPage' namespace
+  const { t } = useTranslation('favoritesPage');
   const user = useSelector(selectCurrentUser);
   const userId = user?.id;
 
@@ -36,12 +37,12 @@ export default function FavoritesPage() {
     10,
   );
 
-  // Query args
+  // Query arguments based on favorite type
   const notesQueryArgs = { userId, page, pageSize };
   const dirsQueryArgs = { userId, page, pageSize, rdir: 'false' };
   const subjectsQueryArgs = { userId, page, pageSize, rdir: 'true' };
 
-  // Favorite notes
+  // Fetch favorite notes
   const {
     data: notesResult,
     isLoading: notesLoading,
@@ -51,7 +52,7 @@ export default function FavoritesPage() {
     skip: favtype !== 'notes',
   });
 
-  // Favorite directories
+  // Fetch favorite directories
   const {
     data: dirsResult,
     isLoading: dirsLoading,
@@ -61,7 +62,7 @@ export default function FavoritesPage() {
     skip: favtype !== 'directories',
   });
 
-  // Favorite subjects
+  // Fetch favorite subjects
   const {
     data: subjectsResult,
     isLoading: subjectsLoading,
@@ -82,6 +83,7 @@ export default function FavoritesPage() {
     (favtype === 'directories' && dirsError) ||
     (favtype === 'subjects' && subjectsError);
 
+  // Determine items and pagination based on favorite type
   let items: any[] = [];
   let totalCount = 0;
   let totalPages = 1;
@@ -100,7 +102,7 @@ export default function FavoritesPage() {
     totalPages = subjectsResult.totalPages;
   }
 
-  // Toggle favorite type
+  // Toggle favorite type and update URL parameters
   const handleFavTypeChange = (newType: string) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set('favtype', newType);
@@ -108,7 +110,7 @@ export default function FavoritesPage() {
     setSearchParams(newParams);
   };
 
-  // Refresh current type
+  // Refresh the current favorite type data
   const handleRefresh = () => {
     if (favtype === 'notes') {
       refetchNotes();
@@ -119,11 +121,12 @@ export default function FavoritesPage() {
     }
   };
 
-  let pageTitle = t('favoritesPage.titlePage');
+  // Determine the page title based on the state
+  let pageTitle = t('titlePage');
   if (isLoading) {
-    pageTitle = t('favoritesPage.loading');
+    pageTitle = t('loading');
   } else if (isError) {
-    pageTitle = t('favoritesPage.errorFetching');
+    pageTitle = t('errorFetching');
   }
 
   return (
@@ -134,7 +137,7 @@ export default function FavoritesPage() {
       <Box sx={{ p: 2 }}>
         {/* Title */}
         <Typography variant="h4" sx={{ mb: 3 }}>
-          {t('favoritesPage.title')}
+          {t('title')}
         </Typography>
 
         {/* Button row: notes / directories / subjects + refresh */}
@@ -143,22 +146,22 @@ export default function FavoritesPage() {
             variant={favtype === 'notes' ? 'contained' : 'outlined'}
             onClick={() => handleFavTypeChange('notes')}
           >
-            {t('favoritesPage.notes')}
+            {t('notes')}
           </Button>
           <Button
             variant={favtype === 'directories' ? 'contained' : 'outlined'}
             onClick={() => handleFavTypeChange('directories')}
           >
-            {t('favoritesPage.directories')}
+            {t('directories')}
           </Button>
           <Button
             variant={favtype === 'subjects' ? 'contained' : 'outlined'}
             onClick={() => handleFavTypeChange('subjects')}
           >
-            {t('favoritesPage.subjects')}
+            {t('subjects')}
           </Button>
 
-          {/* Refresh button */}
+          {/* Refresh button aligned to the end */}
           <IconButton onClick={handleRefresh} sx={{ ml: 'auto' }}>
             <RefreshIcon />
           </IconButton>
@@ -174,16 +177,14 @@ export default function FavoritesPage() {
         {/* Error message */}
         {isError && (
           <Box sx={{ textAlign: 'center', my: 4 }}>
-            <Typography color="error">
-              {t('favoritesPage.errorFetching')}
-            </Typography>
+            <Typography color="error">{t('errorFetching')}</Typography>
           </Box>
         )}
 
         {/* No favorites */}
         {!isLoading && !isError && items.length === 0 && (
           <Typography textAlign="center" sx={{ mt: 4 }}>
-            {t('favoritesPage.noFavorites')}
+            {t('noFavorites')}
           </Typography>
         )}
 
@@ -193,9 +194,8 @@ export default function FavoritesPage() {
             <Box
               sx={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 180px))',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
                 gap: 2,
-                justifyContent: 'center',
                 mb: 4,
               }}
             >

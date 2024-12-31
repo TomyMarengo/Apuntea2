@@ -2,7 +2,7 @@
   "titlePage": "Inicio | Apuntea",
   "welcome": "Bienvenido a <appName>Apuntea</appName>",
   "welcomeUser": "Bienvenido a <appName>Apuntea</appName>, {{username}}",
-  "tagline": "Conecta tu conocimiento, expande tus horizontes",
+  "tagline": "Tu plataforma favorita para compartir apuntes",
   "cards": {
     "organizeNotes": {
       "title": "Organiza tus apuntes",
@@ -14,7 +14,7 @@
     },
     "editProfile": {
       "title": "Edita tu perfil",
-      "description": "Cambia tu foto, nombre y más"
+      "description": "Actualiza tu información personal y configuraciones"
     },
     "register": {
       "title": "Regístrate",

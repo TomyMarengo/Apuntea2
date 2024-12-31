@@ -25,15 +25,16 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import useLogin from '../../hooks/useLogin';
 import { Helmet } from 'react-helmet-async';
 
+// Define validation schemas with Zod
 const loginSchema = z.object({
-  email: z.string().email('loginPage.invalidEmail'),
-  password: z.string().min(4, 'loginPage.passwordMinLength'),
+  email: z.string().email('invalidEmail'),
+  password: z.string().min(4, 'passwordMinLength'),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('loginPage');
   const navigate = useNavigate();
   const { loginUser } = useLogin();
 
@@ -52,6 +53,7 @@ export default function LoginPage() {
     mode: 'onChange',
   });
 
+  // Handle form submission
   const onSubmit = async (data: LoginForm) => {
     try {
       setLoading(true);
@@ -65,16 +67,20 @@ export default function LoginPage() {
     }
   };
 
+  // Toggle password visibility
   const handleTogglePassword = () => setShowPassword(!showPassword);
+
+  // Clear specific form field
   const handleClearField = (fieldName: keyof LoginForm) => {
     reset({ ...watch(), [fieldName]: '' });
   };
 
-  let pageTitle = t('loginPage.titlePage');
+  // Determine the page title based on the state
+  let pageTitle = t('titlePage');
   if (loading) {
-    pageTitle = t('loginPage.loading');
+    pageTitle = t('loading');
   } else if (loginError) {
-    pageTitle = t('loginPage.errorFetching', {
+    pageTitle = t('errorFetching', {
       error: String(loginError),
     });
   }
@@ -95,13 +101,13 @@ export default function LoginPage() {
         <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
           <CardContent>
             <Typography variant="h4" gutterBottom align="center">
-              {t('loginPage.login')}
+              {t('login')}
             </Typography>
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
               {/* EMAIL FIELD */}
               <TextField
-                label={t('loginPage.email')}
+                label={t('email')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -125,7 +131,7 @@ export default function LoginPage() {
 
               {/* PASSWORD FIELD */}
               <TextField
-                label={t('loginPage.password')}
+                label={t('password')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -173,23 +179,19 @@ export default function LoginPage() {
                 sx={{ mt: 2 }}
                 disabled={loading}
               >
-                {loading ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  t('loginPage.login')
-                )}
+                {loading ? <CircularProgress size={24} /> : t('login')}
               </Button>
             </Box>
 
             <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-              {t('loginPage.noAccount')}{' '}
+              {t('noAccount')}{' '}
               <RouterLink to="/register" style={{ color: '#1976d2' }}>
-                {t('loginPage.signup')}
+                {t('signup')}
               </RouterLink>
             </Typography>
             <Typography variant="body2" align="center" sx={{ mt: 1 }}>
               <RouterLink to="/forgot-password" style={{ color: '#1976d2' }}>
-                {t('loginPage.forgotPassword')}
+                {t('forgotPassword')}
               </RouterLink>
             </Typography>
           </CardContent>

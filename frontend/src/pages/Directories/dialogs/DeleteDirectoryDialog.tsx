@@ -1,3 +1,5 @@
+// src/pages/Directories/dialogs/DeleteDirectoryDialog.tsx
+
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -11,7 +13,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useDeleteDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { toast } from 'react-toastify';
-
 import { Directory } from '../../../types';
 
 interface DeleteDirectoryDialogProps {
@@ -27,7 +28,7 @@ const DeleteDirectoryDialog: React.FC<DeleteDirectoryDialogProps> = ({
   directory,
   shouldShowReason,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('deleteDirectoryDialog'); 
   const [deleteDirectory] = useDeleteDirectoryMutation();
   const [reason, setReason] = useState('');
 
@@ -38,24 +39,24 @@ const DeleteDirectoryDialog: React.FC<DeleteDirectoryDialogProps> = ({
         reason: shouldShowReason ? reason : undefined,
       }).unwrap();
       if (result) {
-        toast.success(t('directoryPage.deleteSuccess'));
+        toast.success(t('deleteSuccess'));
         onClose();
       } else {
-        toast.error(t('directoryPage.deleteError'));
+        toast.error(t('deleteError'));
       }
     } catch (err) {
-      toast.error(t('directoryPage.deleteError'));
+      toast.error(t('deleteError'));
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{t('directoryPage.deleteDirectoryTitle')}</DialogTitle>
+      <DialogTitle>{t('deleteDirectoryTitle')}</DialogTitle>
       <DialogContent>
-        <Typography>{t('directoryPage.deleteConfirmMessage')}</Typography>
+        <Typography>{t('deleteConfirmMessage')}</Typography>
         {shouldShowReason && (
           <TextField
-            label={t('directoryPage.reason')}
+            label={t('reason')}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             fullWidth
@@ -64,9 +65,9 @@ const DeleteDirectoryDialog: React.FC<DeleteDirectoryDialogProps> = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>{t('directoryPage.cancel')}</Button>
+        <Button onClick={onClose}>{t('cancel')}</Button>
         <Button onClick={handleConfirm} variant="contained" color="error">
-          {t('directoryPage.delete')}
+          {t('delete')}
         </Button>
       </DialogActions>
     </Dialog>
