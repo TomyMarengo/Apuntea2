@@ -19,6 +19,7 @@ import { useGetReviewsQuery } from '../../store/slices/reviewsApiSlice';
 import ReviewCard from '../../components/ReviewCard';
 import PaginationBar from '../../components/PaginationBar';
 import { Review } from '../../types';
+import { Helmet } from 'react-helmet-async';
 
 const ReviewsPage: React.FC = () => {
   const { t } = useTranslation();
@@ -57,7 +58,7 @@ const ReviewsPage: React.FC = () => {
   }
 
   // Fetch reviews based on the filter
-  const { data, isLoading, isError } = useGetReviewsQuery(queryParams, {
+  const { data, isLoading, isError, error } = useGetReviewsQuery(queryParams, {
     skip: !currentUser,
   });
 
@@ -68,78 +69,90 @@ const ReviewsPage: React.FC = () => {
     setFilter(event.target.value as 'received' | 'given');
   };
 
+  let pageTitle = t('reviewsPage.titlePage');
+  if (isLoading) {
+    pageTitle = t('reviewsPage.loading');
+  } else if (isError) {
+    pageTitle = t('reviewsPage.errorFetching', { error: String(error) });
+  }
+
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Title and Filter */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          mb: 3,
-          flexDirection: { xs: 'column', sm: 'row' },
-          gap: 2,
-        }}
-      >
-        <Typography variant="h5">{t('reviewsPage.title')}</Typography>
-        <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-          <InputLabel id="filter-select-label">
-            {t('reviewsPage.filterLabel')}
-          </InputLabel>
-          <Select
-            labelId="filter-select-label"
-            value={filter}
-            onChange={handleFilterChange}
-            label={t('reviewsPage.filterLabel')}
-          >
-            <MenuItem value="received">
-              {t('reviewsPage.filterReceived')}
-            </MenuItem>
-            <MenuItem value="given">{t('reviewsPage.filterGiven')}</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Box sx={{ p: 3 }}>
+        {/* Title and Filter */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            mb: 3,
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 2,
+          }}
+        >
+          <Typography variant="h5">{t('reviewsPage.title')}</Typography>
+          <FormControl variant="outlined" sx={{ minWidth: 200 }}>
+            <InputLabel id="filter-select-label">
+              {t('reviewsPage.filterLabel')}
+            </InputLabel>
+            <Select
+              labelId="filter-select-label"
+              value={filter}
+              onChange={handleFilterChange}
+              label={t('reviewsPage.filterLabel')}
+            >
+              <MenuItem value="received">
+                {t('reviewsPage.filterReceived')}
+              </MenuItem>
+              <MenuItem value="given">{t('reviewsPage.filterGiven')}</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
 
-      {/* Reviews List */}
-      <Box>
-        {isLoading && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
-            <CircularProgress />
-          </Box>
-        )}
-        {isError && (
-          <Typography
-            variant="body1"
-            color="error"
-            sx={{ textAlign: 'center', py: 5 }}
-          >
-            {t('reviewsPage.errorFetching')}
-          </Typography>
-        )}
-        {data && data.reviews.length > 0
-          ? data.reviews.map((review: Review) => (
-              <ReviewCard
-                key={`${review.noteId}_${review.userId}_${review.createdAt}`}
-                review={review}
-              />
-            ))
-          : !isLoading && (
-              <Typography variant="body1" sx={{ textAlign: 'center', py: 5 }}>
-                {t('reviewsPage.noReviews')}
-              </Typography>
-            )}
-      </Box>
+        {/* Reviews List */}
+        <Box>
+          {isLoading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
+              <CircularProgress />
+            </Box>
+          )}
+          {isError && (
+            <Typography
+              variant="body1"
+              color="error"
+              sx={{ textAlign: 'center', py: 5 }}
+            >
+              {t('reviewsPage.errorFetching')}
+            </Typography>
+          )}
+          {data && data.reviews.length > 0
+            ? data.reviews.map((review: Review) => (
+                <ReviewCard
+                  key={`${review.noteId}_${review.userId}_${review.createdAt}`}
+                  review={review}
+                />
+              ))
+            : !isLoading && (
+                <Typography variant="body1" sx={{ textAlign: 'center', py: 5 }}>
+                  {t('reviewsPage.noReviews')}
+                </Typography>
+              )}
+        </Box>
 
-      {/* Pagination Bar */}
-      {data && data.reviews.length > 0 && (
-        <PaginationBar
-          currentPage={page}
-          pageSize={pageSize}
-          totalPages={data.totalPages}
-          totalCount={data.totalCount}
-        />
-      )}
-    </Box>
+        {/* Pagination Bar */}
+        {data && data.reviews.length > 0 && (
+          <PaginationBar
+            currentPage={page}
+            pageSize={pageSize}
+            totalPages={data.totalPages}
+            totalCount={data.totalCount}
+          />
+        )}
+      </Box>
+    </>
   );
 };
 

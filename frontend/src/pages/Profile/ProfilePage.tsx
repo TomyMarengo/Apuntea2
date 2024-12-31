@@ -10,6 +10,7 @@ import { useGetLoggedUserQuery } from '../../store/slices/usersApiSlice';
 import { selectCurrentUserId } from '../../store/slices/authSlice';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { Helmet } from 'react-helmet-async';
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation();
@@ -18,73 +19,79 @@ const ProfilePage: React.FC = () => {
   const {
     data: user,
     isLoading,
-    error,
+    isError,
     refetch,
   } = useGetLoggedUserQuery({ userId }, { skip: !userId });
 
+  let pageTitle = t('profilePage.titlePage');
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '80vh',
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (error) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '80vh',
-        }}
-      >
-        <Typography variant="h6" color="error">
-          {t('profilePage.errorFetchingUser')}
-        </Typography>
-      </Box>
-    );
-  }
-
-  if (!user) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          minHeight: '80vh',
-        }}
-      >
-        <Typography variant="h6">{t('profilePage.noUserFound')}</Typography>
-      </Box>
-    );
+    pageTitle = t('profilePage.loading');
+  } else if (isError) {
+    pageTitle = t('profilePage.errorFetchingUser');
+  } else if (!user) {
+    pageTitle = t('profilePage.noUserFound');
   }
 
   return (
-    <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
-      <Typography variant="h4" gutterBottom>
-        {t('profilePage.profile')}
-      </Typography>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
+        {isLoading ? (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '80vh',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        ) : isError ? (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '80vh',
+            }}
+          >
+            <Typography variant="h6" color="error">
+              {t('profilePage.errorFetchingUser')}
+            </Typography>
+          </Box>
+        ) : !user ? (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '80vh',
+            }}
+          >
+            <Typography variant="h6">{t('profilePage.noUserFound')}</Typography>
+          </Box>
+        ) : (
+          <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
+            <Typography variant="h4" gutterBottom>
+              {t('profilePage.profile')}
+            </Typography>
 
-      <ProfileCard user={user} onUpdateSuccess={refetch} />
+            <ProfileCard user={user} onUpdateSuccess={refetch} />
 
-      <Divider sx={{ my: 4 }} />
+            <Divider sx={{ my: 4 }} />
 
-      <RecentNotes userId={user.id} />
+            <RecentNotes userId={user.id} />
 
-      <Divider sx={{ my: 4 }} />
+            <Divider sx={{ my: 4 }} />
 
-      <RecentReviews targetId={user.id} />
-    </Box>
+            <RecentReviews targetId={user.id} />
+          </Box>
+        )}
+      </Box>
+    </>
   );
 };
 

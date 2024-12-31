@@ -21,6 +21,18 @@ import { useTranslation } from 'react-i18next';
 import BlockIcon from '@mui/icons-material/Block';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { toast } from 'react-toastify';
+import { Column } from '../../types';
+
+export const ColumnUser: Column[] = [
+  { id: 'username', label: 'adminUsersPage.columns.username' },
+  { id: 'email', label: 'adminUsersPage.columns.email' },
+  { id: 'status', label: 'adminUsersPage.columns.status' },
+  {
+    id: 'actions',
+    label: 'adminUsersPage.columns.actions',
+    align: 'right',
+  },
+];
 
 interface RowUserProps {
   user: User;

@@ -21,7 +21,17 @@ import {
   useUnlinkSubjectCareerMutation,
 } from '../../store/slices/institutionsApiSlice';
 import { toast } from 'react-toastify';
-import { SubjectWithCareer } from '../../types';
+import { SubjectWithCareer, Column } from '../../types';
+
+export const ColumnSubject: Column[] = [
+  { id: 'name', label: 'adminCareersPage.columns.name' },
+  { id: 'year', label: 'adminCareersPage.columns.year' },
+  {
+    id: 'actions',
+    label: 'adminCareersPage.columns.actions',
+    align: 'right',
+  },
+];
 
 interface RowSubjectProps {
   data: SubjectWithCareer;

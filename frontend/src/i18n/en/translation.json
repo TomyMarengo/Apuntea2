@@ -1,5 +1,6 @@
 {
   "homePage": {
+    "titlePage": "Home | Apuntea",
     "welcome": "Welcome to <appName>Apuntea</appName>",
     "welcomeUser": "Welcome to <appName>Apuntea</appName>, {{username}}",
     "tagline": "Your favorite note-sharing platform",
@@ -36,17 +37,9 @@
     "logout": "Logout"
   },
   "directoryPage": {
-    "errorFetchingDirectory": "Error fetching directory",
-    "title": "Parent Directory",
-    "description": "Description of the parent directory.",
-    "search": {
-      "noContent": "No content found."
-    },
-    "breadcrumb": {
-      "parent": "Parent Directory",
-      "isRoot": "Root Directory",
-      "isLoading": "Loading directories..."
-    },
+    "titlePage": "Directory | Apuntea",
+    "loading": "Loading...",
+    "errorFetchingDirectory": "Error fetching directory.",
     "delete": "Delete",
     "cancel": "Cancel",
     "confirm": "Confirm",
@@ -55,10 +48,19 @@
     "deleteSuccess": "Directory deleted successfully!",
     "deleteError": "Error deleting directory.",
     "reason": "Reason",
-    "you": "You",
-    "hiddenNote": "Hidden note"
+    "search": {
+      "noContent": "No content found."
+    },
+    "breadcrumb": {
+      "parent": "Parent Directory",
+      "isRoot": "Root Directory",
+      "isLoading": "Loading directories..."
+    }
   },
   "loginPage": {
+    "titlePage": "Login | Apuntea",
+    "loading": "Loading...",
+    "errorFetching": "Error logging in: {{error}}",
     "login": "Login",
     "email": "Email",
     "password": "Password",
@@ -69,6 +71,8 @@
     "passwordMinLength": "Password must be at least 4 characters"
   },
   "forgotPasswordPage": {
+    "titlePage": "Forgot Password | Apuntea",
+    "errorFetching": "Error recovering password.",
     "title": "Forgot My Password",
     "emailLabel": "Email Address",
     "codeLabel": "Verification Code",
@@ -88,7 +92,7 @@
     "submitCode": "Submit code",
     "validationErrors": {
       "emailRequired": "Email is required.",
-      "codeRequired": "Code is required.",
+      "codeRequired": "Code is 6 characters long.",
       "passwordRequired": "Password is required.",
       "passwordLength": "Password must be at least 4 characters long.",
       "invalidEmail": "Invalid email"
@@ -110,6 +114,9 @@
     }
   },
   "notePage": {
+    "titlePage": "{{noteName}} | Apuntea",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching note.",
     "noteNotFound": "This note does not exist.",
     "fileNotFound": "No file found for this note.",
     "fileNotPreviewable": "This file cannot be previewed.",
@@ -154,6 +161,9 @@
     "noMoreReviews": "No more reviews available."
   },
   "registerPage": {
+    "titlePage": "Register | Apuntea",
+    "loading": "Loading...",
+    "errorFetching": "Error registering: {{error}}",
     "signup": "Sign Up",
     "email": "Email",
     "password": "Password",
@@ -253,6 +263,7 @@
     "selectSubject": "Select a subject"
   },
   "searchPage": {
+    "titlePage": "Search | Apuntea",
     "title": "Search",
     "noContent": "No content found."
   },
@@ -265,6 +276,8 @@
     "admincareers": "Admin Careers"
   },
   "profilePage": {
+    "titlePage": "Profile | Apuntea",
+    "loading": "Loading...",
     "profile": "Profile",
     "errorFetchingUser": "Error fetching user data.",
     "noUserFound": "No user found."
@@ -346,21 +359,23 @@
     "averageScore": "Average Score"
   },
   "adminUsersPage": {
-    "searchPlaceholder": "Search by email or name",
-    "statusFilter": "Status",
-    "statusOptions": {
-      "all": "All",
-      "active": "Active",
-      "banned": "Banned"
-    },
+    "titlePage": "Manage Users | Apuntea",
     "columns": {
       "username": "Username",
       "email": "Email",
       "status": "Status",
       "actions": "Actions"
     },
+    "searchPlaceholder": "Search users...",
+    "statusFilter": "Filter by Status",
+    "statusOptions": {
+      "all": "All",
+      "active": "Active",
+      "banned": "Banned"
+    },
     "loading": "Loading...",
-    "error": "An error occurred while fetching users."
+    "error": "Error fetching users.",
+    "noResults": "No users found with the specified criteria."
   },
   "rowUser": {
     "status": {
@@ -395,18 +410,17 @@
     }
   },
   "adminCareersPage": {
-    "title": "Admin Careers Page",
-    "institution": "Institution",
-    "career": "Career",
-    "selectInstitution": "Select an institution",
-    "selectCareer": "Select a career",
+    "titlePage": "Manage Careers | Apuntea",
     "columns": {
-      "name": "Subject Name",
+      "name": "Name",
       "year": "Year",
       "actions": "Actions"
     },
-    "noSubjects": "No subjects found for this career.",
-    "filterYear": "Filter by year",
+    "institution": "Institution",
+    "selectInstitution": "Select an institution",
+    "career": "Career",
+    "selectCareer": "Select a career",
+    "filterYear": "Filter by Year",
     "yearOptions": {
       "all": "All"
     },
@@ -415,10 +429,9 @@
       "year": "Year",
       "name": "Name"
     },
-    "sortOrder": "Toggle ascending/descending",
-    "loadingSubjects": "Loading subjects...",
+    "sortOrder": "Toggle Sort Order",
     "addSubjectModal": {
-      "title": "Add an existing Subject",
+      "title": "Add Existing Subject",
       "selectSubject": "Select a subject",
       "none": "None",
       "yearLabel": "Year",
@@ -430,18 +443,23 @@
       "nameLabel": "Subject Name",
       "yearLabel": "Year",
       "cancel": "Cancel",
-      "confirm": "Confirm"
+      "confirm": "Create"
     },
     "toast": {
       "addSubject": {
-        "success": "Subject successfully added to the career.",
-        "error": "Failed to add subject to the career."
+        "success": "Subject added successfully.",
+        "error": "Error adding the subject."
       },
       "createSubject": {
-        "success": "Subject successfully created and linked to the career.",
-        "error": "Failed to create and link the new subject."
+        "success": "Subject created successfully.",
+        "error": "Error creating the subject."
       }
-    }
+    },
+    "loadingSubjects": "Loading subjects...",
+    "errorFetchingDirectory": "Error fetching directory: {{error}}",
+    "noSubjects": "There are no subjects in this career.",
+    "title": "Manage Careers",
+    "noResults": "No users found with the specified criteria."
   },
   "rowSubject": {
     "actions": {
@@ -512,11 +530,13 @@
     "directoryCreationFailed": "Failed to create directory."
   },
   "favoritesPage": {
+    "titlePage": "Favorites | Apuntea",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching favorites.",
     "title": "My Favorites",
     "notes": "Notes",
     "directories": "Directories",
     "subjects": "Subjects",
-    "errorFetching": "Error fetching favorites.",
     "noFavorites": "No favorites found.",
     "removeFavorite": "Remove from favorites",
     "favorited": "Added to favorites successfully!",
@@ -525,13 +545,15 @@
     "mustLogin": "You must be logged in to view favorites."
   },
   "notesPage": {
+    "titlePage": "Notes | Apuntea",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notes.",
     "mustLogin": "You must be logged in to view your notes.",
     "title": "My Notes",
     "year": "Year",
     "notes": "Notes",
     "noSubjects": "No subjects found.",
     "noSubjectsForYear": "No subjects available for the selected year.",
-    "errorFetching": "Error fetching data. Please try again later.",
     "yearButton": "Year {{year}}",
     "subjectNotes": {
       "notesCount": "{{count}} Notes",
@@ -539,10 +561,12 @@
     }
   },
   "reviewsPage": {
+    "titlePage": "Reviews | Apuntea",
     "title": "Reviews",
     "filterLabel": "Filter Reviews",
     "filterReceived": "Reviews Received",
     "filterGiven": "Reviews Given",
+    "loading": "Loading...",
     "errorFetching": "Error fetching reviews.",
     "noReviews": "No reviews to display."
   },
@@ -559,7 +583,7 @@
     "hiddenNote": "Hidden note"
   },
   "userPage": {
-    "title": "Apuntea | @{{username}}",
+    "titlePage": "@{{username}} | Apuntea",
     "userNotFound": "User not found.",
     "errorFetchingUser": "Error fetching user data.",
     "loading": "Loading..."

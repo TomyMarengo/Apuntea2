@@ -10,12 +10,7 @@ import {
 } from '@mui/material';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-
-export interface Column {
-  id: string;
-  label: string;
-  align?: 'right' | 'left' | 'center';
-}
+import { Column } from '../types';
 
 interface ResultsTableProps {
   columns: Column[];

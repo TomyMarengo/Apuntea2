@@ -10,21 +10,25 @@ import {
   TableRow,
   TableCell,
   SelectChangeEvent,
+  Typography,
+  CircularProgress,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import ResultsTable, { Column } from '../../components/ResultsTable';
-import RowUser from '../../components/Row/RowUser';
+import ResultsTable from '../../components/ResultsTable';
+import RowUser, { ColumnUser } from '../../components/Row/RowUser';
 import PaginationBar from '../../components/PaginationBar';
 import { useGetUsersQuery } from '../../store/slices/usersApiSlice';
 import { UserStatus } from '../../types';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import useDebounce from '../../hooks/useDebounce';
+import { Helmet } from 'react-helmet-async';
 
 const AdminUsersPage: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
   // Extract query parameters from the URL
   const queryFilter = searchParams.get('query') || '';
   const statusFilter =
@@ -52,7 +56,7 @@ const AdminUsersPage: React.FC = () => {
 
       navigate({ search: params.toString() }, { replace: true });
     }
-  }, [debouncedSearchInput, queryFilter, searchParams]);
+  }, [debouncedSearchInput, queryFilter, searchParams, navigate]);
 
   // Sync the local search input state when the URL's query parameter changes externally
   useEffect(() => {
@@ -85,96 +89,115 @@ const AdminUsersPage: React.FC = () => {
     navigate({ search: params.toString() }, { replace: true });
   };
 
-  // Define the table columns
-  const columns: Column[] = [
-    { id: 'username', label: t('adminUsersPage.columns.username') },
-    { id: 'email', label: t('adminUsersPage.columns.email') },
-    { id: 'status', label: t('adminUsersPage.columns.status') },
-    {
-      id: 'actions',
-      label: t('adminUsersPage.columns.actions'),
-      align: 'right',
-    },
-  ];
+  // Determine the page title based on the state
+  let pageTitle = t('adminUsersPage.titlePage');
+  if (isLoading) {
+    pageTitle = t('adminUsersPage.loading');
+  } else if (isError) {
+    pageTitle = t('adminUsersPage.error');
+  }
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Search and Filter Controls */}
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 2,
-          mb: 3,
-          flexDirection: { xs: 'column', sm: 'row' },
-        }}
-      >
-        {/* Search Input Field */}
-        <TextField
-          label={t('adminUsersPage.searchPlaceholder')}
-          variant="outlined"
-          value={searchInput}
-          onChange={handleQueryChange}
-          fullWidth
-        />
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Box sx={{ p: 3 }}>
+        {/* Search and Filter Controls */}
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            mb: 3,
+            flexDirection: { xs: 'column', sm: 'row' },
+          }}
+        >
+          {/* Search Input Field */}
+          <TextField
+            label={t('adminUsersPage.searchPlaceholder')}
+            variant="outlined"
+            value={searchInput}
+            onChange={handleQueryChange}
+            fullWidth
+          />
 
-        {/* Status Filter Dropdown */}
-        <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-          <InputLabel id="status-filter-label">
-            {t('adminUsersPage.statusFilter')}
-          </InputLabel>
-          <Select
-            labelId="status-filter-label"
-            value={statusFilter}
-            onChange={handleStatusChange}
-            label={t('adminUsersPage.statusFilter')}
-          >
-            <MenuItem value="ALL">
-              {t('adminUsersPage.statusOptions.all')}
-            </MenuItem>
-            <MenuItem value={UserStatus.ACTIVE}>
-              {t('adminUsersPage.statusOptions.active')}
-            </MenuItem>
-            <MenuItem value={UserStatus.BANNED}>
-              {t('adminUsersPage.statusOptions.banned')}
-            </MenuItem>
-          </Select>
-        </FormControl>
+          {/* Status Filter Dropdown */}
+          <FormControl variant="outlined" sx={{ minWidth: 200 }}>
+            <InputLabel id="status-filter-label">
+              {t('adminUsersPage.statusFilter')}
+            </InputLabel>
+            <Select
+              labelId="status-filter-label"
+              value={statusFilter}
+              onChange={handleStatusChange}
+              label={t('adminUsersPage.statusFilter')}
+            >
+              <MenuItem value="ALL">
+                {t('adminUsersPage.statusOptions.all')}
+              </MenuItem>
+              <MenuItem value={UserStatus.ACTIVE}>
+                {t('adminUsersPage.statusOptions.active')}
+              </MenuItem>
+              <MenuItem value={UserStatus.BANNED}>
+                {t('adminUsersPage.statusOptions.banned')}
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+
+        {/* Results Table */}
+        <ResultsTable columns={ColumnUser}>
+          {/* Loading State */}
+          {isLoading && (
+            <TableRow>
+              <TableCell colSpan={4}>
+                <Box sx={{ textAlign: 'center', py: 5 }}>
+                  <CircularProgress />
+                </Box>
+              </TableCell>
+            </TableRow>
+          )}
+
+          {/* Error State */}
+          {isError && (
+            <TableRow>
+              <TableCell colSpan={4}>
+                <Box sx={{ textAlign: 'center', py: 5 }}>
+                  <Typography color="error">
+                    {t('adminUsersPage.error')}
+                  </Typography>
+                </Box>
+              </TableCell>
+            </TableRow>
+          )}
+
+          {/* Display Users */}
+          {data &&
+            data.users.map((user) => <RowUser key={user.id} user={user} />)}
+
+          {/* No Results State */}
+          {data && data.users.length === 0 && !isLoading && !isError && (
+            <TableRow>
+              <TableCell colSpan={4}>
+                <Box sx={{ textAlign: 'center', py: 5 }}>
+                  <Typography>{t('adminUsersPage.noResults')}</Typography>
+                </Box>
+              </TableCell>
+            </TableRow>
+          )}
+        </ResultsTable>
+
+        {/* Pagination Bar */}
+        {data && data.users.length > 0 && (
+          <PaginationBar
+            currentPage={page}
+            pageSize={pageSize}
+            totalPages={data.totalPages}
+            totalCount={data.totalCount}
+          />
+        )}
       </Box>
-
-      {/* Results Table */}
-      <ResultsTable columns={columns}>
-        {isLoading && (
-          <TableRow>
-            <TableCell colSpan={4}>
-              <Box sx={{ textAlign: 'center', py: 5 }}>
-                {t('adminUsersPage.loading')}
-              </Box>
-            </TableCell>
-          </TableRow>
-        )}
-        {isError && (
-          <TableRow>
-            <TableCell colSpan={4}>
-              <Box sx={{ textAlign: 'center', py: 5 }}>
-                {t('adminUsersPage.error')}
-              </Box>
-            </TableCell>
-          </TableRow>
-        )}
-        {data &&
-          data.users.map((user) => <RowUser key={user.id} user={user} />)}
-      </ResultsTable>
-
-      {/* Pagination Bar */}
-      {data && data.users.length > 0 && (
-        <PaginationBar
-          currentPage={page}
-          pageSize={pageSize}
-          totalPages={data.totalPages}
-          totalCount={data.totalCount}
-        />
-      )}
-    </Box>
+    </>
   );
 };
 

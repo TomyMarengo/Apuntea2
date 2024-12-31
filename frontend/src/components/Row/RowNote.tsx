@@ -32,7 +32,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Delete from '@mui/icons-material/Delete';
 import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
-import { Column } from '../ResultsTable';
+import { Column } from '../../types';
 import { RootState } from '../../store/store';
 
 export const ColumnNote: Column[] = [

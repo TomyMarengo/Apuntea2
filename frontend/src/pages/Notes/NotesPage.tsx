@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 import {
   useGetSubjectsByCareerQuery,
@@ -47,17 +48,6 @@ export default function NotesPage() {
   const pageSize = pageSizeParam
     ? parseInt(pageSizeParam, 10)
     : DEFAULT_PAGE_SIZE;
-
-  // Early return if no user
-  if (!userId || !careerId || !institutionId) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" color="error">
-          {t('notesPage.mustLogin')}
-        </Typography>
-      </Box>
-    );
-  }
 
   // Fetch the subjects for the user's career
   const {
@@ -155,73 +145,76 @@ export default function NotesPage() {
     });
   };
 
+  let pageTitle = t('notesPage.titlePage');
   if (isLoading) {
-    return (
-      <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography color="error">{t('notesPage.errorFetching')}</Typography>
-      </Box>
-    );
+    pageTitle = t('notesPage.loading');
+  } else if (isError) {
+    pageTitle = t('notesPage.errorFetching');
   }
 
   return (
-    <Box sx={{ p: 2 }}>
-      {/* Title */}
-      <Typography variant="h4" sx={{ mb: 3 }}>
-        {t('notesPage.title')}
-      </Typography>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Box sx={{ p: 2 }}>
+        {/* Title */}
+        <Typography variant="h4" sx={{ mb: 3 }}>
+          {t('notesPage.titlePage')}
+        </Typography>
 
-      {/* Row with Year Buttons */}
-      <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
-        {uniqueYears.length === 0 ? (
-          <Typography variant="body1">{t('notesPage.noSubjects')}</Typography>
+        {/* Year Selection Buttons */}
+        <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
+          {uniqueYears.length > 0 &&
+            uniqueYears.map((yr) => (
+              <Button
+                key={yr}
+                variant={yr === selectedYear ? 'contained' : 'outlined'}
+                onClick={() => handleYearChange(yr)}
+              >
+                {t('notesPage.yearButton', { year: yr })}
+              </Button>
+            ))}
+        </Stack>
+
+        {/* Content Based on State */}
+        {isLoading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>
+        ) : isError ? (
+          <Typography color="error">{t('notesPage.errorFetching')}</Typography>
+        ) : filteredSubjects.length === 0 ? (
+          <Typography>{t('notesPage.noSubjectsForYear')}</Typography>
         ) : (
-          uniqueYears.map((yr) => (
-            <Button
-              key={yr}
-              variant={yr === selectedYear ? 'contained' : 'outlined'}
-              onClick={() => handleYearChange(yr)}
+          <>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 200px))',
+                gap: 2,
+                justifyContent: 'center',
+              }}
             >
-              {t('notesPage.yearButton', { year: yr })}
-            </Button>
-          ))
+              {subjectsPage.map((sub) => (
+                <SubjectDirectoryCard
+                  key={sub.id}
+                  subject={sub}
+                  userId={userId}
+                />
+              ))}
+            </Box>
+
+            {/* Pagination */}
+            <PaginationBar
+              currentPage={page}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              totalCount={totalCount}
+            />
+          </>
         )}
-      </Stack>
-
-      {/* Grid of subjects for the selected year */}
-      {filteredSubjects.length === 0 ? (
-        <Typography>{t('notesPage.noSubjectsForYear')}</Typography>
-      ) : (
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 200px))',
-            gap: 2,
-            justifyContent: 'center',
-          }}
-        >
-          {subjectsPage.map((sub) => (
-            <SubjectDirectoryCard key={sub.id} subject={sub} userId={userId} />
-          ))}
-        </Box>
-      )}
-
-      {/* Pagination for the subjects */}
-      {filteredSubjects.length > 0 && (
-        <PaginationBar
-          currentPage={page}
-          pageSize={pageSize}
-          totalPages={totalPages}
-          totalCount={totalCount}
-        />
-      )}
-    </Box>
+      </Box>
+    </>
   );
 }

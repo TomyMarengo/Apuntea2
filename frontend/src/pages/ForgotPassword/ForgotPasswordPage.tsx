@@ -1,3 +1,5 @@
+// src/pages/ForgotPassword/ForgotPasswordPage.tsx
+
 import { useState } from 'react';
 import {
   TextField,
@@ -22,16 +24,26 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import useForgotPassword from '../../hooks/useForgotPassword';
+import { Helmet } from 'react-helmet-async'; // Importar Helmet
 
+// Definir esquemas de validación con Zod
 const emailSchema = z
   .string()
   .email('forgotPasswordPage.validationErrors.invalidEmail');
 const codeSchema = z
   .string()
-  .min(1, 'forgotPasswordPage.validationErrors.codeRequired');
+  .length(6, 'forgotPasswordPage.validationErrors.codeRequired');
 const passwordSchema = z
   .string()
   .min(4, 'forgotPasswordPage.validationErrors.passwordLength');
+
+const forgotPasswordSchema = z.object({
+  email: emailSchema,
+  code: codeSchema.optional(),
+  newPassword: passwordSchema.optional(),
+});
+
+type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordPage() {
   const { t } = useTranslation();
@@ -40,13 +52,7 @@ export default function ForgotPasswordPage() {
 
   const [step, setStep] = useState<'email' | 'code'>('email');
   const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
-
-  const forgotPasswordSchema = z.object({
-    email: emailSchema,
-    code: step === 'code' ? codeSchema : z.string().optional(),
-    newPassword: step === 'code' ? passwordSchema : z.string().optional(),
-  });
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     control,
@@ -55,11 +61,11 @@ export default function ForgotPasswordPage() {
     setValue,
     reset,
     getValues,
-  } = useForm({
+  } = useForm<ForgotPasswordForm>({
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const handleEmail = async (data: any) => {
+  const onSubmitEmail = async (data: { email: string }) => {
     setLoading(true);
     try {
       await handleEmailSubmit(data.email);
@@ -73,13 +79,16 @@ export default function ForgotPasswordPage() {
     }
   };
 
-  const handleCode = async (data: any) => {
+  const onSubmitCode = async (data: {
+    code?: string;
+    newPassword?: string;
+  }) => {
     setLoading(true);
     try {
       await handleCodeSubmit({
         email: getValues('email'),
-        code: data.code,
-        newPassword: data.newPassword,
+        code: data.code || '',
+        newPassword: data.newPassword || '',
       });
       toast.success(t('forgotPasswordPage.passwordUpdated'));
       navigate('/login');
@@ -90,165 +99,191 @@ export default function ForgotPasswordPage() {
     }
   };
 
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+
+  const handleClearField = (fieldName: keyof ForgotPasswordForm) => {
+    setValue(fieldName, '');
+  };
+
+  let pageTitle = t('forgotPasswordPage.titlePage');
+  if (loading) {
+    pageTitle = t('forgotPasswordPage.loading');
+  } else if (step === 'code' && (errors.code || errors.newPassword)) {
+    pageTitle = t('forgotPasswordPage.errorFetching');
+  }
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '80vh',
-      }}
-    >
-      <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
-        <CardContent>
-          <Typography variant="h4" gutterBottom align="center">
-            {t('forgotPasswordPage.title')}
-          </Typography>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '80vh',
+        }}
+      >
+        <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
+          <CardContent>
+            <Typography variant="h4" gutterBottom align="center">
+              {t('forgotPasswordPage.title')}
+            </Typography>
 
-          {step === 'email' && (
-            <Box component="form" onSubmit={handleSubmit(handleEmail)}>
-              <Controller
-                name="email"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={t('forgotPasswordPage.emailLabel')}
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={!!errors.email}
-                    helperText={
-                      <Box minHeight="1.5em">
-                        {errors.email ? t(errors.email.message as string) : ''}
-                      </Box>
-                    }
-                    InputProps={{
-                      endAdornment: field.value ? (
-                        <InputAdornment position="end">
-                          <IconButton onClick={() => setValue('email', '')}>
-                            <CloseIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ) : null,
-                    }}
-                  />
-                )}
-              />
-
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{ mt: 2 }}
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  t('forgotPasswordPage.submitEmail')
-                )}
-              </Button>
-            </Box>
-          )}
-
-          {step === 'code' && (
-            <Box component="form" onSubmit={handleSubmit(handleCode)}>
-              <Controller
-                name="code"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={t('forgotPasswordPage.codeLabel')}
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    error={!!errors.code}
-                    helperText={
-                      <Box minHeight="1.5em">
-                        {errors.code ? t(errors.code.message as string) : ''}
-                      </Box>
-                    }
-                    InputProps={{
-                      endAdornment: field.value ? (
-                        <InputAdornment position="end">
-                          <IconButton onClick={() => setValue('code', '')}>
-                            <CloseIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ) : null,
-                    }}
-                  />
-                )}
-              />
-
-              <Controller
-                name="newPassword"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label={t('forgotPasswordPage.newPasswordLabel')}
-                    variant="outlined"
-                    type={showPassword ? 'text' : 'password'}
-                    fullWidth
-                    margin="normal"
-                    error={!!errors.newPassword}
-                    helperText={
-                      <Box minHeight="1.5em">
-                        {errors.newPassword
-                          ? t(errors.newPassword.message as string)
-                          : ''}
-                      </Box>
-                    }
-                    InputProps={{
-                      endAdornment: (
-                        <>
-                          {field.value && (
-                            <InputAdornment position="end">
-                              <IconButton
-                                onClick={() => setValue('newPassword', '')}
-                              >
-                                <CloseIcon />
-                              </IconButton>
-                            </InputAdornment>
-                          )}
+            {step === 'email' && (
+              <Box component="form" onSubmit={handleSubmit(onSubmitEmail)}>
+                {/* CAMPO DE CORREO ELECTRÓNICO */}
+                <Controller
+                  name="email"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={t('forgotPasswordPage.emailLabel')}
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={!!errors.email}
+                      helperText={
+                        <Box minHeight="1.5em">
+                          {errors.email
+                            ? t(errors.email.message as string)
+                            : ''}
+                        </Box>
+                      }
+                      InputProps={{
+                        endAdornment: field.value ? (
                           <InputAdornment position="end">
                             <IconButton
-                              onClick={() => setShowPassword((prev) => !prev)}
+                              onClick={() => handleClearField('email')}
                             >
-                              {showPassword ? (
-                                <VisibilityOff />
-                              ) : (
-                                <Visibility />
-                              )}
+                              <CloseIcon />
                             </IconButton>
                           </InputAdornment>
-                        </>
-                      ),
-                    }}
-                  />
-                )}
-              />
+                        ) : null,
+                      }}
+                    />
+                  )}
+                />
 
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{ mt: 2 }}
-                type="submit"
-                disabled={loading}
-              >
-                {loading ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  t('forgotPasswordPage.submitCode')
-                )}
-              </Button>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
-    </Box>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  sx={{ mt: 2 }}
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} />
+                  ) : (
+                    t('forgotPasswordPage.submitEmail')
+                  )}
+                </Button>
+              </Box>
+            )}
+
+            {step === 'code' && (
+              <Box component="form" onSubmit={handleSubmit(onSubmitCode)}>
+                {/* CAMPO DE CÓDIGO */}
+                <Controller
+                  name="code"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={t('forgotPasswordPage.codeLabel')}
+                      variant="outlined"
+                      fullWidth
+                      margin="normal"
+                      error={!!errors.code}
+                      helperText={
+                        <Box minHeight="1.5em">
+                          {errors.code ? t(errors.code.message as string) : ''}
+                        </Box>
+                      }
+                      InputProps={{
+                        endAdornment: field.value ? (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => handleClearField('code')}
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        ) : null,
+                      }}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name="newPassword"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      label={t('forgotPasswordPage.newPasswordLabel')}
+                      variant="outlined"
+                      type={showPassword ? 'text' : 'password'}
+                      fullWidth
+                      margin="normal"
+                      error={!!errors.newPassword}
+                      helperText={
+                        <Box minHeight="1.5em">
+                          {errors.newPassword
+                            ? t(errors.newPassword.message as string)
+                            : ''}
+                        </Box>
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <>
+                            <InputAdornment position="end">
+                              <IconButton onClick={togglePasswordVisibility}>
+                                {showPassword ? (
+                                  <VisibilityOff />
+                                ) : (
+                                  <Visibility />
+                                )}
+                              </IconButton>
+                            </InputAdornment>
+                            {field.value && (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  onClick={() =>
+                                    handleClearField('newPassword')
+                                  }
+                                >
+                                  <CloseIcon />
+                                </IconButton>
+                              </InputAdornment>
+                            )}
+                          </>
+                        ),
+                      }}
+                    />
+                  )}
+                />
+
+                <Button
+                  variant="contained"
+                  fullWidth
+                  sx={{ mt: 2 }}
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} />
+                  ) : (
+                    t('forgotPasswordPage.submitCode')
+                  )}
+                </Button>
+              </Box>
+            )}
+          </CardContent>
+        </Card>
+      </Box>
+    </>
   );
 }

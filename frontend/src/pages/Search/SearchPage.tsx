@@ -7,6 +7,7 @@ import SearchResultsTable from './SearchResultsTable';
 import PaginationBar from '../../components/PaginationBar';
 import useSearch from '../../hooks/useSearch';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 /**
  * Search Page:
@@ -63,43 +64,49 @@ export default function SearchPage() {
   };
 
   return (
-    <Box sx={{ p: 2, maxWidth: 1200, margin: '0 auto' }}>
-      <Typography variant="h4" sx={{ mb: 3 }}>
-        {t('searchPage.title')}
-      </Typography>
+    <>
+      <Helmet>
+        <title>{t('searchPage.title')}</title>
+      </Helmet>
 
-      <SearchForm searchFields={searchFields} onSearch={handleSearchChange} />
-      {isLoadingData ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        <>
-          {(showNotes && notes.length === 0) ||
-          (showDirectories && directories.length === 0) ? (
-            <Typography variant="body1" sx={{ mt: 4, textAlign: 'center' }}>
-              {t('searchPage.noContent')}
-            </Typography>
-          ) : (
-            <SearchResultsTable
-              showNotes={showNotes}
-              showDirectories={showDirectories}
-              notes={notes}
-              directories={directories}
-            />
-          )}
+      <Box sx={{ p: 2, maxWidth: 1200, margin: '0 auto' }}>
+        <Typography variant="h4" sx={{ mb: 3 }}>
+          {t('searchPage.title')}
+        </Typography>
 
-          {((showNotes && notes.length > 0) ||
-            (showDirectories && directories.length > 0)) && (
-            <PaginationBar
-              currentPage={currentPage}
-              pageSize={pageSize}
-              totalPages={totalPages}
-              totalCount={totalCount}
-            />
-          )}
-        </>
-      )}
-    </Box>
+        <SearchForm searchFields={searchFields} onSearch={handleSearchChange} />
+        {isLoadingData ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            {(showNotes && notes.length === 0) ||
+            (showDirectories && directories.length === 0) ? (
+              <Typography variant="body1" sx={{ mt: 4, textAlign: 'center' }}>
+                {t('searchPage.noContent')}
+              </Typography>
+            ) : (
+              <SearchResultsTable
+                showNotes={showNotes}
+                showDirectories={showDirectories}
+                notes={notes}
+                directories={directories}
+              />
+            )}
+
+            {((showNotes && notes.length > 0) ||
+              (showDirectories && directories.length > 0)) && (
+              <PaginationBar
+                currentPage={currentPage}
+                pageSize={pageSize}
+                totalPages={totalPages}
+                totalCount={totalCount}
+              />
+            )}
+          </>
+        )}
+      </Box>
+    </>
   );
 }

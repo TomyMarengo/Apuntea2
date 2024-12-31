@@ -15,6 +15,7 @@ import useSearch from '../../hooks/useSearch';
 import CreateNoteFab from '../../components/CreateNoteFab';
 import CreateDirectoryFab from '../../components/CreateDirectoryFab';
 import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
+import { Helmet } from 'react-helmet-async';
 
 export default function DirectoryPage() {
   const { directoryId } = useParams<{ directoryId: string }>();
@@ -94,97 +95,113 @@ export default function DirectoryPage() {
     navigate({ search: newParams.toString() }, { replace: true });
   };
 
+  let pageTitle = t('directoryPage.titlePage');
   if (isLoadingCurrentDirectory || isLoadingData || isLoadingOwner) {
-    return (
-      <Box display="flex" justifyContent="center" mt={5}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (isErrorCurrentDirectory || isErrorOwner || !currentDirectory) {
-    return (
-      <Box display="flex" justifyContent="center" mt={5}>
-        <Alert severity="error">
-          {t('directoryPage.errorFetchingDirectory')}
-        </Alert>
-      </Box>
-    );
+    pageTitle = t('directoryPage.loading');
+  } else if (isErrorCurrentDirectory || isErrorOwner) {
+    pageTitle = t('directoryPage.errorFetchingDirectory');
   }
 
   return (
-    <Box sx={{ p: 2, maxWidth: 1200, margin: '0 auto' }}>
-      {/* Current Directory Name */}
-      <Typography variant="h4">{currentDirectory.name}</Typography>
-
-      {currentDirectory && (
-        <DirectoryBreadcrumbs currentDirectory={currentDirectory} />
-      )}
-
-      <Box sx={{ mt: 3 }}>
-        {/* Search Component */}
-        <SearchForm
-          searchFields={searchFields}
-          onSearch={handleSearchChange}
-          hideInstitution
-          hideCareer
-          hideSubject
-        />
-      </Box>
-
-      {/* Search Results */}
-      {isLoadingData ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        <>
-          {(showNotes && notes.length === 0) ||
-          (showDirectories && directories.length === 0) ? (
-            <Typography variant="body1" sx={{ mt: 4, textAlign: 'center' }}>
-              {t('directoryPage.search.noContent')}
-            </Typography>
-          ) : (
-            <SearchResultsTable
-              showNotes={showNotes}
-              showDirectories={showDirectories}
-              notes={notes}
-              directories={directories}
-            />
-          )}
-
-          {((showNotes && notes.length > 0) ||
-            (showDirectories && directories.length > 0)) && (
-            <PaginationBar
-              currentPage={currentPage}
-              pageSize={pageSize}
-              totalPages={totalPages}
-              totalCount={totalCount}
-            />
-          )}
-        </>
-      )}
-
-      {/* FAB Buttons */}
-      {directoryId &&
-        user &&
-        (ownerData?.id === user.id || !currentDirectory.parentUrl) && (
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-end',
-              position: 'fixed',
-              bottom: 32,
-              right: 32,
-              zIndex: 1300,
-              gap: 2,
-            }}
-          >
-            <CreateNoteFab parentId={directoryId} />
-            <CreateDirectoryFab parentId={directoryId} />
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Box sx={{ p: 2, maxWidth: 1200, margin: '0 auto' }}>
+        {/* If loading or there is an error */}
+        {(isLoadingCurrentDirectory || isLoadingData || isLoadingOwner) && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
+            <CircularProgress />
           </Box>
         )}
-    </Box>
+
+        {(isErrorCurrentDirectory || isErrorOwner) && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
+            <Alert severity="error">
+              {t('directoryPage.errorFetchingDirectory')}
+            </Alert>
+          </Box>
+        )}
+
+        {/* Main content when not loading and no error */}
+        {!isLoadingCurrentDirectory &&
+          !isLoadingData &&
+          !isLoadingOwner &&
+          !isErrorCurrentDirectory &&
+          !isErrorOwner &&
+          currentDirectory && (
+            <>
+              {/* Directory Title */}
+              <Typography variant="h4">{currentDirectory.name}</Typography>
+
+              {/* Directory Breadcrumbs */}
+              <DirectoryBreadcrumbs currentDirectory={currentDirectory} />
+
+              <Box sx={{ mt: 3 }}>
+                {/* Search Component */}
+                <SearchForm
+                  searchFields={searchFields}
+                  onSearch={handleSearchChange}
+                  hideInstitution
+                  hideCareer
+                  hideSubject
+                />
+              </Box>
+
+              {/* Search Results */}
+              {(showNotes || showDirectories) && (
+                <>
+                  {notes.length === 0 && directories.length === 0 ? (
+                    <Typography
+                      variant="body1"
+                      sx={{ mt: 4, textAlign: 'center' }}
+                    >
+                      {t('directoryPage.search.noContent')}
+                    </Typography>
+                  ) : (
+                    <SearchResultsTable
+                      showNotes={showNotes}
+                      showDirectories={showDirectories}
+                      notes={notes}
+                      directories={directories}
+                    />
+                  )}
+
+                  {((showNotes && notes.length > 0) ||
+                    (showDirectories && directories.length > 0)) && (
+                    <PaginationBar
+                      currentPage={currentPage}
+                      pageSize={pageSize}
+                      totalPages={totalPages}
+                      totalCount={totalCount}
+                    />
+                  )}
+                </>
+              )}
+
+              {/* FAB buttons to create notes or directories */}
+              {directoryId &&
+                user &&
+                (ownerData?.id === user.id || !currentDirectory.parentUrl) && (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-end',
+                      position: 'fixed',
+                      bottom: 32,
+                      right: 32,
+                      zIndex: 1300,
+                      gap: 2,
+                    }}
+                  >
+                    <CreateNoteFab parentId={directoryId} />
+                    <CreateDirectoryFab parentId={directoryId} />
+                  </Box>
+                )}
+            </>
+          )}
+      </Box>
+    </>
   );
 }

@@ -58,7 +58,9 @@ const UserPage: React.FC = () => {
     institution: institutionData,
   } as User;
 
-  let pageTitle = t('userPage.title', { username: targetUser?.username || '' });
+  let pageTitle = t('userPage.titlePage', {
+    username: targetUser?.username || '',
+  });
   if (isLoading) {
     pageTitle = t('userPage.loading');
   } else if (isError) {

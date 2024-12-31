@@ -31,7 +31,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Delete from '@mui/icons-material/Delete';
 import DeleteDirectoryDialog from '../../pages/Directories/dialogs/DeleteDirectoryDialog';
 import { RootState } from '../../store/store';
-import { Column } from '../ResultsTable';
+import { Column } from '../../types';
 
 export const ColumnDirectory: Column[] = [
   { id: 'name', label: 'searchForm.name' },

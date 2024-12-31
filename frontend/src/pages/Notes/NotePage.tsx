@@ -1,3 +1,5 @@
+// src/pages/Notes/NotePage.tsx
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Box,
@@ -20,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Helmet } from 'react-helmet-async';
 
 import { RootState } from '../../store/store';
 import { selectCurrentUser } from '../../store/slices/authSlice';
@@ -313,305 +316,328 @@ const NotePage: React.FC = () => {
     }
   };
 
+  let pageTitle = t('notePage.titlePage', { noteName: note?.name || '' });
   if (noteLoading) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-  if (noteError || !note) {
-    return (
-      <Box sx={{ p: 3 }}>
-        <Typography color="error">{t('notePage.noteNotFound')}</Typography>
-      </Box>
-    );
+    pageTitle = t('notePage.loading');
+  } else if (noteError) {
+    pageTitle = t('notePage.errorFetching');
+  } else if (!note) {
+    pageTitle = t('notePage.noteNotFound');
   }
 
   return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: {
-          xs: '1fr',
-          md: '2fr 1fr',
-        },
-        height: {
-          xs: 'auto',
-          md: 'calc(100vh - 64px)',
-        },
-      }}
-    >
-      {/* LEFT side */}
-      <Box
-        sx={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}
-      >
-        <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-          {directoryData && note && (
-            <DirectoryBreadcrumbs
-              currentDirectory={directoryData}
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+
+      {noteLoading ? (
+        <Box sx={{ p: 3 }}>
+          <CircularProgress />
+        </Box>
+      ) : noteError || !note ? (
+        <Box sx={{ p: 3 }}>
+          <Typography color="error">{t('notePage.noteNotFound')}</Typography>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              md: '2fr 1fr',
+            },
+            height: {
+              xs: 'auto',
+              md: 'calc(100vh - 64px)',
+            },
+          }}
+        >
+          {/* LEFT side */}
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+            }}
+          >
+            <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+              {directoryData && note && (
+                <DirectoryBreadcrumbs
+                  currentDirectory={directoryData}
+                  note={note}
+                />
+              )}
+            </Box>
+            {/* Top bar */}
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                p: 2,
+                justifyContent: 'space-between',
+              }}
+            >
+              {/* Owner info */}
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Avatar src={ownerData?.profilePictureUrl || ''} />
+                <Box>
+                  <Typography variant="subtitle1">
+                    {ownerData?.username || t('notePage.ownerUnknown')}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {t('notePage.views', { count: note.interactions || 0 })}
+                  </Typography>
+                </Box>
+              </Box>
+
+              {/* Actions */}
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                {/* Favorite if logged in */}
+                {user && (
+                  <Tooltip
+                    title={
+                      isFavorite
+                        ? t('notePage.unfavorite')!
+                        : t('notePage.favorite')!
+                    }
+                  >
+                    <IconButton onClick={handleToggleFavorite}>
+                      {isFavorite ? (
+                        <FavoriteIcon sx={{ color: 'error.main' }} />
+                      ) : (
+                        <FavoriteBorderIcon />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                )}
+
+                {/* Edit if owner */}
+                {isOwner && (
+                  <Tooltip title={t('notePage.edit')!}>
+                    <IconButton onClick={handleOpenEdit}>
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+
+                {/* Delete if owner or admin */}
+                {(isOwner || isAdmin) && (
+                  <Tooltip title={t('notePage.delete')!}>
+                    <IconButton onClick={handleOpenDelete}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+
+                {/* Download always */}
+                <Tooltip title={t('notePage.download')!}>
+                  <IconButton onClick={handleDownload}>
+                    <DownloadIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </Box>
+
+            {/* The note file area */}
+            <Box
+              sx={{
+                flex: 1,
+                overflow: 'hidden',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                p: 2,
+                minHeight: {
+                  xs: 600,
+                },
+              }}
+            >
+              {fileUrl ? (
+                note.fileType?.toLowerCase().includes('pdf') ? (
+                  <iframe
+                    src={fileUrl}
+                    style={{ width: '100%', height: '100%' }}
+                    title="Note PDF"
+                  />
+                ) : note.fileType?.match(/(jpe?g|png|gif)$/i) ? (
+                  <img
+                    src={fileUrl}
+                    alt={note.name}
+                    style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  />
+                ) : note.fileType?.match(/(mp4|webm|ogg)$/i) ? (
+                  <video
+                    src={fileUrl}
+                    controls
+                    style={{ maxWidth: '100%', maxHeight: '100%' }}
+                  />
+                ) : (
+                  <Typography>{t('notePage.fileNotPreviewable')}</Typography>
+                )
+              ) : noteFileLoading ? (
+                <CircularProgress />
+              ) : noteFileError ? (
+                <Typography color="error">
+                  {t('notePage.fileNotFound')}
+                </Typography>
+              ) : (
+                <Typography>{t('notePage.fileNotFound')}</Typography>
+              )}
+            </Box>
+          </Box>
+
+          {/* RIGHT side: reviews */}
+          <Box
+            sx={{
+              borderLeft: {
+                xs: 'none',
+                md: '1px solid',
+              },
+              borderLeftColor: {
+                xs: 'transparent',
+                md: 'divider',
+              },
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden',
+            }}
+          >
+            <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+              <Typography variant="h6">{t('notePage.reviewsTitle')}</Typography>
+            </Box>
+
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: {
+                  xs: 'column-reverse',
+                  md: 'column',
+                },
+                overflow: 'hidden',
+              }}
+            >
+              {/* Reviews scroll container with custom scrollbar */}
+              <Box
+                sx={{
+                  flex: 1,
+                  p: 2,
+                  overflowY: 'auto',
+                  '&::-webkit-scrollbar': {
+                    width: '6px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: 'transparent',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: 'primary.main',
+                    borderRadius: '3px',
+                  },
+                }}
+              >
+                {allReviews.map((rev: Review) => (
+                  <ReviewCard
+                    key={`${rev.noteId}_${rev.userId}`}
+                    review={rev}
+                    noteId={note.id}
+                    onDeleteSuccess={handleDeleteSuccess}
+                  />
+                ))}
+
+                {/* Loading spinner */}
+                {isFetching && (
+                  <Box sx={{ textAlign: 'center', p: 1 }}>
+                    <CircularProgress size={24} />
+                  </Box>
+                )}
+
+                {/* Sentinel for infinite scroll */}
+                {!isFetching && (
+                  <Box
+                    ref={sentinelRef}
+                    sx={{ textAlign: 'center', mt: 2, mb: 2 }}
+                  >
+                    {canLoadMore ? (
+                      <Box
+                        sx={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: 1,
+                        }}
+                      >
+                        <KeyboardDoubleArrowDownIcon />
+                        <Typography variant="body2">
+                          {t('notePage.moreReviewsHint')}
+                        </Typography>
+                      </Box>
+                    ) : (
+                      <Typography variant="body2" color="text.secondary">
+                        {t('notePage.noMoreReviews')}
+                      </Typography>
+                    )}
+                  </Box>
+                )}
+              </Box>
+
+              {/* Create/Update Review if not owner, and user is logged in */}
+              {user && !isOwner && (
+                <Box
+                  sx={{
+                    borderTop: 1,
+                    borderColor: 'divider',
+                    p: 2,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
+                  }}
+                >
+                  <Rating
+                    name="score"
+                    value={score}
+                    onChange={(_, newValue) => {
+                      if (newValue) setScore(newValue);
+                    }}
+                  />
+                  <TextField
+                    multiline
+                    rows={2}
+                    placeholder={t('notePage.reviewPlaceholder')!}
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                  />
+
+                  <Button variant="contained" onClick={handleSaveReview}>
+                    {myReviewData
+                      ? t('notePage.updateReview')
+                      : t('notePage.sendReview')}
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          </Box>
+
+          {/* EDIT NOTE DIALOG */}
+          {isOwner && (
+            <EditNoteDialog
+              open={openEdit}
+              onClose={handleCloseEdit}
               note={note}
             />
           )}
-        </Box>
-        {/* Top bar */}
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            p: 2,
-            justifyContent: 'space-between',
-          }}
-        >
-          {/* Owner info */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Avatar src={ownerData?.profilePictureUrl || ''} />
-            <Box>
-              <Typography variant="subtitle1">
-                {ownerData?.username || t('notePage.ownerUnknown')}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {t('notePage.views', { count: note.interactions || 0 })}
-              </Typography>
-            </Box>
-          </Box>
 
-          {/* Actions */}
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            {/* Favorite if logged in */}
-            {user && (
-              <Tooltip
-                title={
-                  isFavorite
-                    ? t('notePage.unfavorite')!
-                    : t('notePage.favorite')!
-                }
-              >
-                <IconButton onClick={handleToggleFavorite}>
-                  {isFavorite ? (
-                    <FavoriteIcon sx={{ color: 'error.main' }} />
-                  ) : (
-                    <FavoriteBorderIcon />
-                  )}
-                </IconButton>
-              </Tooltip>
-            )}
-
-            {/* Edit if owner */}
-            {isOwner && (
-              <Tooltip title={t('notePage.edit')!}>
-                <IconButton onClick={handleOpenEdit}>
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-
-            {/* Delete if owner or admin */}
-            {(isOwner || isAdmin) && (
-              <Tooltip title={t('notePage.delete')!}>
-                <IconButton onClick={handleOpenDelete}>
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
-            )}
-
-            {/* Download always */}
-            <Tooltip title={t('notePage.download')!}>
-              <IconButton onClick={handleDownload}>
-                <DownloadIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        </Box>
-
-        {/* The note file area */}
-        <Box
-          sx={{
-            flex: 1,
-            overflow: 'hidden',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            p: 2,
-            minHeight: {
-              xs: 600,
-            },
-          }}
-        >
-          {fileUrl ? (
-            note.fileType?.toLowerCase().includes('pdf') ? (
-              <iframe
-                src={fileUrl}
-                style={{ width: '100%', height: '100%' }}
-                title="Note PDF"
-              />
-            ) : note.fileType?.match(/(jpe?g|png|gif)$/i) ? (
-              <img
-                src={fileUrl}
-                alt={note.name}
-                style={{ maxWidth: '100%', maxHeight: '100%' }}
-              />
-            ) : note.fileType?.match(/(mp4|webm|ogg)$/i) ? (
-              <video
-                src={fileUrl}
-                controls
-                style={{ maxWidth: '100%', maxHeight: '100%' }}
-              />
-            ) : (
-              <Typography>{t('notePage.fileNotPreviewable')}</Typography>
-            )
-          ) : noteFileLoading ? (
-            <CircularProgress />
-          ) : noteFileError ? (
-            <Typography color="error">{t('notePage.fileNotFound')}</Typography>
-          ) : (
-            <Typography>{t('notePage.fileNotFound')}</Typography>
+          {/* DELETE NOTE DIALOG */}
+          {(isOwner || isAdmin) && (
+            <DeleteNoteDialog
+              open={openDelete}
+              onClose={handleCloseDelete}
+              note={note}
+              shouldShowReason={isAdmin && !isOwner}
+              navigateBack
+            />
           )}
         </Box>
-      </Box>
-
-      {/* RIGHT side: reviews */}
-      <Box
-        sx={{
-          borderLeft: {
-            xs: 'none',
-            md: '1px solid',
-          },
-          borderLeftColor: {
-            xs: 'transparent',
-            md: 'divider',
-          },
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
-      >
-        <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-          <Typography variant="h6">{t('notePage.reviewsTitle')}</Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: {
-              xs: 'column-reverse',
-              md: 'column',
-            },
-            overflow: 'hidden',
-          }}
-        >
-          {/* Reviews scroll container with custom scrollbar */}
-          <Box
-            sx={{
-              flex: 1,
-              p: 2,
-              overflowY: 'auto',
-              '&::-webkit-scrollbar': {
-                width: '6px',
-              },
-              '&::-webkit-scrollbar-track': {
-                backgroundColor: 'transparent',
-              },
-              '&::-webkit-scrollbar-thumb': {
-                backgroundColor: 'primary.main',
-                borderRadius: '3px',
-              },
-            }}
-          >
-            {allReviews.map((rev: Review) => (
-              <ReviewCard
-                key={`${rev.noteId}_${rev.userId}`}
-                review={rev}
-                noteId={note.id}
-                onDeleteSuccess={handleDeleteSuccess}
-              />
-            ))}
-
-            {/* Loading spinner */}
-            {isFetching && (
-              <Box sx={{ textAlign: 'center', p: 1 }}>
-                <CircularProgress size={24} />
-              </Box>
-            )}
-
-            {/* Sentinel for infinite scroll */}
-            {!isFetching && (
-              <Box ref={sentinelRef} sx={{ textAlign: 'center', mt: 2, mb: 2 }}>
-                {canLoadMore ? (
-                  <Box
-                    sx={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 1,
-                    }}
-                  >
-                    <KeyboardDoubleArrowDownIcon />
-                    <Typography variant="body2">
-                      {t('notePage.moreReviewsHint')}
-                    </Typography>
-                  </Box>
-                ) : (
-                  <Typography variant="body2" color="text.secondary">
-                    {t('notePage.noMoreReviews')}
-                  </Typography>
-                )}
-              </Box>
-            )}
-          </Box>
-
-          {/* Create/Update Review if not owner, and user is logged in */}
-          {user && !isOwner && (
-            <Box
-              sx={{
-                borderTop: 1,
-                borderColor: 'divider',
-                p: 2,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 1,
-              }}
-            >
-              <Rating
-                name="score"
-                value={score}
-                onChange={(_, newValue) => {
-                  if (newValue) setScore(newValue);
-                }}
-              />
-              <TextField
-                multiline
-                rows={2}
-                placeholder={t('notePage.reviewPlaceholder')!}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              />
-
-              <Button variant="contained" onClick={handleSaveReview}>
-                {myReviewData
-                  ? t('notePage.updateReview')
-                  : t('notePage.sendReview')}
-              </Button>
-            </Box>
-          )}
-        </Box>
-      </Box>
-
-      {/* EDIT NOTE DIALOG */}
-      {isOwner && (
-        <EditNoteDialog open={openEdit} onClose={handleCloseEdit} note={note} />
       )}
-
-      {/* DELETE NOTE DIALOG */}
-      {(isOwner || isAdmin) && (
-        <DeleteNoteDialog
-          open={openDelete}
-          onClose={handleCloseDelete}
-          note={note}
-          shouldShowReason={isAdmin && !isOwner}
-          navigateBack
-        />
-      )}
-    </Box>
+    </>
   );
 };
 

@@ -19,6 +19,7 @@ import FavoriteDirectoryCard from '../../components/FavoriteDirectoryCard';
 import { useGetUserNotesFavoritesQuery } from '../../store/slices/notesApiSlice';
 import { useGetUserDirectoriesFavoritesQuery } from '../../store/slices/directoriesApiSlice';
 import { Note, Directory } from '../../types';
+import { Helmet } from 'react-helmet-async';
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -34,16 +35,6 @@ export default function FavoritesPage() {
     searchParams.get('pageSize') || String(DEFAULT_PAGE_SIZE),
     10,
   );
-
-  if (!userId) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6" color="error">
-          {t('favoritesPage.mustLogin')}
-        </Typography>
-      </Box>
-    );
-  }
 
   // Query args
   const notesQueryArgs = { userId, page, pageSize };
@@ -80,7 +71,7 @@ export default function FavoritesPage() {
     skip: favtype !== 'subjects',
   });
 
-  // Gestión de estados de carga y error
+  // Manage loading and error states
   const isLoading =
     (favtype === 'notes' && notesLoading) ||
     (favtype === 'directories' && dirsLoading) ||
@@ -128,102 +119,113 @@ export default function FavoritesPage() {
     }
   };
 
+  let pageTitle = t('favoritesPage.titlePage');
   if (isLoading) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-  if (isError) {
-    return (
-      <Box sx={{ p: 2 }}>
-        <Typography color="error">
-          {t('favoritesPage.errorFetching')}
-        </Typography>
-      </Box>
-    );
+    pageTitle = t('favoritesPage.loading');
+  } else if (isError) {
+    pageTitle = t('favoritesPage.errorFetching');
   }
 
   return (
-    <Box sx={{ p: 2 }}>
-      {/* Title */}
-      <Typography variant="h4" sx={{ mb: 3 }}>
-        {t('favoritesPage.title')}
-      </Typography>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Box sx={{ p: 2 }}>
+        {/* Title */}
+        <Typography variant="h4" sx={{ mb: 3 }}>
+          {t('favoritesPage.title')}
+        </Typography>
 
-      {/* Row of buttons: notes / directories / subjects + refresh */}
-      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
-        <Button
-          variant={favtype === 'notes' ? 'contained' : 'outlined'}
-          onClick={() => handleFavTypeChange('notes')}
-        >
-          {t('favoritesPage.notes')}
-        </Button>
-        <Button
-          variant={favtype === 'directories' ? 'contained' : 'outlined'}
-          onClick={() => handleFavTypeChange('directories')}
-        >
-          {t('favoritesPage.directories')}
-        </Button>
-        <Button
-          variant={favtype === 'subjects' ? 'contained' : 'outlined'}
-          onClick={() => handleFavTypeChange('subjects')}
-        >
-          {t('favoritesPage.subjects')}
-        </Button>
+        {/* Button row: notes / directories / subjects + refresh */}
+        <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+          <Button
+            variant={favtype === 'notes' ? 'contained' : 'outlined'}
+            onClick={() => handleFavTypeChange('notes')}
+          >
+            {t('favoritesPage.notes')}
+          </Button>
+          <Button
+            variant={favtype === 'directories' ? 'contained' : 'outlined'}
+            onClick={() => handleFavTypeChange('directories')}
+          >
+            {t('favoritesPage.directories')}
+          </Button>
+          <Button
+            variant={favtype === 'subjects' ? 'contained' : 'outlined'}
+            onClick={() => handleFavTypeChange('subjects')}
+          >
+            {t('favoritesPage.subjects')}
+          </Button>
 
-        {/* Refresh button */}
-        <IconButton onClick={handleRefresh} sx={{ ml: 'auto' }}>
-          <RefreshIcon />
-        </IconButton>
-      </Stack>
+          {/* Refresh button */}
+          <IconButton onClick={handleRefresh} sx={{ ml: 'auto' }}>
+            <RefreshIcon />
+          </IconButton>
+        </Stack>
 
-      {/* No favorites */}
-      {favtype === 'notes' && items.length === 0 && (
-        <Typography>{t('favoritesPage.noFavorites')}</Typography>
-      )}
-      {favtype === 'directories' && items.length === 0 && (
-        <Typography>{t('favoritesPage.noFavorites')}</Typography>
-      )}
-      {favtype === 'subjects' && items.length === 0 && (
-        <Typography>{t('favoritesPage.noFavorites')}</Typography>
-      )}
+        {/* Loading message */}
+        {isLoading && (
+          <Box sx={{ textAlign: 'center', my: 4 }}>
+            <CircularProgress />
+          </Box>
+        )}
 
-      {/* Items */}
-      {items.length > 0 && (
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 180px))',
-            gap: 2,
-            justifyContent: 'center',
-            mb: 4,
-          }}
-        >
-          {favtype === 'notes'
-            ? items.map((note: Note) => (
-                <FavoriteNoteCard key={note.id} note={note} userId={userId} />
-              ))
-            : items.map((dir: Directory) => (
-                <FavoriteDirectoryCard
-                  key={dir.id}
-                  directory={dir}
-                  userId={userId}
-                />
-              ))}
-        </Box>
-      )}
+        {/* Error message */}
+        {isError && (
+          <Box sx={{ textAlign: 'center', my: 4 }}>
+            <Typography color="error">
+              {t('favoritesPage.errorFetching')}
+            </Typography>
+          </Box>
+        )}
 
-      {/* Pagination */}
-      {items.length > 0 && (
-        <PaginationBar
-          currentPage={page}
-          pageSize={pageSize}
-          totalPages={totalPages}
-          totalCount={totalCount}
-        />
-      )}
-    </Box>
+        {/* No favorites */}
+        {!isLoading && !isError && items.length === 0 && (
+          <Typography textAlign="center" sx={{ mt: 4 }}>
+            {t('favoritesPage.noFavorites')}
+          </Typography>
+        )}
+
+        {/* Items */}
+        {!isLoading && !isError && items.length > 0 && (
+          <>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 180px))',
+                gap: 2,
+                justifyContent: 'center',
+                mb: 4,
+              }}
+            >
+              {favtype === 'notes'
+                ? items.map((note: Note) => (
+                    <FavoriteNoteCard
+                      key={note.id}
+                      note={note}
+                      userId={userId}
+                    />
+                  ))
+                : items.map((dir: Directory) => (
+                    <FavoriteDirectoryCard
+                      key={dir.id}
+                      directory={dir}
+                      userId={userId}
+                    />
+                  ))}
+            </Box>
+
+            {/* Pagination */}
+            <PaginationBar
+              currentPage={page}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              totalCount={totalCount}
+            />
+          </>
+        )}
+      </Box>
+    </>
   );
 }

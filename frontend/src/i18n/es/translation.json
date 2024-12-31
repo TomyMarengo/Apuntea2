@@ -1,5 +1,6 @@
 {
   "homePage": {
+    "titlePage": "Inicio | Apuntea",
     "welcome": "Bienvenido a <appName>Apuntea</appName>",
     "welcomeUser": "Bienvenido a <appName>Apuntea</appName>, {{username}}",
     "tagline": "Conecta tu conocimiento, expande tus horizontes",
@@ -36,6 +37,9 @@
     "logout": "Cerrar Sesión"
   },
   "loginPage": {
+    "titlePage": "Iniciar Sesión | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al iniciar sesión: {{error}}",
     "login": "Iniciar Sesión",
     "email": "Correo Electrónico",
     "password": "Contraseña",
@@ -46,6 +50,8 @@
     "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
   },
   "forgotPasswordPage": {
+    "titlePage": "Recuperar Contraseña | Apuntea",
+    "errorFetching": "Error al recuperar la contraseña.",
     "title": "Olvidé mi contraseña",
     "emailLabel": "Correo electrónico",
     "codeLabel": "Código de verificación",
@@ -65,7 +71,7 @@
     "submitCode": "Enviar código",
     "validationErrors": {
       "emailRequired": "El correo electrónico es obligatorio.",
-      "codeRequired": "El código es obligatorio.",
+      "codeRequired": "El código es de 6 dígitos.",
       "passwordRequired": "La contraseña es obligatoria.",
       "passwordLength": "La contraseña debe tener al menos 4 caracteres.",
       "invalidEmail": "Correo electrónico inválido."
@@ -87,6 +93,9 @@
     }
   },
   "notePage": {
+    "titlePage": "{{noteName}} | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al obtener el apunte.",
     "noteNotFound": "Este apunte no existe.",
     "fileNotFound": "No se encontró archivo para este apunte.",
     "fileNotPreviewable": "Este archivo no se puede previsualizar.",
@@ -131,6 +140,9 @@
     "noMoreReviews": "No hay más reseñas disponibles."
   },
   "registerPage": {
+    "titlePage": "Registro | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al registrar: {{error}}",
     "signup": "Registrarse",
     "email": "Correo Electrónico",
     "password": "Contraseña",
@@ -230,6 +242,7 @@
     "selectSubject": "Selecciona una materia"
   },
   "searchPage": {
+    "titlePage": "Buscar | Apuntea",
     "title": "Buscar",
     "noContent": "No se encontró contenido."
   },
@@ -242,6 +255,8 @@
     "admincareers": "Administrar Carreras"
   },
   "profilePage": {
+    "titlePage": "Perfil | Apuntea",
+    "loading": "Cargando...",
     "profile": "Perfil",
     "errorFetchingUser": "Error al obtener los datos del usuario.",
     "noUserFound": "No se encontró ningún usuario."
@@ -323,21 +338,23 @@
     "averageScore": "Puntuación Promedio"
   },
   "adminUsersPage": {
-    "searchPlaceholder": "Buscar por correo electrónico o nombre",
-    "statusFilter": "Estado",
+    "titlePage": "Administrar Usuarios | Apuntea",
+    "columns": {
+      "username": "Nombre de Usuario",
+      "email": "Correo Electrónico",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "searchPlaceholder": "Buscar usuarios...",
+    "statusFilter": "Filtrar por Estado",
     "statusOptions": {
       "all": "Todos",
       "active": "Activo",
       "banned": "Baneado"
     },
-    "columns": {
-      "username": "Nombre de usuario",
-      "email": "Correo electrónico",
-      "status": "Estado",
-      "actions": "Acciones"
-    },
     "loading": "Cargando...",
-    "error": "Ocurrió un error al obtener los usuarios."
+    "error": "Error al obtener los usuarios.",
+    "noResults": "No se encontraron usuarios con los criterios especificados."
   },
   "rowUser": {
     "status": {
@@ -372,53 +389,56 @@
     }
   },
   "adminCareersPage": {
-    "title": "Página de Administración de Carreras",
-    "institution": "Institución",
-    "career": "Carrera",
-    "selectInstitution": "Selecciona una institución",
-    "selectCareer": "Selecciona una carrera",
+    "titlePage": "Administrar Carreras | Apuntea",
     "columns": {
-      "name": "Nombre de la Materia",
+      "name": "Nombre",
       "year": "Año",
       "actions": "Acciones"
     },
-    "noSubjects": "No se encontraron materias para esta carrera.",
-    "filterYear": "Filtrar por año",
+    "institution": "Institución",
+    "selectInstitution": "Selecciona una institución",
+    "career": "Carrera",
+    "selectCareer": "Selecciona una carrera",
+    "filterYear": "Filtrar por Año",
     "yearOptions": {
       "all": "Todos"
     },
-    "sortBy": "Ordenar por",
+    "sortBy": "Ordenar Por",
     "sortOptions": {
       "year": "Año",
       "name": "Nombre"
     },
-    "sortOrder": "Alternar asc/desc",
-    "loadingSubjects": "Cargando materias...",
+    "sortOrder": "Cambiar Orden",
     "addSubjectModal": {
-      "title": "Añadir una Materia existente",
-      "selectSubject": "Selecciona una materia",
-      "none": "Ninguno",
+      "title": "Agregar Asignatura Existente",
+      "selectSubject": "Selecciona una asignatura",
+      "none": "Ninguna",
       "yearLabel": "Año",
       "cancel": "Cancelar",
       "confirm": "Confirmar"
     },
     "createSubjectModal": {
-      "title": "Crear Nueva Materia",
-      "nameLabel": "Nombre de la Materia",
+      "title": "Crear Nueva Asignatura",
+      "nameLabel": "Nombre de la Asignatura",
       "yearLabel": "Año",
       "cancel": "Cancelar",
-      "confirm": "Confirmar"
+      "confirm": "Crear"
     },
     "toast": {
       "addSubject": {
-        "success": "Materia añadida exitosamente a la carrera.",
-        "error": "No se pudo añadir la materia a la carrera."
+        "success": "Asignatura agregada exitosamente.",
+        "error": "Error al agregar la asignatura."
       },
       "createSubject": {
-        "success": "Materia creada y vinculada a la carrera exitosamente.",
-        "error": "No se pudo crear ni vincular la nueva materia."
+        "success": "Asignatura creada exitosamente.",
+        "error": "Error al crear la asignatura."
       }
-    }
+    },
+    "loadingSubjects": "Cargando asignaturas...",
+    "errorFetchingDirectory": "Error al obtener el directorio: {{error}}",
+    "noSubjects": "No hay asignaturas en esta carrera.",
+    "title": "Administrar Carreras",
+    "noResults": "No se encontraron usuarios con los criterios especificados."
   },
   "rowSubject": {
     "actions": {
@@ -489,11 +509,13 @@
     "directoryCreationFailed": "Error al crear el directorio."
   },
   "favoritesPage": {
+    "titlePage": "Favoritos | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al obtener los favoritos.",
     "title": "Mis Favoritos",
     "notes": "Apuntes",
     "directories": "Carpetas",
     "subjects": "Materias",
-    "errorFetching": "Error al obtener favoritos.",
     "noFavorites": "No se encontraron favoritos.",
     "removeFavorite": "Quitar de favoritos",
     "favorited": "¡Agregado a favoritos exitosamente!",
@@ -502,13 +524,15 @@
     "mustLogin": "Debes iniciar sesión para ver los favoritos."
   },
   "notesPage": {
+    "titlePage": "Apuntes | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al obtener los apuntes.",
     "mustLogin": "Debes iniciar sesión para ver tus apuntes.",
     "title": "Mis Apuntes",
     "year": "Año",
     "notes": "Apuntes",
     "noSubjects": "No se encontraron asignaturas.",
     "noSubjectsForYear": "No hay asignaturas disponibles para el año seleccionado.",
-    "errorFetching": "Error al obtener los datos. Por favor, inténtalo de nuevo más tarde.",
     "yearButton": "Año {{year}}",
     "subjectNotes": {
       "notesCount": "{{count}} Apuntes",
@@ -516,10 +540,12 @@
     }
   },
   "reviewsPage": {
+    "titlePage": "Reseñas | Apuntea",
     "title": "Reseñas",
     "filterLabel": "Filtrar Reseñas",
     "filterReceived": "Reseñas Recibidas",
     "filterGiven": "Reseñas Realizadas",
+    "loading": "Cargando...",
     "errorFetching": "Error al cargar las reseñas.",
     "noReviews": "No hay reseñas para mostrar."
   },
@@ -536,6 +562,9 @@
     "you": "Tú"
   },
   "directoryPage": {
+    "titlePage": "Directorio | Apuntea",
+    "loading": "Cargando...",
+    "errorFetchingDirectory": "Error al obtener el directorio.",
     "delete": "Eliminar",
     "cancel": "Cancelar",
     "confirm": "Confirmar",
@@ -544,9 +573,6 @@
     "deleteSuccess": "¡Directorio eliminado exitosamente!",
     "deleteError": "Error al eliminar el directorio.",
     "reason": "Razón",
-    "errorFetchingDirectory": "Error al obtener el directorio",
-    "title": "Directorio Padre",
-    "description": "Descripción del directorio padre.",
     "search": {
       "noContent": "No se encontró contenido."
     },
@@ -557,7 +583,7 @@
     }
   },
   "userPage": {
-    "title": "Apuntea | @{{username}}",
+    "titlePage": "@{{username}} | Apuntea",
     "userNotFound": "Usuario no encontrado.",
     "errorFetchingUser": "Error al obtener el usuario.",
     "loading": "Cargando..."

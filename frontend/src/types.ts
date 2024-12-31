@@ -168,3 +168,9 @@ export interface Review {
   noteUrl: string;
   userUrl: string;
 }
+
+export interface Column {
+  id: string;
+  label: string;
+  align?: 'right' | 'left' | 'center';
+}

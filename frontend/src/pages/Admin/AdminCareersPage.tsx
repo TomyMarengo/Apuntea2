@@ -36,13 +36,14 @@ import {
   SubjectCareer,
   SubjectWithCareer,
 } from '../../types';
-import ResultsTable, { Column } from '../../components/ResultsTable';
-import RowSubject from '../../components/Row/RowSubject';
-
+import ResultsTable from '../../components/ResultsTable';
+import RowSubject, { ColumnSubject } from '../../components/Row/RowSubject';
+import { useNavigate } from 'react-router-dom';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Helmet } from 'react-helmet-async';
 
 // Utility function for creating a numeric array range
 function range(start: number, end: number): number[] {
@@ -51,6 +52,8 @@ function range(start: number, end: number): number[] {
 
 const AdminCareersPage: React.FC = () => {
   const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useState(new URLSearchParams());
+  const navigate = useNavigate();
   const [selectedInstitutionId, setSelectedInstitutionId] = useState('');
   const [selectedCareerId, setSelectedCareerId] = useState('');
 
@@ -251,280 +254,281 @@ const AdminCareersPage: React.FC = () => {
     }
   };
 
-  // Columns for the table
-  const columns: Column[] = [
-    { id: 'name', label: t('adminCareersPage.columns.name') },
-    { id: 'year', label: t('adminCareersPage.columns.year') },
-    {
-      id: 'actions',
-      label: t('adminCareersPage.columns.actions'),
-      align: 'right',
-    },
-  ];
-
-  // Main table loading state
-  const isLoadingAny = loadingSubjects || loadingSubjectCareers;
+  // Determine the page title based on the state
+  let pageTitle = t('adminCareersPage.titlePage');
+  if (loadingSubjects || loadingSubjectCareers) {
+    pageTitle = t('adminCareersPage.loading');
+  }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        {t('adminCareersPage.title')}
-      </Typography>
-
-      {/* Institution Select */}
-      <FormControl sx={{ mr: 2, mb: 2, minWidth: 200 }}>
-        <InputLabel>{t('adminCareersPage.institution')}</InputLabel>
-        <Select
-          label={t('adminCareersPage.institution')}
-          value={selectedInstitutionId}
-          onChange={handleInstitutionChange}
-        >
-          <MenuItem value="">
-            <em>{t('adminCareersPage.selectInstitution')}</em>
-          </MenuItem>
-          {institutions?.map((inst: Institution) => (
-            <MenuItem key={inst.id} value={inst.id}>
-              {inst.name}
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+      </Helmet>
+      <Box sx={{ p: 3 }}>
+        {/* Institution Select */}
+        <FormControl sx={{ mr: 2, mb: 2, minWidth: 200 }}>
+          <InputLabel>{t('adminCareersPage.institution')}</InputLabel>
+          <Select
+            label={t('adminCareersPage.institution')}
+            value={selectedInstitutionId}
+            onChange={handleInstitutionChange}
+          >
+            <MenuItem value="">
+              <em>{t('adminCareersPage.selectInstitution')}</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+            {institutions?.map((inst: Institution) => (
+              <MenuItem key={inst.id} value={inst.id}>
+                {inst.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-      {/* Career Select */}
-      <FormControl
-        sx={{ mr: 2, mb: 2, minWidth: 200 }}
-        disabled={!selectedInstitutionId}
-      >
-        <InputLabel>{t('adminCareersPage.career')}</InputLabel>
-        <Select
-          label={t('adminCareersPage.career')}
-          value={selectedCareerId}
-          onChange={handleCareerChange}
+        {/* Career Select */}
+        <FormControl
+          sx={{ mr: 2, mb: 2, minWidth: 200 }}
+          disabled={!selectedInstitutionId}
         >
-          <MenuItem value="">
-            <em>{t('adminCareersPage.selectCareer')}</em>
-          </MenuItem>
-          {careers?.map((car: Career) => (
-            <MenuItem key={car.id} value={car.id}>
-              {car.name}
+          <InputLabel>{t('adminCareersPage.career')}</InputLabel>
+          <Select
+            label={t('adminCareersPage.career')}
+            value={selectedCareerId}
+            onChange={handleCareerChange}
+          >
+            <MenuItem value="">
+              <em>{t('adminCareersPage.selectCareer')}</em>
             </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+            {careers?.map((car: Career) => (
+              <MenuItem key={car.id} value={car.id}>
+                {car.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-      {selectedCareerId && (
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            mb: 3,
-            mt: 2,
-          }}
-        >
-          {/* Left side: Filter + Sort */}
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            {/* Filter by Year */}
-            <FormControl sx={{ minWidth: 140 }}>
-              <InputLabel>{t('adminCareersPage.filterYear')}</InputLabel>
-              <Select
-                label={t('adminCareersPage.filterYear')}
-                value={yearFilter === 'ALL' ? 'ALL' : String(yearFilter)}
-                onChange={handleYearFilterChange}
-              >
-                <MenuItem value="ALL">
-                  {t('adminCareersPage.yearOptions.all')}
-                </MenuItem>
-                {maxYearInCareer > 0 &&
-                  range(1, maxYearInCareer).map((yr) => (
-                    <MenuItem value={yr} key={yr}>
-                      {yr}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-
-            {/* Sort by year or name */}
-            <FormControl sx={{ minWidth: 140 }}>
-              <InputLabel>{t('adminCareersPage.sortBy')}</InputLabel>
-              <Select
-                label={t('adminCareersPage.sortBy')}
-                value={sortBy}
-                onChange={handleSortChange}
-              >
-                <MenuItem value="year">
-                  {t('adminCareersPage.sortOptions.year')}
-                </MenuItem>
-                <MenuItem value="name">
-                  {t('adminCareersPage.sortOptions.name')}
-                </MenuItem>
-              </Select>
-            </FormControl>
-
-            <Tooltip title={t('adminCareersPage.sortOrder')}>
-              <IconButton onClick={handleToggleSortOrder} sx={{ mt: 1 }}>
-                {sortAsc ? '↑' : '↓'}
-              </IconButton>
-            </Tooltip>
-          </Box>
-
-          {/* Right side: Action Icons */}
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Tooltip title={t('adminCareersPage.addSubjectModal.title')}>
-              <IconButton color="primary" onClick={handleOpenAddModal}>
-                <LibraryAddIcon />
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title={t('adminCareersPage.createSubjectModal.title')}>
-              <IconButton color="success" onClick={handleOpenCreateModal}>
-                <AddBoxIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        </Box>
-      )}
-
-      {/* Loading indicator for the main table */}
-      {isLoadingAny && selectedCareerId && (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-          <CircularProgress size={24} />
-          <Typography variant="body2">
-            {t('adminCareersPage.loadingSubjects')}
-          </Typography>
-        </Box>
-      )}
-
-      {/* Results Table */}
-      {selectedCareerId && combinedSubjects.length > 0 && !isLoadingAny && (
-        <ResultsTable columns={columns}>
-          {combinedSubjects.map((item) => (
-            <RowSubject
-              key={item.subjectId}
-              data={item}
-              institutionId={selectedInstitutionId}
-              careerId={selectedCareerId}
-            />
-          ))}
-        </ResultsTable>
-      )}
-
-      {/* If we have a valid career but no subjects */}
-      {selectedCareerId && combinedSubjects.length === 0 && !isLoadingAny && (
-        <Typography variant="body1" sx={{ mt: 2 }}>
-          {t('adminCareersPage.noSubjects')}
-        </Typography>
-      )}
-
-      {/* Add Subject Modal */}
-      <Dialog
-        open={openAddModal}
-        onClose={() => setOpenAddModal(false)}
-        maxWidth="xs"
-        fullWidth
-      >
-        <DialogTitle>{t('adminCareersPage.addSubjectModal.title')}</DialogTitle>
-        <DialogContent>
-          {loadingNotInCareer ? (
-            <Box sx={{ textAlign: 'center', py: 3 }}>
-              <CircularProgress />
-            </Box>
-          ) : (
-            <>
-              <FormControl sx={{ mt: 2, width: '100%' }}>
-                <InputLabel>
-                  {t('adminCareersPage.addSubjectModal.selectSubject')}
-                </InputLabel>
+        {selectedCareerId && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              mb: 3,
+              mt: 2,
+            }}
+          >
+            {/* Left side: Filter + Sort */}
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              {/* Filter by Year */}
+              <FormControl sx={{ minWidth: 140 }}>
+                <InputLabel>{t('adminCareersPage.filterYear')}</InputLabel>
                 <Select
-                  label={t('adminCareersPage.addSubjectModal.selectSubject')}
-                  value={selectedSubjectId}
-                  onChange={(e) => setSelectedSubjectId(e.target.value)}
+                  label={t('adminCareersPage.filterYear')}
+                  value={yearFilter === 'ALL' ? 'ALL' : String(yearFilter)}
+                  onChange={handleYearFilterChange}
                 >
-                  <MenuItem value="">
-                    <em>{t('adminCareersPage.addSubjectModal.none')}</em>
+                  <MenuItem value="ALL">
+                    {t('adminCareersPage.yearOptions.all')}
                   </MenuItem>
-                  {subjectsNotInCareer?.map((sub) => (
-                    <MenuItem key={sub.id} value={sub.id}>
-                      {sub.name}
-                    </MenuItem>
-                  ))}
+                  {maxYearInCareer > 0 &&
+                    range(1, maxYearInCareer).map((yr) => (
+                      <MenuItem value={yr} key={yr}>
+                        {yr}
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
 
-              <TextField
-                sx={{ mt: 2 }}
-                type="number"
-                fullWidth
-                label={t('adminCareersPage.addSubjectModal.yearLabel')}
-                value={addSubjectYear}
-                onChange={(e) => setAddSubjectYear(Number(e.target.value))}
-              />
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenAddModal(false)}>
-            {t('adminCareersPage.addSubjectModal.cancel')}
-          </Button>
-          <Button
-            onClick={handleConfirmAddSubject}
-            disabled={
-              !selectedSubjectId || linkingSubject || loadingNotInCareer
-            }
-          >
-            {linkingSubject ? (
-              <CircularProgress size={20} />
-            ) : (
-              t('adminCareersPage.addSubjectModal.confirm')
-            )}
-          </Button>
-        </DialogActions>
-      </Dialog>
+              {/* Sort by year or name */}
+              <FormControl sx={{ minWidth: 140 }}>
+                <InputLabel>{t('adminCareersPage.sortBy')}</InputLabel>
+                <Select
+                  label={t('adminCareersPage.sortBy')}
+                  value={sortBy}
+                  onChange={handleSortChange}
+                >
+                  <MenuItem value="year">
+                    {t('adminCareersPage.sortOptions.year')}
+                  </MenuItem>
+                  <MenuItem value="name">
+                    {t('adminCareersPage.sortOptions.name')}
+                  </MenuItem>
+                </Select>
+              </FormControl>
 
-      {/* Create Subject Modal */}
-      <Dialog
-        open={openCreateModal}
-        onClose={() => setOpenCreateModal(false)}
-        maxWidth="xs"
-        fullWidth
-      >
-        <DialogTitle>
-          {t('adminCareersPage.createSubjectModal.title')}
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            sx={{ mt: 2 }}
-            fullWidth
-            label={t('adminCareersPage.createSubjectModal.nameLabel')}
-            value={newSubjectName}
-            onChange={(e) => setNewSubjectName(e.target.value)}
-          />
-          <TextField
-            sx={{ mt: 2 }}
-            type="number"
-            fullWidth
-            label={t('adminCareersPage.createSubjectModal.yearLabel')}
-            value={newSubjectYear}
-            onChange={(e) => setNewSubjectYear(Number(e.target.value))}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenCreateModal(false)}>
-            {t('adminCareersPage.createSubjectModal.cancel')}
-          </Button>
-          <Button
-            onClick={handleConfirmCreateSubject}
-            disabled={!newSubjectName || creatingSubject}
-          >
-            {creatingSubject ? (
-              <CircularProgress size={20} />
+              <Tooltip title={t('adminCareersPage.sortOrder')}>
+                <IconButton onClick={handleToggleSortOrder}>
+                  {sortAsc ? '↑' : '↓'}
+                </IconButton>
+              </Tooltip>
+            </Box>
+
+            {/* Right side: Action Icons */}
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <Tooltip title={t('adminCareersPage.addSubjectModal.title')}>
+                <IconButton color="primary" onClick={handleOpenAddModal}>
+                  <LibraryAddIcon />
+                </IconButton>
+              </Tooltip>
+
+              <Tooltip title={t('adminCareersPage.createSubjectModal.title')}>
+                <IconButton color="success" onClick={handleOpenCreateModal}>
+                  <AddBoxIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </Box>
+        )}
+
+        {/* Loading indicator for the main table */}
+        {(loadingSubjects || loadingSubjectCareers) && selectedCareerId && (
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+            <CircularProgress size={24} />
+            <Typography variant="body2">
+              {t('adminCareersPage.loadingSubjects')}
+            </Typography>
+          </Box>
+        )}
+
+        {/* Results Table */}
+        {selectedCareerId &&
+          combinedSubjects.length > 0 &&
+          !loadingSubjects &&
+          !loadingSubjectCareers && (
+            <ResultsTable columns={ColumnSubject}>
+              {combinedSubjects.map((item) => (
+                <RowSubject
+                  key={item.subjectId}
+                  data={item}
+                  institutionId={selectedInstitutionId}
+                  careerId={selectedCareerId}
+                />
+              ))}
+            </ResultsTable>
+          )}
+
+        {/* If we have a valid career but no subjects */}
+        {selectedCareerId &&
+          combinedSubjects.length === 0 &&
+          !loadingSubjects &&
+          !loadingSubjectCareers && (
+            <Typography variant="body1" sx={{ mt: 2 }}>
+              {t('adminCareersPage.noSubjects')}
+            </Typography>
+          )}
+
+        {/* Add Subject Modal */}
+        <Dialog
+          open={openAddModal}
+          onClose={() => setOpenAddModal(false)}
+          maxWidth="xs"
+          fullWidth
+        >
+          <DialogTitle>
+            {t('adminCareersPage.addSubjectModal.title')}
+          </DialogTitle>
+          <DialogContent>
+            {loadingNotInCareer ? (
+              <Box sx={{ textAlign: 'center', py: 3 }}>
+                <CircularProgress />
+              </Box>
             ) : (
-              t('adminCareersPage.createSubjectModal.confirm')
+              <>
+                <FormControl sx={{ mt: 2, width: '100%' }}>
+                  <InputLabel>
+                    {t('adminCareersPage.addSubjectModal.selectSubject')}
+                  </InputLabel>
+                  <Select
+                    label={t('adminCareersPage.addSubjectModal.selectSubject')}
+                    value={selectedSubjectId}
+                    onChange={(e) => setSelectedSubjectId(e.target.value)}
+                  >
+                    <MenuItem value="">
+                      <em>{t('adminCareersPage.addSubjectModal.none')}</em>
+                    </MenuItem>
+                    {subjectsNotInCareer?.map((sub) => (
+                      <MenuItem key={sub.id} value={sub.id}>
+                        {sub.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <TextField
+                  sx={{ mt: 2 }}
+                  type="number"
+                  fullWidth
+                  label={t('adminCareersPage.addSubjectModal.yearLabel')}
+                  value={addSubjectYear}
+                  onChange={(e) => setAddSubjectYear(Number(e.target.value))}
+                />
+              </>
             )}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenAddModal(false)}>
+              {t('adminCareersPage.addSubjectModal.cancel')}
+            </Button>
+            <Button
+              onClick={handleConfirmAddSubject}
+              disabled={
+                !selectedSubjectId || linkingSubject || loadingNotInCareer
+              }
+            >
+              {linkingSubject ? (
+                <CircularProgress size={20} />
+              ) : (
+                t('adminCareersPage.addSubjectModal.confirm')
+              )}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Create Subject Modal */}
+        <Dialog
+          open={openCreateModal}
+          onClose={() => setOpenCreateModal(false)}
+          maxWidth="xs"
+          fullWidth
+        >
+          <DialogTitle>
+            {t('adminCareersPage.createSubjectModal.title')}
+          </DialogTitle>
+          <DialogContent>
+            <TextField
+              sx={{ mt: 2 }}
+              fullWidth
+              label={t('adminCareersPage.createSubjectModal.nameLabel')}
+              value={newSubjectName}
+              onChange={(e) => setNewSubjectName(e.target.value)}
+            />
+            <TextField
+              sx={{ mt: 2 }}
+              type="number"
+              fullWidth
+              label={t('adminCareersPage.createSubjectModal.yearLabel')}
+              value={newSubjectYear}
+              onChange={(e) => setNewSubjectYear(Number(e.target.value))}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenCreateModal(false)}>
+              {t('adminCareersPage.createSubjectModal.cancel')}
+            </Button>
+            <Button
+              onClick={handleConfirmCreateSubject}
+              disabled={!newSubjectName || creatingSubject}
+            >
+              {creatingSubject ? (
+                <CircularProgress size={20} />
+              ) : (
+                t('adminCareersPage.createSubjectModal.confirm')
+              )}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
+    </>
   );
 };
 
