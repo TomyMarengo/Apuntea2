@@ -38,6 +38,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteDirectoryDialog from '../../pages/Directories/dialogs/DeleteDirectoryDialog';
 import { Column } from '../../types';
 import EditDirectoryDialog from '../../pages/Directories/dialogs/EditDirectoryDialog';
+import FolderIcon from '@mui/icons-material/Folder';
 
 export const ColumnDirectory: Column[] = [
   { id: 'name', label: 'name' },
@@ -204,13 +205,22 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   return (
     <TableRow hover>
       <TableCell>
-        <MuiLink
-          component={Link}
-          to={`/directories/${directory.id}`}
-          underline="hover"
-        >
-          {directory.name}
-        </MuiLink>
+        <Box display="flex" alignItems="center">
+          {/* Ícono de la carpeta con color dinámico */}
+          <FolderIcon
+            sx={{
+              color: `#${directory.iconColor}` || 'primary.main',
+              marginRight: 1,
+            }}
+          />
+          <MuiLink
+            component={Link}
+            to={`/directories/${directory.id}`}
+            underline="hover"
+          >
+            {directory.name}
+          </MuiLink>
+        </Box>
       </TableCell>
       <TableCell>{subjectName}</TableCell>
       <TableCell>

@@ -37,6 +37,41 @@ import Delete from '@mui/icons-material/Delete';
 import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
 import { Column } from '../../types';
 
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import DescriptionIcon from '@mui/icons-material/Description';
+import ImageIcon from '@mui/icons-material/Image';
+import MovieIcon from '@mui/icons-material/Movie';
+import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+
+function getFileIcon(fileType?: string) {
+  if (!fileType)
+    return <InsertDriveFileIcon sx={{ fontSize: 20 }} color="primary" />;
+
+  switch (fileType.toLowerCase()) {
+    case 'pdf':
+      return <PictureAsPdfIcon sx={{ fontSize: 20 }} color="primary" />;
+    case 'doc':
+    case 'docx':
+    case 'ppt':
+    case 'pptx':
+    case 'xls':
+    case 'xlsx':
+      return <DescriptionIcon sx={{ fontSize: 20 }} color="primary" />;
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+    case 'gif':
+      return <ImageIcon sx={{ fontSize: 20 }} color="primary" />;
+    case 'mp4':
+      return <MovieIcon sx={{ fontSize: 20 }} color="primary" />;
+    case 'mp3':
+      return <MusicNoteIcon sx={{ fontSize: 20 }} color="primary" />;
+    default:
+      return <InsertDriveFileIcon sx={{ fontSize: 20 }} color="primary" />;
+  }
+}
+
 export const ColumnNote: Column[] = [
   { id: 'name', label: 'name' },
   { id: 'subject', label: 'subject' },
@@ -227,9 +262,20 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   return (
     <TableRow hover>
       <TableCell>
-        <MuiLink component={Link} to={`/notes/${note.id}`} underline="hover">
-          {note.name}
-        </MuiLink>
+        <Box display="flex" alignItems="center">
+          {/* Icono del archivo */}
+          {getFileIcon(note.fileType)}
+
+          {/* Nombre de la nota */}
+          <MuiLink
+            component={Link}
+            to={`/notes/${note.id}`}
+            underline="hover"
+            sx={{ ml: 1 }}
+          >
+            {note.name}
+          </MuiLink>
+        </Box>
       </TableCell>
       <TableCell>
         {isSameSubject ? (
