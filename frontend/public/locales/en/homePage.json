@@ -1,0 +1,24 @@
+{
+  "titlePage": "Home | Apuntea",
+  "welcome": "Welcome to <appName>Apuntea</appName>",
+  "welcomeUser": "Welcome to <appName>Apuntea</appName>, {{username}}",
+  "tagline": "Your favorite note-sharing platform",
+  "cards": {
+    "organizeNotes": {
+      "title": "Organize Your Notes",
+      "description": "Create folders and organize your notes"
+    },
+    "findNotes": {
+      "title": "Find Notes",
+      "description": "Search for other people's notes, share them, download them, and review them"
+    },
+    "editProfile": {
+      "title": "Edit Profile",
+      "description": "Update your personal information and settings"
+    },
+    "register": {
+      "title": "Register",
+      "description": "Create an account and start sharing your notes"
+    }
+  }
+}

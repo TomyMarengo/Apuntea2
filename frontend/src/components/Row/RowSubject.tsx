@@ -24,11 +24,11 @@ import { toast } from 'react-toastify';
 import { SubjectWithCareer, Column } from '../../types';
 
 export const ColumnSubject: Column[] = [
-  { id: 'name', label: 'adminCareersPage.columns.name' },
-  { id: 'year', label: 'adminCareersPage.columns.year' },
+  { id: 'name', label: 'name' },
+  { id: 'year', label: 'year' },
   {
     id: 'actions',
-    label: 'adminCareersPage.columns.actions',
+    label: 'actions',
     align: 'right',
   },
 ];
@@ -44,7 +44,7 @@ const RowSubject: React.FC<RowSubjectProps> = ({
   institutionId,
   careerId,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rowSubject');
 
   const [updateSubject] = useUpdateSubjectMutation();
   const [unlinkSubjectCareer] = useUnlinkSubjectCareerMutation();
@@ -81,10 +81,10 @@ const RowSubject: React.FC<RowSubjectProps> = ({
         year: newYear,
       }).unwrap();
 
-      toast.success(t('rowSubject.modals.edit.success'));
+      toast.success(t('modals.edit.success'));
     } catch (error) {
       console.error('Failed to update subject:', error);
-      toast.error(t('rowSubject.modals.edit.error'));
+      toast.error(t('modals.edit.error'));
     } finally {
       setOpenEdit(false);
     }
@@ -108,10 +108,10 @@ const RowSubject: React.FC<RowSubjectProps> = ({
         subjectId: data.subjectId,
       }).unwrap();
 
-      toast.success(t('rowSubject.modals.unlink.success'));
+      toast.success(t('modals.unlink.success'));
     } catch (error) {
       console.error('Failed to unlink subject:', error);
-      toast.error(t('rowSubject.modals.unlink.error'));
+      toast.error(t('modals.unlink.error'));
     } finally {
       setOpenUnlink(false);
     }
@@ -123,12 +123,12 @@ const RowSubject: React.FC<RowSubjectProps> = ({
         <TableCell>{data.name}</TableCell>
         <TableCell>{data.year}</TableCell>
         <TableCell align="right">
-          <Tooltip title={t('rowSubject.actions.edit')}>
+          <Tooltip title={t('actions.edit')}>
             <IconButton color="primary" onClick={handleEditClick} size="small">
               <EditIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title={t('rowSubject.actions.unlink')}>
+          <Tooltip title={t('actions.unlink')}>
             <IconButton color="error" onClick={handleUnlinkClick} size="small">
               <RemoveCircleIcon />
             </IconButton>
@@ -143,17 +143,17 @@ const RowSubject: React.FC<RowSubjectProps> = ({
         maxWidth="xs"
         fullWidth
       >
-        <DialogTitle>{t('rowSubject.modals.edit.title')}</DialogTitle>
+        <DialogTitle>{t('modals.edit.title')}</DialogTitle>
         <DialogContent>
           <TextField
-            label={t('rowSubject.modals.edit.nameLabel')}
+            label={t('modals.edit.nameLabel')}
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             fullWidth
             margin="normal"
           />
           <TextField
-            label={t('rowSubject.modals.edit.yearLabel')}
+            label={t('modals.edit.yearLabel')}
             type="number"
             value={newYear}
             onChange={(e) => setNewYear(Number(e.target.value))}
@@ -163,11 +163,9 @@ const RowSubject: React.FC<RowSubjectProps> = ({
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenEdit(false)}>
-            {t('rowSubject.modals.cancel')}
+            {t('modals.cancel')}
           </Button>
-          <Button onClick={handleEditSave}>
-            {t('rowSubject.modals.save')}
-          </Button>
+          <Button onClick={handleEditSave}>{t('modals.save')}</Button>
         </DialogActions>
       </Dialog>
 
@@ -178,18 +176,18 @@ const RowSubject: React.FC<RowSubjectProps> = ({
         maxWidth="xs"
         fullWidth
       >
-        <DialogTitle>{t('rowSubject.modals.unlink.title')}</DialogTitle>
+        <DialogTitle>{t('modals.unlink.title')}</DialogTitle>
         <DialogContent>
-          {t('rowSubject.modals.unlink.confirmation', {
+          {t('modals.unlink.confirmation', {
             subjectName: data.name,
           })}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenUnlink(false)}>
-            {t('rowSubject.modals.cancel')}
+            {t('modals.cancel')}
           </Button>
           <Button onClick={handleUnlinkConfirm} color="error">
-            {t('rowSubject.modals.confirm')}
+            {t('modals.confirm')}
           </Button>
         </DialogActions>
       </Dialog>

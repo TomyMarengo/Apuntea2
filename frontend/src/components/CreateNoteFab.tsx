@@ -16,21 +16,44 @@ import {
   FormControlLabel,
   Paper,
   ClickAwayListener,
-  SelectChangeEvent,
   CircularProgress,
 } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useCreateNoteMutation } from '../store/slices/notesApiSlice';
+import { z } from 'zod';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { NoteCategory } from '../types';
+
+// Define the Zod schema for form validation
+const noteSchema = z.object({
+  noteName: z
+    .string()
+    .min(1, 'missingFields')
+    .regex(
+      /^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/,
+      'invalidName',
+    ),
+  category: z.enum(['THEORY', 'PRACTICE', 'EXAM', 'OTHER'], {
+    errorMap: () => ({ message: 'invalidCategory' }),
+  }),
+  visible: z.boolean(),
+  file: z
+    .any()
+    .refine((file) => file instanceof File, 'invalidFile')
+    .optional(),
+});
+
+type NoteFormData = z.infer<typeof noteSchema>;
 
 interface CreateNoteFabProps {
   parentId: string;
 }
 
 const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('createNoteFab');
 
   const [createNote, { isLoading }] = useCreateNoteMutation();
 
@@ -46,6 +69,22 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
   // Reference to the wrapper for ClickAwayListener
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  // Initialize react-hook-form with Zod resolver
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<NoteFormData>({
+    resolver: zodResolver(noteSchema),
+    defaultValues: {
+      noteName: '',
+      category: NoteCategory.THEORY,
+      visible: true,
+      file: undefined,
+    },
+  });
+
   // Toggles expansion upon FAB click
   const handleFabClick = () => {
     setExpanded((prev) => !prev);
@@ -54,18 +93,14 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
   // If user clicks away outside the box, close if expanded
   const handleClickAway = (_event: MouseEvent | TouchEvent) => {
     if (expanded) {
-      // Only close if truly outside
       setExpanded(false);
     }
   };
 
-  const handleCategoryChange = (e: SelectChangeEvent) => {
-    setCategory(e.target.value as NoteCategory);
-  };
-
-  const handleCreate = async () => {
-    if (!noteName || !file) {
-      toast.error(t('createNoteFab.missingFields'));
+  // Handle form submission
+  const onSubmit = async (data: NoteFormData) => {
+    if (!data.file) {
+      toast.error(t('missingFields'));
       return;
     }
 
@@ -74,26 +109,21 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
         name: noteName,
         parentId,
         visible,
-        file,
+        file: file!,
         category,
       }).unwrap();
 
       if (result) {
-        toast.success(t('createNoteFab.noteCreated'));
+        toast.success(t('noteCreated'));
+        reset();
+        setExpanded(false);
       } else {
-        toast.error(t('createNoteFab.noteCreationFailed'));
+        toast.error(t('noteCreationFailed'));
       }
     } catch (error: any) {
-      toast.error(
-        error?.data?.[0]?.message || t('createNoteFab.noteCreationFailed'),
-      );
+      toast.error(error?.data?.[0]?.message || t('noteCreationFailed'));
       console.error('Failed to create note:', error);
     }
-
-    // Reset form and close
-    setNoteName('');
-    setFile(null);
-    setExpanded(false);
   };
 
   return (
@@ -101,7 +131,7 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
       <Box ref={containerRef}>
         {/* Floating Action Button (always visible) */}
         {!expanded && (
-          <Tooltip title={t('createNoteFab.createNewNote')} placement="left">
+          <Tooltip title={t('createNewNote')} placement="left">
             <Fab
               color="primary"
               onClick={handleFabClick}
@@ -118,6 +148,7 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
           </Tooltip>
         )}
 
+        {/* Expanded Form */}
         {expanded && (
           <Paper
             sx={{
@@ -132,60 +163,78 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
             elevation={8}
           >
             <Typography variant="subtitle1" sx={{ mb: 1 }}>
-              {t('createNoteFab.createNewNote')}
+              {t('createNewNote')}
             </Typography>
 
             {/* Note Name */}
-            <TextField
-              size="small"
-              label={t('createNoteFab.noteName')}
-              value={noteName}
-              onChange={(e) => setNoteName(e.target.value)}
-              fullWidth
+            <Controller
+              name="noteName"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  size="small"
+                  label={t('noteName')}
+                  error={!!errors.noteName}
+                  helperText={
+                    errors.noteName ? t(errors.noteName.message as string) : ''
+                  }
+                  fullWidth
+                />
+              )}
             />
 
             {/* Category */}
             <FormControl fullWidth size="small">
-              <InputLabel>{t('createNoteFab.category')}</InputLabel>
-              <Select
-                label={t('createNoteFab.category')}
-                value={category}
-                onChange={handleCategoryChange}
-                MenuProps={{
-                  disablePortal: true,
-                }}
-              >
-                {Object.values(NoteCategory).map((c) => (
-                  <MenuItem key={c} value={c}>
-                    {t(`createNoteFab.${c.toLowerCase()}`)}
-                  </MenuItem>
-                ))}
-              </Select>
+              <InputLabel>{t('category')}</InputLabel>
+              <Controller
+                name="category"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    label={t('category')}
+                    onChange={(e) => field.onChange(e.target.value)}
+                    MenuProps={{
+                      disablePortal: true,
+                    }}
+                  >
+                    <MenuItem value={NoteCategory.THEORY}>
+                      {t('theory')}
+                    </MenuItem>
+                    <MenuItem value={NoteCategory.PRACTICE}>
+                      {t('practice')}
+                    </MenuItem>
+                    <MenuItem value={NoteCategory.EXAM}>{t('exam')}</MenuItem>
+                    <MenuItem value={NoteCategory.OTHER}>{t('other')}</MenuItem>
+                  </Select>
+                )}
+              />
             </FormControl>
 
-            {/* Visibility & File in one row */}
+            {/* Visibility Switch & File Upload */}
             <Box
               sx={{
                 display: 'flex',
-                flexDirection: 'row',
+                flexDirection: 'column',
                 gap: 1,
-                alignItems: 'center',
-                justifyContent: 'space-between',
               }}
             >
               <FormControlLabel
                 control={
-                  <Switch
-                    checked={visible}
-                    onChange={(e) => setVisible(e.target.checked)}
+                  <Controller
+                    name="visible"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        {...field}
+                        checked={field.value}
+                        onChange={(e) => field.onChange(e.target.checked)}
+                      />
+                    )}
                   />
                 }
-                label={
-                  visible
-                    ? t('createNoteFab.visible')
-                    : t('createNoteFab.hidden')
-                }
-                sx={{ mr: 1 }}
+                label={visible ? t('visible') : t('hidden')}
               />
 
               <Button
@@ -203,7 +252,7 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
                   textAlign: 'left',
                 }}
               >
-                {file ? file.name : t('createNoteFab.chooseFile')}
+                {file ? file.name : t('chooseFile')}
                 <input
                   type="file"
                   hidden
@@ -214,9 +263,14 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
                   }}
                 />
               </Button>
+              {errors.file && (
+                <Typography variant="caption" color="error">
+                  {t(errors.file.message as string)}
+                </Typography>
+              )}
             </Box>
 
-            {/* Submit button */}
+            {/* Submit Button */}
             <Box
               sx={{
                 display: 'flex',
@@ -230,10 +284,10 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
                 <Button
                   variant="contained"
                   size="small"
-                  onClick={handleCreate}
+                  onClick={handleSubmit(onSubmit)}
                   sx={{ textTransform: 'none' }}
                 >
-                  {t('createNoteFab.submit')}
+                  {t('submit')}
                 </Button>
               )}
             </Box>

@@ -28,7 +28,7 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
   currentDirectory,
   note,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('directoryBreadcrumbs');
 
   const navigate = useNavigate();
 
@@ -61,21 +61,19 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
   if (isError) {
     return (
       <Box display="flex" justifyContent="center" mt={5}>
-        <Alert severity="error">
-          {t('directoryPage.errorFetchingDirectory')}
-        </Alert>
+        <Alert severity="error">{t('errorFetchingDirectory')}</Alert>
       </Box>
     );
   }
 
   return (
     <Box>
-      {breadcrumb.length == 1 && !note && (
+      {breadcrumb.length === 1 && !note && (
         <Typography variant="h6" color="text.primary">
-          {t('directoryPage.breadcrumb.isRoot')}
+          {t('isRoot')}
         </Typography>
       )}
-      {breadcrumb.length == 1 && note && (
+      {breadcrumb.length === 1 && note && (
         <Breadcrumbs
           separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"
@@ -95,7 +93,7 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
           </Typography>
         </Breadcrumbs>
       )}
-      {breadcrumb.length == 2 && (
+      {breadcrumb.length === 2 && (
         <Breadcrumbs
           separator={<NavigateNextIcon fontSize="small" />}
           aria-label="breadcrumb"

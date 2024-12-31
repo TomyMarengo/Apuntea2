@@ -1,0 +1,13 @@
+{
+  "titlePage": "Iniciar Sesión | Apuntea",
+  "loading": "Cargando...",
+  "errorFetching": "Error al iniciar sesión: {{error}}",
+  "login": "Iniciar Sesión",
+  "email": "Correo Electrónico",
+  "password": "Contraseña",
+  "signup": "Registrarse",
+  "noAccount": "¿No tienes una cuenta?",
+  "forgotPassword": "Forgot Password",
+  "invalidEmail": "Correo electrónico inválido",
+  "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
+}

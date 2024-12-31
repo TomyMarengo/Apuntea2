@@ -28,7 +28,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
   userId,
   followingUrl,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('followersModal');
   const [page, setPage] = useState(1);
   const pageSize = 10;
 
@@ -49,7 +49,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
   // Handle errors
   React.useEffect(() => {
     if (error) {
-      toast.error(t('follow.errorLoadingFollowers'));
+      toast.error(t('errorLoadingFollowers'));
     }
   }, [error, t]);
 
@@ -63,9 +63,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>
-        {t('follow.followers')}
-        {': '}
-        {data?.totalCount}
+        {t('followers')}: {data?.totalCount}
       </DialogTitle>
       <DialogContent
         id="scrollableDiv"
@@ -115,7 +113,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
             alignItems="center"
             padding={2}
           >
-            {t('follow.noFollowers')}
+            {t('noFollowers')}
           </Box>
         )}
       </DialogContent>

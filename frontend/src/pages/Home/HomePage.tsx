@@ -9,14 +9,14 @@ import { selectCurrentUser } from '../../store/slices/authSlice';
 import { Helmet } from 'react-helmet-async';
 
 export default function HomePage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('homePage');
   const user = useSelector(selectCurrentUser);
 
   const isLoggedIn = !!user;
 
   const cards = [
     {
-      title: t('homePage.cards.organizeNotes.title'),
+      title: t('cards.organizeNotes.title'),
       description: t('homePage.cards.organizeNotes.description'),
       icon: <Folder sx={{ fontSize: 100 }} />,
       link: isLoggedIn ? '/notes' : '/login',

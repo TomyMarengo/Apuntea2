@@ -1,0 +1,6 @@
+{
+  "favorited": "¡Apunte agregado a favoritos!",
+  "unfavorited": "¡Apunte eliminado de favoritos!",
+  "removeFavorite": "Eliminar de favoritos",
+  "errorUnfavorite": "Error al actualizar el estado de favorito."
+}

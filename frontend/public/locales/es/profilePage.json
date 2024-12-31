@@ -1,0 +1,7 @@
+{
+  "titlePage": "Perfil | Apuntea",
+  "loading": "Cargando...",
+  "profile": "Perfil",
+  "errorFetchingUser": "Error al obtener los datos del usuario.",
+  "noUserFound": "No se encontró ningún usuario."
+}

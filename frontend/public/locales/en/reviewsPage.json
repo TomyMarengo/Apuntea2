@@ -1,0 +1,10 @@
+{
+  "titlePage": "Reviews | Apuntea",
+  "title": "Reviews",
+  "filterLabel": "Filter Reviews",
+  "filterReceived": "Reviews Received",
+  "filterGiven": "Reviews Given",
+  "loading": "Loading...",
+  "errorFetching": "Error fetching reviews.",
+  "noReviews": "No reviews to display."
+}

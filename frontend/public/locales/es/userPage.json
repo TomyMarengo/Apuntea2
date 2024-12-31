@@ -1,0 +1,6 @@
+{
+  "titlePage": "@{{username}} | Apuntea",
+  "userNotFound": "Usuario no encontrado.",
+  "errorFetchingUser": "Error al obtener el usuario.",
+  "loading": "Cargando..."
+}

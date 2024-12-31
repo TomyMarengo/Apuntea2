@@ -1,0 +1,12 @@
+{
+  "username": "Username",
+  "email": "Email",
+  "career": "Career",
+  "institution": "Institution",
+  "notSet": "Not set",
+  "enableEmailNotifications": "Enable Email Notifications",
+  "disableEmailNotifications": "Disable Email Notifications",
+  "updateFailed": "Update failed",
+  "followers": "Followers",
+  "following": "Following"
+}

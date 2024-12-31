@@ -1,4 +1,4 @@
-// src/pages/Favorites/FavoriteNoteCard.tsx
+// src/components/FavoriteNoteCard.tsx
 
 import React, { useEffect, useState } from 'react';
 import { Box, Tooltip, IconButton, Typography } from '@mui/material';
@@ -59,7 +59,7 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
   note,
   userId,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('favoriteNoteCard');
   const [removeFavoriteNote] = useRemoveFavoriteNoteMutation();
   const [addFavoriteNote] = useAddFavoriteNoteMutation();
   const { data: isFavApi, refetch } = useGetIsFavoriteNoteQuery(
@@ -86,19 +86,19 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
           userId,
         }).unwrap();
         if (result) {
-          toast.success(t('favoritesPage.unfavorited'));
+          toast.success(t('unfavorited'));
         }
       } else {
         // call add
         const result = await addFavoriteNote({ noteId: note.id }).unwrap();
         if (result) {
-          toast.success(t('favoritesPage.favorited'));
+          toast.success(t('favorited'));
         }
       }
       // refetch to confirm
       refetch();
     } catch (error) {
-      toast.error(t('favoritesPage.errorUnfavorite'));
+      toast.error(t('errorUnfavorite'));
       console.error('Toggle favorite note failed:', error);
     }
   };
@@ -129,13 +129,7 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
       </Link>
 
       {/* Heart icon top-right */}
-      <Tooltip
-        title={
-          isFavorite
-            ? t('favoritesPage.removeFavorite')!
-            : t('favoritesPage.favorited')!
-        }
-      >
+      <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
         <IconButton
           onClick={handleToggleFavorite}
           size="small"

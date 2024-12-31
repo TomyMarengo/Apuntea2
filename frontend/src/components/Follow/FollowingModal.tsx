@@ -30,7 +30,7 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
   userId,
   followedByUrl,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('followingModal');
   const [page, setPage] = useState(1);
   const pageSize = 10;
 
@@ -51,7 +51,7 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
   // Handle errors
   useEffect(() => {
     if (error) {
-      toast.error(t('follow.errorLoadingFollowings'));
+      toast.error(t('errorLoadingFollowings'));
     }
   }, [error, t]);
 
@@ -77,10 +77,8 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
           alignItems: 'center',
         }}
       >
-        {t('follow.following')}
-        {': '}
-        {data?.totalCount}
-        <IconButton onClick={handleRefresh} aria-label={t('follow.refresh')}>
+        {t('following')}: {data?.totalCount}
+        <IconButton onClick={handleRefresh} aria-label={t('refresh')}>
           <RefreshIcon />
         </IconButton>
       </DialogTitle>
@@ -132,7 +130,7 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
             alignItems="center"
             padding={2}
           >
-            {t('follow.noFollowing')}
+            {t('noFollowing')}
           </Box>
         )}
       </DialogContent>

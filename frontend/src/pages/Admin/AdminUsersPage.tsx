@@ -25,7 +25,7 @@ import useDebounce from '../../hooks/useDebounce';
 import { Helmet } from 'react-helmet-async';
 
 const AdminUsersPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('adminUsersPage');
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -90,11 +90,11 @@ const AdminUsersPage: React.FC = () => {
   };
 
   // Determine the page title based on the state
-  let pageTitle = t('adminUsersPage.titlePage');
+  let pageTitle = t('titlePage');
   if (isLoading) {
-    pageTitle = t('adminUsersPage.loading');
+    pageTitle = t('loading');
   } else if (isError) {
-    pageTitle = t('adminUsersPage.error');
+    pageTitle = t('error');
   }
 
   return (
@@ -114,7 +114,7 @@ const AdminUsersPage: React.FC = () => {
         >
           {/* Search Input Field */}
           <TextField
-            label={t('adminUsersPage.searchPlaceholder')}
+            label={t('searchPlaceholder')}
             variant="outlined"
             value={searchInput}
             onChange={handleQueryChange}
@@ -124,22 +124,20 @@ const AdminUsersPage: React.FC = () => {
           {/* Status Filter Dropdown */}
           <FormControl variant="outlined" sx={{ minWidth: 200 }}>
             <InputLabel id="status-filter-label">
-              {t('adminUsersPage.statusFilter')}
+              {t('statusFilter')}
             </InputLabel>
             <Select
               labelId="status-filter-label"
               value={statusFilter}
               onChange={handleStatusChange}
-              label={t('adminUsersPage.statusFilter')}
+              label={t('statusFilter')}
             >
-              <MenuItem value="ALL">
-                {t('adminUsersPage.statusOptions.all')}
-              </MenuItem>
+              <MenuItem value="ALL">{t('statusOptions.all')}</MenuItem>
               <MenuItem value={UserStatus.ACTIVE}>
-                {t('adminUsersPage.statusOptions.active')}
+                {t('statusOptions.active')}
               </MenuItem>
               <MenuItem value={UserStatus.BANNED}>
-                {t('adminUsersPage.statusOptions.banned')}
+                {t('statusOptions.banned')}
               </MenuItem>
             </Select>
           </FormControl>
@@ -163,9 +161,7 @@ const AdminUsersPage: React.FC = () => {
             <TableRow>
               <TableCell colSpan={4}>
                 <Box sx={{ textAlign: 'center', py: 5 }}>
-                  <Typography color="error">
-                    {t('adminUsersPage.error')}
-                  </Typography>
+                  <Typography color="error">{t('error')}</Typography>
                 </Box>
               </TableCell>
             </TableRow>
@@ -180,7 +176,7 @@ const AdminUsersPage: React.FC = () => {
             <TableRow>
               <TableCell colSpan={4}>
                 <Box sx={{ textAlign: 'center', py: 5 }}>
-                  <Typography>{t('adminUsersPage.noResults')}</Typography>
+                  <Typography>{t('noResults')}</Typography>
                 </Box>
               </TableCell>
             </TableRow>

@@ -1,0 +1,20 @@
+{
+  "institution": "Institution",
+  "career": "Career",
+  "subject": "Subject",
+  "word": "Word",
+  "sortBy": "Sort By",
+  "name": "Name",
+  "lastModifiedAt": "Last Modified At",
+  "score": "Score",
+  "createdAt": "Created At",
+  "owner": "Owner",
+  "actions": "Actions",
+  "asc": "Ascending",
+  "desc": "Descending",
+  "folders": "Folders",
+  "notes": "Notes",
+  "selectInstitution": "Select an institution",
+  "selectCareer": "Select a career",
+  "selectSubject": "Select a subject"
+}

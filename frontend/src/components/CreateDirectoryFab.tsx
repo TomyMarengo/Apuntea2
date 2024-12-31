@@ -38,10 +38,10 @@ const directorySchema = z.object({
     .string()
     .regex(
       /^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/,
-      'createDirectoryFab.invalidName',
+      'invalidName',
     ),
   iconColor: z.enum(['#BBBBBB', '#16A765', '#4986E7', '#CD35A6'], {
-    errorMap: () => ({ message: 'createDirectoryFab.invalidColor' }),
+    errorMap: () => ({ message: 'invalidColor' }),
   }),
   visible: z.boolean(),
 });
@@ -55,7 +55,7 @@ interface CreateDirectoryFabProps {
 const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
   parentId,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('createDirectoryFab');
   const [createDirectory, { isLoading }] = useCreateDirectoryMutation();
 
   // Tracks if the form is expanded
@@ -102,17 +102,14 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
       }).unwrap();
 
       if (result) {
-        toast.success(t('createDirectoryFab.directoryCreated'));
+        toast.success(t('directoryCreated'));
         reset();
         setExpanded(false);
       } else {
-        toast.error(t('createDirectoryFab.directoryCreationFailed'));
+        toast.error(t('directoryCreationFailed'));
       }
     } catch (error: any) {
-      toast.error(
-        error?.data?.[0]?.message ||
-          t('createDirectoryFab.directoryCreationFailed'),
-      );
+      toast.error(error?.data?.[0]?.message || t('directoryCreationFailed'));
       console.error('Failed to create directory:', error);
     }
   };
@@ -122,10 +119,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
       <Box ref={containerRef}>
         {/* Floating Action Button (always visible) */}
         {!expanded && (
-          <Tooltip
-            title={t('createDirectoryFab.createNewDirectory')}
-            placement="left"
-          >
+          <Tooltip title={t('createNewDirectory')} placement="left">
             <Fab
               color="primary"
               onClick={handleFabClick}
@@ -153,7 +147,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
             elevation={8}
           >
             <Typography variant="subtitle1" sx={{ mb: 1 }}>
-              {t('createDirectoryFab.createNewDirectory')}
+              {t('createNewDirectory')}
             </Typography>
 
             {/* Directory Name */}
@@ -164,7 +158,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
                 <TextField
                   {...field}
                   size="small"
-                  label={t('createDirectoryFab.name')}
+                  label={t('name')}
                   error={!!errors.name}
                   helperText={
                     errors.name ? t(errors.name.message as string) : ''
@@ -177,7 +171,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
             {/* Icon Color Selection */}
             <Box>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                {t('createDirectoryFab.iconColor')}
+                {t('iconColor')}
               </Typography>
               <Controller
                 name="iconColor"
@@ -238,11 +232,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
                       onChange={(e) => field.onChange(e.target.checked)}
                     />
                   }
-                  label={
-                    field.value
-                      ? t('createDirectoryFab.visible')
-                      : t('createDirectoryFab.hidden')
-                  }
+                  label={field.value ? t('visible') : t('hidden')}
                 />
               )}
             />
@@ -258,7 +248,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
                   onClick={handleSubmit(onSubmit)}
                   sx={{ textTransform: 'none' }}
                 >
-                  {t('createDirectoryFab.submit')}
+                  {t('submit')}
                 </Button>
               )}
             </Box>

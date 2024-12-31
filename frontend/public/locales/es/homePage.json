@@ -1,0 +1,24 @@
+{
+  "titlePage": "Inicio | Apuntea",
+  "welcome": "Bienvenido a <appName>Apuntea</appName>",
+  "welcomeUser": "Bienvenido a <appName>Apuntea</appName>, {{username}}",
+  "tagline": "Conecta tu conocimiento, expande tus horizontes",
+  "cards": {
+    "organizeNotes": {
+      "title": "Organiza tus apuntes",
+      "description": "Crea carpetas y organiza tus apuntes"
+    },
+    "findNotes": {
+      "title": "Encuentra apuntes",
+      "description": "Busca apuntes de otros, compártelos, descárgalos y revísalos"
+    },
+    "editProfile": {
+      "title": "Edita tu perfil",
+      "description": "Cambia tu foto, nombre y más"
+    },
+    "register": {
+      "title": "Regístrate",
+      "description": "Crea una cuenta y comienza a compartir tus apuntes"
+    }
+  }
+}

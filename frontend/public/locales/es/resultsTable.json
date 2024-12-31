@@ -1,0 +1,12 @@
+{
+  "name": "Nombre",
+  "subject": "Asignatura",
+  "owner": "Propietario",
+  "lastModifiedAt": "Última modificación",
+  "score": "Puntuación",
+  "year": "Año",
+  "username": "Nombre de usuario",
+  "email": "Correo electrónico",
+  "status": "Estado",
+  "actions": "Acciones"
+}

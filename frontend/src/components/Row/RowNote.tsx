@@ -1,3 +1,5 @@
+// src/components/Follow/RowNote.tsx
+
 import React, { useState } from 'react';
 import {
   Box,
@@ -21,7 +23,10 @@ import {
 } from '../../store/slices/notesApiSlice';
 import { saveAs } from 'file-saver';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../store/slices/authSlice';
+import {
+  selectCurrentUser,
+  selectCurrentToken,
+} from '../../store/slices/authSlice';
 import { Note, Subject } from '../../types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,15 +38,14 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Delete from '@mui/icons-material/Delete';
 import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
 import { Column } from '../../types';
-import { RootState } from '../../store/store';
 
 export const ColumnNote: Column[] = [
-  { id: 'name', label: 'searchForm.name' },
-  { id: 'subject', label: 'searchForm.subject' },
-  { id: 'owner', label: 'searchForm.owner' },
-  { id: 'lastModifiedAt', label: 'searchForm.lastModifiedAt' },
-  { id: 'score', label: 'searchForm.score' },
-  { id: 'actions', label: 'searchForm.actions', align: 'right' },
+  { id: 'name', label: 'name' },
+  { id: 'subject', label: 'subject' },
+  { id: 'owner', label: 'owner' },
+  { id: 'lastModifiedAt', label: 'lastModifiedAt' },
+  { id: 'score', label: 'score' },
+  { id: 'actions', label: 'actions', align: 'right' },
 ];
 
 interface RowNoteProps {
@@ -50,9 +54,10 @@ interface RowNoteProps {
 }
 
 const RowNote: React.FC<RowNoteProps> = ({ note }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rowNote');
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
 
   // Fetch subject data
   const {
@@ -104,19 +109,19 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
           noteId: note.id,
           userId: user.id,
         }).unwrap();
-        toast.success(t('rowNote.favoriteRemoved'));
+        toast.success(t('favoriteRemoved'));
       } else {
         await addFavoriteNote({
           noteId: note.id,
         }).unwrap();
-        toast.success(t('rowNote.favoriteAdded'));
+        toast.success(t('favoriteAdded'));
       }
       refetchFavorite();
     } catch (error: any) {
       if (error.status === 409) {
-        toast.error(t('rowNote.alreadyFavorited'));
+        toast.error(t('alreadyFavorited'));
       } else {
-        toast.error(t('rowNote.favoriteActionFailed'));
+        toast.error(t('favoriteActionFailed'));
       }
       console.error('Favorite action failed:', error);
     }
@@ -137,13 +142,13 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
           ? `${note.name}.${note.fileType}`
           : note.name;
         saveAs(blob, fileName);
-        toast.success(t('rowNote.downloadSuccess'));
+        toast.success(t('downloadSuccess'));
       } catch (error) {
         console.error('Download failed:', error);
-        toast.error(t('rowNote.downloadFailed'));
+        toast.error(t('downloadFailed'));
       }
     } else {
-      toast.error(t('rowNote.fileNotAvailable'));
+      toast.error(t('fileNotAvailable'));
     }
   };
 
@@ -152,10 +157,10 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
     try {
       const link = `${window.location.origin}/notes/${note.id}`;
       await navigator.clipboard.writeText(link);
-      toast.success(t('rowNote.copySuccess'));
+      toast.success(t('copySuccess'));
     } catch (error) {
       console.error('Copy failed:', error);
-      toast.error(t('rowNote.copyFailed'));
+      toast.error(t('copyFailed'));
     }
   };
 
@@ -190,15 +195,15 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   };
 
   // Determine subject name
-  let subjectName: string | JSX.Element = t('rowNote.dataUnknown');
+  let subjectName: string | JSX.Element = t('dataUnknown');
   if (subjectLoading) subjectName = <Skeleton width={80} />;
-  else if (subjectError) subjectName = t('rowNote.dataUnknown');
+  else if (subjectError) subjectName = t('dataUnknown');
   else if (subjectData?.name) subjectName = subjectData.name;
 
   // Determine owner name
-  let ownerName: string | JSX.Element = t('rowNote.dataUnknown');
+  let ownerName: string | JSX.Element = t('dataUnknown');
   if (ownerLoading) ownerName = <Skeleton width={80} />;
-  else if (ownerError) ownerName = t('rowNote.dataUnknown');
+  else if (ownerError) ownerName = t('dataUnknown');
   else if (ownerData?.username) ownerName = ownerData.username;
 
   // Delete modal state
@@ -211,8 +216,6 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   const handleCloseDelete = () => {
     setOpenDelete(false);
   };
-
-  const token = useSelector(selectCurrentToken);
 
   const isOwner = user?.id === note.ownerUrl?.split('/').pop();
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;
@@ -253,9 +256,9 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
               title={
                 user
                   ? isFavorite
-                    ? t('rowNote.unfavorite')
-                    : t('rowNote.favorite')
-                  : t('rowNote.loginToFavorite')
+                    ? t('unfavorite')
+                    : t('favorite')
+                  : t('loginToFavorite')
               }
             >
               <span>
@@ -274,21 +277,22 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
             </Tooltip>
 
             {/* Download Button */}
-            <Tooltip title={t('rowNote.download')}>
+            <Tooltip title={t('download')}>
               <IconButton onClick={handleDownloadClick} size="small">
                 <DownloadIcon />
               </IconButton>
             </Tooltip>
 
             {/* Copy Link Button */}
-            <Tooltip title={t('rowNote.copyLink')}>
+            <Tooltip title={t('copyLink')}>
               <IconButton onClick={handleCopyLinkClick} size="small">
                 <LinkIcon />
               </IconButton>
             </Tooltip>
 
+            {/* Delete Button */}
             {(isAdmin || isOwner) && (
-              <Tooltip title={t('rowNote.delete')}>
+              <Tooltip title={t('delete')}>
                 <IconButton onClick={handleDeleteClick} size="small">
                   <Delete />
                 </IconButton>
@@ -296,7 +300,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
             )}
 
             {/* More Menu */}
-            <Tooltip title={t('rowNote.more')}>
+            <Tooltip title={t('more')}>
               <IconButton onClick={handleMenuClick} size="small">
                 <MoreVertIcon />
               </IconButton>
@@ -316,13 +320,13 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
               }}
             >
               <MenuItem onClick={handleOwnerNotes}>
-                {t('rowNote.openOwnersNotes')}
+                {t('openOwnersNotes')}
               </MenuItem>
               <MenuItem onClick={handleOpenParent}>
-                {t('rowNote.openParentDirectory')}
+                {t('openParentDirectory')}
               </MenuItem>
               <MenuItem onClick={handleSubjectDirectories}>
-                {t('rowNote.openSubjectsDirectories')}
+                {t('openSubjectsDirectories')}
               </MenuItem>
             </Menu>
           </Box>

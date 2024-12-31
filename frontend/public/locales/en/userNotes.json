@@ -1,0 +1,8 @@
+{
+  "mustHaveCareerInstitution": "You must have a career and institution set to view your notes.",
+  "errorFetching": "Error fetching user notes.",
+  "notes": "Notes",
+  "noSubjects": "No subjects found.",
+  "yearButton": "Year {{year}}",
+  "noSubjectsForYear": "No subjects available for the selected year."
+}

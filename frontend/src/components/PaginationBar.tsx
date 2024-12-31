@@ -17,7 +17,7 @@ export default function PaginationBar({
   totalPages,
   totalCount,
 }: PaginationBarProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('paginationBar');
   const [searchParams, setSearchParams] = useSearchParams();
 
   function handlePageChange(_: React.ChangeEvent<unknown>, page: number) {
@@ -45,7 +45,7 @@ export default function PaginationBar({
         onChange={handlePageChange}
       />
       <Typography variant="body2">
-        {t('paginationBar.totalCount', { from, to, totalCount })}
+        {t('totalCount', { from, to, totalCount })}
       </Typography>
     </Box>
   );

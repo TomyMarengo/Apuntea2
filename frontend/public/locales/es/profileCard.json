@@ -1,0 +1,12 @@
+{
+  "username": "Nombre de usuario",
+  "email": "Correo electrónico",
+  "career": "Carrera",
+  "institution": "Institución",
+  "notSet": "No establecido",
+  "enableEmailNotifications": "Habilitar notificaciones por correo",
+  "disableEmailNotifications": "Deshabilitar notificaciones por correo",
+  "updateFailed": "Actualización fallida",
+  "followers": "Seguidores",
+  "following": "Siguiendo"
+}

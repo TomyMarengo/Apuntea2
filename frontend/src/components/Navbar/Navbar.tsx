@@ -20,7 +20,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ isLoggedIn }: NavbarProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('navbar');
   return (
     <AppBar
       position="static"
@@ -38,9 +38,9 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
           variant="h4"
           component={Link}
           to="/"
-          sx={{ fontWeight: 'bold' }}
+          sx={{ fontWeight: 'bold', textDecoration: 'none', color: 'inherit' }}
         >
-          {t('navbar.appName') /* "Apuntea" */}
+          {t('appName') /* "Apuntea" */}
         </Typography>
 
         {/* Right Side */}
@@ -56,10 +56,10 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
           ) : (
             <>
               <Button component={Link} to="/login" color="inherit">
-                {t('navbar.login')}
+                {t('login')}
               </Button>
               <Button component={Link} to="/register" color="inherit">
-                {t('navbar.signup')}
+                {t('signup')}
               </Button>
             </>
           )}

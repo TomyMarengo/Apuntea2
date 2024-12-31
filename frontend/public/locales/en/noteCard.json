@@ -1,0 +1,12 @@
+{
+  "hiddenNote": "Hidden Note",
+  "category": {
+    "theory": "Theory",
+    "practice": "Practice",
+    "exam": "Exam",
+    "other": "Other"
+  },
+  "visible": "Visible",
+  "hidden": "Hidden",
+  "averageScore": "Average Score"
+}

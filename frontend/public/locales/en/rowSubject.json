@@ -1,0 +1,24 @@
+{
+  "actions": {
+    "edit": "Edit Subject",
+    "unlink": "Unlink from Career"
+  },
+  "modals": {
+    "edit": {
+      "title": "Edit Subject",
+      "nameLabel": "Subject Name",
+      "yearLabel": "Year",
+      "success": "Subject successfully edited.",
+      "error": "Failed to edit the subject."
+    },
+    "unlink": {
+      "title": "Unlink Subject",
+      "confirmation": "Are you sure you want to unlink \"{{subjectName}}\" from this career?",
+      "success": "Subject successfully unlinked from the career.",
+      "error": "Failed to unlink the subject from the career."
+    },
+    "cancel": "Cancel",
+    "save": "Save",
+    "confirm": "Confirm"
+  }
+}

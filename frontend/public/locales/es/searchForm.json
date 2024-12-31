@@ -1,0 +1,20 @@
+{
+  "institution": "Institución",
+  "career": "Carrera",
+  "subject": "Materia",
+  "word": "Palabra",
+  "sortBy": "Ordenar Por",
+  "name": "Nombre",
+  "lastModifiedAt": "Última Modificación",
+  "score": "Puntuación",
+  "createdAt": "Creado en",
+  "owner": "Propietario",
+  "actions": "Acciones",
+  "asc": "Ascendente",
+  "desc": "Descendente",
+  "folders": "Carpetas",
+  "notes": "Apuntes",
+  "selectInstitution": "Selecciona una institución",
+  "selectCareer": "Selecciona una carrera",
+  "selectSubject": "Selecciona una materia"
+}

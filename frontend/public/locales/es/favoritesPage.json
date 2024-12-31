@@ -1,0 +1,15 @@
+{
+  "titlePage": "Favoritos | Apuntea",
+  "loading": "Cargando...",
+  "errorFetching": "Error al obtener los favoritos.",
+  "title": "Mis Favoritos",
+  "notes": "Apuntes",
+  "directories": "Carpetas",
+  "subjects": "Materias",
+  "noFavorites": "No se encontraron favoritos.",
+  "removeFavorite": "Quitar de favoritos",
+  "favorited": "¡Agregado a favoritos exitosamente!",
+  "unfavorited": "¡Eliminado de favoritos exitosamente!",
+  "errorUnfavorite": "Error al quitar de favoritos.",
+  "mustLogin": "Debes iniciar sesión para ver los favoritos."
+}

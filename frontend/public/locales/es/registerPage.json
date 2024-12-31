@@ -1,0 +1,23 @@
+{
+  "titlePage": "Registro | Apuntea",
+  "loading": "Cargando...",
+  "errorFetching": "Error al registrar: {{error}}",
+  "signup": "Registrarse",
+  "email": "Correo Electrónico",
+  "password": "Contraseña",
+  "confirmPassword": "Confirmar Contraseña",
+  "institution": "Institución",
+  "career": "Carrera",
+  "invalidEmail": "Correo electrónico inválido",
+  "passwordMinLength": "La contraseña debe tener al menos 4 caracteres",
+  "selectInstitution": "Selecciona una institución",
+  "selectCareer": "Selecciona una carrera",
+  "youMustSelectInstitution": "Debes seleccionar una institución",
+  "youMustSelectCareer": "Debes seleccionar una carrera",
+  "passwordsDoNotMatch": "Las contraseñas no coinciden",
+  "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+  "toast": {
+    "success": "¡Cuenta creada exitosamente!",
+    "error": "Error al crear la cuenta."
+  }
+}

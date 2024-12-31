@@ -1,0 +1,8 @@
+{
+  "mustHaveCareerInstitution": "Debes tener una carrera e institución para ver tus apuntes.",
+  "errorFetching": "Error al obtener los apuntes.",
+  "notes": "Apuntes",
+  "noSubjects": "No se encontraron asignaturas.",
+  "yearButton": "Año {{year}}",
+  "noSubjectsForYear": "No hay asignaturas disponibles para el año seleccionado."
+}

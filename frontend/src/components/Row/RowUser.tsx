@@ -1,5 +1,6 @@
 // src/components/Row/RowUser.tsx
 
+import React, { useState } from 'react';
 import {
   IconButton,
   Tooltip,
@@ -13,7 +14,7 @@ import {
   Button,
   Link as MuiLink,
 } from '@mui/material';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { User, UserStatus } from '../../types';
 import { useUpdateUserStatusMutation } from '../../store/slices/usersApiSlice';
@@ -24,12 +25,12 @@ import { toast } from 'react-toastify';
 import { Column } from '../../types';
 
 export const ColumnUser: Column[] = [
-  { id: 'username', label: 'adminUsersPage.columns.username' },
-  { id: 'email', label: 'adminUsersPage.columns.email' },
-  { id: 'status', label: 'adminUsersPage.columns.status' },
+  { id: 'username', label: 'username' },
+  { id: 'email', label: 'email' },
+  { id: 'status', label: 'status' },
   {
     id: 'actions',
-    label: 'adminUsersPage.columns.actions',
+    label: 'actions',
     align: 'right',
   },
 ];
@@ -39,7 +40,7 @@ interface RowUserProps {
 }
 
 const RowUser: FC<RowUserProps> = ({ user }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rowUser');
   const [updateUserStatus] = useUpdateUserStatusMutation();
   const [openBanModal, setOpenBanModal] = useState(false);
   const [openUnbanModal, setOpenUnbanModal] = useState(false);
@@ -58,13 +59,13 @@ const RowUser: FC<RowUserProps> = ({ user }) => {
       await updateUserStatus({
         userId: user.id,
         status: UserStatus.BANNED,
-        banReason, // Assuming your API accepts a banReason field
+        banReason,
       }).unwrap();
       setOpenBanModal(false);
-      toast.success(t('rowUser.toast.ban.success')); // Success toast
+      toast.success(t('toast.ban.success'));
     } catch (error) {
       console.error('Failed to ban user:', error);
-      toast.error(t('rowUser.toast.ban.failure')); // Error toast
+      toast.error(t('toast.ban.error'));
     }
   };
 
@@ -75,10 +76,10 @@ const RowUser: FC<RowUserProps> = ({ user }) => {
         status: UserStatus.ACTIVE,
       }).unwrap();
       setOpenUnbanModal(false);
-      toast.success(t('rowUser.toast.unban.success')); // Success toast
+      toast.success(t('toast.unban.success'));
     } catch (error) {
       console.error('Failed to unban user:', error);
-      toast.error(t('rowUser.toast.unban.failure')); // Error toast
+      toast.error(t('toast.unban.error'));
     }
   };
 
@@ -91,18 +92,16 @@ const RowUser: FC<RowUserProps> = ({ user }) => {
             {user.email}
           </MuiLink>
         </TableCell>
-        <TableCell>
-          {t(`rowUser.status.${user.status?.toLowerCase()}`)}
-        </TableCell>
+        <TableCell>{t(`status.${user.status?.toLowerCase()}`)}</TableCell>
         <TableCell align="right">
           {user.status === UserStatus.ACTIVE ? (
-            <Tooltip title={t('rowUser.actions.ban')}>
+            <Tooltip title={t('actions.ban')}>
               <IconButton onClick={handleBanClick} color="error">
                 <BlockIcon />
               </IconButton>
             </Tooltip>
           ) : (
-            <Tooltip title={t('rowUser.actions.unban')}>
+            <Tooltip title={t('actions.unban')}>
               <IconButton onClick={handleUnbanClick} color="success">
                 <CheckCircleIcon />
               </IconButton>
@@ -113,12 +112,12 @@ const RowUser: FC<RowUserProps> = ({ user }) => {
 
       {/* Ban Modal */}
       <Dialog open={openBanModal} onClose={() => setOpenBanModal(false)}>
-        <DialogTitle>{t('rowUser.modals.ban.title')}</DialogTitle>
+        <DialogTitle>{t('modals.ban.title')}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
             margin="dense"
-            label={t('rowUser.modals.ban.reasonLabel')}
+            label={t('modals.ban.reasonLabel')}
             type="text"
             fullWidth
             variant="outlined"
@@ -128,24 +127,24 @@ const RowUser: FC<RowUserProps> = ({ user }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenBanModal(false)}>
-            {t('rowUser.modals.cancel')}
+            {t('modals.cancel')}
           </Button>
           <Button onClick={handleBanConfirm} disabled={!banReason}>
-            {t('rowUser.modals.confirm')}
+            {t('modals.confirm')}
           </Button>
         </DialogActions>
       </Dialog>
 
       {/* Unban Modal */}
       <Dialog open={openUnbanModal} onClose={() => setOpenUnbanModal(false)}>
-        <DialogTitle>{t('rowUser.modals.unban.title')}</DialogTitle>
-        <DialogContent>{t('rowUser.modals.unban.confirmation')}</DialogContent>
+        <DialogTitle>{t('modals.unban.title')}</DialogTitle>
+        <DialogContent>{t('modals.unban.confirmation')}</DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenUnbanModal(false)}>
-            {t('rowUser.modals.cancel')}
+            {t('modals.cancel')}
           </Button>
-          <Button onClick={handleUnbanConfirm}>
-            {t('rowUser.modals.confirm')}
+          <Button onClick={handleUnbanConfirm} color="error">
+            {t('modals.confirm')}
           </Button>
         </DialogActions>
       </Dialog>

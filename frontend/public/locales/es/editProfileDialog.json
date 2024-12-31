@@ -1,0 +1,22 @@
+{
+  "editProfile": "Editar Perfil",
+  "close": "Cerrar",
+  "uploadPicture": "Subir Foto",
+  "firstName": "Nombre",
+  "lastName": "Apellido",
+  "username": "Nombre de Usuario",
+  "email": "Correo Electrónico",
+  "career": "Carrera",
+  "selectCareer": "Seleccionar Carrera",
+  "changePassword": "Cambiar Contraseña",
+  "currentPassword": "Contraseña Actual",
+  "newPassword": "Nueva Contraseña",
+  "confirmNewPassword": "Confirmar Nueva Contraseña",
+  "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+  "failedToUpdateProfile": "Error al actualizar el perfil.",
+  "cancel": "Cancelar",
+  "saving": "Guardando...",
+  "saveChanges": "Guardar Cambios",
+  "profileUpdatedSuccessfully": "Perfil actualizado exitosamente.",
+  "passwordChangedSuccessfully": "Contraseña cambiada exitosamente."
+}

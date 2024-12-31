@@ -35,7 +35,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   noteId,
   onDeleteSuccess,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('reviewCard');
   const user = useSelector(selectCurrentUser);
 
   const { data: userData } = useGetUserQuery(
@@ -102,7 +102,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
               </Typography>
             </Link>
           ) : (
-            <Typography variant="subtitle2">{t('reviewCard.you')}</Typography>
+            <Typography variant="subtitle2">{t('you')}</Typography>
           )}
           <Rating value={review.score} readOnly size="small" />
         </Box>
@@ -145,7 +145,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
         )}
         {!noteData && (
           <Typography variant="caption" color="text.secondary">
-            {t('reviewCard.hiddenNote')}
+            {t('hiddenNote')}
           </Typography>
         )}
         <Typography

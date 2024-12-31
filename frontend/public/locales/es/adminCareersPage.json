@@ -1,0 +1,46 @@
+{
+  "titlePage": "Administrar Carreras | Apuntea",
+  "institution": "Institución",
+  "selectInstitution": "Selecciona una institución",
+  "career": "Carrera",
+  "selectCareer": "Selecciona una carrera",
+  "filterYear": "Filtrar por Año",
+  "yearOptions": {
+    "all": "Todos"
+  },
+  "sortBy": "Ordenar Por",
+  "sortOptions": {
+    "year": "Año",
+    "name": "Nombre"
+  },
+  "sortOrder": "Cambiar Orden",
+  "addSubjectModal": {
+    "title": "Agregar Asignatura Existente",
+    "selectSubject": "Selecciona una asignatura",
+    "none": "Ninguna",
+    "yearLabel": "Año",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar"
+  },
+  "createSubjectModal": {
+    "title": "Crear Nueva Asignatura",
+    "nameLabel": "Nombre de la Asignatura",
+    "yearLabel": "Año",
+    "cancel": "Cancelar",
+    "confirm": "Crear"
+  },
+  "toast": {
+    "addSubject": {
+      "success": "Asignatura agregada exitosamente.",
+      "error": "Error al agregar la asignatura."
+    },
+    "createSubject": {
+      "success": "Asignatura creada exitosamente.",
+      "error": "Error al crear la asignatura."
+    }
+  },
+  "loadingSubjects": "Cargando asignaturas...",
+  "errorFetchingDirectory": "Error al obtener el directorio: {{error}}",
+  "noSubjects": "No hay asignaturas en esta carrera.",
+  "title": "Administrar Carreras"
+}

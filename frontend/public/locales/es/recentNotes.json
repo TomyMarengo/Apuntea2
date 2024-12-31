@@ -1,0 +1,7 @@
+{
+  "loading": "Cargando...",
+  "errorFetchingNotes": "Error al obtener los apuntes.",
+  "recentNotes": "Apuntes recientes",
+  "viewMore": "Ver Más",
+  "noRecentNotes": "No se encontraron apuntes recientes."
+}

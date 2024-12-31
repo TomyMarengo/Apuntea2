@@ -1,0 +1,21 @@
+{
+  "titlePage": "Directorio | Apuntea",
+  "loading": "Cargando...",
+  "errorFetchingDirectory": "Error al obtener el directorio.",
+  "delete": "Eliminar",
+  "cancel": "Cancelar",
+  "confirm": "Confirmar",
+  "deleteDirectoryTitle": "Eliminar Directorio",
+  "deleteConfirmMessage": "¿Está seguro de que desea eliminar este directorio?",
+  "deleteSuccess": "¡Directorio eliminado exitosamente!",
+  "deleteError": "Error al eliminar el directorio.",
+  "reason": "Razón",
+  "search": {
+    "noContent": "No se encontró contenido."
+  },
+  "breadcrumb": {
+    "parent": "Directorio Padre",
+    "isRoot": "Este es el directorio raíz.",
+    "isLoading": "Cargando directorios..."
+  }
+}

@@ -18,7 +18,7 @@ interface ResultsTableProps {
 }
 
 const ResultsTable: FC<ResultsTableProps> = ({ columns, children }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('resultsTable');
 
   return (
     <Paper sx={{ mt: 3 }}>

@@ -1,3 +1,5 @@
+// src/components/Follow/RowDirectory.tsx
+
 import {
   IconButton,
   Tooltip,
@@ -33,15 +35,14 @@ import LinkIcon from '@mui/icons-material/Link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Delete from '@mui/icons-material/Delete';
 import DeleteDirectoryDialog from '../../pages/Directories/dialogs/DeleteDirectoryDialog';
-import { RootState } from '../../store/store';
 import { Column } from '../../types';
 
 export const ColumnDirectory: Column[] = [
-  { id: 'name', label: 'searchForm.name' },
-  { id: 'subject', label: 'searchForm.subject' },
-  { id: 'owner', label: 'searchForm.owner' },
-  { id: 'lastModifiedAt', label: 'searchForm.lastModifiedAt' },
-  { id: 'actions', label: 'searchForm.actions', align: 'right' },
+  { id: 'name', label: 'name' },
+  { id: 'subject', label: 'subject' },
+  { id: 'owner', label: 'owner' },
+  { id: 'lastModifiedAt', label: 'lastModifiedAt' },
+  { id: 'actions', label: 'actions', align: 'right' },
 ];
 
 interface RowDirectoryProps {
@@ -49,7 +50,7 @@ interface RowDirectoryProps {
 }
 
 const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('rowDirectory');
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
 
@@ -103,19 +104,19 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
           directoryId: directory.id,
           userId: user.id,
         }).unwrap();
-        toast.success(t('rowDirectory.favoriteRemoved'));
+        toast.success(t('favoriteRemoved'));
       } else {
         await addFavoriteDirectory({
           directoryId: directory.id,
         }).unwrap();
-        toast.success(t('rowDirectory.favoriteAdded'));
+        toast.success(t('favoriteAdded'));
       }
       refetchFavorite();
     } catch (error: any) {
       if (error.status === 409) {
-        toast.error(t('rowDirectory.alreadyDirectoryFavorited'));
+        toast.error(t('alreadyDirectoryFavorited'));
       } else {
-        toast.error(t('rowDirectory.favoriteActionFailed'));
+        toast.error(t('favoriteActionFailed'));
       }
       console.error('Favorite action failed:', error);
     }
@@ -126,10 +127,10 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
     try {
       const link = `${window.location.origin}/directories/${directory.id}`;
       await navigator.clipboard.writeText(link);
-      toast.success(t('rowDirectory.copySuccess'));
+      toast.success(t('copySuccess'));
     } catch (error) {
       console.error('Copy failed:', error);
-      toast.error(t('rowDirectory.copyFailed'));
+      toast.error(t('copyFailed'));
     }
   };
 
@@ -171,15 +172,15 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   };
 
   // Determine subject name
-  let subjectName: string | JSX.Element = t('rowDirectory.dataUnknown');
+  let subjectName: string | JSX.Element = t('dataUnknown');
   if (subjectLoading) subjectName = <Skeleton width={80} />;
-  else if (subjectError) subjectName = t('rowDirectory.dataUnknown');
+  else if (subjectError) subjectName = t('dataUnknown');
   else if (subjectData?.name) subjectName = subjectData.name;
 
   // Determine owner name
-  let ownerName: string | JSX.Element = t('rowDirectory.dataUnknown');
+  let ownerName: string | JSX.Element = t('dataUnknown');
   if (ownerLoading) ownerName = <Skeleton width={80} />;
-  else if (ownerError) ownerName = t('rowDirectory.dataUnknown');
+  else if (ownerError) ownerName = t('dataUnknown');
   else if (ownerData?.username) ownerName = ownerData.username;
 
   const token = useSelector(selectCurrentToken);
@@ -228,9 +229,9 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
               title={
                 user
                   ? isFavorite
-                    ? t('rowDirectory.unfavorite')
-                    : t('rowDirectory.favorite')
-                  : t('rowDirectory.loginToFavorite')
+                    ? t('unfavorite')
+                    : t('favorite')
+                  : t('loginToFavorite')
               }
             >
               <span>
@@ -249,7 +250,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
             </Tooltip>
 
             {/* Copy Link Button */}
-            <Tooltip title={t('rowDirectory.copyLink')}>
+            <Tooltip title={t('copyLink')}>
               <IconButton onClick={handleCopyLinkClick} size="small">
                 <LinkIcon />
               </IconButton>
@@ -257,7 +258,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
 
             {/* Delete Button */}
             {(isAdmin || isOwner) && (
-              <Tooltip title={t('rowDirectory.delete')}>
+              <Tooltip title={t('delete')}>
                 <IconButton onClick={handleDeleteClick} size="small">
                   <Delete />
                 </IconButton>
@@ -265,7 +266,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
             )}
 
             {/* More Menu */}
-            <Tooltip title={t('rowDirectory.more')}>
+            <Tooltip title={t('more')}>
               <IconButton onClick={handleMenuClick} size="small">
                 <MoreVertIcon />
               </IconButton>
@@ -285,13 +286,13 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
               }}
             >
               <MenuItem onClick={handleOwnerNotes}>
-                {t('rowDirectory.openOwnersNotes')}
+                {t('openOwnersNotes')}
               </MenuItem>
               <MenuItem onClick={handleOpenParent}>
-                {t('rowDirectory.openParentDirectory')}
+                {t('openParentDirectory')}
               </MenuItem>
               <MenuItem onClick={handleSubjectDirectories}>
-                {t('rowDirectory.openSubjectsDirectories')}
+                {t('openSubjectsDirectories')}
               </MenuItem>
             </Menu>
           </Box>

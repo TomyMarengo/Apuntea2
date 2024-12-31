@@ -38,7 +38,6 @@ import {
 } from '../../types';
 import ResultsTable from '../../components/ResultsTable';
 import RowSubject, { ColumnSubject } from '../../components/Row/RowSubject';
-import { useNavigate } from 'react-router-dom';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { toast } from 'react-toastify';
@@ -51,9 +50,7 @@ function range(start: number, end: number): number[] {
 }
 
 const AdminCareersPage: React.FC = () => {
-  const { t } = useTranslation();
-  const [searchParams, setSearchParams] = useState(new URLSearchParams());
-  const navigate = useNavigate();
+  const { t } = useTranslation('adminCareersPage');
   const [selectedInstitutionId, setSelectedInstitutionId] = useState('');
   const [selectedCareerId, setSelectedCareerId] = useState('');
 
@@ -213,13 +210,13 @@ const AdminCareersPage: React.FC = () => {
         year: addSubjectYear,
       }).unwrap();
 
-      toast.success(t('adminCareersPage.toast.addSubject.success'));
+      toast.success(t('toast.addSubject.success'));
       // Refresh
       refetchSubjects();
       refetchSubjectCareers();
     } catch (error) {
       console.error('Failed to link subject:', error);
-      toast.error(t('adminCareersPage.toast.addSubject.error'));
+      toast.error(t('toast.addSubject.error'));
     } finally {
       setOpenAddModal(false);
     }
@@ -242,22 +239,22 @@ const AdminCareersPage: React.FC = () => {
         year: newSubjectYear,
       }).unwrap();
 
-      toast.success(t('adminCareersPage.toast.createSubject.success'));
+      toast.success(t('toast.createSubject.success'));
       // Refresh
       refetchSubjects();
       refetchSubjectCareers();
     } catch (error) {
       console.error('Failed to create subject:', error);
-      toast.error(t('adminCareersPage.toast.createSubject.error'));
+      toast.error(t('toast.createSubject.error'));
     } finally {
       setOpenCreateModal(false);
     }
   };
 
   // Determine the page title based on the state
-  let pageTitle = t('adminCareersPage.titlePage');
+  let pageTitle = t('titlePage');
   if (loadingSubjects || loadingSubjectCareers) {
-    pageTitle = t('adminCareersPage.loading');
+    pageTitle = t('loadingSubjects');
   }
 
   return (
@@ -268,14 +265,14 @@ const AdminCareersPage: React.FC = () => {
       <Box sx={{ p: 3 }}>
         {/* Institution Select */}
         <FormControl sx={{ mr: 2, mb: 2, minWidth: 200 }}>
-          <InputLabel>{t('adminCareersPage.institution')}</InputLabel>
+          <InputLabel>{t('institution')}</InputLabel>
           <Select
-            label={t('adminCareersPage.institution')}
+            label={t('institution')}
             value={selectedInstitutionId}
             onChange={handleInstitutionChange}
           >
             <MenuItem value="">
-              <em>{t('adminCareersPage.selectInstitution')}</em>
+              <em>{t('selectInstitution')}</em>
             </MenuItem>
             {institutions?.map((inst: Institution) => (
               <MenuItem key={inst.id} value={inst.id}>
@@ -290,14 +287,14 @@ const AdminCareersPage: React.FC = () => {
           sx={{ mr: 2, mb: 2, minWidth: 200 }}
           disabled={!selectedInstitutionId}
         >
-          <InputLabel>{t('adminCareersPage.career')}</InputLabel>
+          <InputLabel>{t('career')}</InputLabel>
           <Select
-            label={t('adminCareersPage.career')}
+            label={t('career')}
             value={selectedCareerId}
             onChange={handleCareerChange}
           >
             <MenuItem value="">
-              <em>{t('adminCareersPage.selectCareer')}</em>
+              <em>{t('selectCareer')}</em>
             </MenuItem>
             {careers?.map((car: Career) => (
               <MenuItem key={car.id} value={car.id}>
@@ -321,15 +318,13 @@ const AdminCareersPage: React.FC = () => {
             <Box sx={{ display: 'flex', gap: 2 }}>
               {/* Filter by Year */}
               <FormControl sx={{ minWidth: 140 }}>
-                <InputLabel>{t('adminCareersPage.filterYear')}</InputLabel>
+                <InputLabel>{t('filterYear')}</InputLabel>
                 <Select
-                  label={t('adminCareersPage.filterYear')}
+                  label={t('filterYear')}
                   value={yearFilter === 'ALL' ? 'ALL' : String(yearFilter)}
                   onChange={handleYearFilterChange}
                 >
-                  <MenuItem value="ALL">
-                    {t('adminCareersPage.yearOptions.all')}
-                  </MenuItem>
+                  <MenuItem value="ALL">{t('yearOptions.all')}</MenuItem>
                   {maxYearInCareer > 0 &&
                     range(1, maxYearInCareer).map((yr) => (
                       <MenuItem value={yr} key={yr}>
@@ -341,22 +336,18 @@ const AdminCareersPage: React.FC = () => {
 
               {/* Sort by year or name */}
               <FormControl sx={{ minWidth: 140 }}>
-                <InputLabel>{t('adminCareersPage.sortBy')}</InputLabel>
+                <InputLabel>{t('sortBy')}</InputLabel>
                 <Select
-                  label={t('adminCareersPage.sortBy')}
+                  label={t('sortBy')}
                   value={sortBy}
                   onChange={handleSortChange}
                 >
-                  <MenuItem value="year">
-                    {t('adminCareersPage.sortOptions.year')}
-                  </MenuItem>
-                  <MenuItem value="name">
-                    {t('adminCareersPage.sortOptions.name')}
-                  </MenuItem>
+                  <MenuItem value="year">{t('sortOptions.year')}</MenuItem>
+                  <MenuItem value="name">{t('sortOptions.name')}</MenuItem>
                 </Select>
               </FormControl>
 
-              <Tooltip title={t('adminCareersPage.sortOrder')}>
+              <Tooltip title={t('sortOrder')}>
                 <IconButton onClick={handleToggleSortOrder}>
                   {sortAsc ? '↑' : '↓'}
                 </IconButton>
@@ -365,13 +356,13 @@ const AdminCareersPage: React.FC = () => {
 
             {/* Right side: Action Icons */}
             <Box sx={{ display: 'flex', gap: 2 }}>
-              <Tooltip title={t('adminCareersPage.addSubjectModal.title')}>
+              <Tooltip title={t('addSubjectModal.title')}>
                 <IconButton color="primary" onClick={handleOpenAddModal}>
                   <LibraryAddIcon />
                 </IconButton>
               </Tooltip>
 
-              <Tooltip title={t('adminCareersPage.createSubjectModal.title')}>
+              <Tooltip title={t('createSubjectModal.title')}>
                 <IconButton color="success" onClick={handleOpenCreateModal}>
                   <AddBoxIcon />
                 </IconButton>
@@ -384,9 +375,7 @@ const AdminCareersPage: React.FC = () => {
         {(loadingSubjects || loadingSubjectCareers) && selectedCareerId && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
             <CircularProgress size={24} />
-            <Typography variant="body2">
-              {t('adminCareersPage.loadingSubjects')}
-            </Typography>
+            <Typography variant="body2">{t('loadingSubjects')}</Typography>
           </Box>
         )}
 
@@ -413,7 +402,7 @@ const AdminCareersPage: React.FC = () => {
           !loadingSubjects &&
           !loadingSubjectCareers && (
             <Typography variant="body1" sx={{ mt: 2 }}>
-              {t('adminCareersPage.noSubjects')}
+              {t('noSubjects')}
             </Typography>
           )}
 
@@ -424,9 +413,7 @@ const AdminCareersPage: React.FC = () => {
           maxWidth="xs"
           fullWidth
         >
-          <DialogTitle>
-            {t('adminCareersPage.addSubjectModal.title')}
-          </DialogTitle>
+          <DialogTitle>{t('addSubjectModal.title')}</DialogTitle>
           <DialogContent>
             {loadingNotInCareer ? (
               <Box sx={{ textAlign: 'center', py: 3 }}>
@@ -435,16 +422,14 @@ const AdminCareersPage: React.FC = () => {
             ) : (
               <>
                 <FormControl sx={{ mt: 2, width: '100%' }}>
-                  <InputLabel>
-                    {t('adminCareersPage.addSubjectModal.selectSubject')}
-                  </InputLabel>
+                  <InputLabel>{t('addSubjectModal.selectSubject')}</InputLabel>
                   <Select
-                    label={t('adminCareersPage.addSubjectModal.selectSubject')}
+                    label={t('addSubjectModal.selectSubject')}
                     value={selectedSubjectId}
                     onChange={(e) => setSelectedSubjectId(e.target.value)}
                   >
                     <MenuItem value="">
-                      <em>{t('adminCareersPage.addSubjectModal.none')}</em>
+                      <em>{t('addSubjectModal.none')}</em>
                     </MenuItem>
                     {subjectsNotInCareer?.map((sub) => (
                       <MenuItem key={sub.id} value={sub.id}>
@@ -458,7 +443,7 @@ const AdminCareersPage: React.FC = () => {
                   sx={{ mt: 2 }}
                   type="number"
                   fullWidth
-                  label={t('adminCareersPage.addSubjectModal.yearLabel')}
+                  label={t('addSubjectModal.yearLabel')}
                   value={addSubjectYear}
                   onChange={(e) => setAddSubjectYear(Number(e.target.value))}
                 />
@@ -467,7 +452,7 @@ const AdminCareersPage: React.FC = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setOpenAddModal(false)}>
-              {t('adminCareersPage.addSubjectModal.cancel')}
+              {t('addSubjectModal.cancel')}
             </Button>
             <Button
               onClick={handleConfirmAddSubject}
@@ -478,7 +463,7 @@ const AdminCareersPage: React.FC = () => {
               {linkingSubject ? (
                 <CircularProgress size={20} />
               ) : (
-                t('adminCareersPage.addSubjectModal.confirm')
+                t('addSubjectModal.confirm')
               )}
             </Button>
           </DialogActions>
@@ -491,14 +476,12 @@ const AdminCareersPage: React.FC = () => {
           maxWidth="xs"
           fullWidth
         >
-          <DialogTitle>
-            {t('adminCareersPage.createSubjectModal.title')}
-          </DialogTitle>
+          <DialogTitle>{t('createSubjectModal.title')}</DialogTitle>
           <DialogContent>
             <TextField
               sx={{ mt: 2 }}
               fullWidth
-              label={t('adminCareersPage.createSubjectModal.nameLabel')}
+              label={t('createSubjectModal.nameLabel')}
               value={newSubjectName}
               onChange={(e) => setNewSubjectName(e.target.value)}
             />
@@ -506,14 +489,14 @@ const AdminCareersPage: React.FC = () => {
               sx={{ mt: 2 }}
               type="number"
               fullWidth
-              label={t('adminCareersPage.createSubjectModal.yearLabel')}
+              label={t('createSubjectModal.yearLabel')}
               value={newSubjectYear}
               onChange={(e) => setNewSubjectYear(Number(e.target.value))}
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setOpenCreateModal(false)}>
-              {t('adminCareersPage.createSubjectModal.cancel')}
+              {t('createSubjectModal.cancel')}
             </Button>
             <Button
               onClick={handleConfirmCreateSubject}
@@ -522,7 +505,7 @@ const AdminCareersPage: React.FC = () => {
               {creatingSubject ? (
                 <CircularProgress size={20} />
               ) : (
-                t('adminCareersPage.createSubjectModal.confirm')
+                t('createSubjectModal.confirm')
               )}
             </Button>
           </DialogActions>

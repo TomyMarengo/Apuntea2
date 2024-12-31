@@ -23,22 +23,22 @@ interface MiniSidebarProps {
 }
 
 const MiniSidebar: React.FC<MiniSidebarProps> = ({ isAdmin }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('miniSidebar');
 
   // Main menu items
   const mainMenuItems = [
     {
-      label: t('miniSidebar.mynotes'),
+      label: t('mynotes'),
       icon: <FolderSharedIcon sx={{ color: 'primary.main' }} />,
       to: '/notes',
     },
     {
-      label: t('miniSidebar.myfavorites'),
+      label: t('myfavorites'),
       icon: <FavoriteIcon sx={{ color: 'primary.main' }} />,
       to: '/favorites',
     },
     {
-      label: t('miniSidebar.myreviews'),
+      label: t('myreviews'),
       icon: <NotesIcon sx={{ color: 'primary.main' }} />,
       to: '/reviews',
     },
@@ -47,12 +47,12 @@ const MiniSidebar: React.FC<MiniSidebarProps> = ({ isAdmin }) => {
   // Admin menu items
   const adminMenuItems = [
     {
-      label: t('miniSidebar.adminuser'),
+      label: t('adminuser'),
       icon: <PersonOffIcon sx={{ color: 'secondary.main' }} />,
       to: '/admin/users',
     },
     {
-      label: t('miniSidebar.admincareers'),
+      label: t('admincareers'),
       icon: <ClassIcon sx={{ color: 'secondary.main' }} />,
       to: '/admin/careers',
     },
@@ -139,7 +139,7 @@ const MiniSidebar: React.FC<MiniSidebarProps> = ({ isAdmin }) => {
                 transition: 'opacity 0.3s',
               }}
             >
-              {t('miniSidebar.admin')}
+              {t('admin')}
             </Typography>
             {adminMenuItems.map((item, index) => (
               <ListItem

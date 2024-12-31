@@ -1,0 +1,10 @@
+{
+  "follow": "Follow",
+  "unfollow": "Unfollow",
+  "followed": "You are now following this user.",
+  "unfollowed": "You have unfollowed this user.",
+  "followFailed": "Failed to follow the user.",
+  "unfollowFailed": "Failed to unfollow the user.",
+  "noCareer": "Career not set.",
+  "noInstitution": "Institution not set."
+}

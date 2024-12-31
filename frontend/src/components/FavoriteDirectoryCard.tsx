@@ -24,7 +24,7 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
   directory,
   userId,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('favoriteDirectoryCard');
   const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
   const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
   const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
@@ -48,19 +48,19 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
           userId,
         }).unwrap();
         if (result) {
-          toast.success(t('favoritesPage.unfavorited'));
+          toast.success(t('unfavorited'));
         }
       } else {
         const result = await addFavoriteDirectory({
           directoryId: directory.id,
         }).unwrap();
         if (result) {
-          toast.success(t('favoritesPage.favorited'));
+          toast.success(t('favorited'));
         }
       }
       refetch();
     } catch (error) {
-      toast.error(t('favoritesPage.errorUnfavorite'));
+      toast.error(t('errorUnfavorite'));
       console.error('Toggle favorite directory failed:', error);
     }
   };
@@ -96,13 +96,7 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
       </Link>
 
       {/* Heart icon top-right */}
-      <Tooltip
-        title={
-          isFavorite
-            ? t('favoritesPage.removeFavorite')!
-            : t('favoritesPage.favorited')!
-        }
-      >
+      <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
         <IconButton
           onClick={handleToggleFavorite}
           size="small"

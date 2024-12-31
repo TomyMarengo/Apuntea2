@@ -1,0 +1,15 @@
+{
+  "titlePage": "Favorites | Apuntea",
+  "loading": "Loading...",
+  "errorFetching": "Error fetching favorites.",
+  "title": "My Favorites",
+  "notes": "Notes",
+  "directories": "Directories",
+  "subjects": "Subjects",
+  "noFavorites": "No favorites found.",
+  "removeFavorite": "Remove from favorites",
+  "favorited": "Added to favorites successfully!",
+  "unfavorited": "Removed from favorites successfully!",
+  "errorUnfavorite": "Failed to remove favorite.",
+  "mustLogin": "You must be logged in to view favorites."
+}

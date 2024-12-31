@@ -11,27 +11,26 @@ interface NoteCardProps {
 }
 
 const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('noteCard');
 
   return (
     <Card sx={{ mb: 2, boxShadow: 2 }}>
       <CardActionArea component={RouterLink} to={`/notes/${note.id}`}>
         <CardContent>
           <Typography variant="h6" gutterBottom>
-            {note.name || t('noteCard.hiddenNote')}
+            {note.name || t('hiddenNote')}
           </Typography>
           <Typography variant="body2" color="textSecondary">
             {new Date(note.createdAt).toLocaleDateString()}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {t(`noteCard.category.${note.category?.toLowerCase()}`)} -{' '}
-            {note.fileType}
+            {t(`category.${note.category?.toLowerCase()}`)} - {note.fileType}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {note.visible ? t('noteCard.visible') : t('noteCard.hidden')}
+            {note.visible ? t('visible') : t('hidden')}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {t('noteCard.averageScore')}: {note.avgScore.toFixed(2)}
+            {t('averageScore')}: {note.avgScore.toFixed(2)}
           </Typography>
         </CardContent>
       </CardActionArea>

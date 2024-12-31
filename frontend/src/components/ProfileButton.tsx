@@ -22,7 +22,7 @@ const ProfileButton: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
-  const { t } = useTranslation();
+  const { t } = useTranslation('profileButton');
   const theme = useTheme();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -81,8 +81,11 @@ const ProfileButton: React.FC = () => {
         <Avatar
           src={user.profilePictureUrl || ''}
           alt={user.username}
-          sx={{ borderRadius: '50%', width: 24, height: 24 }}
+          sx={{ borderRadius: '50%', width: 24, height: 24, mr: 1 }}
         />
+        <Typography variant="body2" sx={{ color: 'background.paper' }}>
+          {user.username}
+        </Typography>
       </Button>
 
       <Menu
@@ -109,10 +112,10 @@ const ProfileButton: React.FC = () => {
       >
         <Box sx={{ px: 2, py: 1 }}>
           <Typography variant="caption" color="text.secondary">
-            {t('profileButton.loggedInAs')}
+            {t('loggedInAs')}
           </Typography>
           <Typography variant="subtitle2">
-            {user?.username || t('profileButton.user')}
+            {user?.username || t('user')}
           </Typography>
         </Box>
         <Divider sx={{ my: 1 }} />
@@ -122,10 +125,10 @@ const ProfileButton: React.FC = () => {
             handleMenuClose();
           }}
         >
-          {t('profileButton.profile.title')}
+          {t('profile.title')}
         </MenuItem>
         <Divider sx={{ my: 1 }} />
-        <MenuItem onClick={handleLogOut}>{t('profileButton.logout')}</MenuItem>
+        <MenuItem onClick={handleLogOut}>{t('logout')}</MenuItem>
       </Menu>
     </>
   );

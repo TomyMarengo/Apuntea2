@@ -1,0 +1,16 @@
+{
+  "titlePage": "Apuntes | Apuntea",
+  "loading": "Cargando...",
+  "errorFetching": "Error al obtener los apuntes.",
+  "mustLogin": "Debes iniciar sesión para ver tus apuntes.",
+  "title": "Mis Apuntes",
+  "year": "Año",
+  "notes": "Apuntes",
+  "noSubjects": "No se encontraron asignaturas.",
+  "noSubjectsForYear": "No hay asignaturas disponibles para el año seleccionado.",
+  "yearButton": "Año {{year}}",
+  "subjectNotes": {
+    "notesCount": "{{count}} Apuntes",
+    "loadingNotes": "Cargando apuntes..."
+  }
+}

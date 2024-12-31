@@ -1,0 +1,5 @@
+{
+  "notesCount": "{{count}} apunte",
+  "notesCount_plural": "{{count}} apuntes",
+  "errorFetchingDirectory": "Error al cargar el directorio."
+}

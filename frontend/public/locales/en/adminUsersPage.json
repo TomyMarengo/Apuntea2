@@ -1,0 +1,13 @@
+{
+  "titlePage": "Manage Users | Apuntea",
+  "searchPlaceholder": "Search users...",
+  "statusFilter": "Filter by Status",
+  "statusOptions": {
+    "all": "All",
+    "active": "Active",
+    "banned": "Banned"
+  },
+  "loading": "Loading...",
+  "error": "Error fetching users.",
+  "noResults": "No users found with the specified criteria."
+}

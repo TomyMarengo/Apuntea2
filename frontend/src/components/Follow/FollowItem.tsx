@@ -24,7 +24,7 @@ interface FollowItemProps {
 }
 
 const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('followItem');
 
   const {
     data: followUserData,
@@ -46,13 +46,13 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
         userId: followId,
       }).unwrap();
       if (result) {
-        toast.success(t('follow.successFollow'));
+        toast.success(t('successFollow'));
         refetch();
       } else {
-        toast.error(t('follow.errorFollow'));
+        toast.error(t('errorFollow'));
       }
     } catch (error) {
-      toast.error(t('follow.errorFollow'));
+      toast.error(t('errorFollow'));
     }
   };
 
@@ -63,13 +63,13 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
         followerId: currentUserId,
       }).unwrap();
       if (result) {
-        toast.success(t('follow.successUnfollow'));
+        toast.success(t('successUnfollow'));
         refetch();
       } else {
-        toast.error(t('follow.errorUnfollow'));
+        toast.error(t('errorUnfollow'));
       }
     } catch (error) {
-      toast.error(t('follow.errorUnfollow'));
+      toast.error(t('errorUnfollow'));
     }
   };
 
@@ -79,7 +79,7 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
         <ListItemAvatar>
           <Avatar />
         </ListItemAvatar>
-        <ListItemText primary={t('follow.loading')} />
+        <ListItemText primary={t('loading')} />
       </ListItem>
     );
   }
@@ -87,7 +87,7 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
   if (userError || !followUserData) {
     return (
       <ListItem>
-        <ListItemText primary={t('follow.errorLoadingUser')} />
+        <ListItemText primary={t('errorLoadingUser')} />
       </ListItem>
     );
   }
@@ -101,16 +101,18 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
         />
       </ListItemAvatar>
       <ListItemText
-        primary={`${followUserData.firstName || ''} ${followUserData.lastName || followUserData.username}`}
+        primary={`${followUserData.firstName || ''} ${
+          followUserData.lastName || followUserData.username
+        }`}
       />
       <Box>
         {isFollowing ? (
           <Button variant="outlined" color="primary" onClick={handleUnfollow}>
-            {t('follow.unfollow')}
+            {t('unfollow')}
           </Button>
         ) : (
           <Button variant="contained" color="primary" onClick={handleFollow}>
-            {t('follow.follow')}
+            {t('follow')}
           </Button>
         )}
       </Box>

@@ -1,4 +1,4 @@
-// src/components/SubjectNotesCard.tsx
+// src/components/SubjectDirectoryCard.tsx
 
 import React from 'react';
 import { Box, Typography, Tooltip, CircularProgress } from '@mui/material';
@@ -19,7 +19,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   subject,
   userId,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('subjectDirectoryCard');
   const navigate = useNavigate();
 
   // Fetch the number of notes for this subject and user
@@ -90,7 +90,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
           title={
             notesLoading || dirLoading
               ? ''
-              : t('notesPage.subjectNotes.notesCount', { count: notesCount })
+              : t('notesCount', { count: notesCount })
           }
         >
           <Box
@@ -135,7 +135,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
       {/* Handle Directory Fetch Error */}
       {dirError && (
         <Typography variant="caption" color="error">
-          {t('notesPage.subjectNotes.errorFetchingDirectory')}
+          {t('errorFetchingDirectory')}
         </Typography>
       )}
     </Box>

@@ -1,0 +1,13 @@
+{
+  "titlePage": "Login | Apuntea",
+  "loading": "Loading...",
+  "errorFetching": "Error logging in: {{error}}",
+  "login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "signup": "Sign Up",
+  "noAccount": "Don't have an account?",
+  "forgotPassword": "Forgot Password",
+  "invalidEmail": "Invalid email",
+  "passwordMinLength": "Password must be at least 4 characters"
+}

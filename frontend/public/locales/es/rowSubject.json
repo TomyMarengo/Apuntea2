@@ -1,0 +1,24 @@
+{
+  "actions": {
+    "edit": "Editar Materia",
+    "unlink": "Desvincular de la Carrera"
+  },
+  "modals": {
+    "edit": {
+      "title": "Editar Materia",
+      "nameLabel": "Nombre de la Materia",
+      "yearLabel": "Año",
+      "success": "Materia editada exitosamente.",
+      "error": "No se pudo editar la materia."
+    },
+    "unlink": {
+      "title": "Desvincular Materia",
+      "confirmation": "¿Estás seguro de que deseas desvincular \"{{subjectName}}\" de esta carrera?",
+      "success": "Materia desvinculada exitosamente de la carrera.",
+      "error": "No se pudo desvincular la materia de la carrera."
+    },
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "confirm": "Confirmar"
+  }
+}
