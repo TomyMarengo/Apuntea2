@@ -29,7 +29,7 @@ import { NoteCategory } from '../types';
 
 // Define the Zod schema for form validation
 const noteSchema = z.object({
-  noteName: z
+  name: z
     .string()
     .min(1, 'missingFields')
     .regex(
@@ -41,8 +41,10 @@ const noteSchema = z.object({
   }),
   visible: z.boolean(),
   file: z
-    .any()
-    .refine((file) => file instanceof File, 'invalidFile')
+    .instanceof(File)
+    .refine((file) => file instanceof File, {
+      message: 'invalidFile',
+    })
     .optional(),
 });
 
@@ -56,15 +58,8 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
   const { t } = useTranslation('createNoteFab');
 
   const [createNote, { isLoading }] = useCreateNoteMutation();
-
   // Tracks if the form is expanded
   const [expanded, setExpanded] = useState(false);
-
-  // Fields for creating a note
-  const [noteName, setNoteName] = useState('');
-  const [visible, setVisible] = useState(true);
-  const [category, setCategory] = useState<NoteCategory>(NoteCategory.THEORY);
-  const [file, setFile] = useState<File | null>(null);
 
   // Reference to the wrapper for ClickAwayListener
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -78,7 +73,7 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
   } = useForm<NoteFormData>({
     resolver: zodResolver(noteSchema),
     defaultValues: {
-      noteName: '',
+      name: '',
       category: NoteCategory.THEORY,
       visible: true,
       file: undefined,
@@ -106,11 +101,11 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
 
     try {
       const result = await createNote({
-        name: noteName,
+        name: data.name,
         parentId,
-        visible,
-        file: file!,
-        category,
+        visible: data.visible,
+        file: data.file,
+        category: data.category as NoteCategory,
       }).unwrap();
 
       if (result) {
@@ -168,16 +163,16 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
 
             {/* Note Name */}
             <Controller
-              name="noteName"
+              name="name"
               control={control}
               render={({ field }) => (
                 <TextField
                   {...field}
                   size="small"
-                  label={t('noteName')}
-                  error={!!errors.noteName}
+                  label={t('name')}
+                  error={!!errors.name}
                   helperText={
-                    errors.noteName ? t(errors.noteName.message as string) : ''
+                    errors.name ? t(errors.name.message as string) : ''
                   }
                   fullWidth
                 />
@@ -220,54 +215,55 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
                 gap: 1,
               }}
             >
-              <FormControlLabel
-                control={
-                  <Controller
-                    name="visible"
-                    control={control}
-                    render={({ field }) => (
+              <Controller
+                name="visible"
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={
                       <Switch
                         {...field}
                         checked={field.value}
                         onChange={(e) => field.onChange(e.target.checked)}
                       />
-                    )}
+                    }
+                    label={t(field.value ? 'visible' : 'hidden')}
                   />
-                }
-                label={visible ? t('visible') : t('hidden')}
+                )}
               />
 
-              <Button
-                variant="outlined"
-                component="label"
-                size="small"
-                sx={{
-                  textTransform: 'none',
-                  flexShrink: 0,
-                  maxWidth: '130px',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  display: 'block',
-                  textAlign: 'left',
-                }}
-              >
-                {file ? file.name : t('chooseFile')}
-                <input
-                  type="file"
-                  hidden
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      setFile(e.target.files[0]);
-                    }
-                  }}
-                />
-              </Button>
-              {errors.file && (
-                <Typography variant="caption" color="error">
-                  {t(errors.file.message as string)}
-                </Typography>
-              )}
+              <Controller
+                name="file"
+                control={control}
+                render={({ field }) => (
+                  <Button
+                    variant="outlined"
+                    component="label"
+                    size="small"
+                    sx={{
+                      textTransform: 'none',
+                      flexShrink: 0,
+                      maxWidth: '130px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      display: 'block',
+                      textAlign: 'left',
+                    }}
+                  >
+                    {field.value ? field.value.name : t('chooseFile')}
+                    <input
+                      type="file"
+                      hidden
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          field.onChange(e.target.files[0]);
+                        }
+                      }}
+                    />
+                  </Button>
+                )}
+              />
             </Box>
 
             {/* Submit Button */}
