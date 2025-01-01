@@ -1,5 +1,3 @@
-// src/components/Follow/FollowItem.tsx
-
 import React from 'react';
 import {
   ListItem,
@@ -8,6 +6,7 @@ import {
   ListItemText,
   Button,
   Box,
+  Link as MuiLink, // Importa MuiLink
 } from '@mui/material';
 import {
   useGetUserQuery,
@@ -17,6 +16,7 @@ import {
 } from '../../store/slices/usersApiSlice';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 interface FollowItemProps {
   followId: string;
@@ -101,9 +101,17 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
         />
       </ListItemAvatar>
       <ListItemText
-        primary={`${followUserData.firstName || ''} ${
-          followUserData.lastName || followUserData.username
-        }`}
+        primary={
+          <MuiLink
+            component={Link}
+            to={`/users/${followUserData.id}`}
+            underline="hover"
+          >
+            {`${followUserData.firstName || ''} ${
+              followUserData.lastName || followUserData.username
+            }`}
+          </MuiLink>
+        }
       />
       <Box>
         {isFollowing ? (

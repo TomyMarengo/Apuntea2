@@ -1,5 +1,3 @@
-// src/components/Follow/RowNote.tsx
-
 import React, { useState } from 'react';
 import {
   Box,
@@ -12,7 +10,7 @@ import {
   TableRow,
   TableCell,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
@@ -56,6 +54,7 @@ interface RowNoteProps {
 const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   const { t } = useTranslation('rowNote');
   const navigate = useNavigate();
+  const location = useLocation(); // Hook para obtener la ubicación actual
   const user = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken);
 
@@ -220,6 +219,11 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   const isOwner = user?.id === note.ownerUrl?.split('/').pop();
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;
 
+  // Check if the current path corresponds to the subject directory
+  const isSameSubject =
+    location.pathname ===
+    `/directories/${subjectData?.rootDirectoryUrl?.split('/').pop()}`;
+
   return (
     <TableRow hover>
       <TableCell>
@@ -227,7 +231,19 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
           {note.name}
         </MuiLink>
       </TableCell>
-      <TableCell>{subjectName}</TableCell>
+      <TableCell>
+        {isSameSubject ? (
+          subjectName
+        ) : (
+          <MuiLink
+            component={Link}
+            to={`/directories/${subjectData?.rootDirectoryUrl?.split('/').pop()}`}
+            underline="hover"
+          >
+            {subjectName}
+          </MuiLink>
+        )}
+      </TableCell>
       <TableCell>
         <MuiLink
           component={Link}
