@@ -8,6 +8,11 @@ import {
   mapApiCareer,
   mapApiSubjectCareer,
 } from '../../utils/mappers';
+import {
+  SUBJECT_CAREER_CONTENT_TYPE,
+  SUBJECT_CAREER_CREATE_CONTENT_TYPE,
+  SUBJECT_CONTENT_TYPE
+} from "../../contentTypes.ts";
 
 /**
  * One-of logic:
@@ -131,7 +136,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             method: 'POST',
             body: JSON.stringify({ name }),
             headers: {
-              'Content-Type': 'application/vnd.apuntea.subject-v1.0+json',
+              'Content-Type': SUBJECT_CONTENT_TYPE,
             },
           });
           if (subjectResult.error) return { data: false }; // Return false if there's an error
@@ -147,8 +152,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
               method: 'POST',
               body: JSON.stringify({ subjectId, year }),
               headers: {
-                'Content-Type':
-                  'application/vnd.apuntea.subjectcareer-create-v1.0+json',
+                'Content-Type': SUBJECT_CAREER_CREATE_CONTENT_TYPE,
               },
             });
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
@@ -179,7 +183,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
               method: 'PUT',
               body: JSON.stringify({ name }),
               headers: {
-                'Content-Type': 'application/vnd.apuntea.subject-v1.0+json',
+                'Content-Type': SUBJECT_CONTENT_TYPE,
               },
             });
             if (subjectResult.error) return { data: false }; // Return false if there's an error
@@ -192,8 +196,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
               method: 'PUT',
               body: JSON.stringify({ year }),
               headers: {
-                'Content-Type':
-                  'application/vnd.apuntea.subjectcareer-v1.0+json',
+                'Content-Type': SUBJECT_CAREER_CONTENT_TYPE,
               },
             });
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
@@ -221,8 +224,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
               method: 'POST',
               body: JSON.stringify({ subjectId, year }),
               headers: {
-                'Content-Type':
-                  'application/vnd.apuntea.subjectcareer-create-v1.0+json',
+                'Content-Type': SUBJECT_CAREER_CREATE_CONTENT_TYPE,
               },
             });
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error

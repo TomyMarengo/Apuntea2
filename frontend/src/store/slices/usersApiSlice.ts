@@ -5,6 +5,11 @@ import { User, Career, Institution, UserStatus } from '../../types';
 import { setCurrentUser } from './authSlice';
 import { mapApiUser } from '../../utils/mappers';
 import { setLocale } from './languageSlice';
+import {
+  USER_CREATE_CONTENT_TYPE, USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
+  USER_UPDATE_CONTENT_TYPE, USER_UPDATE_PASSWORD_CONTENT_TYPE,
+  USER_UPDATE_STATUS_CONTENT_TYPE
+} from "../../contentTypes.ts";
 
 interface GetUsersArgs {
   url?: string;
@@ -251,7 +256,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify(data),
           headers: {
-            'Content-Type': 'application/vnd.apuntea.user-update-v1.0+json',
+            'Content-Type': USER_UPDATE_CONTENT_TYPE,
           },
         });
 
@@ -281,8 +286,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify(data),
           headers: {
-            'Content-Type':
-              'application/vnd.apuntea.user-update-status-v1.0+json',
+            'Content-Type': USER_UPDATE_STATUS_CONTENT_TYPE,
           },
         });
 
@@ -298,7 +302,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: JSON.stringify(userInfo),
         headers: {
-          'Content-Type': 'application/vnd.apuntea.user-create-v1.0+json',
+          'Content-Type': USER_CREATE_CONTENT_TYPE,
         },
       }),
       transformResponse: async (_response: any, meta: any) => {
@@ -428,8 +432,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: JSON.stringify({ email }),
         headers: {
-          'Content-Type':
-            'application/vnd.apuntea.request-password-change-v1.0+json',
+          'Content-Type': USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
         },
       }),
     }),
@@ -446,8 +449,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify({ password }),
           headers: {
-            'Content-Type':
-              'application/vnd.apuntea.user-update-password-v1.0+json',
+            'Content-Type': USER_UPDATE_PASSWORD_CONTENT_TYPE,
             Authorization: `Basic ${authorization}`,
           },
         });

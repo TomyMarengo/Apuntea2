@@ -9,7 +9,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { setCredentials, logOut, invalidateToken } from './authSlice';
 import { decode } from '../../utils/helpers';
-
+import {USER_UPDATE_CONTENT_TYPE} from '../../contentTypes';
 const baseUrl = import.meta.env.VITE_API_URL as string;
 
 const baseQuery = fetchBaseQuery({
@@ -44,7 +44,7 @@ const baseQueryWithReauth: BaseQueryFn<
       'headers' in args &&
       args.headers &&
       args.headers['Content-Type'] ===
-        'application/vnd.apuntea.user-update-v1.0+json'
+        USER_UPDATE_CONTENT_TYPE
     ) {
       throw new Error('InvalidPassword');
     }

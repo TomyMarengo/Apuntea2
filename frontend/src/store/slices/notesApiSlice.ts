@@ -3,6 +3,7 @@
 import { apiSlice } from './apiSlice';
 import { Note, NoteCategory } from '../../types';
 import { mapApiNote } from '../../utils/mappers';
+import {DELETE_REASON_CONTENT_TYPE, NOTE_UPDATE_CONTENT_TYPE} from "../../contentTypes.ts";
 
 interface NoteQueryArgs {
   noteId?: string;
@@ -117,7 +118,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify(body),
           headers: {
-            'Content-Type': 'application/vnd.apuntea.note-update-v1.0+json',
+            'Content-Type': NOTE_UPDATE_CONTENT_TYPE,
           },
         });
         return { data: result.error === undefined };
@@ -143,7 +144,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
-              'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
+              'Content-Type': DELETE_REASON_CONTENT_TYPE,
             },
           });
         } else {

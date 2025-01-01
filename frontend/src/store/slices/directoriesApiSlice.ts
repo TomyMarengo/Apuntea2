@@ -3,6 +3,11 @@
 import { apiSlice } from './apiSlice';
 import { Directory } from '../../types';
 import { mapApiDirectory } from '../../utils/mappers';
+import {
+  DELETE_REASON_CONTENT_TYPE,
+  DIRECTORY_CREATE_CONTENT_TYPE,
+  DIRECTORY_UPDATE_CONTENT_TYPE
+} from "../../contentTypes.ts";
 
 interface DirectoryQueryArgs {
   directoryId?: string;
@@ -72,8 +77,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: JSON.stringify({ name, parentId, visible, iconColor }),
           headers: {
-            'Content-Type':
-              'application/vnd.apuntea.directory-create-v1.0+json',
+            'Content-Type': DIRECTORY_CREATE_CONTENT_TYPE,
           },
         });
         return { data: result.error === undefined };
@@ -98,8 +102,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify(body),
           headers: {
-            'Content-Type':
-              'application/vnd.apuntea.directory-update-v1.0+json',
+            'Content-Type': DIRECTORY_UPDATE_CONTENT_TYPE,
           },
         });
         return { data: result.error === undefined };
@@ -126,7 +129,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
-              'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
+              'Content-Type': DELETE_REASON_CONTENT_TYPE,
             },
           });
         } else {

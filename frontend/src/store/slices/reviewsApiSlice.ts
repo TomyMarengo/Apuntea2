@@ -3,6 +3,11 @@
 import { apiSlice } from './apiSlice';
 import { Review } from '../../types';
 import { mapApiReview } from '../../utils/mappers';
+import {
+  DELETE_REASON_CONTENT_TYPE,
+  REVIEW_CREATE_CONTENT_TYPE,
+  REVIEW_UPDATE_CONTENT_TYPE
+} from "../../contentTypes.ts";
 
 interface GetReviewsArgs {
   noteId?: string;
@@ -128,7 +133,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: JSON.stringify({ noteId, score, content }),
           headers: {
-            'Content-Type': 'application/vnd.apuntea.review-create-v1.0+json',
+            'Content-Type': REVIEW_CREATE_CONTENT_TYPE,
           },
         });
         return { data: response.error === undefined };
@@ -150,7 +155,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify({ score, content }),
           headers: {
-            'Content-Type': 'application/vnd.apuntea.review-update-v1.0+json',
+            'Content-Type': REVIEW_UPDATE_CONTENT_TYPE,
           },
         });
         return { data: response.error === undefined };
@@ -174,7 +179,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: JSON.stringify(body),
           headers: {
-            'Content-Type': 'application/vnd.apuntea.delete-reason-v1.0+json',
+            'Content-Type': DELETE_REASON_CONTENT_TYPE,
           },
         });
 
