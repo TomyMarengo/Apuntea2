@@ -1,0 +1,10 @@
+{
+  "editSuccess": "Edición exitosa",
+  "editFailed": "Edición fallida",
+  "editDirectoryTitle": "Editar directorio",
+  "name": "Nombre",
+  "iconColor": "Color del icono",
+  "visible": "Visible",
+  "cancel": "Cancelar",
+  "save": "Guardar"
+}

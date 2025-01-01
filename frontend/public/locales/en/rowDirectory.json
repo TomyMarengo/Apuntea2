@@ -18,6 +18,7 @@
   "cancel": "Cancel",
   "deleting": "Deleting...",
   "confirm": "Confirm",
+  "edit": "Edit",
   "deleteSuccess": "Directory deleted successfully!",
   "deleteError": "Error deleting directory.",
   "unfollow": "Unfollow",

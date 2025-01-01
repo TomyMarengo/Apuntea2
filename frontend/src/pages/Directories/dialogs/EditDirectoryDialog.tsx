@@ -32,7 +32,7 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
   directory,
   showNameOnly = false,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('editDirectoryDialog');
   const [updateDirectory] = useUpdateDirectoryMutation();
 
   const [name, setName] = useState(directory.name);
@@ -56,22 +56,22 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
         iconColor,
       }).unwrap();
       if (result) {
-        toast.success(t('directoryPage.editSuccess'));
+        toast.success(t('editSuccess'));
         onClose();
       }
     } catch (err) {
-      toast.error(t('directoryPage.editFailed'));
+      toast.error(t('editFailed'));
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{t('directoryPage.editDirectoryTitle')}</DialogTitle>
+      <DialogTitle>{t('editDirectoryTitle')}</DialogTitle>
       <DialogContent>
         <TextField
           margin="normal"
           fullWidth
-          label={t('directoryPage.name')}
+          label={t('name')}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -80,7 +80,7 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
           <>
             <Box sx={{ mb: 1 }}>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
-                {t('directoryPage.iconColor')}
+                {t('iconColor')}
               </Typography>
               <ToggleButtonGroup
                 value={iconColor}
@@ -124,17 +124,17 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
                   color="primary"
                 />
               }
-              label={t('directoryPage.visible')}
+              label={t('visible')}
             />
           </>
         )}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          {t('directoryPage.cancel')}
+          {t('cancel')}
         </Button>
         <Button onClick={handleSave} variant="contained">
-          {t('directoryPage.save')}
+          {t('save')}
         </Button>
       </DialogActions>
     </Dialog>
