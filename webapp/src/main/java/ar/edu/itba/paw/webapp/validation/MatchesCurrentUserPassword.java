@@ -21,7 +21,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = {MatchesCurrentUserPassword.MatchesCurrentUserPasswordValidator.class})
 public @interface MatchesCurrentUserPassword {
 
-    String message() default "{ar.edu.itba.paw.webapp.validation.MatchesCurrentUserPassword.message}";
+    String message() default "validation.currentPasswordMismatch";
 
     Class<?>[] groups() default {};
 

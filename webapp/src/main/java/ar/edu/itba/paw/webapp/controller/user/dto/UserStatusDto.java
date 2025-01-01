@@ -8,11 +8,11 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 public class UserStatusDto {
-    @NotNull
+    @NotNull(message = "{error.param.empty}")
     @Pattern(regexp = "^(active|banned)$")
     private String status;
 
-    @Size(max = 255)
+    @Size(max = 255, message = "{error.param.length}")
     private String reason;
 
     public UserStatusDto() {

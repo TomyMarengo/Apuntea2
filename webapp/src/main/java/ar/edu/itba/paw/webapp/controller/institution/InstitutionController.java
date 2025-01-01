@@ -12,9 +12,9 @@ import ar.edu.itba.paw.services.CareerService;
 import ar.edu.itba.paw.services.InstitutionService;
 import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.controller.institution.dtos.CareerDto;
+import ar.edu.itba.paw.webapp.controller.institution.dtos.CareerResponseDto;
 import ar.edu.itba.paw.webapp.controller.institution.dtos.InstitutionCareerPathParams;
-import ar.edu.itba.paw.webapp.controller.institution.dtos.InstitutionDto;
+import ar.edu.itba.paw.webapp.controller.institution.dtos.InstitutionResponseDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerCreationDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerResponseDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerUpdateDto;
@@ -54,7 +54,7 @@ public class InstitutionController {
     @Produces(value = { ApunteaMediaType.INSTITUTION })
     public Response getInstitution(@Context final Request request, @ValidUuid @PathParam("institutionId") final UUID institutionId) {
         final Institution institution = institutionService.getInstitution(institutionId).orElseThrow(InstitutionNotFoundException::new);
-        final InstitutionDto dtoInstitution = InstitutionDto.fromInstitution(institution, uriInfo);
+        final InstitutionResponseDto dtoInstitution = InstitutionResponseDto.fromInstitution(institution, uriInfo);
         return CacheUtils.conditionalCache(Response.ok(dtoInstitution), request, institution.hashCode()).build();
     }
 
@@ -62,12 +62,12 @@ public class InstitutionController {
     @Produces(value = { ApunteaMediaType.INSTITUTION_COLLECTION })
     public Response listAllInstitutions(@Context final Request request) {
         final Collection<Institution> allInstitutions = institutionService.getInstitutions();
-        final Collection<InstitutionDto> dtoInstitutions = allInstitutions
+        final Collection<InstitutionResponseDto> dtoInstitutions = allInstitutions
                 .stream()
-                .map(i -> InstitutionDto.fromInstitution(i, uriInfo))
+                .map(i -> InstitutionResponseDto.fromInstitution(i, uriInfo))
                 .collect(Collectors.toList());
         return CacheUtils.conditionalCache(
-                Response.ok(new GenericEntity<Collection<InstitutionDto>>(dtoInstitutions) {}),
+                Response.ok(new GenericEntity<Collection<InstitutionResponseDto>>(dtoInstitutions) {}),
                 request,
                 allInstitutions.hashCode()
         ).build();
@@ -78,7 +78,7 @@ public class InstitutionController {
     @Produces(value = { ApunteaMediaType.CAREER })
     public Response getCareer(@Context final Request request, @Valid @BeanParam final InstitutionCareerPathParams instCarParams) {
         final Career career = careerService.getCareerById(instCarParams.getCareerId()).orElseThrow(CareerNotFoundException::new);
-        final CareerDto dtoCareer = CareerDto.fromCareer(career, uriInfo);
+        final CareerResponseDto dtoCareer = CareerResponseDto.fromCareer(career, uriInfo);
         return CacheUtils.conditionalCache(Response.ok(dtoCareer), request, career.hashCode()).build();
     }
 
@@ -87,11 +87,11 @@ public class InstitutionController {
     @Produces(value = { ApunteaMediaType.CAREER_COLLECTION })
     public Response listAllCareers(@Context Request request, @ValidUuid @PathParam("institutionId") final UUID institutionId) {
         final Collection<Career> allCareers = careerService.getCareers(institutionId);
-        final Collection<CareerDto> dtoCareers = allCareers
+        final Collection<CareerResponseDto> dtoCareers = allCareers
                 .stream()
-                .map(c -> CareerDto.fromCareer(c, uriInfo))
+                .map(c -> CareerResponseDto.fromCareer(c, uriInfo))
                 .collect(Collectors.toList());
-        return CacheUtils.conditionalCache(Response.ok(new GenericEntity<Collection<CareerDto>>(dtoCareers) {}), request, allCareers.hashCode()).build();
+        return CacheUtils.conditionalCache(Response.ok(new GenericEntity<Collection<CareerResponseDto>>(dtoCareers) {}), request, allCareers.hashCode()).build();
     }
 
     @GET

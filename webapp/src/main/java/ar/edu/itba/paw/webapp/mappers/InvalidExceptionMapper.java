@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.mappers;
 
 import ar.edu.itba.paw.models.exceptions.InvalidException;
-import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.webapp.dto.ApiErrorDto;
 import ar.edu.itba.paw.webapp.helpers.LocaleHelper;
 import org.slf4j.Logger;

@@ -7,8 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 public class NoteUpdateDto extends SearchableUpdateDto {
-
-    @Pattern(regexp = RegexUtils.CATEGORY_REGEX, message = "validation.noteUpdate.category")
+    @Pattern(regexp = RegexUtils.CATEGORY_REGEX, message = "{validation.category}")
     private String category;
 
     public String getCategory() {

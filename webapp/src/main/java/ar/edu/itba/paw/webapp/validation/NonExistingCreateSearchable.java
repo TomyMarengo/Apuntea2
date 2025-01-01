@@ -20,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NonExistingCreateSearchable {
 
-    String message() default "{ar.edu.itba.paw.webapp.validation.NonExistingCreateSearchable.message}";
+    String message() default "error.searchable.alreadyExists";
 
     Class<?>[] groups() default {};
 

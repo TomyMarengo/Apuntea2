@@ -7,7 +7,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
-@EitherAttribute(fieldGroup1 = {"institutionId", "careerId", "subjectId"}, fieldGroup2 = {"parentId", "favBy"}, message = "invalidAttributeCombination")
+@EitherAttribute(fieldGroup1 = {"institutionId", "careerId", "subjectId"}, fieldGroup2 = {"parentId", "favBy"})
 public class SearchableQuery extends PageableQuery { //TODO: Add error messages
     @DefaultValue("true")
     @QueryParam("asc")

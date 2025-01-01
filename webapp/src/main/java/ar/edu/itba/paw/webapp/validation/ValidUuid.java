@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidUuid {
-    String message() default "{ar.edu.itba.paw.webapp.validation.ValidUuid.message}";
+    String message() default "validation.uuid";
     String regex() default "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

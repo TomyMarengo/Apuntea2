@@ -6,8 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import java.util.UUID;
 
 public class SubjectCareerCreationDto {
-
-    @Range(min = 1, max = 10)
+    @Range(min = 1, max = 5, message = "{error.param.range}")
     private int year;
 
     @ValidUuid

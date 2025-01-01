@@ -9,29 +9,29 @@ import java.util.UUID;
 
 @AttributeDependence(baseField = "password", dependentField = "oldPassword")
 public class UserUpdateDto {
-    @Pattern(regexp = RegexUtils.NAME_REGEX)
-    @Size(max = 20)
+    @Pattern(regexp = RegexUtils.NAME_REGEX, message = "{validation.user.name}")
+    @Size(max = 20, message = "{error.param.length}")
     private String firstName;
 
-    @Pattern(regexp = RegexUtils.NAME_REGEX)
-    @Size(max = 20)
+    @Pattern(regexp = RegexUtils.NAME_REGEX, message = "{validation.user.name}")
+    @Size(max = 20, message = "{error.param.length}")
     private String lastName;
 
     @UnusedUsername
-    @Size(max = 30)
-    @Pattern(regexp = RegexUtils.USERNAME_REGEX)
+    @Size(max = 30, message = "{error.param.length}")
+    @Pattern(regexp = RegexUtils.USERNAME_REGEX, message = "{validation.user.username}")
     private String username;
 
     @ValidUuid
     private UUID careerId;
 
-    @Size(min = 4, max = 50)
-    @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
+    @Size(min = 4, max = 50, message = "{error.param.length}")
+    @Pattern(regexp = RegexUtils.PASSWORD_REGEX, message = "{error.password.invalid}")
     private String password;
 
 
-    @Size(min = 4, max = 50)
-    @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
+    @Size(min = 4, max = 50, message = "{error.param.length}")
+    @Pattern(regexp = RegexUtils.PASSWORD_REGEX, message = "{error.password.invalid}")
     @MatchesCurrentUserPassword
     private String oldPassword;
 

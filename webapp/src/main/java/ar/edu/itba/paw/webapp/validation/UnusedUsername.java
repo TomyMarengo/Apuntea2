@@ -22,7 +22,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = {UnusedUsername.UnusedUsernameValidator.class})
 public @interface UnusedUsername {
-    String message() default "{ar.edu.itba.paw.webapp.validation.UnusedUsername.message}";
+    String message() default "validation.unusedUsername";
 
     String regex() default "^(?![-._]+$)(?!^\\d+$)[a-zA-Z0-9.\\-_]+$";
 

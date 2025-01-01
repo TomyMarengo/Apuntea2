@@ -6,11 +6,11 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 import javax.validation.constraints.NotNull;
 
 public class PictureDto {
-    @NotNull
+    @NotNull(message = "{error.param.empty}")
     @FormDataParam("profilePicture")
     private byte[] profilePictureBytes;
 
-    @NotNull
+    @NotNull(message = "{error.param.empty}")
     @FormDataParam("profilePicture")
     private FormDataBodyPart profilePictureDetails;
 

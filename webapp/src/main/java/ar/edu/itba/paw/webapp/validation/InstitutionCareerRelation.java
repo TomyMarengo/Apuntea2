@@ -18,7 +18,7 @@ import java.util.Optional;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InstitutionCareerRelation {
-    String message() default "institutionCareerMismatch";
+    String message() default "validation.institutionCareerMismatch";
 
     Class<?>[] groups() default {};
 

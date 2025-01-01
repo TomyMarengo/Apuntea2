@@ -8,8 +8,8 @@ import org.hibernate.validator.constraints.Range;
 import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
-@EitherAttribute(fieldGroup1 = {"careerId", "year", "userId"}, fieldGroup2 = {"notInCareer"}, allowNeither = false, message = "invalidAttributeCombination")
-@AttributeDependence(baseField = "year", dependentField = {"careerId", "userId"}, message = "invalidAttributeCombination")
+@EitherAttribute(fieldGroup1 = {"careerId", "year", "userId"}, fieldGroup2 = {"notInCareer"}, allowNeither = false)
+@AttributeDependence(baseField = "year", dependentField = {"careerId", "userId"})
 public class SubjectQuery {
     @ValidUuid
     @QueryParam("careerId")

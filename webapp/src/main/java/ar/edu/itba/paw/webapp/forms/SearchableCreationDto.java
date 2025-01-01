@@ -10,11 +10,11 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
-@NonExistingCreateSearchable(message = "error.searchable.alreadyExists")
+@NonExistingCreateSearchable()
 public abstract class SearchableCreationDto {
-    @NotEmpty
-    @Size(min = 2, max = 50)
-    @Pattern(regexp = RegexUtils.FILE_REGEX)
+    @NotEmpty(message = "{error.param.empty}")
+    @Size(min = 2, max = 50, message = "{error.param.length}")
+    @Pattern(regexp = RegexUtils.FILE_REGEX, message = "{validation.searchable.name}")
     @FormDataParam("name")
     private String name;
 

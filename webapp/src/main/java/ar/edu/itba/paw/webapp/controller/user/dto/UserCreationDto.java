@@ -14,23 +14,17 @@ import java.util.UUID;
 
 public class UserCreationDto {
 
-    @NotEmpty
-    @Email
+    @NotEmpty(message = "{error.param.empty}")
+    @Email(message = "{error.email.invalid}")
     @UnusedEmail
     private String email;
 
-//    @NotNull
-//    @NotBlank
-    @Size(min = 4, max = 50)
-    @Pattern(regexp = RegexUtils.PASSWORD_REGEX)
+    @NotNull(message = "{error.param.empty}")
+    @Size(min = 4, max = 50, message = "{error.param.length}")
+    @Pattern(regexp = RegexUtils.PASSWORD_REGEX, message = "{error.password.invalid}")
     private String password;
 
-    // TODO: Remove
-//    @NotNull
-    @ValidUuid
-    private UUID institutionId;
-
-    @NotNull
+    @NotNull(message = "{error.param.empty}")
     @ValidUuid
     private UUID careerId;
 
@@ -49,13 +43,6 @@ public class UserCreationDto {
     }
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public UUID getInstitutionId() {
-        return institutionId;
-    }
-    public void setInstitutionId(UUID institutionId) {
-        this.institutionId = institutionId;
     }
 
     public UUID getCareerId() {

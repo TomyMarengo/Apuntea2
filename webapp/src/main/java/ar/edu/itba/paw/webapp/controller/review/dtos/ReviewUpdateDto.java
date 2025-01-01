@@ -2,16 +2,13 @@ package ar.edu.itba.paw.webapp.controller.review.dtos;
 
 import org.hibernate.validator.constraints.Range;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 public class ReviewUpdateDto {
-
-    @Size(max = 255)
+    @Size(max = 255, message = "{error.param.length}")
     private String content;
 
-    @Range(min = 1, max = 5)
+    @Range(min = 1, max = 5, message = "{error.param.range}")
     private Integer score;
 
     public String getContent() {

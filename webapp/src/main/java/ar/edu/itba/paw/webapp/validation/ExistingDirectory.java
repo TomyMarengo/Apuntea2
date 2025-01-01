@@ -19,7 +19,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Constraint(validatedBy = {ExistingDirectory.ExistingDirectoryValidator.class})
 public @interface ExistingDirectory {
-    String message() default "{ar.edu.itba.paw.webapp.validation.ExistingDirectory.message}";
+    String message() default "validation.existingDirectory";
 
     Class<?>[] groups() default {};
 

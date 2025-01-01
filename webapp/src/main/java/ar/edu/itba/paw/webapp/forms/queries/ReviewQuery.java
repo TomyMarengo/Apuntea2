@@ -5,7 +5,7 @@ import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
-@EitherAttribute(fieldGroup1 = {"targetUser"}, fieldGroup2 = {"userId", "noteId"}, message = "invalidAttributeCombination")
+@EitherAttribute(fieldGroup1 = {"targetUser"}, fieldGroup2 = {"userId", "noteId"})
 public class ReviewQuery extends PageableQuery{
     @ValidUuid
     @QueryParam("targetUser")

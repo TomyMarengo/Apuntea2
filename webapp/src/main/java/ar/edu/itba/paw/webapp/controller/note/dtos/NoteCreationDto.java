@@ -1,8 +1,6 @@
 package ar.edu.itba.paw.webapp.controller.note.dtos;
 
 import ar.edu.itba.paw.webapp.forms.SearchableCreationDto;
-import ar.edu.itba.paw.webapp.validation.AcceptedExtension;
-import ar.edu.itba.paw.webapp.validation.AcceptedFileSize;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -12,16 +10,16 @@ import javax.validation.constraints.*;
 
 
 public class NoteCreationDto extends SearchableCreationDto {
-    @NotNull
+    @NotNull(message = "{error.param.empty}")
     @FormDataParam("file")
-    private byte[] file;
+    private byte[] file = new byte[0];
 
-    @NotNull
+    @NotNull(message = "{error.param.empty}")
     @FormDataParam("file")
-    private FormDataBodyPart fileDetails;
+    private FormDataBodyPart fileDetails = new FormDataBodyPart();
 
-    @NotEmpty
-    @Pattern(regexp = RegexUtils.CATEGORY_REGEX)
+    @NotEmpty(message = "{error.param.empty}")
+    @Pattern(regexp = RegexUtils.CATEGORY_REGEX, message = "{validation.category}")
     @FormDataParam("category")
     private String category;
 

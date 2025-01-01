@@ -6,7 +6,7 @@ public class RegexUtils {
 
     public static final String PASSWORD_REGEX = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$";
 
-    public static final String USERNAME_REGEX = "^(?![\\-_0-9.]+$)[a-zA-Z0-9.\\-_]+$";
+    public static final String USERNAME_REGEX = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+$";
 
     public static final String NAME_REGEX = "([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*";
 
@@ -17,8 +17,6 @@ public class RegexUtils {
     public static final String AVAILABLE_FOLDER_COLORS_REGEX = "(BBBBBB|16A765|4986E7|CD35A6)";
 
     public static final String CATEGORY_REGEX = "THEORY|PRACTICE|EXAM|OTHER";
-
-    public static final String SEARCHABLE_REDIRECT = "/|/notes/.*|/directory/.*";
 
     private RegexUtils() {
     }

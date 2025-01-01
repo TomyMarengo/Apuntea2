@@ -7,13 +7,9 @@ import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public abstract class SearchableUpdateDto {
-
-    @Size(min = 2, max = 50)
-    @Pattern(regexp = RegexUtils.FILE_REGEX)
+    @Size(min = 2, max = 50, message = "{validation.searchable.name}")
+    @Pattern(regexp = RegexUtils.FILE_REGEX, message = "{validation.searchable.name}")
     private String name;
-
-    @ValidUuid
-    private UUID id;
 
     private boolean visible = true;
 
@@ -21,14 +17,6 @@ public abstract class SearchableUpdateDto {
         return name;
     }
     public void setName(String name) { this.name = name; }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public boolean getVisible() {
         return visible;

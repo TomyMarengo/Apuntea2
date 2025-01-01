@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = EitherAttribute.EitherAttributeValidator.class)
 @Documented
 public @interface EitherAttribute {
-    String message() default "{ar.edu.itba.paw.webapp.validation.EitherAttribute.message}";
+    String message() default "validation.invalidAttributeCombination";
 
     Class<?>[] groups() default {};
 

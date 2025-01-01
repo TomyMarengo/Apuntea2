@@ -6,7 +6,7 @@ import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import javax.validation.constraints.Pattern;
 
 public class DirectoryCreationDto extends SearchableCreationDto {
-    @Pattern(regexp = RegexUtils.AVAILABLE_FOLDER_COLORS_REGEX)
+    @Pattern(regexp = RegexUtils.AVAILABLE_FOLDER_COLORS_REGEX, message = "{validation.validColors}")
     private String iconColor = "BBBBBB";
 
     public String getIconColor() {

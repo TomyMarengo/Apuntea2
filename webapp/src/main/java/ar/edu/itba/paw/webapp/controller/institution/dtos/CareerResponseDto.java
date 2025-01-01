@@ -8,7 +8,7 @@ import java.net.URI;
 import java.util.UUID;
 
 
-public class CareerDto {
+public class CareerResponseDto {
     private UUID id;
     private String name;
     private URI self;
@@ -19,8 +19,8 @@ public class CareerDto {
     private URI subjectCareers;
 
 
-    public static CareerDto fromCareer(final Career career, final UriInfo uriInfo){
-        final CareerDto careerDto = new CareerDto();
+    public static CareerResponseDto fromCareer(final Career career, final UriInfo uriInfo){
+        final CareerResponseDto careerDto = new CareerResponseDto();
         careerDto.id = career.getCareerId();
         careerDto.name = career.getName();
         UriBuilder builder = uriInfo.getBaseUriBuilder();

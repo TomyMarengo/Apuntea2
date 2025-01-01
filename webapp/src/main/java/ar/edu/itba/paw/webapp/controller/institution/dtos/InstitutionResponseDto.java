@@ -7,14 +7,14 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.UUID;
 
-public class InstitutionDto {
+public class InstitutionResponseDto {
     private UUID id;
     private String name;
     private URI self;
     private URI careers;
 
-    public static InstitutionDto fromInstitution(final Institution institution, final UriInfo uriInfo){
-        final InstitutionDto institutionDto = new InstitutionDto();
+    public static InstitutionResponseDto fromInstitution(final Institution institution, final UriInfo uriInfo){
+        final InstitutionResponseDto institutionDto = new InstitutionResponseDto();
         institutionDto.id = institution.getInstitutionId();
         institutionDto.name = institution.getName();
         UriBuilder builder = uriInfo.getBaseUriBuilder();
