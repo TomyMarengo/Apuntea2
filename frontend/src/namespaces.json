@@ -4,6 +4,8 @@
   "common",
   "createDirectoryFab",
   "createNoteFab",
+  "deleteDirectoryDialog",
+  "deleteNoteDialog",
   "directoryBreadcrumbs",
   "directoryPage",
   "editProfileDialog",

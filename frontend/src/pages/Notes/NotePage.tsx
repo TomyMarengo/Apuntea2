@@ -50,7 +50,7 @@ import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
 import { Token } from '../../types';
 
 const NotePage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('notePage');
   const { noteId } = useParams<{ noteId: string }>();
   const user = useSelector(selectCurrentUser);
   const token = useSelector(
@@ -100,7 +100,7 @@ const NotePage: React.FC = () => {
 
   const handleToggleFavorite = async () => {
     if (!user) {
-      toast.error(t('notePage.mustLoginFavorite'));
+      toast.error(t('mustLoginFavorite'));
       return;
     }
     try {
@@ -110,17 +110,17 @@ const NotePage: React.FC = () => {
           userId: user.id,
         }).unwrap();
         if (result) {
-          toast.success(t('notePage.unfavorited'));
+          toast.success(t('unfavorited'));
         }
       } else {
         const result = await addFavoriteNote({ noteId }).unwrap();
         if (result) {
-          toast.success(t('notePage.favorited'));
+          toast.success(t('favorited'));
         }
       }
       refetchFav();
     } catch (err) {
-      toast.error(t('notePage.favoriteError'));
+      toast.error(t('favoriteError'));
     }
   };
 
@@ -144,7 +144,7 @@ const NotePage: React.FC = () => {
 
   const handleDownload = () => {
     if (!note || !noteFileBlob) {
-      toast.error(t('notePage.downloadError'));
+      toast.error(t('downloadError'));
       return;
     }
     const ext = note.fileType ? `.${note.fileType}` : '';
@@ -155,7 +155,7 @@ const NotePage: React.FC = () => {
     a.download = filename;
     a.click();
     URL.revokeObjectURL(blobUrl);
-    toast.success(t('notePage.downloadSuccess'));
+    toast.success(t('downloadSuccess'));
   };
 
   /** 5) Edit/Delete note with modals */
@@ -276,7 +276,7 @@ const NotePage: React.FC = () => {
 
   const handleSaveReview = async () => {
     if (!user) {
-      toast.error(t('notePage.mustLoginReview'));
+      toast.error(t('mustLoginReview'));
       return;
     }
     if (isOwner) return; // Owners can't review their own note
@@ -302,27 +302,23 @@ const NotePage: React.FC = () => {
       }
 
       if (result) {
-        toast.success(
-          myReviewData
-            ? t('notePage.reviewUpdated')
-            : t('notePage.reviewCreated'),
-        );
+        toast.success(myReviewData ? t('reviewUpdated') : t('reviewCreated'));
         refetchMyReview();
       } else {
-        toast.error(t('notePage.reviewError'));
+        toast.error(t('reviewError'));
       }
     } catch (err) {
-      toast.error(t('notePage.reviewError'));
+      toast.error(t('reviewError'));
     }
   };
 
-  let pageTitle = t('notePage.titlePage', { noteName: note?.name || '' });
+  let pageTitle = t('titlePage', { noteName: note?.name || '' });
   if (noteLoading) {
-    pageTitle = t('notePage.loading');
+    pageTitle = t('loading');
   } else if (noteError) {
-    pageTitle = t('notePage.errorFetching');
+    pageTitle = t('errorFetching');
   } else if (!note) {
-    pageTitle = t('notePage.noteNotFound');
+    pageTitle = t('noteNotFound');
   }
 
   return (
@@ -337,7 +333,7 @@ const NotePage: React.FC = () => {
         </Box>
       ) : noteError || !note ? (
         <Box sx={{ p: 3 }}>
-          <Typography color="error">{t('notePage.noteNotFound')}</Typography>
+          <Typography color="error">{t('noteNotFound')}</Typography>
         </Box>
       ) : (
         <Box
@@ -383,10 +379,10 @@ const NotePage: React.FC = () => {
                 <Avatar src={ownerData?.profilePictureUrl || ''} />
                 <Box>
                   <Typography variant="subtitle1">
-                    {ownerData?.username || t('notePage.ownerUnknown')}
+                    {ownerData?.username || t('ownerUnknown')}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
-                    {t('notePage.views', { count: note.interactions || 0 })}
+                    {t('views', { count: note.interactions || 0 })}
                   </Typography>
                 </Box>
               </Box>
@@ -396,11 +392,7 @@ const NotePage: React.FC = () => {
                 {/* Favorite if logged in */}
                 {user && (
                   <Tooltip
-                    title={
-                      isFavorite
-                        ? t('notePage.unfavorite')!
-                        : t('notePage.favorite')!
-                    }
+                    title={isFavorite ? t('unfavorite')! : t('favorite')!}
                   >
                     <IconButton onClick={handleToggleFavorite}>
                       {isFavorite ? (
@@ -414,7 +406,7 @@ const NotePage: React.FC = () => {
 
                 {/* Edit if owner */}
                 {isOwner && (
-                  <Tooltip title={t('notePage.edit')!}>
+                  <Tooltip title={t('edit')!}>
                     <IconButton onClick={handleOpenEdit}>
                       <EditIcon />
                     </IconButton>
@@ -423,7 +415,7 @@ const NotePage: React.FC = () => {
 
                 {/* Delete if owner or admin */}
                 {(isOwner || isAdmin) && (
-                  <Tooltip title={t('notePage.delete')!}>
+                  <Tooltip title={t('delete')!}>
                     <IconButton onClick={handleOpenDelete}>
                       <DeleteIcon />
                     </IconButton>
@@ -431,7 +423,7 @@ const NotePage: React.FC = () => {
                 )}
 
                 {/* Download always */}
-                <Tooltip title={t('notePage.download')!}>
+                <Tooltip title={t('download')!}>
                   <IconButton onClick={handleDownload}>
                     <DownloadIcon />
                   </IconButton>
@@ -473,16 +465,14 @@ const NotePage: React.FC = () => {
                     style={{ maxWidth: '100%', maxHeight: '100%' }}
                   />
                 ) : (
-                  <Typography>{t('notePage.fileNotPreviewable')}</Typography>
+                  <Typography>{t('fileNotPreviewable')}</Typography>
                 )
               ) : noteFileLoading ? (
                 <CircularProgress />
               ) : noteFileError ? (
-                <Typography color="error">
-                  {t('notePage.fileNotFound')}
-                </Typography>
+                <Typography color="error">{t('fileNotFound')}</Typography>
               ) : (
-                <Typography>{t('notePage.fileNotFound')}</Typography>
+                <Typography>{t('fileNotFound')}</Typography>
               )}
             </Box>
           </Box>
@@ -504,7 +494,7 @@ const NotePage: React.FC = () => {
             }}
           >
             <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-              <Typography variant="h6">{t('notePage.reviewsTitle')}</Typography>
+              <Typography variant="h6">{t('reviewsTitle')}</Typography>
             </Box>
 
             <Box
@@ -567,12 +557,12 @@ const NotePage: React.FC = () => {
                       >
                         <KeyboardDoubleArrowDownIcon />
                         <Typography variant="body2">
-                          {t('notePage.moreReviewsHint')}
+                          {t('moreReviewsHint')}
                         </Typography>
                       </Box>
                     ) : (
                       <Typography variant="body2" color="text.secondary">
-                        {t('notePage.noMoreReviews')}
+                        {t('noMoreReviews')}
                       </Typography>
                     )}
                   </Box>
@@ -601,15 +591,13 @@ const NotePage: React.FC = () => {
                   <TextField
                     multiline
                     rows={2}
-                    placeholder={t('notePage.reviewPlaceholder')!}
+                    placeholder={t('reviewPlaceholder')!}
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />
 
                   <Button variant="contained" onClick={handleSaveReview}>
-                    {myReviewData
-                      ? t('notePage.updateReview')
-                      : t('notePage.sendReview')}
+                    {myReviewData ? t('updateReview') : t('sendReview')}
                   </Button>
                 </Box>
               )}

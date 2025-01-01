@@ -20,16 +20,14 @@ const UserPage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
-  const { t } = useTranslation();
+  const { t } = useTranslation('userPage');
 
-  // Redirect to /profile if the userId is the logged-in user's ID
   useEffect(() => {
     if (userId && currentUser && userId === currentUser.id) {
       navigate('/profile', { replace: true });
     }
   }, [userId, currentUser, navigate]);
 
-  // Fetch target user data
   const {
     data: targetUser,
     isLoading,
@@ -37,36 +35,33 @@ const UserPage: React.FC = () => {
     error,
   } = useGetUserQuery({ userId }, { skip: !userId });
 
-  // Fetch institution data
   const institutionUrl = targetUser?.institutionUrl;
   const { data: institutionData } = useGetInstitutionQuery(
     { url: institutionUrl },
     { skip: !targetUser?.institutionUrl },
   );
 
-  // Fetch career data
   const careerUrl = targetUser?.careerUrl;
   const { data: careerData } = useGetCareerQuery(
     { url: careerUrl },
     { skip: !targetUser?.careerUrl },
   );
 
-  // Add career, institution and targetUser to user object
   const targetUserWithDetails = {
     ...targetUser,
     career: careerData,
     institution: institutionData,
   } as User;
 
-  let pageTitle = t('userPage.titlePage', {
+  let pageTitle = t('titlePage', {
     username: targetUser?.username || '',
   });
   if (isLoading) {
-    pageTitle = t('userPage.loading');
+    pageTitle = t('loading');
   } else if (isError) {
-    pageTitle = t('userPage.errorFetchingUser', { error: String(error) });
+    pageTitle = t('errorFetchingUser', { error: String(error) });
   } else if (!targetUser) {
-    pageTitle = t('userPage.userNotFound');
+    pageTitle = t('userNotFound');
   }
 
   return (
@@ -75,23 +70,20 @@ const UserPage: React.FC = () => {
         <title>{pageTitle}</title>
       </Helmet>
       <Box sx={{ p: 2 }}>
-        {/* Loading State */}
         {isLoading && (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
           </Box>
         )}
 
-        {/* Error State */}
         {isError && (
           <Typography variant="h6" color="error">
-            {t('userPage.errorFetching', { error: String(error) })}
+            {t('errorFetchingUser', { error: String(error) })}
           </Typography>
         )}
 
-        {/* User Not Found */}
         {!isLoading && !isError && !targetUser && (
-          <Typography variant="h6">{t('userPage.userNotFound')}</Typography>
+          <Typography variant="h6">{t('userNotFound')}</Typography>
         )}
 
         {/* Main Content */}

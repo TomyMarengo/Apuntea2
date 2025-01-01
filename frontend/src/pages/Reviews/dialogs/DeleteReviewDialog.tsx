@@ -1,3 +1,5 @@
+// src/pages/Reviews/dialogs/DeleteReviewDialog.tsx
+
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -29,7 +31,7 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
   shouldShowReason,
   onDeleteSuccess,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('deleteReviewDialog');
   const [deleteReview] = useDeleteReviewMutation();
   const [reason, setReason] = useState('');
 
@@ -41,25 +43,25 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
         reason: shouldShowReason ? reason : undefined,
       }).unwrap();
       if (result) {
-        toast.success(t('reviewCard.deleteSuccess'));
+        toast.success(t('deleteSuccess'));
         onClose();
         if (onDeleteSuccess) onDeleteSuccess(review);
       } else {
-        toast.error(t('reviewCard.deleteError'));
+        toast.error(t('deleteError'));
       }
     } catch (err) {
-      toast.error(t('reviewCard.deleteError'));
+      toast.error(t('deleteError'));
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{t('reviewCard.deleteReviewTitle')}</DialogTitle>
+      <DialogTitle>{t('deleteReviewTitle')}</DialogTitle>
       <DialogContent>
-        <Typography>{t('reviewCard.deleteConfirmMessage')}</Typography>
+        <Typography>{t('deleteConfirmMessage')}</Typography>
         {shouldShowReason && (
           <TextField
-            label={t('reviewCard.reason')}
+            label={t('reason')}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             fullWidth
@@ -68,9 +70,9 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>{t('reviewCard.cancel')}</Button>
+        <Button onClick={onClose}>{t('cancel')}</Button>
         <Button onClick={handleConfirm} variant="contained" color="error">
-          {t('reviewCard.delete')}
+          {t('delete')}
         </Button>
       </DialogActions>
     </Dialog>

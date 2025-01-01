@@ -1,4 +1,4 @@
-// src/pages/NotePage/dialogs/DeleteNoteDialog.tsx
+// src/pages/Notes/dialogs/DeleteNoteDialog.tsx
 
 import React, { useState } from 'react';
 import {
@@ -31,11 +31,13 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
   shouldShowReason,
   navigateBack = false,
 }) => {
-  const { t } = useTranslation();
+
+  const { t } = useTranslation('deleteNoteDialog');
   const [deleteNote] = useDeleteNoteMutation();
   const [reason, setReason] = useState('');
   const navigate = useNavigate();
 
+  // Handle confirm delete action
   const handleConfirm = async () => {
     try {
       const result = await deleteNote({
@@ -43,25 +45,25 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
         reason: shouldShowReason ? reason : undefined,
       }).unwrap();
       if (result) {
-        toast.success(t('notePage.deleteSuccess'));
+        toast.success(t('deleteSuccess'));
         onClose();
         if (navigateBack) navigate('/', { replace: true });
       } else {
-        toast.error(t('notePage.deleteError'));
+        toast.error(t('deleteError'));
       }
     } catch (err) {
-      toast.error(t('notePage.deleteError'));
+      toast.error(t('deleteError'));
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{t('notePage.deleteNoteTitle')}</DialogTitle>
+      <DialogTitle>{t('deleteNoteTitle')}</DialogTitle>
       <DialogContent>
-        <Typography>{t('notePage.deleteConfirmMessage')}</Typography>
+        <Typography>{t('deleteConfirmMessage')}</Typography>
         {shouldShowReason && (
           <TextField
-            label={t('notePage.reason')}
+            label={t('reason')}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             fullWidth
@@ -70,9 +72,9 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>{t('notePage.cancel')}</Button>
+        <Button onClick={onClose}>{t('cancel')}</Button>
         <Button onClick={handleConfirm} variant="contained" color="error">
-          {t('notePage.delete')}
+          {t('delete')}
         </Button>
       </DialogActions>
     </Dialog>

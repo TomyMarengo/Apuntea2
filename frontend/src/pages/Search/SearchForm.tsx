@@ -45,9 +45,8 @@ export default function SearchForm({
   hideCareer = false,
   hideSubject = false,
 }: SearchFormProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('searchForm');
 
-  // Local state for search-related fields initialized from props
   const [localInstitutionId, setLocalInstitutionId] = useState<string>(
     searchFields.institutionId,
   );
@@ -59,13 +58,11 @@ export default function SearchForm({
   );
   const [localWord, setLocalWord] = useState<string>(searchFields.word);
 
-  // Update local search fields when props change
   useEffect(() => {
     setLocalInstitutionId(searchFields.institutionId);
     setLocalCareerId(searchFields.careerId);
     setLocalSubjectId(searchFields.subjectId);
     setLocalWord(searchFields.word);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     searchFields.institutionId,
     searchFields.careerId,
@@ -73,10 +70,8 @@ export default function SearchForm({
     searchFields.word,
   ]);
 
-  // Local state for filter-related fields controlled via props
   const { category, sortBy, asc } = searchFields;
 
-  // Fetch data
   const { data: institutions, isFetching: isFetchingInstitutions } =
     useGetInstitutionsQuery(undefined);
 
@@ -91,7 +86,6 @@ export default function SearchForm({
       { skip: !localCareerId },
     );
 
-  // Debounce for the word input
   useEffect(() => {
     const handler = setTimeout(() => {
       onSearch({
@@ -108,25 +102,20 @@ export default function SearchForm({
     return () => {
       clearTimeout(handler);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localWord]);
 
-  // Handle category change side-effect
   useEffect(() => {
     if (category === 'directory' && sortBy === 'score') {
       onSearch({ sortBy: 'modified' });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, sortBy]);
 
-  // Handle Institution Change
   const handleInstitutionChange = (e: SelectChangeEvent<string>) => {
     const newInstitutionId = e.target.value;
     setLocalInstitutionId(newInstitutionId);
     setLocalCareerId('');
     setLocalSubjectId('');
 
-    // Update search parameters
     onSearch({
       institutionId: newInstitutionId,
       careerId: '',
@@ -138,13 +127,11 @@ export default function SearchForm({
     });
   };
 
-  // Handle Career Change
   const handleCareerChange = (e: SelectChangeEvent<string>) => {
     const newCareerId = e.target.value;
     setLocalCareerId(newCareerId);
     setLocalSubjectId('');
 
-    // Update search parameters
     onSearch({
       institutionId: localInstitutionId,
       careerId: newCareerId,
@@ -156,12 +143,10 @@ export default function SearchForm({
     });
   };
 
-  // Handle Subject Change
   const handleSubjectChange = (e: SelectChangeEvent<string>) => {
     const newSubjectId = e.target.value;
     setLocalSubjectId(newSubjectId);
 
-    // Update search parameters
     onSearch({
       institutionId: localInstitutionId,
       careerId: localCareerId,
@@ -173,25 +158,20 @@ export default function SearchForm({
     });
   };
 
-  // Handle Category Change
   const handleCategoryChange = (newCategory: 'note' | 'directory') => {
     onSearch({ category: newCategory });
   };
 
-  // Handle Sort By Change
   const handleSortByChange = (e: SelectChangeEvent<string>) => {
     onSearch({ sortBy: e.target.value as string });
   };
 
-  // Toggle ascending/descending
   const toggleAsc = () => {
     onSearch({ asc: asc === 'true' ? 'false' : 'true' });
   };
 
-  // Clear word input
   const handleClearWord = () => {
     setLocalWord('');
-    // Optionally: trigger a search with the cleared word
     onSearch({
       institutionId: localInstitutionId,
       careerId: localCareerId,
@@ -217,14 +197,14 @@ export default function SearchForm({
         {/* Select Institution */}
         {!hideInstitution && (
           <FormControl sx={{ minWidth: 180 }} disabled={isFetchingInstitutions}>
-            <InputLabel>{t('searchForm.institution')}</InputLabel>
+            <InputLabel>{t('institution')}</InputLabel>
             <Select
-              label={t('searchForm.institution')}
+              label={t('institution')}
               value={localInstitutionId}
               onChange={handleInstitutionChange}
             >
               <MenuItem value="">
-                <em>{t('searchForm.selectInstitution')}</em>
+                <em>{t('selectInstitution')}</em>
               </MenuItem>
               {institutions?.map((inst: any) => (
                 <MenuItem key={inst.id} value={String(inst.id)}>
@@ -241,14 +221,14 @@ export default function SearchForm({
             sx={{ minWidth: 180 }}
             disabled={!localInstitutionId || isFetchingCareers}
           >
-            <InputLabel>{t('searchForm.career')}</InputLabel>
+            <InputLabel>{t('career')}</InputLabel>
             <Select
-              label={t('searchForm.career')}
+              label={t('career')}
               value={localCareerId}
               onChange={handleCareerChange}
             >
               <MenuItem value="">
-                <em>{t('searchForm.selectCareer')}</em>
+                <em>{t('selectCareer')}</em>
               </MenuItem>
               {careers?.map((car: any) => (
                 <MenuItem key={car.id} value={String(car.id)}>
@@ -265,14 +245,14 @@ export default function SearchForm({
             sx={{ minWidth: 180 }}
             disabled={!localCareerId || isFetchingSubjects}
           >
-            <InputLabel>{t('searchForm.subject')}</InputLabel>
+            <InputLabel>{t('subject')}</InputLabel>
             <Select
-              label={t('searchForm.subject')}
+              label={t('subject')}
               value={localSubjectId}
               onChange={handleSubjectChange}
             >
               <MenuItem value="">
-                <em>{t('searchForm.selectSubject')}</em>
+                <em>{t('selectSubject')}</em>
               </MenuItem>
               {subjects?.map((sub: any) => (
                 <MenuItem key={sub.id} value={String(sub.id)}>
@@ -285,7 +265,7 @@ export default function SearchForm({
 
         {/* Word Input */}
         <TextField
-          label={t('searchForm.word')}
+          label={t('word')}
           variant="outlined"
           value={localWord}
           onChange={(e) => setLocalWord(e.target.value)}
@@ -312,40 +292,36 @@ export default function SearchForm({
             variant={category === 'directory' ? 'contained' : 'outlined'}
             onClick={() => handleCategoryChange('directory')}
           >
-            {t('searchForm.folders')}
+            {t('folders')}
           </Button>
           <Button
             variant={category === 'note' ? 'contained' : 'outlined'}
             onClick={() => handleCategoryChange('note')}
             sx={{ ml: 1 }}
           >
-            {t('searchForm.notes')}
+            {t('notes')}
           </Button>
         </Box>
 
         {/* Select Sort By */}
         <FormControl sx={{ minWidth: 150 }}>
-          <InputLabel>{t('searchForm.sortBy')}</InputLabel>
+          <InputLabel>{t('sortBy')}</InputLabel>
           <Select
-            label={t('searchForm.sortBy')}
+            label={t('sortBy')}
             value={sortBy}
             onChange={handleSortByChange}
           >
-            <MenuItem value="name">{t('searchForm.name')}</MenuItem>
-            <MenuItem value="modified">
-              {t('searchForm.lastModifiedAt')}
-            </MenuItem>
-            {/* show score only if note category */}
+            <MenuItem value="name">{t('name')}</MenuItem>
+            <MenuItem value="modified">{t('lastModifiedAt')}</MenuItem>
             {category === 'note' && (
-              <MenuItem value="score">{t('searchForm.score')}</MenuItem>
+              <MenuItem value="score">{t('score')}</MenuItem>
             )}
-            <MenuItem value="date">{t('searchForm.createdAt')}</MenuItem>
+            <MenuItem value="date">{t('createdAt')}</MenuItem>
           </Select>
         </FormControl>
 
-        {/* Ascending/Descending Button */}
         <Button variant="outlined" onClick={toggleAsc}>
-          {asc === 'true' ? t('searchForm.asc') : t('searchForm.desc')}
+          {asc === 'true' ? t('asc') : t('desc')}
         </Button>
       </Box>
     </Box>

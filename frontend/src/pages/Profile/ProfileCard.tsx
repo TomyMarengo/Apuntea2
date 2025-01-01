@@ -16,7 +16,7 @@ import {
 import { Edit as EditIcon } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import EditProfileDialog from './EditProfileDialog';
+import EditProfileDialog from './dialogs/EditProfileDialog';
 import { User } from '../../types';
 import {
   useUpdateUserMutation,
@@ -32,7 +32,7 @@ interface ProfileCardProps {
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profileCard');
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
   const [followingModalOpen, setFollowingModalOpen] = useState(false);
@@ -56,12 +56,12 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
       }).unwrap();
       toast.success(
         newValue
-          ? t('profileCard.enableEmailNotifications')
-          : t('profileCard.disableEmailNotifications'),
+          ? t('enableEmailNotifications')
+          : t('disableEmailNotifications'),
       );
       onUpdateSuccess();
     } catch (error) {
-      toast.error(t('profileCard.updateFailed'));
+      toast.error(t('updateFailed'));
     }
   };
 
@@ -87,7 +87,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
     setFollowersModalOpen(false);
   };
 
-  // Handlers para FollowingModal
   const handleFollowingClick = () => {
     setFollowingModalOpen(true);
   };
@@ -128,18 +127,18 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
             </Box>
             <Box sx={{ mt: 1 }}>
               <Typography variant="body1" color="textSecondary">
-                <strong>{t('profileCard.username')}:</strong> {user.username}
+                <strong>{t('username')}:</strong> {user.username}
               </Typography>
               <Typography variant="body1" color="textSecondary">
-                <strong>{t('profileCard.email')}:</strong> {user.email}
+                <strong>{t('email')}:</strong> {user.email}
               </Typography>
               <Typography variant="body1" color="textSecondary">
-                <strong>{t('profileCard.career')}:</strong>{' '}
-                {user.career?.name || t('profileCard.notSet')}
+                <strong>{t('career')}:</strong>{' '}
+                {user.career?.name || t('notSet')}
               </Typography>
               <Typography variant="body1" color="textSecondary">
-                <strong>{t('profileCard.institution')}:</strong>{' '}
-                {user.institution?.name || t('profileCard.notSet')}
+                <strong>{t('institution')}:</strong>{' '}
+                {user.institution?.name || t('notSet')}
               </Typography>
               <FormControlLabel
                 control={
@@ -151,20 +150,20 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                 }
                 label={
                   notificationsEnabled
-                    ? t('profileCard.disableEmailNotifications')
-                    : t('profileCard.enableEmailNotifications')
+                    ? t('disableEmailNotifications')
+                    : t('enableEmailNotifications')
                 }
                 sx={{ mt: 2 }}
               />
               <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
                 <Button onClick={handleFollowersClick}>
-                  {t('profileCard.followers')}
+                  {t('followers')}
                   {': '}
                   {!isLoadingFollowers && (followersData?.totalCount || 0)}
                   {isLoadingFollowers && <CircularProgress size={20} />}
                 </Button>
                 <Button onClick={handleFollowingClick}>
-                  {t('profileCard.following')}
+                  {t('following')}
                   {': '}
                   {!isLoadingFollowings && (followingsData?.totalCount || 0)}
                   {isLoadingFollowings && <CircularProgress size={20} />}

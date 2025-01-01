@@ -1,0 +1,16 @@
+{
+  "editSuccess": "Note updated successfully.",
+  "editError": "Error updating the note.",
+  "editNoteTitle": "Edit Note",
+  "name": "Name",
+  "visible": "Visible",
+  "category": "Category",
+  "cancel": "Cancel",
+  "save": "Save",
+  "categories": {
+    "theory": "Theory",
+    "practice": "Practice",
+    "exam": "Exam",
+    "other": "Other"
+  }
+}

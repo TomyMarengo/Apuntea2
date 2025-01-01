@@ -22,22 +22,19 @@ import { Review } from '../../types';
 import { Helmet } from 'react-helmet-async';
 
 const ReviewsPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('reviewsPage');
   const currentUser = useSelector(selectCurrentUser);
   const [searchParams, _setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Extract URL parameters
   const page = parseInt(searchParams.get('page') || '1', 10);
   const pageSize = 10;
-  const filterType = searchParams.get('filter') || 'received'; // 'received' or 'given'
+  const filterType = searchParams.get('filter') || 'received';
 
-  // Local state for filter
   const [filter, setFilter] = useState<'received' | 'given'>(
     filterType === 'given' ? 'given' : 'received',
   );
 
-  // Update URL parameters when filter or page changes
   useEffect(() => {
     const params = new URLSearchParams();
     params.set('page', String(page));
@@ -45,7 +42,6 @@ const ReviewsPage: React.FC = () => {
     navigate({ search: `?${params}` }, { replace: true });
   }, [page, filter]);
 
-  // Parameters for the query
   const queryParams: any = {
     page,
     pageSize,
@@ -57,23 +53,21 @@ const ReviewsPage: React.FC = () => {
     queryParams.targetUser = currentUser?.id;
   }
 
-  // Fetch reviews based on the filter
   const { data, isLoading, isError, error } = useGetReviewsQuery(queryParams, {
     skip: !currentUser,
   });
 
-  // Handle filter change with correct typing
   const handleFilterChange = (
     event: SelectChangeEvent<'received' | 'given'>,
   ) => {
     setFilter(event.target.value as 'received' | 'given');
   };
 
-  let pageTitle = t('reviewsPage.titlePage');
+  let pageTitle = t('titlePage');
   if (isLoading) {
-    pageTitle = t('reviewsPage.loading');
+    pageTitle = t('loading');
   } else if (isError) {
-    pageTitle = t('reviewsPage.errorFetching', { error: String(error) });
+    pageTitle = t('errorFetching', { error: String(error) });
   }
 
   return (
@@ -82,7 +76,6 @@ const ReviewsPage: React.FC = () => {
         <title>{pageTitle}</title>
       </Helmet>
       <Box sx={{ p: 3 }}>
-        {/* Title and Filter */}
         <Box
           sx={{
             display: 'flex',
@@ -93,26 +86,21 @@ const ReviewsPage: React.FC = () => {
             gap: 2,
           }}
         >
-          <Typography variant="h5">{t('reviewsPage.title')}</Typography>
+          <Typography variant="h5">{t('title')}</Typography>
           <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-            <InputLabel id="filter-select-label">
-              {t('reviewsPage.filterLabel')}
-            </InputLabel>
+            <InputLabel id="filter-select-label">{t('filterLabel')}</InputLabel>
             <Select
               labelId="filter-select-label"
               value={filter}
               onChange={handleFilterChange}
-              label={t('reviewsPage.filterLabel')}
+              label={t('filterLabel')}
             >
-              <MenuItem value="received">
-                {t('reviewsPage.filterReceived')}
-              </MenuItem>
-              <MenuItem value="given">{t('reviewsPage.filterGiven')}</MenuItem>
+              <MenuItem value="received">{t('filterReceived')}</MenuItem>
+              <MenuItem value="given">{t('filterGiven')}</MenuItem>
             </Select>
           </FormControl>
         </Box>
 
-        {/* Reviews List */}
         <Box>
           {isLoading && (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
@@ -125,7 +113,7 @@ const ReviewsPage: React.FC = () => {
               color="error"
               sx={{ textAlign: 'center', py: 5 }}
             >
-              {t('reviewsPage.errorFetching')}
+              {t('errorFetching')}
             </Typography>
           )}
           {data && data.reviews.length > 0
@@ -137,12 +125,11 @@ const ReviewsPage: React.FC = () => {
               ))
             : !isLoading && (
                 <Typography variant="body1" sx={{ textAlign: 'center', py: 5 }}>
-                  {t('reviewsPage.noReviews')}
+                  {t('noReviews')}
                 </Typography>
               )}
         </Box>
 
-        {/* Pagination Bar */}
         {data && data.reviews.length > 0 && (
           <PaginationBar
             currentPage={page}

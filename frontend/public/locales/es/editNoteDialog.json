@@ -1,0 +1,16 @@
+{
+  "editSuccess": "Apunte actualizado exitosamente.",
+  "editError": "Error al actualizar el punte.",
+  "editNoteTitle": "Editar Apunte",
+  "name": "Nombre",
+  "visible": "Visible",
+  "category": "Categoría",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  "categories": {
+    "theory": "Teoría",
+    "practice": "Práctica",
+    "exam": "Examen",
+    "other": "Otro"
+  }
+}

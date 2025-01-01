@@ -10,8 +10,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 import {
@@ -27,7 +26,7 @@ import SubjectDirectoryCard from '../../components/SubjectDirectoryCard';
 const DEFAULT_PAGE_SIZE = 10;
 
 export default function NotesPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('notesPage');
   const navigate = useNavigate();
 
   // Current logged user
@@ -87,24 +86,16 @@ export default function NotesPage() {
     // Convert subjectCareers into a Map: subjectId -> year
     const subjectYearMap = new Map<string, number>();
     subjectCareers.forEach((sc: SubjectCareer) => {
-      // subjectUrl is something like .../subjects/{subjectId}
       const subjectId = sc.subjectUrl.split('/').pop() || '';
       subjectYearMap.set(subjectId, sc.year);
     });
 
-    // Build a combined array of subjects + their year
-    const merged = subjects
-      .map((sub: Subject) => {
-        const subId = sub.id || '';
-        return {
-          ...sub,
-          year: subjectYearMap.get(subId) || 0,
-        };
-      })
-      // Filter out any subject that doesn't have a year
+    return subjects
+      .map((sub: Subject) => ({
+        ...sub,
+        year: subjectYearMap.get(sub.id || '') || 0,
+      }))
       .filter((item) => item.year > 0);
-
-    return merged;
   }, [subjects, subjectCareers]);
 
   // Figure out the unique years
@@ -135,21 +126,20 @@ export default function NotesPage() {
   const endIndex = startIndex + pageSize;
   const subjectsPage = filteredSubjects.slice(startIndex, endIndex);
 
-  // Handler for changing the selected year
   const handleYearChange = (yr: number) => {
     setSearchParams((prev) => {
       const newParams = new URLSearchParams(prev);
       newParams.set('year', String(yr));
-      newParams.set('page', '1'); // Reset to first page when year changes
+      newParams.set('page', '1');
       return newParams;
     });
   };
 
-  let pageTitle = t('notesPage.titlePage');
+  let pageTitle = t('titlePage');
   if (isLoading) {
-    pageTitle = t('notesPage.loading');
+    pageTitle = t('loading');
   } else if (isError) {
-    pageTitle = t('notesPage.errorFetching');
+    pageTitle = t('errorFetching');
   }
 
   return (
@@ -158,12 +148,9 @@ export default function NotesPage() {
         <title>{pageTitle}</title>
       </Helmet>
       <Box sx={{ p: 2 }}>
-        {/* Title */}
         <Typography variant="h4" sx={{ mb: 3 }}>
-          {t('notesPage.titlePage')}
+          {t('titlePage')}
         </Typography>
-
-        {/* Year Selection Buttons */}
         <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
           {uniqueYears.length > 0 &&
             uniqueYears.map((yr) => (
@@ -172,20 +159,18 @@ export default function NotesPage() {
                 variant={yr === selectedYear ? 'contained' : 'outlined'}
                 onClick={() => handleYearChange(yr)}
               >
-                {t('notesPage.yearButton', { year: yr })}
+                {t('yearButton', { year: yr })}
               </Button>
             ))}
         </Stack>
-
-        {/* Content Based on State */}
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
           </Box>
         ) : isError ? (
-          <Typography color="error">{t('notesPage.errorFetching')}</Typography>
+          <Typography color="error">{t('errorFetching')}</Typography>
         ) : filteredSubjects.length === 0 ? (
-          <Typography>{t('notesPage.noSubjectsForYear')}</Typography>
+          <Typography>{t('noSubjectsForYear')}</Typography>
         ) : (
           <>
             <Box
@@ -204,8 +189,6 @@ export default function NotesPage() {
                 />
               ))}
             </Box>
-
-            {/* Pagination */}
             <PaginationBar
               currentPage={page}
               pageSize={pageSize}

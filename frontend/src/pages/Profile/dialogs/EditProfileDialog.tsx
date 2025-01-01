@@ -1,4 +1,4 @@
-// src/pages/Profile/EditProfileDialog.tsx
+// src/pages/Profile/dialogs/EditProfileDialog.tsx
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -28,9 +28,9 @@ import { useTranslation } from 'react-i18next';
 import {
   useUpdateUserMutation,
   useUpdatePictureMutation,
-} from '../../store/slices/usersApiSlice';
-import { Career, User } from '../../types';
-import { useGetCareersQuery } from '../../store/slices/institutionsApiSlice';
+} from '../../../store/slices/usersApiSlice';
+import { Career, User } from '../../../types';
+import { useGetCareersQuery } from '../../../store/slices/institutionsApiSlice';
 import { toast } from 'react-toastify';
 
 interface EditProfileDialogProps {
@@ -46,7 +46,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
   user,
   onUpdateSuccess,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('editProfileDialog');
 
   const [firstName, setFirstName] = useState(user.firstName || '');
   const [lastName, setLastName] = useState(user.lastName || '');
@@ -98,7 +98,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       const objectUrl = URL.createObjectURL(profilePicture);
       setPreview(objectUrl);
 
-      // Clean up the URL when the component unmounts or when profilePicture changes
       return () => {
         URL.revokeObjectURL(objectUrl);
       };
@@ -109,15 +108,13 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
 
   const handleSave = async () => {
     try {
-      // Validate if the password is being changed
       if (newPassword && newPassword !== confirmNewPassword) {
-        toast.error(t('editProfileDialog.passwordsDoNotMatch'));
+        toast.error(t('passwordsDoNotMatch'));
         return;
       }
 
       let passwordChanged = false;
 
-      // Update user information
       await updateUser({
         userId: user.id,
         firstName,
@@ -132,35 +129,31 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           }),
       }).unwrap();
 
-      // If a new password was provided and changed successfully, set flag
       if (newPassword) {
         passwordChanged = true;
       }
 
-      // Update profile picture if changed
       if (profilePicture) {
         await updatePicture({
           profilePicture,
         }).unwrap();
       }
 
-      // Show appropriate success toast
       if (passwordChanged) {
-        toast.success(t('editProfileDialog.passwordChangedSuccessfully'));
+        toast.success(t('passwordChangedSuccessfully'));
       } else {
-        toast.success(t('editProfileDialog.profileUpdatedSuccessfully'));
+        toast.success(t('profileUpdatedSuccessfully'));
       }
 
-      onUpdateSuccess(); // Refresh user data
+      onUpdateSuccess();
       handleClose();
     } catch (error: any) {
       console.error('Failed to update profile:', error);
 
-      // Show error notifications
       if (error.data?.[0]?.message) {
         toast.error(error.data[0].message);
       } else {
-        toast.error(t('editProfileDialog.failedToUpdateProfile'));
+        toast.error(t('failedToUpdateProfile'));
       }
     }
   };
@@ -176,9 +169,9 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>
-        {t('editProfileDialog.editProfile')}
+        {t('editProfile')}
         <IconButton
-          aria-label={t('editProfileDialog.close')}
+          aria-label={t('close')}
           onClick={handleClose}
           sx={{
             position: 'absolute',
@@ -190,7 +183,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        {/* Profile picture section */}
         <Box
           sx={{
             display: 'flex',
@@ -215,7 +207,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <IconButton
                 color="primary"
-                aria-label={t('editProfileDialog.uploadPicture')}
+                aria-label={t('uploadPicture')}
                 component="span"
               >
                 <PhotoCamera />
@@ -226,11 +218,9 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             </Box>
           </label>
         </Box>
-
-        {/* User information section */}
         <Box component="form" noValidate autoComplete="off">
           <TextField
-            label={t('editProfileDialog.firstName')}
+            label={t('firstName')}
             variant="outlined"
             fullWidth
             margin="normal"
@@ -238,7 +228,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             onChange={(e) => setFirstName(e.target.value)}
           />
           <TextField
-            label={t('editProfileDialog.lastName')}
+            label={t('lastName')}
             variant="outlined"
             fullWidth
             margin="normal"
@@ -246,7 +236,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             onChange={(e) => setLastName(e.target.value)}
           />
           <TextField
-            label={t('editProfileDialog.username')}
+            label={t('username')}
             variant="outlined"
             fullWidth
             margin="normal"
@@ -254,7 +244,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
-            label={t('editProfileDialog.email')}
+            label={t('email')}
             variant="outlined"
             fullWidth
             margin="normal"
@@ -262,15 +252,15 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             onChange={(e) => setEmail(e.target.value)}
           />
           <FormControl fullWidth margin="normal" variant="outlined">
-            <InputLabel>{t('editProfileDialog.career')}</InputLabel>
+            <InputLabel>{t('career')}</InputLabel>
             <Select
-              label={t('editProfileDialog.career')}
+              label={t('career')}
               value={careerId}
               onChange={(e) => setCareerId(e.target.value)}
               disabled={isLoadingCareers}
             >
               <MenuItem value="">
-                <em>{t('editProfileDialog.selectCareer')}</em>
+                <em>{t('selectCareer')}</em>
               </MenuItem>
               {careers?.map((career: Career) => (
                 <MenuItem key={career.id} value={career.id}>
@@ -280,14 +270,12 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             </Select>
           </FormControl>
         </Box>
-
-        {/* Password change section */}
         <Box sx={{ mt: 4 }}>
           <Typography variant="h6" gutterBottom>
-            {t('editProfileDialog.changePassword')}
+            {t('changePassword')}
           </Typography>
           <TextField
-            label={t('editProfileDialog.currentPassword')}
+            label={t('currentPassword')}
             variant="outlined"
             type={showCurrentPassword ? 'text' : 'password'}
             fullWidth
@@ -308,7 +296,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             }}
           />
           <TextField
-            label={t('editProfileDialog.newPassword')}
+            label={t('newPassword')}
             variant="outlined"
             type={showNewPassword ? 'text' : 'password'}
             fullWidth
@@ -329,7 +317,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             }}
           />
           <TextField
-            label={t('editProfileDialog.confirmNewPassword')}
+            label={t('confirmNewPassword')}
             variant="outlined"
             type={showConfirmNewPassword ? 'text' : 'password'}
             fullWidth
@@ -362,16 +350,14 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           onClick={handleClose}
           disabled={isUpdatingUser || isUpdatingPicture}
         >
-          {t('editProfileDialog.cancel')}
+          {t('cancel')}
         </Button>
         <Button
           onClick={handleSave}
           variant="contained"
           disabled={isUpdatingUser || isUpdatingPicture}
         >
-          {isUpdatingUser || isUpdatingPicture
-            ? t('editProfileDialog.saving')
-            : t('editProfileDialog.saveChanges')}
+          {isUpdatingUser || isUpdatingPicture ? t('saving') : t('saveChanges')}
         </Button>
       </DialogActions>
     </Dialog>

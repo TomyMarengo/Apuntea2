@@ -1,4 +1,4 @@
-// src/pages/User/UserProfileCard.tsx
+// src/pages/Users/UserProfileCard.tsx
 
 import {
   Card,
@@ -24,7 +24,7 @@ interface UserProfileCardProps {
 }
 
 const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('userProfileCard');
   const currentUserId = useSelector(selectCurrentUserId);
 
   const [followUser, { isLoading: isFollowingLoading }] =
@@ -50,13 +50,13 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
         userId: user.id,
       }).unwrap();
       if (result) {
-        toast.success(t('userProfileCard.followed'));
+        toast.success(t('followed'));
         refetch();
       } else {
-        toast.error(t('userProfileCard.followFailed'));
+        toast.error(t('followFailed'));
       }
     } catch (error) {
-      toast.error(t('userProfileCard.followFailed'));
+      toast.error(t('followFailed'));
     }
   };
 
@@ -67,13 +67,13 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
         followerId: currentUserId!,
       }).unwrap();
       if (result) {
-        toast.success(t('userProfileCard.unfollowed'));
+        toast.success(t('unfollowed'));
         refetch();
       } else {
-        toast.error(t('userProfileCard.unfollowFailed'));
+        toast.error(t('unfollowFailed'));
       }
     } catch (error) {
-      toast.error(t('userProfileCard.unfollowFailed'));
+      toast.error(t('unfollowFailed'));
     }
   };
 
@@ -104,10 +104,10 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
             {user.email}
           </Typography>
           <Typography variant="body1" color="textSecondary">
-            {user.career?.name || t('userProfileCard.noCareer')}
+            {user.career?.name || t('noCareer')}
           </Typography>
           <Typography variant="body1" color="textSecondary">
-            {user.institution?.name || t('userProfileCard.noInstitution')}
+            {user.institution?.name || t('noInstitution')}
           </Typography>
         </Box>
         <Box sx={{ marginLeft: 'auto' }}>
@@ -121,7 +121,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
               {isUnfollowingLoading ? (
                 <CircularProgress size={24} />
               ) : (
-                t('userProfileCard.unfollow')
+                t('unfollow')
               )}
             </Button>
           ) : (
@@ -134,7 +134,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
               {isFollowingLoading ? (
                 <CircularProgress size={24} />
               ) : (
-                t('userProfileCard.follow')
+                t('follow')
               )}
             </Button>
           )}

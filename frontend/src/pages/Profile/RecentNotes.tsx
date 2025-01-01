@@ -1,3 +1,5 @@
+// src/pages/Profile/RecentNotes.tsx
+
 import React from 'react';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +13,7 @@ interface RecentNotesProps {
 }
 
 const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('recentNotes');
 
   const { data, isLoading, error } = useGetLatestNotesQuery({ userId });
 
@@ -19,7 +21,7 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <CircularProgress size={24} />{' '}
-        <Typography sx={{ ml: 2 }}>{t('recentNotes.loading')}</Typography>
+        <Typography sx={{ ml: 2 }}>{t('loading')}</Typography>
       </Box>
     );
   }
@@ -27,7 +29,7 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
   if (error) {
     return (
       <Typography variant="body1" color="error">
-        {t('recentNotes.errorFetchingNotes')}
+        {t('errorFetchingNotes')}
       </Typography>
     );
   }
@@ -37,7 +39,7 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Typography variant="h6">{t('recentNotes.recentNotes')}</Typography>
+        <Typography variant="h6">{t('recentNotes')}</Typography>
         {hasNotes && (
           <Button
             component={RouterLink}
@@ -45,7 +47,7 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
             variant="outlined"
             size="small"
           >
-            {t('recentNotes.viewMore')}
+            {t('viewMore')}
           </Button>
         )}
       </Box>
@@ -56,7 +58,7 @@ const RecentNotes: React.FC<RecentNotesProps> = ({ userId }) => {
           ))}
         </Box>
       ) : (
-        <Typography>{t('recentNotes.noRecentNotes')}</Typography>
+        <Typography>{t('noRecentNotes')}</Typography>
       )}
     </Box>
   );

@@ -7,16 +7,16 @@
   "username": "Nombre de Usuario",
   "email": "Correo Electrónico",
   "career": "Carrera",
-  "selectCareer": "Seleccionar Carrera",
+  "selectCareer": "Selecciona una carrera",
   "changePassword": "Cambiar Contraseña",
   "currentPassword": "Contraseña Actual",
   "newPassword": "Nueva Contraseña",
   "confirmNewPassword": "Confirmar Nueva Contraseña",
   "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+  "passwordChangedSuccessfully": "¡Contraseña cambiada exitosamente!",
+  "profileUpdatedSuccessfully": "¡Perfil actualizado exitosamente!",
   "failedToUpdateProfile": "Error al actualizar el perfil.",
   "cancel": "Cancelar",
   "saving": "Guardando...",
-  "saveChanges": "Guardar Cambios",
-  "profileUpdatedSuccessfully": "Perfil actualizado exitosamente.",
-  "passwordChangedSuccessfully": "Contraseña cambiada exitosamente."
+  "saveChanges": "Guardar Cambios"
 }

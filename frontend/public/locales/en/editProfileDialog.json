@@ -7,16 +7,16 @@
   "username": "Username",
   "email": "Email",
   "career": "Career",
-  "selectCareer": "Select Career",
+  "selectCareer": "Select a career",
   "changePassword": "Change Password",
   "currentPassword": "Current Password",
   "newPassword": "New Password",
   "confirmNewPassword": "Confirm New Password",
   "passwordsDoNotMatch": "Passwords do not match.",
+  "passwordChangedSuccessfully": "Password changed successfully!",
+  "profileUpdatedSuccessfully": "Profile updated successfully!",
   "failedToUpdateProfile": "Failed to update profile.",
   "cancel": "Cancel",
   "saving": "Saving...",
-  "saveChanges": "Save Changes",
-  "profileUpdatedSuccessfully": "Profile updated successfully.",
-  "passwordChangedSuccessfully": "Password changed successfully."
+  "saveChanges": "Save Changes"
 }

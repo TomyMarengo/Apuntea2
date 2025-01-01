@@ -2,15 +2,6 @@
   "titlePage": "Notes | Apuntea",
   "loading": "Loading...",
   "errorFetching": "Error fetching notes.",
-  "mustLogin": "You must be logged in to view your notes.",
-  "title": "My Notes",
-  "year": "Year",
-  "notes": "Notes",
-  "noSubjects": "No subjects found.",
   "noSubjectsForYear": "No subjects available for the selected year.",
-  "yearButton": "Year {{year}}",
-  "subjectNotes": {
-    "notesCount": "{{count}} Notes",
-    "loadingNotes": "Loading notes..."
-  }
+  "yearButton": "Year {{year}}"
 }

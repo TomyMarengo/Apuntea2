@@ -47,7 +47,7 @@ const registerSchema = z
 type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('registerPage');
   const navigate = useNavigate();
 
   const { registerUser } = useRegister();
@@ -55,7 +55,6 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Local state for loading and errors
   const [loading, setLoading] = useState(false);
   const [registerError, setRegisterError] = useState<string | null>(null);
 
@@ -70,25 +69,19 @@ export default function RegisterPage() {
     mode: 'onChange',
   });
 
-  // Watch for institution to enable career selection
   const selectedInstitution = watch('institutionId');
 
-  // Query institutions and careers
   const { data: institutions } = useGetInstitutionsQuery(undefined);
   const { data: careers } = useGetCareersQuery(
     { institutionId: selectedInstitution },
     { skip: !selectedInstitution },
   );
 
-  /**
-   * Submits the registration
-   */
   const onSubmit = async (data: RegisterForm) => {
     try {
       setRegisterError(null);
       setLoading(true);
 
-      // Pass ALL fields: email, password, institutionId, careerId
       await registerUser({
         email: data.email,
         password: data.password,
@@ -96,11 +89,10 @@ export default function RegisterPage() {
         careerId: data.careerId,
       });
 
-      // Navigate away after success
-      toast.success(t('registerPage.toast.success'));
+      toast.success(t('toast.success'));
       navigate('/');
     } catch (err: any) {
-      toast.error(t('registerPage.toast.error'));
+      toast.error(t('toast.error'));
       setRegisterError(err.message);
     } finally {
       setLoading(false);
@@ -119,13 +111,11 @@ export default function RegisterPage() {
     reset({ ...watch(), [fieldName]: '' });
   };
 
-  let pageTitle = t('registerPage.titlePage');
+  let pageTitle = t('titlePage');
   if (loading) {
-    pageTitle = t('registerPage.loading');
+    pageTitle = t('loading');
   } else if (registerError) {
-    pageTitle = t('registerPage.errorFetching', {
-      error: String(registerError),
-    });
+    pageTitle = t('errorFetching', { error: String(registerError) });
   }
 
   return (
@@ -144,19 +134,17 @@ export default function RegisterPage() {
         <Card sx={{ maxWidth: 500, width: '100%', mx: 2 }}>
           <CardContent>
             <Typography variant="h4" gutterBottom align="center">
-              {t('registerPage.signup')}
+              {t('signup')}
             </Typography>
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-              {/* EMAIL */}
               <TextField
-                label={t('registerPage.email')}
+                label={t('email')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
                 {...register('email')}
                 error={!!errors.email}
-                // Reserve space for error
                 helperText={
                   <Box minHeight="1.5em">
                     {errors.email ? t(errors.email.message as string) : ''}
@@ -172,10 +160,8 @@ export default function RegisterPage() {
                   ) : null,
                 }}
               />
-
-              {/* PASSWORD */}
               <TextField
-                label={t('registerPage.password')}
+                label={t('password')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -206,10 +192,8 @@ export default function RegisterPage() {
                   ),
                 }}
               />
-
-              {/* CONFIRM PASSWORD */}
               <TextField
-                label={t('registerPage.confirmPassword')}
+                label={t('confirmPassword')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -244,11 +228,9 @@ export default function RegisterPage() {
                   ),
                 }}
               />
-
-              {/* INSTITUTION */}
               <TextField
                 select
-                label={t('registerPage.institution')}
+                label={t('institution')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -262,20 +244,16 @@ export default function RegisterPage() {
                   </Box>
                 }
               >
-                <MenuItem value="">
-                  {t('registerPage.selectInstitution')}
-                </MenuItem>
+                <MenuItem value="">{t('selectInstitution')}</MenuItem>
                 {institutions?.map((inst: any) => (
                   <MenuItem key={inst.id} value={inst.id}>
                     {inst.name}
                   </MenuItem>
                 ))}
               </TextField>
-
-              {/* CAREER */}
               <TextField
                 select
-                label={t('registerPage.career')}
+                label={t('career')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -290,21 +268,18 @@ export default function RegisterPage() {
                 }
                 disabled={!selectedInstitution}
               >
-                <MenuItem value="">{t('registerPage.selectCareer')}</MenuItem>
+                <MenuItem value="">{t('selectCareer')}</MenuItem>
                 {careers?.map((c: any) => (
                   <MenuItem key={c.id} value={c.id}>
                     {c.name}
                   </MenuItem>
                 ))}
               </TextField>
-
-              {/* Overall Registration Error */}
               {registerError && (
                 <Typography variant="body2" color="error" sx={{ mt: 1 }}>
                   {registerError}
                 </Typography>
               )}
-
               <Button
                 type="submit"
                 variant="contained"
@@ -313,16 +288,11 @@ export default function RegisterPage() {
                 sx={{ mt: 2 }}
                 disabled={loading}
               >
-                {loading ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  t('registerPage.signup')
-                )}
+                {loading ? <CircularProgress size={24} /> : t('signup')}
               </Button>
             </Box>
-
             <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-              {t('registerPage.alreadyHaveAccount')}{' '}
+              {t('alreadyHaveAccount')}{' '}
               <RouterLink to="/login" style={{ color: '#1976d2' }}>
                 {t('loginPage.login')}
               </RouterLink>

@@ -1,3 +1,5 @@
+// src/pages/Profile/RecentReviews.tsx
+
 import React from 'react';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +13,7 @@ interface RecentReviewsProps {
 }
 
 const RecentReviews: React.FC<RecentReviewsProps> = ({ targetId }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('recentReviews');
 
   const { data, isLoading, error } = useGetReviewsQuery({
     targetUser: targetId,
@@ -21,7 +23,7 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ targetId }) => {
     return (
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <CircularProgress size={24} />{' '}
-        <Typography sx={{ ml: 2 }}>{t('recentReviews.loading')}</Typography>
+        <Typography sx={{ ml: 2 }}>{t('loading')}</Typography>
       </Box>
     );
   }
@@ -29,7 +31,7 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ targetId }) => {
   if (error) {
     return (
       <Typography variant="body1" color="error">
-        {t('recentReviews.errorFetchingReviews')}
+        {t('errorFetchingReviews')}
       </Typography>
     );
   }
@@ -39,7 +41,7 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ targetId }) => {
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-        <Typography variant="h6">{t('recentReviews.recentReviews')}</Typography>
+        <Typography variant="h6">{t('recentReviews')}</Typography>
         {hasReviews && (
           <Button
             component={RouterLink}
@@ -47,7 +49,7 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ targetId }) => {
             variant="outlined"
             size="small"
           >
-            {t('recentReviews.viewMore')}
+            {t('viewMore')}
           </Button>
         )}
       </Box>
@@ -58,7 +60,7 @@ const RecentReviews: React.FC<RecentReviewsProps> = ({ targetId }) => {
           ))}
         </Box>
       ) : (
-        <Typography>{t('recentReviews.noRecentReviews')}</Typography>
+        <Typography>{t('noRecentReviews')}</Typography>
       )}
     </Box>
   );

@@ -23,7 +23,7 @@ export default function AppRouter() {
       {/* Public routes */}
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/search" element={<SearchPage />} />
       <Route path="/notes/:noteId" element={<NotePage />} />

@@ -190,7 +190,7 @@ export default function LoginPage() {
               </RouterLink>
             </Typography>
             <Typography variant="body2" align="center" sx={{ mt: 1 }}>
-              <RouterLink to="/forgot-password" style={{ color: '#1976d2' }}>
+              <RouterLink to="/forgotpassword" style={{ color: '#1976d2' }}>
                 {t('forgotPassword')}
               </RouterLink>
             </Typography>

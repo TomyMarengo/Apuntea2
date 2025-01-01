@@ -1,12 +1,11 @@
 // src/pages/Search/SearchResultsTable.tsx
 
-import ResultsTable, { Column } from '../../components/ResultsTable';
+import ResultsTable from '../../components/ResultsTable';
 import RowNote, { ColumnNote } from '../../components/Row/RowNote';
 import RowDirectory, {
   ColumnDirectory,
 } from '../../components/Row/RowDirectory';
-import { Note, Directory } from '../../types';
-import { useTranslation } from 'react-i18next';
+import { Note, Directory, Column } from '../../types';
 
 interface Props {
   showNotes: boolean;

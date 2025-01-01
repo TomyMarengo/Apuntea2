@@ -1,0 +1,9 @@
+{
+  "deleteSuccess": "Note deleted successfully.",
+  "deleteError": "Error deleting the note.",
+  "deleteNoteTitle": "Delete Note",
+  "deleteConfirmMessage": "Are you sure you want to delete this note?",
+  "reason": "Reason for deletion",
+  "cancel": "Cancel",
+  "delete": "Delete"
+}

@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 
 const ProfilePage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profilePage');
   const userId = useSelector(selectCurrentUserId);
 
   const {
@@ -22,13 +22,13 @@ const ProfilePage: React.FC = () => {
     refetch,
   } = useGetLoggedUserQuery({ userId }, { skip: !userId });
 
-  let pageTitle = t('profilePage.titlePage');
+  let pageTitle = t('titlePage');
   if (isLoading) {
-    pageTitle = t('profilePage.loading');
+    pageTitle = t('loading');
   } else if (isError) {
-    pageTitle = t('profilePage.errorFetchingUser');
+    pageTitle = t('errorFetchingUser');
   } else if (!user) {
-    pageTitle = t('profilePage.noUserFound');
+    pageTitle = t('noUserFound');
   }
 
   return (
@@ -58,7 +58,7 @@ const ProfilePage: React.FC = () => {
             }}
           >
             <Typography variant="h6" color="error">
-              {t('profilePage.errorFetchingUser')}
+              {t('errorFetchingUser')}
             </Typography>
           </Box>
         ) : !user ? (
@@ -70,12 +70,12 @@ const ProfilePage: React.FC = () => {
               minHeight: '80vh',
             }}
           >
-            <Typography variant="h6">{t('profilePage.noUserFound')}</Typography>
+            <Typography variant="h6">{t('noUserFound')}</Typography>
           </Box>
         ) : (
           <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
             <Typography variant="h4" gutterBottom>
-              {t('profilePage.profile')}
+              {t('profile')}
             </Typography>
 
             <ProfileCard user={user} onUpdateSuccess={refetch} />

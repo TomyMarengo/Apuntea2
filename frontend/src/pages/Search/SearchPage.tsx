@@ -9,18 +9,10 @@ import useSearch from '../../hooks/useSearch';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
-/**
- * Search Page:
- *  1) Check user default institution/career from useUserData.
- *  2) If the URL has no institutionId or careerId, set them from user data.
- *  3) Then useSearch reads from the final URL params to fetch notes/dirs.
- *  4) Display the triple chain selects + results table + pagination.
- */
 export default function SearchPage() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('searchPage');
   const navigate = useNavigate();
 
-  // 2) Now useSearch reads from final URL param
   const {
     searchParams,
     notes,
@@ -34,7 +26,6 @@ export default function SearchPage() {
     totalCount,
   } = useSearch();
 
-  // Extract individual search fields from searchParams
   const searchFields = {
     institutionId: searchParams.get('institutionId') || '',
     careerId: searchParams.get('careerId') || '',
@@ -57,7 +48,6 @@ export default function SearchPage() {
       }
     });
 
-    // Reset to first page on search/filter change
     newParams.set('page', '1');
 
     navigate({ search: newParams.toString() }, { replace: true });
@@ -66,12 +56,12 @@ export default function SearchPage() {
   return (
     <>
       <Helmet>
-        <title>{t('searchPage.title')}</title>
+        <title>{t('titlePage')}</title>
       </Helmet>
 
       <Box sx={{ p: 2, maxWidth: 1200, margin: '0 auto' }}>
         <Typography variant="h4" sx={{ mb: 3 }}>
-          {t('searchPage.title')}
+          {t('title')}
         </Typography>
 
         <SearchForm searchFields={searchFields} onSearch={handleSearchChange} />
@@ -84,7 +74,7 @@ export default function SearchPage() {
             {(showNotes && notes.length === 0) ||
             (showDirectories && directories.length === 0) ? (
               <Typography variant="body1" sx={{ mt: 4, textAlign: 'center' }}>
-                {t('searchPage.noContent')}
+                {t('noContent')}
               </Typography>
             ) : (
               <SearchResultsTable
