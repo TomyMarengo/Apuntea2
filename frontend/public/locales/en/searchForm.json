@@ -2,7 +2,7 @@
   "institution": "Institution",
   "career": "Career",
   "subject": "Subject",
-  "word": "Word",
+  "word": "Search by name",
   "sortBy": "Sort By",
   "name": "Name",
   "lastModifiedAt": "Last Modified At",
@@ -14,7 +14,7 @@
   "desc": "Descending",
   "folders": "Folders",
   "notes": "Notes",
-  "selectInstitution": "Select an institution",
-  "selectCareer": "Select a career",
-  "selectSubject": "Select a subject"
+  "noInstitution": "No institution",
+  "noCareer": "No career",
+  "noSubject": "No subject"
 }

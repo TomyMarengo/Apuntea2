@@ -1,13 +1,10 @@
 // src/hooks/useSearch.ts
 
-import { useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   useSearchNotesQuery,
   useSearchDirectoriesQuery,
 } from '../store/slices/searchApiSlice';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../store/slices/authSlice';
 
 interface UseSearchReturn {
   searchParams: URLSearchParams;
@@ -22,34 +19,8 @@ interface UseSearchReturn {
   totalCount: number;
 }
 
-export default function useSearch(userData: boolean = true): UseSearchReturn {
+export default function useSearch(): UseSearchReturn {
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const user = useSelector(selectCurrentUser);
-
-  // User data
-  if (userData) {
-    useEffect(() => {
-      let updated = false;
-
-      if (!searchParams.has('institutionId') && user?.institution?.id) {
-        searchParams.set('institutionId', user.institution.id);
-        updated = true;
-      }
-
-      if (!searchParams.has('careerId') && user?.career?.id) {
-        searchParams.set('careerId', user.career.id);
-        updated = true;
-      }
-
-      if (updated) {
-        // Reset to first page on defaults set
-        searchParams.set('page', '1');
-        navigate({ search: searchParams.toString() }, { replace: true });
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user, searchParams, setSearchParams]);
-  }
 
   // Extract search parameters
   const pageParam = searchParams.get('page') || '1';

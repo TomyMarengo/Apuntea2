@@ -204,7 +204,7 @@ export default function SearchForm({
               onChange={handleInstitutionChange}
             >
               <MenuItem value="">
-                <em>{t('selectInstitution')}</em>
+                <em>{t('noInstitution')}</em>
               </MenuItem>
               {institutions?.map((inst: any) => (
                 <MenuItem key={inst.id} value={String(inst.id)}>
@@ -228,7 +228,7 @@ export default function SearchForm({
               onChange={handleCareerChange}
             >
               <MenuItem value="">
-                <em>{t('selectCareer')}</em>
+                <em>{t('noCareer')}</em>
               </MenuItem>
               {careers?.map((car: any) => (
                 <MenuItem key={car.id} value={String(car.id)}>
@@ -252,7 +252,7 @@ export default function SearchForm({
               onChange={handleSubjectChange}
             >
               <MenuItem value="">
-                <em>{t('selectSubject')}</em>
+                <em>{t('noSubject')}</em>
               </MenuItem>
               {subjects?.map((sub: any) => (
                 <MenuItem key={sub.id} value={String(sub.id)}>

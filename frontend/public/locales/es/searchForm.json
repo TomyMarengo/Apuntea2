@@ -2,7 +2,7 @@
   "institution": "Institución",
   "career": "Carrera",
   "subject": "Materia",
-  "word": "Palabra",
+  "word": "Buscar por nombre",
   "sortBy": "Ordenar Por",
   "name": "Nombre",
   "lastModifiedAt": "Última Modificación",
@@ -14,7 +14,7 @@
   "desc": "Descendente",
   "folders": "Carpetas",
   "notes": "Apuntes",
-  "selectInstitution": "Selecciona una institución",
-  "selectCareer": "Selecciona una carrera",
-  "selectSubject": "Selecciona una materia"
+  "noInstitution": "Sin institución",
+  "noCareer": "Sin carrera",
+  "noSubject": "Sin materia"
 }

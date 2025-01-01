@@ -57,7 +57,7 @@ export default function DirectoryPage() {
     pageSize,
     totalPages,
     totalCount,
-  } = useSearch(false); // No userData needed
+  } = useSearch();
 
   // Extract individual search fields from searchParams
   const searchFields = {
