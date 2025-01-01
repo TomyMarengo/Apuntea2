@@ -1,3 +1,5 @@
+// src/components/Row/RowNote.tsx
+
 import React, { useState } from 'react';
 import {
   Box,
@@ -36,6 +38,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Delete from '@mui/icons-material/Delete';
 import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
 import { Column } from '../../types';
+import NoteFileIcon from '../NoteFileIcon';
 
 export const ColumnNote: Column[] = [
   { id: 'name', label: 'name' },
@@ -54,7 +57,7 @@ interface RowNoteProps {
 const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   const { t } = useTranslation('rowNote');
   const navigate = useNavigate();
-  const location = useLocation(); // Hook para obtener la ubicación actual
+  const location = useLocation();
   const user = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken);
 
@@ -227,9 +230,18 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
   return (
     <TableRow hover>
       <TableCell>
-        <MuiLink component={Link} to={`/notes/${note.id}`} underline="hover">
-          {note.name}
-        </MuiLink>
+        <Box display="flex" alignItems="center">
+          <NoteFileIcon fileType={note.fileType} size={24} />
+
+          <MuiLink
+            component={Link}
+            to={`/notes/${note.id}`}
+            underline="hover"
+            sx={{ ml: 1 }}
+          >
+            {note.name}
+          </MuiLink>
+        </Box>
       </TableCell>
       <TableCell>
         {isSameSubject ? (

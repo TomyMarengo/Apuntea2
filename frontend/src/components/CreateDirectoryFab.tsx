@@ -23,14 +23,7 @@ import { useCreateDirectoryMutation } from '../store/slices/directoriesApiSlice'
 import { z } from 'zod';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-// Define the color options
-const colorOptions = [
-  { label: 'Gray', value: '#BBBBBB' },
-  { label: 'Green', value: '#16A765' },
-  { label: 'Blue', value: '#4986E7' },
-  { label: 'Pink', value: '#CD35A6' },
-];
+import { FolderIconColor } from '../types';
 
 // Define the Zod schema for form validation
 const directorySchema = z.object({
@@ -188,23 +181,23 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
                     aria-label="icon color"
                     sx={{ gap: 1 }} // Adds spacing between the buttons
                   >
-                    {colorOptions.map((color) => (
+                    {Object.entries(FolderIconColor).map(([label, value]) => (
                       <ToggleButton
-                        key={color.value}
-                        value={color.value}
-                        aria-label={color.label}
+                        key={value}
+                        value={value}
+                        aria-label={label}
                         sx={{
                           width: 40,
                           height: 40,
-                          minWidth: 40, // Ensures consistent sizing
-                          border: 'none', // Removes border when unselected
-                          borderRadius: '50%', // Makes the button circular
-                          backgroundColor: color.value,
-                          transition: 'transform 0.2s, border 0.2s', // Smooth transitions
+                          minWidth: 40,
+                          border: 'none',
+                          borderRadius: '50%',
+                          backgroundColor: value,
+                          transition: 'transform 0.2s, border 0.2s',
                           '&.Mui-selected, &.Mui-selected:hover, &:hover': {
-                            transform: 'scale(1.1)', // Slightly enlarges the selected button
-                            border: '2px solid #FFFFFF', // Adds a distinct white border when selected
-                            backgroundColor: color.value,
+                            transform: 'scale(1.1)',
+                            border: '2px solid #FFFFFF',
+                            backgroundColor: value,
                           },
                         }}
                       />

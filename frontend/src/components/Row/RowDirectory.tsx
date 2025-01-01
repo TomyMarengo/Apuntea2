@@ -34,8 +34,11 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LinkIcon from '@mui/icons-material/Link';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Delete from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import DeleteDirectoryDialog from '../../pages/Directories/dialogs/DeleteDirectoryDialog';
 import { Column } from '../../types';
+import EditDirectoryDialog from '../../pages/Directories/dialogs/EditDirectoryDialog';
+import FolderIcon from '@mui/icons-material/Folder';
 
 export const ColumnDirectory: Column[] = [
   { id: 'name', label: 'name' },
@@ -145,6 +148,17 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
     setOpenDeleteModal(false);
   };
 
+  // Edit directory dialog state
+  const [openEdit, setOpenEditModal] = useState(false);
+
+  const handleEditClick = () => {
+    setOpenEditModal(true);
+  };
+
+  const handleCloseEdit = () => {
+    setOpenEditModal(false);
+  };
+
   // Menu action handlers
   const handleOwnerNotes = () => {
     const ownerId = directory.ownerUrl?.split('/').pop();
@@ -191,13 +205,21 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   return (
     <TableRow hover>
       <TableCell>
-        <MuiLink
-          component={Link}
-          to={`/directories/${directory.id}`}
-          underline="hover"
-        >
-          {directory.name}
-        </MuiLink>
+        <Box display="flex" alignItems="center">
+          <FolderIcon
+            sx={{
+              color: `#${directory.iconColor}` || 'primary.main',
+            }}
+          />
+          <MuiLink
+            component={Link}
+            to={`/directories/${directory.id}`}
+            underline="hover"
+            sx={{ ml: 1 }}
+          >
+            {directory.name}
+          </MuiLink>
+        </Box>
       </TableCell>
       <TableCell>{subjectName}</TableCell>
       <TableCell>
@@ -248,6 +270,15 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
                 </IconButton>
               </span>
             </Tooltip>
+
+            {/* Edit Button */}
+            {isOwner && (
+              <Tooltip title={t('rowDirectory.edit')}>
+                <IconButton onClick={handleEditClick} size="small">
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            )}
 
             {/* Copy Link Button */}
             <Tooltip title={t('copyLink')}>
@@ -305,6 +336,13 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
         onClose={handleCloseDelete}
         directory={directory}
         shouldShowReason={isAdmin && !isOwner}
+      />
+
+      {/* Edit Directory Dialog */}
+      <EditDirectoryDialog
+        open={openEdit}
+        onClose={handleCloseEdit}
+        directory={directory}
       />
     </TableRow>
   );

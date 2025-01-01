@@ -130,7 +130,7 @@ export interface Note {
   id: string;
   name: string;
   visible: boolean;
-  fileType?: FileType;
+  fileType: FileType;
   category?: NoteCategory;
   createdAt: string;
   lastModifiedAt: string;
@@ -168,9 +168,15 @@ export interface Review {
   noteUrl: string;
   userUrl: string;
 }
-
 export interface Column {
   id: string;
   label: string;
   align?: 'right' | 'left' | 'center';
+}
+
+export enum FolderIconColor {
+  GRAY = '#BBBBBB',
+  GREEN = '#16A765',
+  BLUE = '#4986E7',
+  PINK = '#CD35A6',
 }

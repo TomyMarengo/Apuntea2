@@ -1,3 +1,5 @@
+// src/components/Follow/FollowItem.tsx
+
 import React from 'react';
 import {
   ListItem,
@@ -6,7 +8,7 @@ import {
   ListItemText,
   Button,
   Box,
-  Link as MuiLink, // Importa MuiLink
+  Link as MuiLink,
 } from '@mui/material';
 import {
   useGetUserQuery,

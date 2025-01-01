@@ -4,51 +4,16 @@ import React, { useEffect, useState } from 'react';
 import { Box, Tooltip, IconButton, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import DescriptionIcon from '@mui/icons-material/Description';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import ImageIcon from '@mui/icons-material/Image';
-import MovieIcon from '@mui/icons-material/Movie';
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { useTranslation } from 'react-i18next';
 import {
   useRemoveFavoriteNoteMutation,
   useAddFavoriteNoteMutation,
   useGetIsFavoriteNoteQuery,
 } from '../store/slices/notesApiSlice';
-import { Note, FileType } from '../types';
+import { Note } from '../types';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-
-function getFileIcon(fileType?: FileType) {
-  if (!fileType)
-    return <InsertDriveFileIcon sx={{ fontSize: 48 }} color="primary" />;
-
-  switch (fileType.toLowerCase()) {
-    case 'pdf':
-      return <PictureAsPdfIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'doc':
-    case 'docx':
-      return <DescriptionIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'ppt':
-    case 'pptx':
-      return <DescriptionIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'xls':
-    case 'xlsx':
-      return <DescriptionIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'jpg':
-    case 'jpeg':
-    case 'png':
-    case 'gif':
-      return <ImageIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'mp4':
-      return <MovieIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'mp3':
-      return <MusicNoteIcon sx={{ fontSize: 48 }} color="primary" />;
-    default:
-      return <InsertDriveFileIcon sx={{ fontSize: 48 }} color="primary" />;
-  }
-}
+import NoteFileIcon from './NoteFileIcon';
 
 interface FavoriteNoteCardProps {
   note: Note;
@@ -124,7 +89,7 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
         <Box sx={{ mb: 0.5, position: 'relative' }}>
-          {getFileIcon(note.fileType)}
+          <NoteFileIcon fileType={note.fileType} size={48} />
         </Box>
       </Link>
 
