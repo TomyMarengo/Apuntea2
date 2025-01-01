@@ -68,7 +68,7 @@ export default function HomePage() {
         >
           {isLoggedIn ? (
             <Trans
-              i18nKey="homePage.welcomeUser"
+              i18nKey="homePage:welcomeUser"
               values={{ username: user.username || user.email }}
               components={{
                 appName: (
@@ -83,7 +83,7 @@ export default function HomePage() {
             />
           ) : (
             <Trans
-              i18nKey="homePage.welcome"
+              i18nKey="homePage:welcome"
               components={{
                 appName: (
                   <Box
