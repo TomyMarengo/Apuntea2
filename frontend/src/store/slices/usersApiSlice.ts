@@ -4,6 +4,7 @@ import { apiSlice } from './apiSlice';
 import { User, Career, Institution, UserStatus } from '../../types';
 import { setCurrentUser } from './authSlice';
 import { mapApiUser } from '../../utils/mappers';
+import { setLocale } from './languageSlice';
 
 interface GetUsersArgs {
   url?: string;
@@ -171,6 +172,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           };
 
           queryApi.dispatch(setCurrentUser(user));
+          if (user.locale) queryApi.dispatch(setLocale(user.locale));
 
           return { data: user };
         } catch (error) {
