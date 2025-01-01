@@ -24,7 +24,7 @@ i18n
     },
 
     backend: {
-      loadPath: 'paw-2023b-12/locales/{{lng}}/{{ns}}.json',
+      loadPath: 'locales/{{lng}}/{{ns}}.json',
     },
 
     react: {
