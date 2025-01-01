@@ -4,12 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Box, Tooltip, IconButton, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import DescriptionIcon from '@mui/icons-material/Description';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import ImageIcon from '@mui/icons-material/Image';
-import MovieIcon from '@mui/icons-material/Movie';
-import MusicNoteIcon from '@mui/icons-material/MusicNote';
 import { useTranslation } from 'react-i18next';
 import {
   useRemoveFavoriteNoteMutation,
@@ -19,7 +13,7 @@ import {
 import { Note } from '../types';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import { getFileIcon } from '../utils/helperFunctions';
+import NoteFileIcon from './NoteFileIcon';
 
 interface FavoriteNoteCardProps {
   note: Note;
@@ -95,7 +89,7 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
         <Box sx={{ mb: 0.5, position: 'relative' }}>
-          {getFileIcon(note.fileType, 48)}
+          <NoteFileIcon fileType={note.fileType} size={48} />
         </Box>
       </Link>
 

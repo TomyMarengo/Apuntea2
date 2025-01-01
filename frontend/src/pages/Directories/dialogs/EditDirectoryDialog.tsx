@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useUpdateDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { toast } from 'react-toastify';
 import { Directory } from '../../../types';
-import { ColorOptions } from '../../../types';
+import { FolderIconColor } from '../../../types';
 
 interface DirectoryPageProps {
   open: boolean;
@@ -93,7 +93,7 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
                 aria-label="icon color"
                 sx={{ gap: 1 }}
               >
-                {Object.entries(ColorOptions).map(([label, value]) => (
+                {Object.entries(FolderIconColor).map(([label, value]) => (
                   <ToggleButton
                     key={value}
                     value={value}

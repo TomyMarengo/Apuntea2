@@ -6,7 +6,12 @@ import ImageIcon from '@mui/icons-material/Image';
 import MovieIcon from '@mui/icons-material/Movie';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
 
-export function getFileIcon(fileType?: FileType, size: number = 20) {
+interface NoteFileIconProps {
+  fileType?: FileType;
+  size?: number;
+}
+
+const NoteFileIcon: React.FC<NoteFileIconProps> = ({ fileType, size }) => {
   if (!fileType)
     return <InsertDriveFileIcon sx={{ fontSize: size }} color="primary" />;
 
@@ -32,4 +37,6 @@ export function getFileIcon(fileType?: FileType, size: number = 20) {
     default:
       return <InsertDriveFileIcon sx={{ fontSize: size }} color="primary" />;
   }
-}
+};
+
+export default NoteFileIcon;

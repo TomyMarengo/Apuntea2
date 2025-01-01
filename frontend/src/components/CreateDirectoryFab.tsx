@@ -23,7 +23,7 @@ import { useCreateDirectoryMutation } from '../store/slices/directoriesApiSlice'
 import { z } from 'zod';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ColorOptions } from '../types';
+import { FolderIconColor } from '../types';
 
 // Define the Zod schema for form validation
 const directorySchema = z.object({
@@ -181,7 +181,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
                     aria-label="icon color"
                     sx={{ gap: 1 }} // Adds spacing between the buttons
                   >
-                    {Object.entries(ColorOptions).map(([label, value]) => (
+                    {Object.entries(FolderIconColor).map(([label, value]) => (
                       <ToggleButton
                         key={value}
                         value={value}
