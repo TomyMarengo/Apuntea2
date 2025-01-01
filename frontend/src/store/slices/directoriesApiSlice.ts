@@ -102,7 +102,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
               'application/vnd.apuntea.directory-update-v1.0+json',
           },
         });
-        return result.error ? { error: result.error } : { data: true };
+        return { data: result.error === undefined };
       },
       invalidatesTags: (result, error, { directoryId }) => [
         { type: 'Directories', id: directoryId },

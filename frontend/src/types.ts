@@ -168,9 +168,15 @@ export interface Review {
   noteUrl: string;
   userUrl: string;
 }
-
 export interface Column {
   id: string;
   label: string;
   align?: 'right' | 'left' | 'center';
+}
+
+export enum ColorOptions {
+  GRAY = '#BBBBBB',
+  GREEN = '#16A765',
+  BLUE = '#4986E7',
+  PINK = '#CD35A6',
 }

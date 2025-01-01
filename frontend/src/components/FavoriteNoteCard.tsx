@@ -16,39 +16,10 @@ import {
   useAddFavoriteNoteMutation,
   useGetIsFavoriteNoteQuery,
 } from '../store/slices/notesApiSlice';
-import { Note, FileType } from '../types';
+import { Note } from '../types';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-
-function getFileIcon(fileType?: FileType) {
-  if (!fileType)
-    return <InsertDriveFileIcon sx={{ fontSize: 48 }} color="primary" />;
-
-  switch (fileType.toLowerCase()) {
-    case 'pdf':
-      return <PictureAsPdfIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'doc':
-    case 'docx':
-      return <DescriptionIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'ppt':
-    case 'pptx':
-      return <DescriptionIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'xls':
-    case 'xlsx':
-      return <DescriptionIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'jpg':
-    case 'jpeg':
-    case 'png':
-    case 'gif':
-      return <ImageIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'mp4':
-      return <MovieIcon sx={{ fontSize: 48 }} color="primary" />;
-    case 'mp3':
-      return <MusicNoteIcon sx={{ fontSize: 48 }} color="primary" />;
-    default:
-      return <InsertDriveFileIcon sx={{ fontSize: 48 }} color="primary" />;
-  }
-}
+import { getFileIcon } from '../utils/helperFunctions';
 
 interface FavoriteNoteCardProps {
   note: Note;
@@ -124,7 +95,7 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
         <Box sx={{ mb: 0.5, position: 'relative' }}>
-          {getFileIcon(note.fileType)}
+          {getFileIcon(note.fileType, 48)}
         </Box>
       </Link>
 

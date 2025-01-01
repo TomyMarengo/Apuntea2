@@ -119,6 +119,8 @@ export default function DirectoryPage() {
     setOpenEditDialog(false); // Close the dialog
   };
 
+  const isOwner = user?.id === ownerData?.id;
+
   return (
     <>
       <Helmet>
@@ -148,9 +150,11 @@ export default function DirectoryPage() {
             <>
               {/* Directory Title */}
               <Typography variant="h4">{currentDirectory.name}</Typography>
-              <IconButton onClick={handleEditClick} sx={{ ml: 2 }}>
-                <EditIcon />
-              </IconButton>
+              {isOwner && (
+                <IconButton onClick={handleEditClick} sx={{ ml: 2 }}>
+                  <EditIcon />
+                </IconButton>
+              )}
 
               {/* Directory Breadcrumbs */}
               <DirectoryBreadcrumbs currentDirectory={currentDirectory} />

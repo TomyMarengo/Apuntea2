@@ -17,13 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useUpdateDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { toast } from 'react-toastify';
 import { Directory } from '../../../types';
-
-const colorOptions = [
-  { label: 'Gray', value: '#BBBBBB' },
-  { label: 'Green', value: '#16A765' },
-  { label: 'Blue', value: '#4986E7' },
-  { label: 'Pink', value: '#CD35A6' },
-];
+import { ColorOptions } from '../../../types';
 
 interface DirectoryPageProps {
   open: boolean;
@@ -99,23 +93,23 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
                 aria-label="icon color"
                 sx={{ gap: 1 }}
               >
-                {colorOptions.map((color) => (
+                {Object.entries(ColorOptions).map(([label, value]) => (
                   <ToggleButton
-                    key={color.value}
-                    value={color.value}
-                    aria-label={color.label}
+                    key={value}
+                    value={value}
+                    aria-label={label}
                     sx={{
                       width: 40,
                       height: 40,
                       minWidth: 40,
                       border: 'none',
                       borderRadius: '50%',
-                      backgroundColor: color.value,
+                      backgroundColor: value,
                       transition: 'transform 0.2s, border 0.2s',
                       '&.Mui-selected, &.Mui-selected:hover, &:hover': {
                         transform: 'scale(1.1)',
                         border: '2px solid #FFFFFF',
-                        backgroundColor: color.value,
+                        backgroundColor: value,
                       },
                     }}
                   />

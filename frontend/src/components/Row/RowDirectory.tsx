@@ -206,17 +206,16 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
     <TableRow hover>
       <TableCell>
         <Box display="flex" alignItems="center">
-          {/* Ícono de la carpeta con color dinámico */}
           <FolderIcon
             sx={{
               color: `#${directory.iconColor}` || 'primary.main',
-              marginRight: 1,
             }}
           />
           <MuiLink
             component={Link}
             to={`/directories/${directory.id}`}
             underline="hover"
+            sx={{ ml: 1 }}
           >
             {directory.name}
           </MuiLink>
@@ -273,7 +272,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
             </Tooltip>
 
             {/* Edit Button */}
-            {(isAdmin || isOwner) && (
+            {isOwner && (
               <Tooltip title={t('rowDirectory.edit')}>
                 <IconButton onClick={handleEditClick} size="small">
                   <EditIcon />
