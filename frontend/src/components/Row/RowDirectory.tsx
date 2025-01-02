@@ -268,7 +268,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
 
             {/* Edit Button */}
             {isOwner && (
-              <Tooltip title={t('rowDirectory.edit')}>
+              <Tooltip title={t('edit')}>
                 <IconButton onClick={handleEditClick} size="small">
                   <EditIcon />
                 </IconButton>

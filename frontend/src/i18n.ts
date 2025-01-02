@@ -13,7 +13,7 @@ i18n.use(initReactI18next).init({
     es: esTranslations,
   },
   fallbackLng: 'en',
-  debug: true,
+  debug: false,
   ns: namespaceList,
   defaultNS: 'common',
   interpolation: {

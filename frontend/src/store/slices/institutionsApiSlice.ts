@@ -174,9 +174,6 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
         baseQuery,
       ) {
         try {
-          console.log('name', name);
-          console.log('year', year);
-
           // Step 1: Update the subject
           if (name) {
             const subjectResult = await baseQuery({

@@ -455,6 +455,8 @@
     "noReviews": "No hay reseñas para mostrar."
   },
   "rowDirectory": {
+    "unfavorite": "Eliminar Favorito",
+    "favorite": "Favorito",
     "favoriteRemoved": "¡Directorio eliminado de favoritos!",
     "favoriteAdded": "¡Directorio agregado a favoritos!",
     "alreadyDirectoryFavorited": "El directorio ya está en favoritos.",
@@ -576,7 +578,6 @@
     "name": "Nombre",
     "lastModifiedAt": "Última Modificación",
     "score": "Puntuación",
-    "createdAt": "Creado en",
     "owner": "Propietario",
     "actions": "Acciones",
     "asc": "Ascendente",

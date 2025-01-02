@@ -150,12 +150,14 @@ export default function DirectoryPage() {
           currentDirectory && (
             <>
               {/* Directory Title */}
-              <Typography variant="h4">{currentDirectory.name}</Typography>
-              {isOwner && (
-                <IconButton onClick={handleEditClick} sx={{ ml: 2 }}>
-                  <EditIcon />
-                </IconButton>
-              )}
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="h4">{currentDirectory.name}</Typography>
+                {isOwner && (
+                  <IconButton onClick={handleEditClick}>
+                    <EditIcon />
+                  </IconButton>
+                )}
+              </Box>
 
               {/* Directory Breadcrumbs */}
               <DirectoryBreadcrumbs currentDirectory={currentDirectory} />
