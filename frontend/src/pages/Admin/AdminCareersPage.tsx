@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 import ResultsTable from '../../components/ResultsTable';
-import RowSubject, { ColumnSubject } from '../../components/Row/RowSubject';
+import RowSubject from '../../components/Row/RowSubject';
 import {
   useGetInstitutionsQuery,
   useGetCareersQuery,
@@ -42,6 +42,7 @@ import {
   Subject,
   SubjectCareer,
   SubjectWithCareer,
+  ColumnSubject,
 } from '../../types';
 
 import 'react-toastify/dist/ReactToastify.css';
