@@ -26,7 +26,7 @@ interface UseSearchReturn {
   pageSize: number;
 }
 
-const useSearch = (): UseSearchReturn => {
+const useSearch = (parentId: string): UseSearchReturn => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const location = useLocation();
@@ -95,10 +95,9 @@ const useSearch = (): UseSearchReturn => {
     watchedValues.page,
     watchedValues.pageSize,
     navigate,
-    location.search,
   ]);
 
-  // Preparar argumentos para la búsqueda
+  // Prepare search arguments
   const searchArgs = useMemo(() => {
     const args: Record<string, any> = {
       page: watchedValues.page,
@@ -108,6 +107,7 @@ const useSearch = (): UseSearchReturn => {
       category: watchedValues.category,
     };
 
+    if (parentId) args.parentId = parentId;
     if (watchedValues.institutionId)
       args.institutionId = watchedValues.institutionId;
     if (watchedValues.careerId) args.careerId = watchedValues.careerId;
@@ -127,7 +127,6 @@ const useSearch = (): UseSearchReturn => {
     debouncedWord,
   ]);
 
-  // Consultas condicionales
   const { data: dataNotes, isLoading: isLoadingNotes } = useSearchNotesQuery(
     searchArgs,
     { skip: watchedValues.category === 'directory' },

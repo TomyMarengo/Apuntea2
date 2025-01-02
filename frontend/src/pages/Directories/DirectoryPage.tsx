@@ -6,11 +6,11 @@ import {
   Alert,
   IconButton,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import EditDirectoryDialog from './dialogs/EditDirectoryDialog';
 import CreateDirectoryFab from '../../components/CreateDirectoryFab';
@@ -27,8 +27,8 @@ import SearchResultsTable from '../Search/SearchResultsTable';
 export default function DirectoryPage() {
   const { directoryId } = useParams<{ directoryId: string }>();
   const { t } = useTranslation('directoryPage');
-  const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   // Fetch the current directory
   const {
@@ -44,83 +44,39 @@ export default function DirectoryPage() {
     isError: isErrorOwner,
   } = useGetUserQuery({ url: ownerUrl }, { skip: !ownerUrl });
 
-  const [openEditDialog, setOpenEditDialog] = useState(false); // State to manage dialog visibility
+  const isOwner = user?.id === ownerData?.id;
 
-  useEffect(() => {
-    if (directoryId) {
-      const newParams = new URLSearchParams(window.location.search);
-      newParams.set('parentId', directoryId);
-      navigate({ search: newParams.toString() }, { replace: true });
-    }
-  }, [directoryId, navigate]);
-
-  // Use useSearch with parentId
   const {
-    searchParams,
+    control,
+    watchedValues,
+    setValue,
+    isLoading,
     notes,
     directories,
-    isLoadingData,
-    showNotes,
-    showDirectories,
+    totalCount,
+    totalPages,
     currentPage,
     pageSize,
-    totalPages,
-    totalCount,
-  } = useSearch();
+  } = useSearch(directoryId!);
 
-  // Extract individual search fields from searchParams
-  const searchFields = {
-    institutionId: '', // Hidden in this context
-    careerId: '', // Hidden in this context
-    subjectId: '', // Hidden in this context
-    parentId: directoryId || '', // Added to filter by parentId
-    word: searchParams.get('word') || '',
-    category: (searchParams.get('category') as 'note' | 'directory') || 'note',
-    sortBy: searchParams.get('sortBy') || 'modified',
-    asc: searchParams.get('asc') || 'true',
+  const showNotes = watchedValues.category !== 'directory';
+  const showDirectories = watchedValues.category === 'directory';
+
+  const handleEditClick = () => {
+    setOpenEditDialog(true);
   };
 
-  const handleSearchChange = (params: Record<string, string>) => {
-    const newParams = new URLSearchParams(searchParams);
-
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        newParams.set(key, value);
-      } else {
-        newParams.delete(key);
-      }
-    });
-
-    // Ensure to keep the parentId
-    if (directoryId) {
-      newParams.set('parentId', directoryId);
-    } else {
-      newParams.delete('parentId');
-    }
-
-    // Reset to the first page when changing search/filter
-    newParams.set('page', '1');
-
-    navigate({ search: newParams.toString() }, { replace: true });
+  const handleCloseDialog = () => {
+    setOpenEditDialog(false);
   };
 
   // Determine the page title based on the state
   let pageTitle = t('titlePage');
-  if (isLoadingCurrentDirectory || isLoadingData || isLoadingOwner) {
+  if (isLoadingCurrentDirectory || isLoadingOwner || isLoading) {
     pageTitle = t('loading');
   } else if (isErrorCurrentDirectory || isErrorOwner) {
     pageTitle = t('errorFetchingDirectory');
   }
-
-  const handleEditClick = () => {
-    setOpenEditDialog(true); // Open the dialog when the edit button is clicked
-  };
-
-  const handleCloseDialog = () => {
-    setOpenEditDialog(false); // Close the dialog
-  };
-
-  const isOwner = user?.id === ownerData?.id;
 
   return (
     <>
@@ -129,7 +85,7 @@ export default function DirectoryPage() {
       </Helmet>
       <Box sx={{ p: 2, maxWidth: 1200, margin: '0 auto' }}>
         {/* If loading or there is an error */}
-        {(isLoadingCurrentDirectory || isLoadingData || isLoadingOwner) && (
+        {(isLoadingCurrentDirectory || isLoadingOwner || isLoading) && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
             <CircularProgress />
           </Box>
@@ -143,8 +99,8 @@ export default function DirectoryPage() {
 
         {/* Main content when not loading and no error */}
         {!isLoadingCurrentDirectory &&
-          !isLoadingData &&
           !isLoadingOwner &&
+          !isLoading &&
           !isErrorCurrentDirectory &&
           !isErrorOwner &&
           currentDirectory && (
@@ -165,8 +121,9 @@ export default function DirectoryPage() {
               <Box sx={{ mt: 3 }}>
                 {/* Search Component */}
                 <SearchForm
-                  searchFields={searchFields}
-                  onSearch={handleSearchChange}
+                  control={control}
+                  watch={watchedValues}
+                  setValue={setValue}
                   hideInstitution
                   hideCareer
                   hideSubject
@@ -176,7 +133,8 @@ export default function DirectoryPage() {
               {/* Search Results */}
               {(showNotes || showDirectories) && (
                 <>
-                  {notes.length === 0 && directories.length === 0 ? (
+                  {(showNotes && notes.length === 0) ||
+                  (showDirectories && directories.length === 0) ? (
                     <Typography
                       variant="body1"
                       sx={{ mt: 4, textAlign: 'center' }}
@@ -199,6 +157,7 @@ export default function DirectoryPage() {
                       pageSize={pageSize}
                       totalPages={totalPages}
                       totalCount={totalCount}
+                      setValue={setValue}
                     />
                   )}
                 </>
