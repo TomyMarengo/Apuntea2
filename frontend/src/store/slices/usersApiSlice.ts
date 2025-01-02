@@ -28,7 +28,7 @@ interface UserArgs {
   url?: string;
 }
 
-interface UpdateUserArgs {
+export interface UpdateUserArgs {
   userId: string;
   email?: string;
   firstName?: string;

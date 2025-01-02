@@ -1,5 +1,6 @@
 // src/pages/Profile/dialogs/EditProfileDialog.tsx
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Close as CloseIcon,
   PhotoCamera,
@@ -23,14 +24,17 @@ import {
   Typography,
   InputAdornment,
 } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 import { useGetCareersQuery } from '../../../store/slices/institutionsApiSlice';
 import {
   useUpdateUserMutation,
   useUpdatePictureMutation,
+  UpdateUserArgs,
 } from '../../../store/slices/usersApiSlice';
 import { Career, User } from '../../../types';
 
@@ -49,20 +53,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
 }) => {
   const { t } = useTranslation('editProfileDialog');
 
-  const [firstName, setFirstName] = useState(user.firstName || '');
-  const [lastName, setLastName] = useState(user.lastName || '');
-  const [username, setUsername] = useState(user.username || '');
-  const [email, setEmail] = useState(user.email || '');
-  const [careerId, setCareerId] = useState(user.career?.id || '');
-  const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
-
-  // States for passwords
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-
-  // States to toggle password visibility
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
@@ -76,27 +67,153 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
     { skip: !user.institution?.id },
   );
 
+  const editProfileSchema = z
+    .object({
+      firstName: z
+        .string()
+        .regex(
+          /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
+          t('validation.firstNameInvalid'),
+        )
+        .max(20, t('validation.firstNameMax'))
+        .optional(),
+      lastName: z
+        .string()
+        .regex(
+          /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
+          t('validation.lastNameInvalid'),
+        )
+        .max(20, t('validation.lastNameMax'))
+        .optional(),
+      username: z
+        .string()
+        .regex(
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+$/,
+          t('validation.usernameInvalid'),
+        )
+        .max(30, t('validation.usernameMax'))
+        .optional(),
+      email: z.string().email(t('validation.emailInvalid')).optional(),
+      careerId: z.string().uuid(t('validation.careerIdInvalid')).optional(),
+      currentPassword: z
+        .string()
+        .regex(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
+          t('validation.currentPasswordInvalid'),
+        )
+        .min(4, t('validation.passwordMinLength'))
+        .max(50, t('validation.passwordMaxLength'))
+        .optional(),
+      newPassword: z
+        .string()
+        .regex(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
+          t('validation.newPasswordInvalid'),
+        )
+        .min(4, t('validation.passwordMinLength'))
+        .max(50, t('validation.passwordMaxLength'))
+        .optional(),
+      confirmNewPassword: z
+        .string()
+        .regex(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
+          t('validation.confirmNewPasswordInvalid'),
+        )
+        .min(4, t('validation.passwordMinLength'))
+        .max(50, t('validation.passwordMaxLength'))
+        .optional(),
+      profilePicture: z
+        .instanceof(FileList)
+        .optional()
+        .refine(
+          (files) => {
+            if (!files) return true;
+            const file = files[0];
+            if (!file) return true;
+            const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            const isValidType = validTypes.includes(file.type);
+            const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
+            return isValidType && isValidSize;
+          },
+          { message: t('validation.profilePicture') },
+        ),
+    })
+    .refine(
+      (data) => {
+        const passwordFieldsFilled =
+          data.newPassword || data.confirmNewPassword || data.currentPassword;
+
+        if (passwordFieldsFilled) {
+          // Verify that all password fields are filled
+          const allPasswordsFilled =
+            data.newPassword && data.confirmNewPassword && data.currentPassword;
+
+          // Verify that the new password is not the same as the current one
+          const passwordsAreDifferent =
+            data.newPassword !== data.currentPassword;
+
+          // Verify that the new password and confirmation are the same
+          const passwordsMatch = data.newPassword === data.confirmNewPassword;
+
+          return allPasswordsFilled && passwordsAreDifferent && passwordsMatch;
+        }
+        return true;
+      },
+      {
+        message: t('validation.passwordsDoNotMatchOrIncomplete'),
+        path: ['confirmNewPassword'], // Associate the error with the confirmNewPassword field
+      },
+    );
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors, dirtyFields },
+  } = useForm<z.infer<typeof editProfileSchema>>({
+    resolver: zodResolver(editProfileSchema),
+    defaultValues: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      email: user.email,
+      careerId: user.career?.id,
+      currentPassword: undefined,
+      newPassword: undefined,
+      confirmNewPassword: undefined,
+      profilePicture: undefined,
+    },
+  });
+
+  const watchedProfilePicture = watch('profilePicture');
+
+  // Reset form when the dialog opens
   useEffect(() => {
     if (open) {
-      setFirstName(user.firstName || '');
-      setLastName(user.lastName || '');
-      setUsername(user.username || '');
-      setEmail(user.email || '');
-      setCareerId(user.career?.id || '');
-      setProfilePicture(null);
+      reset({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        email: user.email,
+        careerId: user.career?.id,
+        currentPassword: undefined,
+        newPassword: undefined,
+        confirmNewPassword: undefined,
+        profilePicture: undefined,
+      });
       setPreview(null);
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmNewPassword('');
       setShowCurrentPassword(false);
       setShowNewPassword(false);
       setShowConfirmNewPassword(false);
     }
-  }, [open, user]);
+  }, [open, user, reset]);
 
+  // Update the image preview
   useEffect(() => {
-    if (profilePicture) {
-      const objectUrl = URL.createObjectURL(profilePicture);
+    if (watchedProfilePicture && watchedProfilePicture.length > 0) {
+      const file = watchedProfilePicture[0];
+      const objectUrl = URL.createObjectURL(file);
       setPreview(objectUrl);
 
       return () => {
@@ -105,45 +222,50 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
     } else {
       setPreview(null);
     }
-  }, [profilePicture]);
+  }, [watchedProfilePicture]);
 
-  const handleSave = async () => {
+  const onSubmit = async (data: z.infer<typeof editProfileSchema>) => {
     try {
-      if (newPassword && newPassword !== confirmNewPassword) {
-        toast.error(t('passwordsDoNotMatch'));
-        return;
+      // Create an object with only the modified fields
+      const updatedFields: UpdateUserArgs = { userId: user.id };
+
+      if (dirtyFields.firstName) updatedFields.firstName = data.firstName;
+      if (dirtyFields.lastName) updatedFields.lastName = data.lastName;
+      if (dirtyFields.username) updatedFields.username = data.username;
+      if (dirtyFields.email) updatedFields.email = data.email;
+      if (dirtyFields.careerId) updatedFields.careerId = data.careerId;
+
+      if (
+        dirtyFields.newPassword &&
+        dirtyFields.confirmNewPassword &&
+        dirtyFields.currentPassword
+      ) {
+        updatedFields.password = data.newPassword;
+        updatedFields.oldPassword = data.currentPassword;
       }
 
-      let passwordChanged = false;
-
-      await updateUser({
-        userId: user.id,
-        firstName,
-        lastName,
-        username,
-        email,
-        careerId: careerId || undefined,
-        ...(newPassword &&
-          currentPassword && {
-            password: newPassword,
-            oldPassword: currentPassword,
-          }),
-      }).unwrap();
-
-      if (newPassword) {
-        passwordChanged = true;
+      // Send only the modified fields if there are any
+      if (Object.keys(updatedFields).length > 1) {
+        // userId is always present
+        await updateUser(updatedFields).unwrap();
       }
 
-      if (profilePicture) {
+      // Handle profile picture update if it was modified
+      if (
+        dirtyFields.profilePicture &&
+        data.profilePicture &&
+        data.profilePicture.length > 0
+      ) {
         await updatePicture({
-          profilePicture,
+          profilePicture: data.profilePicture[0],
         }).unwrap();
       }
 
-      if (passwordChanged) {
-        toast.success(t('passwordChangedSuccessfully'));
+      // Show success messages
+      if (updatedFields.password) {
+        toast.success(t('messages.passwordChangedSuccessfully'));
       } else {
-        toast.success(t('profileUpdatedSuccessfully'));
+        toast.success(t('messages.profileUpdatedSuccessfully'));
       }
 
       onUpdateSuccess();
@@ -154,25 +276,17 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       if (error.data?.[0]?.message) {
         toast.error(error.data[0].message);
       } else {
-        toast.error(t('failedToUpdateProfile'));
+        toast.error(t('messages.failedToUpdateProfile'));
       }
-    }
-  };
-
-  const handleProfilePictureChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (e.target.files && e.target.files[0]) {
-      setProfilePicture(e.target.files[0]);
     }
   };
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>
-        {t('editProfile')}
+        {t('titles.editProfile')}
         <IconButton
-          aria-label={t('close')}
+          aria-label={t('buttons.close')}
           onClick={handleClose}
           sx={{
             position: 'absolute',
@@ -197,153 +311,247 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             alt={user.username}
             sx={{ width: 100, height: 100, mb: 2 }}
           />
-          <label htmlFor="profile-picture-upload">
-            <input
-              accept="image/*"
-              id="profile-picture-upload"
-              type="file"
-              hidden
-              onChange={handleProfilePictureChange}
-            />
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton
-                color="primary"
-                aria-label={t('uploadPicture')}
-                component="span"
-              >
-                <PhotoCamera />
-              </IconButton>
-              {profilePicture && (
-                <Typography variant="body2">{profilePicture.name}</Typography>
-              )}
-            </Box>
-          </label>
+          <Controller
+            name="profilePicture"
+            control={control}
+            render={({ field }) => (
+              <label htmlFor="profile-picture-upload">
+                <input
+                  accept="image/*"
+                  id="profile-picture-upload"
+                  type="file"
+                  hidden
+                  onChange={(e) => {
+                    field.onChange(e.target.files);
+                  }}
+                />
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <IconButton
+                    color="primary"
+                    aria-label={t('buttons.uploadPicture')}
+                    component="span"
+                  >
+                    <PhotoCamera />
+                  </IconButton>
+                  {field.value && field.value.length > 0 && (
+                    <Typography variant="body2">
+                      {field.value[0].name}
+                    </Typography>
+                  )}
+                </Box>
+              </label>
+            )}
+          />
+          {errors.profilePicture && (
+            <Typography color="error" variant="body2">
+              {errors.profilePicture.message}
+            </Typography>
+          )}
         </Box>
         <Box component="form" noValidate autoComplete="off">
-          <TextField
-            label={t('firstName')}
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
+          <Controller
+            name="firstName"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={t('labels.firstName')}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                error={!!errors.firstName}
+                helperText={errors.firstName?.message}
+              />
+            )}
           />
-          <TextField
-            label={t('lastName')}
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
+          <Controller
+            name="lastName"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={t('labels.lastName')}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                error={!!errors.lastName}
+                helperText={errors.lastName?.message}
+              />
+            )}
           />
-          <TextField
-            label={t('username')}
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+          <Controller
+            name="username"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={t('labels.username')}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                error={!!errors.username}
+                helperText={errors.username?.message}
+              />
+            )}
           />
-          <TextField
-            label={t('email')}
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={t('labels.email')}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            )}
           />
-          <FormControl fullWidth margin="normal" variant="outlined">
-            <InputLabel>{t('career')}</InputLabel>
-            <Select
-              label={t('career')}
-              value={careerId}
-              onChange={(e) => setCareerId(e.target.value)}
-              disabled={isLoadingCareers}
-            >
-              <MenuItem value="">
-                <em>{t('selectCareer')}</em>
-              </MenuItem>
-              {careers?.map((career: Career) => (
-                <MenuItem key={career.id} value={career.id}>
-                  {career.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Controller
+            name="careerId"
+            control={control}
+            render={({ field }) => (
+              <FormControl
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                error={!!errors.careerId}
+              >
+                <InputLabel>{t('labels.career')}</InputLabel>
+                <Select
+                  {...field}
+                  label={t('labels.career')}
+                  disabled={isLoadingCareers}
+                >
+                  <MenuItem value="">
+                    <em>{t('placeholders.selectCareer')}</em>
+                  </MenuItem>
+                  {careers?.map((career: Career) => (
+                    <MenuItem key={career.id} value={career.id}>
+                      {career.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.careerId && (
+                  <Typography color="error" variant="body2">
+                    {errors.careerId.message}
+                  </Typography>
+                )}
+              </FormControl>
+            )}
+          />
         </Box>
         <Box sx={{ mt: 4 }}>
           <Typography variant="h6" gutterBottom>
-            {t('changePassword')}
+            {t('titles.changePassword')}
           </Typography>
-          <TextField
-            label={t('currentPassword')}
-            variant="outlined"
-            type={showCurrentPassword ? 'text' : 'password'}
-            fullWidth
-            margin="normal"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                    edge="end"
-                  >
-                    {showCurrentPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
+          <Controller
+            name="currentPassword"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={t('labels.currentPassword')}
+                variant="outlined"
+                type={showCurrentPassword ? 'text' : 'password'}
+                fullWidth
+                margin="normal"
+                error={!!errors.currentPassword}
+                helperText={errors.currentPassword?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() =>
+                          setShowCurrentPassword(!showCurrentPassword)
+                        }
+                        edge="end"
+                        tabIndex={-1}
+                      >
+                        {showCurrentPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
           />
-          <TextField
-            label={t('newPassword')}
-            variant="outlined"
-            type={showNewPassword ? 'text' : 'password'}
-            fullWidth
-            margin="normal"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                    edge="end"
-                  >
-                    {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
+          <Controller
+            name="newPassword"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={t('labels.newPassword')}
+                variant="outlined"
+                type={showNewPassword ? 'text' : 'password'}
+                fullWidth
+                margin="normal"
+                error={!!errors.newPassword}
+                helperText={errors.newPassword?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        edge="end"
+                        tabIndex={-1}
+                      >
+                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
           />
-          <TextField
-            label={t('confirmNewPassword')}
-            variant="outlined"
-            type={showConfirmNewPassword ? 'text' : 'password'}
-            fullWidth
-            margin="normal"
-            value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() =>
-                      setShowConfirmNewPassword(!showConfirmNewPassword)
-                    }
-                    edge="end"
-                  >
-                    {showConfirmNewPassword ? (
-                      <VisibilityOff />
-                    ) : (
-                      <Visibility />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
+          <Controller
+            name="confirmNewPassword"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label={t('labels.confirmNewPassword')}
+                variant="outlined"
+                type={showConfirmNewPassword ? 'text' : 'password'}
+                fullWidth
+                margin="normal"
+                error={!!errors.confirmNewPassword}
+                helperText={errors.confirmNewPassword?.message}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() =>
+                          setShowConfirmNewPassword(!showConfirmNewPassword)
+                        }
+                        edge="end"
+                        tabIndex={-1}
+                      >
+                        {showConfirmNewPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
           />
+          {/* Mostrar error de refinamiento asociado a confirmNewPassword */}
+          {errors.confirmNewPassword && (
+            <Typography color="error" variant="body2">
+              {errors.confirmNewPassword.message}
+            </Typography>
+          )}
         </Box>
       </DialogContent>
       <DialogActions>
@@ -351,14 +559,16 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           onClick={handleClose}
           disabled={isUpdatingUser || isUpdatingPicture}
         >
-          {t('cancel')}
+          {t('buttons.cancel')}
         </Button>
         <Button
-          onClick={handleSave}
+          onClick={handleSubmit(onSubmit)}
           variant="contained"
           disabled={isUpdatingUser || isUpdatingPicture}
         >
-          {isUpdatingUser || isUpdatingPicture ? t('saving') : t('saveChanges')}
+          {isUpdatingUser || isUpdatingPicture
+            ? t('buttons.saving')
+            : t('buttons.saveChanges')}
         </Button>
       </DialogActions>
     </Dialog>

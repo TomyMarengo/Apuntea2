@@ -154,7 +154,10 @@ export default function RegisterPage() {
                 InputProps={{
                   endAdornment: watch('email') ? (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => handleClearField('email')}>
+                      <IconButton
+                        onClick={() => handleClearField('email')}
+                        tabIndex={-1}
+                      >
                         <CloseIcon />
                       </IconButton>
                     </InputAdornment>
@@ -179,12 +182,13 @@ export default function RegisterPage() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePassword}>
+                      <IconButton onClick={handleTogglePassword} tabIndex={-1}>
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                       {watch('password') && (
                         <IconButton
                           onClick={() => handleClearField('password')}
+                          tabIndex={-1}
                         >
                           <CloseIcon />
                         </IconButton>
@@ -211,7 +215,10 @@ export default function RegisterPage() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={handleToggleConfirmPassword}>
+                      <IconButton
+                        onClick={handleToggleConfirmPassword}
+                        tabIndex={-1}
+                      >
                         {showConfirmPassword ? (
                           <VisibilityOff />
                         ) : (
@@ -221,6 +228,7 @@ export default function RegisterPage() {
                       {watch('confirmPassword') && (
                         <IconButton
                           onClick={() => handleClearField('confirmPassword')}
+                          tabIndex={-1}
                         >
                           <CloseIcon />
                         </IconButton>
@@ -295,7 +303,7 @@ export default function RegisterPage() {
             <Typography variant="body2" align="center" sx={{ mt: 2 }}>
               {t('alreadyHaveAccount')}{' '}
               <RouterLink to="/login" style={{ color: '#1976d2' }}>
-                {t('loginPage.login')}
+                {t('login')}
               </RouterLink>
             </Typography>
           </CardContent>

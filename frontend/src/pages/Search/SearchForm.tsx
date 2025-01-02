@@ -283,7 +283,7 @@ export default function SearchForm({
           InputProps={{
             endAdornment: localWord && (
               <InputAdornment position="end">
-                <IconButton onClick={handleClearWord}>
+                <IconButton onClick={handleClearWord} tabIndex={-1}>
                   <Close />
                 </IconButton>
               </InputAdornment>

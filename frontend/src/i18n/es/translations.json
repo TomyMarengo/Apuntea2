@@ -160,26 +160,52 @@
     }
   },
   "editProfileDialog": {
-    "editProfile": "Editar Perfil",
-    "close": "Cerrar",
-    "uploadPicture": "Subir Foto",
-    "firstName": "Nombre",
-    "lastName": "Apellido",
-    "username": "Nombre de Usuario",
-    "email": "Correo Electrónico",
-    "career": "Carrera",
-    "selectCareer": "Selecciona una carrera",
-    "changePassword": "Cambiar Contraseña",
-    "currentPassword": "Contraseña Actual",
-    "newPassword": "Nueva Contraseña",
-    "confirmNewPassword": "Confirmar Nueva Contraseña",
-    "passwordsDoNotMatch": "Las contraseñas no coinciden.",
-    "passwordChangedSuccessfully": "¡Contraseña cambiada exitosamente!",
-    "profileUpdatedSuccessfully": "¡Perfil actualizado exitosamente!",
-    "failedToUpdateProfile": "Error al actualizar el perfil.",
-    "cancel": "Cancelar",
-    "saving": "Guardando...",
-    "saveChanges": "Guardar Cambios"
+    "titles": {
+      "editProfile": "Editar Perfil",
+      "changePassword": "Cambiar Contraseña"
+    },
+    "labels": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "username": "Nombre de Usuario",
+      "email": "Correo Electrónico",
+      "career": "Carrera",
+      "currentPassword": "Contraseña Actual",
+      "newPassword": "Nueva Contraseña",
+      "confirmNewPassword": "Confirmar Nueva Contraseña"
+    },
+    "buttons": {
+      "close": "Cerrar",
+      "uploadPicture": "Subir Imagen",
+      "cancel": "Cancelar",
+      "saveChanges": "Guardar Cambios",
+      "saving": "Guardando..."
+    },
+    "placeholders": {
+      "selectCareer": "Selecciona una carrera"
+    },
+    "validation": {
+      "firstNameInvalid": "El nombre solo puede contener letras y espacios.",
+      "firstNameMax": "El nombre no puede exceder los 20 caracteres.",
+      "lastNameInvalid": "El apellido solo puede contener letras y espacios.",
+      "lastNameMax": "El apellido no puede exceder los 20 caracteres.",
+      "usernameInvalid": "El nombre de usuario contiene caracteres no permitidos.",
+      "usernameMax": "El nombre de usuario no puede exceder los 30 caracteres.",
+      "careerIdInvalid": "El ID de carrera no es válido.",
+      "emailInvalid": "El correo electrónico no es válido.",
+      "currentPasswordInvalid": "La contraseña actual no cumple con los requisitos.",
+      "newPasswordInvalid": "La nueva contraseña no cumple con los requisitos.",
+      "confirmNewPasswordInvalid": "La confirmación de la nueva contraseña no cumple con los requisitos.",
+      "passwordMinLength": "La contraseña debe tener al menos 4 caracteres.",
+      "passwordMaxLength": "La contraseña no puede exceder los 50 caracteres.",
+      "passwordsDoNotMatchOrIncomplete": "Las contraseñas no coinciden o están incompletas.",
+      "profilePicture": "La imagen debe ser JPEG, PNG o JPG y no superar los 5MB."
+    },
+    "messages": {
+      "passwordChangedSuccessfully": "Contraseña cambiada exitosamente",
+      "profileUpdatedSuccessfully": "Perfil actualizado exitosamente",
+      "failedToUpdateProfile": "Error al actualizar el perfil"
+    }
   },
   "favoriteDirectoryCard": {
     "favorited": "¡Directorio agregado a favoritos!",
@@ -396,6 +422,7 @@
     "youMustSelectCareer": "Debes seleccionar una carrera",
     "passwordsDoNotMatch": "Las contraseñas no coinciden",
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "login": "Iniciar Sesión",
     "toast": {
       "success": "¡Cuenta creada exitosamente!",
       "error": "Error al crear la cuenta."

@@ -122,7 +122,10 @@ export default function LoginPage() {
                 InputProps={{
                   endAdornment: watch('email') ? (
                     <InputAdornment position="end">
-                      <IconButton onClick={() => handleClearField('email')}>
+                      <IconButton
+                        onClick={() => handleClearField('email')}
+                        tabIndex={-1}
+                      >
                         <CloseIcon />
                       </IconButton>
                     </InputAdornment>
@@ -149,12 +152,13 @@ export default function LoginPage() {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePassword}>
+                      <IconButton onClick={handleTogglePassword} tabIndex={-1}>
                         {showPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>
                       {watch('password') && (
                         <IconButton
                           onClick={() => handleClearField('password')}
+                          tabIndex={-1}
                         >
                           <CloseIcon />
                         </IconButton>

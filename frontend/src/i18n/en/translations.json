@@ -160,26 +160,52 @@
     }
   },
   "editProfileDialog": {
-    "editProfile": "Edit Profile",
-    "close": "Close",
-    "uploadPicture": "Upload Picture",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "username": "Username",
-    "email": "Email",
-    "career": "Career",
-    "selectCareer": "Select a career",
-    "changePassword": "Change Password",
-    "currentPassword": "Current Password",
-    "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password",
-    "passwordsDoNotMatch": "Passwords do not match.",
-    "passwordChangedSuccessfully": "Password changed successfully!",
-    "profileUpdatedSuccessfully": "Profile updated successfully!",
-    "failedToUpdateProfile": "Failed to update profile.",
-    "cancel": "Cancel",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes"
+    "titles": {
+      "editProfile": "Edit Profile",
+      "changePassword": "Change Password"
+    },
+    "labels": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "username": "Username",
+      "email": "Email",
+      "career": "Career",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmNewPassword": "Confirm New Password"
+    },
+    "buttons": {
+      "close": "Close",
+      "uploadPicture": "Upload Picture",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes",
+      "saving": "Saving..."
+    },
+    "placeholders": {
+      "selectCareer": "Select a career"
+    },
+    "validation": {
+      "firstNameInvalid": "First name can only contain letters and spaces.",
+      "firstNameMax": "First name cannot exceed 20 characters.",
+      "lastNameInvalid": "Last name can only contain letters and spaces.",
+      "lastNameMax": "Last name cannot exceed 20 characters.",
+      "usernameInvalid": "Username contains invalid characters.",
+      "usernameMax": "Username cannot exceed 30 characters.",
+      "careerIdInvalid": "Career ID is not valid.",
+      "emailInvalid": "Email address is not valid.",
+      "currentPasswordInvalid": "Current password does not meet the requirements.",
+      "newPasswordInvalid": "New password does not meet the requirements.",
+      "confirmNewPasswordInvalid": "Confirm password does not meet the requirements.",
+      "passwordMinLength": "Password must be at least 4 characters long.",
+      "passwordMaxLength": "Password cannot exceed 50 characters.",
+      "passwordsDoNotMatchOrIncomplete": "Passwords do not match or are incomplete.",
+      "profilePicture": "Image must be JPEG, PNG, or JPG and not exceed 5MB."
+    },
+    "messages": {
+      "passwordChangedSuccessfully": "Password changed successfully",
+      "profileUpdatedSuccessfully": "Profile updated successfully",
+      "failedToUpdateProfile": "Failed to update profile"
+    }
   },
   "favoriteDirectoryCard": {
     "favorited": "Directory added to favorites!",
@@ -397,6 +423,7 @@
     "youMustSelectCareer": "You must select a career",
     "passwordsDoNotMatch": "Passwords do not match",
     "alreadyHaveAccount": "Already have an account?",
+    "login": "Login",
     "toast": {
       "success": "Account created successfully!",
       "error": "Failed to create account."

@@ -164,6 +164,7 @@ export default function ForgotPasswordPage() {
                           <InputAdornment position="end">
                             <IconButton
                               onClick={() => handleClearField('email')}
+                              tabIndex={-1}
                             >
                               <CloseIcon />
                             </IconButton>
@@ -210,6 +211,7 @@ export default function ForgotPasswordPage() {
                           <InputAdornment position="end">
                             <IconButton
                               onClick={() => handleClearField('code')}
+                              tabIndex={-1}
                             >
                               <CloseIcon />
                             </IconButton>
@@ -244,7 +246,10 @@ export default function ForgotPasswordPage() {
                         endAdornment: (
                           <>
                             <InputAdornment position="end">
-                              <IconButton onClick={togglePasswordVisibility}>
+                              <IconButton
+                                onClick={togglePasswordVisibility}
+                                tabIndex={-1}
+                              >
                                 {showPassword ? (
                                   <VisibilityOff />
                                 ) : (
@@ -258,6 +263,7 @@ export default function ForgotPasswordPage() {
                                   onClick={() =>
                                     handleClearField('newPassword')
                                   }
+                                  tabIndex={-1}
                                 >
                                   <CloseIcon />
                                 </IconButton>
