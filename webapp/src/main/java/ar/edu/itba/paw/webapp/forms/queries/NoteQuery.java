@@ -7,11 +7,11 @@ import javax.ws.rs.QueryParam;
 
 public class NoteQuery extends SearchableQuery {
     @QueryParam("category")
-    @Pattern(regexp = "NOTE|DIRECTORY|THEORY|PRACTICE|EXAM|OTHER|ALL", message = "error.note.invalidCategory")
+    @Pattern(regexp = "THEORY|PRACTICE|EXAM|OTHER", message = "{validation.category}")
     private String category;
 
     @QueryParam("sortBy")
-    @Pattern(regexp = "score|name|date|modified")
+    @Pattern(regexp = "score|name|date|modified", message = "{error.searchable.invalidSort}")
     private String sortBy = "modified";
 
     public NoteQuery() {

@@ -164,7 +164,6 @@ public class User {
     }
 
     public boolean hasProfilePicture() {
-        // TODO: Check efficiency
         return profilePicture != null;
     }
 

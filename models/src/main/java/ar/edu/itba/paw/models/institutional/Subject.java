@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.directory.Directory;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -68,7 +69,7 @@ public class Subject {
 
     @Override
     public int hashCode() {
-        return subjectId.hashCode();
+        return Objects.hash(name, subjectId);
     }
 
     @Override

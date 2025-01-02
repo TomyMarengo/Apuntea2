@@ -7,7 +7,7 @@ import javax.ws.rs.QueryParam;
 
 //@EitherAttribute(fieldGroup1 = {"institutionId", "careerId", "subjectId"}, fieldGroup2 = {"rdir"})
 public class DirectoryQuery extends SearchableQuery {
-    @Pattern(regexp = "name|date|modified")
+    @Pattern(regexp = "name|date|modified", message = "{error.searchable.invalidSort}")
     @QueryParam("sortBy")
     private String sortBy = "modified";
 

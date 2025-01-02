@@ -7,12 +7,12 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
 
 public abstract class PageableQuery {
-    @Min(1)
+    @Min(value=1, message = "{validation.param.min}")
     @QueryParam("page")
     @DefaultValue("1")
     private int page;
 
-    @Range(min = 1, max = 64)
+    @Range(min = 1, max = 64, message = "{validation.param.range}")
     @QueryParam("pageSize")
     @DefaultValue("12")
     private int pageSize;

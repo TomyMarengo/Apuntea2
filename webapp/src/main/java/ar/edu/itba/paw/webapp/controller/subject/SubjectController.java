@@ -6,16 +6,13 @@ import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectResponseDto;
-import ar.edu.itba.paw.webapp.forms.RegexUtils;
+import ar.edu.itba.paw.webapp.controller.utils.CacheUtils;
 import ar.edu.itba.paw.webapp.forms.queries.SubjectQuery;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.Collection;
@@ -26,6 +23,7 @@ import java.util.UUID;
 @Component
 public class SubjectController {
     private final SubjectService subjectService;
+
     @Context
     private UriInfo uriInfo;
     public SubjectController(@Autowired SubjectService subjectService) {
@@ -35,7 +33,7 @@ public class SubjectController {
     @GET
     @Produces(value = { ApunteaMediaType.SUBJECT_COLLECTION })
     public Response listSubjects(@Valid @BeanParam final SubjectQuery subjectQuery){
-        List<Subject> subjects = (subjectQuery.getCareerId() != null || subjectQuery.getUserId() != null )?
+        final List<Subject> subjects = (subjectQuery.getCareerId() != null || subjectQuery.getUserId() != null )?
                 subjectService.getSubjects(subjectQuery.getCareerId(), subjectQuery.getYear(), subjectQuery.getUserId()):
                 subjectService.getSubjectsByCareerComplemented(subjectQuery.getNotInCareer());
         final Collection<SubjectResponseDto> subjectDtos = subjects.stream().map(s->SubjectResponseDto.fromSubject(s, uriInfo)).collect(java.util.stream.Collectors.toList());
@@ -45,9 +43,9 @@ public class SubjectController {
     @GET
     @Path("/{subjectId}")
     @Produces(value = { ApunteaMediaType.SUBJECT})
-    public Response getSubject(@PathParam("subjectId") final UUID subjectId){
-        Subject sub = subjectService.getSubject(subjectId).orElseThrow(SubjectNotFoundException::new);
-        return Response.ok(SubjectResponseDto.fromSubject(sub, uriInfo)).build();
+    public Response getSubject(@Context final Request request, @PathParam("subjectId") final UUID subjectId){
+        final Subject sub = subjectService.getSubject(subjectId).orElseThrow(SubjectNotFoundException::new);
+        return CacheUtils.conditionalCache(Response.ok(SubjectResponseDto.fromSubject(sub, uriInfo)), request, sub.hashCode()).build();
     }
 
     @POST

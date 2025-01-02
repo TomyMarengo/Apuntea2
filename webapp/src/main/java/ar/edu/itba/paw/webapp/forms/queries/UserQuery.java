@@ -21,7 +21,7 @@ public class UserQuery extends PageableQuery {
     private String status;
 
     @QueryParam("email")
-    @Email
+    @Email(message = "{error.email.invalid}")
     private String email;
 
     public UUID getFollowedBy() {

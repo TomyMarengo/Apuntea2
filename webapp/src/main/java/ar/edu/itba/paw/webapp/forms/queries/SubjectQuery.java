@@ -13,7 +13,7 @@ public class SubjectQuery {
     @QueryParam("careerId")
     private UUID careerId;
 
-    @Range(min = 1, max = 10)
+    @Range(min = 1, max = 10, message = "{error.param.range}")
     @QueryParam("year")
     private Integer year;
 

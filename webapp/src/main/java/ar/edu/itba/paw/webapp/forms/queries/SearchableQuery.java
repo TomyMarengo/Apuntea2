@@ -7,7 +7,7 @@ import javax.ws.rs.QueryParam;
 import java.util.UUID;
 
 @EitherAttribute(fieldGroup1 = {"institutionId", "careerId", "subjectId"}, fieldGroup2 = {"parentId", "favBy"})
-public class SearchableQuery extends PageableQuery { //TODO: Add error messages
+public class SearchableQuery extends PageableQuery {
     @DefaultValue("true")
     @QueryParam("asc")
     private boolean ascending;
