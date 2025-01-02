@@ -99,7 +99,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
     }
 
     try {
-      if (isFavorite) {
+      if (isFavorite?.success) {
         await removeFavoriteDirectory({
           directoryId: directory.id,
           userId: user.id,
@@ -262,7 +262,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
                 <Tooltip
                   title={
                     user
-                      ? isFavorite
+                      ? isFavorite?.success
                         ? t('unfavorite')
                         : t('favorite')
                       : t('loginToFavorite')
@@ -274,7 +274,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
                       size="small"
                       disabled={addingFavorite || removingFavorite || !user}
                     >
-                      {isFavorite ? (
+                      {isFavorite?.success ? (
                         <FavoriteIcon color="error" />
                       ) : (
                         <FavoriteBorderIcon />
@@ -282,7 +282,6 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
                     </IconButton>
                   </span>
                 </Tooltip>
-
                 {/* Edit Button */}
                 {isOwner && (
                   <Tooltip title={t('edit')}>

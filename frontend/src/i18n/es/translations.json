@@ -101,7 +101,8 @@
   },
   "deleteDirectoryDialog": {
     "deleteSuccess": "Directorio eliminado exitosamente.",
-    "deleteError": "Error al eliminar el directorio.",
+    "deleteError": "Error al eliminar el directorio{{errorMessage}}",
+    "reasonMaxLength": "La razón no puede exceder los 255 caracteres.",
     "deleteDirectoryTitle": "Eliminar Directorio",
     "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este directorio?",
     "reason": "Razón para la eliminación",
