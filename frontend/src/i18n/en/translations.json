@@ -240,13 +240,15 @@
   "followersModal": {
     "errorLoadingFollowers": "Error loading followers.",
     "followers": "Followers",
-    "noFollowers": "No followers"
+    "noFollowers": "No followers",
+    "noMoreFollowers": "No more followers"
   },
   "followingModal": {
     "errorLoadingFollowings": "Error loading followings.",
-    "following": "Following",
+    "followings": "Following",
     "refresh": "Refresh",
-    "noFollowing": "Not following anyone"
+    "noFollowings": "Not following anyone",
+    "noMoreFollowings": "No more following"
   },
   "forgotPasswordPage": {
     "titlePage": "Forgot Password | Apuntea",

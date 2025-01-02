@@ -8,13 +8,14 @@ import {
   CircularProgress,
   Box,
 } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { toast } from 'react-toastify';
 
 import FollowItem from './FollowItem';
 import { useGetFollowersQuery } from '../../store/slices/usersApiSlice';
+import { User } from '../../types';
 
 interface FollowersModalProps {
   open: boolean;
@@ -31,9 +32,13 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
 }) => {
   const { t } = useTranslation('followersModal');
   const [page, setPage] = useState(1);
+  const [followers, setFollowers] = useState<User[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const pageSize = 10;
 
-  const { data, error, isLoading } = useGetFollowersQuery(
+  // Fetch followers based on the current page
+  const { data, error, isLoading, isFetching } = useGetFollowersQuery(
     { url: followingUrl, page, pageSize },
     {
       skip: !open,
@@ -41,36 +46,61 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
     },
   );
 
-  const fetchMoreData = () => {
-    if (data && page < data.totalPages) {
-      setPage((prev) => prev + 1);
-    }
-  };
-
   // Handle errors
-  React.useEffect(() => {
+  useEffect(() => {
     if (error) {
       toast.error(t('errorLoadingFollowers'));
     }
   }, [error, t]);
 
-  // Reset page when modal is reopened
+  // Reset state when the modal opens
   useEffect(() => {
     if (open) {
       setPage(1);
+      setFollowers([]);
+      setHasMore(true);
+      setIsFetchingMore(false);
     }
   }, [open]);
+
+  // Accumulate followers when new data is received
+  useEffect(() => {
+    if (data) {
+      // Filter duplicate followers
+      const newFollowers = data.users.filter(
+        (newFollower: User) => !followers.some((f) => f.id === newFollower.id),
+      );
+
+      setFollowers((prev) => [...prev, ...newFollowers]);
+
+      // Determine if there are more pages to load
+      if (page >= data.totalPages) {
+        setHasMore(false);
+      }
+
+      // Finish loading
+      setIsFetchingMore(false);
+    }
+  }, [data, page, followers]);
+
+  // Function to load more data
+  const fetchMoreData = useCallback(() => {
+    if (!isFetchingMore && hasMore && !isLoading && !isFetching) {
+      setIsFetchingMore(true);
+      setPage((prev) => prev + 1);
+    }
+  }, [isFetchingMore, hasMore, isLoading, isFetching]);
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
       <DialogTitle>
-        {t('followers')}: {data?.totalCount}
+        {t('followers')}: {data?.totalCount || 0}
       </DialogTitle>
       <DialogContent
         id="scrollableDiv"
         style={{ height: '60vh', overflow: 'auto', padding: 0 }}
       >
-        {isLoading ? (
+        {isLoading && page === 1 ? (
           <Box
             display="flex"
             justifyContent="center"
@@ -81,9 +111,9 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
           </Box>
         ) : (
           <InfiniteScroll
-            dataLength={data?.users.length || 0}
+            dataLength={followers.length}
             next={fetchMoreData}
-            hasMore={data ? page < data.totalPages : false}
+            hasMore={hasMore}
             loader={
               <Box
                 display="flex"
@@ -91,13 +121,25 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
                 alignItems="center"
                 padding={2}
               >
-                <CircularProgress />
+                <CircularProgress size={24} />
               </Box>
             }
             scrollableTarget="scrollableDiv"
+            endMessage={
+              followers.length > 0 && (
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  padding={2}
+                >
+                  {t('noMoreFollowers')}
+                </Box>
+              )
+            }
           >
             <List>
-              {data?.users.map((follower) => (
+              {followers.map((follower) => (
                 <FollowItem
                   key={follower.id}
                   followId={follower.id}
@@ -107,7 +149,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
             </List>
           </InfiniteScroll>
         )}
-        {data && data.users.length === 0 && (
+        {!isLoading && followers.length === 0 && !error && (
           <Box
             display="flex"
             justifyContent="center"

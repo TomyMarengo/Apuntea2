@@ -336,14 +336,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       GetUsersArgs
     >({
-      query: ({ url, page = 1, pageSize = 10 }) => {
-        if (url) return url;
-
+      query: ({ url, page, pageSize }) => {
         const params = new URLSearchParams();
         params.append('page', String(page));
         params.append('pageSize', String(pageSize));
 
-        return `/users?${params.toString()}`;
+        return url + `&${params.toString()}`;
       },
       transformResponse: (response: any, meta: any) => {
         const totalCount = Number(
@@ -371,14 +369,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       },
       GetUsersArgs
     >({
-      query: ({ url, page = 1, pageSize = 10 }) => {
-        if (url) return url;
-
+      query: ({ url, page, pageSize }) => {
         const params = new URLSearchParams();
         params.append('page', String(page));
         params.append('pageSize', String(pageSize));
 
-        return `/users?${params.toString()}`;
+        return url + `&${params.toString()}`;
       },
       transformResponse: (response: any, meta: any) => {
         const totalCount = Number(

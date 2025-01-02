@@ -240,13 +240,15 @@
   "followersModal": {
     "errorLoadingFollowers": "Error al cargar seguidores.",
     "followers": "Seguidores",
-    "noFollowers": "No tiene seguidores"
+    "noFollowers": "No tiene seguidores",
+    "noMoreFollowers": "No hay más seguidores."
   },
-  "followinModal": {
+  "followingModal": {
     "errorLoadingFollowings": "Error al cargar seguidos.",
-    "following": "Siguiendo",
+    "followings": "Siguiendo",
     "refresh": "Actualizar",
-    "noFollowing": "No sigue a nadie"
+    "noFollowings": "No sigue a nadie",
+    "noMoreFollowings": "No hay más seguidos."
   },
   "forgotPasswordPage": {
     "titlePage": "Recuperar Contraseña | Apuntea",
