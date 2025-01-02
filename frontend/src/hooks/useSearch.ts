@@ -1,107 +1,178 @@
 // src/hooks/useSearch.ts
 
-import { useSearchParams } from 'react-router-dom';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useEffect, useMemo, useRef } from 'react';
+import { useForm, UseFormSetValue } from 'react-hook-form';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 
+import useDebounce from './useDebounce';
+import { searchSchema, SearchFormValues } from '../pages/Search/searchSchema';
 import {
   useSearchNotesQuery,
   useSearchDirectoriesQuery,
 } from '../store/slices/searchApiSlice';
+import { Note, Directory } from '../types';
 
 interface UseSearchReturn {
-  searchParams: URLSearchParams;
-  isLoadingData: boolean;
-  notes: any[];
-  directories: any[];
-  showNotes: boolean;
-  showDirectories: boolean;
+  control: any;
+  watchedValues: SearchFormValues;
+  isLoading: boolean;
+  setValue: UseFormSetValue<SearchFormValues>;
+  notes: Note[];
+  directories: Directory[];
+  totalCount: number;
+  totalPages: number;
   currentPage: number;
   pageSize: number;
-  totalPages: number;
-  totalCount: number;
 }
 
-export default function useSearch(): UseSearchReturn {
+const useSearch = (): UseSearchReturn => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const isFirstRender = useRef(true);
 
-  // Extract search parameters
-  const pageParam = searchParams.get('page') || '1';
-  const pageSizeParam = searchParams.get('pageSize') || '10';
-  const ascParam = searchParams.get('asc') || 'true';
-  const sortByParam = searchParams.get('sortBy') || 'modified';
-  const categoryParam =
-    (searchParams.get('category') as 'note' | 'directory') || 'note';
-  const wordParam = searchParams.get('word');
-  const institutionIdParam = searchParams.get('institutionId');
-  const careerIdParam = searchParams.get('careerId');
-  const subjectIdParam = searchParams.get('subjectId');
-  const parentIdParam = searchParams.get('parentId');
-  const userId = searchParams.get('userId');
-
-  const currentPage = Number(pageParam);
-  const pageSize = Number(pageSizeParam);
-
-  const searchArgs: Record<string, any> = {
-    page: currentPage,
-    pageSize,
-    asc: ascParam,
-    sortBy: sortByParam,
-    category: categoryParam,
+  const defaultValues: SearchFormValues = {
+    institutionId: searchParams.get('institutionId') || '',
+    careerId: searchParams.get('careerId') || '',
+    subjectId: searchParams.get('subjectId') || '',
+    word: searchParams.get('word') || '',
+    category: searchParams.get('category') || 'note',
+    sortBy: searchParams.get('sortBy') || 'modified',
+    asc: searchParams.get('asc') || 'true',
+    page: searchParams.get('page') || '1',
+    pageSize: searchParams.get('pageSize') || '10',
   };
 
-  if (institutionIdParam) searchArgs.institutionId = institutionIdParam;
-  if (careerIdParam) searchArgs.careerId = careerIdParam;
-  if (subjectIdParam) searchArgs.subjectId = subjectIdParam;
-  if (wordParam) searchArgs.word = wordParam;
-  if (parentIdParam) searchArgs.parentId = parentIdParam;
-  if (userId) searchArgs.userId = userId;
+  const { control, watch, setValue, reset } = useForm<SearchFormValues>({
+    resolver: zodResolver(searchSchema),
+    defaultValues,
+  });
 
-  // Fetch notes or directories based on category
+  useEffect(() => {
+    reset(defaultValues);
+  }, [location.search]);
+
+  const watchedValues = watch();
+  const debouncedWord = useDebounce(watchedValues.word, 500);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const params = new URLSearchParams();
+
+    if (watchedValues.institutionId)
+      params.set('institutionId', watchedValues.institutionId);
+    if (watchedValues.careerId) params.set('careerId', watchedValues.careerId);
+    if (watchedValues.subjectId)
+      params.set('subjectId', watchedValues.subjectId);
+    if (watchedValues.word) params.set('word', watchedValues.word);
+    if (watchedValues.category) params.set('category', watchedValues.category);
+    if (watchedValues.sortBy) params.set('sortBy', watchedValues.sortBy);
+    if (watchedValues.asc) params.set('asc', watchedValues.asc);
+    if (watchedValues.page) params.set('page', watchedValues.page);
+    if (watchedValues.pageSize) params.set('pageSize', watchedValues.pageSize);
+
+    const newSearch = params.toString();
+    const currentSearch = location.search.startsWith('?')
+      ? location.search.substring(1)
+      : location.search;
+
+    if (newSearch !== currentSearch) {
+      navigate({ search: newSearch });
+    }
+  }, [
+    watchedValues.institutionId,
+    watchedValues.careerId,
+    watchedValues.subjectId,
+    watchedValues.word,
+    watchedValues.category,
+    watchedValues.sortBy,
+    watchedValues.asc,
+    watchedValues.page,
+    watchedValues.pageSize,
+    navigate,
+    location.search,
+  ]);
+
+  // Preparar argumentos para la búsqueda
+  const searchArgs = useMemo(() => {
+    const args: Record<string, any> = {
+      page: watchedValues.page,
+      pageSize: watchedValues.pageSize,
+      asc: watchedValues.asc,
+      sortBy: watchedValues.sortBy,
+      category: watchedValues.category,
+    };
+
+    if (watchedValues.institutionId)
+      args.institutionId = watchedValues.institutionId;
+    if (watchedValues.careerId) args.careerId = watchedValues.careerId;
+    if (watchedValues.subjectId) args.subjectId = watchedValues.subjectId;
+    if (debouncedWord) args.word = debouncedWord;
+
+    return args;
+  }, [
+    watchedValues.page,
+    watchedValues.pageSize,
+    watchedValues.asc,
+    watchedValues.sortBy,
+    watchedValues.category,
+    watchedValues.institutionId,
+    watchedValues.careerId,
+    watchedValues.subjectId,
+    debouncedWord,
+  ]);
+
+  // Consultas condicionales
   const { data: dataNotes, isLoading: isLoadingNotes } = useSearchNotesQuery(
     searchArgs,
-    { skip: categoryParam === 'directory' },
+    { skip: watchedValues.category === 'directory' },
   );
+
   const { data: dataDirs, isLoading: isLoadingDirs } =
     useSearchDirectoriesQuery(searchArgs, {
-      skip: categoryParam !== 'directory',
+      skip: watchedValues.category !== 'directory',
     });
 
-  const {
-    totalCount: totalCountNotes,
-    totalPages: totalPagesNotes,
-    notes,
-  } = dataNotes || { totalCount: 0, totalPages: 0, notes: [] };
-  const {
-    totalCount: totalCountDirectories,
-    totalPages: totalPagesDirectories,
-    directories,
-  } = dataDirs || { totalCount: 0, totalPages: 0, directories: [] };
+  const isLoading = isLoadingNotes || isLoadingDirs;
 
-  const showNotes = categoryParam !== 'directory';
-  const showDirectories = categoryParam === 'directory';
+  const notesData = dataNotes || { totalCount: 0, totalPages: 0, notes: [] };
+  const dirsData = dataDirs || {
+    totalCount: 0,
+    totalPages: 0,
+    directories: [],
+  };
 
-  const isLoadingData = isLoadingNotes || isLoadingDirs;
-
-  const safeCountNotes = Number(totalCountNotes || 0);
-  const safePagesNotes = Number(totalPagesNotes || 0);
-  const safeCountDirs = Number(totalCountDirectories || 0);
-  const safePagesDirs = Number(totalPagesDirectories || 0);
-
-  // Calculate totalPages based on category
-  const totalPages =
-    categoryParam === 'directory' ? safePagesDirs : safePagesNotes;
   const totalCount =
-    categoryParam === 'directory' ? safeCountDirs : safeCountNotes;
+    (watchedValues.category === 'directory'
+      ? dirsData.totalCount
+      : notesData.totalCount) || 0;
+  const totalPages =
+    (watchedValues.category === 'directory'
+      ? dirsData.totalPages
+      : notesData.totalPages) || 0;
+  const currentPage = Number(watchedValues.page);
+  const pageSize = Number(watchedValues.pageSize);
+
+  const notes = notesData.notes || [];
+  const directories = dirsData.directories || [];
 
   return {
-    searchParams,
-    isLoadingData,
-    notes: notes || [],
-    directories: directories || [],
-    showNotes,
-    showDirectories,
+    control,
+    watchedValues,
+    isLoading,
+    setValue,
+    notes,
+    directories,
+    totalCount,
+    totalPages,
     currentPage,
     pageSize,
-    totalPages,
-    totalCount,
   };
-}
+};
+
+export default useSearch;

@@ -12,10 +12,10 @@ import {
   InputAdornment,
   Button,
 } from '@mui/material';
-import { SelectChangeEvent } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { Controller, Control, UseFormSetValue } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { SearchFormValues } from './searchSchema';
 import {
   useGetInstitutionsQuery,
   useGetCareersQuery,
@@ -23,184 +23,83 @@ import {
 } from '../../store/slices/institutionsApiSlice';
 
 interface SearchFormProps {
-  searchFields: {
-    institutionId: string;
-    careerId: string;
-    subjectId: string;
-    word: string;
-    category: 'note' | 'directory';
-    sortBy: string;
-    asc: string;
-    parentId?: string;
-  };
-  onSearch: (params: Record<string, string>) => void;
+  control: Control<SearchFormValues>;
+  watch: SearchFormValues;
+  setValue: UseFormSetValue<SearchFormValues>;
   hideInstitution?: boolean;
   hideCareer?: boolean;
   hideSubject?: boolean;
 }
 
 export default function SearchForm({
-  searchFields,
-  onSearch,
+  control,
+  watch,
+  setValue,
   hideInstitution = false,
   hideCareer = false,
   hideSubject = false,
 }: SearchFormProps) {
   const { t } = useTranslation('searchForm');
 
-  const [localInstitutionId, setLocalInstitutionId] = useState<string>(
-    searchFields.institutionId,
-  );
-  const [localCareerId, setLocalCareerId] = useState<string>(
-    searchFields.careerId,
-  );
-  const [localSubjectId, setLocalSubjectId] = useState<string>(
-    searchFields.subjectId,
-  );
-  const [localWord, setLocalWord] = useState<string>(searchFields.word);
+  const { institutionId, careerId, word, category, sortBy, asc } = watch;
 
-  useEffect(() => {
-    setLocalInstitutionId(searchFields.institutionId);
-    setLocalCareerId(searchFields.careerId);
-    setLocalSubjectId(searchFields.subjectId);
-    setLocalWord(searchFields.word);
-  }, [
-    searchFields.institutionId,
-    searchFields.careerId,
-    searchFields.subjectId,
-    searchFields.word,
-  ]);
+  const onCategoryChange = (category: 'note' | 'directory') => {
+    setValue('category', category);
+    if (category === 'directory' && sortBy === 'score') {
+      setValue('sortBy', 'modified');
+    }
+    setValue('page', '1');
+  };
 
-  const { category, sortBy, asc } = searchFields;
+  const onToggleAsc = () => {
+    setValue('asc', asc === 'true' ? 'false' : 'true');
+    setValue('page', '1');
+  };
 
+  const onClearWord = () => {
+    setValue('word', '');
+    setValue('page', '1');
+  };
+
+  const onInstitutionChange = (institutionId: string) => {
+    setValue('institutionId', institutionId);
+    setValue('careerId', '');
+    setValue('subjectId', '');
+    setValue('page', '1');
+  };
+
+  const onCareerChange = (careerId: string) => {
+    setValue('careerId', careerId);
+    setValue('subjectId', '');
+    setValue('page', '1');
+  };
+
+  // Fetch data based on form values
   const { data: institutions, isFetching: isFetchingInstitutions } =
-    useGetInstitutionsQuery(undefined);
+    useGetInstitutionsQuery();
 
   const { data: careers, isFetching: isFetchingCareers } = useGetCareersQuery(
-    { institutionId: localInstitutionId },
-    { skip: !localInstitutionId },
+    { institutionId },
+    { skip: !institutionId || hideInstitution },
   );
 
   const { data: subjects, isFetching: isFetchingSubjects } =
     useGetSubjectsByCareerQuery(
-      { careerId: localCareerId },
-      { skip: !localCareerId },
+      { careerId },
+      { skip: !careerId || hideCareer },
     );
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      onSearch({
-        institutionId: localInstitutionId,
-        careerId: localCareerId,
-        subjectId: localSubjectId,
-        word: localWord,
-        category,
-        sortBy,
-        asc,
-      });
-    }, 350);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [
-    localWord,
-    localInstitutionId,
-    localCareerId,
-    localSubjectId,
-    category,
-    sortBy,
-    asc,
-    onSearch,
-  ]);
-
-  useEffect(() => {
-    if (category === 'directory' && sortBy === 'score') {
-      onSearch({ sortBy: 'modified' });
-    }
-  }, [category, sortBy, onSearch]);
-
-  const handleInstitutionChange = (e: SelectChangeEvent<string>) => {
-    const newInstitutionId = e.target.value;
-    setLocalInstitutionId(newInstitutionId);
-    setLocalCareerId('');
-    setLocalSubjectId('');
-
-    onSearch({
-      institutionId: newInstitutionId,
-      careerId: '',
-      subjectId: '',
-      word: localWord,
-      category,
-      sortBy,
-      asc,
-    });
-  };
-
-  const handleCareerChange = (e: SelectChangeEvent<string>) => {
-    const newCareerId = e.target.value;
-    setLocalCareerId(newCareerId);
-    setLocalSubjectId('');
-
-    onSearch({
-      institutionId: localInstitutionId,
-      careerId: newCareerId,
-      subjectId: '',
-      word: localWord,
-      category,
-      sortBy,
-      asc,
-    });
-  };
-
-  const handleSubjectChange = (e: SelectChangeEvent<string>) => {
-    const newSubjectId = e.target.value;
-    setLocalSubjectId(newSubjectId);
-
-    onSearch({
-      institutionId: localInstitutionId,
-      careerId: localCareerId,
-      subjectId: newSubjectId,
-      word: localWord,
-      category,
-      sortBy,
-      asc,
-    });
-  };
-
-  const handleCategoryChange = (newCategory: 'note' | 'directory') => {
-    onSearch({ category: newCategory });
-  };
-
-  const handleSortByChange = (e: SelectChangeEvent<string>) => {
-    onSearch({ sortBy: e.target.value as string });
-  };
-
-  const toggleAsc = () => {
-    onSearch({ asc: asc === 'true' ? 'false' : 'true' });
-  };
-
-  const handleClearWord = () => {
-    setLocalWord('');
-    onSearch({
-      institutionId: localInstitutionId,
-      careerId: localCareerId,
-      subjectId: localSubjectId,
-      word: '',
-      category,
-      sortBy,
-      asc,
-    });
-  };
 
   return (
     <Box
+      component="form"
       sx={{
         display: 'flex',
         flexDirection: 'column',
         gap: 2,
         mb: 3,
       }}
+      noValidate
+      autoComplete="off"
     >
       {/* ROW 1: Institution → Career → Subject → Word */}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
@@ -208,20 +107,26 @@ export default function SearchForm({
         {!hideInstitution && (
           <FormControl sx={{ minWidth: 180 }} disabled={isFetchingInstitutions}>
             <InputLabel>{t('institution')}</InputLabel>
-            <Select
-              label={t('institution')}
-              value={localInstitutionId}
-              onChange={handleInstitutionChange}
-            >
-              <MenuItem value="">
-                <em>{t('noInstitution')}</em>
-              </MenuItem>
-              {institutions?.map((inst: any) => (
-                <MenuItem key={inst.id} value={String(inst.id)}>
-                  {inst.name}
-                </MenuItem>
-              ))}
-            </Select>
+            <Controller
+              name="institutionId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  label={t('institution')}
+                  onChange={(e) => onInstitutionChange(e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>{t('noInstitution')}</em>
+                  </MenuItem>
+                  {institutions?.map((inst: any) => (
+                    <MenuItem key={inst.id} value={String(inst.id)}>
+                      {inst.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
           </FormControl>
         )}
 
@@ -229,23 +134,29 @@ export default function SearchForm({
         {!hideCareer && (
           <FormControl
             sx={{ minWidth: 180 }}
-            disabled={!localInstitutionId || isFetchingCareers}
+            disabled={!institutionId || isFetchingCareers}
           >
             <InputLabel>{t('career')}</InputLabel>
-            <Select
-              label={t('career')}
-              value={localCareerId}
-              onChange={handleCareerChange}
-            >
-              <MenuItem value="">
-                <em>{t('noCareer')}</em>
-              </MenuItem>
-              {careers?.map((car: any) => (
-                <MenuItem key={car.id} value={String(car.id)}>
-                  {car.name}
-                </MenuItem>
-              ))}
-            </Select>
+            <Controller
+              name="careerId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  label={t('career')}
+                  onChange={(e) => onCareerChange(e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>{t('noCareer')}</em>
+                  </MenuItem>
+                  {careers?.map((car: any) => (
+                    <MenuItem key={car.id} value={String(car.id)}>
+                      {car.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
           </FormControl>
         )}
 
@@ -253,42 +164,49 @@ export default function SearchForm({
         {!hideSubject && (
           <FormControl
             sx={{ minWidth: 180 }}
-            disabled={!localCareerId || isFetchingSubjects}
+            disabled={!careerId || isFetchingSubjects}
           >
             <InputLabel>{t('subject')}</InputLabel>
-            <Select
-              label={t('subject')}
-              value={localSubjectId}
-              onChange={handleSubjectChange}
-            >
-              <MenuItem value="">
-                <em>{t('noSubject')}</em>
-              </MenuItem>
-              {subjects?.map((sub: any) => (
-                <MenuItem key={sub.id} value={String(sub.id)}>
-                  {sub.name}
-                </MenuItem>
-              ))}
-            </Select>
+            <Controller
+              name="subjectId"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} label={t('subject')}>
+                  <MenuItem value="">
+                    <em>{t('noSubject')}</em>
+                  </MenuItem>
+                  {subjects?.map((sub: any) => (
+                    <MenuItem key={sub.id} value={String(sub.id)}>
+                      {sub.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
           </FormControl>
         )}
 
         {/* Word Input */}
-        <TextField
-          label={t('word')}
-          variant="outlined"
-          value={localWord}
-          onChange={(e) => setLocalWord(e.target.value)}
-          sx={{ flex: 1, minWidth: 220 }}
-          InputProps={{
-            endAdornment: localWord && (
-              <InputAdornment position="end">
-                <IconButton onClick={handleClearWord} tabIndex={-1}>
-                  <Close />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
+        <Controller
+          name="word"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label={t('word')}
+              variant="outlined"
+              sx={{ flex: 1, minWidth: 220 }}
+              InputProps={{
+                endAdornment: word && (
+                  <InputAdornment position="end">
+                    <IconButton onClick={onClearWord} tabIndex={-1}>
+                      <Close />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
         />
       </Box>
 
@@ -300,13 +218,13 @@ export default function SearchForm({
         <Box sx={{ display: 'flex' }}>
           <Button
             variant={category === 'directory' ? 'contained' : 'outlined'}
-            onClick={() => handleCategoryChange('directory')}
+            onClick={() => onCategoryChange('directory')}
           >
             {t('folders')}
           </Button>
           <Button
             variant={category === 'note' ? 'contained' : 'outlined'}
-            onClick={() => handleCategoryChange('note')}
+            onClick={() => onCategoryChange('note')}
             sx={{ ml: 1 }}
           >
             {t('notes')}
@@ -316,21 +234,22 @@ export default function SearchForm({
         {/* Select Sort By */}
         <FormControl sx={{ minWidth: 150 }}>
           <InputLabel>{t('sortBy')}</InputLabel>
-          <Select
-            label={t('sortBy')}
-            value={sortBy}
-            onChange={handleSortByChange}
-          >
-            <MenuItem value="name">{t('name')}</MenuItem>
-            <MenuItem value="modified">{t('lastModifiedAt')}</MenuItem>
-            {category === 'note' && (
-              <MenuItem value="score">{t('score')}</MenuItem>
+          <Controller
+            name="sortBy"
+            control={control}
+            render={({ field }) => (
+              <Select {...field} label={t('sortBy')}>
+                <MenuItem value="name">{t('name')}</MenuItem>
+                <MenuItem value="modified">{t('lastModifiedAt')}</MenuItem>
+                {category === 'note' && (
+                  <MenuItem value="score">{t('score')}</MenuItem>
+                )}
+              </Select>
             )}
-            <MenuItem value="date">{t('createdAt')}</MenuItem>
-          </Select>
+          />
         </FormControl>
 
-        <Button variant="outlined" onClick={toggleAsc}>
+        <Button variant="outlined" onClick={onToggleAsc}>
           {asc === 'true' ? t('asc') : t('desc')}
         </Button>
       </Box>

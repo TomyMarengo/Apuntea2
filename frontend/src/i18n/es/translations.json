@@ -578,6 +578,7 @@
     }
   },
   "searchForm": {
+    "search": "Buscar",
     "institution": "Institución",
     "career": "Carrera",
     "subject": "Materia",

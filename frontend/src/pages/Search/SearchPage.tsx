@@ -1,58 +1,165 @@
 // src/pages/Search/SearchPage.tsx
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Box, CircularProgress, Typography } from '@mui/material';
+import { useMemo, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 
 import SearchForm from './SearchForm';
 import SearchResultsTable from './SearchResultsTable';
+import { searchSchema, SearchFormValues } from './searchSchema';
 import PaginationBar from '../../components/PaginationBar';
-import useSearch from '../../hooks/useSearch';
+import useDebounce from '../../hooks/useDebounce';
+import {
+  useSearchNotesQuery,
+  useSearchDirectoriesQuery,
+} from '../../store/slices/searchApiSlice';
+import { AirlineSeatIndividualSuiteOutlined } from '@mui/icons-material';
 
 export default function SearchPage() {
   const { t } = useTranslation('searchPage');
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const isFirstRender = useRef(true);
 
-  const {
-    searchParams,
-    notes,
-    directories,
-    isLoadingData,
-    showNotes,
-    showDirectories,
-    currentPage,
-    pageSize,
-    totalPages,
-    totalCount,
-  } = useSearch();
-
-  const searchFields = {
+  // Extract search parameters with defaults
+  const defaultValues: SearchFormValues = {
     institutionId: searchParams.get('institutionId') || '',
     careerId: searchParams.get('careerId') || '',
     subjectId: searchParams.get('subjectId') || '',
     word: searchParams.get('word') || '',
-    category: (searchParams.get('category') as 'note' | 'directory') || 'note',
+    category: searchParams.get('category') || 'note',
     sortBy: searchParams.get('sortBy') || 'modified',
     asc: searchParams.get('asc') || 'true',
-    parentId: searchParams.get('parentId') || '',
+    page: searchParams.get('page') || '1',
+    pageSize: searchParams.get('pageSize') || '10',
   };
 
-  const handleSearchChange = (params: Record<string, string>) => {
-    const newParams = new URLSearchParams(searchParams);
+  const { control, watch, setValue, reset } = useForm<SearchFormValues>({
+    resolver: zodResolver(searchSchema),
+    defaultValues,
+  });
 
-    Object.entries(params).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        newParams.set(key, value);
-      } else {
-        newParams.delete(key);
-      }
+  useEffect(() => {
+    reset(defaultValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
+
+  const watchedValues = watch();
+
+  const debouncedWord = useDebounce(watchedValues.word, 500);
+
+  // Handle form value changes and update URL
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    const params = new URLSearchParams();
+
+    if (watchedValues.institutionId)
+      params.set('institutionId', watchedValues.institutionId);
+    if (watchedValues.careerId) params.set('careerId', watchedValues.careerId);
+    if (watchedValues.subjectId)
+      params.set('subjectId', watchedValues.subjectId);
+    if (watchedValues.word) params.set('word', watchedValues.word);
+    if (watchedValues.category) params.set('category', watchedValues.category);
+    if (watchedValues.sortBy) params.set('sortBy', watchedValues.sortBy);
+    if (watchedValues.asc) params.set('asc', watchedValues.asc);
+    if (watchedValues.page) params.set('page', watchedValues.page);
+    if (watchedValues.pageSize) params.set('pageSize', watchedValues.pageSize);
+
+    const newSearch = params.toString();
+    const currentSearch = location.search.startsWith('?')
+      ? location.search.substring(1)
+      : location.search;
+
+    // Comparar los parámetros actuales con los nuevos
+    if (newSearch !== currentSearch) {
+      navigate({ search: newSearch });
+    }
+  }, [
+    watchedValues.institutionId,
+    watchedValues.careerId,
+    watchedValues.subjectId,
+    watchedValues.word,
+    watchedValues.category,
+    watchedValues.sortBy,
+    watchedValues.asc,
+    watchedValues.page,
+    watchedValues.pageSize,
+    navigate,
+  ]);
+
+  // Fetch notes or directories based on category
+  const searchArgs = useMemo(() => {
+    const args: Record<string, any> = {
+      page: watchedValues.page,
+      pageSize: watchedValues.pageSize,
+      asc: watchedValues.asc,
+      sortBy: watchedValues.sortBy,
+      category: watchedValues.category,
+    };
+
+    if (watchedValues.institutionId)
+      args.institutionId = watchedValues.institutionId;
+    if (watchedValues.careerId) args.careerId = watchedValues.careerId;
+    if (watchedValues.subjectId) args.subjectId = watchedValues.subjectId;
+    if (debouncedWord) args.word = debouncedWord;
+
+    return args;
+  }, [
+    watchedValues.page,
+    watchedValues.pageSize,
+    watchedValues.asc,
+    watchedValues.sortBy,
+    watchedValues.category,
+    watchedValues.institutionId,
+    watchedValues.careerId,
+    watchedValues.subjectId,
+    debouncedWord,
+  ]);
+
+  const { data: dataNotes, isLoading: isLoadingNotes } = useSearchNotesQuery(
+    searchArgs,
+    { skip: watchedValues.category === 'directory' },
+  );
+
+  const { data: dataDirs, isLoading: isLoadingDirs } =
+    useSearchDirectoriesQuery(searchArgs, {
+      skip: watchedValues.category !== 'directory',
     });
 
-    newParams.set('page', '1');
+  const isLoadingData = isLoadingNotes || isLoadingDirs;
 
-    navigate({ search: newParams.toString() }, { replace: true });
+  const notesData = dataNotes || { totalCount: 0, totalPages: 0, notes: [] };
+  const dirsData = dataDirs || {
+    totalCount: 0,
+    totalPages: 0,
+    directories: [],
   };
+
+  const totalCount =
+    (watchedValues.category === 'directory'
+      ? dirsData.totalCount
+      : notesData.totalCount) || 0;
+  const totalPages =
+    (watchedValues.category === 'directory'
+      ? dirsData.totalPages
+      : notesData.totalPages) || 0;
+  const currentPage = Number(watchedValues.page);
+  const pageSize = Number(watchedValues.pageSize);
+
+  const notes = notesData.notes || [];
+  const directories = dirsData.directories || [];
+
+  const showNotes = watchedValues.category !== 'directory';
+  const showDirectories = watchedValues.category === 'directory';
 
   return (
     <>
@@ -65,7 +172,12 @@ export default function SearchPage() {
           {t('title')}
         </Typography>
 
-        <SearchForm searchFields={searchFields} onSearch={handleSearchChange} />
+        <SearchForm
+          control={control}
+          watch={watchedValues}
+          setValue={setValue}
+        />
+
         {isLoadingData ? (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
@@ -93,6 +205,7 @@ export default function SearchPage() {
                 pageSize={pageSize}
                 totalPages={totalPages}
                 totalCount={totalCount}
+                setValue={setValue}
               />
             )}
           </>
