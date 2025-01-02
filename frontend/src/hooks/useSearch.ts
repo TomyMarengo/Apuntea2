@@ -26,7 +26,7 @@ interface UseSearchReturn {
   pageSize: number;
 }
 
-const useSearch = (parentId: string): UseSearchReturn => {
+const useSearch = (parentId?: string): UseSearchReturn => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const location = useLocation();
