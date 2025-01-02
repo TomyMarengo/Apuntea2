@@ -73,9 +73,12 @@
     "hidden": "Oculto",
     "missingFields": "Por favor, completa todos los campos requeridos.",
     "invalidName": "Formato de nombre inválido.",
+    "notEmpty": "El nombre no puede estar vacío.",
+    "minLength": "El nombre del directorio debe tener al menos 2 caracteres.",
+    "maxLength": "El nombre del directorio no puede exceder los 50 caracteres.",
     "invalidColor": "Por favor, selecciona un color de icono válido.",
     "directoryCreated": "¡Directorio creado exitosamente!",
-    "directoryCreationFailed": "Error al crear el directorio."
+    "directoryCreationFailed": "Error al crear el directorio{{errorMessage}}"
   },
   "createNoteFab": {
     "createNewNote": "Crear Nuevo Apunte",
@@ -135,13 +138,18 @@
   },
   "editDirectoryDialog": {
     "editSuccess": "Edición exitosa",
-    "editFailed": "Edición fallida",
+    "editFailed": "Edición fallida{{errorMessage}}",
     "editDirectoryTitle": "Editar directorio",
     "name": "Nombre",
     "iconColor": "Color del icono",
     "visible": "Visible",
     "cancel": "Cancelar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "invalidName": "Formato de nombre inválido.",
+    "notEmpty": "El nombre no puede estar vacío.",
+    "minLength": "El nombre del directorio debe tener al menos 2 caracteres.",
+    "maxLength": "El nombre del directorio no puede exceder los 50 caracteres.",
+    "invalidColor": "Por favor, selecciona un color de icono válido."
   },
   "editNoteDialog": {
     "editSuccess": "Apunte actualizado exitosamente.",

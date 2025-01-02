@@ -89,3 +89,8 @@ export const apiSlice = createApi({
     'Reviews',
   ],
 });
+
+export interface ApiResponse {
+  success: boolean;
+  messages: string[];
+}

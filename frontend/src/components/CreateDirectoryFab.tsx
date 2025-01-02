@@ -26,18 +26,19 @@ import { z } from 'zod';
 import { useCreateDirectoryMutation } from '../store/slices/directoriesApiSlice';
 import { FolderIconColor } from '../types';
 
-// Define the Zod schema for form validation
 const directorySchema = z.object({
   name: z
     .string()
-    .regex(
-      /^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/,
-      'invalidName',
-    ),
-  iconColor: z.enum(['#BBBBBB', '#16A765', '#4986E7', '#CD35A6'], {
-    errorMap: () => ({ message: 'invalidColor' }),
+    .nonempty({ message: 'notEmpty' })
+    .min(2, { message: 'minLength' })
+    .max(50, { message: 'maxLength' })
+    .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
+      message: 'invalidName',
+    }),
+  iconColor: z.string().regex(/^#(?:BBBBBB|16A765|4986E7|CD35A6)$/, {
+    message: 'invalidColor',
   }),
-  visible: z.boolean(),
+  visible: z.boolean().default(true),
 });
 
 type DirectoryFormData = z.infer<typeof directorySchema>;
@@ -94,16 +95,22 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
         visible: data.visible,
         parentId,
       }).unwrap();
-
-      if (result) {
+      if (result.success) {
         toast.success(t('directoryCreated'));
         reset();
         setExpanded(false);
       } else {
-        toast.error(t('directoryCreationFailed'));
+        toast.error(
+          t('directoryCreationFailed', {
+            errorMessage:
+              result.messages && result.messages.length > 0
+                ? `: ${result.messages[0]}`
+                : '',
+          }),
+        );
       }
     } catch (error: any) {
-      toast.error(error?.data?.[0]?.message || t('directoryCreationFailed'));
+      toast.error(t('directoryCreationFailed'));
       console.error('Failed to create directory:', error);
     }
   };

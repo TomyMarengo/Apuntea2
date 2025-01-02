@@ -1,6 +1,6 @@
 // src/store/slices/reviewsApiSlice.ts
 
-import { apiSlice } from './apiSlice';
+import { ApiResponse, apiSlice } from './apiSlice';
 import {
   DELETE_REASON_CONTENT_TYPE,
   REVIEW_CREATE_CONTENT_TYPE,
@@ -121,14 +121,14 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
         { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),
-    createReview: builder.mutation<boolean, CreateReviewArgs>({
+    createReview: builder.mutation<ApiResponse, CreateReviewArgs>({
       queryFn: async (
         { noteId, score, content, url },
         _queryApi,
         _extraOptions,
         fetchWithBQ,
       ) => {
-        const response = await fetchWithBQ({
+        const result = await fetchWithBQ({
           url: url || '/reviews',
           method: 'POST',
           body: JSON.stringify({ noteId, score, content }),
@@ -136,21 +136,26 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
             'Content-Type': REVIEW_CREATE_CONTENT_TYPE,
           },
         });
-        return { data: response.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },
         { type: 'Reviews', id: `LIST_${noteId}` },
       ],
     }),
-    updateReview: builder.mutation<boolean, UpdateReviewArgs>({
+    updateReview: builder.mutation<ApiResponse, UpdateReviewArgs>({
       queryFn: async (
         { noteId, userId, score, content, url },
         _queryApi,
         _extraOptions,
         fetchWithBQ,
       ) => {
-        const response = await fetchWithBQ({
+        const result = await fetchWithBQ({
           url: url || `/reviews/${noteId}_${userId}`,
           method: 'PATCH',
           body: JSON.stringify({ score, content }),
@@ -158,13 +163,18 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
             'Content-Type': REVIEW_UPDATE_CONTENT_TYPE,
           },
         });
-        return { data: response.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: (_result, _error, { noteId, userId }) => [
         { type: 'Reviews', id: `${noteId}_${userId}` },
       ],
     }),
-    deleteReview: builder.mutation<boolean, DeleteReviewArgs>({
+    deleteReview: builder.mutation<ApiResponse, DeleteReviewArgs>({
       queryFn: async (
         { noteId, userId, reason, url },
         _api,
@@ -183,7 +193,12 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           },
         });
 
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
     }),
   }),

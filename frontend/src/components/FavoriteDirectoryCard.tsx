@@ -50,6 +50,8 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
         }).unwrap();
         if (result) {
           toast.success(t('unfavorited'));
+        } else {
+          toast.error(t('errorUnfavorite'));
         }
       } else {
         const result = await addFavoriteDirectory({
@@ -57,6 +59,8 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
         }).unwrap();
         if (result) {
           toast.success(t('favorited'));
+        } else {
+          toast.error(t('errorFavorite'));
         }
       }
       refetch();

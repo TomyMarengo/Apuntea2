@@ -1,3 +1,6 @@
+// src/components/EditDirectoryDialog.tsx
+
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
   DialogTitle,
@@ -13,12 +16,32 @@ import {
   ToggleButtonGroup,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 import { useUpdateDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { Directory } from '../../../types';
 import { FolderIconColor } from '../../../types';
+
+// Define the Zod schema for form validation
+const directorySchema = z.object({
+  name: z
+    .string()
+    .nonempty({ message: 'notEmpty' })
+    .min(2, { message: 'minLength' })
+    .max(50, { message: 'maxLength' })
+    .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
+      message: 'invalidName',
+    }),
+  iconColor: z.string().regex(/^#(?:BBBBBB|16A765|4986E7|CD35A6)$/, {
+    message: 'invalidColor',
+  }),
+  visible: z.boolean().default(true),
+});
+
+type DirectoryFormData = z.infer<typeof directorySchema>;
 
 interface DirectoryPageProps {
   open: boolean;
@@ -36,29 +59,56 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
   const { t } = useTranslation('editDirectoryDialog');
   const [updateDirectory] = useUpdateDirectoryMutation();
 
+  // State to manage the directory data
   const [name, setName] = useState(directory.name);
+  const [iconColor, setIconColor] = useState(`#${directory.iconColor}`);
   const [visible, setVisible] = useState(directory.visible);
-  const [iconColor, setIconColor] = useState(directory.iconColor);
 
+  // Use effect to update state when `open` or `directory` changes
   useEffect(() => {
     if (open) {
       setName(directory.name);
+      setIconColor(`#${directory.iconColor}`);
       setVisible(directory.visible);
-      setIconColor(directory.iconColor);
     }
   }, [open, directory]);
 
-  const handleSave = async () => {
+  // Initialize react-hook-form with Zod resolver
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<DirectoryFormData>({
+    resolver: zodResolver(directorySchema),
+    defaultValues: {
+      name,
+      iconColor,
+      visible,
+    },
+  });
+
+  // Handle form submission
+  const onSubmit = async (data: DirectoryFormData) => {
     try {
       const result = await updateDirectory({
         directoryId: directory.id,
-        name,
-        visible,
-        iconColor,
+        name: data.name,
+        visible: data.visible,
+        iconColor: data.iconColor,
       }).unwrap();
-      if (result) {
+      if (result.success) {
         toast.success(t('editSuccess'));
         onClose();
+      } else {
+        toast.error(
+          t('editFailed', {
+            errorMessage:
+              result.messages && result.messages.length > 0
+                ? `: ${result.messages[0]}`
+                : '',
+          }),
+        );
       }
     } catch (error) {
       console.error('Failed to edit directory:', error);
@@ -66,76 +116,116 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
     }
   };
 
+  // Handle closing the dialog and resetting form state
+  const handleClose = () => {
+    // Reset the form values when closing the dialog
+    reset({
+      name: directory.name,
+      iconColor: `#${directory.iconColor}`,
+      visible: directory.visible,
+    });
+    onClose(); // Close the dialog
+  };
+
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
       <DialogTitle>{t('editDirectoryTitle')}</DialogTitle>
       <DialogContent>
-        <TextField
-          margin="normal"
-          fullWidth
-          label={t('name')}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+        {/* Directory Name Field */}
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              margin="normal"
+              fullWidth
+              label={t('name')}
+              error={!!errors.name}
+              helperText={errors.name ? t(errors.name.message as string) : ''}
+            />
+          )}
         />
-        {/* Selector de color agregado */}
+
+        {/* Icon Color Selector */}
         {!showNameOnly && (
           <>
-            <Box sx={{ mb: 1 }}>
+            <Box sx={{ mb: 1, display: 'flex', flexDirection: 'column' }}>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 {t('iconColor')}
               </Typography>
-              <ToggleButtonGroup
-                value={iconColor}
-                exclusive
-                onChange={(_, value) => {
-                  if (value !== null) {
-                    setIconColor(value);
-                  }
-                }}
-                aria-label="icon color"
-                sx={{ gap: 1 }}
-              >
-                {Object.entries(FolderIconColor).map(([label, value]) => (
-                  <ToggleButton
-                    key={value}
-                    value={value}
-                    aria-label={label}
-                    sx={{
-                      width: 40,
-                      height: 40,
-                      minWidth: 40,
-                      border: 'none',
-                      borderRadius: '50%',
-                      backgroundColor: value,
-                      transition: 'transform 0.2s, border 0.2s',
-                      '&.Mui-selected, &.Mui-selected:hover, &:hover': {
-                        transform: 'scale(1.1)',
-                        border: '2px solid #FFFFFF',
-                        backgroundColor: value,
-                      },
+              <Controller
+                name="iconColor"
+                control={control}
+                render={({ field }) => (
+                  <ToggleButtonGroup
+                    {...field}
+                    exclusive
+                    value={field.value}
+                    onChange={(_, value) => {
+                      if (value !== null) {
+                        field.onChange(value);
+                      }
                     }}
-                  />
-                ))}
-              </ToggleButtonGroup>
+                    aria-label="icon color"
+                    sx={{ gap: 1, mb: 1 }}
+                  >
+                    {Object.entries(FolderIconColor).map(([label, value]) => (
+                      <ToggleButton
+                        key={value}
+                        value={value}
+                        aria-label={label}
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          minWidth: 40,
+                          border: 'none',
+                          borderRadius: '50%',
+                          backgroundColor: value,
+                          transition: 'transform 0.2s, border 0.2s',
+                          '&.Mui-selected, &.Mui-selected:hover, &:hover': {
+                            transform: 'scale(1.1)',
+                            border: '2px solid #FFFFFF',
+                            backgroundColor: value,
+                          },
+                        }}
+                      />
+                    ))}
+                  </ToggleButtonGroup>
+                )}
+              />
+              {errors.iconColor && (
+                <Typography variant="caption" color="error">
+                  {t(errors.iconColor.message as string)}
+                </Typography>
+              )}
             </Box>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={visible}
-                  onChange={(e) => setVisible(e.target.checked)}
-                  color="primary"
+
+            {/* Visibility Switch */}
+            <Controller
+              name="visible"
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={
+                    <Switch
+                      {...field}
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                    />
+                  }
+                  label={field.value ? t('visible') : t('hidden')}
                 />
-              }
-              label={t('visible')}
+              )}
             />
           </>
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={handleClose} color="primary">
           {t('cancel')}
         </Button>
-        <Button onClick={handleSave} variant="contained">
+        <Button onClick={handleSubmit(onSubmit)} variant="contained">
           {t('save')}
         </Button>
       </DialogActions>

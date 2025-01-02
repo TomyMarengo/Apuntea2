@@ -148,8 +148,8 @@ export interface Note {
 export interface Directory {
   id: string;
   name: string;
-  visible?: boolean;
-  iconColor?: string;
+  visible: boolean;
+  iconColor: string;
   createdAt: string;
   lastModifiedAt: string;
   selfUrl?: string;

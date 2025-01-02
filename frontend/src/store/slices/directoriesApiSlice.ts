@@ -1,6 +1,6 @@
 // src/store/slices/directoriesApiSlice.ts
 
-import { apiSlice } from './apiSlice';
+import { apiSlice, ApiResponse } from './apiSlice';
 import {
   DELETE_REASON_CONTENT_TYPE,
   DIRECTORY_CREATE_CONTENT_TYPE,
@@ -60,7 +60,7 @@ interface FavoriteDirectoryArgs {
 
 export const directoriesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    createDirectory: builder.mutation<boolean, CreateDirectoryArgs>({
+    createDirectory: builder.mutation<ApiResponse, CreateDirectoryArgs>({
       queryFn: async (
         { name, parentId, visible, iconColor, url },
         _api,
@@ -80,11 +80,25 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
             'Content-Type': DIRECTORY_CREATE_CONTENT_TYPE,
           },
         });
-        return { data: result.error === undefined };
+        let errorMessages: string[] = [];
+        if (Array.isArray(result.error?.data)) {
+          errorMessages = result.error.data.map(
+            (err: any) => err.message || '',
+          );
+        } else if ((result.error?.data as any).message) {
+          errorMessages = [(result.error?.data as any).message];
+        }
+
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: errorMessages,
+          },
+        };
       },
       invalidatesTags: ['Directories'],
     }),
-    updateDirectory: builder.mutation<boolean, UpdateDirectoryArgs>({
+    updateDirectory: builder.mutation<ApiResponse, UpdateDirectoryArgs>({
       queryFn: async (
         { directoryId, name, visible, iconColor, url },
         _api,
@@ -105,14 +119,28 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
             'Content-Type': DIRECTORY_UPDATE_CONTENT_TYPE,
           },
         });
-        return { data: result.error === undefined };
+        let errorMessages: string[] = [];
+        if (Array.isArray(result.error?.data)) {
+          errorMessages = result.error.data.map(
+            (err: any) => err.message || '',
+          );
+        } else if ((result.error?.data as any).message) {
+          errorMessages = [(result.error?.data as any).message];
+        }
+
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: errorMessages,
+          },
+        };
       },
       invalidatesTags: (result, error, { directoryId }) => [
         { type: 'Directories', id: directoryId },
       ],
     }),
 
-    deleteDirectory: builder.mutation<boolean, DeleteDirectoryArgs>({
+    deleteDirectory: builder.mutation<ApiResponse, DeleteDirectoryArgs>({
       queryFn: async (
         { directoryId, reason, url },
         _api,
@@ -138,7 +166,12 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
             method: 'DELETE',
           });
         }
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: ['Directories'],
     }),
@@ -201,7 +234,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Directories', id: 'PARTIAL-LIST' }],
     }),
-    getIsFavoriteDirectory: builder.query<boolean, FavoriteDirectoryArgs>({
+    getIsFavoriteDirectory: builder.query<ApiResponse, FavoriteDirectoryArgs>({
       queryFn: async (
         { directoryId, userId, url },
         _queryApi,
@@ -212,19 +245,32 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           url: url || `/directories/${directoryId}/favorites/${userId}`,
           method: 'GET',
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
     }),
-    addFavoriteDirectory: builder.mutation<boolean, DirectoryQueryArgs>({
+    addFavoriteDirectory: builder.mutation<ApiResponse, DirectoryQueryArgs>({
       queryFn: async ({ directoryId, url }, _api, _extraOptions, baseQuery) => {
         const result = await baseQuery({
           url: url || `/directories/${directoryId}/favorites`,
           method: 'POST',
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
     }),
-    removeFavoriteDirectory: builder.mutation<boolean, FavoriteDirectoryArgs>({
+    removeFavoriteDirectory: builder.mutation<
+      ApiResponse,
+      FavoriteDirectoryArgs
+    >({
       queryFn: async (
         { directoryId, userId, url },
         _api,
@@ -235,7 +281,12 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           url: url || `/directories/${directoryId}/favorites/${userId}`,
           method: 'DELETE',
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
     }),
   }),

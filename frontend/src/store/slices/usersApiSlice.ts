@@ -1,6 +1,6 @@
 // src/store/slices/usersApiSlice.ts
 
-import { apiSlice } from './apiSlice';
+import { ApiResponse, apiSlice } from './apiSlice';
 import { setCurrentUser } from './authSlice';
 import { setLocale } from './languageSlice';
 import {
@@ -202,7 +202,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 60 * 60 * 60 * 24 * 30, // 30 days
     }),
-    updatePicture: builder.mutation<boolean, PictureArgs>({
+    updatePicture: builder.mutation<ApiResponse, PictureArgs>({
       queryFn: async (
         { url, profilePicture },
         _api,
@@ -211,18 +211,23 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       ) => {
         const formData = new FormData();
         formData.append('profilePicture', profilePicture);
-        const response = await baseQuery({
+        const result = await baseQuery({
           url: url || '/pictures',
           method: 'POST',
           body: formData,
         });
-        return { data: response.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
-    updateUser: builder.mutation<boolean, UpdateUserArgs>({
+    updateUser: builder.mutation<ApiResponse, UpdateUserArgs>({
       queryFn: async (
         {
           userId,
@@ -254,7 +259,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           data.notificationsEnabled = notificationsEnabled;
         }
 
-        const response = await baseQuery({
+        const result = await baseQuery({
           url: url || `/users/${userId}`,
           method: 'PATCH',
           body: JSON.stringify(data),
@@ -263,13 +268,18 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           },
         });
 
-        return { data: response.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
       ],
     }),
-    updateUserStatus: builder.mutation<boolean, UpdateUserStatusArgs>({
+    updateUserStatus: builder.mutation<ApiResponse, UpdateUserStatusArgs>({
       queryFn: async (
         { userId, status, banReason, url },
         _api,
@@ -284,7 +294,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
         data.status = status.toLowerCase();
 
-        const response = await baseQuery({
+        const result = await baseQuery({
           url: url || `/users/${userId}`,
           method: 'PATCH',
           body: JSON.stringify(data),
@@ -293,7 +303,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           },
         });
 
-        return { data: response.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },
@@ -383,19 +398,24 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    followUser: builder.mutation<boolean, FollowUserArgs>({
+    followUser: builder.mutation<ApiResponse, FollowUserArgs>({
       queryFn: async ({ userId, url }, _api, _extraOptions, baseQuery) => {
         const result = await baseQuery({
           url: url || `/users/${userId}/followers`,
           method: 'POST',
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Followers', id: userId },
       ],
     }),
-    unfollowUser: builder.mutation<boolean, UnfollowUserArgs>({
+    unfollowUser: builder.mutation<ApiResponse, UnfollowUserArgs>({
       queryFn: async (
         { userId, followerId, url },
         _api,
@@ -407,13 +427,18 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           method: 'DELETE',
         });
 
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Followers', id: userId },
       ],
     }),
-    isFollowingUser: builder.query<boolean, IsFollowingUser>({
+    isFollowingUser: builder.query<ApiResponse, IsFollowingUser>({
       queryFn: async (
         { userId, followerId, url },
         _api,
@@ -423,23 +448,40 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         const result = await baseQuery({
           url: url || `/users/${userId}/followers/${followerId}`,
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       providesTags: (_result, _error, { userId }) => [
         { type: 'Followers', id: userId },
       ],
     }),
-    requestPasswordChange: builder.mutation<boolean, { email: string }>({
-      query: ({ email }) => ({
-        url: '/users',
-        method: 'POST',
-        body: JSON.stringify({ email }),
-        headers: {
-          'Content-Type': USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
-        },
-      }),
+    requestPasswordChange: builder.mutation<ApiResponse, { email: string }>({
+      queryFn: async ({ email }, _queryApi, _extraOptions, baseQuery) => {
+        try {
+          const result = await baseQuery({
+            url: '/users',
+            method: 'POST',
+            body: JSON.stringify({ email }),
+            headers: {
+              'Content-Type': USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
+            },
+          });
+          if (result.error) {
+            return { data: { success: false, messages: [] } };
+          }
+          return { data: { success: true, messages: [] } };
+        } catch (error) {
+          console.error('Failed to request password change:', error);
+          return { data: { success: false, messages: [] } };
+        }
+      },
     }),
-    updateUserPassword: builder.mutation<boolean, UpdatePasswordArgs>({
+
+    updateUserPassword: builder.mutation<ApiResponse, UpdatePasswordArgs>({
       queryFn: async (
         { userId, password, email, code },
         _api,
@@ -447,7 +489,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         baseQuery,
       ) => {
         const authorization = btoa(`${email}:${code}`);
-        const response = await baseQuery({
+        const result = await baseQuery({
           url: `/users/${userId}`,
           method: 'PATCH',
           body: JSON.stringify({ password }),
@@ -457,8 +499,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           },
         });
 
-        // Return true if no error occurred (indicating a successful request), false otherwise
-        return { data: response.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: (_result, _error, { userId }) => [
         { type: 'Users', id: userId },

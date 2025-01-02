@@ -1,6 +1,6 @@
 // src/store/slices/notesApiSlice.ts
 
-import { apiSlice } from './apiSlice';
+import { ApiResponse, apiSlice } from './apiSlice';
 import {
   DELETE_REASON_CONTENT_TYPE,
   NOTE_UPDATE_CONTENT_TYPE,
@@ -78,7 +78,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         responseHandler: (res) => res.blob(),
       }),
     }),
-    createNote: builder.mutation<boolean, CreateNoteArgs>({
+    createNote: builder.mutation<ApiResponse, CreateNoteArgs>({
       queryFn: async (
         { name, parentId, visible, file, category },
         _api,
@@ -100,11 +100,16 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: formData,
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: ['Notes'],
     }),
-    updateNote: builder.mutation<boolean, UpdateNoteArgs>({
+    updateNote: builder.mutation<ApiResponse, UpdateNoteArgs>({
       queryFn: async (
         { noteId, name, visible, category, url },
         _api,
@@ -124,13 +129,18 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             'Content-Type': NOTE_UPDATE_CONTENT_TYPE,
           },
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: (result, error, { noteId }) => [
         { type: 'Notes', id: noteId },
       ],
     }),
-    deleteNote: builder.mutation<boolean, DeleteNoteArgs>({
+    deleteNote: builder.mutation<ApiResponse, DeleteNoteArgs>({
       queryFn: async (
         { noteId, reason, url },
         _api,
@@ -156,7 +166,12 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             method: 'DELETE',
           });
         }
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
       invalidatesTags: ['Notes'],
     }),
@@ -200,7 +215,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: 'Notes', id: 'PARTIAL-LIST' }],
     }),
-    getIsFavoriteNote: builder.query<boolean, FavoriteNoteArgs>({
+    getIsFavoriteNote: builder.query<ApiResponse, FavoriteNoteArgs>({
       queryFn: async (
         { noteId, userId, url },
         _queryApi,
@@ -209,19 +224,29 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       ) => {
         const endpoint = url || `/notes/${noteId}/favorites/${userId}`;
         const result = await baseQuery(endpoint);
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
     }),
-    addFavoriteNote: builder.mutation<boolean, NoteQueryArgs>({
+    addFavoriteNote: builder.mutation<ApiResponse, NoteQueryArgs>({
       queryFn: async ({ noteId, url }, _api, _extraOptions, baseQuery) => {
         const result = await baseQuery({
           url: url || `/notes/${noteId}/favorites`,
           method: 'POST',
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
     }),
-    removeFavoriteNote: builder.mutation<boolean, FavoriteNoteArgs>({
+    removeFavoriteNote: builder.mutation<ApiResponse, FavoriteNoteArgs>({
       queryFn: async (
         { noteId, userId, url },
         _api,
@@ -232,10 +257,15 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           url: url || `/notes/${noteId}/favorites/${userId}`,
           method: 'DELETE',
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
     }),
-    addInteractionNote: builder.mutation<boolean, FavoriteNoteArgs>({
+    addInteractionNote: builder.mutation<ApiResponse, FavoriteNoteArgs>({
       queryFn: async (
         { noteId, userId, url },
         _api,
@@ -246,7 +276,12 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           url: url || `/notes/${noteId}/interactions/${userId}`,
           method: 'POST',
         });
-        return { data: result.error === undefined };
+        return {
+          data: {
+            success: result.error === undefined,
+            messages: [],
+          },
+        };
       },
     }),
     getLatestNotes: builder.query<Note[], NoteQueryArgs>({

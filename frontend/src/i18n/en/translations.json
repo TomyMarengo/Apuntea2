@@ -73,9 +73,12 @@
     "hidden": "Hidden",
     "missingFields": "Please fill in all required fields.",
     "invalidName": "Invalid name format.",
+    "notEmpty": "Directory name cannot be empty.",
+    "minLength": "Directory name must be at least 2 characters long.",
+    "maxLength": "Directory name cannot exceed 50 characters.",
     "invalidColor": "Please select a valid icon color.",
     "directoryCreated": "Directory created successfully!",
-    "directoryCreationFailed": "Failed to create directory."
+    "directoryCreationFailed": "Failed to create directory{{errorMessage}}"
   },
   "createNoteFab": {
     "createNewNote": "Create New Note",
@@ -135,13 +138,18 @@
   },
   "editDirectoryDialog": {
     "editSuccess": "Edit successful",
-    "editFailed": "Edit failed",
+    "editFailed": "Edit failed {{errorMessage}}",
     "editDirectoryTitle": "Edit Directory",
     "name": "Name",
     "iconColor": "Icon Color",
     "visible": "Visible",
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "invalidName": "Invalid name format.",
+    "notEmpty": "Directory name cannot be empty.",
+    "minLength": "Directory name must be at least 2 characters long.",
+    "maxLength": "Directory name cannot exceed 50 characters.",
+    "invalidColor": "Please select a valid icon color."
   },
   "editNoteDialog": {
     "editSuccess": "Note updated successfully.",

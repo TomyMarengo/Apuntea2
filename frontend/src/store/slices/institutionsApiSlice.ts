@@ -1,6 +1,6 @@
 // src/store/slices/institutionsApiSlice.ts
 
-import { apiSlice } from './apiSlice';
+import { apiSlice, ApiResponse } from './apiSlice';
 import {
   SUBJECT_CAREER_CONTENT_TYPE,
   SUBJECT_CAREER_CREATE_CONTENT_TYPE,
@@ -122,7 +122,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       providesTags: ['Subjects'],
       keepUnusedDataFor: 86400,
     }),
-    createSubject: builder.mutation<boolean, CreateSubjectArgs>({
+    createSubject: builder.mutation<ApiResponse, CreateSubjectArgs>({
       async queryFn(
         { name, year, institutionId, careerId, url },
         _queryApi,
@@ -139,7 +139,15 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
               'Content-Type': SUBJECT_CONTENT_TYPE,
             },
           });
-          if (subjectResult.error) return { data: false }; // Return false if there's an error
+
+          if (subjectResult.error) {
+            return {
+              data: {
+                success: false,
+                messages: [],
+              },
+            };
+          }
 
           const subjectUrl =
             subjectResult.meta?.response.headers.get('Location');
@@ -155,18 +163,36 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
                 'Content-Type': SUBJECT_CAREER_CREATE_CONTENT_TYPE,
               },
             });
-            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
-          }
 
-          return { data: true }; // Return true if everything was successful
+            if (subjectCareerResult.error) {
+              return {
+                data: {
+                  success: false,
+                  messages: [],
+                },
+              };
+            }
+          }
+          return {
+            data: {
+              success: true,
+              messages: [],
+            },
+          };
         } catch (error) {
           console.error('Failed to create subject:', error);
-          return { data: false }; // Return false if an exception occurs
+          return {
+            data: {
+              success: false,
+              messages: [],
+            },
+          };
         }
       },
       invalidatesTags: ['Subjects'],
     }),
-    updateSubject: builder.mutation<boolean, UpdateSubjectArgs>({
+
+    updateSubject: builder.mutation<ApiResponse, UpdateSubjectArgs>({
       async queryFn(
         { name, year, institutionId, careerId, subjectId },
         _queryApi,
@@ -184,7 +210,11 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
                 'Content-Type': SUBJECT_CONTENT_TYPE,
               },
             });
-            if (subjectResult.error) return { data: false }; // Return false if there's an error
+            if (subjectResult.error) {
+              return {
+                data: { success: false, messages: [] },
+              };
+            }
           }
 
           // Step 2: Associate the subject with the career and year
@@ -197,17 +227,21 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
                 'Content-Type': SUBJECT_CAREER_CONTENT_TYPE,
               },
             });
-            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
+            if (subjectCareerResult.error) {
+              return {
+                data: { success: false, messages: [] },
+              };
+            }
           }
-          return { data: true }; // Return true if everything was successful
+          return { data: { success: true, messages: [] } };
         } catch (error) {
           console.error('Failed to update subject:', error);
-          return { data: false }; // Return false if an exception occurs
+          return { data: { success: false, messages: [] } };
         }
       },
       invalidatesTags: ['Subjects'],
     }),
-    linkSubjectCareer: builder.mutation<boolean, LinkSubjectArgs>({
+    linkSubjectCareer: builder.mutation<ApiResponse, LinkSubjectArgs>({
       async queryFn(
         { year, institutionId, careerId, subjectId, url },
         _queryApi,
@@ -226,17 +260,20 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
                 'Content-Type': SUBJECT_CAREER_CREATE_CONTENT_TYPE,
               },
             });
-            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
+            if (subjectCareerResult.error) {
+              return { data: { success: false, messages: [] } };
+            }
           }
-          return { data: true }; // Return true if everything was successful
+          return { data: { success: true, messages: [] } };
         } catch (error) {
           console.error('Failed to link subject to career:', error);
-          return { data: false }; // Return false if an exception occurs
+          return { data: { success: false, messages: [] } };
         }
       },
       invalidatesTags: ['Subjects'],
     }),
-    unlinkSubjectCareer: builder.mutation<boolean, UnlinkSubjectArgs>({
+
+    unlinkSubjectCareer: builder.mutation<ApiResponse, UnlinkSubjectArgs>({
       async queryFn(
         { institutionId, careerId, subjectId, url },
         _queryApi,
@@ -251,12 +288,14 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
                 `/institutions/${institutionId}/careers/${careerId}/subjectcareers/${subjectId}`,
               method: 'DELETE',
             });
-            if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
+            if (subjectCareerResult.error) {
+              return { data: { success: false, messages: [] } };
+            }
           }
-          return { data: true }; // Return true if everything was successful
+          return { data: { success: true, messages: [] } };
         } catch (error) {
           console.error('Failed to unlink subject from career:', error);
-          return { data: false }; // Return false if an exception occurs
+          return { data: { success: false, messages: [] } };
         }
       },
       invalidatesTags: ['Subjects'],
