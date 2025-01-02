@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.forms.queries;
 
 import ar.edu.itba.paw.webapp.validation.EitherAttribute;
-import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import javax.validation.constraints.Size;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.QueryParam;
@@ -13,31 +12,25 @@ public class SearchableQuery extends PageableQuery { //TODO: Add error messages
     @QueryParam("asc")
     private boolean ascending;
 
-    @ValidUuid
     @QueryParam("userId")
     private UUID userId;
 
-    @Size(max = 50)
+    @Size(max = 50, message = "{error.param.size}")
     @QueryParam("word")
     private String word;
 
-    @ValidUuid
     @QueryParam("institutionId")
     private UUID institutionId;
 
-    @ValidUuid
     @QueryParam("careerId")
     private UUID careerId;
 
-    @ValidUuid
     @QueryParam("subjectId")
     private UUID subjectId;
 
-    @ValidUuid
     @QueryParam("parentId")
     private UUID parentId;
 
-    @ValidUuid
     @QueryParam("favBy")
     private UUID favBy;
 

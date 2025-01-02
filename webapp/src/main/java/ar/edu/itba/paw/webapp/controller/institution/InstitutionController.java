@@ -19,7 +19,6 @@ import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerCreationDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerResponseDto;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectCareerUpdateDto;
 import ar.edu.itba.paw.webapp.controller.utils.CacheUtils;
-import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Component;
@@ -52,7 +51,7 @@ public class InstitutionController {
     @GET
     @Path("/{institutionId}")
     @Produces(value = { ApunteaMediaType.INSTITUTION })
-    public Response getInstitution(@Context final Request request, @ValidUuid @PathParam("institutionId") final UUID institutionId) {
+    public Response getInstitution(@Context final Request request, @PathParam("institutionId") final UUID institutionId) {
         final Institution institution = institutionService.getInstitution(institutionId).orElseThrow(InstitutionNotFoundException::new);
         final InstitutionResponseDto dtoInstitution = InstitutionResponseDto.fromInstitution(institution, uriInfo);
         return CacheUtils.conditionalCache(Response.ok(dtoInstitution), request, institution.hashCode()).build();
@@ -85,7 +84,7 @@ public class InstitutionController {
     @GET
     @Path("/{institutionId}/careers")
     @Produces(value = { ApunteaMediaType.CAREER_COLLECTION })
-    public Response listAllCareers(@Context Request request, @ValidUuid @PathParam("institutionId") final UUID institutionId) {
+    public Response listAllCareers(@Context Request request, @PathParam("institutionId") final UUID institutionId) {
         final Collection<Career> allCareers = careerService.getCareers(institutionId);
         final Collection<CareerResponseDto> dtoCareers = allCareers
                 .stream()

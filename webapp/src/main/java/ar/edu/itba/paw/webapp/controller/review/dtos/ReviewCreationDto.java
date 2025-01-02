@@ -1,13 +1,11 @@
 package ar.edu.itba.paw.webapp.controller.review.dtos;
 
-import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
 public class ReviewCreationDto {
-    @ValidUuid
     private UUID noteId;
 
     @Size(max = 255, message = "{error.param.length}")

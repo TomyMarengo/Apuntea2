@@ -1,9 +1,11 @@
 package ar.edu.itba.paw.webapp.mappers;
 
+import ar.edu.itba.paw.webapp.dto.ApiErrorDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -23,10 +25,8 @@ public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplica
                 exception.getMessage(),
                 exception.getResponse().getStatus());
 
-        return Response
-                .status(exception.getResponse().getStatus())
-                .entity(exception.getMessage())
-                .build();
+        ApiErrorDto errorDto = new ApiErrorDto(exception.getMessage());
+        return Response.status(exception.getResponse().getStatus()).type(MediaType.APPLICATION_JSON).entity(errorDto).build();
     }
 }
 

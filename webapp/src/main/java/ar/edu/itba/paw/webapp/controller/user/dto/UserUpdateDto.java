@@ -22,7 +22,6 @@ public class UserUpdateDto {
     @Pattern(regexp = RegexUtils.USERNAME_REGEX, message = "{validation.user.username}")
     private String username;
 
-    @ValidUuid
     private UUID careerId;
 
     @Size(min = 4, max = 50, message = "{error.param.length}")

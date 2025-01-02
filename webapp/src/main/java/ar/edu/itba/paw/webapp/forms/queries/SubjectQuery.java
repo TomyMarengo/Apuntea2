@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.forms.queries;
 
 import ar.edu.itba.paw.webapp.validation.AttributeDependence;
 import ar.edu.itba.paw.webapp.validation.EitherAttribute;
-import ar.edu.itba.paw.webapp.validation.ValidUuid;
 import org.hibernate.validator.constraints.Range;
 
 import javax.ws.rs.QueryParam;
@@ -11,7 +10,6 @@ import java.util.UUID;
 @EitherAttribute(fieldGroup1 = {"careerId", "year", "userId"}, fieldGroup2 = {"notInCareer"}, allowNeither = false)
 @AttributeDependence(baseField = "year", dependentField = {"careerId", "userId"})
 public class SubjectQuery {
-    @ValidUuid
     @QueryParam("careerId")
     private UUID careerId;
 
@@ -19,11 +17,9 @@ public class SubjectQuery {
     @QueryParam("year")
     private Integer year;
 
-    @ValidUuid
     @QueryParam("userId")
     private UUID userId;
 
-    @ValidUuid
     @QueryParam("notInCareer")
     private UUID notInCareer;
 

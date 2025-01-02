@@ -12,11 +12,11 @@ import javax.validation.constraints.*;
 public class NoteCreationDto extends SearchableCreationDto {
     @NotNull(message = "{error.param.empty}")
     @FormDataParam("file")
-    private byte[] file = new byte[0];
+    private byte[] file;
 
     @NotNull(message = "{error.param.empty}")
     @FormDataParam("file")
-    private FormDataBodyPart fileDetails = new FormDataBodyPart();
+    private FormDataBodyPart fileDetails;
 
     @NotEmpty(message = "{error.param.empty}")
     @Pattern(regexp = RegexUtils.CATEGORY_REGEX, message = "{validation.category}")
