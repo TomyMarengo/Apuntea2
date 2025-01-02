@@ -1,5 +1,0 @@
-{
-  "notesCount": "{{count}} note",
-  "notesCount_plural": "{{count}} notes",
-  "errorFetchingDirectory": "Error fetching directory."
-}

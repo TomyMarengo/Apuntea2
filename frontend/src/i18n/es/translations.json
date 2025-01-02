@@ -1,0 +1,597 @@
+{
+  "adminCareersPage": {
+    "titlePage": "Administrar Carreras | Apuntea",
+    "institution": "Institución",
+    "selectInstitution": "Selecciona una institución",
+    "career": "Carrera",
+    "selectCareer": "Selecciona una carrera",
+    "filterYear": "Filtrar por Año",
+    "yearOptions": {
+      "all": "Todos"
+    },
+    "sortBy": "Ordenar Por",
+    "sortOptions": {
+      "year": "Año",
+      "name": "Nombre"
+    },
+    "sortOrder": "Cambiar Orden",
+    "addSubjectModal": {
+      "title": "Agregar Asignatura Existente",
+      "selectSubject": "Selecciona una asignatura",
+      "none": "Ninguna",
+      "yearLabel": "Año",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "createSubjectModal": {
+      "title": "Crear Nueva Asignatura",
+      "nameLabel": "Nombre de la Asignatura",
+      "yearLabel": "Año",
+      "cancel": "Cancelar",
+      "confirm": "Crear"
+    },
+    "toast": {
+      "addSubject": {
+        "success": "Asignatura agregada exitosamente.",
+        "error": "Error al agregar la asignatura."
+      },
+      "createSubject": {
+        "success": "Asignatura creada exitosamente.",
+        "error": "Error al crear la asignatura."
+      }
+    },
+    "loadingSubjects": "Cargando asignaturas...",
+    "errorFetchingDirectory": "Error al obtener el directorio: {{error}}",
+    "noSubjects": "No hay asignaturas en esta carrera.",
+    "title": "Administrar Carreras"
+  },
+  "adminUsersPage": {
+    "titlePage": "Administrar Usuarios | Apuntea",
+    "searchPlaceholder": "Buscar usuarios...",
+    "statusFilter": "Filtrar por Estado",
+    "statusOptions": {
+      "all": "Todos",
+      "active": "Activo",
+      "banned": "Baneado"
+    },
+    "loading": "Cargando...",
+    "error": "Error al obtener los usuarios.",
+    "noResults": "No se encontraron usuarios con los criterios especificados."
+  },
+  "common": {
+    "loadingTranslations": "Cargando traducciones...",
+    "errorBoundary": "Algo salió mal"
+  },
+  "createDirectoryFab": {
+    "createNewDirectory": "Crear Nuevo Directorio",
+    "name": "Nombre",
+    "iconColor": "Color del Icono",
+    "chooseColor": "Elegir Color",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "visible": "Visible",
+    "hidden": "Oculto",
+    "missingFields": "Por favor, completa todos los campos requeridos.",
+    "invalidName": "Formato de nombre inválido.",
+    "invalidColor": "Por favor, selecciona un color de icono válido.",
+    "directoryCreated": "¡Directorio creado exitosamente!",
+    "directoryCreationFailed": "Error al crear el directorio."
+  },
+  "createNoteFab": {
+    "createNewNote": "Crear Nuevo Apunte",
+    "name": "Nombre",
+    "category": "Categoría",
+    "visible": "Visible",
+    "hidden": "Oculto",
+    "chooseFile": "Elegir Archivo",
+    "submit": "Enviar",
+    "missingFields": "Por favor, ingresa el nombre, el archivo y la materia.",
+    "noteCreated": "¡Apunte creado exitosamente!",
+    "noteCreationFailed": "Error al crear el apunte.",
+    "theory": "Teoría",
+    "practice": "Práctica",
+    "exam": "Examen",
+    "other": "Otro",
+    "invalidName": "Formato de nombre inválido.",
+    "invalidCategory": "Por favor, selecciona una categoría válida.",
+    "invalidFile": "Por favor, sube un archivo válido."
+  },
+  "deleteDirectoryDialog": {
+    "deleteSuccess": "Directorio eliminado exitosamente.",
+    "deleteError": "Error al eliminar el directorio.",
+    "deleteDirectoryTitle": "Eliminar Directorio",
+    "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este directorio?",
+    "reason": "Razón para la eliminación",
+    "cancel": "Cancelar",
+    "delete": "Eliminar"
+  },
+  "deleteNoteDialog": {
+    "deleteSuccess": "Apunte eliminado exitosamente.",
+    "deleteError": "Error al eliminar el apunte.",
+    "deleteNoteTitle": "Eliminar Apunte",
+    "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este apunte?",
+    "reason": "Razón de la eliminación",
+    "cancel": "Cancelar",
+    "delete": "Eliminar"
+  },
+  "deleteReviewDialog": {
+    "deleteReviewTitle": "Eliminar Reseña",
+    "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar esta reseña?",
+    "reason": "Razón",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "deleteSuccess": "Reseña eliminada exitosamente.",
+    "deleteError": "Error al eliminar la reseña."
+  },
+  "directoryBreadcrumbs": {
+    "errorFetchingDirectory": "Error al cargar el directorio.",
+    "isRoot": "Directorio Raíz"
+  },
+  "directoryPage": {
+    "titlePage": "Directorio | Apuntea",
+    "loading": "Cargando...",
+    "errorFetchingDirectory": "Error al obtener el directorio.",
+    "noResults": "No se encontró contenido."
+  },
+  "editDirectoryDialog": {
+    "editSuccess": "Edición exitosa",
+    "editFailed": "Edición fallida",
+    "editDirectoryTitle": "Editar directorio",
+    "name": "Nombre",
+    "iconColor": "Color del icono",
+    "visible": "Visible",
+    "cancel": "Cancelar",
+    "save": "Guardar"
+  },
+  "editNoteDialog": {
+    "editSuccess": "Apunte actualizado exitosamente.",
+    "editError": "Error al actualizar el punte.",
+    "editNoteTitle": "Editar Apunte",
+    "name": "Nombre",
+    "visible": "Visible",
+    "category": "Categoría",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "categories": {
+      "theory": "Teoría",
+      "practice": "Práctica",
+      "exam": "Examen",
+      "other": "Otro"
+    }
+  },
+  "editProfileDialog": {
+    "editProfile": "Editar Perfil",
+    "close": "Cerrar",
+    "uploadPicture": "Subir Foto",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "username": "Nombre de Usuario",
+    "email": "Correo Electrónico",
+    "career": "Carrera",
+    "selectCareer": "Selecciona una carrera",
+    "changePassword": "Cambiar Contraseña",
+    "currentPassword": "Contraseña Actual",
+    "newPassword": "Nueva Contraseña",
+    "confirmNewPassword": "Confirmar Nueva Contraseña",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+    "passwordChangedSuccessfully": "¡Contraseña cambiada exitosamente!",
+    "profileUpdatedSuccessfully": "¡Perfil actualizado exitosamente!",
+    "failedToUpdateProfile": "Error al actualizar el perfil.",
+    "cancel": "Cancelar",
+    "saving": "Guardando...",
+    "saveChanges": "Guardar Cambios"
+  },
+  "favoriteDirectoryCard": {
+    "favorited": "¡Directorio agregado a favoritos!",
+    "unfavorited": "¡Directorio eliminado de favoritos!",
+    "removeFavorite": "Eliminar de favoritos",
+    "errorUnfavorite": "Error al actualizar el estado de favorito."
+  },
+  "favoriteNoteCard": {
+    "favorited": "¡Apunte agregado a favoritos!",
+    "unfavorited": "¡Apunte eliminado de favoritos!",
+    "removeFavorite": "Eliminar de favoritos",
+    "errorUnfavorite": "Error al actualizar el estado de favorito."
+  },
+  "favoritesPage": {
+    "titlePage": "Favoritos | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al obtener los favoritos.",
+    "title": "Mis Favoritos",
+    "notes": "Apuntes",
+    "directories": "Carpetas",
+    "subjects": "Materias",
+    "noFavorites": "No se encontraron favoritos."
+  },
+  "followersModal": {
+    "errorLoadingFollowers": "Error al cargar seguidores.",
+    "followers": "Seguidores",
+    "noFollowers": "No tiene seguidores"
+  },
+  "followinModal": {
+    "errorLoadingFollowings": "Error al cargar seguidos.",
+    "following": "Siguiendo",
+    "refresh": "Actualizar",
+    "noFollowing": "No sigue a nadie"
+  },
+  "forgotPasswordPage": {
+    "titlePage": "Recuperar Contraseña | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al recuperar la contraseña.",
+    "title": "Olvidé mi contraseña",
+    "emailLabel": "Correo electrónico",
+    "submitEmail": "Enviar correo",
+    "codeLabel": "Código de verificación",
+    "newPasswordLabel": "Nueva contraseña",
+    "submitCode": "Enviar código",
+    "emailSent": "Se envió un código a tu correo. Ingresa el código para continuar.",
+    "emailError": "Hubo un error al enviar el código. Verifica tu correo e inténtalo de nuevo.",
+    "passwordUpdated": "¡Contraseña actualizada exitosamente!",
+    "codeError": "El código ingresado no es válido. Por favor, verifica y vuelve a intentarlo.",
+    "validationErrors": {
+      "invalidEmail": "Correo electrónico inválido.",
+      "codeRequired": "El código debe tener 6 caracteres.",
+      "passwordLength": "La contraseña debe tener al menos 4 caracteres."
+    }
+  },
+  "homePage": {
+    "titlePage": "Inicio | Apuntea",
+    "welcome": "Bienvenido a <appName>Apuntea</appName>",
+    "welcomeUser": "Bienvenido a <appName>Apuntea</appName>, {{username}}",
+    "tagline": "Tu plataforma favorita para compartir apuntes",
+    "cards": {
+      "organizeNotes": {
+        "title": "Organiza tus apuntes",
+        "description": "Crea carpetas y organiza tus apuntes"
+      },
+      "findNotes": {
+        "title": "Encuentra apuntes",
+        "description": "Busca apuntes de otros, compártelos, descárgalos y revísalos"
+      },
+      "editProfile": {
+        "title": "Edita tu perfil",
+        "description": "Actualiza tu información personal y configuraciones"
+      },
+      "register": {
+        "title": "Regístrate",
+        "description": "Crea una cuenta y comienza a compartir tus apuntes"
+      }
+    }
+  },
+  "loginPage": {
+    "titlePage": "Iniciar Sesión | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al iniciar sesión: {{error}}",
+    "login": "Iniciar Sesión",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "signup": "Registrarse",
+    "noAccount": "¿No tienes una cuenta?",
+    "forgotPassword": "Olvidé mi contraseña",
+    "invalidEmail": "Correo electrónico inválido",
+    "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
+  },
+  "miniSidebar": {
+    "admin": "Administrar",
+    "mynotes": "Mis Apuntes",
+    "myfavorites": "Mis Favoritos",
+    "myreviews": "Mis Reseñas",
+    "adminuser": "Usuarios",
+    "admincareers": "Carreras"
+  },
+  "navbar": {
+    "appName": "Apuntea",
+    "login": "Iniciar Sesión",
+    "signup": "Registrarse"
+  },
+  "noteCard": {
+    "hiddenNote": "Apunte oculto",
+    "category": {
+      "theory": "Teoría",
+      "practice": "Práctica",
+      "exam": "Examen",
+      "other": "Otro"
+    },
+    "visible": "Visible",
+    "hidden": "Oculto",
+    "averageScore": "Puntuación Promedio"
+  },
+  "notePage": {
+    "titlePage": "{{noteName}} | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al obtener el apunte.",
+    "noteNotFound": "Este apunte no existe.",
+    "fileNotFound": "No se encontró archivo para este apunte.",
+    "fileNotPreviewable": "Este archivo no se puede previsualizar.",
+    "download": "Descargar",
+    "downloadSuccess": "¡Archivo descargado!",
+    "downloadError": "No se puede descargar el archivo.",
+    "favorite": "Favorito",
+    "unfavorite": "Quitar favorito",
+    "favorited": "¡Agregado a favoritos!",
+    "unfavorited": "¡Eliminado de favoritos!",
+    "favoriteError": "Error al cambiar favorito.",
+    "mustLoginFavorite": "Debes iniciar sesión para marcar favorito.",
+    "mustLoginReview": "Por favor inicia sesión para reseñar.",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "reviewsTitle": "Reseñas",
+    "updateReview": "Actualizar reseña",
+    "reviewPlaceholder": "Escribe tu reseña...",
+    "sendReview": "Enviar reseña",
+    "reviewCreated": "¡Tu reseña fue creada!",
+    "reviewUpdated": "¡Tu reseña fue actualizada!",
+    "reviewError": "Error al crear la reseña.",
+    "views": "{{count}} visualizaciones",
+    "ownerUnknown": "Propietario desconocido",
+    "moreReviewsHint": "¡Hay más reseñas disponibles abajo!",
+    "noMoreReviews": "No hay más reseñas disponibles."
+  },
+  "notesPage": {
+    "titlePage": "Apuntes | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al obtener los apuntes.",
+    "noSubjectsForYear": "No hay asignaturas disponibles para el año seleccionado.",
+    "yearButton": "Año {{year}}"
+  },
+  "paginationBar": {
+    "totalCount": "Mostrando {{from}} a {{to}} de {{totalCount}} resultados"
+  },
+  "profileButton": {
+    "loggedInAs": "Has iniciado sesión como",
+    "user": "Usuario",
+    "profile": {
+      "title": "Perfil"
+    },
+    "logout": "Cerrar Sesión"
+  },
+  "profileCard": {
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "career": "Carrera",
+    "institution": "Institución",
+    "notSet": "No establecido",
+    "enableEmailNotifications": "Habilitar notificaciones por correo",
+    "disableEmailNotifications": "Deshabilitar notificaciones por correo",
+    "updateFailed": "Actualización fallida",
+    "followers": "Seguidores",
+    "following": "Siguiendo"
+  },
+  "profilePage": {
+    "titlePage": "Perfil | Apuntea",
+    "loading": "Cargando...",
+    "profile": "Perfil",
+    "errorFetchingUser": "Error al obtener los datos del usuario.",
+    "noUserFound": "No se encontró ningún usuario."
+  },
+  "recentNotes": {
+    "loading": "Cargando...",
+    "errorFetchingNotes": "Error al obtener los apuntes.",
+    "recentNotes": "Apuntes recientes",
+    "viewMore": "Ver Más",
+    "noRecentNotes": "No se encontraron apuntes recientes."
+  },
+  "recentReviews": {
+    "loading": "Cargando...",
+    "errorFetchingReviews": "Error al obtener las reseñas.",
+    "recentReviews": "Reseñas recientes",
+    "viewMore": "Ver Más",
+    "noRecentReviews": "No se encontraron reseñas recientes."
+  },
+  "registerPage": {
+    "titlePage": "Registro | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al registrar: {{error}}",
+    "signup": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "institution": "Institución",
+    "career": "Carrera",
+    "invalidEmail": "Correo electrónico inválido",
+    "passwordMinLength": "La contraseña debe tener al menos 4 caracteres",
+    "selectInstitution": "Selecciona una institución",
+    "selectCareer": "Selecciona una carrera",
+    "youMustSelectInstitution": "Debes seleccionar una institución",
+    "youMustSelectCareer": "Debes seleccionar una carrera",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "toast": {
+      "success": "¡Cuenta creada exitosamente!",
+      "error": "Error al crear la cuenta."
+    }
+  },
+  "resultsTable": {
+    "name": "Nombre",
+    "subject": "Asignatura",
+    "owner": "Propietario",
+    "lastModifiedAt": "Última modificación",
+    "score": "Puntuación",
+    "year": "Año",
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "status": "Estado",
+    "actions": "Acciones"
+  },
+  "reviewCard": {
+    "hiddenNote": "Apunte oculto",
+    "you": "Tú"
+  },
+  "reviewsPage": {
+    "titlePage": "Reseñas | Apuntea",
+    "title": "Reseñas",
+    "filterLabel": "Filtrar Reseñas",
+    "filterReceived": "Reseñas Recibidas",
+    "filterGiven": "Reseñas Realizadas",
+    "loading": "Cargando...",
+    "errorFetching": "Error al cargar las reseñas.",
+    "noReviews": "No hay reseñas para mostrar."
+  },
+  "rowDirectory": {
+    "favoriteRemoved": "¡Directorio eliminado de favoritos!",
+    "favoriteAdded": "¡Directorio agregado a favoritos!",
+    "alreadyDirectoryFavorited": "El directorio ya está en favoritos.",
+    "favoriteActionFailed": "Error al actualizar el estado de favorito.",
+    "copySuccess": "¡Enlace copiado al portapapeles!",
+    "copyFailed": "Error al copiar el enlace.",
+    "dataUnknown": "Desconocido",
+    "delete": "Eliminar",
+    "copyLink": "Copiar Enlace",
+    "more": "Más",
+    "openOwnersNotes": "Abrir Apuntes del Propietario",
+    "openParentDirectory": "Abrir Directorio Padre",
+    "openSubjectsDirectories": "Abrir Directorio de la Materia",
+    "deleteDirectory": "Eliminar Directorio",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar este directorio?",
+    "deleteReason": "Razón",
+    "cancel": "Cancelar",
+    "deleting": "Eliminando...",
+    "confirm": "Confirmar",
+    "edit": "Editar",
+    "deleteSuccess": "¡Directorio eliminado exitosamente!",
+    "deleteError": "Error al eliminar el directorio.",
+    "unfollow": "Dejar de seguir",
+    "follow": "Seguir",
+    "loginToFavorite": "Inicia sesión para agregar a favoritos"
+  },
+  "rowNote": {
+    "favoriteRemoved": "¡Apunte eliminado de favoritos!",
+    "favoriteAdded": "¡Apunte agregado a favoritos!",
+    "alreadyFavorited": "El apunte ya está en favoritos.",
+    "favoriteActionFailed": "Error al actualizar el estado de favorito.",
+    "downloadSuccess": "¡Archivo descargado exitosamente!",
+    "downloadFailed": "Error al descargar el archivo.",
+    "fileNotAvailable": "Archivo no disponible.",
+    "copySuccess": "¡Enlace copiado al portapapeles!",
+    "copyFailed": "Error al copiar el enlace.",
+    "dataUnknown": "Desconocido",
+    "delete": "Eliminar",
+    "deleteNote": "Eliminar Apunte",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar este apunte?",
+    "deleteReason": "Razón",
+    "cancel": "Cancelar",
+    "deleting": "Eliminando...",
+    "confirm": "Confirmar",
+    "deleteSuccess": "¡Apunte eliminado exitosamente!",
+    "deleteError": "Error al eliminar el apunte.",
+    "unfavorite": "Eliminar Favorito",
+    "favorite": "Favorito",
+    "loginToFavorite": "Inicia sesión para agregar a favoritos",
+    "download": "Descargar",
+    "copyLink": "Copiar Enlace",
+    "more": "Más",
+    "openOwnersNotes": "Abrir Apuntes del Propietario",
+    "openParentDirectory": "Abrir Directorio Padre",
+    "openSubjectsDirectories": "Abrir Directorio de la Materia"
+  },
+  "rowSubject": {
+    "actions": {
+      "edit": "Editar Materia",
+      "unlink": "Desvincular de la Carrera"
+    },
+    "modals": {
+      "edit": {
+        "title": "Editar Materia",
+        "nameLabel": "Nombre de la Materia",
+        "yearLabel": "Año",
+        "success": "Materia editada exitosamente.",
+        "error": "No se pudo editar la materia."
+      },
+      "unlink": {
+        "title": "Desvincular Materia",
+        "confirmation": "¿Estás seguro de que deseas desvincular \"{{subjectName}}\" de esta carrera?",
+        "success": "Materia desvinculada exitosamente de la carrera.",
+        "error": "No se pudo desvincular la materia de la carrera."
+      },
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "confirm": "Confirmar"
+    }
+  },
+  "rowUser": {
+    "status": {
+      "active": "Activo",
+      "banned": "Baneado"
+    },
+    "actions": {
+      "ban": "Banear usuario",
+      "unban": "Desbanear usuario"
+    },
+    "modals": {
+      "ban": {
+        "title": "Banear Usuario",
+        "reasonLabel": "Razón para banear"
+      },
+      "unban": {
+        "title": "Desbanear Usuario",
+        "confirmation": "¿Estás seguro de que deseas desbanear a este usuario?"
+      },
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "toast": {
+      "ban": {
+        "success": "Usuario baneado exitosamente.",
+        "error": "No se pudo banear al usuario."
+      },
+      "unban": {
+        "success": "Usuario desbaneado exitosamente.",
+        "error": "No se pudo desbanear al usuario."
+      }
+    }
+  },
+  "searchForm": {
+    "institution": "Institución",
+    "career": "Carrera",
+    "subject": "Materia",
+    "word": "Buscar por nombre",
+    "sortBy": "Ordenar Por",
+    "name": "Nombre",
+    "lastModifiedAt": "Última Modificación",
+    "score": "Puntuación",
+    "createdAt": "Creado en",
+    "owner": "Propietario",
+    "actions": "Acciones",
+    "asc": "Ascendente",
+    "desc": "Descendente",
+    "folders": "Carpetas",
+    "notes": "Apuntes",
+    "noInstitution": "Sin institución",
+    "noCareer": "Sin carrera",
+    "noSubject": "Sin materia"
+  },
+  "searchPage": {
+    "titlePage": "Buscar | Apuntea",
+    "title": "Buscar",
+    "noContent": "No se encontró contenido."
+  },
+  "subjectDirectoryCard": {
+    "notesCount": "{{count}} apunte",
+    "notesCount_plural": "{{count}} apuntes",
+    "errorFetchingDirectory": "Error al cargar el directorio."
+  },
+  "userNotes": {
+    "mustHaveCareerInstitution": "Debes tener una carrera e institución para ver tus apuntes.",
+    "errorFetching": "Error al obtener los apuntes.",
+    "notes": "Apuntes",
+    "noSubjects": "No se encontraron asignaturas.",
+    "yearButton": "Año {{year}}",
+    "noSubjectsForYear": "No hay asignaturas disponibles para el año seleccionado."
+  },
+  "userPage": {
+    "titlePage": "@{{username}} | Apuntea",
+    "userNotFound": "Usuario no encontrado.",
+    "errorFetchingUser": "Error al obtener el usuario.",
+    "loading": "Cargando..."
+  },
+  "userProfileCard": {
+    "follow": "Seguir",
+    "unfollow": "Dejar de seguir",
+    "followed": "Has seguido a este usuario.",
+    "unfollowed": "Has dejado de seguir a este usuario.",
+    "followFailed": "Error al seguir al usuario.",
+    "unfollowFailed": "Error al dejar de seguir al usuario.",
+    "noCareer": "Carrera no establecida.",
+    "noInstitution": "Institución no establecida."
+  }
+}

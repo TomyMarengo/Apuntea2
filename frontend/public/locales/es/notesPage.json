@@ -1,7 +1,0 @@
-{
-  "titlePage": "Apuntes | Apuntea",
-  "loading": "Cargando...",
-  "errorFetching": "Error al obtener los apuntes.",
-  "noSubjectsForYear": "No hay asignaturas disponibles para el año seleccionado.",
-  "yearButton": "Año {{year}}"
-}

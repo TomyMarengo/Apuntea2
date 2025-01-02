@@ -1,6 +1,0 @@
-{
-  "favorited": "Directory added to favorites!",
-  "unfavorited": "Directory removed from favorites!",
-  "removeFavorite": "Remove from favorites",
-  "errorUnfavorite": "Failed to update favorite status."
-}

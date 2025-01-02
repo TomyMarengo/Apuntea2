@@ -1,7 +1,0 @@
-{
-  "titlePage": "Notes | Apuntea",
-  "loading": "Loading...",
-  "errorFetching": "Error fetching notes.",
-  "noSubjectsForYear": "No subjects available for the selected year.",
-  "yearButton": "Year {{year}}"
-}

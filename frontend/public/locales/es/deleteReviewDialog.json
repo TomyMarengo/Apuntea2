@@ -1,9 +1,0 @@
-{
-  "deleteReviewTitle": "Eliminar Reseña",
-  "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar esta reseña?",
-  "reason": "Razón",
-  "cancel": "Cancelar",
-  "delete": "Eliminar",
-  "deleteSuccess": "Reseña eliminada exitosamente.",
-  "deleteError": "Error al eliminar la reseña."
-}

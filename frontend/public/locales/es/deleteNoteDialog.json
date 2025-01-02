@@ -1,9 +1,0 @@
-{
-  "deleteSuccess": "Apunte eliminado exitosamente.",
-  "deleteError": "Error al eliminar el apunte.",
-  "deleteNoteTitle": "Eliminar Apunte",
-  "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este apunte?",
-  "reason": "Razón de la eliminación",
-  "cancel": "Cancelar",
-  "delete": "Eliminar"
-}

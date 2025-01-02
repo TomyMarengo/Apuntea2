@@ -1,6 +1,0 @@
-{
-  "titlePage": "@{{username}} | Apuntea",
-  "userNotFound": "User not found.",
-  "errorFetchingUser": "Error fetching user data.",
-  "loading": "Loading..."
-}
