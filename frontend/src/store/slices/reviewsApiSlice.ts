@@ -1,13 +1,13 @@
 // src/store/slices/reviewsApiSlice.ts
 
 import { apiSlice } from './apiSlice';
-import { Review } from '../../types';
-import { mapApiReview } from '../../utils/mappers';
 import {
   DELETE_REASON_CONTENT_TYPE,
   REVIEW_CREATE_CONTENT_TYPE,
-  REVIEW_UPDATE_CONTENT_TYPE
-} from "../../contentTypes.ts";
+  REVIEW_UPDATE_CONTENT_TYPE,
+} from '../../contentTypes.ts';
+import { Review } from '../../types';
+import { mapApiReview } from '../../utils/mappers';
 
 interface GetReviewsArgs {
   noteId?: string;
@@ -102,7 +102,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           : [{ type: 'Reviews', id: `LIST_${noteId}` }],
     }),
     getMyReview: builder.query<Review, ReviewArgs>({
-      query: ({ noteId, userId, url }) => url + `&userId=${userId}`,
+      query: ({ userId, url }) => url + `&userId=${userId}`,
       transformResponse: (response: any) => {
         const review = Array.isArray(response) ? response[0] : response;
         return mapApiReview(review);
@@ -123,7 +123,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
     }),
     createReview: builder.mutation<boolean, CreateReviewArgs>({
       queryFn: async (
-        { noteId, userId, score, content, url },
+        { noteId, score, content, url },
         _queryApi,
         _extraOptions,
         fetchWithBQ,

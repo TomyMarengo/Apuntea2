@@ -1,20 +1,21 @@
 // src/pages/User/UserPage.tsx
 
-import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, CircularProgress } from '@mui/material';
+import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+
+import UserNotes from './UserNotes';
+import UserProfileCard from './UserProfileCard';
 import { selectCurrentUser } from '../../store/slices/authSlice';
-import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import {
   useGetInstitutionQuery,
   useGetCareerQuery,
 } from '../../store/slices/institutionsApiSlice';
-import UserProfileCard from './UserProfileCard';
-import UserNotes from './UserNotes';
-import { useTranslation } from 'react-i18next';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import { User } from '../../types';
-import { Helmet } from 'react-helmet-async';
 
 const UserPage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();

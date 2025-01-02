@@ -1,9 +1,12 @@
 // src/store/slices/notesApiSlice.ts
 
 import { apiSlice } from './apiSlice';
+import {
+  DELETE_REASON_CONTENT_TYPE,
+  NOTE_UPDATE_CONTENT_TYPE,
+} from '../../contentTypes.ts';
 import { Note, NoteCategory } from '../../types';
 import { mapApiNote } from '../../utils/mappers';
-import {DELETE_REASON_CONTENT_TYPE, NOTE_UPDATE_CONTENT_TYPE} from "../../contentTypes.ts";
 
 interface NoteQueryArgs {
   noteId?: string;

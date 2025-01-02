@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Box,
   Typography,
@@ -7,20 +7,21 @@ import {
   Link,
   IconButton,
 } from '@mui/material';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { Link as RouterLink } from 'react-router-dom';
+
+import DeleteReviewDialog from '../pages/Reviews/dialogs/DeleteReviewDialog';
 import {
   selectCurrentToken,
   selectCurrentUser,
 } from '../store/slices/authSlice';
-import { Review } from '../types';
-import { Link as RouterLink } from 'react-router-dom';
-import { useGetUserQuery } from '../store/slices/usersApiSlice';
 import { useGetNoteQuery } from '../store/slices/notesApiSlice';
-import { useTranslation } from 'react-i18next';
-import DeleteIcon from '@mui/icons-material/Delete';
-import dayjs from 'dayjs';
-import localizedFormat from 'dayjs/plugin/localizedFormat';
-import DeleteReviewDialog from '../pages/Reviews/dialogs/DeleteReviewDialog';
+import { useGetUserQuery } from '../store/slices/usersApiSlice';
+import { Review } from '../types';
 
 dayjs.extend(localizedFormat);
 

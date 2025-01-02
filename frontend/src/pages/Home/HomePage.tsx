@@ -1,12 +1,13 @@
 // src/pages/Home/HomePage.tsx
 
-import { Box, Typography, Card, CardContent, Stack } from '@mui/material';
 import { Folder, Search, Person } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Box, Typography, Card, CardContent, Stack } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 import { Trans, useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import { selectCurrentUser } from '../../store/slices/authSlice';
-import { Helmet } from 'react-helmet-async';
 
 export default function HomePage() {
   const { t } = useTranslation('homePage');

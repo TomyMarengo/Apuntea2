@@ -8,16 +8,18 @@ import {
   Button,
   CircularProgress,
 } from '@mui/material';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { User } from '../../types';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
+import { selectCurrentUserId } from '../../store/slices/authSlice';
 import {
   useFollowUserMutation,
   useUnfollowUserMutation,
   useIsFollowingUserQuery,
 } from '../../store/slices/usersApiSlice';
-import { useSelector } from 'react-redux';
-import { selectCurrentUserId } from '../../store/slices/authSlice';
-import { toast } from 'react-toastify';
+import { User } from '../../types';
 
 interface UserProfileCardProps {
   user: User;
@@ -56,6 +58,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
         toast.error(t('followFailed'));
       }
     } catch (error) {
+      console.error('Failed to follow user:', error);
       toast.error(t('followFailed'));
     }
   };
@@ -73,6 +76,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
         toast.error(t('unfollowFailed'));
       }
     } catch (error) {
+      console.error('Failed to unfollow user:', error);
       toast.error(t('unfollowFailed'));
     }
   };

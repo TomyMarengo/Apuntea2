@@ -1,14 +1,15 @@
 // src/components/SubjectDirectoryCard.tsx
 
-import React from 'react';
-import { Box, Typography, Tooltip, CircularProgress } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
+import { Box, Typography, Tooltip, CircularProgress } from '@mui/material';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchNotesQuery } from '../store/slices/searchApiSlice';
-import { useGetDirectoryQuery } from '../store/slices/directoriesApiSlice';
-import { Subject } from '../types';
 import { useNavigate } from 'react-router-dom';
+
+import { useGetDirectoryQuery } from '../store/slices/directoriesApiSlice';
+import { useSearchNotesQuery } from '../store/slices/searchApiSlice';
+import { Subject } from '../types';
 
 interface SubjectDirectoryCardProps {
   subject: Subject;

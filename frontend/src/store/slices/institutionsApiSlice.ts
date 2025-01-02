@@ -1,6 +1,11 @@
 // src/store/slices/institutionsApiSlice.ts
 
 import { apiSlice } from './apiSlice';
+import {
+  SUBJECT_CAREER_CONTENT_TYPE,
+  SUBJECT_CAREER_CREATE_CONTENT_TYPE,
+  SUBJECT_CONTENT_TYPE,
+} from '../../contentTypes.ts';
 import { Institution, Career, Subject, SubjectCareer } from '../../types';
 import {
   mapApiSubject,
@@ -8,11 +13,6 @@ import {
   mapApiCareer,
   mapApiSubjectCareer,
 } from '../../utils/mappers';
-import {
-  SUBJECT_CAREER_CONTENT_TYPE,
-  SUBJECT_CAREER_CREATE_CONTENT_TYPE,
-  SUBJECT_CONTENT_TYPE
-} from "../../contentTypes.ts";
 
 /**
  * One-of logic:
@@ -159,7 +159,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           }
 
           return { data: true }; // Return true if everything was successful
-        } catch (error: any) {
+        } catch (error) {
+          console.error('Failed to create subject:', error);
           return { data: false }; // Return false if an exception occurs
         }
       },
@@ -202,7 +203,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
           }
           return { data: true }; // Return true if everything was successful
-        } catch (error: any) {
+        } catch (error) {
+          console.error('Failed to update subject:', error);
           return { data: false }; // Return false if an exception occurs
         }
       },
@@ -230,7 +232,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
           }
           return { data: true }; // Return true if everything was successful
-        } catch (error: any) {
+        } catch (error) {
+          console.error('Failed to link subject to career:', error);
           return { data: false }; // Return false if an exception occurs
         }
       },
@@ -254,7 +257,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             if (subjectCareerResult.error) return { data: false }; // Return false if there's an error
           }
           return { data: true }; // Return true if everything was successful
-        } catch (error: any) {
+        } catch (error) {
+          console.error('Failed to unlink subject from career:', error);
           return { data: false }; // Return false if an exception occurs
         }
       },

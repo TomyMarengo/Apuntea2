@@ -1,13 +1,13 @@
 // src/store/slices/directoriesApiSlice.ts
 
 import { apiSlice } from './apiSlice';
-import { Directory } from '../../types';
-import { mapApiDirectory } from '../../utils/mappers';
 import {
   DELETE_REASON_CONTENT_TYPE,
   DIRECTORY_CREATE_CONTENT_TYPE,
-  DIRECTORY_UPDATE_CONTENT_TYPE
-} from "../../contentTypes.ts";
+  DIRECTORY_UPDATE_CONTENT_TYPE,
+} from '../../contentTypes.ts';
+import { Directory } from '../../types';
+import { mapApiDirectory } from '../../utils/mappers';
 
 interface DirectoryQueryArgs {
   directoryId?: string;

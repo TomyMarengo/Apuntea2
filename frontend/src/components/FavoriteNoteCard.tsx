@@ -1,18 +1,19 @@
 // src/components/FavoriteNoteCard.tsx
 
-import React, { useEffect, useState } from 'react';
-import { Box, Tooltip, IconButton, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { Box, Tooltip, IconButton, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import {
   useRemoveFavoriteNoteMutation,
   useAddFavoriteNoteMutation,
   useGetIsFavoriteNoteQuery,
 } from '../store/slices/notesApiSlice';
 import { Note } from '../types';
-import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
 import NoteFileIcon from './NoteFileIcon';
 
 interface FavoriteNoteCardProps {

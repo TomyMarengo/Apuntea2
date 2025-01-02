@@ -1,6 +1,5 @@
 // src/pages/Reviews/ReviewsPage.tsx
 
-import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
@@ -11,20 +10,22 @@ import {
   CircularProgress,
   SelectChangeEvent,
 } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+
+import PaginationBar from '../../components/PaginationBar';
+import ReviewCard from '../../components/ReviewCard';
 import { selectCurrentUser } from '../../store/slices/authSlice';
 import { useGetReviewsQuery } from '../../store/slices/reviewsApiSlice';
-import ReviewCard from '../../components/ReviewCard';
-import PaginationBar from '../../components/PaginationBar';
 import { Review } from '../../types';
-import { Helmet } from 'react-helmet-async';
 
 const ReviewsPage: React.FC = () => {
   const { t } = useTranslation('reviewsPage');
   const currentUser = useSelector(selectCurrentUser);
-  const [searchParams, _setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const page = parseInt(searchParams.get('page') || '1', 10);
@@ -40,7 +41,7 @@ const ReviewsPage: React.FC = () => {
     params.set('page', String(page));
     params.set('filter', filter);
     navigate({ search: `?${params}` }, { replace: true });
-  }, [page, filter]);
+  }, [page, filter, navigate]);
 
   const queryParams: any = {
     page,

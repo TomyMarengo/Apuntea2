@@ -1,9 +1,7 @@
 // src/components/ProfileButton.tsx
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { logOut, selectCurrentUser } from '../store/slices/authSlice';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Button,
   Menu,
@@ -14,9 +12,12 @@ import {
   useTheme,
   Avatar,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import { logOut, selectCurrentUser } from '../store/slices/authSlice';
 
 const ProfileButton: React.FC = () => {
   const dispatch = useDispatch();

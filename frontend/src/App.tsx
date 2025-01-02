@@ -1,20 +1,21 @@
 // src/App.tsx
 
+import { CssBaseline, Box, GlobalStyles } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+
+import MiniSidebar from './components/Navbar/MiniSidebar';
+import Navbar from './components/Navbar/Navbar';
+import AppRouter from './routes/AppRouter';
 import {
   selectCurrentToken,
   selectCurrentUser,
 } from './store/slices/authSlice';
-import Navbar from './components/Navbar/Navbar';
-import MiniSidebar from './components/Navbar/MiniSidebar';
-import AppRouter from './routes/AppRouter';
-import { CssBaseline, Box, GlobalStyles } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
+import { RootState } from './store/store';
 import { lightTheme, darkTheme } from './theme';
 import { Locale } from './types';
-import { useTranslation } from 'react-i18next';
-import { RootState } from './store/store';
 
 function App() {
   const { i18n } = useTranslation();
@@ -38,7 +39,7 @@ function App() {
   // Synchronize the Redux locale with the user locale if available
   useEffect(() => {
     i18n.changeLanguage(locale);
-  }, [locale]);
+  }, [locale, i18n]);
 
   const isLoggedIn = !!user;
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN');

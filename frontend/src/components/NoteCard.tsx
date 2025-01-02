@@ -1,10 +1,11 @@
 // src/components/NoteCard.tsx
 
-import React from 'react';
 import { Card, CardContent, Typography, CardActionArea } from '@mui/material';
-import { Note } from '../types';
-import { Link as RouterLink } from 'react-router-dom';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link as RouterLink } from 'react-router-dom';
+
+import { Note } from '../types';
 
 interface NoteCardProps {
   note: Note;

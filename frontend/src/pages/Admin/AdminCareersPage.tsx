@@ -1,6 +1,7 @@
 // src/pages/AdminCareersPage.tsx
 
-import React, { useState, useMemo } from 'react';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import {
   Box,
   FormControl,
@@ -19,7 +20,13 @@ import {
   TextField,
   CircularProgress,
 } from '@mui/material';
+import React, { useState, useMemo } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+
+import ResultsTable from '../../components/ResultsTable';
+import RowSubject, { ColumnSubject } from '../../components/Row/RowSubject';
 import {
   useGetInstitutionsQuery,
   useGetCareersQuery,
@@ -36,13 +43,8 @@ import {
   SubjectCareer,
   SubjectWithCareer,
 } from '../../types';
-import ResultsTable from '../../components/ResultsTable';
-import RowSubject, { ColumnSubject } from '../../components/Row/RowSubject';
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import { toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
-import { Helmet } from 'react-helmet-async';
 
 // Utility function for creating a numeric array range
 function range(start: number, end: number): number[] {

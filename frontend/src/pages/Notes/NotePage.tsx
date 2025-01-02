@@ -1,6 +1,11 @@
 // src/pages/Notes/NotePage.tsx
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DownloadIcon from '@mui/icons-material/Download';
+import EditIcon from '@mui/icons-material/Edit';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import {
   Box,
   Avatar,
@@ -12,20 +17,19 @@ import {
   TextField,
   CircularProgress,
 } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DownloadIcon from '@mui/icons-material/Download';
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-import { RootState } from '../../store/store';
+import DeleteNoteDialog from './dialogs/DeleteNoteDialog';
+import EditNoteDialog from './dialogs/EditNoteDialog';
+import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
+import ReviewCard from '../../components/ReviewCard';
 import { selectCurrentUser } from '../../store/slices/authSlice';
+import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
 import {
   useGetNoteQuery,
   useAddFavoriteNoteMutation,
@@ -33,20 +37,15 @@ import {
   useGetIsFavoriteNoteQuery,
   useGetNoteFileQuery,
 } from '../../store/slices/notesApiSlice';
-import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
-import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import {
   useGetReviewsQuery,
   useGetMyReviewQuery,
   useCreateReviewMutation,
   useUpdateReviewMutation,
 } from '../../store/slices/reviewsApiSlice';
-
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
+import { RootState } from '../../store/store';
 import { Review } from '../../types';
-import EditNoteDialog from './dialogs/EditNoteDialog';
-import DeleteNoteDialog from './dialogs/DeleteNoteDialog';
-import ReviewCard from '../../components/ReviewCard';
-import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
 import { Token } from '../../types';
 
 const NotePage: React.FC = () => {
@@ -119,7 +118,8 @@ const NotePage: React.FC = () => {
         }
       }
       refetchFav();
-    } catch (err) {
+    } catch (error) {
+      console.error('Failed to toggle favorite:', error);
       toast.error(t('favoriteError'));
     }
   };
@@ -307,7 +307,8 @@ const NotePage: React.FC = () => {
       } else {
         toast.error(t('reviewError'));
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Failed to save review:', error);
       toast.error(t('reviewError'));
     }
   };

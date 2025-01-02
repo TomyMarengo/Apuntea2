@@ -1,6 +1,7 @@
 // src/components/Row/RowUser.tsx
 
-import React, { useState } from 'react';
+import BlockIcon from '@mui/icons-material/Block';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
   IconButton,
   Tooltip,
@@ -14,26 +15,14 @@ import {
   Button,
   Link as MuiLink,
 } from '@mui/material';
+import { useState } from 'react';
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
-import { User, UserStatus } from '../../types';
-import { useUpdateUserStatusMutation } from '../../store/slices/usersApiSlice';
 import { useTranslation } from 'react-i18next';
-import BlockIcon from '@mui/icons-material/Block';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Column } from '../../types';
 
-export const ColumnUser: Column[] = [
-  { id: 'username', label: 'username' },
-  { id: 'email', label: 'email' },
-  { id: 'status', label: 'status' },
-  {
-    id: 'actions',
-    label: 'actions',
-    align: 'right',
-  },
-];
+import { useUpdateUserStatusMutation } from '../../store/slices/usersApiSlice';
+import { User, UserStatus } from '../../types';
 
 interface RowUserProps {
   user: User;

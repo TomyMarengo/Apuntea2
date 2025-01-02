@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.app.json",
+  "include": [
+    "eslint.config.js",
+    "postcss.config.js",
+    "tailwind.config.js",
+    "vite.config.ts"
+  ]
+}

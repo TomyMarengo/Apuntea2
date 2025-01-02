@@ -1,6 +1,7 @@
 // src/hooks/useSearch.ts
 
 import { useSearchParams } from 'react-router-dom';
+
 import {
   useSearchNotesQuery,
   useSearchDirectoriesQuery,
@@ -20,7 +21,7 @@ interface UseSearchReturn {
 }
 
 export default function useSearch(): UseSearchReturn {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   // Extract search parameters
   const pageParam = searchParams.get('page') || '1';

@@ -1,6 +1,7 @@
 // scripts/generateNamespaces.js
 
 import fs from 'fs';
+import process from 'node:process';
 import path from 'path';
 import { fileURLToPath } from 'url';
 

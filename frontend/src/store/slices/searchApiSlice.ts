@@ -1,8 +1,8 @@
 // src/store/slices/searchApiSlice.ts
 
 import { apiSlice } from './apiSlice';
-import { isUuid } from '../../utils/helpers';
 import { Note, Directory } from '../../types';
+import { isUuid } from '../../utils/helpers';
 import { mapApiNote, mapApiDirectory } from '../../utils/mappers';
 
 interface NotesSearchResponse {
@@ -68,7 +68,7 @@ export const searchApiSlice = apiSlice.injectEndpoints({
 
         const filteredParams = Object.fromEntries(
           Object.entries(queryParams).filter(
-            ([_, value]) => value != null && value !== '' && value != undefined,
+            ([, value]) => value != null && value !== '' && value != undefined,
           ),
         );
 
@@ -142,7 +142,7 @@ export const searchApiSlice = apiSlice.injectEndpoints({
 
         const filteredParams = Object.fromEntries(
           Object.entries(queryParams).filter(
-            ([_, value]) => value != null && value !== '' && value != undefined,
+            ([, value]) => value != null && value !== '' && value != undefined,
           ),
         );
 

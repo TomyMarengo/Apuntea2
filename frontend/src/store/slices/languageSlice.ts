@@ -1,6 +1,7 @@
 // src/store/slices/languageSlice.ts
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import { Locale } from '../../types';
 
 interface LanguageState {

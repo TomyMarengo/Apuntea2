@@ -1,6 +1,11 @@
 // src/pages/Profile/dialogs/EditProfileDialog.tsx
 
-import React, { useState, useEffect } from 'react';
+import {
+  Close as CloseIcon,
+  PhotoCamera,
+  Visibility,
+  VisibilityOff,
+} from '@mui/icons-material';
 import {
   Dialog,
   DialogTitle,
@@ -18,20 +23,16 @@ import {
   Typography,
   InputAdornment,
 } from '@mui/material';
-import {
-  Close as CloseIcon,
-  PhotoCamera,
-  Visibility,
-  VisibilityOff,
-} from '@mui/icons-material';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+
+import { useGetCareersQuery } from '../../../store/slices/institutionsApiSlice';
 import {
   useUpdateUserMutation,
   useUpdatePictureMutation,
 } from '../../../store/slices/usersApiSlice';
 import { Career, User } from '../../../types';
-import { useGetCareersQuery } from '../../../store/slices/institutionsApiSlice';
-import { toast } from 'react-toastify';
 
 interface EditProfileDialogProps {
   open: boolean;

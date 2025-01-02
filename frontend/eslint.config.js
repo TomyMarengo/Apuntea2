@@ -1,27 +1,31 @@
-// eslint.config.js (Flat Config)
+// eslint.config.js
 
 import js from '@eslint/js';
-import globals from 'globals';
-import reactHooks from 'eslint-plugin-react-hooks';
-import reactRefresh from 'eslint-plugin-react-refresh';
-
-// TypeScript
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-
-// Prettier
+import prettierConfigPackage from 'eslint-config-prettier';
+import importPlugin from 'eslint-plugin-import';
 import prettierPlugin from 'eslint-plugin-prettier';
-import { configs as prettierConfigs } from 'eslint-config-prettier';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import globals from 'globals';
+
+const { configs: prettierConfigs } = prettierConfigPackage;
 
 export default [
   {
-    // We want to lint TS, TSX, and optionally JS
     files: ['**/*.{ts,tsx,js}'],
-    ignores: ['dist', 'node_modules'],
+    ignores: [
+      'dist',
+      'node_modules',
+      'eslint.config.js',
+      'postcss.config.js',
+      'tailwind.config.js',
+      'vite.config.ts',
+    ],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        // Link to whichever tsconfig you want for linting
         project: ['./tsconfig.app.json'],
         ecmaVersion: 'latest',
         sourceType: 'module',
@@ -35,26 +39,89 @@ export default [
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       prettier: prettierPlugin,
+      import: importPlugin,
     },
     rules: {
-      // Base JS recommended
       ...js.configs.recommended.rules,
-      // TS recommended
       ...ts.configs.recommended.rules,
-      // React Hooks
       ...reactHooks.configs.recommended.rules,
-      // React Refresh
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
       ],
-
-      // Prettier as an ESLint rule:
       'prettier/prettier': 'warn',
+      'import/order': [
+        'warn',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            ['sibling', 'parent'],
+            'index',
+            'object',
+            'type',
+          ],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+        },
+      ],
+
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+  {
+    files: [
+      'eslint.config.js',
+      'postcss.config.js',
+      'tailwind.config.js',
+      'vite.config.ts',
+    ],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: ['./tsconfig.eslint.json'],
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+      globals: {
+        ...globals.browser,
+      },
+    },
+    plugins: {
+      '@typescript-eslint': ts,
+      prettier: prettierPlugin,
+      import: importPlugin,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...ts.configs.recommended.rules,
+      'prettier/prettier': 'warn',
+      'import/order': [
+        'warn',
+        {
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            ['sibling', 'parent'],
+            'index',
+            'object',
+            'type',
+          ],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+        },
+      ],
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
 
-  // Integrate Prettier's recommended config
-  // which disables ESLint rules that conflict with Prettier
-  prettierConfigs.recommended,
+  prettierConfigs?.recommended || {},
 ];

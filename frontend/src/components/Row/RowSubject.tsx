@@ -1,6 +1,7 @@
 // src/components/Row/RowSubject.tsx
 
-import React, { useState } from 'react';
+import EditIcon from '@mui/icons-material/Edit';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import {
   TableRow,
   TableCell,
@@ -13,25 +14,15 @@ import {
   Button,
   TextField,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+
 import {
   useUpdateSubjectMutation,
   useUnlinkSubjectCareerMutation,
 } from '../../store/slices/institutionsApiSlice';
-import { toast } from 'react-toastify';
-import { SubjectWithCareer, Column } from '../../types';
-
-export const ColumnSubject: Column[] = [
-  { id: 'name', label: 'name' },
-  { id: 'year', label: 'year' },
-  {
-    id: 'actions',
-    label: 'actions',
-    align: 'right',
-  },
-];
+import { SubjectWithCareer } from '../../types';
 
 interface RowSubjectProps {
   data: SubjectWithCareer;

@@ -1,6 +1,5 @@
 // src/pages/Directories/dialogs/DeleteDirectoryDialog.tsx
 
-import React, { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -10,9 +9,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDeleteDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { toast } from 'react-toastify';
+
+import { useDeleteDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { Directory } from '../../../types';
 
 interface DeleteDirectoryDialogProps {
@@ -28,7 +29,7 @@ const DeleteDirectoryDialog: React.FC<DeleteDirectoryDialogProps> = ({
   directory,
   shouldShowReason,
 }) => {
-  const { t } = useTranslation('deleteDirectoryDialog'); 
+  const { t } = useTranslation('deleteDirectoryDialog');
   const [deleteDirectory] = useDeleteDirectoryMutation();
   const [reason, setReason] = useState('');
 
@@ -44,7 +45,8 @@ const DeleteDirectoryDialog: React.FC<DeleteDirectoryDialogProps> = ({
       } else {
         toast.error(t('deleteError'));
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Failed to delete directory:', error);
       toast.error(t('deleteError'));
     }
   };

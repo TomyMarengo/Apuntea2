@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+
 import enTranslations from './i18n/en/translations.json';
 import esTranslations from './i18n/es/translations.json';
 import namespaces from './namespaces.json';

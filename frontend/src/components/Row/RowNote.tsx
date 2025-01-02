@@ -1,6 +1,11 @@
 // src/components/Row/RowNote.tsx
 
-import React, { useState } from 'react';
+import Delete from '@mui/icons-material/Delete';
+import DownloadIcon from '@mui/icons-material/Download';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import LinkIcon from '@mui/icons-material/Link';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
   Box,
   IconButton,
@@ -12,42 +17,28 @@ import {
   TableRow,
   TableCell,
 } from '@mui/material';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { saveAs } from 'file-saver';
+import React, { useState, JSX } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
+import {
+  selectCurrentUser,
+  selectCurrentToken,
+} from '../../store/slices/authSlice';
 import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
-import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import {
   useAddFavoriteNoteMutation,
   useRemoveFavoriteNoteMutation,
   useGetIsFavoriteNoteQuery,
 } from '../../store/slices/notesApiSlice';
-import { saveAs } from 'file-saver';
-import { useSelector } from 'react-redux';
-import {
-  selectCurrentUser,
-  selectCurrentToken,
-} from '../../store/slices/authSlice';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import { Note, Subject } from '../../types';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import DownloadIcon from '@mui/icons-material/Download';
-import LinkIcon from '@mui/icons-material/Link';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Delete from '@mui/icons-material/Delete';
-import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
-import { Column } from '../../types';
 import NoteFileIcon from '../NoteFileIcon';
-
-export const ColumnNote: Column[] = [
-  { id: 'name', label: 'name' },
-  { id: 'subject', label: 'subject' },
-  { id: 'owner', label: 'owner' },
-  { id: 'lastModifiedAt', label: 'lastModifiedAt' },
-  { id: 'score', label: 'score' },
-  { id: 'actions', label: 'actions', align: 'right' },
-];
 
 interface RowNoteProps {
   note: Note;

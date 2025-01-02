@@ -1,6 +1,5 @@
 // src/pages/Notes/dialogs/EditNoteDialog.tsx
 
-import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -15,10 +14,12 @@ import {
   Switch,
   FormControlLabel,
 } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Note, NoteCategory } from '../../../types';
-import { useUpdateNoteMutation } from '../../../store/slices/notesApiSlice';
 import { toast } from 'react-toastify';
+
+import { useUpdateNoteMutation } from '../../../store/slices/notesApiSlice';
+import { Note, NoteCategory } from '../../../types';
 
 interface EditNoteDialogProps {
   open: boolean;
@@ -60,7 +61,8 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
         toast.success(t('editSuccess'));
         onClose();
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Failed to edit note:', error);
       toast.error(t('editError'));
     }
   };

@@ -1,12 +1,13 @@
 // src/pages/Profile/RecentNotes.tsx
 
-import React from 'react';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
+
+import NoteCard from '../../components/NoteCard';
 import { useGetLatestNotesQuery } from '../../store/slices/notesApiSlice';
 import { Note } from '../../types';
-import NoteCard from '../../components/NoteCard';
 
 interface RecentNotesProps {
   userId?: string;

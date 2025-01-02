@@ -1,19 +1,20 @@
 // src/components/FavoriteDirectoryCard.tsx
 
-import React, { useEffect, useState } from 'react';
-import { Box, Tooltip, IconButton, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FolderIcon from '@mui/icons-material/Folder';
+import { Box, Tooltip, IconButton, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import {
   useRemoveFavoriteDirectoryMutation,
   useAddFavoriteDirectoryMutation,
   useGetIsFavoriteDirectoryQuery,
 } from '../store/slices/directoriesApiSlice';
 import { Directory } from '../types';
-import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
 
 interface FavoriteDirectoryCardProps {
   directory: Directory;
@@ -89,7 +90,9 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
           <FolderIcon
             sx={{
               fontSize: 48,
-              color: `#${directory.iconColor}` || 'primary.main',
+              color: directory.iconColor
+                ? `#${directory.iconColor}`
+                : 'primary.main',
             }}
           />
         </Box>

@@ -1,11 +1,13 @@
 // src/components/LanguageToggle.tsx
 
-import { IconButton, Menu, MenuItem } from '@mui/material';
 import LanguageIcon from '@mui/icons-material/Language';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import React from 'react';
 import { useState } from 'react';
-import { Locale } from '../types';
 import { useDispatch } from 'react-redux';
+
 import { setLocale } from '../store/slices/languageSlice';
+import { Locale } from '../types';
 
 export default function LanguageToggle() {
   const dispatch = useDispatch();

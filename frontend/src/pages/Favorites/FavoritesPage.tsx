@@ -1,5 +1,6 @@
 // src/pages/Favorites/FavoritesPage.tsx
 
+import RefreshIcon from '@mui/icons-material/Refresh';
 import {
   Box,
   Button,
@@ -8,18 +9,18 @@ import {
   Stack,
   IconButton,
 } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import { useSearchParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../store/slices/authSlice';
-import PaginationBar from '../../components/PaginationBar';
-import FavoriteNoteCard from '../../components/FavoriteNoteCard';
+import { useSearchParams } from 'react-router-dom';
+
 import FavoriteDirectoryCard from '../../components/FavoriteDirectoryCard';
-import { useGetUserNotesFavoritesQuery } from '../../store/slices/notesApiSlice';
+import FavoriteNoteCard from '../../components/FavoriteNoteCard';
+import PaginationBar from '../../components/PaginationBar';
+import { selectCurrentUser } from '../../store/slices/authSlice';
 import { useGetUserDirectoriesFavoritesQuery } from '../../store/slices/directoriesApiSlice';
+import { useGetUserNotesFavoritesQuery } from '../../store/slices/notesApiSlice';
 import { Note, Directory } from '../../types';
-import { Helmet } from 'react-helmet-async';
 
 const DEFAULT_PAGE_SIZE = 10;
 

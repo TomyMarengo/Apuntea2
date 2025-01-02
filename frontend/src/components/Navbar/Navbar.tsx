@@ -1,5 +1,6 @@
 // src/components/Navbar/Navbar.tsx
 
+import SearchIcon from '@mui/icons-material/Search';
 import {
   AppBar,
   Toolbar,
@@ -9,11 +10,11 @@ import {
   IconButton,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+
 import DarkModeToggle from '../DarkModeToggle';
 import LanguageToggle from '../LanguageToggle';
 import ProfileButton from '../ProfileButton';
-import { Link } from 'react-router-dom';
-import SearchIcon from '@mui/icons-material/Search';
 
 interface NavbarProps {
   isLoggedIn: boolean;

@@ -1,6 +1,5 @@
 // src/components/Follow/FollowItem.tsx
 
-import React from 'react';
 import {
   ListItem,
   ListItemAvatar,
@@ -10,15 +9,17 @@ import {
   Box,
   Link as MuiLink,
 } from '@mui/material';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import {
   useGetUserQuery,
   useIsFollowingUserQuery,
   useFollowUserMutation,
   useUnfollowUserMutation,
 } from '../../store/slices/usersApiSlice';
-import { toast } from 'react-toastify';
-import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 interface FollowItemProps {
   followId: string;
@@ -53,7 +54,7 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
       } else {
         toast.error(t('errorFollow'));
       }
-    } catch (error) {
+    } catch {
       toast.error(t('errorFollow'));
     }
   };
@@ -70,7 +71,7 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
       } else {
         toast.error(t('errorUnfollow'));
       }
-    } catch (error) {
+    } catch {
       toast.error(t('errorUnfollow'));
     }
   };

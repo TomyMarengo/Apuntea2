@@ -1,6 +1,5 @@
 // src/pages/Reviews/dialogs/DeleteReviewDialog.tsx
 
-import React, { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -10,10 +9,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDeleteReviewMutation } from '../../../store/slices/reviewsApiSlice';
 import { toast } from 'react-toastify';
 
+import { useDeleteReviewMutation } from '../../../store/slices/reviewsApiSlice';
 import { Review } from '../../../types';
 
 interface DeleteReviewDialogProps {
@@ -49,7 +49,8 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
       } else {
         toast.error(t('deleteError'));
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Failed to delete review:', error);
       toast.error(t('deleteError'));
     }
   };

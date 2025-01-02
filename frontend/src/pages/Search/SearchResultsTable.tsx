@@ -1,11 +1,17 @@
 // src/pages/Search/SearchResultsTable.tsx
 
+import React from 'react';
+
 import ResultsTable from '../../components/ResultsTable';
-import RowNote, { ColumnNote } from '../../components/Row/RowNote';
-import RowDirectory, {
+import RowDirectory from '../../components/Row/RowDirectory';
+import RowNote from '../../components/Row/RowNote';
+import {
+  Note,
+  Directory,
+  Column,
+  ColumnNote,
   ColumnDirectory,
-} from '../../components/Row/RowDirectory';
-import { Note, Directory, Column } from '../../types';
+} from '../../types';
 
 interface Props {
   showNotes: boolean;

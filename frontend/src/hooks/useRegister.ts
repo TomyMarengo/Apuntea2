@@ -1,13 +1,14 @@
 // src/hooks/useRegister.ts
 
-import { decode } from '../utils/helpers';
+import { useDispatch } from 'react-redux';
+
 import { useLazyRegisterQuery } from '../store/slices/authApiSlice';
+import { setCredentials } from '../store/slices/authSlice';
 import {
   useCreateUserMutation,
   useLazyGetLoggedUserQuery,
 } from '../store/slices/usersApiSlice';
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '../store/slices/authSlice';
+import { decode } from '../utils/helpers';
 
 interface RegisterRequest {
   email: string;
@@ -65,7 +66,6 @@ export default function useRegister() {
 
       // Update the state with the complete user data
       dispatch(setCredentials({ token, refreshToken }));
-      
     } catch (error: any) {
       console.error('Error during registration:', error);
       throw new Error(

@@ -1,6 +1,6 @@
 // src/pages/Profile/ProfileCard.tsx
 
-import React, { useState } from 'react';
+import { Edit as EditIcon } from '@mui/icons-material';
 import {
   Card,
   Typography,
@@ -13,18 +13,19 @@ import {
   Button,
   CircularProgress,
 } from '@mui/material';
-import { Edit as EditIcon } from '@mui/icons-material';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+
 import EditProfileDialog from './dialogs/EditProfileDialog';
-import { User } from '../../types';
+import FollowersModal from '../../components/Follow/FollowersModal';
+import FollowingModal from '../../components/Follow/FollowingModal';
 import {
   useUpdateUserMutation,
   useGetFollowersQuery,
   useGetFollowingsQuery,
 } from '../../store/slices/usersApiSlice';
-import FollowersModal from '../../components/Follow/FollowersModal';
-import FollowingModal from '../../components/Follow/FollowingModal';
+import { User } from '../../types';
 
 interface ProfileCardProps {
   user: User;
@@ -61,6 +62,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
       );
       onUpdateSuccess();
     } catch (error) {
+      console.error('Failed to update user:', error);
       toast.error(t('updateFailed'));
     }
   };

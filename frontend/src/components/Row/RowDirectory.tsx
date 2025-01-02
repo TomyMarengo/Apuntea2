@@ -1,5 +1,12 @@
 // src/components/Follow/RowDirectory.tsx
 
+import Delete from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FolderIcon from '@mui/icons-material/Folder';
+import LinkIcon from '@mui/icons-material/Link';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
   IconButton,
   Tooltip,
@@ -11,42 +18,28 @@ import {
   TableCell,
   Box,
 } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import React, { JSX } from 'react';
 import { useState, MouseEvent } from 'react';
-import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
-import { useGetUserQuery } from '../../store/slices/usersApiSlice';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import DeleteDirectoryDialog from '../../pages/Directories/dialogs/DeleteDirectoryDialog';
+import EditDirectoryDialog from '../../pages/Directories/dialogs/EditDirectoryDialog';
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+} from '../../store/slices/authSlice';
 import {
   useAddFavoriteDirectoryMutation,
   useRemoveFavoriteDirectoryMutation,
   useGetIsFavoriteDirectoryQuery,
 } from '../../store/slices/directoriesApiSlice';
-import { useSelector } from 'react-redux';
-import {
-  selectCurrentToken,
-  selectCurrentUser,
-} from '../../store/slices/authSlice';
+import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import { Directory, Subject } from '../../types';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import LinkIcon from '@mui/icons-material/Link';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Delete from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteDirectoryDialog from '../../pages/Directories/dialogs/DeleteDirectoryDialog';
-import { Column } from '../../types';
-import EditDirectoryDialog from '../../pages/Directories/dialogs/EditDirectoryDialog';
-import FolderIcon from '@mui/icons-material/Folder';
-
-export const ColumnDirectory: Column[] = [
-  { id: 'name', label: 'name' },
-  { id: 'subject', label: 'subject' },
-  { id: 'owner', label: 'owner' },
-  { id: 'lastModifiedAt', label: 'lastModifiedAt' },
-  { id: 'actions', label: 'actions', align: 'right' },
-];
 
 interface RowDirectoryProps {
   directory: Directory;
@@ -208,7 +201,9 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
         <Box display="flex" alignItems="center">
           <FolderIcon
             sx={{
-              color: `#${directory.iconColor}` || 'primary.main',
+              color: directory.iconColor
+                ? `#${directory.iconColor}`
+                : 'primary.main',
             }}
           />
           <MuiLink

@@ -7,9 +7,10 @@ import {
   BaseQueryFn,
   FetchArgs,
 } from '@reduxjs/toolkit/query/react';
+
 import { setCredentials, logOut, invalidateToken } from './authSlice';
+import { USER_UPDATE_CONTENT_TYPE } from '../../contentTypes';
 import { decode } from '../../utils/helpers';
-import {USER_UPDATE_CONTENT_TYPE} from '../../contentTypes';
 const baseUrl = import.meta.env.VITE_API_URL as string;
 
 const baseQuery = fetchBaseQuery({
@@ -43,8 +44,7 @@ const baseQueryWithReauth: BaseQueryFn<
       typeof args === 'object' &&
       'headers' in args &&
       args.headers &&
-      args.headers['Content-Type'] ===
-        USER_UPDATE_CONTENT_TYPE
+      args.headers['Content-Type'] === USER_UPDATE_CONTENT_TYPE
     ) {
       throw new Error('InvalidPassword');
     }
@@ -71,7 +71,7 @@ const baseQueryWithReauth: BaseQueryFn<
 
 export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
-  endpoints: (_) => ({}),
+  endpoints: () => ({}),
   keepUnusedDataFor: 2,
   tagTypes: [
     'Institutions',

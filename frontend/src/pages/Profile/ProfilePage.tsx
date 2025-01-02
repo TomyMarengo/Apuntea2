@@ -1,15 +1,16 @@
 // src/pages/Profile/ProfilePage.tsx
 
-import React from 'react';
 import { Box, CircularProgress, Typography, Divider } from '@mui/material';
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+
 import ProfileCard from './ProfileCard';
 import RecentNotes from './RecentNotes';
 import RecentReviews from './RecentReviews';
-import { useGetLoggedUserQuery } from '../../store/slices/usersApiSlice';
 import { selectCurrentUserId } from '../../store/slices/authSlice';
-import { useSelector } from 'react-redux';
-import { Helmet } from 'react-helmet-async';
+import { useGetLoggedUserQuery } from '../../store/slices/usersApiSlice';
 
 const ProfilePage: React.FC = () => {
   const { t } = useTranslation('profilePage');

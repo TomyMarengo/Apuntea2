@@ -1,6 +1,5 @@
 // src/pages/Notes/dialogs/DeleteNoteDialog.tsx
 
-import React, { useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -10,11 +9,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Note } from '../../../types';
-import { useDeleteNoteMutation } from '../../../store/slices/notesApiSlice';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import { useDeleteNoteMutation } from '../../../store/slices/notesApiSlice';
+import { Note } from '../../../types';
 
 interface DeleteNoteDialogProps {
   open: boolean;
@@ -31,7 +32,6 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
   shouldShowReason,
   navigateBack = false,
 }) => {
-
   const { t } = useTranslation('deleteNoteDialog');
   const [deleteNote] = useDeleteNoteMutation();
   const [reason, setReason] = useState('');
@@ -51,7 +51,8 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
       } else {
         toast.error(t('deleteError'));
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Failed to delete note:', error);
       toast.error(t('deleteError'));
     }
   };

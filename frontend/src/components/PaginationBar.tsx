@@ -1,6 +1,7 @@
 // src/components/PaginationBar.tsx
 
 import { Box, Pagination, Typography } from '@mui/material';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 

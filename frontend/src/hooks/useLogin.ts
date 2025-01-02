@@ -1,10 +1,11 @@
 // src/hooks/useLogin.ts
 
+import { useDispatch } from 'react-redux';
+
 import { useLazyLoginQuery } from '../store/slices/authApiSlice';
+import { setCredentials } from '../store/slices/authSlice';
 import { useLazyGetLoggedUserQuery } from '../store/slices/usersApiSlice';
 import { decode } from '../utils/helpers';
-import { setCredentials } from '../store/slices/authSlice';
-import { useDispatch } from 'react-redux';
 
 interface Credentials {
   email: string;
@@ -13,9 +14,9 @@ interface Credentials {
 
 /**
  * Represents the response received after a login attempt.
- * 
+ *
  * @interface LoginResponse
- * 
+ *
  * @property {any} [token] - The authentication token returned by the server. Consider specifying a more precise type.
  * @property {any} [refreshToken] - The refresh token used to obtain a new authentication token. Consider specifying a more precise type.
  * @property {any} [user] - The user information returned by the server. Consider specifying a more precise type.

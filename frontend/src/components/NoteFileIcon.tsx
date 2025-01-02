@@ -1,10 +1,12 @@
-import { FileType } from '../types';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ImageIcon from '@mui/icons-material/Image';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import MovieIcon from '@mui/icons-material/Movie';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import React from 'react';
+
+import { FileType } from '../types';
 
 interface NoteFileIconProps {
   fileType?: FileType;

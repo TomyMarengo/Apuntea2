@@ -1,12 +1,13 @@
 // src/pages/Profile/RecentReviews.tsx
 
-import React from 'react';
 import { Box, Typography, Button, CircularProgress } from '@mui/material';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
+
+import ReviewCard from '../../components/ReviewCard';
 import { useGetReviewsQuery } from '../../store/slices/reviewsApiSlice';
 import { Review } from '../../types';
-import ReviewCard from '../../components/ReviewCard';
 
 interface RecentReviewsProps {
   targetId?: string;

@@ -1,9 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../store/slices/authSlice';
-import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
-import { useGetUserQuery } from '../../store/slices/usersApiSlice';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
   Typography,
@@ -11,17 +6,23 @@ import {
   Alert,
   IconButton,
 } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import SearchForm from '../Search/SearchForm';
-import SearchResultsTable from '../Search/SearchResultsTable';
+import { useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+
+import EditDirectoryDialog from './dialogs/EditDirectoryDialog';
+import CreateDirectoryFab from '../../components/CreateDirectoryFab';
+import CreateNoteFab from '../../components/CreateNoteFab';
+import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
 import PaginationBar from '../../components/PaginationBar';
 import useSearch from '../../hooks/useSearch';
-import CreateNoteFab from '../../components/CreateNoteFab';
-import CreateDirectoryFab from '../../components/CreateDirectoryFab';
-import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
-import { Helmet } from 'react-helmet-async';
-import EditDirectoryDialog from './dialogs/EditDirectoryDialog';
-import EditIcon from '@mui/icons-material/Edit';
+import { selectCurrentUser } from '../../store/slices/authSlice';
+import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
+import SearchForm from '../Search/SearchForm';
+import SearchResultsTable from '../Search/SearchResultsTable';
 
 export default function DirectoryPage() {
   const { directoryId } = useParams<{ directoryId: string }>();

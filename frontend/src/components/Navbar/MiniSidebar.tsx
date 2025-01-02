@@ -1,6 +1,10 @@
 // src/components/Navbar/MiniSidebar.tsx
 
-import React from 'react';
+import ClassIcon from '@mui/icons-material/Class';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FolderSharedIcon from '@mui/icons-material/FolderShared';
+import NotesIcon from '@mui/icons-material/Notes';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
 import {
   Box,
   Divider,
@@ -9,12 +13,8 @@ import {
   ListItemIcon,
   Typography,
 } from '@mui/material';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import FolderSharedIcon from '@mui/icons-material/FolderShared';
-import NotesIcon from '@mui/icons-material/Notes';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import PersonOffIcon from '@mui/icons-material/PersonOff';
-import ClassIcon from '@mui/icons-material/Class';
 import { Link } from 'react-router-dom';
 
 // Props for your mini sidebar (e.g. isAdmin).

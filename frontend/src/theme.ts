@@ -1,7 +1,7 @@
 // src/theme.ts
 
-import { createTheme } from '@mui/material/styles';
 import { PaletteColorOptions } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 
 // Extender la interfaz de Palette para incluir 'tertiary'
 declare module '@mui/material/styles' {

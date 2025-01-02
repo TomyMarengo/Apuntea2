@@ -1,6 +1,11 @@
 // src/pages/ForgotPassword/ForgotPasswordPage.tsx
 
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Close as CloseIcon,
+  Visibility,
+  VisibilityOff,
+} from '@mui/icons-material';
 import {
   TextField,
   Button,
@@ -12,19 +17,15 @@ import {
   CardContent,
   CircularProgress,
 } from '@mui/material';
-import {
-  Close as CloseIcon,
-  Visibility,
-  VisibilityOff,
-} from '@mui/icons-material';
-import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import useForgotPassword from '../../hooks/useForgotPassword';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useForm, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { z } from 'zod';
+
+import useForgotPassword from '../../hooks/useForgotPassword';
 
 // Define validation schemas with Zod
 const emailSchema = z
@@ -73,7 +74,8 @@ export default function ForgotPasswordPage() {
       toast.success(t('emailSent'));
       setStep('code');
       reset({ email: data.email });
-    } catch (error: any) {
+    } catch (error) {
+      console.error('Failed to submit email:', error);
       toast.error(t('emailError'));
     } finally {
       setLoading(false);

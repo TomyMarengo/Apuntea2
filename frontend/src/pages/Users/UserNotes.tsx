@@ -1,6 +1,5 @@
 // src/pages/Users/UserNotes.tsx
 
-import React, { useMemo, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -8,15 +7,17 @@ import {
   CircularProgress,
   Stack,
 } from '@mui/material';
+import React, { useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+
+import PaginationBar from '../../components/PaginationBar';
+import SubjectDirectoryCard from '../../components/SubjectDirectoryCard';
 import {
   useGetSubjectsByCareerQuery,
   useGetSubjectCareersQuery,
 } from '../../store/slices/institutionsApiSlice';
 import { Subject, SubjectCareer, User } from '../../types';
-import PaginationBar from '../../components/PaginationBar';
-import SubjectDirectoryCard from '../../components/SubjectDirectoryCard';
 
 interface UserNotesProps {
   user: User;

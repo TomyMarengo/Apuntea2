@@ -1,15 +1,17 @@
 // src/store/slices/usersApiSlice.ts
 
 import { apiSlice } from './apiSlice';
-import { User, Career, Institution, UserStatus } from '../../types';
 import { setCurrentUser } from './authSlice';
-import { mapApiUser } from '../../utils/mappers';
 import { setLocale } from './languageSlice';
 import {
-  USER_CREATE_CONTENT_TYPE, USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
-  USER_UPDATE_CONTENT_TYPE, USER_UPDATE_PASSWORD_CONTENT_TYPE,
-  USER_UPDATE_STATUS_CONTENT_TYPE
-} from "../../contentTypes.ts";
+  USER_CREATE_CONTENT_TYPE,
+  USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
+  USER_UPDATE_CONTENT_TYPE,
+  USER_UPDATE_PASSWORD_CONTENT_TYPE,
+  USER_UPDATE_STATUS_CONTENT_TYPE,
+} from '../../contentTypes.ts';
+import { User, Career, Institution, UserStatus } from '../../types';
+import { mapApiUser } from '../../utils/mappers';
 
 interface GetUsersArgs {
   url?: string;
@@ -181,6 +183,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
           return { data: user };
         } catch (error) {
+          console.error('Failed to fetch user data:', error);
           return {
             error: {
               status: 'CUSTOM_ERROR',
@@ -201,7 +204,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
     }),
     updatePicture: builder.mutation<boolean, PictureArgs>({
       queryFn: async (
-        { url, profilePicture, userId },
+        { url, profilePicture },
         _api,
         _extraOptions,
         baseQuery,

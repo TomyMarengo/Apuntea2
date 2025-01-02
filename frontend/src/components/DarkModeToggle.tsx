@@ -3,8 +3,9 @@
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../store/store';
+
 import { toggleDarkMode } from '../store/slices/themeSlice';
+import { RootState } from '../store/store';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,

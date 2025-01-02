@@ -1,21 +1,22 @@
 // src/routes/AppRouter.tsx
 import { Routes, Route } from 'react-router-dom';
+
+import AdminRoute from './AdminRoute';
+import PrivateRoute from './PrivateRoute';
+import AdminCareersPage from '../pages/Admin/AdminCareersPage';
+import AdminUsersPage from '../pages/Admin/AdminUsersPage';
+import DirectoryPage from '../pages/Directories/DirectoryPage';
+import FavoritesPage from '../pages/Favorites/FavoritesPage';
+import ForgotPasswordPage from '../pages/ForgotPassword/ForgotPasswordPage';
 import HomePage from '../pages/Home/HomePage';
 import LoginPage from '../pages/Login/LoginPage';
-import RegisterPage from '../pages/Register/RegisterPage';
-import SearchPage from '../pages/Search/SearchPage';
 import NotePage from '../pages/Notes/NotePage';
-import DirectoryPage from '../pages/Directories/DirectoryPage';
 import NotesPage from '../pages/Notes/NotesPage';
 import ProfilePage from '../pages/Profile/ProfilePage';
-import AdminUsersPage from '../pages/Admin/AdminUsersPage';
-import AdminCareersPage from '../pages/Admin/AdminCareersPage';
-import FavoritesPage from '../pages/Favorites/FavoritesPage';
+import RegisterPage from '../pages/Register/RegisterPage';
 import ReviewsPage from '../pages/Reviews/ReviewsPage';
-import ForgotPasswordPage from '../pages/ForgotPassword/ForgotPasswordPage';
+import SearchPage from '../pages/Search/SearchPage';
 import UserPage from '../pages/Users/UserPage';
-import PrivateRoute from './PrivateRoute';
-import AdminRoute from './AdminRoute';
 
 export default function AppRouter() {
   return (

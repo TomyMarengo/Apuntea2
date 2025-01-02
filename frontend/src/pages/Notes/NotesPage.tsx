@@ -1,6 +1,5 @@
 // src/pages/Notes/NotesPage.tsx
 
-import { useMemo, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -8,20 +7,20 @@ import {
   CircularProgress,
   Stack,
 } from '@mui/material';
+import { useMemo, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 
+import PaginationBar from '../../components/PaginationBar';
+import SubjectDirectoryCard from '../../components/SubjectDirectoryCard';
+import { selectCurrentUser } from '../../store/slices/authSlice';
 import {
   useGetSubjectsByCareerQuery,
   useGetSubjectCareersQuery,
 } from '../../store/slices/institutionsApiSlice';
-
 import { Subject, SubjectCareer } from '../../types';
-import PaginationBar from '../../components/PaginationBar';
-import { selectCurrentUser } from '../../store/slices/authSlice';
-import SubjectDirectoryCard from '../../components/SubjectDirectoryCard';
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -111,7 +110,7 @@ export default function NotesPage() {
       const firstYear = uniqueYears[0];
       navigate({ search: `?year=${firstYear}&page=1` }, { replace: true });
     }
-  }, [uniqueYears, selectedYear, setSearchParams]);
+  }, [uniqueYears, selectedYear, setSearchParams, navigate]);
 
   // Filter subjects by the selected year
   const filteredSubjects = useMemo(() => {

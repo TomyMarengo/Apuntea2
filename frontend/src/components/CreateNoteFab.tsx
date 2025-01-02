@@ -1,6 +1,7 @@
 // src/components/CreateNoteFab.tsx
 
-import React, { useState, useRef } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import {
   Box,
   Fab,
@@ -18,13 +19,13 @@ import {
   ClickAwayListener,
   CircularProgress,
 } from '@mui/material';
-import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import React, { useState, useRef } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useCreateNoteMutation } from '../store/slices/notesApiSlice';
 import { z } from 'zod';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+
+import { useCreateNoteMutation } from '../store/slices/notesApiSlice';
 import { NoteCategory } from '../types';
 
 // Define the Zod schema for form validation
@@ -86,7 +87,7 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
   };
 
   // If user clicks away outside the box, close if expanded
-  const handleClickAway = (_event: MouseEvent | TouchEvent) => {
+  const handleClickAway = () => {
     if (expanded) {
       setExpanded(false);
     }

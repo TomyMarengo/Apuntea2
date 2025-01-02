@@ -1,6 +1,7 @@
 // src/components/CreateDirectoryFab.tsx
 
-import React, { useState, useRef } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import {
   Box,
   Fab,
@@ -16,13 +17,13 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
-import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+import React, { useState, useRef } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useCreateDirectoryMutation } from '../store/slices/directoriesApiSlice';
 import { z } from 'zod';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+
+import { useCreateDirectoryMutation } from '../store/slices/directoriesApiSlice';
 import { FolderIconColor } from '../types';
 
 // Define the Zod schema for form validation
@@ -78,7 +79,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
   };
 
   // Close the form when clicking outside
-  const handleClickAway = (_event: MouseEvent | TouchEvent) => {
+  const handleClickAway = () => {
     if (expanded) {
       setExpanded(false);
     }

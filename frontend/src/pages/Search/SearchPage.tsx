@@ -1,13 +1,14 @@
 // src/pages/Search/SearchPage.tsx
 
 import { Box, CircularProgress, Typography } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 import SearchForm from './SearchForm';
 import SearchResultsTable from './SearchResultsTable';
 import PaginationBar from '../../components/PaginationBar';
 import useSearch from '../../hooks/useSearch';
-import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 
 export default function SearchPage() {
   const { t } = useTranslation('searchPage');

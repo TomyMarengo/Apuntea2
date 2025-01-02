@@ -1,6 +1,6 @@
 // src/pages/Search/SearchForm.tsx
 
-import { useState, useEffect } from 'react';
+import { Close } from '@mui/icons-material';
 import {
   Box,
   TextField,
@@ -12,14 +12,15 @@ import {
   InputAdornment,
   Button,
 } from '@mui/material';
-import { Close } from '@mui/icons-material';
+import { SelectChangeEvent } from '@mui/material';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import {
   useGetInstitutionsQuery,
   useGetCareersQuery,
   useGetSubjectsByCareerQuery,
 } from '../../store/slices/institutionsApiSlice';
-import { SelectChangeEvent } from '@mui/material';
 
 interface SearchFormProps {
   searchFields: {
@@ -102,13 +103,22 @@ export default function SearchForm({
     return () => {
       clearTimeout(handler);
     };
-  }, [localWord]);
+  }, [
+    localWord,
+    localInstitutionId,
+    localCareerId,
+    localSubjectId,
+    category,
+    sortBy,
+    asc,
+    onSearch,
+  ]);
 
   useEffect(() => {
     if (category === 'directory' && sortBy === 'score') {
       onSearch({ sortBy: 'modified' });
     }
-  }, [category, sortBy]);
+  }, [category, sortBy, onSearch]);
 
   const handleInstitutionChange = (e: SelectChangeEvent<string>) => {
     const newInstitutionId = e.target.value;

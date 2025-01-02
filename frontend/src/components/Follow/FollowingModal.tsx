@@ -1,6 +1,6 @@
 // src/components/Follow/FollowingModal.tsx
 
-import React, { useState, useEffect } from 'react';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import {
   Dialog,
   DialogTitle,
@@ -10,12 +10,13 @@ import {
   Box,
   IconButton,
 } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { useGetFollowingsQuery } from '../../store/slices/usersApiSlice';
-import FollowItem from './FollowItem';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { toast } from 'react-toastify';
+
+import FollowItem from './FollowItem';
+import { useGetFollowingsQuery } from '../../store/slices/usersApiSlice';
 
 interface FollowingModalProps {
   open: boolean;

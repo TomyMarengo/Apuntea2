@@ -13,20 +13,22 @@ import {
   Typography,
   CircularProgress,
 } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import ResultsTable from '../../components/ResultsTable';
-import RowUser, { ColumnUser } from '../../components/Row/RowUser';
-import PaginationBar from '../../components/PaginationBar';
-import { useGetUsersQuery } from '../../store/slices/usersApiSlice';
-import { UserStatus } from '../../types';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import React from 'react';
 import { useState, useEffect } from 'react';
-import useDebounce from '../../hooks/useDebounce';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+
+import PaginationBar from '../../components/PaginationBar';
+import ResultsTable from '../../components/ResultsTable';
+import RowUser from '../../components/Row/RowUser';
+import useDebounce from '../../hooks/useDebounce';
+import { useGetUsersQuery } from '../../store/slices/usersApiSlice';
+import { UserStatus, ColumnUser } from '../../types';
 
 const AdminUsersPage: React.FC = () => {
   const { t } = useTranslation('adminUsersPage');
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   // Extract query parameters from the URL

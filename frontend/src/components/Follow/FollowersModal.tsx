@@ -1,6 +1,5 @@
 // src/components/Follow/FollowersModal.tsx
 
-import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,11 +8,13 @@ import {
   CircularProgress,
   Box,
 } from '@mui/material';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { useGetFollowersQuery } from '../../store/slices/usersApiSlice';
-import FollowItem from './FollowItem';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { toast } from 'react-toastify';
+
+import FollowItem from './FollowItem';
+import { useGetFollowersQuery } from '../../store/slices/usersApiSlice';
 
 interface FollowersModalProps {
   open: boolean;

@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -13,9 +12,11 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useUpdateDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { toast } from 'react-toastify';
+
+import { useUpdateDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { Directory } from '../../../types';
 import { FolderIconColor } from '../../../types';
 
@@ -59,7 +60,8 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
         toast.success(t('editSuccess'));
         onClose();
       }
-    } catch (err) {
+    } catch (error) {
+      console.error('Failed to edit directory:', error);
       toast.error(t('editFailed'));
     }
   };

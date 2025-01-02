@@ -1,6 +1,7 @@
 // src/components/DirectoryBreadcrumbs.tsx
 
-import { useState } from 'react';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import {
   Box,
   Typography,
@@ -12,12 +13,13 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import React from 'react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+
 import useDirectoryBreadcrumb from '../hooks/useDirectoryBreadcrumb';
 import { Directory, Note } from '../types';
-import { useTranslation } from 'react-i18next';
 
 interface DirectoryBreadcrumbsProps {
   currentDirectory: Directory;

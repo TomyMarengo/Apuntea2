@@ -174,6 +174,44 @@ export interface Column {
   align?: 'right' | 'left' | 'center';
 }
 
+export const ColumnDirectory: Column[] = [
+  { id: 'name', label: 'name' },
+  { id: 'subject', label: 'subject' },
+  { id: 'owner', label: 'owner' },
+  { id: 'lastModifiedAt', label: 'lastModifiedAt' },
+  { id: 'actions', label: 'actions', align: 'right' },
+];
+
+export const ColumnNote: Column[] = [
+  { id: 'name', label: 'name' },
+  { id: 'subject', label: 'subject' },
+  { id: 'owner', label: 'owner' },
+  { id: 'lastModifiedAt', label: 'lastModifiedAt' },
+  { id: 'score', label: 'score' },
+  { id: 'actions', label: 'actions', align: 'right' },
+];
+
+export const ColumnSubject: Column[] = [
+  { id: 'name', label: 'name' },
+  { id: 'year', label: 'year' },
+  {
+    id: 'actions',
+    label: 'actions',
+    align: 'right',
+  },
+];
+
+export const ColumnUser: Column[] = [
+  { id: 'username', label: 'username' },
+  { id: 'email', label: 'email' },
+  { id: 'status', label: 'status' },
+  {
+    id: 'actions',
+    label: 'actions',
+    align: 'right',
+  },
+];
+
 export enum FolderIconColor {
   GRAY = '#BBBBBB',
   GREEN = '#16A765',
