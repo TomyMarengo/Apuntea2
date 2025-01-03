@@ -201,12 +201,12 @@
       "usernameMax": "El nombre de usuario no puede exceder los 30 caracteres.",
       "careerIdInvalid": "El ID de carrera no es válido.",
       "emailInvalid": "El correo electrónico no es válido.",
-      "currentPasswordInvalid": "La contraseña actual no cumple con los requisitos.",
-      "newPasswordInvalid": "La nueva contraseña no cumple con los requisitos.",
-      "confirmNewPasswordInvalid": "La confirmación de la nueva contraseña no cumple con los requisitos.",
+      "passwordInvalid": "La contraseña debe tener mayúsculas, minúsculas y números.",
       "passwordMinLength": "La contraseña debe tener al menos 4 caracteres.",
       "passwordMaxLength": "La contraseña no puede exceder los 50 caracteres.",
-      "passwordsDoNotMatchOrIncomplete": "Las contraseñas no coinciden o están incompletas.",
+      "newPasswordShouldBeDifferent": "La nueva contraseña debe ser diferente a la actual.",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+      "newPasswordRequired": "La nueva contraseña es requerida.",
       "profilePicture": "La imagen debe ser JPEG, PNG o JPG y no superar los 5MB."
     },
     "messages": {

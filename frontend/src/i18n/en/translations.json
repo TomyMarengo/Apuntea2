@@ -201,12 +201,12 @@
       "usernameMax": "Username cannot exceed 30 characters.",
       "careerIdInvalid": "Career ID is not valid.",
       "emailInvalid": "Email address is not valid.",
-      "currentPasswordInvalid": "Current password does not meet the requirements.",
-      "newPasswordInvalid": "New password does not meet the requirements.",
-      "confirmNewPasswordInvalid": "Confirm password does not meet the requirements.",
+      "passwordInvalid": "Password must contain uppercase, lowercase letters, and numbers.",
       "passwordMinLength": "Password must be at least 4 characters long.",
       "passwordMaxLength": "Password cannot exceed 50 characters.",
-      "passwordsDoNotMatchOrIncomplete": "Passwords do not match or are incomplete.",
+      "newPasswordShouldBeDifferent": "New password should be different from the current password.",
+      "passwordsDoNotMatch": "Passwords do not match.",
+      "newPasswordRequired": "New password is required.",
       "profilePicture": "Image must be JPEG, PNG, or JPG and not exceed 5MB."
     },
     "messages": {

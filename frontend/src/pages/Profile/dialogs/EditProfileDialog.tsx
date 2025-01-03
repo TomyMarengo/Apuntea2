@@ -99,7 +99,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         .string()
         .regex(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
-          t('validation.currentPasswordInvalid'),
+          t('validation.passwordInvalid'),
         )
         .min(4, t('validation.passwordMinLength'))
         .max(50, t('validation.passwordMaxLength'))
@@ -108,7 +108,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         .string()
         .regex(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
-          t('validation.newPasswordInvalid'),
+          t('validation.passwordInvalid'),
         )
         .min(4, t('validation.passwordMinLength'))
         .max(50, t('validation.passwordMaxLength'))
@@ -117,7 +117,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         .string()
         .regex(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
-          t('validation.confirmNewPasswordInvalid'),
+          t('validation.passwordInvalid'),
         )
         .min(4, t('validation.passwordMinLength'))
         .max(50, t('validation.passwordMaxLength'))
@@ -138,30 +138,43 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           { message: t('validation.profilePicture') },
         ),
     })
+    // Validation 1: currentPassword !== newPassword
     .refine(
       (data) => {
-        const passwordFieldsFilled =
-          data.newPassword || data.confirmNewPassword || data.currentPassword;
-
-        if (passwordFieldsFilled) {
-          // Verify that all password fields are filled
-          const allPasswordsFilled =
-            data.newPassword && data.confirmNewPassword && data.currentPassword;
-
-          // Verify that the new password is not the same as the current one
-          const passwordsAreDifferent =
-            data.newPassword !== data.currentPassword;
-
-          // Verify that the new password and confirmation are the same
-          const passwordsMatch = data.newPassword === data.confirmNewPassword;
-
-          return allPasswordsFilled && passwordsAreDifferent && passwordsMatch;
+        if (data.newPassword && data.currentPassword) {
+          return data.newPassword !== data.currentPassword;
         }
         return true;
       },
       {
-        message: t('validation.passwordsDoNotMatchOrIncomplete'),
-        path: ['confirmNewPassword'], // Associate the error with the confirmNewPassword field
+        message: t('validation.newPasswordShouldBeDifferent'),
+        path: ['newPassword'], // Asocia el error a 'newPassword'
+      },
+    )
+    // Validation 2: newPassword === confirmNewPassword
+    .refine(
+      (data) => {
+        if (data.newPassword || data.confirmNewPassword) {
+          return data.newPassword === data.confirmNewPassword;
+        }
+        return true;
+      },
+      {
+        message: t('validation.passwordsDoNotMatch'),
+        path: ['confirmNewPassword'],
+      },
+    )
+    // Validation 3: currentPassword === undefined => newPassword === undefined
+    .refine(
+      (data) => {
+        if (!data.currentPassword) {
+          return !data.newPassword;
+        }
+        return true;
+      },
+      {
+        message: t('validation.newPasswordRequired'),
+        path: ['newPassword'],
       },
     );
 
@@ -546,12 +559,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
               />
             )}
           />
-          {/* Mostrar error de refinamiento asociado a confirmNewPassword */}
-          {errors.confirmNewPassword && (
-            <Typography color="error" variant="body2">
-              {errors.confirmNewPassword.message}
-            </Typography>
-          )}
         </Box>
       </DialogContent>
       <DialogActions>
