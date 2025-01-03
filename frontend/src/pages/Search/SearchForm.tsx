@@ -21,6 +21,7 @@ import {
   useGetCareersQuery,
   useGetSubjectsByCareerQuery,
 } from '../../store/slices/institutionsApiSlice';
+import { NoteCategory } from '../../types';
 
 interface SearchFormProps {
   control: Control<SearchFormValues>;
@@ -43,7 +44,7 @@ export default function SearchForm({
 
   const { institutionId, careerId, word, category, sortBy, asc } = watch;
 
-  const onCategoryChange = (category: 'note' | 'directory') => {
+  const onCategoryChange = (category: string) => {
     setValue('category', category);
     if (category === 'directory' && sortBy === 'score') {
       setValue('sortBy', 'modified');
@@ -223,7 +224,7 @@ export default function SearchForm({
             {t('folders')}
           </Button>
           <Button
-            variant={category === 'note' ? 'contained' : 'outlined'}
+            variant={category !== 'directory' ? 'contained' : 'outlined'}
             onClick={() => onCategoryChange('note')}
             sx={{ ml: 1 }}
           >
@@ -241,7 +242,7 @@ export default function SearchForm({
               <Select {...field} label={t('sortBy')}>
                 <MenuItem value="name">{t('name')}</MenuItem>
                 <MenuItem value="modified">{t('lastModifiedAt')}</MenuItem>
-                {category === 'note' && (
+                {category !== 'directory' && (
                   <MenuItem value="score">{t('score')}</MenuItem>
                 )}
               </Select>
@@ -252,6 +253,33 @@ export default function SearchForm({
         <Button variant="outlined" onClick={onToggleAsc}>
           {asc === 'true' ? t('asc') : t('desc')}
         </Button>
+
+        {/* Select Category */}
+        {category !== 'directory' && (
+          <FormControl sx={{ minWidth: 150 }}>
+            <InputLabel>{t('categoryBy')}</InputLabel>
+            <Controller
+              name="category"
+              control={control}
+              render={({ field }) => (
+                <Select {...field} label={t('categoryBy')}>
+                  <MenuItem key="all" value="note">
+                    {t('all')}
+                  </MenuItem>
+                  {Object.values(NoteCategory).map((noteCategory) => (
+                    <MenuItem
+                      key={noteCategory}
+                      value={noteCategory}
+                      onClick={() => onCategoryChange(noteCategory)}
+                    >
+                      {t(noteCategory.toLowerCase())}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </FormControl>
+        )}
       </Box>
     </Box>
   );
