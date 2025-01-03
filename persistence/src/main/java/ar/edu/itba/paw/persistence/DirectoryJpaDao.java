@@ -261,8 +261,6 @@ public class DirectoryJpaDao implements DirectoryDao {
         List<UUID> directoryIds = ((List<Object[]>) query.getResultList()).stream().map(r -> UUID.fromString(r[0].toString())).collect(Collectors.toList());
 
         return findDirectoriesByIds(directoryIds, sortArgs);
-        // TODO: Polemicardo in the bar
-        // sa.getCurrentUserId().ifPresent(uId -> directoryDao.loadDirectoryFavorites(directoryIds, uId));
     }
 
 }

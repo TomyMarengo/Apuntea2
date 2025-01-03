@@ -61,21 +61,6 @@ public class SubjectServiceImpl implements SubjectService {
         return subjectDao.getSubjectsByCareerIdComplemented(careerId);
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId) { // TODO: Remove?
-//        UUID currentUserId = this.securityService.getCurrentUser().map(User::getUserId).orElse(null);
-//        User user = this.userDao.findById(userId).orElseThrow(UserNotFoundException::new);
-//        List<Subject> subjects = subjectDao.getSubjectsByUser(user);
-//        if (!subjects.isEmpty()) directoryDao.loadRootDirsFileQuantity(
-//                subjects.stream().map(Subject::getRootDirectoryId).collect(Collectors.toList()),
-//                user.getUserId(),
-//                currentUserId
-//        );
-////        return subjects.stream().collect(Collectors.groupingBy(Subject::getYear));
-//        return null;
-//    }
-
     @Override
     @Transactional
     public UUID createSubject(String name) {

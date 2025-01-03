@@ -19,7 +19,6 @@ public class UserResponseDto {
     private Boolean notificationsEnabled;
 
 
-    // TODO: Add roles?
     private URI self;
     private URI career;
     private URI institution;
