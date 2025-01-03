@@ -477,10 +477,9 @@
     "delete": "Eliminar",
     "copyLink": "Copiar Enlace",
     "more": "Más",
-    "openOwnersNotes": "Abrir Apuntes del Propietario",
-    "openParentDirectory": "Abrir Directorio Padre",
-    "openSubjectsDirectories": "Abrir Directorio de la Materia",
-    "deleteDirectory": "Eliminar Directorio",
+    "openParentDirectory": "Abrir directorio padre",
+    "openSubjectsDirectories": "Abrir directorio de la materia",
+    "deleteDirectory": "Eliminar directorio",
     "confirmDelete": "¿Estás seguro de que deseas eliminar este directorio?",
     "deleteReason": "Razón",
     "cancel": "Cancelar",
@@ -519,9 +518,8 @@
     "download": "Descargar",
     "copyLink": "Copiar Enlace",
     "more": "Más",
-    "openOwnersNotes": "Abrir Apuntes del Propietario",
-    "openParentDirectory": "Abrir Directorio Padre",
-    "openSubjectsDirectories": "Abrir Directorio de la Materia"
+    "openParentDirectory": "Abrir directorio padre",
+    "openSubjectsDirectories": "Abrir directorio de la materia"
   },
   "rowSubject": {
     "actions": {

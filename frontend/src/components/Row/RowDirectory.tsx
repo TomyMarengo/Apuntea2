@@ -328,9 +328,6 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
                     horizontal: 'right',
                   }}
                 >
-                  <MenuItem onClick={handleOwnerNotes}>
-                    {t('openOwnersNotes')}
-                  </MenuItem>
                   <MenuItem onClick={handleOpenParent}>
                     {t('openParentDirectory')}
                   </MenuItem>

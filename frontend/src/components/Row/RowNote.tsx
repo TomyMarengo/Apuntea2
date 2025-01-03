@@ -21,7 +21,7 @@ import { saveAs } from 'file-saver';
 import React, { useState, JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -48,7 +48,6 @@ interface RowNoteProps {
 const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
   const { t } = useTranslation('rowNote');
   const navigate = useNavigate();
-  const location = useLocation();
   const user = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken);
 
@@ -213,11 +212,6 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
   const isOwner = user?.id === note.ownerUrl?.split('/').pop();
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;
 
-  // Check if the current path corresponds to the subject directory
-  const isSameSubject =
-    location.pathname ===
-    `/directories/${subjectData?.rootDirectoryUrl?.split('/').pop()}`;
-
   const renderCell = (column: Column) => {
     switch (column.id) {
       case 'name':
@@ -238,21 +232,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
           </TableCell>
         );
       case 'subject':
-        return (
-          <TableCell key={column.id}>
-            {isSameSubject ? (
-              subjectName
-            ) : (
-              <MuiLink
-                component={Link}
-                to={`/directories/${subjectData?.rootDirectoryUrl?.split('/').pop()}`}
-                underline="hover"
-              >
-                {subjectName}
-              </MuiLink>
-            )}
-          </TableCell>
-        );
+        return <TableCell key={column.id}>{subjectName}</TableCell>;
       case 'owner':
         return (
           <TableCell key={column.id}>
@@ -360,9 +340,6 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
                     horizontal: 'right',
                   }}
                 >
-                  <MenuItem onClick={handleOwnerNotes}>
-                    {t('openOwnersNotes')}
-                  </MenuItem>
                   <MenuItem onClick={handleOpenParent}>
                     {t('openParentDirectory')}
                   </MenuItem>
