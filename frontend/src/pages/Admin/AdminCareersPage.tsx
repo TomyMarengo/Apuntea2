@@ -19,8 +19,9 @@ import {
   Button,
   TextField,
   CircularProgress,
+  Autocomplete,
 } from '@mui/material';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -76,10 +77,12 @@ const AdminCareersPage: React.FC = () => {
 
   // --- API Calls ---
   const { data: institutions } = useGetInstitutionsQuery();
-  const { data: careers } = useGetCareersQuery(
+
+  const { data: careers, isLoading: isLoadingCareers } = useGetCareersQuery(
     { institutionId: selectedInstitutionId },
     { skip: !selectedInstitutionId },
   );
+
   const {
     data: subjects,
     refetch: refetchSubjects,
@@ -88,6 +91,7 @@ const AdminCareersPage: React.FC = () => {
     { careerId: selectedCareerId },
     { skip: !selectedCareerId },
   );
+
   const {
     data: subjectCareers,
     refetch: refetchSubjectCareers,
@@ -96,6 +100,7 @@ const AdminCareersPage: React.FC = () => {
     { institutionId: selectedInstitutionId, careerId: selectedCareerId },
     { skip: !selectedInstitutionId || !selectedCareerId },
   );
+
   const {
     data: subjectsNotInCareer,
     refetch: refetchNotInCareer,
@@ -114,16 +119,6 @@ const AdminCareersPage: React.FC = () => {
   const [createSubject, { isLoading: creatingSubject }] =
     useCreateSubjectMutation();
 
-  // Institution / Career selection handlers
-  const handleInstitutionChange = (event: SelectChangeEvent) => {
-    setSelectedInstitutionId(event.target.value);
-    setSelectedCareerId('');
-  };
-
-  const handleCareerChange = (event: SelectChangeEvent) => {
-    setSelectedCareerId(event.target.value);
-  };
-
   // Filter by year
   const handleYearFilterChange = (event: SelectChangeEvent) => {
     const val = event.target.value;
@@ -140,9 +135,22 @@ const AdminCareersPage: React.FC = () => {
     setSortAsc((prev) => !prev);
   };
 
+  useEffect(() => {
+    if (selectedCareerId) {
+      refetchSubjects();
+      refetchSubjectCareers();
+    }
+  }, [selectedCareerId, refetchSubjects, refetchSubjectCareers]);
+
   // --------------- COMBINE SUBJECTS + SUBJECTCAREERS ---------------
   const combinedSubjects: SubjectWithCareer[] = useMemo(() => {
-    if (!subjects || !subjectCareers) return [];
+    if (
+      !subjects ||
+      !subjectCareers ||
+      loadingSubjectCareers ||
+      loadingSubjects
+    )
+      return [];
 
     // Create a map from subjectId -> SubjectWithCareer
     const scMap = new Map<string, Subject>();
@@ -186,7 +194,15 @@ const AdminCareersPage: React.FC = () => {
     });
 
     return merged;
-  }, [subjects, subjectCareers, yearFilter, sortBy, sortAsc]);
+  }, [
+    subjects,
+    subjectCareers,
+    yearFilter,
+    sortBy,
+    sortAsc,
+    loadingSubjects,
+    loadingSubjectCareers,
+  ]);
 
   // Compute the maximum year from subjectCareers
   const maxYearInCareer = useMemo(() => {
@@ -265,47 +281,60 @@ const AdminCareersPage: React.FC = () => {
       <Helmet>
         <title>{pageTitle}</title>
       </Helmet>
-      <Box sx={{ p: 3 }}>
-        {/* Institution Select */}
-        <FormControl sx={{ mr: 2, mb: 2, minWidth: 200 }}>
-          <InputLabel>{t('institution')}</InputLabel>
-          <Select
-            label={t('institution')}
-            value={selectedInstitutionId}
-            onChange={handleInstitutionChange}
-          >
-            <MenuItem value="">
-              <em>{t('selectInstitution')}</em>
-            </MenuItem>
-            {institutions?.map((inst: Institution) => (
-              <MenuItem key={inst.id} value={inst.id}>
-                {inst.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+      <Box sx={{ px: 5, py: 3 }}>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <Autocomplete
+            options={institutions || []}
+            getOptionLabel={(option: Institution) => option.name || ''}
+            value={
+              institutions
+                ? institutions.find(
+                    (inst: Institution) => inst.id === selectedInstitutionId,
+                  ) || null
+                : null
+            }
+            onChange={(_, newValue) => {
+              setSelectedInstitutionId(newValue?.id ?? '');
+              setSelectedCareerId('');
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('institution')}
+                variant="outlined"
+                margin="normal"
+              />
+            )}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            sx={{ mr: 2, mb: 2, maxWidth: 200, width: '100%' }}
+          />
 
-        {/* Career Select */}
-        <FormControl
-          sx={{ mr: 2, mb: 2, minWidth: 200 }}
-          disabled={!selectedInstitutionId}
-        >
-          <InputLabel>{t('career')}</InputLabel>
-          <Select
-            label={t('career')}
-            value={selectedCareerId}
-            onChange={handleCareerChange}
-          >
-            <MenuItem value="">
-              <em>{t('selectCareer')}</em>
-            </MenuItem>
-            {careers?.map((car: Career) => (
-              <MenuItem key={car.id} value={car.id}>
-                {car.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          {/* Career Autocomplete */}
+          <Autocomplete
+            options={careers || []}
+            getOptionLabel={(option: Career) => option.name || ''}
+            value={
+              careers
+                ? careers.find((car: Career) => car.id === selectedCareerId) ||
+                  null
+                : null
+            }
+            onChange={(_, newValue) => {
+              setSelectedCareerId(newValue?.id ?? '');
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('career')}
+                variant="outlined"
+                margin="normal"
+                disabled={!selectedInstitutionId || isLoadingCareers}
+              />
+            )}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            sx={{ mr: 2, mb: 2, maxWidth: 200, width: '100%' }}
+          />
+        </Box>
 
         {selectedCareerId && (
           <Box
@@ -388,14 +417,17 @@ const AdminCareersPage: React.FC = () => {
           !loadingSubjects &&
           !loadingSubjectCareers && (
             <ResultsTable columns={ColumnSubject}>
-              {combinedSubjects.map((item) => (
-                <RowSubject
-                  key={item.subjectId}
-                  data={item}
-                  institutionId={selectedInstitutionId}
-                  careerId={selectedCareerId}
-                />
-              ))}
+              {combinedSubjects.map(
+                (item) =>
+                  item.subjectId && (
+                    <RowSubject
+                      key={item.subjectId}
+                      data={item}
+                      institutionId={selectedInstitutionId}
+                      careerId={selectedCareerId}
+                    />
+                  ),
+              )}
             </ResultsTable>
           )}
 
@@ -424,23 +456,30 @@ const AdminCareersPage: React.FC = () => {
               </Box>
             ) : (
               <>
-                <FormControl sx={{ mt: 2, width: '100%' }}>
-                  <InputLabel>{t('addSubjectModal.selectSubject')}</InputLabel>
-                  <Select
-                    label={t('addSubjectModal.selectSubject')}
-                    value={selectedSubjectId}
-                    onChange={(e) => setSelectedSubjectId(e.target.value)}
-                  >
-                    <MenuItem value="">
-                      <em>{t('addSubjectModal.none')}</em>
-                    </MenuItem>
-                    {subjectsNotInCareer?.map((sub) => (
-                      <MenuItem key={sub.id} value={sub.id}>
-                        {sub.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <Autocomplete
+                  options={subjectsNotInCareer || []}
+                  getOptionLabel={(option: Subject) => option.name || ''}
+                  value={
+                    subjectsNotInCareer
+                      ? subjectsNotInCareer.find(
+                          (sub) => sub.id === selectedSubjectId,
+                        ) || null
+                      : null
+                  }
+                  onChange={(_, newValue) => {
+                    setSelectedSubjectId(newValue ? newValue.id! : '');
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t('addSubjectModal.selectSubject')}
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                    />
+                  )}
+                  sx={{ mt: 2, width: '100%' }}
+                />
 
                 <TextField
                   sx={{ mt: 2 }}
@@ -449,6 +488,7 @@ const AdminCareersPage: React.FC = () => {
                   label={t('addSubjectModal.yearLabel')}
                   value={addSubjectYear}
                   onChange={(e) => setAddSubjectYear(Number(e.target.value))}
+                  inputProps={{ min: 1 }}
                 />
               </>
             )}

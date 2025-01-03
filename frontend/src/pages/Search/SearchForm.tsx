@@ -11,6 +11,7 @@ import {
   IconButton,
   InputAdornment,
   Button,
+  Autocomplete,
 } from '@mui/material';
 import { Controller, Control, UseFormSetValue } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +22,7 @@ import {
   useGetCareersQuery,
   useGetSubjectsByCareerQuery,
 } from '../../store/slices/institutionsApiSlice';
-import { NoteCategory } from '../../types';
+import { NoteCategory, Institution, Career, Subject } from '../../types';
 
 interface SearchFormProps {
   control: Control<SearchFormValues>;
@@ -42,7 +43,8 @@ export default function SearchForm({
 }: SearchFormProps) {
   const { t } = useTranslation('searchForm');
 
-  const { institutionId, careerId, word, category, sortBy, asc } = watch;
+  const { institutionId, careerId, subjectId, word, category, sortBy, asc } =
+    watch;
 
   const onCategoryChange = (category: string) => {
     setValue('category', category);
@@ -72,6 +74,11 @@ export default function SearchForm({
   const onCareerChange = (careerId: string) => {
     setValue('careerId', careerId);
     setValue('subjectId', '');
+    setValue('page', '1');
+  };
+
+  const onSubjectChange = (subjectId: string) => {
+    setValue('subjectId', subjectId);
     setValue('page', '1');
   };
 
@@ -106,85 +113,82 @@ export default function SearchForm({
       <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
         {/* Select Institution */}
         {!hideInstitution && (
-          <FormControl sx={{ minWidth: 180 }} disabled={isFetchingInstitutions}>
-            <InputLabel>{t('institution')}</InputLabel>
-            <Controller
-              name="institutionId"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  label={t('institution')}
-                  onChange={(e) => onInstitutionChange(e.target.value)}
-                >
-                  <MenuItem value="">
-                    <em>{t('noInstitution')}</em>
-                  </MenuItem>
-                  {institutions?.map((inst: any) => (
-                    <MenuItem key={inst.id} value={String(inst.id)}>
-                      {inst.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-          </FormControl>
+          <Autocomplete
+            options={institutions || []}
+            getOptionLabel={(option: Institution) => option.name || ''}
+            value={
+              institutions
+                ? institutions.find(
+                    (inst: Institution) => inst.id === institutionId,
+                  ) || null
+                : null
+            }
+            onChange={(_, newValue) => {
+              onInstitutionChange(newValue ? String(newValue.id) : '');
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('institution')}
+                variant="outlined"
+                disabled={isFetchingInstitutions}
+              />
+            )}
+            sx={{ minWidth: 180 }}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         )}
 
         {/* Select Career */}
         {!hideCareer && (
-          <FormControl
+          <Autocomplete
+            options={careers || []}
+            getOptionLabel={(option: Career) => option.name || ''}
+            value={
+              careers
+                ? careers.find((car: Career) => car.id === careerId) || null
+                : null
+            }
+            onChange={(_, newValue) => {
+              onCareerChange(newValue ? String(newValue.id) : '');
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('career')}
+                variant="outlined"
+                disabled={!institutionId || isFetchingCareers}
+              />
+            )}
             sx={{ minWidth: 180 }}
-            disabled={!institutionId || isFetchingCareers}
-          >
-            <InputLabel>{t('career')}</InputLabel>
-            <Controller
-              name="careerId"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  label={t('career')}
-                  onChange={(e) => onCareerChange(e.target.value)}
-                >
-                  <MenuItem value="">
-                    <em>{t('noCareer')}</em>
-                  </MenuItem>
-                  {careers?.map((car: any) => (
-                    <MenuItem key={car.id} value={String(car.id)}>
-                      {car.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-          </FormControl>
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         )}
 
         {/* Select Subject */}
         {!hideSubject && (
-          <FormControl
+          <Autocomplete
+            options={subjects || []}
+            getOptionLabel={(option: Subject) => option.name || ''}
+            value={
+              subjects
+                ? subjects.find((sub: Subject) => sub.id === subjectId) || null
+                : null
+            }
+            onChange={(_, newValue) => {
+              onSubjectChange(newValue ? String(newValue.id) : '');
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('subject')}
+                variant="outlined"
+                disabled={!careerId || isFetchingSubjects}
+              />
+            )}
             sx={{ minWidth: 180 }}
-            disabled={!careerId || isFetchingSubjects}
-          >
-            <InputLabel>{t('subject')}</InputLabel>
-            <Controller
-              name="subjectId"
-              control={control}
-              render={({ field }) => (
-                <Select {...field} label={t('subject')}>
-                  <MenuItem value="">
-                    <em>{t('noSubject')}</em>
-                  </MenuItem>
-                  {subjects?.map((sub: any) => (
-                    <MenuItem key={sub.id} value={String(sub.id)}>
-                      {sub.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-          </FormControl>
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+          />
         )}
 
         {/* Word Input */}

@@ -17,10 +17,11 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  Autocomplete,
 } from '@mui/material';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -34,15 +35,15 @@ import {
 
 const registerSchema = z
   .object({
-    email: z.string().email('registerPage.invalidEmail'),
-    password: z.string().min(4, 'registerPage.passwordMinLength'),
-    confirmPassword: z.string().min(4, 'registerPage.passwordMinLength'),
-    institutionId: z.string().nonempty('registerPage.selectInstitution'),
-    careerId: z.string().nonempty('registerPage.selectCareer'),
+    email: z.string().email('invalidEmail'),
+    password: z.string().min(4, 'passwordMinLength'),
+    confirmPassword: z.string().min(4, 'passwordMinLength'),
+    institutionId: z.string().nonempty('selectInstitution'),
+    careerId: z.string().nonempty('selectCareer'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
-    message: 'registerPage.passwordsDoNotMatch',
+    message: 'passwordsDoNotMatch',
   });
 
 type RegisterForm = z.infer<typeof registerSchema>;
@@ -60,10 +61,12 @@ export default function RegisterPage() {
   const [registerError, setRegisterError] = useState<string | null>(null);
 
   const {
+    control,
     register,
     handleSubmit,
     watch,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<RegisterForm>({
     resolver: zodResolver(registerSchema),
@@ -73,7 +76,7 @@ export default function RegisterPage() {
   const selectedInstitution = watch('institutionId');
 
   const { data: institutions } = useGetInstitutionsQuery(undefined);
-  const { data: careers } = useGetCareersQuery(
+  const { data: careers, isFetching: isFetchingCareers } = useGetCareersQuery(
     { institutionId: selectedInstitution },
     { skip: !selectedInstitution },
   );
@@ -237,53 +240,85 @@ export default function RegisterPage() {
                   ),
                 }}
               />
-              <TextField
-                select
-                label={t('institution')}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                {...register('institutionId')}
-                error={!!errors.institutionId}
-                helperText={
-                  <Box minHeight="1.5em">
-                    {errors.institutionId
-                      ? t(errors.institutionId.message as string)
-                      : ''}
-                  </Box>
-                }
-              >
-                <MenuItem value="">{t('selectInstitution')}</MenuItem>
-                {institutions?.map((inst: any) => (
-                  <MenuItem key={inst.id} value={inst.id}>
-                    {inst.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <TextField
-                select
-                label={t('career')}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                {...register('careerId')}
-                error={!!errors.careerId}
-                helperText={
-                  <Box minHeight="1.5em">
-                    {errors.careerId
-                      ? t(errors.careerId.message as string)
-                      : ''}
-                  </Box>
-                }
-                disabled={!selectedInstitution}
-              >
-                <MenuItem value="">{t('selectCareer')}</MenuItem>
-                {careers?.map((c: any) => (
-                  <MenuItem key={c.id} value={c.id}>
-                    {c.name}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <Controller
+                name="institutionId"
+                control={control}
+                render={({ field }) => (
+                  <Autocomplete
+                    {...field}
+                    options={institutions || []}
+                    getOptionLabel={(option: any) => option.name}
+                    value={
+                      institutions
+                        ? institutions.find(
+                            (inst: any) => inst.id === field.value,
+                          ) || null
+                        : null
+                    }
+                    onChange={(_, newValue) => {
+                      field.onChange(newValue ? newValue.id : '');
+                      setValue('careerId', '');
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={t('institution')}
+                        variant="outlined"
+                        margin="normal"
+                        error={!!errors.institutionId}
+                        helperText={
+                          errors.institutionId
+                            ? t(errors.institutionId.message as string)
+                            : ''
+                        }
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value.id
+                    }
+                    sx={{ minWidth: 180, width: '100%' }}
+                  />
+                )}
+              />
+              <Controller
+                name="careerId"
+                control={control}
+                render={({ field }) => (
+                  <Autocomplete
+                    {...field}
+                    options={careers || []}
+                    getOptionLabel={(option: any) => option.name}
+                    value={
+                      careers
+                        ? careers.find((car: any) => car.id === field.value) ||
+                          null
+                        : null
+                    }
+                    onChange={(_, newValue) => {
+                      field.onChange(newValue ? newValue.id : '');
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={t('career')}
+                        variant="outlined"
+                        margin="normal"
+                        error={!!errors.careerId}
+                        helperText={
+                          errors.careerId
+                            ? t(errors.careerId.message as string)
+                            : ''
+                        }
+                        disabled={!watch('institutionId') || isFetchingCareers}
+                      />
+                    )}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value.id
+                    }
+                    sx={{ minWidth: 180, width: '100%' }}
+                  />
+                )}
+              />
               {registerError && (
                 <Typography variant="body2" color="error" sx={{ mt: 1 }}>
                   {registerError}
