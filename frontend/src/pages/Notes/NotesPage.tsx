@@ -20,7 +20,7 @@ import {
   useGetSubjectsByCareerQuery,
   useGetSubjectCareersQuery,
 } from '../../store/slices/institutionsApiSlice';
-import { Subject, SubjectCareer } from '../../types';
+import { Subject, SubjectCareer, SubjectWithCareer } from '../../types';
 
 const DEFAULT_PAGE_SIZE = 10;
 
@@ -78,24 +78,35 @@ export default function NotesPage() {
   const isLoading = subjectsLoading || scLoading;
   const isError = subjectsError || scError;
 
-  // Combine the subjects + subjectCareers to know which subject is in which year
-  const combined = useMemo(() => {
-    if (!subjects || !subjectCareers) return [];
+  // --------------- COMBINE SUBJECTS + SUBJECTCAREERS ---------------
+  const combined: SubjectWithCareer[] = useMemo(() => {
+    if (!subjects || !subjectCareers || subjectsLoading || scLoading) return [];
 
-    // Convert subjectCareers into a Map: subjectId -> year
-    const subjectYearMap = new Map<string, number>();
-    subjectCareers.forEach((sc: SubjectCareer) => {
-      const subjectId = sc.subjectUrl.split('/').pop() || '';
-      subjectYearMap.set(subjectId, sc.year);
+    // Create a map from subjectId -> SubjectWithCareer
+    const scMap = new Map<string, Subject>();
+    subjects.forEach((subject: Subject) => {
+      if (subject.id) {
+        scMap.set(subject.selfUrl, subject);
+      }
     });
 
-    return subjects
-      .map((sub: Subject) => ({
-        ...sub,
-        year: subjectYearMap.get(sub.id || '') || 0,
-      }))
-      .filter((item) => item.year > 0);
-  }, [subjects, subjectCareers]);
+    // Build the merged array
+    let merged: SubjectWithCareer[] = subjectCareers.map(
+      (subjectcareer: SubjectCareer) => {
+        const matchingSubject = scMap.get(subjectcareer.subjectUrl || '');
+        return {
+          subjectId: matchingSubject?.id || '',
+          name: matchingSubject?.name || '',
+          year: subjectcareer?.year ?? 0,
+          subjectUrl: subjectcareer?.subjectUrl || '',
+          subjectCareerUrl: subjectcareer?.selfUrl || '',
+          careerUrl: subjectcareer?.careerUrl || '',
+          rootDirectoryUrl: matchingSubject?.rootDirectoryUrl || '',
+        };
+      },
+    );
+    return merged;
+  }, [subjects, subjectCareers, subjectsLoading, scLoading]);
 
   // Figure out the unique years
   const uniqueYears = useMemo(() => {
@@ -182,7 +193,7 @@ export default function NotesPage() {
             >
               {subjectsPage.map((sub) => (
                 <SubjectDirectoryCard
-                  key={sub.id}
+                  key={sub.subjectId}
                   subject={sub}
                   userId={userId}
                 />

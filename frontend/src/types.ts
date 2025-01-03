@@ -74,11 +74,10 @@ export interface Career {
 }
 
 export interface Subject {
-  id?: string;
-  name?: string;
-  selfUrl?: string;
-  rootDirectoryId?: string;
-  rootDirectoryUrl?: string;
+  id: string;
+  name: string;
+  selfUrl: string;
+  rootDirectoryUrl: string;
 }
 
 export interface SubjectCareer {
@@ -92,9 +91,10 @@ export interface SubjectWithCareer {
   subjectId: string;
   name: string;
   year: number;
+  rootDirectoryUrl: string;
   subjectUrl?: string;
-  subjectCareerUrl?: string;
   careerUrl?: string;
+  subjectCareerUrl?: string;
 }
 
 export enum FileType {

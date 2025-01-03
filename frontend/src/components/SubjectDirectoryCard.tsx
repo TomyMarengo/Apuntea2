@@ -23,10 +23,10 @@ import {
   useGetIsFavoriteDirectoryQuery,
 } from '../store/slices/directoriesApiSlice';
 import { useSearchNotesQuery } from '../store/slices/searchApiSlice';
-import { Subject } from '../types';
+import { SubjectWithCareer } from '../types';
 
 interface SubjectDirectoryCardProps {
-  subject: Subject;
+  subject: SubjectWithCareer;
   userId: string;
 }
 
@@ -40,13 +40,13 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   // Fetch the number of notes for this subject and user
   const { data: notesResult, isLoading: notesLoading } = useSearchNotesQuery(
     {
-      subjectId: subject.id,
+      subjectId: subject.subjectId,
       userId,
       page: 1,
       pageSize: 1,
     },
     {
-      skip: !subject.id || !userId,
+      skip: !subject.subjectId || !userId,
     },
   );
 
@@ -82,9 +82,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
 
   useEffect(() => {
-    if (typeof isFavApi === 'boolean') {
-      setIsFavorite(isFavApi);
-    }
+    setIsFavorite(isFavApi?.success || false);
   }, [isFavApi]);
 
   const handleToggleFavorite = async (

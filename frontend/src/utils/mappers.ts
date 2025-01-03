@@ -100,7 +100,6 @@ export const mapApiSubject = (apiSubject: any): Subject => {
     name: apiSubject.name,
     selfUrl: apiSubject.self,
     rootDirectoryUrl: apiSubject.rootDirectory,
-    rootDirectoryId: apiSubject.rootDirectoryId,
   };
 };
 

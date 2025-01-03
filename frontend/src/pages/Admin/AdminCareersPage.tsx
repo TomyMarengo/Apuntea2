@@ -156,16 +156,14 @@ const AdminCareersPage: React.FC = () => {
     const scMap = new Map<string, Subject>();
     subjects.forEach((subject: Subject) => {
       if (subject.id) {
-        scMap.set(subject.id, subject);
+        scMap.set(subject.selfUrl, subject);
       }
     });
 
     // Build the merged array
     let merged: SubjectWithCareer[] = subjectCareers.map(
       (subjectcareer: SubjectCareer) => {
-        const matchingSubject = scMap.get(
-          subjectcareer.subjectUrl.split('/').pop() || '',
-        );
+        const matchingSubject = scMap.get(subjectcareer.subjectUrl || '');
         return {
           subjectId: matchingSubject?.id || '',
           name: matchingSubject?.name || '',
@@ -173,6 +171,7 @@ const AdminCareersPage: React.FC = () => {
           subjectUrl: subjectcareer?.subjectUrl || '',
           subjectCareerUrl: subjectcareer?.selfUrl || '',
           careerUrl: subjectcareer?.careerUrl || '',
+          rootDirectoryUrl: matchingSubject?.rootDirectoryUrl || '',
         };
       },
     );
