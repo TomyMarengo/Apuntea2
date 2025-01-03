@@ -82,11 +82,14 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
         });
         let errorMessages: string[] = [];
         if (Array.isArray(result.error?.data)) {
-          errorMessages = result.error.data.map(
-            (err: any) => err.message || '',
-          );
-        } else if ((result.error?.data as any).message) {
-          errorMessages = [(result.error?.data as any).message];
+          errorMessages = result.error.data
+            .map((err: any) => (err?.message ? err.message : ''))
+            .filter((message) => message);
+        } else if (result.error?.data && (result.error?.data as any).message) {
+          const message = (result.error?.data as any).message;
+          if (message) {
+            errorMessages = [message];
+          }
         }
 
         return {
@@ -121,11 +124,14 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
         });
         let errorMessages: string[] = [];
         if (Array.isArray(result.error?.data)) {
-          errorMessages = result.error.data.map(
-            (err: any) => err.message || '',
-          );
-        } else if ((result.error?.data as any).message) {
-          errorMessages = [(result.error?.data as any).message];
+          errorMessages = result.error.data
+            .map((err: any) => (err?.message ? err.message : ''))
+            .filter((message) => message);
+        } else if (result.error?.data && (result.error?.data as any).message) {
+          const message = (result.error?.data as any).message;
+          if (message) {
+            errorMessages = [message];
+          }
         }
 
         return {
