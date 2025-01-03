@@ -1,5 +1,6 @@
 // src/pages/Notes/NotePage.tsx
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
@@ -19,10 +20,13 @@ import {
 } from '@mui/material';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useForm } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 import DeleteNoteDialog from './dialogs/DeleteNoteDialog';
 import EditNoteDialog from './dialogs/EditNoteDialog';
@@ -48,6 +52,17 @@ import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import { RootState } from '../../store/store';
 import { Review } from '../../types';
 import { Token } from '../../types';
+
+const reviewSchema = z.object({
+  score: z
+    .number()
+    .int()
+    .min(1, { message: 'minScore' })
+    .max(5, { message: 'maxScore' }),
+  content: z.string().max(255, { message: 'maxContentLength' }),
+});
+
+type ReviewFormData = z.infer<typeof reviewSchema>;
 
 const NotePage: React.FC = () => {
   const { t } = useTranslation('notePage');
@@ -269,8 +284,17 @@ const NotePage: React.FC = () => {
   const [createReviewMutation] = useCreateReviewMutation();
   const [updateReviewMutation] = useUpdateReviewMutation();
 
-  const [score, setScore] = useState<number>(5);
-  const [content, setContent] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ReviewFormData>({
+    resolver: zodResolver(reviewSchema),
+    defaultValues: {
+      content: myReviewData?.content || '',
+      score: myReviewData?.score || 1,
+    },
+  });
 
   const handleDeleteSuccess = (review: Review) => {
     setAllReviews((prev) =>
@@ -279,15 +303,8 @@ const NotePage: React.FC = () => {
       ),
     );
   };
-
-  useEffect(() => {
-    if (myReviewData) {
-      setScore(myReviewData.score);
-      setContent(myReviewData.content);
-    }
-  }, [myReviewData]);
-
-  const handleSaveReview = async () => {
+  // Handle form submit
+  const handleSaveReview = async (data: ReviewFormData) => {
     if (!user) {
       toast.error(t('mustLoginReview'));
       return;
@@ -296,29 +313,36 @@ const NotePage: React.FC = () => {
     try {
       let result;
       if (myReviewData) {
-        // Update
+        // Update review
         result = await updateReviewMutation({
           url: myReviewData.selfUrl,
           noteId: note?.id || '',
           userId: user.id,
-          score,
-          content,
+          score: data.score,
+          content: data.content,
         }).unwrap();
       } else {
-        // Create
+        // Create new review
         result = await createReviewMutation({
           noteId: note?.id || '',
           userId: user.id,
-          score,
-          content,
+          score: data.score,
+          content: data.content,
         }).unwrap();
       }
 
-      if (result) {
+      if (result.success) {
         toast.success(myReviewData ? t('reviewUpdated') : t('reviewCreated'));
         refetchMyReview();
       } else {
-        toast.error(t('reviewError'));
+        toast.error(
+          t('reviewError', {
+            errorMessage:
+              result.messages && result.messages.length > 0
+                ? `: ${result.messages[0]}`
+                : '',
+          }),
+        );
       }
     } catch (error) {
       console.error('Failed to save review:', error);
@@ -595,22 +619,40 @@ const NotePage: React.FC = () => {
                     gap: 1,
                   }}
                 >
-                  <Rating
+                  <Controller
                     name="score"
-                    value={score}
-                    onChange={(_, newValue) => {
-                      if (newValue) setScore(newValue);
-                    }}
+                    control={control}
+                    render={({ field }) => (
+                      <Rating
+                        {...field}
+                        onChange={(_, newValue) => field.onChange(newValue)} // Handle score change
+                        value={field.value} // Use value from form state
+                      />
+                    )}
                   />
-                  <TextField
-                    multiline
-                    rows={2}
-                    placeholder={t('reviewPlaceholder')!}
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                  <Controller
+                    name="content"
+                    control={control}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        multiline
+                        rows={2}
+                        placeholder={t('reviewPlaceholder')!}
+                        error={!!errors.content}
+                        helperText={
+                          errors.content
+                            ? t(errors.content.message as string)
+                            : ''
+                        }
+                      />
+                    )}
                   />
 
-                  <Button variant="contained" onClick={handleSaveReview}>
+                  <Button
+                    variant="contained"
+                    onClick={handleSubmit(handleSaveReview)}
+                  >
                     {myReviewData ? t('updateReview') : t('sendReview')}
                   </Button>
                 </Box>

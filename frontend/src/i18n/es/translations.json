@@ -129,7 +129,8 @@
     "cancel": "Cancelar",
     "delete": "Eliminar",
     "deleteSuccess": "Reseña eliminada exitosamente.",
-    "deleteError": "Error al eliminar la reseña."
+    "deleteError": "Error al eliminar la reseña{{errorMessage}}",
+    "reasonMaxLength": "La razón no puede exceder los 255 caracteres."
   },
   "directoryBreadcrumbs": {
     "errorFetchingDirectory": "Error al cargar el directorio.",
@@ -377,7 +378,10 @@
     "sendReview": "Enviar reseña",
     "reviewCreated": "¡Tu reseña fue creada!",
     "reviewUpdated": "¡Tu reseña fue actualizada!",
-    "reviewError": "Error al crear la reseña.",
+    "reviewError": "Error al crear la reseña{{errorMessage}}",
+    "maxContentLength": "El contenido de la reseña no puede exceder los 255 caracteres.",
+    "minScore": "La puntuación debe ser mayor a 1.",
+    "maxScore": "La puntuación no puede exceder los 5.",
     "views": "{{count}} visualizaciones",
     "ownerUnknown": "Propietario desconocido",
     "moreReviewsHint": "¡Hay más reseñas disponibles abajo!",

@@ -1,5 +1,4 @@
-// src/pages/Reviews/dialogs/DeleteReviewDialog.tsx
-
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
   DialogTitle,
@@ -9,12 +8,19 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 import { useDeleteReviewMutation } from '../../../store/slices/reviewsApiSlice';
 import { Review } from '../../../types';
+
+// Define Zod schema for reason validation
+const reasonSchema = z.object({
+  reason: z.string().max(255, { message: 'reasonMaxLength' }).optional(),
+});
 
 interface DeleteReviewDialogProps {
   open: boolean;
@@ -33,21 +39,37 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
 }) => {
   const { t } = useTranslation('deleteReviewDialog');
   const [deleteReview] = useDeleteReviewMutation();
-  const [reason, setReason] = useState('');
 
-  const handleConfirm = async () => {
+  // React Hook Form with Zod Resolver
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(reasonSchema),
+    defaultValues: { reason: '' },
+  });
+
+  const handleConfirm = async (data: { reason: string }) => {
     try {
       const result = await deleteReview({
         noteId: review.noteId,
         userId: review.userId,
-        reason: shouldShowReason ? reason : undefined,
+        reason: shouldShowReason ? data.reason : undefined,
       }).unwrap();
-      if (result) {
+      if (result.success) {
         toast.success(t('deleteSuccess'));
         onClose();
         if (onDeleteSuccess) onDeleteSuccess(review);
       } else {
-        toast.error(t('deleteError'));
+        toast.error(
+          t('deleteError', {
+            errorMessage:
+              result.messages && result.messages.length > 0
+                ? `: ${result.messages[0]}`
+                : '',
+          }),
+        );
       }
     } catch (error) {
       console.error('Failed to delete review:', error);
@@ -63,8 +85,9 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
         {shouldShowReason && (
           <TextField
             label={t('reason')}
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
+            {...register('reason')}
+            error={!!errors.reason}
+            helperText={errors.reason ? t(errors.reason.message!) : ''}
             fullWidth
             margin="normal"
           />
@@ -72,7 +95,11 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t('cancel')}</Button>
-        <Button onClick={handleConfirm} variant="contained" color="error">
+        <Button
+          onClick={handleSubmit(handleConfirm)}
+          variant="contained"
+          color="error"
+        >
           {t('delete')}
         </Button>
       </DialogActions>

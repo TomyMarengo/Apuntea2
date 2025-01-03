@@ -136,10 +136,22 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
             'Content-Type': REVIEW_CREATE_CONTENT_TYPE,
           },
         });
+        let errorMessages: string[] = [];
+        if (Array.isArray(result.error?.data)) {
+          errorMessages = result.error.data
+            .map((err: any) => (err?.message ? err.message : ''))
+            .filter((message) => message);
+        } else if (result.error?.data && (result.error?.data as any).message) {
+          const message = (result.error?.data as any).message;
+          if (message) {
+            errorMessages = [message];
+          }
+        }
+
         return {
           data: {
             success: result.error === undefined,
-            messages: [],
+            messages: errorMessages,
           },
         };
       },
@@ -163,10 +175,22 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
             'Content-Type': REVIEW_UPDATE_CONTENT_TYPE,
           },
         });
+        let errorMessages: string[] = [];
+        if (Array.isArray(result.error?.data)) {
+          errorMessages = result.error.data
+            .map((err: any) => (err?.message ? err.message : ''))
+            .filter((message) => message);
+        } else if (result.error?.data && (result.error?.data as any).message) {
+          const message = (result.error?.data as any).message;
+          if (message) {
+            errorMessages = [message];
+          }
+        }
+
         return {
           data: {
             success: result.error === undefined,
-            messages: [],
+            messages: errorMessages,
           },
         };
       },

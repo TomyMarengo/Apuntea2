@@ -129,7 +129,8 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "deleteSuccess": "Review deleted successfully.",
-    "deleteError": "Error deleting the review."
+    "deleteError": "Error deleting the review{{errorMessage}}",
+    "reasonMaxLength": "Reason cannot exceed 255 characters."
   },
   "directoryBreadcrumbs": {
     "errorFetchingDirectory": "Error fetching directory.",
@@ -378,7 +379,10 @@
     "sendReview": "Submit Review",
     "reviewCreated": "Your review was created!",
     "reviewUpdated": "Your review was updated!",
-    "reviewError": "Failed to create review.",
+    "reviewError": "Failed to create review{{errorMessage}}",
+    "maxContentLength": "Review cannot exceed 255 characters.",
+    "minScore": "Score must be at least 1.",
+    "maxScore": "Score cannot exceed 5.",
     "views": "{{count}} views",
     "ownerUnknown": "Unknown owner",
     "moreReviewsHint": "More reviews below!",
