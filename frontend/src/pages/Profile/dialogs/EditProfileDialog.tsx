@@ -148,7 +148,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       },
       {
         message: t('validation.newPasswordShouldBeDifferent'),
-        path: ['newPassword'], // Asocia el error a 'newPassword'
+        path: ['newPassword'],
       },
     )
     // Validation 2: newPassword === confirmNewPassword
