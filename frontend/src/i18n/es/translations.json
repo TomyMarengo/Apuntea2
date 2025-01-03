@@ -101,7 +101,8 @@
     "maxLength": "El nombre del apunte no puede exceder los 50 caracteres.",
     "invalidCategory": "Por favor, selecciona una categoría válida.",
     "fileTooLarge": "El archivo no puede exceder los 100MB.",
-    "invalidFileType": "El archivo debe ser de tipo PDF, JPG, JPEG, MP4 o MP3."
+    "invalidFileType": "El archivo debe ser de tipo PDF, JPG, JPEG, MP4 o MP3.",
+    "fileNotEmpty": "Por favor, selecciona un archivo."
   },
   "deleteDirectoryDialog": {
     "deleteSuccess": "Directorio eliminado exitosamente.",

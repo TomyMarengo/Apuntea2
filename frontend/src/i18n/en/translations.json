@@ -101,7 +101,8 @@
     "maxLength": "Note name cannot exceed 50 characters.",
     "invalidCategory": "Please select a valid category.",
     "fileTooLarge": "File size cannot exceed 100MB.",
-    "invalidFileType": "File must be of type PDF, JPG, JPEG, MP4, or MP3."
+    "invalidFileType": "File must be of type PDF, JPG, JPEG, MP4, or MP3.",
+    "fileNotEmpty": "File cannot be empty."
   },
   "deleteDirectoryDialog": {
     "deleteSuccess": "Directory deleted successfully.",

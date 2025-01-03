@@ -80,6 +80,11 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
   const handleClickAway = () => {
     if (expanded) {
       setExpanded(false);
+      reset({
+        name: '',
+        iconColor: '#BBBBBB',
+        visible: true,
+      });
     }
   };
 

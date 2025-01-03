@@ -49,6 +49,9 @@ const noteSchema = z.object({
     .refine((file) => /\.(jpg|jpeg|png|pdf|mp4|mp3)$/i.test(file.name), {
       message: 'invalidFileType',
     })
+    .refine((file) => file !== undefined && file !== null, {
+      message: 'fileNotEmpty',
+    })
     .optional(),
 });
 
@@ -87,6 +90,12 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
   const handleClickAway = () => {
     if (expanded) {
       setExpanded(false);
+      reset({
+        name: '',
+        category: NoteCategory.THEORY,
+        visible: true,
+        file: undefined,
+      });
     }
   };
 
@@ -107,7 +116,12 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
 
       if (result.success) {
         toast.success(t('noteCreated'));
-        reset();
+        reset({
+          name: '',
+          category: NoteCategory.THEORY,
+          visible: true,
+          file: undefined,
+        });
         setExpanded(false);
       } else {
         toast.error(
