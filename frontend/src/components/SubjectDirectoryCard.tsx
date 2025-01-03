@@ -1,13 +1,27 @@
 // src/components/SubjectDirectoryCard.tsx
 
 import DescriptionIcon from '@mui/icons-material/Description';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FolderIcon from '@mui/icons-material/Folder';
-import { Box, Typography, Tooltip, CircularProgress } from '@mui/material';
-import React from 'react';
+import {
+  Box,
+  Typography,
+  Tooltip,
+  CircularProgress,
+  IconButton,
+} from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-import { useGetDirectoryQuery } from '../store/slices/directoriesApiSlice';
+import {
+  useGetDirectoryQuery,
+  useRemoveFavoriteDirectoryMutation,
+  useAddFavoriteDirectoryMutation,
+  useGetIsFavoriteDirectoryQuery,
+} from '../store/slices/directoriesApiSlice';
 import { useSearchNotesQuery } from '../store/slices/searchApiSlice';
 import { Subject } from '../types';
 
@@ -22,6 +36,51 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
 }) => {
   const { t } = useTranslation('subjectDirectoryCard');
   const navigate = useNavigate();
+
+  // TODO: Implement useFavorite hook
+  const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
+  const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
+  const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
+    { directoryId: subject.rootDirectoryId, userId },
+    { skip: !userId || !subject.rootDirectoryId },
+  );
+
+  const [isFavorite, setIsFavorite] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (typeof isFavApi === 'boolean') {
+      setIsFavorite(isFavApi);
+    }
+  }, [isFavApi]);
+
+  const handleToggleFavorite = async () => {
+    try {
+      if (isFavorite) {
+        const result = await removeFavoriteDirectory({
+          directoryId: subject.rootDirectoryId,
+          userId,
+        }).unwrap();
+        if (result) {
+          toast.success(t('unfavorited'));
+        } else {
+          toast.error(t('errorUnfavorite'));
+        }
+      } else {
+        const result = await addFavoriteDirectory({
+          directoryId: subject.rootDirectoryId,
+        }).unwrap();
+        if (result) {
+          toast.success(t('favorited'));
+        } else {
+          toast.error(t('errorFavorite'));
+        }
+      }
+      refetch();
+    } catch (error) {
+      toast.error(t('errorUnfavorite'));
+      console.error('Toggle favorite directory failed:', error);
+    }
+  };
 
   // Fetch the number of notes for this subject and user
   const { data: notesResult, isLoading: notesLoading } = useSearchNotesQuery(
@@ -86,6 +145,28 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
             color: folderColor,
           }}
         />
+
+        {/* Heart icon top-right */}
+        <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
+          <IconButton
+            onClick={handleToggleFavorite}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: -10,
+              right: -10,
+              zIndex: 999,
+            }}
+          >
+            {isFavorite ? (
+              <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
+            ) : (
+              <FavoriteBorderIcon sx={{ color: 'error.main', fontSize: 22 }} />
+            )}
+          </IconButton>
+        </Tooltip>
+
+        {/* Notes Count */}
         <Tooltip
           placement="right"
           title={
@@ -97,8 +178,8 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
           <Box
             sx={{
               position: 'absolute',
-              top: -10,
-              right: -10,
+              top: -8,
+              left: -20,
               backgroundColor: 'none',
               width: 24,
               height: 24,

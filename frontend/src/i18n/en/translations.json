@@ -219,7 +219,8 @@
     "favorited": "Directory added to favorites!",
     "unfavorited": "Directory removed from favorites!",
     "removeFavorite": "Remove from favorites",
-    "errorUnfavorite": "Failed to update favorite status."
+    "errorUnfavorite": "Failed to update favorite status.",
+    "errorFavorite": "Failed to update favorite status."
   },
   "favoriteNoteCard": {
     "favorited": "Note added to favorites!",
@@ -608,7 +609,12 @@
   "subjectDirectoryCard": {
     "notesCount": "{{count}} note",
     "notesCount_plural": "{{count}} notes",
-    "errorFetchingDirectory": "Error fetching directory."
+    "errorFetchingDirectory": "Error fetching directory.",
+    "favorited": "Directory added to favorites!",
+    "unfavorited": "Directory removed from favorites!",
+    "removeFavorite": "Remove from favorites",
+    "errorUnfavorite": "Failed to update favorite status.",
+    "errorFavorite": "Failed to update favorite status."
   },
   "userNotes": {
     "mustHaveCareerInstitution": "You must have a career and institution set to view your notes.",

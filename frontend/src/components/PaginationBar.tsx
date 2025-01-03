@@ -1,8 +1,10 @@
 // src/components/PaginationBar.tsx
 
 import { Box, Pagination, Typography } from '@mui/material';
+import React from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 import { SearchFormValues } from '../pages/Search/searchSchema';
 
@@ -11,7 +13,7 @@ interface PaginationBarProps {
   pageSize: number;
   totalPages: number;
   totalCount: number;
-  setValue: UseFormSetValue<SearchFormValues>;
+  setValue?: UseFormSetValue<SearchFormValues>;
 }
 
 export default function PaginationBar({
@@ -22,6 +24,17 @@ export default function PaginationBar({
   setValue,
 }: PaginationBarProps) {
   const { t } = useTranslation('paginationBar');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  function handlePageChange(_: React.ChangeEvent<unknown>, page: number) {
+    if (!setValue) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set('page', String(page));
+      setSearchParams(newParams);
+    } else {
+      setValue('page', page.toString());
+    }
+  }
 
   const from = (currentPage - 1) * pageSize + 1;
   const to = Math.min(currentPage * pageSize, totalCount);
@@ -39,9 +52,7 @@ export default function PaginationBar({
       <Pagination
         count={totalPages}
         page={currentPage}
-        onChange={(_, page) => {
-          setValue('page', page.toString());
-        }}
+        onChange={handlePageChange}
       />
       <Typography variant="body2">
         {t('totalCount', { from, to, totalCount })}

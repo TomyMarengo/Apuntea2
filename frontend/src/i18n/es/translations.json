@@ -607,7 +607,11 @@
   "subjectDirectoryCard": {
     "notesCount": "{{count}} apunte",
     "notesCount_plural": "{{count}} apuntes",
-    "errorFetchingDirectory": "Error al cargar el directorio."
+    "errorFetchingDirectory": "Error al cargar el directorio.",
+    "favorited": "¡Directorio agregado a favoritos!",
+    "unfavorited": "¡Directorio eliminado de favoritos!",
+    "removeFavorite": "Eliminar de favoritos",
+    "errorUnfavorite": "Error al actualizar el estado de favorito."
   },
   "userNotes": {
     "mustHaveCareerInstitution": "Debes tener una carrera e institución para ver tus apuntes.",
