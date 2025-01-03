@@ -274,7 +274,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       ) => {
         const result = await baseQuery({
           url: url || `/notes/${noteId}/interactions/${userId}`,
-          method: 'POST',
+          method: 'PUT',
         });
         return {
           data: {

@@ -36,6 +36,7 @@ import {
   useRemoveFavoriteNoteMutation,
   useGetIsFavoriteNoteQuery,
   useGetNoteFileQuery,
+  useAddInteractionNoteMutation,
 } from '../../store/slices/notesApiSlice';
 import {
   useGetReviewsQuery,
@@ -55,6 +56,8 @@ const NotePage: React.FC = () => {
   const token = useSelector(
     (state: RootState & { auth: { token: Token } }) => state.auth.token,
   );
+  const [addInteractionNote] = useAddInteractionNoteMutation();
+  const isFirstRender = useRef(true);
 
   /** 1) Basic note data */
   const {
@@ -62,6 +65,16 @@ const NotePage: React.FC = () => {
     isLoading: noteLoading,
     isError: noteError,
   } = useGetNoteQuery({ noteId: noteId || '' }, { skip: !noteId });
+
+  useEffect(() => {
+    if (noteId && user && isFirstRender.current) {
+      addInteractionNote({
+        noteId: noteId,
+        userId: user.id,
+      });
+      isFirstRender.current = false;
+    }
+  }, [noteId, user, addInteractionNote]);
 
   /** 1.1) Directory data */
   const { data: directoryData } = useGetDirectoryQuery(
