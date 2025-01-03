@@ -37,15 +37,15 @@ import {
   useGetIsFavoriteNoteQuery,
 } from '../../store/slices/notesApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
-import { Note, Subject } from '../../types';
+import { Note, Subject, Column } from '../../types';
 import NoteFileIcon from '../NoteFileIcon';
 
 interface RowNoteProps {
   note: Note;
-  led?: boolean;
+  columnsToShow: Column[];
 }
 
-const RowNote: React.FC<RowNoteProps> = ({ note }) => {
+const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
   const { t } = useTranslation('rowNote');
   const navigate = useNavigate();
   const location = useLocation();
@@ -218,140 +218,171 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
     location.pathname ===
     `/directories/${subjectData?.rootDirectoryUrl?.split('/').pop()}`;
 
-  return (
-    <TableRow hover>
-      <TableCell>
-        <Box display="flex" alignItems="center">
-          <NoteFileIcon fileType={note.fileType} size={24} />
+  const renderCell = (column: Column) => {
+    switch (column.id) {
+      case 'name':
+        return (
+          <TableCell key={column.id}>
+            <Box display="flex" alignItems="center">
+              <NoteFileIcon fileType={note.fileType} size={24} />
 
-          <MuiLink
-            component={Link}
-            to={`/notes/${note.id}`}
-            underline="hover"
-            sx={{ ml: 1 }}
-          >
-            {note.name}
-          </MuiLink>
-        </Box>
-      </TableCell>
-      <TableCell>
-        {isSameSubject ? (
-          subjectName
-        ) : (
-          <MuiLink
-            component={Link}
-            to={`/directories/${subjectData?.rootDirectoryUrl?.split('/').pop()}`}
-            underline="hover"
-          >
-            {subjectName}
-          </MuiLink>
-        )}
-      </TableCell>
-      <TableCell>
-        <MuiLink
-          component={Link}
-          to={`/users/${ownerData?.id}`}
-          underline="hover"
-        >
-          {ownerName}
-        </MuiLink>
-      </TableCell>
-      <TableCell>{new Date(note.lastModifiedAt).toLocaleString()}</TableCell>
-      <TableCell>{note.avgScore?.toFixed(2) ?? '-'}</TableCell>
-      <TableCell
-        align="right"
-        sx={{
-          transition: 'opacity 0.1s',
-          opacity: 0,
-          '&:hover': {
-            opacity: 1,
-          },
-        }}
-      >
-        <Box display="flex" alignItems="center" justifyContent="flex-end">
-          <Box display="flex" alignItems="center">
-            {/* Favorite Button */}
-            <Tooltip
-              title={
-                user
-                  ? isFavorite
-                    ? t('unfavorite')
-                    : t('favorite')
-                  : t('loginToFavorite')
-              }
-            >
-              <span>
-                <IconButton
-                  onClick={handleFavoriteClick}
-                  size="small"
-                  disabled={addingFavorite || removingFavorite || !user}
-                >
-                  {isFavorite ? (
-                    <FavoriteIcon color="error" />
-                  ) : (
-                    <FavoriteBorderIcon />
-                  )}
-                </IconButton>
-              </span>
-            </Tooltip>
-
-            {/* Download Button */}
-            <Tooltip title={t('download')}>
-              <IconButton onClick={handleDownloadClick} size="small">
-                <DownloadIcon />
-              </IconButton>
-            </Tooltip>
-
-            {/* Copy Link Button */}
-            <Tooltip title={t('copyLink')}>
-              <IconButton onClick={handleCopyLinkClick} size="small">
-                <LinkIcon />
-              </IconButton>
-            </Tooltip>
-
-            {/* Delete Button */}
-            {(isAdmin || isOwner) && (
-              <Tooltip title={t('delete')}>
-                <IconButton onClick={handleDeleteClick} size="small">
-                  <Delete />
-                </IconButton>
-              </Tooltip>
+              <MuiLink
+                component={Link}
+                to={`/notes/${note.id}`}
+                underline="hover"
+                sx={{ ml: 1 }}
+              >
+                {note.name}
+              </MuiLink>
+            </Box>
+          </TableCell>
+        );
+      case 'subject':
+        return (
+          <TableCell key={column.id}>
+            {isSameSubject ? (
+              subjectName
+            ) : (
+              <MuiLink
+                component={Link}
+                to={`/directories/${subjectData?.rootDirectoryUrl?.split('/').pop()}`}
+                underline="hover"
+              >
+                {subjectName}
+              </MuiLink>
             )}
-
-            {/* More Menu */}
-            <Tooltip title={t('more')}>
-              <IconButton onClick={handleMenuClick} size="small">
-                <MoreVertIcon />
-              </IconButton>
-            </Tooltip>
-
-            <Menu
-              anchorEl={anchorEl}
-              open={openMenu}
-              onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
+          </TableCell>
+        );
+      case 'owner':
+        return (
+          <TableCell key={column.id}>
+            <MuiLink
+              component={Link}
+              to={`/users/${ownerData?.id}`}
+              underline="hover"
             >
-              <MenuItem onClick={handleOwnerNotes}>
-                {t('openOwnersNotes')}
-              </MenuItem>
-              <MenuItem onClick={handleOpenParent}>
-                {t('openParentDirectory')}
-              </MenuItem>
-              <MenuItem onClick={handleSubjectDirectories}>
-                {t('openSubjectsDirectories')}
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Box>
-      </TableCell>
+              {ownerName}
+            </MuiLink>
+          </TableCell>
+        );
+      case 'lastModifiedAt':
+        return (
+          <TableCell key={column.id}>
+            {new Date(note.lastModifiedAt).toLocaleString()}
+          </TableCell>
+        );
+      case 'score':
+        return (
+          <TableCell key={column.id}>
+            {note.avgScore?.toFixed(2) ?? '-'}
+          </TableCell>
+        );
+      case 'actions':
+        return (
+          <TableCell
+            key={column.id}
+            align="right"
+            sx={{
+              transition: 'opacity 0.1s',
+              opacity: 0,
+              '&:hover': {
+                opacity: 1,
+              },
+            }}
+          >
+            <Box display="flex" alignItems="center" justifyContent="flex-end">
+              <Box display="flex" alignItems="center">
+                {/* Favorite Button */}
+                <Tooltip
+                  title={
+                    user
+                      ? isFavorite
+                        ? t('unfavorite')
+                        : t('favorite')
+                      : t('loginToFavorite')
+                  }
+                >
+                  <span>
+                    <IconButton
+                      onClick={handleFavoriteClick}
+                      size="small"
+                      disabled={addingFavorite || removingFavorite || !user}
+                    >
+                      {isFavorite ? (
+                        <FavoriteIcon color="error" />
+                      ) : (
+                        <FavoriteBorderIcon />
+                      )}
+                    </IconButton>
+                  </span>
+                </Tooltip>
 
+                {/* Download Button */}
+                <Tooltip title={t('download')}>
+                  <IconButton onClick={handleDownloadClick} size="small">
+                    <DownloadIcon />
+                  </IconButton>
+                </Tooltip>
+
+                {/* Copy Link Button */}
+                <Tooltip title={t('copyLink')}>
+                  <IconButton onClick={handleCopyLinkClick} size="small">
+                    <LinkIcon />
+                  </IconButton>
+                </Tooltip>
+
+                {/* Delete Button */}
+                {(isAdmin || isOwner) && (
+                  <Tooltip title={t('delete')}>
+                    <IconButton onClick={handleDeleteClick} size="small">
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
+                )}
+
+                {/* More Menu */}
+                <Tooltip title={t('more')}>
+                  <IconButton onClick={handleMenuClick} size="small">
+                    <MoreVertIcon />
+                  </IconButton>
+                </Tooltip>
+
+                <Menu
+                  anchorEl={anchorEl}
+                  open={openMenu}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                >
+                  <MenuItem onClick={handleOwnerNotes}>
+                    {t('openOwnersNotes')}
+                  </MenuItem>
+                  <MenuItem onClick={handleOpenParent}>
+                    {t('openParentDirectory')}
+                  </MenuItem>
+                  <MenuItem onClick={handleSubjectDirectories}>
+                    {t('openSubjectsDirectories')}
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </Box>
+          </TableCell>
+        );
+      default:
+        return <TableCell key={column.id}>-</TableCell>;
+    }
+  };
+
+  return (
+    <>
+      <TableRow hover>{columnsToShow.map(renderCell)}</TableRow>
+      {/* Delete Directory Dialog */}
       {/* DeleteNoteDialog component */}
       <DeleteNoteDialog
         open={openDelete}
@@ -359,7 +390,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note }) => {
         note={note}
         shouldShowReason={isAdmin && !isOwner}
       />
-    </TableRow>
+    </>
   );
 };
 

@@ -22,7 +22,7 @@ const ResultsTable: FC<ResultsTableProps> = ({ columns, children }) => {
   const { t } = useTranslation('resultsTable');
 
   return (
-    <Paper sx={{ mt: 3 }}>
+    <Paper sx={{ mt: 3, overflowX: 'auto' }}>
       <Table>
         <TableHead>
           <TableRow>

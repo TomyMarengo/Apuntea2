@@ -172,44 +172,37 @@ export interface Column {
   id: string;
   label: string;
   align?: 'right' | 'left' | 'center';
+  priority: number; // Minor number, higher priority
 }
 
 export const ColumnDirectory: Column[] = [
-  { id: 'name', label: 'name' },
-  { id: 'subject', label: 'subject' },
-  { id: 'owner', label: 'owner' },
-  { id: 'lastModifiedAt', label: 'lastModifiedAt' },
-  { id: 'actions', label: 'actions', align: 'right' },
+  { id: 'name', label: 'name', priority: 2 },
+  { id: 'subject', label: 'subject', priority: 3 },
+  { id: 'owner', label: 'owner', priority: 4 },
+  { id: 'lastModifiedAt', label: 'lastModifiedAt', priority: 5 },
+  { id: 'actions', label: 'actions', align: 'right', priority: 1 },
 ];
 
 export const ColumnNote: Column[] = [
-  { id: 'name', label: 'name' },
-  { id: 'subject', label: 'subject' },
-  { id: 'owner', label: 'owner' },
-  { id: 'lastModifiedAt', label: 'lastModifiedAt' },
-  { id: 'score', label: 'score' },
-  { id: 'actions', label: 'actions', align: 'right' },
+  { id: 'name', label: 'name', priority: 2 },
+  { id: 'subject', label: 'subject', priority: 3 },
+  { id: 'owner', label: 'owner', priority: 4 },
+  { id: 'lastModifiedAt', label: 'lastModifiedAt', priority: 5 },
+  { id: 'score', label: 'score', priority: 6 },
+  { id: 'actions', label: 'actions', align: 'right', priority: 1 },
 ];
 
 export const ColumnSubject: Column[] = [
-  { id: 'name', label: 'name' },
-  { id: 'year', label: 'year' },
-  {
-    id: 'actions',
-    label: 'actions',
-    align: 'right',
-  },
+  { id: 'name', label: 'name', priority: 2 },
+  { id: 'year', label: 'year', priority: 3 },
+  { id: 'actions', label: 'actions', align: 'right', priority: 1 },
 ];
 
 export const ColumnUser: Column[] = [
-  { id: 'username', label: 'username' },
-  { id: 'email', label: 'email' },
-  { id: 'status', label: 'status' },
-  {
-    id: 'actions',
-    label: 'actions',
-    align: 'right',
-  },
+  { id: 'username', label: 'username', priority: 2 },
+  { id: 'email', label: 'email', priority: 3 },
+  { id: 'status', label: 'status', priority: 4 },
+  { id: 'actions', label: 'actions', align: 'right', priority: 1 },
 ];
 
 export enum FolderIconColor {

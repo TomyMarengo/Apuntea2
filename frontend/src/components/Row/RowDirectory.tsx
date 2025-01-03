@@ -39,13 +39,17 @@ import {
 } from '../../store/slices/directoriesApiSlice';
 import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
-import { Directory, Subject } from '../../types';
+import { Directory, Subject, Column } from '../../types';
 
 interface RowDirectoryProps {
   directory: Directory;
+  columnsToShow: Column[];
 }
 
-const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
+const RowDirectory: React.FC<RowDirectoryProps> = ({
+  directory,
+  columnsToShow,
+}) => {
   const { t } = useTranslation('rowDirectory');
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
@@ -195,136 +199,157 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
   const isOwner = user?.id === directory.ownerUrl?.split('/').pop();
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;
 
-  return (
-    <TableRow hover>
-      <TableCell>
-        <Box display="flex" alignItems="center">
-          <FolderIcon
+  const renderCell = (column: Column) => {
+    switch (column.id) {
+      case 'name':
+        return (
+          <TableCell key={column.id}>
+            <Box display="flex" alignItems="center">
+              <FolderIcon
+                sx={{
+                  color: directory.iconColor
+                    ? `#${directory.iconColor}`
+                    : 'primary.main',
+                }}
+              />
+              <MuiLink
+                component={Link}
+                to={`/directories/${directory.id}`}
+                underline="hover"
+                sx={{ ml: 1 }}
+              >
+                {directory.name}
+              </MuiLink>
+            </Box>
+          </TableCell>
+        );
+      case 'subject':
+        return <TableCell key={column.id}>{subjectName}</TableCell>;
+      case 'owner':
+        return (
+          <TableCell key={column.id}>
+            <MuiLink
+              component={Link}
+              to={`/users/${ownerData?.id}`}
+              underline="hover"
+            >
+              {ownerName}
+            </MuiLink>
+          </TableCell>
+        );
+      case 'lastModifiedAt':
+        return (
+          <TableCell key={column.id}>
+            {new Date(directory.lastModifiedAt).toLocaleString()}
+          </TableCell>
+        );
+      case 'actions':
+        return (
+          <TableCell
+            key={column.id}
+            align={column.align || 'left'}
             sx={{
-              color: directory.iconColor
-                ? `#${directory.iconColor}`
-                : 'primary.main',
+              transition: 'opacity 0.1s',
+              opacity: 0,
+              '&:hover': {
+                opacity: 1,
+              },
             }}
-          />
-          <MuiLink
-            component={Link}
-            to={`/directories/${directory.id}`}
-            underline="hover"
-            sx={{ ml: 1 }}
           >
-            {directory.name}
-          </MuiLink>
-        </Box>
-      </TableCell>
-      <TableCell>{subjectName}</TableCell>
-      <TableCell>
-        <MuiLink
-          component={Link}
-          to={`/users/${ownerData?.id}`}
-          underline="hover"
-        >
-          {ownerName}
-        </MuiLink>
-      </TableCell>
-      <TableCell>
-        {new Date(directory.lastModifiedAt).toLocaleString()}
-      </TableCell>
-      <TableCell
-        align="right"
-        sx={{
-          transition: 'opacity 0.1s',
-          opacity: 0,
-          '&:hover': {
-            opacity: 1,
-          },
-        }}
-      >
-        <Box display="flex" alignItems="center" justifyContent="flex-end">
-          <Box display="flex" alignItems="center">
-            {/* Favorite Button */}
-            <Tooltip
-              title={
-                user
-                  ? isFavorite
-                    ? t('unfavorite')
-                    : t('favorite')
-                  : t('loginToFavorite')
-              }
-            >
-              <span>
-                <IconButton
-                  onClick={handleFavoriteClick}
-                  size="small"
-                  disabled={addingFavorite || removingFavorite || !user}
+            <Box display="flex" alignItems="center" justifyContent="flex-end">
+              <Box display="flex" alignItems="center">
+                {/* Favorite Button */}
+                <Tooltip
+                  title={
+                    user
+                      ? isFavorite
+                        ? t('unfavorite')
+                        : t('favorite')
+                      : t('loginToFavorite')
+                  }
                 >
-                  {isFavorite ? (
-                    <FavoriteIcon color="error" />
-                  ) : (
-                    <FavoriteBorderIcon />
-                  )}
-                </IconButton>
-              </span>
-            </Tooltip>
+                  <span>
+                    <IconButton
+                      onClick={handleFavoriteClick}
+                      size="small"
+                      disabled={addingFavorite || removingFavorite || !user}
+                    >
+                      {isFavorite ? (
+                        <FavoriteIcon color="error" />
+                      ) : (
+                        <FavoriteBorderIcon />
+                      )}
+                    </IconButton>
+                  </span>
+                </Tooltip>
 
-            {/* Edit Button */}
-            {isOwner && (
-              <Tooltip title={t('edit')}>
-                <IconButton onClick={handleEditClick} size="small">
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
-            )}
+                {/* Edit Button */}
+                {isOwner && (
+                  <Tooltip title={t('edit')}>
+                    <IconButton onClick={handleEditClick} size="small">
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
 
-            {/* Copy Link Button */}
-            <Tooltip title={t('copyLink')}>
-              <IconButton onClick={handleCopyLinkClick} size="small">
-                <LinkIcon />
-              </IconButton>
-            </Tooltip>
+                {/* Copy Link Button */}
+                <Tooltip title={t('copyLink')}>
+                  <IconButton onClick={handleCopyLinkClick} size="small">
+                    <LinkIcon />
+                  </IconButton>
+                </Tooltip>
 
-            {/* Delete Button */}
-            {(isAdmin || isOwner) && (
-              <Tooltip title={t('delete')}>
-                <IconButton onClick={handleDeleteClick} size="small">
-                  <Delete />
-                </IconButton>
-              </Tooltip>
-            )}
+                {/* Delete Button */}
+                {(isAdmin || isOwner) && (
+                  <Tooltip title={t('delete')}>
+                    <IconButton onClick={handleDeleteClick} size="small">
+                      <Delete />
+                    </IconButton>
+                  </Tooltip>
+                )}
 
-            {/* More Menu */}
-            <Tooltip title={t('more')}>
-              <IconButton onClick={handleMenuClick} size="small">
-                <MoreVertIcon />
-              </IconButton>
-            </Tooltip>
+                {/* More Menu */}
+                <Tooltip title={t('more')}>
+                  <IconButton onClick={handleMenuClick} size="small">
+                    <MoreVertIcon />
+                  </IconButton>
+                </Tooltip>
 
-            <Menu
-              anchorEl={anchorEl}
-              open={openMenu}
-              onClose={handleMenuClose}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-            >
-              <MenuItem onClick={handleOwnerNotes}>
-                {t('openOwnersNotes')}
-              </MenuItem>
-              <MenuItem onClick={handleOpenParent}>
-                {t('openParentDirectory')}
-              </MenuItem>
-              <MenuItem onClick={handleSubjectDirectories}>
-                {t('openSubjectsDirectories')}
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Box>
-      </TableCell>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={openMenu}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                >
+                  <MenuItem onClick={handleOwnerNotes}>
+                    {t('openOwnersNotes')}
+                  </MenuItem>
+                  <MenuItem onClick={handleOpenParent}>
+                    {t('openParentDirectory')}
+                  </MenuItem>
+                  <MenuItem onClick={handleSubjectDirectories}>
+                    {t('openSubjectsDirectories')}
+                  </MenuItem>
+                </Menu>
+              </Box>
+            </Box>
+          </TableCell>
+        );
+      default:
+        return <TableCell key={column.id}>-</TableCell>;
+    }
+  };
 
+  return (
+    <>
+      <TableRow hover>{columnsToShow.map(renderCell)}</TableRow>
       {/* Delete Directory Dialog */}
       <DeleteDirectoryDialog
         open={openDelete}
@@ -339,7 +364,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({ directory }) => {
         onClose={handleCloseEdit}
         directory={directory}
       />
-    </TableRow>
+    </>
   );
 };
 
