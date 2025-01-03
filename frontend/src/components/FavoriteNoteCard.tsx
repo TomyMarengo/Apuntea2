@@ -37,8 +37,8 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
 
   useEffect(() => {
-    if (typeof isFavApi === 'boolean') {
-      setIsFavorite(isFavApi);
+    if (typeof isFavApi?.success === 'boolean') {
+      setIsFavorite(isFavApi.success);
     }
   }, [isFavApi]);
 
@@ -51,13 +51,13 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
           noteId: note.id,
           userId,
         }).unwrap();
-        if (result) {
+        if (result.success) {
           toast.success(t('unfavorited'));
         }
       } else {
         // call add
         const result = await addFavoriteNote({ noteId: note.id }).unwrap();
-        if (result) {
+        if (result.success) {
           toast.success(t('favorited'));
         }
       }

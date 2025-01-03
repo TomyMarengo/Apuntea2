@@ -36,8 +36,8 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
 
   useEffect(() => {
-    if (typeof isFavApi === 'boolean') {
-      setIsFavorite(isFavApi);
+    if (typeof isFavApi?.success === 'boolean') {
+      setIsFavorite(isFavApi.success);
     }
   }, [isFavApi]);
 
@@ -48,7 +48,7 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
           directoryId: directory.id,
           userId,
         }).unwrap();
-        if (result) {
+        if (result.success) {
           toast.success(t('unfavorited'));
         } else {
           toast.error(t('errorUnfavorite'));
@@ -57,7 +57,7 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
         const result = await addFavoriteDirectory({
           directoryId: directory.id,
         }).unwrap();
-        if (result) {
+        if (result.success) {
           toast.success(t('favorited'));
         } else {
           toast.error(t('errorFavorite'));

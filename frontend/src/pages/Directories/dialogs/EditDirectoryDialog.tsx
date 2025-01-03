@@ -1,3 +1,5 @@
+// src/pages/Directories/dialogs/EditDirectoryDialog.tsx
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import FolderIcon from '@mui/icons-material/Folder';
 import {

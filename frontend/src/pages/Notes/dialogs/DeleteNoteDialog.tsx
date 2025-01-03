@@ -1,3 +1,5 @@
+// src/pages/Notes/dialogs/DeleteNoteDialog.tsx
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,

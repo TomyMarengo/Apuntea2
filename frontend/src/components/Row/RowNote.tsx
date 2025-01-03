@@ -2,7 +2,7 @@
 
 import Delete from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
-import EditIcon from '@mui/icons-material/Edit'; // Ícono de lápiz
+import EditIcon from '@mui/icons-material/Edit';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LinkIcon from '@mui/icons-material/Link';
@@ -27,7 +27,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
-import EditNoteDialog from '../../pages/Notes/dialogs/EditNoteDialog'; // Importa el diálogo de edición
+import EditNoteDialog from '../../pages/Notes/dialogs/EditNoteDialog';
 import {
   selectCurrentUser,
   selectCurrentToken,
@@ -322,7 +322,6 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
                     <DownloadIcon />
                   </IconButton>
                 </Tooltip>
-
                 {/* Copy Link Button */}
                 <Tooltip title={t('copyLink')}>
                   <IconButton onClick={handleCopyLinkClick} size="small">
@@ -338,14 +337,12 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
                     </IconButton>
                   </Tooltip>
                 )}
-
                 {/* More Menu */}
                 <Tooltip title={t('more')}>
                   <IconButton onClick={handleMenuClick} size="small">
                     <MoreVertIcon />
                   </IconButton>
                 </Tooltip>
-
                 <Menu
                   anchorEl={anchorEl}
                   open={openMenu}

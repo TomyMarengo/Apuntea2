@@ -1,3 +1,5 @@
+// src/pages/Directories/dialogs/DeleteDirectoryDialog.tsx
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,

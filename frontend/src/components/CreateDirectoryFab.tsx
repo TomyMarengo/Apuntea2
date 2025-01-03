@@ -1,3 +1,5 @@
+// src/components/CreateDirectoryFab.tsx
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -53,6 +55,8 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
   const [createDirectory, { isLoading }] = useCreateDirectoryMutation();
 
   const [expanded, setExpanded] = useState(false);
+
+  // Reference to the wrapper for ClickAwayListener
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const {

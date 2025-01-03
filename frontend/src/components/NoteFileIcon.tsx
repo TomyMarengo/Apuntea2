@@ -1,4 +1,5 @@
-import DescriptionIcon from '@mui/icons-material/Description';
+// src/components/NoteFileIcon.tsx
+
 import ImageIcon from '@mui/icons-material/Image';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import MovieIcon from '@mui/icons-material/Movie';
@@ -20,17 +21,9 @@ const NoteFileIcon: React.FC<NoteFileIconProps> = ({ fileType, size }) => {
   switch (fileType.toLowerCase()) {
     case 'pdf':
       return <PictureAsPdfIcon sx={{ fontSize: size }} color="primary" />;
-    case 'doc':
-    case 'docx':
-    case 'ppt':
-    case 'pptx':
-    case 'xls':
-    case 'xlsx':
-      return <DescriptionIcon sx={{ fontSize: size }} color="primary" />;
     case 'jpg':
     case 'jpeg':
     case 'png':
-    case 'gif':
       return <ImageIcon sx={{ fontSize: size }} color="primary" />;
     case 'mp4':
       return <MovieIcon sx={{ fontSize: size }} color="primary" />;

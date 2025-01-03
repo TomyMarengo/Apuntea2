@@ -119,7 +119,8 @@ const NotePage: React.FC = () => {
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
   useEffect(() => {
-    if (typeof isFavData === 'boolean') setIsFavorite(isFavData);
+    if (typeof isFavData?.success === 'boolean')
+      setIsFavorite(isFavData?.success);
   }, [isFavData]);
 
   const isOwner = user && note && user.id === note.ownerUrl?.split('/').pop();
@@ -136,12 +137,12 @@ const NotePage: React.FC = () => {
           noteId,
           userId: user.id,
         }).unwrap();
-        if (result) {
+        if (result.success) {
           toast.success(t('unfavorited'));
         }
       } else {
         const result = await addFavoriteNote({ noteId }).unwrap();
-        if (result) {
+        if (result.success) {
           toast.success(t('favorited'));
         }
       }

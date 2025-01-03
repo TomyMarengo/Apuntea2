@@ -99,13 +99,9 @@ export interface SubjectWithCareer {
 
 export enum FileType {
   PDF = 'pdf',
-  DOCX = 'docx',
-  PPTX = 'pptx',
-  XLSX = 'xlsx',
   JPG = 'jpg',
   JPEG = 'jpeg',
   PNG = 'png',
-  GIF = 'gif',
   MP4 = 'mp4',
   MP3 = 'mp3',
 }

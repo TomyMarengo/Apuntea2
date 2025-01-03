@@ -1,3 +1,5 @@
+// src/pages/Directories/DirectoryPage.tsx
+
 import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,

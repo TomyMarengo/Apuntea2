@@ -1,5 +1,4 @@
 // src/components/CreateNoteFab.tsx
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import {
@@ -44,8 +43,11 @@ const noteSchema = z.object({
   visible: z.boolean().default(true),
   file: z
     .instanceof(File)
-    .refine((file) => file instanceof File, {
-      message: 'invalidFile',
+    .refine((file) => file.size <= 100 * 1024 * 1024, {
+      message: 'fileTooLarge',
+    })
+    .refine((file) => /\.(jpg|jpeg|png|pdf|mp4|mp3)$/i.test(file.name), {
+      message: 'invalidFileType',
     })
     .optional(),
 });
@@ -231,32 +233,40 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
                 name="file"
                 control={control}
                 render={({ field }) => (
-                  <Button
-                    variant="outlined"
-                    component="label"
-                    size="small"
-                    sx={{
-                      textTransform: 'none',
-                      flexShrink: 0,
-                      maxWidth: '130px',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      display: 'block',
-                      textAlign: 'left',
-                    }}
-                  >
-                    {field.value ? field.value.name : t('chooseFile')}
-                    <input
-                      type="file"
-                      hidden
-                      onChange={(e) => {
-                        if (e.target.files && e.target.files[0]) {
-                          field.onChange(e.target.files[0]);
-                        }
+                  <Box>
+                    <Button
+                      variant="outlined"
+                      component="label"
+                      size="small"
+                      sx={{
+                        textTransform: 'none',
+                        flexShrink: 0,
+                        minWidth: '100px',
+                        maxWidth: '100px',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        display: 'block',
+                        textAlign: field.value ? 'left' : 'center',
                       }}
-                    />
-                  </Button>
+                    >
+                      {field.value ? field.value.name : t('chooseFile')}
+                      <input
+                        type="file"
+                        hidden
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            field.onChange(e.target.files[0]);
+                          }
+                        }}
+                      />
+                    </Button>
+                    {errors.file && (
+                      <Typography color="error" variant="caption">
+                        {t(errors.file.message as string)}
+                      </Typography>
+                    )}
+                  </Box>
                 )}
               />
             </Box>

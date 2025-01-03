@@ -100,7 +100,8 @@
     "minLength": "El nombre del apunte debe tener al menos 2 caracteres.",
     "maxLength": "El nombre del apunte no puede exceder los 50 caracteres.",
     "invalidCategory": "Por favor, selecciona una categoría válida.",
-    "invalidFile": "Por favor, sube un archivo válido."
+    "fileTooLarge": "El archivo no puede exceder los 100MB.",
+    "invalidFileType": "El archivo debe ser de tipo PDF, JPG, JPEG, MP4 o MP3."
   },
   "deleteDirectoryDialog": {
     "deleteSuccess": "Directorio eliminado exitosamente.",
