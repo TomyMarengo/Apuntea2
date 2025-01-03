@@ -89,7 +89,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
       const result = await followUser({
         userId: user.id,
       }).unwrap();
-      if (result) {
+      if (result.success) {
         toast.success(t('followed'));
         refetch();
       } else {
@@ -107,7 +107,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
         userId: user.id,
         followerId: currentUserId!,
       }).unwrap();
-      if (result) {
+      if (result.success) {
         toast.success(t('unfollowed'));
         refetch();
       } else {
@@ -154,7 +154,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                 <Typography variant="h5">{user.username}</Typography>
               )}
               <Box sx={{ marginLeft: 'auto' }}>
-                {isFollowing ? (
+                {isFollowing?.success ? (
                   <Button
                     variant="outlined"
                     onClick={handleUnfollow}

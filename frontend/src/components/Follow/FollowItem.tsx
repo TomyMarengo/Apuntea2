@@ -48,7 +48,7 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
       const result = await followUser({
         userId: followId,
       }).unwrap();
-      if (result) {
+      if (result.success) {
         toast.success(
           t('successFollow', { username: followUserData?.username }),
         );
@@ -67,7 +67,7 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
         userId: followId,
         followerId: currentUserId,
       }).unwrap();
-      if (result) {
+      if (result.success) {
         toast.success(
           t('successUnfollow', { username: followUserData?.username }),
         );
@@ -122,7 +122,7 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
       />
       {followId !== currentUserId && (
         <Box>
-          {isFollowing ? (
+          {isFollowing?.success ? (
             <Button variant="outlined" color="primary" onClick={handleUnfollow}>
               {t('unfollow')}
             </Button>
