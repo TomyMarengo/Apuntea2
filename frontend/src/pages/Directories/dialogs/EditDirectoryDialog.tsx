@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import FolderIcon from '@mui/icons-material/Folder';
 import {
   Dialog,
   DialogTitle,
@@ -154,7 +155,6 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
                 control={control}
                 render={({ field }) => (
                   <ToggleButtonGroup
-                    {...field}
                     exclusive
                     value={field.value}
                     onChange={(_, value) => {
@@ -162,29 +162,44 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
                         field.onChange(value);
                       }
                     }}
-                    aria-label="icon color"
-                    sx={{ gap: 1, mb: 1 }}
+                    sx={{ display: 'flex', gap: 1 }}
                   >
-                    {Object.entries(FolderIconColor).map(([label, value]) => (
+                    {Object.entries(FolderIconColor).map(([_, value]) => (
                       <ToggleButton
                         key={value}
                         value={value}
-                        aria-label={label}
+                        disableRipple
                         sx={{
-                          width: 40,
-                          height: 40,
-                          minWidth: 40,
+                          padding: 0,
+                          minWidth: 30,
+                          width: 30,
+                          height: 30,
                           border: 'none',
                           borderRadius: '50%',
-                          backgroundColor: value,
-                          transition: 'transform 0.2s, border 0.2s',
-                          '&.Mui-selected, &.Mui-selected:hover, &:hover': {
+                          backgroundColor: 'transparent',
+                          transition: 'transform 0.2s ease-in-out',
+                          boxShadow: 'none',
+                          '&:hover': {
                             transform: 'scale(1.1)',
-                            border: '2px solid #FFFFFF',
-                            backgroundColor: value,
+                            backgroundColor: 'transparent',
+                          },
+                          '&.Mui-selected': {
+                            transform: 'scale(1.2)',
+                            backgroundColor: 'transparent',
+                          },
+                          '&.Mui-selected:hover': {
+                            transform: 'scale(1.3)',
+                            backgroundColor: 'transparent',
                           },
                         }}
-                      />
+                      >
+                        <FolderIcon
+                          sx={{
+                            fontSize: 30,
+                            color: value,
+                          }}
+                        />
+                      </ToggleButton>
                     ))}
                   </ToggleButtonGroup>
                 )}

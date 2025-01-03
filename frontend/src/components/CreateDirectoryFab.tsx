@@ -1,7 +1,6 @@
-// src/components/CreateDirectoryFab.tsx
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+import FolderIcon from '@mui/icons-material/Folder';
 import {
   Box,
   Fab,
@@ -53,13 +52,9 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
   const { t } = useTranslation('createDirectoryFab');
   const [createDirectory, { isLoading }] = useCreateDirectoryMutation();
 
-  // Tracks if the form is expanded
   const [expanded, setExpanded] = useState(false);
-
-  // Reference to the wrapper for ClickAwayListener
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Initialize react-hook-form with Zod resolver
   const {
     control,
     handleSubmit,
@@ -74,19 +69,16 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
     },
   });
 
-  // Toggle the form expansion
   const handleFabClick = () => {
     setExpanded((prev) => !prev);
   };
 
-  // Close the form when clicking outside
   const handleClickAway = () => {
     if (expanded) {
       setExpanded(false);
     }
   };
 
-  // Handle form submission
   const onSubmit = async (data: DirectoryFormData) => {
     try {
       const result = await createDirectory({
@@ -118,7 +110,6 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
   return (
     <ClickAwayListener onClickAway={handleClickAway}>
       <Box ref={containerRef}>
-        {/* Floating Action Button (always visible) */}
         {!expanded && (
           <Tooltip title={t('createNewDirectory')} placement="left">
             <Fab
@@ -133,7 +124,6 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
           </Tooltip>
         )}
 
-        {/* Expanded Form */}
         {expanded && (
           <Paper
             sx={{
@@ -151,7 +141,6 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
               {t('createNewDirectory')}
             </Typography>
 
-            {/* Directory Name */}
             <Controller
               name="name"
               control={control}
@@ -179,36 +168,51 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
                 control={control}
                 render={({ field }) => (
                   <ToggleButtonGroup
-                    {...field}
                     exclusive
+                    value={field.value}
                     onChange={(_, value) => {
                       if (value !== null) {
                         field.onChange(value);
                       }
                     }}
-                    aria-label="icon color"
-                    sx={{ gap: 1 }} // Adds spacing between the buttons
+                    sx={{ display: 'flex', gap: 1 }}
                   >
-                    {Object.entries(FolderIconColor).map(([label, value]) => (
+                    {Object.entries(FolderIconColor).map(([_, value]) => (
                       <ToggleButton
                         key={value}
                         value={value}
-                        aria-label={label}
+                        disableRipple
                         sx={{
-                          width: 40,
-                          height: 40,
-                          minWidth: 40,
+                          padding: 0,
+                          minWidth: 30,
+                          width: 30,
+                          height: 30,
                           border: 'none',
                           borderRadius: '50%',
-                          backgroundColor: value,
-                          transition: 'transform 0.2s, border 0.2s',
-                          '&.Mui-selected, &.Mui-selected:hover, &:hover': {
+                          backgroundColor: 'transparent',
+                          transition: 'transform 0.2s ease-in-out',
+                          boxShadow: 'none',
+                          '&:hover': {
                             transform: 'scale(1.1)',
-                            border: '2px solid #FFFFFF',
-                            backgroundColor: value,
+                            backgroundColor: 'transparent',
+                          },
+                          '&.Mui-selected': {
+                            transform: 'scale(1.2)',
+                            backgroundColor: 'transparent',
+                          },
+                          '&.Mui-selected:hover': {
+                            transform: 'scale(1.3)',
+                            backgroundColor: 'transparent',
                           },
                         }}
-                      />
+                      >
+                        <FolderIcon
+                          sx={{
+                            fontSize: 30,
+                            color: value,
+                          }}
+                        />
+                      </ToggleButton>
                     ))}
                   </ToggleButtonGroup>
                 )}
@@ -220,7 +224,6 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
               )}
             </Box>
 
-            {/* Visibility Switch */}
             <Controller
               name="visible"
               control={control}
@@ -238,7 +241,6 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
               )}
             />
 
-            {/* Submit Button */}
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
               {isLoading ? (
                 <CircularProgress size={30} />
