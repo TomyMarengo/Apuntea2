@@ -69,17 +69,11 @@ public class  NoteServiceImpl implements NoteService {
         return noteDao.getNoteById(noteId, maybeUser.map(User::getUserId).orElse(null));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Optional<NoteFile> getNoteFileById(UUID noteId) {
-        final Optional<User> maybeUser = securityService.getCurrentUser();
-
-        if (maybeUser.isPresent()) {
-            final Note note = noteDao.getNoteById(noteId, maybeUser.get().getUserId()).orElseThrow(NoteNotFoundException::new);
-            noteDao.addInteractionIfNotExists(maybeUser.get(), note);
-        }
-
-        return noteDao.getNoteFileById(noteId, maybeUser.map(User::getUserId).orElse(null));
+        final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
+        return noteDao.getNoteFileById(noteId, userId);
     }
 
     @Transactional(readOnly = true)
