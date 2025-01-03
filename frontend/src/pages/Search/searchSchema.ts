@@ -6,6 +6,7 @@ export const searchSchema = z.object({
   institutionId: z.string().optional(),
   careerId: z.string().optional(),
   subjectId: z.string().optional(),
+  userId: z.string().optional(),
   word: z.string().optional(),
   category: z.string(),
   sortBy: z.string(),

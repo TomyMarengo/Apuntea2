@@ -36,6 +36,7 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     institutionId: searchParams.get('institutionId') || '',
     careerId: searchParams.get('careerId') || '',
     subjectId: searchParams.get('subjectId') || '',
+    userId: searchParams.get('userId') || '',
     word: searchParams.get('word') || '',
     category: searchParams.get('category') || 'note',
     sortBy: searchParams.get('sortBy') || 'modified',
@@ -69,6 +70,7 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     if (watchedValues.careerId) params.set('careerId', watchedValues.careerId);
     if (watchedValues.subjectId)
       params.set('subjectId', watchedValues.subjectId);
+    if (watchedValues.userId) params.set('userId', watchedValues.userId);
     if (watchedValues.word) params.set('word', watchedValues.word);
     if (watchedValues.category) params.set('category', watchedValues.category);
     if (watchedValues.sortBy) params.set('sortBy', watchedValues.sortBy);
@@ -88,6 +90,7 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     watchedValues.institutionId,
     watchedValues.careerId,
     watchedValues.subjectId,
+    watchedValues.userId,
     watchedValues.word,
     watchedValues.category,
     watchedValues.sortBy,
@@ -112,6 +115,7 @@ const useSearch = (parentId?: string): UseSearchReturn => {
       args.institutionId = watchedValues.institutionId;
     if (watchedValues.careerId) args.careerId = watchedValues.careerId;
     if (watchedValues.subjectId) args.subjectId = watchedValues.subjectId;
+    if (watchedValues.userId) args.userId = watchedValues.userId;
     if (debouncedWord) args.word = debouncedWord;
 
     return args;
@@ -124,6 +128,7 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     watchedValues.institutionId,
     watchedValues.careerId,
     watchedValues.subjectId,
+    watchedValues.userId,
     debouncedWord,
   ]);
 
