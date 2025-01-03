@@ -26,6 +26,7 @@ export function serializeFormQuery(params: Record<string, any>): string {
 }
 
 export function extractErrorMessages(error: any): string[] {
+  if (!error) return [];
   let errorMessages: string[] = [];
   if (Array.isArray(error.data)) {
     errorMessages = error.data
