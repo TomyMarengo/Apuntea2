@@ -251,6 +251,16 @@
     "noFollowings": "Not following anyone",
     "noMoreFollowings": "No more following"
   },
+  "followItem": {
+    "successFollow": "You are now following {{username}}.",
+    "errorFollow": "An error occurred while following {{username}}.",
+    "successUnfollow": "You have unfollowed {{username}}.",
+    "errorUnfollow": "An error occurred while unfollowing {{username}}.",
+    "loading": "Loading...",
+    "errorLoadingUser": "Error loading user.",
+    "Follow": "Follow",
+    "Unfollow": "Unfollow"
+  },
   "forgotPasswordPage": {
     "titlePage": "Forgot Password | Apuntea",
     "loading": "Loading...",
@@ -624,11 +634,18 @@
   },
   "userPage": {
     "titlePage": "@{{username}} | Apuntea",
+    "profile": "Profile of {{username}}",
     "userNotFound": "User not found.",
     "errorFetchingUser": "Error fetching user data.",
     "loading": "Loading..."
   },
   "userProfileCard": {
+    "username": "Username",
+    "email": "Email",
+    "career": "Career",
+    "institution": "Institution",
+    "followers": "Followers",
+    "following": "Following",
     "follow": "Follow",
     "unfollow": "Unfollow",
     "followed": "You are now following this user.",

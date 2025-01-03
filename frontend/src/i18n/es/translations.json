@@ -250,6 +250,16 @@
     "noFollowings": "No sigue a nadie",
     "noMoreFollowings": "No hay más seguidos."
   },
+  "followItem": {
+    "successFollow": "Ahora sigues a {{username}}.",
+    "errorFollow": "Ocurrió un error al seguir a {{username}}.",
+    "successUnfollow": "Has dejado de seguir a {{username}}.",
+    "errorUnfollow": "Ocurrió un error al dejar de seguir a {{username}}.",
+    "loading": "Cargando...",
+    "errorLoadingUser": "Error al cargar el usuario.",
+    "Follow": "Seguir",
+    "Unfollow": "Dejar de seguir"
+  },
   "forgotPasswordPage": {
     "titlePage": "Recuperar Contraseña | Apuntea",
     "loading": "Cargando...",
@@ -621,11 +631,18 @@
   },
   "userPage": {
     "titlePage": "@{{username}} | Apuntea",
+    "profile": "Perfil de {{username}}",
     "userNotFound": "Usuario no encontrado.",
     "errorFetchingUser": "Error al obtener el usuario.",
     "loading": "Cargando..."
   },
   "userProfileCard": {
+    "username": "Nombre de usuario",
+    "email": "Correo electrónico",
+    "career": "Carrera",
+    "institution": "Institución",
+    "followers": "Seguidores",
+    "following": "Siguiendo",
     "follow": "Seguir",
     "unfollow": "Dejar de seguir",
     "followed": "Has seguido a este usuario.",

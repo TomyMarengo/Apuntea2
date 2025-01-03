@@ -74,7 +74,7 @@ const ProfilePage: React.FC = () => {
             <Typography variant="h6">{t('noUserFound')}</Typography>
           </Box>
         ) : (
-          <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
+          <Box sx={{ maxWidth: 1200, margin: '0 auto' }}>
             <Typography variant="h4" gutterBottom>
               {t('profile')}
             </Typography>

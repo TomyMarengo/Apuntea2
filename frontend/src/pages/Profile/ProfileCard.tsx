@@ -142,6 +142,20 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                 <strong>{t('institution')}:</strong>{' '}
                 {user.institution?.name || t('notSet')}
               </Typography>
+              <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
+                <Button onClick={handleFollowersClick}>
+                  {t('followers')}
+                  {': '}
+                  {!isLoadingFollowers && (followersData?.totalCount || 0)}
+                  {isLoadingFollowers && <CircularProgress size={20} />}
+                </Button>
+                <Button onClick={handleFollowingClick}>
+                  {t('following')}
+                  {': '}
+                  {!isLoadingFollowings && (followingsData?.totalCount || 0)}
+                  {isLoadingFollowings && <CircularProgress size={20} />}
+                </Button>
+              </Box>
               <FormControlLabel
                 control={
                   <Switch
@@ -157,20 +171,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                 }
                 sx={{ mt: 2 }}
               />
-              <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-                <Button onClick={handleFollowersClick}>
-                  {t('followers')}
-                  {': '}
-                  {!isLoadingFollowers && (followersData?.totalCount || 0)}
-                  {isLoadingFollowers && <CircularProgress size={20} />}
-                </Button>
-                <Button onClick={handleFollowingClick}>
-                  {t('following')}
-                  {': '}
-                  {!isLoadingFollowings && (followingsData?.totalCount || 0)}
-                  {isLoadingFollowings && <CircularProgress size={20} />}
-                </Button>
-              </Box>
             </Box>
           </Grid>
         </Grid>

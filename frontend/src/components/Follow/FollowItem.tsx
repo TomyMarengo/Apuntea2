@@ -49,13 +49,15 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
         userId: followId,
       }).unwrap();
       if (result) {
-        toast.success(t('successFollow'));
+        toast.success(
+          t('successFollow', { username: followUserData?.username }),
+        );
         refetch();
       } else {
-        toast.error(t('errorFollow'));
+        toast.error(t('errorFollow', { username: followUserData?.username }));
       }
     } catch {
-      toast.error(t('errorFollow'));
+      toast.error(t('errorFollow', { username: followUserData?.username }));
     }
   };
 
@@ -66,13 +68,15 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
         followerId: currentUserId,
       }).unwrap();
       if (result) {
-        toast.success(t('successUnfollow'));
+        toast.success(
+          t('successUnfollow', { username: followUserData?.username }),
+        );
         refetch();
       } else {
-        toast.error(t('errorUnfollow'));
+        toast.error(t('errorUnfollow', { username: followUserData?.username }));
       }
     } catch {
-      toast.error(t('errorUnfollow'));
+      toast.error(t('errorUnfollow', { username: followUserData?.username }));
     }
   };
 
@@ -116,17 +120,19 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
           </MuiLink>
         }
       />
-      <Box>
-        {isFollowing ? (
-          <Button variant="outlined" color="primary" onClick={handleUnfollow}>
-            {t('unfollow')}
-          </Button>
-        ) : (
-          <Button variant="contained" color="primary" onClick={handleFollow}>
-            {t('follow')}
-          </Button>
-        )}
-      </Box>
+      {followId !== currentUserId && (
+        <Box>
+          {isFollowing ? (
+            <Button variant="outlined" color="primary" onClick={handleUnfollow}>
+              {t('unfollow')}
+            </Button>
+          ) : (
+            <Button variant="contained" color="primary" onClick={handleFollow}>
+              {t('follow')}
+            </Button>
+          )}
+        </Box>
+      )}
     </ListItem>
   );
 };

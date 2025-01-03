@@ -70,7 +70,7 @@ const UserPage: React.FC = () => {
       <Helmet>
         <title>{pageTitle}</title>
       </Helmet>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
         {isLoading && (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
@@ -89,13 +89,18 @@ const UserPage: React.FC = () => {
 
         {/* Main Content */}
         {!isLoading && !isError && targetUser && (
-          <>
+          <Box sx={{ maxWidth: 1200, margin: '0 auto' }}>
+            <Typography variant="h4" gutterBottom>
+              {t('profile', {
+                username: targetUser?.username || targetUser?.email,
+              })}
+            </Typography>
             {/* User Profile */}
             <UserProfileCard user={targetUserWithDetails} />
 
             {/* User Notes */}
             <UserNotes user={targetUserWithDetails} />
-          </>
+          </Box>
         )}
       </Box>
     </>
