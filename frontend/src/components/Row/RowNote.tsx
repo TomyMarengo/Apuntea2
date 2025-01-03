@@ -2,6 +2,7 @@
 
 import Delete from '@mui/icons-material/Delete';
 import DownloadIcon from '@mui/icons-material/Download';
+import EditIcon from '@mui/icons-material/Edit'; // Ícono de lápiz
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import LinkIcon from '@mui/icons-material/Link';
@@ -26,6 +27,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import DeleteNoteDialog from '../../pages/Notes/dialogs/DeleteNoteDialog';
+import EditNoteDialog from '../../pages/Notes/dialogs/EditNoteDialog'; // Importa el diálogo de edición
 import {
   selectCurrentUser,
   selectCurrentToken,
@@ -50,6 +52,8 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken);
+
+  const [openEditDialog, setOpenEditDialog] = useState(false);
 
   // Fetch subject data
   const {
@@ -209,6 +213,14 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
     setOpenDelete(false);
   };
 
+  const handleEditClick = () => {
+    setOpenEditDialog(true);
+  };
+
+  const handleCloseEditDialog = () => {
+    setOpenEditDialog(false);
+  };
+
   const isOwner = user?.id === note.ownerUrl?.split('/').pop();
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;
 
@@ -296,7 +308,14 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
                     </IconButton>
                   </span>
                 </Tooltip>
-
+                {/* Edit Button */}
+                {isOwner && (
+                  <Tooltip title={t('edit')}>
+                    <IconButton onClick={handleEditClick} size="small">
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
                 {/* Download Button */}
                 <Tooltip title={t('download')}>
                   <IconButton onClick={handleDownloadClick} size="small">
@@ -359,12 +378,18 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
   return (
     <>
       <TableRow hover>{columnsToShow.map(renderCell)}</TableRow>
-      {/* DeleteNoteDialog component */}
+      {/* DeleteNoteDialog */}
       <DeleteNoteDialog
         open={openDelete}
         onClose={handleCloseDelete}
         note={note}
         shouldShowReason={isAdmin && !isOwner}
+      />
+      {/* EditNoteDialog */}
+      <EditNoteDialog
+        open={openEditDialog}
+        onClose={handleCloseEditDialog}
+        note={note}
       />
     </>
   );
