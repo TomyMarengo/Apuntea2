@@ -24,3 +24,18 @@ export function serializeFormQuery(params: Record<string, any>): string {
   const query = new URLSearchParams(params).toString() || '';
   return query;
 }
+
+export function extractErrorMessages(error: any): string[] {
+  let errorMessages: string[] = [];
+  if (Array.isArray(error.data)) {
+    errorMessages = error.data
+      .map((err: any) => (err?.message ? err.message : ''))
+      .filter((message: any) => message);
+  } else if (error.data && (error.data as any).message) {
+    const message = (error.data as any).message;
+    if (message) {
+      errorMessages = [message];
+    }
+  }
+  return errorMessages;
+}

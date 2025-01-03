@@ -7,6 +7,7 @@ import {
   DIRECTORY_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Directory } from '../../types';
+import { extractErrorMessages } from '../../utils/helpers.ts';
 import { mapApiDirectory } from '../../utils/mappers';
 
 interface DirectoryQueryArgs {
@@ -80,18 +81,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
             'Content-Type': DIRECTORY_CREATE_CONTENT_TYPE,
           },
         });
-        let errorMessages: string[] = [];
-        if (Array.isArray(result.error?.data)) {
-          errorMessages = result.error.data
-            .map((err: any) => (err?.message ? err.message : ''))
-            .filter((message) => message);
-        } else if (result.error?.data && (result.error?.data as any).message) {
-          const message = (result.error?.data as any).message;
-          if (message) {
-            errorMessages = [message];
-          }
-        }
-
+        let errorMessages = extractErrorMessages(result.error);
         return {
           data: {
             success: result.error === undefined,
@@ -122,17 +112,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
             'Content-Type': DIRECTORY_UPDATE_CONTENT_TYPE,
           },
         });
-        let errorMessages: string[] = [];
-        if (Array.isArray(result.error?.data)) {
-          errorMessages = result.error.data
-            .map((err: any) => (err?.message ? err.message : ''))
-            .filter((message) => message);
-        } else if (result.error?.data && (result.error?.data as any).message) {
-          const message = (result.error?.data as any).message;
-          if (message) {
-            errorMessages = [message];
-          }
-        }
+        let errorMessages = extractErrorMessages(result.error);
 
         return {
           data: {

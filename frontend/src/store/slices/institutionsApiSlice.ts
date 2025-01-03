@@ -7,13 +7,13 @@ import {
   SUBJECT_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Institution, Career, Subject, SubjectCareer } from '../../types';
+import { extractErrorMessages } from '../../utils/helpers';
 import {
   mapApiSubject,
   mapApiInstitution,
   mapApiCareer,
   mapApiSubjectCareer,
 } from '../../utils/mappers';
-
 /**
  * One-of logic:
  * - We can pass either { institutionId, careerId, subjectId }
@@ -129,6 +129,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
         _extraOptions,
         baseQuery,
       ) {
+        let errorMessages: string[] = [];
+
         try {
           // Step 1: Create the subject
           const subjectResult = await baseQuery({
@@ -141,10 +143,11 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           });
 
           if (subjectResult.error) {
+            errorMessages = extractErrorMessages(subjectResult.error);
             return {
               data: {
                 success: false,
-                messages: [],
+                messages: errorMessages,
               },
             };
           }
@@ -165,14 +168,16 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             });
 
             if (subjectCareerResult.error) {
+              errorMessages = extractErrorMessages(subjectCareerResult.error);
               return {
                 data: {
                   success: false,
-                  messages: [],
+                  messages: errorMessages,
                 },
               };
             }
           }
+
           return {
             data: {
               success: true,
@@ -181,17 +186,17 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           };
         } catch (error) {
           console.error('Failed to create subject:', error);
+          errorMessages.push('An unexpected error occurred.');
           return {
             data: {
               success: false,
-              messages: [],
+              messages: errorMessages,
             },
           };
         }
       },
       invalidatesTags: ['Subjects'],
     }),
-
     updateSubject: builder.mutation<ApiResponse, UpdateSubjectArgs>({
       async queryFn(
         { name, year, institutionId, careerId, subjectId },
@@ -199,6 +204,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
         _extraOptions,
         baseQuery,
       ) {
+        let errorMessages: string[] = [];
+
         try {
           // Step 1: Update the subject
           if (name) {
@@ -210,9 +217,11 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
                 'Content-Type': SUBJECT_CONTENT_TYPE,
               },
             });
+
             if (subjectResult.error) {
+              errorMessages = extractErrorMessages(subjectResult.error);
               return {
-                data: { success: false, messages: [] },
+                data: { success: false, messages: errorMessages },
               };
             }
           }
@@ -227,16 +236,20 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
                 'Content-Type': SUBJECT_CAREER_CONTENT_TYPE,
               },
             });
+
             if (subjectCareerResult.error) {
+              errorMessages = extractErrorMessages(subjectCareerResult.error);
               return {
-                data: { success: false, messages: [] },
+                data: { success: false, messages: errorMessages },
               };
             }
           }
+
           return { data: { success: true, messages: [] } };
         } catch (error) {
           console.error('Failed to update subject:', error);
-          return { data: { success: false, messages: [] } };
+          errorMessages.push('An unexpected error occurred.');
+          return { data: { success: false, messages: errorMessages } };
         }
       },
       invalidatesTags: ['Subjects'],

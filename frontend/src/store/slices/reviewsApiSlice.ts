@@ -7,6 +7,7 @@ import {
   REVIEW_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Review } from '../../types';
+import { extractErrorMessages } from '../../utils/helpers';
 import { mapApiReview } from '../../utils/mappers';
 
 interface GetReviewsArgs {
@@ -136,17 +137,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
             'Content-Type': REVIEW_CREATE_CONTENT_TYPE,
           },
         });
-        let errorMessages: string[] = [];
-        if (Array.isArray(result.error?.data)) {
-          errorMessages = result.error.data
-            .map((err: any) => (err?.message ? err.message : ''))
-            .filter((message) => message);
-        } else if (result.error?.data && (result.error?.data as any).message) {
-          const message = (result.error?.data as any).message;
-          if (message) {
-            errorMessages = [message];
-          }
-        }
+        let errorMessages = extractErrorMessages(result.error);
 
         return {
           data: {
@@ -175,17 +166,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
             'Content-Type': REVIEW_UPDATE_CONTENT_TYPE,
           },
         });
-        let errorMessages: string[] = [];
-        if (Array.isArray(result.error?.data)) {
-          errorMessages = result.error.data
-            .map((err: any) => (err?.message ? err.message : ''))
-            .filter((message) => message);
-        } else if (result.error?.data && (result.error?.data as any).message) {
-          const message = (result.error?.data as any).message;
-          if (message) {
-            errorMessages = [message];
-          }
-        }
+        let errorMessages = extractErrorMessages(result.error);
 
         return {
           data: {
