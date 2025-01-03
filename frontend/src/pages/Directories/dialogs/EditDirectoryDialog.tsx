@@ -1,5 +1,3 @@
-// src/components/EditDirectoryDialog.tsx
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
@@ -15,7 +13,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -59,20 +57,6 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
   const { t } = useTranslation('editDirectoryDialog');
   const [updateDirectory] = useUpdateDirectoryMutation();
 
-  // State to manage the directory data
-  const [name, setName] = useState(directory.name);
-  const [iconColor, setIconColor] = useState(`#${directory.iconColor}`);
-  const [visible, setVisible] = useState(directory.visible);
-
-  // Use effect to update state when `open` or `directory` changes
-  useEffect(() => {
-    if (open) {
-      setName(directory.name);
-      setIconColor(`#${directory.iconColor}`);
-      setVisible(directory.visible);
-    }
-  }, [open, directory]);
-
   // Initialize react-hook-form with Zod resolver
   const {
     control,
@@ -82,11 +66,22 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
   } = useForm<DirectoryFormData>({
     resolver: zodResolver(directorySchema),
     defaultValues: {
-      name,
-      iconColor,
-      visible,
+      name: directory.name,
+      iconColor: `#${directory.iconColor}`,
+      visible: directory.visible,
     },
   });
+
+  // Update form values when the dialog opens
+  useEffect(() => {
+    if (open) {
+      reset({
+        name: directory.name,
+        iconColor: `#${directory.iconColor}`,
+        visible: directory.visible,
+      });
+    }
+  }, [open, directory, reset]);
 
   // Handle form submission
   const onSubmit = async (data: DirectoryFormData) => {
@@ -97,6 +92,7 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
         visible: data.visible,
         iconColor: data.iconColor,
       }).unwrap();
+
       if (result.success) {
         toast.success(t('editSuccess'));
         onClose();
@@ -118,13 +114,12 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
 
   // Handle closing the dialog and resetting form state
   const handleClose = () => {
-    // Reset the form values when closing the dialog
     reset({
       name: directory.name,
       iconColor: `#${directory.iconColor}`,
       visible: directory.visible,
     });
-    onClose(); // Close the dialog
+    onClose();
   };
 
   return (
