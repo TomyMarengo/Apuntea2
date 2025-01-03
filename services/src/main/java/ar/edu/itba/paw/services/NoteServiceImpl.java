@@ -35,7 +35,7 @@ public class  NoteServiceImpl implements NoteService {
     private final SearchService searchService;
 
     private static final String[] ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "pdf", "mp4", "mp3"};
-    private static final int MAX_FILE_SIZE = 500 * 1024 * 1024; // 500 MB
+    private static final int MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
 
     @Autowired
     public NoteServiceImpl(final UserDao userDao, final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SearchService searchService) {
@@ -69,11 +69,17 @@ public class  NoteServiceImpl implements NoteService {
         return noteDao.getNoteById(noteId, maybeUser.map(User::getUserId).orElse(null));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
     public Optional<NoteFile> getNoteFileById(UUID noteId) {
-        final UUID userId = securityService.getCurrentUser().map(User::getUserId).orElse(null);
-        return noteDao.getNoteFileById(noteId, userId);
+        final Optional<User> maybeUser = securityService.getCurrentUser();
+
+        if (maybeUser.isPresent()) {
+            final Note note = noteDao.getNoteById(noteId, maybeUser.get().getUserId()).orElseThrow(NoteNotFoundException::new);
+            noteDao.addInteractionIfNotExists(maybeUser.get(), note);
+        }
+
+        return noteDao.getNoteFileById(noteId, maybeUser.map(User::getUserId).orElse(null));
     }
 
     @Transactional(readOnly = true)
@@ -177,7 +183,7 @@ public class  NoteServiceImpl implements NoteService {
         );
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public Page<Review> getReviewsByTargetUser(UUID targetUserId, int pageNum, int pageSize) {
         int countTotalResults = noteDao.countReviewsByTargetUser(targetUserId);

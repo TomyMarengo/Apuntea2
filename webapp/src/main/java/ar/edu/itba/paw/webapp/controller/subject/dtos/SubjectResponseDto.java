@@ -20,7 +20,6 @@ public class SubjectResponseDto {
         subjectDto.name = subject.getName();
 
         subjectDto.self = uriInfo.getBaseUriBuilder().path("subjects").path(subject.getSubjectId().toString()).build();
-        // TODO: Make sure that the id was already loaded
         subjectDto.rootDirectory = uriInfo.getBaseUriBuilder().path("directories").path(subject.getRootDirectoryId().toString()).build();
         return subjectDto;
     }

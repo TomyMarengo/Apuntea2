@@ -132,7 +132,6 @@ public class NoteJpaDao implements NoteDao {
     }
 
 
-    // TODO: Check if all those join fetch are necessary
     @Override
     public List<Review> getReviews(UUID noteId, UUID userId, int pageNum, int pageSize) {
         StringBuilder queryBuilder = new StringBuilder("SELECT CAST(user_id AS VARCHAR(36)), CAST(note_id AS VARCHAR(36)) FROM Reviews WHERE TRUE ");
@@ -315,7 +314,5 @@ public class NoteJpaDao implements NoteDao {
         List<UUID> noteIds = ((List<Object[]>) query.getResultList()).stream().map(r -> UUID.fromString(r[0].toString())).collect(Collectors.toList());
 
         return findNotesByIds(noteIds, sortArgs);
-        // TODO: Polemicardo in the bar
-        // sa.getCurrentUserId().ifPresent(uId -> directoryDao.loadDirectoryFavorites(directoryIds, uId));
     }
 }

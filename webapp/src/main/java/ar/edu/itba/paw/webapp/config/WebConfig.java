@@ -38,10 +38,9 @@ import java.util.Properties;
 
 
 @EnableAsync
-//@EnableCaching
 @EnableScheduling
 @EnableTransactionManagement
-@ComponentScan({"ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence"})
+@ComponentScan({"ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.services", "ar.edu.itba.paw.persistence", "ar.edu.itba.paw.webapp.mappers"})
 @PropertySource("classpath:application.properties")
 @Configuration
 public class WebConfig {
@@ -147,9 +146,9 @@ public class WebConfig {
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
         properties.setProperty("hibernate.hbm2ddl.auto", "none");
 
-        // TODO: REMOVE THIS PLEASE IN PRODUCTION AHHHHHHHHHHHHHHHHHHHHHHHHHHH
-         properties.setProperty("hibernate.show_sql", "true");
-         properties.setProperty("format_sql", "true");
+        // TODO: Remove in production
+//         properties.setProperty("hibernate.show_sql", "true");
+//         properties.setProperty("format_sql", "true");
 
         factoryBean.setJpaProperties(properties);
 
@@ -160,11 +159,6 @@ public class WebConfig {
     public TaskScheduler taskScheduler() {
         return new ConcurrentTaskScheduler();
     }
-
-//    @Bean
-//    public CacheManager cacheManager() {
-//        return new ConcurrentMapCacheManager("currentUser");
-//    }
 
     @Bean
     public RequestContextListener requestContextListener() {
