@@ -5,4 +5,8 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react()],
   base: '/paw-2023b-12',
+  test: {
+    environment: "jsdom",
+    setupFiles: ["./src/__tests__/setup/setup.js"]
+  }
 });
