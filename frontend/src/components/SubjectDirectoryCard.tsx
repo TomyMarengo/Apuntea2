@@ -37,51 +37,6 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   const { t } = useTranslation('subjectDirectoryCard');
   const navigate = useNavigate();
 
-  // TODO: Implement useFavorite hook
-  const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
-  const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
-  const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
-    { directoryId: subject.rootDirectoryId, userId },
-    { skip: !userId || !subject.rootDirectoryId },
-  );
-
-  const [isFavorite, setIsFavorite] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (typeof isFavApi === 'boolean') {
-      setIsFavorite(isFavApi);
-    }
-  }, [isFavApi]);
-
-  const handleToggleFavorite = async () => {
-    try {
-      if (isFavorite) {
-        const result = await removeFavoriteDirectory({
-          directoryId: subject.rootDirectoryId,
-          userId,
-        }).unwrap();
-        if (result) {
-          toast.success(t('unfavorited'));
-        } else {
-          toast.error(t('errorUnfavorite'));
-        }
-      } else {
-        const result = await addFavoriteDirectory({
-          directoryId: subject.rootDirectoryId,
-        }).unwrap();
-        if (result) {
-          toast.success(t('favorited'));
-        } else {
-          toast.error(t('errorFavorite'));
-        }
-      }
-      refetch();
-    } catch (error) {
-      toast.error(t('errorUnfavorite'));
-      console.error('Toggle favorite directory failed:', error);
-    }
-  };
-
   // Fetch the number of notes for this subject and user
   const { data: notesResult, isLoading: notesLoading } = useSearchNotesQuery(
     {
@@ -113,6 +68,55 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   const handleNavigate = () => {
     if (directory?.id) {
       navigate(`/directories/${directory.id}?userId=${userId}`);
+    }
+  };
+
+  // TODO: Implement useFavorite hook
+  const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
+  const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
+  const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
+    { directoryId: directory?.id, userId },
+    { skip: dirLoading || !userId || !directory?.id },
+  );
+
+  const [isFavorite, setIsFavorite] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (typeof isFavApi === 'boolean') {
+      setIsFavorite(isFavApi);
+    }
+  }, [isFavApi]);
+
+  const handleToggleFavorite = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.stopPropagation();
+
+    try {
+      if (isFavorite) {
+        const result = await removeFavoriteDirectory({
+          directoryId: directory?.id,
+          userId,
+        }).unwrap();
+        if (result) {
+          toast.success(t('unfavorited'));
+        } else {
+          toast.error(t('errorUnfavorite'));
+        }
+      } else {
+        const result = await addFavoriteDirectory({
+          directoryId: directory?.id,
+        }).unwrap();
+        if (result) {
+          toast.success(t('favorited'));
+        } else {
+          toast.error(t('errorFavorite'));
+        }
+      }
+      refetch();
+    } catch (error) {
+      toast.error(t('errorUnfavorite'));
+      console.error('Toggle favorite directory failed:', error);
     }
   };
 
@@ -154,7 +158,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
             sx={{
               position: 'absolute',
               top: -10,
-              right: -10,
+              right: -30,
               zIndex: 999,
             }}
           >
