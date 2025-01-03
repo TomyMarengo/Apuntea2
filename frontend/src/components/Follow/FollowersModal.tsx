@@ -81,7 +81,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
       // Finish loading
       setIsFetchingMore(false);
     }
-  }, [data, page, followers]);
+  }, [data, page]);
 
   // Function to load more data
   const fetchMoreData = useCallback(() => {

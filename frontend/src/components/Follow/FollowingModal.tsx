@@ -83,7 +83,7 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
       // Finish loading
       setIsFetchingMore(false);
     }
-  }, [data, page, followings]);
+  }, [data, page]);
 
   // Function to load more data
   const fetchMoreData = useCallback(() => {
