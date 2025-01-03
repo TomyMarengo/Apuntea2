@@ -32,15 +32,16 @@ import { NoteCategory } from '../types';
 const noteSchema = z.object({
   name: z
     .string()
-    .min(1, 'missingFields')
-    .regex(
-      /^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/,
-      'invalidName',
-    ),
-  category: z.enum(['THEORY', 'PRACTICE', 'EXAM', 'OTHER'], {
-    errorMap: () => ({ message: 'invalidCategory' }),
+    .nonempty({ message: 'notEmpty' })
+    .min(2, { message: 'minLength' })
+    .max(50, { message: 'maxLength' })
+    .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
+      message: 'invalidName',
+    }),
+  category: z.string().regex(/^(THEORY|PRACTICE|EXAM|OTHER)$/, {
+    message: 'invalidCategory',
   }),
-  visible: z.boolean(),
+  visible: z.boolean().default(true),
   file: z
     .instanceof(File)
     .refine((file) => file instanceof File, {
@@ -59,13 +60,9 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
   const { t } = useTranslation('createNoteFab');
 
   const [createNote, { isLoading }] = useCreateNoteMutation();
-  // Tracks if the form is expanded
   const [expanded, setExpanded] = useState(false);
-
-  // Reference to the wrapper for ClickAwayListener
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // Initialize react-hook-form with Zod resolver
   const {
     control,
     handleSubmit,
@@ -81,19 +78,16 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
     },
   });
 
-  // Toggles expansion upon FAB click
   const handleFabClick = () => {
     setExpanded((prev) => !prev);
   };
 
-  // If user clicks away outside the box, close if expanded
   const handleClickAway = () => {
     if (expanded) {
       setExpanded(false);
     }
   };
 
-  // Handle form submission
   const onSubmit = async (data: NoteFormData) => {
     if (!data.file) {
       toast.error(t('missingFields'));
@@ -109,15 +103,22 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
         category: data.category as NoteCategory,
       }).unwrap();
 
-      if (result) {
+      if (result.success) {
         toast.success(t('noteCreated'));
         reset();
         setExpanded(false);
       } else {
-        toast.error(t('noteCreationFailed'));
+        toast.error(
+          t('noteCreationFailed', {
+            errorMessage:
+              result.messages && result.messages.length > 0
+                ? `: ${result.messages[0]}`
+                : '',
+          }),
+        );
       }
     } catch (error: any) {
-      toast.error(error?.data?.[0]?.message || t('noteCreationFailed'));
+      toast.error(t('noteCreationFailed'));
       console.error('Failed to create note:', error);
     }
   };
@@ -135,11 +136,7 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
                 cursor: 'pointer',
               }}
             >
-              <NoteAddIcon
-                sx={{
-                  color: 'background.paper',
-                }}
-              />
+              <NoteAddIcon sx={{ color: 'background.paper' }} />
             </Fab>
           </Tooltip>
         )}
@@ -195,14 +192,11 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
                       disablePortal: true,
                     }}
                   >
-                    <MenuItem value={NoteCategory.THEORY}>
-                      {t('theory')}
-                    </MenuItem>
-                    <MenuItem value={NoteCategory.PRACTICE}>
-                      {t('practice')}
-                    </MenuItem>
-                    <MenuItem value={NoteCategory.EXAM}>{t('exam')}</MenuItem>
-                    <MenuItem value={NoteCategory.OTHER}>{t('other')}</MenuItem>
+                    {Object.values(NoteCategory).map((category) => (
+                      <MenuItem key={category} value={category}>
+                        {t(category.toLowerCase())}
+                      </MenuItem>
+                    ))}
                   </Select>
                 )}
               />

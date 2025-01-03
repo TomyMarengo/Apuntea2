@@ -100,10 +100,23 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: formData,
         });
+
+        let errorMessages: string[] = [];
+        if (Array.isArray(result.error?.data)) {
+          errorMessages = result.error.data
+            .map((err: any) => (err?.message ? err.message : ''))
+            .filter((message) => message);
+        } else if (result.error?.data && (result.error?.data as any).message) {
+          const message = (result.error?.data as any).message;
+          if (message) {
+            errorMessages = [message];
+          }
+        }
+
         return {
           data: {
             success: result.error === undefined,
-            messages: [],
+            messages: errorMessages,
           },
         };
       },
@@ -129,10 +142,23 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             'Content-Type': NOTE_UPDATE_CONTENT_TYPE,
           },
         });
+
+        let errorMessages: string[] = [];
+        if (Array.isArray(result.error?.data)) {
+          errorMessages = result.error.data
+            .map((err: any) => (err?.message ? err.message : ''))
+            .filter((message) => message);
+        } else if (result.error?.data && (result.error?.data as any).message) {
+          const message = (result.error?.data as any).message;
+          if (message) {
+            errorMessages = [message];
+          }
+        }
+
         return {
           data: {
             success: result.error === undefined,
-            messages: [],
+            messages: errorMessages,
           },
         };
       },
@@ -140,6 +166,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         { type: 'Notes', id: noteId },
       ],
     }),
+
     deleteNote: builder.mutation<ApiResponse, DeleteNoteArgs>({
       queryFn: async (
         { noteId, reason, url },

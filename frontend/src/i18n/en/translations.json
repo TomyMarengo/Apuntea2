@@ -90,12 +90,15 @@
     "submit": "Submit",
     "missingFields": "Please provide note name, file, and subject.",
     "noteCreated": "Note created successfully!",
-    "noteCreationFailed": "Failed to create note.",
+    "noteCreationFailed": "Failed to create note{{errorMessage}}",
     "theory": "Theory",
     "practice": "Practice",
     "exam": "Exam",
     "other": "Other",
     "invalidName": "Invalid name format.",
+    "notEmpty": "Note name cannot be empty.",
+    "minLength": "Note name must be at least 2 characters long.",
+    "maxLength": "Note name cannot exceed 50 characters.",
     "invalidCategory": "Please select a valid category.",
     "invalidFile": "Please upload a valid file."
   },
@@ -111,7 +114,8 @@
   },
   "deleteNoteDialog": {
     "deleteSuccess": "Note deleted successfully.",
-    "deleteError": "Error deleting the note.",
+    "deleteError": "Error deleting the note{{errorMessage}}",
+    "reasonMaxLength": "Reason cannot exceed 255 characters.",
     "deleteNoteTitle": "Delete Note",
     "deleteConfirmMessage": "Are you sure you want to delete this note?",
     "reason": "Reason for deletion",
@@ -154,7 +158,7 @@
   },
   "editNoteDialog": {
     "editSuccess": "Note updated successfully.",
-    "editError": "Error updating the note.",
+    "editFailed": "Error updating the note{{errorMessage}}",
     "editNoteTitle": "Edit Note",
     "name": "Name",
     "visible": "Visible",
@@ -166,7 +170,12 @@
       "practice": "Practice",
       "exam": "Exam",
       "other": "Other"
-    }
+    },
+    "invalidName": "Invalid name format.",
+    "notEmpty": "Note name cannot be empty.",
+    "minLength": "Note name must be at least 2 characters long.",
+    "maxLength": "Note name cannot exceed 50 characters.",
+    "invalidCategory": "Please select a valid category."
   },
   "editProfileDialog": {
     "titles": {

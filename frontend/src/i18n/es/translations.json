@@ -90,12 +90,15 @@
     "submit": "Enviar",
     "missingFields": "Por favor, ingresa el nombre, el archivo y la materia.",
     "noteCreated": "¡Apunte creado exitosamente!",
-    "noteCreationFailed": "Error al crear el apunte.",
+    "noteCreationFailed": "Error al crear el apunte{{errorMessage}}",
     "theory": "Teoría",
     "practice": "Práctica",
     "exam": "Examen",
     "other": "Otro",
     "invalidName": "Formato de nombre inválido.",
+    "notEmpty": "El nombre no puede estar vacío.",
+    "minLength": "El nombre del apunte debe tener al menos 2 caracteres.",
+    "maxLength": "El nombre del apunte no puede exceder los 50 caracteres.",
     "invalidCategory": "Por favor, selecciona una categoría válida.",
     "invalidFile": "Por favor, sube un archivo válido."
   },
@@ -111,7 +114,8 @@
   },
   "deleteNoteDialog": {
     "deleteSuccess": "Apunte eliminado exitosamente.",
-    "deleteError": "Error al eliminar el apunte.",
+    "deleteError": "Error al eliminar el apunte{{errorMessage}}",
+    "reasonMaxLength": "La razón no puede exceder los 255 caracteres.",
     "deleteNoteTitle": "Eliminar Apunte",
     "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este apunte?",
     "reason": "Razón de la eliminación",
@@ -154,7 +158,7 @@
   },
   "editNoteDialog": {
     "editSuccess": "Apunte actualizado exitosamente.",
-    "editError": "Error al actualizar el punte.",
+    "editFailed": "Error al actualizar el apunte{{errorMessage}}",
     "editNoteTitle": "Editar Apunte",
     "name": "Nombre",
     "visible": "Visible",
@@ -166,7 +170,12 @@
       "practice": "Práctica",
       "exam": "Examen",
       "other": "Otro"
-    }
+    },
+    "invalidName": "Formato de nombre inválido.",
+    "notEmpty": "El nombre no puede estar vacío.",
+    "minLength": "El nombre del apunte debe tener al menos 2 caracteres.",
+    "maxLength": "El nombre del apunte no puede exceder los 50 caracteres.",
+    "invalidCategory": "Por favor, selecciona una categoría válida."
   },
   "editProfileDialog": {
     "titles": {

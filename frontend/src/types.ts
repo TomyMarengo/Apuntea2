@@ -131,7 +131,7 @@ export interface Note {
   name: string;
   visible: boolean;
   fileType: FileType;
-  category?: NoteCategory;
+  category: NoteCategory;
   createdAt: string;
   lastModifiedAt: string;
   avgScore: number;

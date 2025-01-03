@@ -1,5 +1,4 @@
-// src/pages/Notes/dialogs/DeleteNoteDialog.tsx
-
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
   DialogTitle,
@@ -9,13 +8,20 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 import { useDeleteNoteMutation } from '../../../store/slices/notesApiSlice';
 import { Note } from '../../../types';
+
+// Define Zod schema for reason validation
+const reasonSchema = z.object({
+  reason: z.string().max(255, { message: 'reasonMaxLength' }).optional(),
+});
 
 interface DeleteNoteDialogProps {
   open: boolean;
@@ -34,25 +40,42 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
 }) => {
   const { t } = useTranslation('deleteNoteDialog');
   const [deleteNote] = useDeleteNoteMutation();
-  const [reason, setReason] = useState('');
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(reasonSchema),
+    defaultValues: { reason: '' },
+  });
   const navigate = useNavigate();
 
   // Handle confirm delete action
-  const handleConfirm = async () => {
+  const onSubmit = async (data: { reason: string }) => {
     try {
       const result = await deleteNote({
         noteId: note.id,
-        reason: shouldShowReason ? reason : undefined,
+        reason: shouldShowReason ? data.reason : undefined,
       }).unwrap();
-      if (result) {
+      if (result.success) {
         toast.success(t('deleteSuccess'));
         onClose();
-        if (navigateBack) navigate('/', { replace: true });
+        if (navigateBack) {
+          navigate(-1);
+        }
       } else {
-        toast.error(t('deleteError'));
+        toast.error(
+          t('deleteError', {
+            errorMessage:
+              result.messages && result.messages.length > 0
+                ? `: ${result.messages[0]}`
+                : '',
+          }),
+        );
       }
-    } catch (error) {
-      console.error('Failed to delete note:', error);
+    } catch (err) {
+      console.error('Failed to delete note:', err);
       toast.error(t('deleteError'));
     }
   };
@@ -65,8 +88,9 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
         {shouldShowReason && (
           <TextField
             label={t('reason')}
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
+            {...register('reason')}
+            error={!!errors.reason}
+            helperText={errors.reason ? t(errors.reason.message!) : ''}
             fullWidth
             margin="normal"
           />
@@ -74,7 +98,11 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t('cancel')}</Button>
-        <Button onClick={handleConfirm} variant="contained" color="error">
+        <Button
+          onClick={handleSubmit(onSubmit)}
+          variant="contained"
+          color="error"
+        >
           {t('delete')}
         </Button>
       </DialogActions>

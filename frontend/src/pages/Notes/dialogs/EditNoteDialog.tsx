@@ -1,5 +1,6 @@
 // src/pages/Notes/dialogs/EditNoteDialog.tsx
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Dialog,
   DialogTitle,
@@ -14,12 +15,38 @@ import {
   Switch,
   FormControlLabel,
 } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import { z } from 'zod';
 
 import { useUpdateNoteMutation } from '../../../store/slices/notesApiSlice';
 import { Note, NoteCategory } from '../../../types';
+
+// Define the Zod schema for form validation
+const noteSchema = z.object({
+  name: z
+    .string()
+    .nonempty({ message: 'notEmpty' })
+    .min(2, { message: 'minLength' })
+    .max(50, { message: 'maxLength' })
+    .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
+      message: 'invalidName',
+    }),
+  category: z.string().regex(/^(THEORY|PRACTICE|EXAM|OTHER)$/, {
+    message: 'invalidCategory',
+  }),
+  visible: z.boolean().default(true),
+  file: z
+    .instanceof(File)
+    .refine((file) => file instanceof File, {
+      message: 'invalidFile',
+    })
+    .optional(),
+});
+
+type NoteFormData = z.infer<typeof noteSchema>;
 
 interface EditNoteDialogProps {
   open: boolean;
@@ -32,38 +59,61 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
   onClose,
   note,
 }) => {
-  // Initialize translation with the 'editNoteDialog' namespace
   const { t } = useTranslation('editNoteDialog');
   const [updateNote] = useUpdateNoteMutation();
 
-  const [name, setName] = useState(note.name);
-  const [visible, setVisible] = useState(note.visible);
-  const [category, setCategory] = useState(note.category);
+  // Initialize react-hook-form with Zod resolver
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<NoteFormData>({
+    resolver: zodResolver(noteSchema),
+    defaultValues: {
+      name: note.name,
+      visible: note.visible,
+      category: note.category,
+    },
+  });
 
+  // Update form values when the dialog opens
   useEffect(() => {
     if (open) {
-      setName(note.name);
-      setVisible(note.visible);
-      setCategory(note.category);
+      reset({
+        name: note.name,
+        visible: note.visible,
+        category: note.category,
+      });
     }
-  }, [open, note]);
+  }, [open, note, reset]);
 
   // Handle save action
-  const handleSave = async () => {
+  const onSubmit = async (data: NoteFormData) => {
     try {
       const result = await updateNote({
         noteId: note.id,
-        name,
-        visible,
-        category,
+        name: data.name,
+        visible: data.visible,
+        category: data.category as NoteCategory,
       }).unwrap();
-      if (result) {
+
+      if (result.success) {
         toast.success(t('editSuccess'));
         onClose();
+      } else {
+        toast.error(
+          t('editFailed', {
+            errorMessage:
+              result.messages && result.messages.length > 0
+                ? `: ${result.messages[0]}`
+                : '',
+          }),
+        );
       }
     } catch (error) {
       console.error('Failed to edit note:', error);
-      toast.error(t('editError'));
+      toast.error(t('editFailed'));
     }
   };
 
@@ -72,45 +122,65 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
       <DialogTitle>{t('editNoteTitle')}</DialogTitle>
       <DialogContent>
         {/* Name Field */}
-        <TextField
-          label={t('name')}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
-
-        {/* Visible Switch */}
-        <FormControlLabel
-          control={
-            <Switch
-              checked={visible}
-              onChange={(e) => setVisible(e.target.checked)}
-              color="primary"
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label={t('name')}
+              fullWidth
+              margin="normal"
+              error={!!errors.name}
+              helperText={errors.name ? t(errors.name.message as string) : ''}
             />
-          }
-          label={t('visible')}
+          )}
         />
 
         {/* Category Select */}
         <FormControl fullWidth margin="normal">
           <InputLabel>{t('category')}</InputLabel>
-          <Select
-            value={category}
-            label={t('category')}
-            onChange={(e) => setCategory(e.target.value as NoteCategory)}
-          >
-            {Object.values(NoteCategory).map((cat) => (
-              <MenuItem key={cat} value={cat}>
-                {t(`categories.${cat.toLowerCase()}`)}
-              </MenuItem>
-            ))}
-          </Select>
+          <Controller
+            name="category"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                label={t('category')}
+                error={!!errors.category}
+                onChange={(e) => field.onChange(e.target.value)}
+              >
+                {Object.values(NoteCategory).map((cat) => (
+                  <MenuItem key={cat} value={cat}>
+                    {t(`categories.${cat.toLowerCase()}`)}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
+          />
         </FormControl>
+
+        {/* Visibility Switch */}
+        <Controller
+          name="visible"
+          control={control}
+          render={({ field }) => (
+            <FormControlLabel
+              control={
+                <Switch
+                  {...field}
+                  checked={field.value}
+                  onChange={(e) => field.onChange(e.target.checked)}
+                />
+              }
+              label={field.value ? t('visible') : t('hidden')}
+            />
+          )}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{t('cancel')}</Button>
-        <Button onClick={handleSave} variant="contained">
+        <Button onClick={handleSubmit(onSubmit)} variant="contained">
           {t('save')}
         </Button>
       </DialogActions>

@@ -96,7 +96,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
     }
 
     try {
-      if (isFavorite) {
+      if (isFavorite?.success) {
         await removeFavoriteNote({
           noteId: note.id,
           userId: user.id,
@@ -276,7 +276,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
                 <Tooltip
                   title={
                     user
-                      ? isFavorite
+                      ? isFavorite?.success
                         ? t('unfavorite')
                         : t('favorite')
                       : t('loginToFavorite')
@@ -288,7 +288,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
                       size="small"
                       disabled={addingFavorite || removingFavorite || !user}
                     >
-                      {isFavorite ? (
+                      {isFavorite?.success ? (
                         <FavoriteIcon color="error" />
                       ) : (
                         <FavoriteBorderIcon />
@@ -359,7 +359,6 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
   return (
     <>
       <TableRow hover>{columnsToShow.map(renderCell)}</TableRow>
-      {/* Delete Directory Dialog */}
       {/* DeleteNoteDialog component */}
       <DeleteNoteDialog
         open={openDelete}
