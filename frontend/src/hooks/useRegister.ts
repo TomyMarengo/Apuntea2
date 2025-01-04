@@ -1,5 +1,6 @@
 // src/hooks/useRegister.ts
 
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { useLazyRegisterQuery } from '../store/slices/authApiSlice';
@@ -39,6 +40,7 @@ export default function useRegister() {
   const [register] = useLazyRegisterQuery();
   const [getLoggedUser] = useLazyGetLoggedUserQuery();
   const dispatch = useDispatch();
+  const { t } = useTranslation('registerPage');
 
   async function registerUser(userInfo: RegisterRequest) {
     try {
@@ -68,9 +70,7 @@ export default function useRegister() {
       dispatch(setCredentials({ token, refreshToken }));
     } catch (error: any) {
       console.error('Error during registration:', error);
-      throw new Error(
-        error.data?.[0]?.message || 'Unknown error during registration',
-      );
+      throw new Error(error?.data?.[0]?.message || t('registerError'));
     }
   }
 

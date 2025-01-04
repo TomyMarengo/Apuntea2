@@ -58,7 +58,10 @@ export default function LoginPage() {
     try {
       setLoading(true);
       setLoginError(null);
-      await loginUser({ email: data.email, password: data.password });
+      await loginUser({
+        email: data.email,
+        password: data.password,
+      });
       navigate('/');
     } catch (err: any) {
       setLoginError(err.message);

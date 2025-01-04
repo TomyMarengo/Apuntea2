@@ -376,7 +376,8 @@
     "validation": {
       "emailInvalid": "Invalid email",
       "passwordMinLength": "Password must be at least 4 characters"
-    }
+    },
+    "loginError": "Invalid email or password"
   },
   "miniSidebar": {
     "admin": "Admin",
@@ -524,7 +525,8 @@
     "toast": {
       "success": "Account created successfully!",
       "error": "Failed to create account."
-    }
+    },
+    "registerError": "Error registering"
   },
   "resultsTable": {
     "name": "Name",

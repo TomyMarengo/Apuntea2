@@ -375,7 +375,8 @@
     "validation": {
       "emailInvalid": "Correo electrónico inválido",
       "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
-    }
+    },
+    "loginError": "Usuario o contraseña incorrectos"
   },
   "miniSidebar": {
     "admin": "Administrar",
@@ -522,7 +523,8 @@
     "toast": {
       "success": "¡Cuenta creada exitosamente!",
       "error": "Error al crear la cuenta."
-    }
+    },
+    "registerError": "Error al registrar"
   },
   "resultsTable": {
     "name": "Nombre",

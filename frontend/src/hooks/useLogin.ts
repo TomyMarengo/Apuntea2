@@ -1,5 +1,6 @@
 // src/hooks/useLogin.ts
 
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { useLazyLoginQuery } from '../store/slices/authApiSlice';
@@ -32,6 +33,7 @@ interface LoginResponse {
  * decodes the token, and dispatches setCredentials to the Redux store.
  */
 export default function useLogin() {
+  const { t } = useTranslation('loginPage');
   const [login] = useLazyLoginQuery();
   const [getLoggedUser] = useLazyGetLoggedUserQuery();
   const dispatch = useDispatch();
@@ -57,7 +59,7 @@ export default function useLogin() {
       dispatch(setCredentials({ token, refreshToken }));
     } catch (error: any) {
       console.error('Error during login:', error);
-      throw new Error(error?.data?.[0]?.message || 'Failed to log in');
+      throw new Error(error?.data?.[0]?.message || t('loginError'));
     }
   }
 
