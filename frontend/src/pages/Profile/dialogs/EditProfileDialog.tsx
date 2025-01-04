@@ -160,6 +160,9 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
    * Handle form submission for editing user info (no password logic here).
    */
   const onSubmit = async (data: z.infer<typeof editProfileSchema>) => {
+    let isUserUpdateSuccessful = true;
+    let isPictureUpdateSuccessful = true;
+
     try {
       // Create an object with only the modified fields
       const updatedFields: UpdateUserArgs = { userId: user.id };
@@ -170,26 +173,51 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       if (dirtyFields.email) updatedFields.email = data.email;
       if (dirtyFields.careerId) updatedFields.careerId = data.careerId;
 
-      // Send only the modified fields if there are any (userId is always present)
+      // Update user info if any fields are dirty
       if (Object.keys(updatedFields).length > 1) {
-        await updateUser(updatedFields).unwrap();
+        const result = await updateUser(updatedFields).unwrap();
+        if (!result.success) {
+          isUserUpdateSuccessful = false;
+          toast.error(
+            t('messages.failedToUpdateProfile', {
+              errorMessage:
+                result.messages && result.messages.length > 0
+                  ? `: ${result.messages[0]}`
+                  : '',
+            }),
+          );
+        }
       }
 
-      // Handle profile picture update if it was modified
+      // Update profile picture if it's dirty
       if (
         dirtyFields.profilePicture &&
         data.profilePicture &&
         data.profilePicture.length > 0
       ) {
-        await updatePicture({
+        const pictureResult = await updatePicture({
           profilePicture: data.profilePicture[0],
         }).unwrap();
+
+        if (!pictureResult.success) {
+          isPictureUpdateSuccessful = false;
+          toast.error(t('messages.failedToUpdatePicture'));
+        }
       }
 
-      // Show success message
-      toast.success(t('messages.profileUpdatedSuccessfully'));
-      onUpdateSuccess();
-      handleClose();
+      // Show success messages based on what was successful
+      if (isUserUpdateSuccessful && isPictureUpdateSuccessful) {
+        toast.success(t('messages.profileUpdatedSuccessfully'));
+        onUpdateSuccess();
+        handleClose();
+      } else {
+        if (isUserUpdateSuccessful) {
+          toast.success(t('messages.profileUpdatedSuccessfully'));
+        }
+        if (isPictureUpdateSuccessful) {
+          toast.success(t('messages.pictureUpdatedSuccessfully'));
+        }
+      }
     } catch (error: any) {
       console.error('Failed to update profile:', error);
 

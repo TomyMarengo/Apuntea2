@@ -243,7 +243,8 @@
     },
     "messages": {
       "profileUpdatedSuccessfully": "Profile updated successfully",
-      "failedToUpdateProfile": "Failed to update profile"
+      "pictureUpdatedSuccessfully": "Profile picture updated successfully",
+      "failedToUpdateProfile": "Failed to update profile{{errorMessage}}"
     }
   },
   "changePasswordDialog": {
@@ -258,7 +259,7 @@
     },
     "messages": {
       "passwordChangedSuccessfully": "Password changed successfully",
-      "failedToUpdateProfile": "Failed to update profile: {{error}}"
+      "failedToUpdateProfile": "Failed to update profile: {{errorMessage}}"
     },
     "buttons": {
       "close": "Close",

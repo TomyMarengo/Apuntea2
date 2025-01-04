@@ -139,7 +139,12 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
         handleClose();
       } else {
         toast.error(
-          t('messages.failedToUpdateProfile', { error: result?.messages[0] }),
+          t('messages.failedToUpdateProfile', {
+            errorMessage:
+              result.messages && result.messages.length > 0
+                ? `: ${result.messages[0]}`
+                : '',
+          }),
         );
       }
     } catch (error: any) {

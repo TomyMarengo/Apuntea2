@@ -1,5 +1,4 @@
 // src/components/FavoriteNoteCard.tsx
-
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Box, Tooltip, IconButton, Typography } from '@mui/material';
@@ -89,30 +88,32 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
         to={`/notes/${note.id}`}
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <Box sx={{ mb: 0.5, position: 'relative' }}>
+        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
           <NoteFileIcon fileType={note.fileType} size={48} />
+
+          {/* Heart icon top-right */}
+          <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
+            <IconButton
+              onClick={handleToggleFavorite}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: -10,
+                right: -30,
+                zIndex: 999,
+              }}
+            >
+              {isFavorite ? (
+                <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
+              ) : (
+                <FavoriteBorderIcon
+                  sx={{ color: 'error.main', fontSize: 22 }}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
         </Box>
       </Link>
-
-      {/* Heart icon top-right */}
-      <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
-        <IconButton
-          onClick={handleToggleFavorite}
-          size="small"
-          sx={{
-            position: 'absolute',
-            top: -6,
-            right: -6,
-            zIndex: 999,
-          }}
-        >
-          {isFavorite ? (
-            <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
-          ) : (
-            <FavoriteBorderIcon sx={{ color: 'error.main', fontSize: 22 }} />
-          )}
-        </IconButton>
-      </Tooltip>
 
       {/* Name ellipsized */}
       <Typography

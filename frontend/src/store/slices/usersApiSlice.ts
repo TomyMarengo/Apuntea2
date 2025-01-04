@@ -11,6 +11,7 @@ import {
   USER_UPDATE_STATUS_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { User, Career, Institution, UserStatus } from '../../types';
+import { extractErrorMessages } from '../../utils/helpers';
 import { mapApiUser } from '../../utils/mappers';
 
 interface GetUsersArgs {
@@ -216,10 +217,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: formData,
         });
+        let errorMessages = extractErrorMessages(result.error);
+
         return {
           data: {
             success: result.error === undefined,
-            messages: [],
+            messages: errorMessages,
           },
         };
       },
@@ -268,10 +271,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           },
         });
 
+        let errorMessages = extractErrorMessages(result.error);
+
         return {
           data: {
             success: result.error === undefined,
-            messages: [],
+            messages: errorMessages,
           },
         };
       },
@@ -303,10 +308,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           },
         });
 
+        let errorMessages = extractErrorMessages(result.error);
+
         return {
           data: {
             success: result.error === undefined,
-            messages: [],
+            messages: errorMessages,
           },
         };
       },
@@ -495,10 +502,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           },
         });
 
+        let errorMessages = extractErrorMessages(result.error);
+
         return {
           data: {
             success: result.error === undefined,
-            messages: [],
+            messages: errorMessages,
           },
         };
       },

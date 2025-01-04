@@ -243,7 +243,8 @@
     },
     "messages": {
       "profileUpdatedSuccessfully": "Perfil actualizado exitosamente",
-      "failedToUpdateProfile": "Error al actualizar el perfil"
+      "pictureUpdatedSuccessfully": "Foto de perfil actualizada exitosamente",
+      "failedToUpdateProfile": "Error al actualizar el perfil{{errorMessage}}"
     }
   },
   "changePasswordDialog": {
@@ -258,7 +259,7 @@
     },
     "messages": {
       "passwordChangedSuccessfully": "Contraseña cambiada exitosamente",
-      "failedToUpdateProfile": "Error al actualizar el perfil: {{error}}"
+      "failedToUpdateProfile": "Error al actualizar el perfil: {{errorMessage}}"
     },
     "buttons": {
       "close": "Cerrar",
