@@ -13,7 +13,6 @@ import {
   InputAdornment,
   Box,
   Typography,
-  MenuItem,
   Card,
   CardContent,
   CircularProgress,
@@ -33,21 +32,6 @@ import {
   useGetCareersQuery,
 } from '../../store/slices/institutionsApiSlice';
 
-const registerSchema = z
-  .object({
-    email: z.string().email('invalidEmail'),
-    password: z.string().min(4, 'passwordMinLength'),
-    confirmPassword: z.string().min(4, 'passwordMinLength'),
-    institutionId: z.string().nonempty('selectInstitution'),
-    careerId: z.string().nonempty('selectCareer'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'passwordsDoNotMatch',
-  });
-
-type RegisterForm = z.infer<typeof registerSchema>;
-
 export default function RegisterPage() {
   const { t } = useTranslation('registerPage');
   const navigate = useNavigate();
@@ -59,6 +43,29 @@ export default function RegisterPage() {
 
   const [loading, setLoading] = useState(false);
   const [registerError, setRegisterError] = useState<string | null>(null);
+
+  const registerSchema = z
+    .object({
+      email: z.string().email({ message: t('validation.invalidEmail') }),
+      password: z
+        .string()
+        .min(4, { message: t('validation.passwordMinLength') }),
+      confirmPassword: z
+        .string()
+        .min(4, { message: t('validation.passwordMinLength') }),
+      institutionId: z
+        .string()
+        .nonempty({ message: t('validation.youMustSelectInstitution') }),
+      careerId: z
+        .string()
+        .nonempty({ message: t('validation.youMustSelectCareer') }),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      path: ['confirmPassword'],
+      message: t('validation.passwordsDoNotMatch'),
+    });
+
+  type RegisterForm = z.infer<typeof registerSchema>;
 
   const {
     control,

@@ -27,23 +27,6 @@ import { z } from 'zod';
 import { useCreateDirectoryMutation } from '../store/slices/directoriesApiSlice';
 import { FolderIconColor } from '../types';
 
-const directorySchema = z.object({
-  name: z
-    .string()
-    .nonempty({ message: 'notEmpty' })
-    .min(2, { message: 'minLength' })
-    .max(50, { message: 'maxLength' })
-    .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
-      message: 'invalidName',
-    }),
-  iconColor: z.string().regex(/^#(?:BBBBBB|16A765|4986E7|CD35A6)$/, {
-    message: 'invalidColor',
-  }),
-  visible: z.boolean().default(true),
-});
-
-type DirectoryFormData = z.infer<typeof directorySchema>;
-
 interface CreateDirectoryFabProps {
   parentId: string;
 }
@@ -58,6 +41,23 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
 
   // Reference to the wrapper for ClickAwayListener
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const directorySchema = z.object({
+    name: z
+      .string()
+      .nonempty({ message: t('validation.nameNotEmpty') })
+      .min(2, { message: t('validation.nameMinLength') })
+      .max(50, { message: t('validation.nameMaxLength') })
+      .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
+        message: t('validation.nameInvalid'),
+      }),
+    iconColor: z.string().regex(/^#(?:BBBBBB|16A765|4986E7|CD35A6)$/, {
+      message: t('validation.colorInvalid'),
+    }),
+    visible: z.boolean().default(true),
+  });
+
+  type DirectoryFormData = z.infer<typeof directorySchema>;
 
   const {
     control,

@@ -19,10 +19,6 @@ import { z } from 'zod';
 import { useDeleteDirectoryMutation } from '../../../store/slices/directoriesApiSlice';
 import { Directory } from '../../../types';
 
-const reasonSchema = z.object({
-  reason: z.string().max(255, { message: 'reasonMaxLength' }).optional(),
-});
-
 interface DeleteDirectoryDialogProps {
   open: boolean;
   onClose: () => void;
@@ -38,6 +34,13 @@ const DeleteDirectoryDialog: React.FC<DeleteDirectoryDialogProps> = ({
 }) => {
   const { t } = useTranslation('deleteDirectoryDialog');
   const [deleteDirectory] = useDeleteDirectoryMutation();
+
+  const reasonSchema = z.object({
+    reason: z
+      .string()
+      .max(255, { message: t('validation.reasonMaxLength') })
+      .optional(),
+  });
 
   const {
     register,

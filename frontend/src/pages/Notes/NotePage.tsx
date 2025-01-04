@@ -53,17 +53,6 @@ import { RootState } from '../../store/store';
 import { Review } from '../../types';
 import { Token } from '../../types';
 
-const reviewSchema = z.object({
-  score: z
-    .number()
-    .int()
-    .min(1, { message: 'minScore' })
-    .max(5, { message: 'maxScore' }),
-  content: z.string().max(255, { message: 'maxContentLength' }),
-});
-
-type ReviewFormData = z.infer<typeof reviewSchema>;
-
 const NotePage: React.FC = () => {
   const { t } = useTranslation('notePage');
   const { noteId } = useParams<{ noteId: string }>();
@@ -284,6 +273,17 @@ const NotePage: React.FC = () => {
   /** 7) Create or Update review (if not owner) */
   const [createReviewMutation] = useCreateReviewMutation();
   const [updateReviewMutation] = useUpdateReviewMutation();
+
+  const reviewSchema = z.object({
+    score: z
+      .number()
+      .int()
+      .min(1, { message: t('validation.scoreMin') })
+      .max(5, { message: t('validation.scoreMax') }),
+    content: z.string().max(255, { message: t('validation.contentMaxLength') }),
+  });
+
+  type ReviewFormData = z.infer<typeof reviewSchema>;
 
   const {
     control,

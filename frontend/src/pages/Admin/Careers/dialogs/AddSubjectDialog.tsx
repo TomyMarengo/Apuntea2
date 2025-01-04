@@ -24,17 +24,6 @@ import {
 } from '../../../../store/slices/institutionsApiSlice';
 import { Subject } from '../../../../types';
 
-// Define the schema for form validation with zod
-const AddSubjectFormSchema = z.object({
-  subjectId: z.string().uuid('invalidUuid').nonempty('missingFields'),
-  year: z
-    .number({ invalid_type_error: 'yearInvalid' })
-    .positive('yearPositive')
-    .max(5, 'yearMax'),
-});
-
-type AddSubjectFormData = z.infer<typeof AddSubjectFormSchema>;
-
 interface AddSubjectDialogProps {
   open: boolean;
   onClose: () => void;
@@ -67,6 +56,19 @@ const AddSubjectDialog: React.FC<AddSubjectDialogProps> = ({
 
   const [linkSubjectCareer, { isLoading: linkingSubject }] =
     useLinkSubjectCareerMutation();
+
+  const AddSubjectFormSchema = z.object({
+    subjectId: z
+      .string()
+      .uuid(t('validation.subjectInvalid'))
+      .nonempty(t('validation.subjectNotEmpty')),
+    year: z
+      .number({ invalid_type_error: t('validation.yearInvalid') })
+      .positive(t('validation.yearPositive'))
+      .max(5, t('validation.yearMax')),
+  });
+
+  type AddSubjectFormData = z.infer<typeof AddSubjectFormSchema>;
 
   const {
     register,

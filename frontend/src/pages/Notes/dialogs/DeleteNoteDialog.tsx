@@ -20,11 +20,6 @@ import { z } from 'zod';
 import { useDeleteNoteMutation } from '../../../store/slices/notesApiSlice';
 import { Note } from '../../../types';
 
-// Define Zod schema for reason validation
-const reasonSchema = z.object({
-  reason: z.string().max(255, { message: 'reasonMaxLength' }).optional(),
-});
-
 interface DeleteNoteDialogProps {
   open: boolean;
   onClose: () => void;
@@ -42,6 +37,13 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
 }) => {
   const { t } = useTranslation('deleteNoteDialog');
   const [deleteNote] = useDeleteNoteMutation();
+
+  const reasonSchema = z.object({
+    reason: z
+      .string()
+      .max(255, { message: t('validation.reasonMaxLength') })
+      .optional(),
+  });
 
   const {
     register,

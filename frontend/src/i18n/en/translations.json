@@ -9,11 +9,13 @@
       "success": "Subject added successfully!",
       "error": "Failed to add subject."
     },
-    "invalidUuid": "Invalid unique identifier.",
-    "missingFields": "This field is required.",
-    "yearInvalid": "Year must be a valid number.",
-    "yearPositive": "Year must be positive.",
-    "yearMax": "Year cannot exceed 5."
+    "validation": {
+      "subjectInvalid": "Invalid subject.",
+      "subjectNotEmpty": "Subject is required.",
+      "yearInvalid": "Year must be a valid number.",
+      "yearPositive": "Year must be positive.",
+      "yearMax": "Year cannot exceed 5."
+    }
   },
   "createSubjectDialog": {
     "title": "Create Subject",
@@ -25,11 +27,14 @@
       "success": "Subject created successfully!",
       "error": "Failed to create subject."
     },
-    "missingFields": "This field is required.",
-    "invalidName": "The name is invalid or too long.",
-    "yearInvalid": "Year must be a valid number.",
-    "yearPositive": "Year must be positive.",
-    "yearMax": "Year cannot exceed 5."
+    "validation": {
+      "nameMinLength": "Subject name must be at least 1 character long.",
+      "nameMaxLength": "Subject name cannot exceed 50 characters.",
+      "nameInvalid": "Invalid subject name.",
+      "yearInvalid": "Year must be a valid number.",
+      "yearPositive": "Year must be positive.",
+      "yearMax": "Year cannot exceed 5."
+    }
   },
   "adminCareersPage": {
     "titlePage": "Manage Careers | Apuntea",
@@ -78,14 +83,15 @@
     "cancel": "Cancel",
     "visible": "Visible",
     "hidden": "Hidden",
-    "missingFields": "Please fill in all required fields.",
-    "invalidName": "Invalid name format.",
-    "notEmpty": "Directory name cannot be empty.",
-    "minLength": "Directory name must be at least 2 characters long.",
-    "maxLength": "Directory name cannot exceed 50 characters.",
-    "invalidColor": "Please select a valid icon color.",
     "directoryCreated": "Directory created successfully!",
-    "directoryCreationFailed": "Failed to create directory{{errorMessage}}"
+    "directoryCreationFailed": "Failed to create directory{{errorMessage}}",
+    "validation": {
+      "nameInvalid": "Invalid name format.",
+      "nameNotEmpty": "Directory name cannot be empty.",
+      "nameMinLength": "Directory name must be at least 2 characters long.",
+      "nameMaxLength": "Directory name cannot exceed 50 characters.",
+      "colorInvalid": "Please select a valid icon color."
+    }
   },
   "createNoteFab": {
     "createNewNote": "Create New Note",
@@ -102,34 +108,40 @@
     "practice": "Practice",
     "exam": "Exam",
     "other": "Other",
-    "invalidName": "Invalid name format.",
-    "notEmpty": "Note name cannot be empty.",
-    "minLength": "Note name must be at least 2 characters long.",
-    "maxLength": "Note name cannot exceed 50 characters.",
-    "invalidCategory": "Please select a valid category.",
-    "fileTooLarge": "File size cannot exceed 100MB.",
-    "invalidFileType": "File must be of type PDF, JPG, JPEG, MP4, or MP3.",
-    "fileNotEmpty": "File cannot be empty."
+    "validation": {
+      "nameInvalid": "Invalid name format.",
+      "nameNotEmpty": "Note name cannot be empty.",
+      "nameMinLength": "Note name must be at least 2 characters long.",
+      "nameMaxLength": "Note name cannot exceed 50 characters.",
+      "categoryInvalid": "Please select a valid category.",
+      "fileTooLarge": "File size cannot exceed 100MB.",
+      "fileTypeInvalid": "File must be of type PDF, JPG, JPEG, MP4, or MP3.",
+      "fileNotEmpty": "File cannot be empty."
+    }
   },
   "deleteDirectoryDialog": {
     "deleteSuccess": "Directory deleted successfully.",
     "deleteError": "Error deleting the directory{{errorMessage}}",
-    "reasonMaxLength": "Reason cannot exceed 255 characters.",
     "deleteDirectoryTitle": "Delete Directory",
     "deleteConfirmMessage": "Are you sure you want to delete this directory?",
     "reason": "Reason for deletion",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "validation": {
+      "reasonMaxLength": "Reason cannot exceed 255 characters."
+    }
   },
   "deleteNoteDialog": {
     "deleteSuccess": "Note deleted successfully.",
     "deleteError": "Error deleting the note{{errorMessage}}",
-    "reasonMaxLength": "Reason cannot exceed 255 characters.",
     "deleteNoteTitle": "Delete Note",
     "deleteConfirmMessage": "Are you sure you want to delete this note?",
     "reason": "Reason for deletion",
     "cancel": "Cancel",
-    "delete": "Delete"
+    "delete": "Delete",
+    "validation": {
+      "reasonMaxLength": "Reason cannot exceed 255 characters."
+    }
   },
   "deleteReviewDialog": {
     "deleteReviewTitle": "Delete Review",
@@ -139,7 +151,9 @@
     "delete": "Delete",
     "deleteSuccess": "Review deleted successfully.",
     "deleteError": "Error deleting the review{{errorMessage}}",
-    "reasonMaxLength": "Reason cannot exceed 255 characters."
+    "validation": {
+      "reasonMaxLength": "Reason cannot exceed 255 characters."
+    }
   },
   "directoryBreadcrumbs": {
     "errorFetchingDirectory": "Error fetching directory.",
@@ -160,11 +174,13 @@
     "visible": "Visible",
     "cancel": "Cancel",
     "save": "Save",
-    "invalidName": "Invalid name format.",
-    "notEmpty": "Directory name cannot be empty.",
-    "minLength": "Directory name must be at least 2 characters long.",
-    "maxLength": "Directory name cannot exceed 50 characters.",
-    "invalidColor": "Please select a valid icon color."
+    "validation": {
+      "nameInvalid": "Invalid name format.",
+      "nameNotEmpty": "Directory name cannot be empty.",
+      "nameMinLength": "Directory name must be at least 2 characters long.",
+      "nameMaxLength": "Directory name cannot exceed 50 characters.",
+      "colorInvalid": "Please select a valid icon color."
+    }
   },
   "editNoteDialog": {
     "editSuccess": "Note updated successfully.",
@@ -181,11 +197,13 @@
       "exam": "Exam",
       "other": "Other"
     },
-    "invalidName": "Invalid name format.",
-    "notEmpty": "Note name cannot be empty.",
-    "minLength": "Note name must be at least 2 characters long.",
-    "maxLength": "Note name cannot exceed 50 characters.",
-    "invalidCategory": "Please select a valid category."
+    "validation": {
+      "nameNotEmpty": "Note name cannot be empty.",
+      "nameMinLength": "Note name must be at least 2 characters long.",
+      "nameMaxLength": "Note name cannot exceed 50 characters.",
+      "nameInvalid": "Invalid name format.",
+      "categoryInvalid": "Please select a valid category."
+    }
   },
   "editProfileDialog": {
     "titles": {
@@ -214,11 +232,11 @@
     },
     "validation": {
       "firstNameInvalid": "First name can only contain letters and spaces.",
-      "firstNameMax": "First name cannot exceed 20 characters.",
+      "firstNameMaxLength": "First name cannot exceed 20 characters.",
       "lastNameInvalid": "Last name can only contain letters and spaces.",
-      "lastNameMax": "Last name cannot exceed 20 characters.",
+      "lastNameMaxLength": "Last name cannot exceed 20 characters.",
       "usernameInvalid": "Username contains invalid characters.",
-      "usernameMax": "Username cannot exceed 30 characters.",
+      "usernameMaxLength": "Username cannot exceed 30 characters.",
       "careerIdInvalid": "Career ID is not valid.",
       "emailInvalid": "Email address is not valid.",
       "passwordInvalid": "Password must contain uppercase, lowercase letters, and numbers.",
@@ -295,10 +313,10 @@
     "emailError": "An error occurred while sending the code. Please check your email and try again.",
     "passwordUpdated": "Password updated successfully!",
     "codeError": "The entered code is invalid. Please verify and try again.",
-    "validationErrors": {
-      "invalidEmail": "Invalid email.",
-      "codeRequired": "Code must be 6 characters long.",
-      "passwordLength": "Password must be at least 4 characters long."
+    "validation": {
+      "emailInvalid": "Invalid email.",
+      "codeLength": "Code must be 6 characters long.",
+      "passwordMinLength": "Password must be at least 4 characters long."
     }
   },
   "homePage": {
@@ -335,8 +353,10 @@
     "signup": "Sign Up",
     "noAccount": "Don't have an account?",
     "forgotPassword": "Forgot Password",
-    "invalidEmail": "Invalid email",
-    "passwordMinLength": "Password must be at least 4 characters"
+    "validation": {
+      "emailInvalid": "Invalid email",
+      "passwordMinLength": "Password must be at least 4 characters"
+    }
   },
   "miniSidebar": {
     "admin": "Admin",
@@ -389,13 +409,15 @@
     "reviewCreated": "Your review was created!",
     "reviewUpdated": "Your review was updated!",
     "reviewError": "Failed to create review{{errorMessage}}",
-    "maxContentLength": "Review cannot exceed 255 characters.",
-    "minScore": "Score must be at least 1.",
-    "maxScore": "Score cannot exceed 5.",
     "views": "{{count}} views",
     "ownerUnknown": "Unknown owner",
     "moreReviewsHint": "More reviews below!",
-    "noMoreReviews": "No more reviews available."
+    "noMoreReviews": "No more reviews available.",
+    "validation": {
+      "contentMaxLength": "Review cannot exceed 255 characters.",
+      "scoreMin": "Score must be at least one star",
+      "scoreMax": "Score cannot exceed 5 stars."
+    }
   },
   "notesPage": {
     "titlePage": "Notes | Apuntea",
@@ -459,13 +481,13 @@
     "confirmPassword": "Confirm Password",
     "institution": "Institution",
     "career": "Career",
-    "invalidEmail": "Invalid email",
-    "passwordMinLength": "Password must be at least 4 characters",
-    "selectInstitution": "Select an institution",
-    "selectCareer": "Select a career",
-    "youMustSelectInstitution": "You must select an institution",
-    "youMustSelectCareer": "You must select a career",
-    "passwordsDoNotMatch": "Passwords do not match",
+    "validation": {
+      "invalidEmail": "Invalid email",
+      "passwordMinLength": "Password must be at least 4 characters",
+      "youMustSelectInstitution": "You must select an institution",
+      "youMustSelectCareer": "You must select a career",
+      "passwordsDoNotMatch": "Passwords do not match"
+    },
     "alreadyHaveAccount": "Already have an account?",
     "login": "Login",
     "toast": {

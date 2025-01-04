@@ -9,11 +9,13 @@
       "success": "¡Asignatura agregada exitosamente!",
       "error": "Error al agregar la asignatura."
     },
-    "invalidUuid": "Identificador único inválido.",
-    "missingFields": "Este campo es obligatorio.",
-    "yearInvalid": "El año debe ser un número válido.",
-    "yearPositive": "El año debe ser positivo.",
-    "yearMax": "El año no puede exceder 5."
+    "validation": {
+      "subjectInvalid": "Asignatura inválida.",
+      "subjectNotEmpty": "La asignatura es obligatoria.",
+      "yearInvalid": "El año debe ser un número válido.",
+      "yearPositive": "El año debe ser positivo.",
+      "yearMax": "El año no puede exceder 5."
+    }
   },
   "createSubjectDialog": {
     "title": "Crear Asignatura",
@@ -25,11 +27,14 @@
       "success": "¡Asignatura creada exitosamente!",
       "error": "Error al crear la asignatura."
     },
-    "missingFields": "Este campo es obligatorio.",
-    "invalidName": "El nombre es inválido o demasiado largo.",
-    "yearInvalid": "El año debe ser un número válido.",
-    "yearPositive": "El año debe ser positivo.",
-    "yearMax": "El año no puede exceder 5."
+    "validation": {
+      "nameMinLength": "El nombre de la asignatura debe tener al menos 1 caracteres.",
+      "nameMaxLength": "El nombre de la asignatura no puede exceder los 50 caracteres.",
+      "nameInvalid": "Nombre de asignatura inválido.",
+      "yearInvalid": "El año debe ser un número válido.",
+      "yearPositive": "El año debe ser positivo.",
+      "yearMax": "El año no puede exceder 5."
+    }
   },
   "adminCareersPage": {
     "titlePage": "Administrar Carreras | Apuntea",
@@ -78,14 +83,15 @@
     "cancel": "Cancelar",
     "visible": "Visible",
     "hidden": "Oculto",
-    "missingFields": "Por favor, completa todos los campos requeridos.",
-    "invalidName": "Formato de nombre inválido.",
-    "notEmpty": "El nombre no puede estar vacío.",
-    "minLength": "El nombre del directorio debe tener al menos 2 caracteres.",
-    "maxLength": "El nombre del directorio no puede exceder los 50 caracteres.",
-    "invalidColor": "Por favor, selecciona un color de icono válido.",
     "directoryCreated": "¡Directorio creado exitosamente!",
-    "directoryCreationFailed": "Error al crear el directorio{{errorMessage}}"
+    "directoryCreationFailed": "Error al crear el directorio{{errorMessage}}",
+    "validation": {
+      "nameInvalid": "Formato de nombre inválido.",
+      "nameNotEmpty": "El nombre no puede estar vacío.",
+      "nameMinLength": "El nombre del directorio debe tener al menos 2 caracteres.",
+      "nameMaxLength": "El nombre del directorio no puede exceder los 50 caracteres.",
+      "colorInvalid": "Por favor, selecciona un color de icono válido."
+    }
   },
   "createNoteFab": {
     "createNewNote": "Crear Nuevo Apunte",
@@ -102,34 +108,40 @@
     "practice": "Práctica",
     "exam": "Examen",
     "other": "Otro",
-    "invalidName": "Formato de nombre inválido.",
-    "notEmpty": "El nombre no puede estar vacío.",
-    "minLength": "El nombre del apunte debe tener al menos 2 caracteres.",
-    "maxLength": "El nombre del apunte no puede exceder los 50 caracteres.",
-    "invalidCategory": "Por favor, selecciona una categoría válida.",
-    "fileTooLarge": "El archivo no puede exceder los 100MB.",
-    "invalidFileType": "El archivo debe ser de tipo PDF, JPG, JPEG, MP4 o MP3.",
-    "fileNotEmpty": "Por favor, selecciona un archivo."
+    "validation": {
+      "nameInvalid": "Formato de nombre inválido.",
+      "nameNotEmpty": "El nombre del apunte no puede estar vacío.",
+      "nameMinLength": "El nombre del apunte debe tener al menos 2 caracteres.",
+      "nameMaxLength": "El nombre del apunte no puede exceder los 50 caracteres.",
+      "categoryInvalid": "Por favor, selecciona una categoría válida.",
+      "fileTooLarge": "El tamaño del archivo no puede exceder los 100MB.",
+      "fileTypeInvalid": "El archivo debe ser de tipo PDF, JPG, JPEG, MP4 o MP3.",
+      "fileNotEmpty": "El archivo no puede estar vacío."
+    }
   },
   "deleteDirectoryDialog": {
     "deleteSuccess": "Directorio eliminado exitosamente.",
     "deleteError": "Error al eliminar el directorio{{errorMessage}}",
-    "reasonMaxLength": "La razón no puede exceder los 255 caracteres.",
     "deleteDirectoryTitle": "Eliminar Directorio",
     "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este directorio?",
     "reason": "Razón para la eliminación",
     "cancel": "Cancelar",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "validation": {
+      "reasonMaxLength": "La razón no puede exceder los 255 caracteres."
+    }
   },
   "deleteNoteDialog": {
     "deleteSuccess": "Apunte eliminado exitosamente.",
     "deleteError": "Error al eliminar el apunte{{errorMessage}}",
-    "reasonMaxLength": "La razón no puede exceder los 255 caracteres.",
     "deleteNoteTitle": "Eliminar Apunte",
     "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este apunte?",
     "reason": "Razón de la eliminación",
     "cancel": "Cancelar",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "validation": {
+      "reasonMaxLength": "La razón no puede exceder los 255 caracteres."
+    }
   },
   "deleteReviewDialog": {
     "deleteReviewTitle": "Eliminar Reseña",
@@ -139,7 +151,9 @@
     "delete": "Eliminar",
     "deleteSuccess": "Reseña eliminada exitosamente.",
     "deleteError": "Error al eliminar la reseña{{errorMessage}}",
-    "reasonMaxLength": "La razón no puede exceder los 255 caracteres."
+    "validation": {
+      "reasonMaxLength": "La razón no puede exceder los 255 caracteres."
+    }
   },
   "directoryBreadcrumbs": {
     "errorFetchingDirectory": "Error al cargar el directorio.",
@@ -160,11 +174,13 @@
     "visible": "Visible",
     "cancel": "Cancelar",
     "save": "Guardar",
-    "invalidName": "Formato de nombre inválido.",
-    "notEmpty": "El nombre no puede estar vacío.",
-    "minLength": "El nombre del directorio debe tener al menos 2 caracteres.",
-    "maxLength": "El nombre del directorio no puede exceder los 50 caracteres.",
-    "invalidColor": "Por favor, selecciona un color de icono válido."
+    "validation": {
+      "nameInvalid": "Formato de nombre inválido.",
+      "nameNotEmpty": "El nombre no puede estar vacío.",
+      "nameMinLength": "El nombre del directorio debe tener al menos 2 caracteres.",
+      "nameMaxLength": "El nombre del directorio no puede exceder los 50 caracteres.",
+      "colorInvalid": "Por favor, selecciona un color de icono válido."
+    }
   },
   "editNoteDialog": {
     "editSuccess": "Apunte actualizado exitosamente.",
@@ -181,11 +197,13 @@
       "exam": "Examen",
       "other": "Otro"
     },
-    "invalidName": "Formato de nombre inválido.",
-    "notEmpty": "El nombre no puede estar vacío.",
-    "minLength": "El nombre del apunte debe tener al menos 2 caracteres.",
-    "maxLength": "El nombre del apunte no puede exceder los 50 caracteres.",
-    "invalidCategory": "Por favor, selecciona una categoría válida."
+    "validation": {
+      "nameNotEmpty": "El nombre del apunte no puede estar vacío.",
+      "nameMinLength": "El nombre del apunte debe tener al menos 2 caracteres.",
+      "nameMaxLength": "El nombre del apunte no puede exceder los 50 caracteres.",
+      "nameInvalid": "Formato de nombre inválido.",
+      "categoryInvalid": "Por favor, selecciona una categoría válida."
+    }
   },
   "editProfileDialog": {
     "titles": {
@@ -214,11 +232,11 @@
     },
     "validation": {
       "firstNameInvalid": "El nombre solo puede contener letras y espacios.",
-      "firstNameMax": "El nombre no puede exceder los 20 caracteres.",
+      "firstNameMaxLength": "El nombre no puede exceder los 20 caracteres.",
       "lastNameInvalid": "El apellido solo puede contener letras y espacios.",
-      "lastNameMax": "El apellido no puede exceder los 20 caracteres.",
+      "lastNameMaxLength": "El apellido no puede exceder los 20 caracteres.",
       "usernameInvalid": "El nombre de usuario contiene caracteres no permitidos.",
-      "usernameMax": "El nombre de usuario no puede exceder los 30 caracteres.",
+      "usernameMaxLength": "El nombre de usuario no puede exceder los 30 caracteres.",
       "careerIdInvalid": "El ID de carrera no es válido.",
       "emailInvalid": "El correo electrónico no es válido.",
       "passwordInvalid": "La contraseña debe tener mayúsculas, minúsculas y números.",
@@ -294,10 +312,10 @@
     "emailError": "Hubo un error al enviar el código. Verifica tu correo e inténtalo de nuevo.",
     "passwordUpdated": "¡Contraseña actualizada exitosamente!",
     "codeError": "El código ingresado no es válido. Por favor, verifica y vuelve a intentarlo.",
-    "validationErrors": {
-      "invalidEmail": "Correo electrónico inválido.",
-      "codeRequired": "El código debe tener 6 caracteres.",
-      "passwordLength": "La contraseña debe tener al menos 4 caracteres."
+    "validation": {
+      "emailInvalid": "Correo electrónico inválido.",
+      "codeLength": "El código debe tener 6 caracteres.",
+      "passwordMinLength": "La contraseña debe tener al menos 4 caracteres."
     }
   },
   "homePage": {
@@ -334,8 +352,10 @@
     "signup": "Registrarse",
     "noAccount": "¿No tienes una cuenta?",
     "forgotPassword": "Olvidé mi contraseña",
-    "invalidEmail": "Correo electrónico inválido",
-    "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
+    "validation": {
+      "emailInvalid": "Correo electrónico inválido",
+      "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
+    }
   },
   "miniSidebar": {
     "admin": "Administrar",
@@ -388,13 +408,15 @@
     "reviewCreated": "¡Tu reseña fue creada!",
     "reviewUpdated": "¡Tu reseña fue actualizada!",
     "reviewError": "Error al crear la reseña{{errorMessage}}",
-    "maxContentLength": "El contenido de la reseña no puede exceder los 255 caracteres.",
-    "minScore": "La puntuación debe ser mayor a 1.",
-    "maxScore": "La puntuación no puede exceder los 5.",
     "views": "{{count}} visualizaciones",
     "ownerUnknown": "Propietario desconocido",
     "moreReviewsHint": "¡Hay más reseñas disponibles abajo!",
-    "noMoreReviews": "No hay más reseñas disponibles."
+    "noMoreReviews": "No hay más reseñas disponibles.",
+    "validation": {
+      "contentMaxLength": "El contenido de la reseña no puede exceder los 255 caracteres.",
+      "scoreMin": "La puntuación debe ser mayor a una estrella.",
+      "scoreMax": "La puntuación no puede exceder las 5 estrellas."
+    }
   },
   "notesPage": {
     "titlePage": "Apuntes | Apuntea",
@@ -457,13 +479,13 @@
     "confirmPassword": "Confirmar Contraseña",
     "institution": "Institución",
     "career": "Carrera",
-    "invalidEmail": "Correo electrónico inválido",
-    "passwordMinLength": "La contraseña debe tener al menos 4 caracteres",
-    "selectInstitution": "Selecciona una institución",
-    "selectCareer": "Selecciona una carrera",
-    "youMustSelectInstitution": "Debes seleccionar una institución",
-    "youMustSelectCareer": "Debes seleccionar una carrera",
-    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "validation": {
+      "invalidEmail": "Correo electrónico inválido",
+      "passwordMinLength": "La contraseña debe tener al menos 4 caracteres",
+      "youMustSelectInstitution": "Debes seleccionar una institución",
+      "youMustSelectCareer": "Debes seleccionar una carrera",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden"
+    },
     "alreadyHaveAccount": "¿Ya tienes una cuenta?",
     "login": "Iniciar Sesión",
     "toast": {

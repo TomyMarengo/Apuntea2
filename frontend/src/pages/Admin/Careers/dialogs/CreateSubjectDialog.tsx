@@ -18,21 +18,6 @@ import { z } from 'zod';
 
 import { useCreateSubjectMutation } from '../../../../store/slices/institutionsApiSlice';
 
-// Define the schema for form validation with zod
-const CreateSubjectFormSchema = z.object({
-  name: z
-    .string()
-    .min(1, 'missingFields')
-    .max(50, 'invalidName')
-    .regex(/^(?!([,_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\\-_]+$/, 'invalidName'), // NEW
-  year: z
-    .number({ invalid_type_error: 'yearInvalid' })
-    .positive('yearPositive')
-    .max(5, 'yearMax'),
-});
-
-type CreateSubjectFormData = z.infer<typeof CreateSubjectFormSchema>;
-
 interface CreateSubjectDialogProps {
   open: boolean;
   onClose: () => void;
@@ -53,6 +38,22 @@ const CreateSubjectDialog: React.FC<CreateSubjectDialogProps> = ({
   const { t } = useTranslation('createSubjectDialog');
   const [createSubject, { isLoading: creatingSubject }] =
     useCreateSubjectMutation();
+
+  const CreateSubjectFormSchema = z.object({
+    name: z
+      .string()
+      .min(1, { message: t('validation.nameMinLength') })
+      .max(50, { message: t('validation.nameMaxLength') })
+      .regex(/^(?!([,_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\\-_]+$/, {
+        message: t('validation.nameInvalid'),
+      }),
+    year: z
+      .number({ invalid_type_error: t('validation.yearInvalid') })
+      .positive({ message: t('validation.yearPositive') })
+      .max(5, { message: t('validation.yearMax') }),
+  });
+
+  type CreateSubjectFormData = z.infer<typeof CreateSubjectFormSchema>;
 
   const {
     register,

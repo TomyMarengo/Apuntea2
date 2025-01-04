@@ -26,24 +26,6 @@ import { useUpdateDirectoryMutation } from '../../../store/slices/directoriesApi
 import { Directory } from '../../../types';
 import { FolderIconColor } from '../../../types';
 
-// Define the Zod schema for form validation
-const directorySchema = z.object({
-  name: z
-    .string()
-    .nonempty({ message: 'notEmpty' })
-    .min(2, { message: 'minLength' })
-    .max(50, { message: 'maxLength' })
-    .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
-      message: 'invalidName',
-    }),
-  iconColor: z.string().regex(/^#(?:BBBBBB|16A765|4986E7|CD35A6)$/, {
-    message: 'invalidColor',
-  }),
-  visible: z.boolean().default(true),
-});
-
-type DirectoryFormData = z.infer<typeof directorySchema>;
-
 interface DirectoryPageProps {
   open: boolean;
   onClose: () => void;
@@ -60,7 +42,23 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
   const { t } = useTranslation('editDirectoryDialog');
   const [updateDirectory] = useUpdateDirectoryMutation();
 
-  // Initialize react-hook-form with Zod resolver
+  const directorySchema = z.object({
+    name: z
+      .string()
+      .nonempty({ message: t('validation.nameNotEmpty') })
+      .min(2, { message: t('validation.nameMinLength') })
+      .max(50, { message: t('validation.nameMaxLength') })
+      .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
+        message: t('validation.nameInvalid'),
+      }),
+    iconColor: z.string().regex(/^#(?:BBBBBB|16A765|4986E7|CD35A6)$/, {
+      message: t('validation.colorInvalid'),
+    }),
+    visible: z.boolean().default(true),
+  });
+
+  type DirectoryFormData = z.infer<typeof directorySchema>;
+
   const {
     control,
     handleSubmit,

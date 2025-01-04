@@ -27,36 +27,6 @@ import { z } from 'zod';
 import { useCreateNoteMutation } from '../store/slices/notesApiSlice';
 import { NoteCategory } from '../types';
 
-// Define the Zod schema for form validation
-const noteSchema = z.object({
-  name: z
-    .string()
-    .nonempty({ message: 'notEmpty' })
-    .min(2, { message: 'minLength' })
-    .max(50, { message: 'maxLength' })
-    .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
-      message: 'invalidName',
-    }),
-  category: z.string().regex(/^(THEORY|PRACTICE|EXAM|OTHER)$/, {
-    message: 'invalidCategory',
-  }),
-  visible: z.boolean().default(true),
-  file: z
-    .instanceof(File)
-    .refine((file) => file.size <= 100 * 1024 * 1024, {
-      message: 'fileTooLarge',
-    })
-    .refine((file) => /\.(jpg|jpeg|png|pdf|mp4|mp3)$/i.test(file.name), {
-      message: 'invalidFileType',
-    })
-    .refine((file) => file !== undefined && file !== null, {
-      message: 'fileNotEmpty',
-    })
-    .optional(),
-});
-
-type NoteFormData = z.infer<typeof noteSchema>;
-
 interface CreateNoteFabProps {
   parentId: string;
 }
@@ -67,6 +37,35 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
   const [createNote, { isLoading }] = useCreateNoteMutation();
   const [expanded, setExpanded] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const noteSchema = z.object({
+    name: z
+      .string()
+      .nonempty({ message: t('validation.nameNotEmpty') })
+      .min(2, { message: t('validation.nameMinLength') })
+      .max(50, { message: t('validation.nameMaxLength') })
+      .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
+        message: t('validation.nameInvalid'),
+      }),
+    category: z.string().regex(/^(THEORY|PRACTICE|EXAM|OTHER)$/, {
+      message: t('validation.categoryInvalid'),
+    }),
+    visible: z.boolean().default(true),
+    file: z
+      .instanceof(File)
+      .refine((file) => file.size <= 100 * 1024 * 1024, {
+        message: t('validation.fileTooLarge'),
+      })
+      .refine((file) => /\.(jpg|jpeg|png|pdf|mp4|mp3)$/i.test(file.name), {
+        message: t('validation.fileTypeInvalid'),
+      })
+      .refine((file) => file !== undefined && file !== null, {
+        message: t('validation.fileNotEmpty'),
+      })
+      .optional(),
+  });
+
+  type NoteFormData = z.infer<typeof noteSchema>;
 
   const {
     control,

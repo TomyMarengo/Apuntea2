@@ -75,7 +75,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
           t('validation.firstNameInvalid'),
         )
-        .max(20, t('validation.firstNameMax'))
+        .max(20, t('validation.firstNameMaxLength'))
         .optional(),
       lastName: z
         .string()
@@ -83,7 +83,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
           t('validation.lastNameInvalid'),
         )
-        .max(20, t('validation.lastNameMax'))
+        .max(20, t('validation.lastNameMaxLength'))
         .optional(),
       username: z
         .string()
@@ -91,7 +91,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+$/,
           t('validation.usernameInvalid'),
         )
-        .max(30, t('validation.usernameMax'))
+        .max(30, t('validation.usernameMaxLength'))
         .optional(),
       email: z.string().email(t('validation.emailInvalid')).optional(),
       careerId: z.string().uuid(t('validation.careerIdInvalid')).optional(),

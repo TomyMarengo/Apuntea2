@@ -19,11 +19,6 @@ import { z } from 'zod';
 import { useDeleteReviewMutation } from '../../../store/slices/reviewsApiSlice';
 import { Review } from '../../../types';
 
-// Define Zod schema for reason validation
-const reasonSchema = z.object({
-  reason: z.string().max(255, { message: 'reasonMaxLength' }).optional(),
-});
-
 interface DeleteReviewDialogProps {
   open: boolean;
   onClose: () => void;
@@ -41,6 +36,13 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
 }) => {
   const { t } = useTranslation('deleteReviewDialog');
   const [deleteReview] = useDeleteReviewMutation();
+
+  const reasonSchema = z.object({
+    reason: z
+      .string()
+      .max(255, { message: t('validation.reasonMaxLength') })
+      .optional(),
+  });
 
   // React Hook Form with Zod Resolver
   const {

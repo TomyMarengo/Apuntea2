@@ -24,30 +24,6 @@ import { z } from 'zod';
 import { useUpdateNoteMutation } from '../../../store/slices/notesApiSlice';
 import { Note, NoteCategory } from '../../../types';
 
-// Define the Zod schema for form validation
-const noteSchema = z.object({
-  name: z
-    .string()
-    .nonempty({ message: 'notEmpty' })
-    .min(2, { message: 'minLength' })
-    .max(50, { message: 'maxLength' })
-    .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
-      message: 'invalidName',
-    }),
-  category: z.string().regex(/^(THEORY|PRACTICE|EXAM|OTHER)$/, {
-    message: 'invalidCategory',
-  }),
-  visible: z.boolean().default(true),
-  file: z
-    .instanceof(File)
-    .refine((file) => file instanceof File, {
-      message: 'invalidFile',
-    })
-    .optional(),
-});
-
-type NoteFormData = z.infer<typeof noteSchema>;
-
 interface EditNoteDialogProps {
   open: boolean;
   onClose: () => void;
@@ -62,7 +38,23 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
   const { t } = useTranslation('editNoteDialog');
   const [updateNote] = useUpdateNoteMutation();
 
-  // Initialize react-hook-form with Zod resolver
+  const noteSchema = z.object({
+    name: z
+      .string()
+      .nonempty({ message: t('validation.nameNotEmpty') })
+      .min(2, { message: t('validation.nameMinLength') })
+      .max(50, { message: t('validation.nameMaxLength') })
+      .regex(/^(?!([ ,\-_.]+)$)[a-zA-Z0-9áéíóúÁÉÍÓÚñÑüÜ .,\\-_]+$/, {
+        message: t('validation.nameInvalid'),
+      }),
+    category: z.string().regex(/^(THEORY|PRACTICE|EXAM|OTHER)$/, {
+      message: t('validation.categoryInvalid'),
+    }),
+    visible: z.boolean().default(true),
+  });
+
+  type NoteFormData = z.infer<typeof noteSchema>;
+
   const {
     control,
     handleSubmit,

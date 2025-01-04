@@ -27,25 +27,6 @@ import { z } from 'zod';
 
 import useForgotPassword from '../../hooks/useForgotPassword';
 
-// Define validation schemas with Zod
-const emailSchema = z
-  .string()
-  .email('forgotPasswordPage.validationErrors.invalidEmail');
-const codeSchema = z
-  .string()
-  .length(6, 'forgotPasswordPage.validationErrors.codeRequired');
-const passwordSchema = z
-  .string()
-  .min(4, 'forgotPasswordPage.validationErrors.passwordLength');
-
-const forgotPasswordSchema = z.object({
-  email: emailSchema,
-  code: codeSchema.optional(),
-  newPassword: passwordSchema.optional(),
-});
-
-type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;
-
 export default function ForgotPasswordPage() {
   const { t } = useTranslation('forgotPasswordPage');
   const navigate = useNavigate();
@@ -54,6 +35,14 @@ export default function ForgotPasswordPage() {
   const [step, setStep] = useState<'email' | 'code'>('email');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const forgotPasswordSchema = z.object({
+    email: z.string().email('validation.emailInvalid'),
+    code: z.string().length(6, 'validation.codeLength').optional(),
+    newPassword: z.string().min(4, 'validation.passwordMinLength').optional(),
+  });
+
+  type ForgotPasswordForm = z.infer<typeof forgotPasswordSchema>;
 
   const {
     control,

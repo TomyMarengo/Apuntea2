@@ -26,14 +26,6 @@ import { z } from 'zod';
 
 import useLogin from '../../hooks/useLogin';
 
-// Define validation schemas with Zod
-const loginSchema = z.object({
-  email: z.string().email('invalidEmail'),
-  password: z.string().min(4, 'passwordMinLength'),
-});
-
-type LoginForm = z.infer<typeof loginSchema>;
-
 export default function LoginPage() {
   const { t } = useTranslation('loginPage');
   const navigate = useNavigate();
@@ -42,6 +34,13 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
+
+  const loginSchema = z.object({
+    email: z.string().email(t('validation.emailInvalid')),
+    password: z.string().min(4, t('validation.passwordMinLength')),
+  });
+
+  type LoginForm = z.infer<typeof loginSchema>;
 
   const {
     register,
