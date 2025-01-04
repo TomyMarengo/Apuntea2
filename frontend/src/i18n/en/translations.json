@@ -401,7 +401,8 @@
     },
     "visible": "Visible",
     "hidden": "Hidden",
-    "averageScore": "Average Score"
+    "averageScore": "Average Score",
+    "noScore": "No score"
   },
   "notePage": {
     "titlePage": "{{noteName}} | Apuntea",
@@ -606,7 +607,8 @@
     "copyLink": "Copy Link",
     "more": "More",
     "openParentDirectory": "Open parent directory",
-    "openSubjectsDirectories": "Open subject's directory"
+    "openSubjectsDirectories": "Open subject's directory",
+    "noScore": "No score"
   },
   "rowSubject": {
     "actions": {

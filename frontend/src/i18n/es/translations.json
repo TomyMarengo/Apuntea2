@@ -211,7 +211,7 @@
   },
   "editProfileDialog": {
     "titles": {
-      "xfile": "Editar Perfil"
+      "editProfile": "Editar Perfil"
     },
     "labels": {
       "firstName": "Nombre",
@@ -222,7 +222,6 @@
     },
     "buttons": {
       "close": "Cerrar",
-      "icture": "Subir Foto",
       "cancel": "Cancelar",
       "saveChanges": "Guardar Cambios",
       "saving": "Guardando..."
@@ -401,7 +400,8 @@
     },
     "visible": "Visible",
     "hidden": "Oculto",
-    "averageScore": "Puntuación Promedio"
+    "averageScore": "Puntuación Promedio",
+    "noScore": "Sin puntuación"
   },
   "notePage": {
     "titlePage": "{{noteName}} | Apuntea",
@@ -605,7 +605,8 @@
     "copyLink": "Copiar Enlace",
     "more": "Más",
     "openParentDirectory": "Abrir directorio padre",
-    "openSubjectsDirectories": "Abrir directorio de la materia"
+    "openSubjectsDirectories": "Abrir directorio de la materia",
+    "noScore": "Sin puntuación"
   },
   "rowSubject": {
     "actions": {

@@ -31,7 +31,9 @@ const NoteCard: React.FC<NoteCardProps> = ({ note }) => {
             {note.visible ? t('visible') : t('hidden')}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {t('averageScore')}: {note.avgScore.toFixed(2)}
+            {note.avgScore === 0
+              ? t('noScore')
+              : `${t('averageScore')}: ${note.avgScore.toFixed(2)}`}
           </Typography>
         </CardContent>
       </CardActionArea>

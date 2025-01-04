@@ -98,6 +98,15 @@ const NotePage: React.FC = () => {
     { skip: !note || !user },
   );
 
+  useEffect(() => {
+    if (myReviewData) {
+      reset({
+        content: myReviewData.content,
+        score: myReviewData.score,
+      });
+    }
+  }, [myReviewData]);
+
   /** 3) Favorite logic */
   const { data: isFavData, refetch: refetchFav } = useGetIsFavoriteNoteQuery(
     user && note ? { noteId: note.id, userId: user.id } : {},
@@ -288,6 +297,7 @@ const NotePage: React.FC = () => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ReviewFormData>({
     resolver: zodResolver(reviewSchema),
@@ -570,6 +580,7 @@ const NotePage: React.FC = () => {
                     review={rev}
                     noteId={note.id}
                     onDeleteSuccess={handleDeleteSuccess}
+                    shouldDelete
                   />
                 ))}
 

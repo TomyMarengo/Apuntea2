@@ -196,6 +196,7 @@ export default function NotesPage() {
                   key={sub.subjectId}
                   subject={sub}
                   userId={userId}
+                  shouldFavorite
                 />
               ))}
             </Box>

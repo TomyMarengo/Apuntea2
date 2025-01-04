@@ -266,7 +266,9 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
       case 'score':
         return (
           <TableCell key={column.id}>
-            {note.avgScore?.toFixed(2) ?? '-'}
+            {note.avgScore && note.avgScore > 0
+              ? note.avgScore.toFixed(2)
+              : t('noScore')}
           </TableCell>
         );
       case 'actions':

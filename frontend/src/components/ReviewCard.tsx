@@ -30,12 +30,14 @@ dayjs.extend(localizedFormat);
 interface ReviewCardProps {
   review: Review;
   noteId?: string;
+  shouldDelete?: boolean;
   onDeleteSuccess?: (review: Review) => void;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
   review,
   noteId,
+  shouldDelete = false,
   onDeleteSuccess,
 }) => {
   const { t } = useTranslation('reviewCard');
@@ -110,7 +112,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           <Rating value={review.score} readOnly size="small" />
         </Box>
 
-        {isAdmin && (
+        {isAdmin && shouldDelete && (
           <IconButton onClick={handleDeleteClick}>
             <DeleteIcon />
           </IconButton>

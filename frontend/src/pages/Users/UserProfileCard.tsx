@@ -10,6 +10,7 @@ import {
   Grid,
 } from '@mui/material';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -56,6 +57,16 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
       pageSize: 1,
     });
 
+  const [followersCount, setFollowersCount] = useState(
+    followersData?.totalCount || 0,
+  );
+
+  useEffect(() => {
+    if (followersData?.totalCount) {
+      setFollowersCount(followersData.totalCount);
+    }
+  }, [followersData]);
+
   const handleFollowersClick = () => {
     setFollowersModalOpen(true);
   };
@@ -86,11 +97,10 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
 
   const handleFollow = async () => {
     try {
-      const result = await followUser({
-        userId: user.id,
-      }).unwrap();
+      const result = await followUser({ userId: user.id }).unwrap();
       if (result.success) {
         toast.success(t('followed'));
+        setFollowersCount((followersCount) => followersCount + 1); // Incrementa el contador
         refetch();
       } else {
         toast.error(t('followFailed'));
@@ -109,6 +119,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
       }).unwrap();
       if (result.success) {
         toast.success(t('unfollowed'));
+        setFollowersCount((followersCount) => Math.max(followersCount - 1, 0)); // Decrementa el contador
         refetch();
       } else {
         toast.error(t('unfollowFailed'));
@@ -200,7 +211,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                 <Button onClick={handleFollowersClick}>
                   {t('followers')}
                   {': '}
-                  {!isLoadingFollowers && (followersData?.totalCount || 0)}
+                  {!isLoadingFollowers && (followersCount || 0)}
                   {isLoadingFollowers && <CircularProgress size={20} />}
                 </Button>
                 <Button onClick={handleFollowingClick}>

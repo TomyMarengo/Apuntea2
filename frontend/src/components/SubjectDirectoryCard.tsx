@@ -28,11 +28,13 @@ import { SubjectWithCareer } from '../types';
 interface SubjectDirectoryCardProps {
   subject: SubjectWithCareer;
   userId: string;
+  shouldFavorite?: boolean;
 }
 
 const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   subject,
   userId,
+  shouldFavorite = false,
 }) => {
   const { t } = useTranslation('subjectDirectoryCard');
   const navigate = useNavigate();
@@ -149,24 +151,28 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
         />
 
         {/* Heart icon top-right */}
-        <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
-          <IconButton
-            onClick={handleToggleFavorite}
-            size="small"
-            sx={{
-              position: 'absolute',
-              top: -10,
-              right: -30,
-              zIndex: 999,
-            }}
-          >
-            {isFavorite ? (
-              <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
-            ) : (
-              <FavoriteBorderIcon sx={{ color: 'error.main', fontSize: 22 }} />
-            )}
-          </IconButton>
-        </Tooltip>
+        {shouldFavorite && (
+          <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
+            <IconButton
+              onClick={handleToggleFavorite}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: -10,
+                right: -30,
+                zIndex: 999,
+              }}
+            >
+              {isFavorite ? (
+                <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
+              ) : (
+                <FavoriteBorderIcon
+                  sx={{ color: 'error.main', fontSize: 22 }}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
+        )}
 
         {/* Notes Count */}
         <Tooltip
