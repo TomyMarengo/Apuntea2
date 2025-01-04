@@ -73,7 +73,7 @@ const DeleteDirectoryDialog: React.FC<DeleteDirectoryDialogProps> = ({
       }
     } catch (err) {
       console.error('Failed to delete directory:', err);
-      toast.error(t('deleteError'));
+      toast.error(t('deleteError', { errorMessage: '' }));
     }
   };
 

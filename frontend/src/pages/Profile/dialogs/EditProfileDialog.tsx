@@ -1,7 +1,5 @@
-// src/pages/Profile/dialogs/EditProfileDialog.tsx
-
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Close as CloseIcon, PhotoCamera } from '@mui/icons-material';
+import { Close as CloseIcon } from '@mui/icons-material';
 import {
   Dialog,
   DialogTitle,
@@ -9,16 +7,15 @@ import {
   DialogActions,
   Button,
   TextField,
-  Avatar,
-  IconButton,
-  Box,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
   Typography,
+  Box,
+  IconButton,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -27,7 +24,6 @@ import { z } from 'zod';
 import { useGetCareersQuery } from '../../../store/slices/institutionsApiSlice';
 import {
   useUpdateUserMutation,
-  useUpdatePictureMutation,
   UpdateUserArgs,
 } from '../../../store/slices/usersApiSlice';
 import { Career, User } from '../../../types';
@@ -47,13 +43,8 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
 }) => {
   const { t } = useTranslation('editProfileDialog');
 
-  // State for preview of the profile picture
-  const [preview, setPreview] = useState<string | null>(null);
-
   // RTK mutations
   const [updateUser, { isLoading: isUpdatingUser }] = useUpdateUserMutation();
-  const [updatePicture, { isLoading: isUpdatingPicture }] =
-    useUpdatePictureMutation();
 
   // Fetch careers
   const { data: careers, isLoading: isLoadingCareers } = useGetCareersQuery(
@@ -89,28 +80,12 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       .optional(),
     email: z.string().email(t('validation.emailInvalid')).optional(),
     careerId: z.string().uuid(t('validation.careerIdInvalid')).optional(),
-    profilePicture: z
-      .instanceof(FileList)
-      .optional()
-      .refine(
-        (files) => {
-          if (!files) return true;
-          const file = files[0];
-          if (!file) return true;
-          const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-          const isValidType = validTypes.includes(file.type);
-          const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
-          return isValidType && isValidSize;
-        },
-        { message: t('validation.profilePicture') },
-      ),
   });
 
   const {
     control,
     handleSubmit,
     reset,
-    watch,
     formState: { errors, dirtyFields },
   } = useForm<z.infer<typeof editProfileSchema>>({
     resolver: zodResolver(editProfileSchema),
@@ -120,11 +95,8 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       username: user.username,
       email: user.email,
       careerId: user.career?.id,
-      profilePicture: undefined,
     },
   });
-
-  const watchedProfilePicture = watch('profilePicture');
 
   // Reset form when the dialog opens
   useEffect(() => {
@@ -135,34 +107,14 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         username: user.username,
         email: user.email,
         careerId: user.career?.id,
-        profilePicture: undefined,
       });
-      setPreview(null);
     }
   }, [open, user]);
-
-  // Update the image preview
-  useEffect(() => {
-    if (watchedProfilePicture && watchedProfilePicture.length > 0) {
-      const file = watchedProfilePicture[0];
-      const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
-
-      return () => {
-        URL.revokeObjectURL(objectUrl);
-      };
-    } else {
-      setPreview(null);
-    }
-  }, [watchedProfilePicture]);
 
   /**
    * Handle form submission for editing user info (no password logic here).
    */
   const onSubmit = async (data: z.infer<typeof editProfileSchema>) => {
-    let isUserUpdateSuccessful = true;
-    let isPictureUpdateSuccessful = true;
-
     try {
       // Create an object with only the modified fields
       const updatedFields: UpdateUserArgs = { userId: user.id };
@@ -176,8 +128,11 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       // Update user info if any fields are dirty
       if (Object.keys(updatedFields).length > 1) {
         const result = await updateUser(updatedFields).unwrap();
-        if (!result.success) {
-          isUserUpdateSuccessful = false;
+        if (result.success) {
+          toast.success(t('messages.profileUpdatedSuccessfully'));
+          onUpdateSuccess();
+          handleClose();
+        } else {
           toast.error(
             t('messages.failedToUpdateProfile', {
               errorMessage:
@@ -188,43 +143,13 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
           );
         }
       }
-
-      // Update profile picture if it's dirty
-      if (
-        dirtyFields.profilePicture &&
-        data.profilePicture &&
-        data.profilePicture.length > 0
-      ) {
-        const pictureResult = await updatePicture({
-          profilePicture: data.profilePicture[0],
-        }).unwrap();
-
-        if (!pictureResult.success) {
-          isPictureUpdateSuccessful = false;
-          toast.error(t('messages.failedToUpdatePicture'));
-        }
-      }
-
-      // Show success messages based on what was successful
-      if (isUserUpdateSuccessful && isPictureUpdateSuccessful) {
-        toast.success(t('messages.profileUpdatedSuccessfully'));
-        onUpdateSuccess();
-        handleClose();
-      } else {
-        if (isUserUpdateSuccessful) {
-          toast.success(t('messages.profileUpdatedSuccessfully'));
-        }
-        if (isPictureUpdateSuccessful) {
-          toast.success(t('messages.pictureUpdatedSuccessfully'));
-        }
-      }
     } catch (error: any) {
       console.error('Failed to update profile:', error);
 
       if (error.data?.[0]?.message) {
         toast.error(error.data[0].message);
       } else {
-        toast.error(t('messages.failedToUpdateProfile'));
+        toast.error(t('messages.failedToUpdateProfile', { errorMessage: '' }));
       }
     }
   };
@@ -246,58 +171,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        {/* Profile Picture Section */}
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            mb: 3,
-            flexDirection: 'column',
-          }}
-        >
-          <Avatar
-            src={preview || user.profilePictureUrl || ''}
-            alt={user.username}
-            sx={{ width: 100, height: 100, mb: 2 }}
-          />
-          <Controller
-            name="profilePicture"
-            control={control}
-            render={({ field }) => (
-              <label htmlFor="profile-picture-upload">
-                <input
-                  accept="image/*"
-                  id="profile-picture-upload"
-                  type="file"
-                  hidden
-                  onChange={(e) => {
-                    field.onChange(e.target.files);
-                  }}
-                />
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <IconButton
-                    color="primary"
-                    aria-label={t('buttons.uploadPicture')}
-                    component="span"
-                  >
-                    <PhotoCamera />
-                  </IconButton>
-                  {field.value && field.value.length > 0 && (
-                    <Typography variant="body2">
-                      {field.value[0].name}
-                    </Typography>
-                  )}
-                </Box>
-              </label>
-            )}
-          />
-          {errors.profilePicture && (
-            <Typography color="error" variant="body2">
-              {errors.profilePicture.message}
-            </Typography>
-          )}
-        </Box>
-
         {/* User Info Form */}
         <Box component="form" noValidate autoComplete="off">
           <Controller
@@ -398,20 +271,15 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
 
       {/* Dialog Actions */}
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          disabled={isUpdatingUser || isUpdatingPicture}
-        >
+        <Button onClick={handleClose} disabled={isUpdatingUser}>
           {t('buttons.cancel')}
         </Button>
         <Button
           onClick={handleSubmit(onSubmit)}
           variant="contained"
-          disabled={isUpdatingUser || isUpdatingPicture}
+          disabled={isUpdatingUser}
         >
-          {isUpdatingUser || isUpdatingPicture
-            ? t('buttons.saving')
-            : t('buttons.saveChanges')}
+          {isUpdatingUser ? t('buttons.saving') : t('buttons.saveChanges')}
         </Button>
       </DialogActions>
     </Dialog>

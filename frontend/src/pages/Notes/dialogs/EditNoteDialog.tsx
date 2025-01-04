@@ -105,7 +105,7 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
       }
     } catch (error) {
       console.error('Failed to edit note:', error);
-      toast.error(t('editFailed'));
+      toast.error(t('editFailed', { errorMessage: '' }));
     }
   };
 

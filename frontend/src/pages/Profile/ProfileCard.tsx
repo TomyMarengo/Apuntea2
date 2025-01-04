@@ -1,6 +1,6 @@
 // src/pages/Profile/ProfileCard.tsx
 
-import { Edit as EditIcon } from '@mui/icons-material';
+import { Edit as EditIcon, PhotoCamera } from '@mui/icons-material';
 import {
   Card,
   Typography,
@@ -12,8 +12,9 @@ import {
   Grid,
   Button,
   CircularProgress,
+  Tooltip,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
@@ -23,6 +24,7 @@ import FollowersModal from '../../components/Follow/FollowersModal';
 import FollowingModal from '../../components/Follow/FollowingModal';
 import {
   useUpdateUserMutation,
+  useUpdatePictureMutation,
   useGetFollowersQuery,
   useGetFollowingsQuery,
 } from '../../store/slices/usersApiSlice';
@@ -36,13 +38,20 @@ interface ProfileCardProps {
 const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
   const { t } = useTranslation('profileCard');
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false); // <-- New state
+  const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false);
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
   const [followingModalOpen, setFollowingModalOpen] = useState(false);
-  const [updateUser] = useUpdateUserMutation();
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     user.notificationsEnabled,
   );
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const [updateUser] = useUpdateUserMutation();
+  const [updatePicture] = useUpdatePictureMutation();
+
+  useEffect(() => {
+    setPreview(user.profilePictureUrl || null);
+  }, [user.profilePictureUrl]);
 
   const handleEditClick = () => setEditModalOpen(true);
   const handleEditModalClose = () => setEditModalOpen(false);
@@ -88,20 +97,57 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
       pageSize: 1,
     });
 
-  const handleFollowersClick = () => {
-    setFollowersModalOpen(true);
-  };
+  const handleFollowersClick = () => setFollowersModalOpen(true);
+  const handleFollowersModalClose = () => setFollowersModalOpen(false);
 
-  const handleFollowersModalClose = () => {
-    setFollowersModalOpen(false);
-  };
+  const handleFollowingClick = () => setFollowingModalOpen(true);
+  const handleFollowingModalClose = () => setFollowingModalOpen(false);
 
-  const handleFollowingClick = () => {
-    setFollowingModalOpen(true);
-  };
+  const handleProfilePictureChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const files = event.target.files;
+    if (files && files[0]) {
+      const file = files[0];
+      const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      const isValidType = validTypes.includes(file.type);
+      const isValidSize = file.size <= 64 * 1024 * 1024; // 64 MB
 
-  const handleFollowingModalClose = () => {
-    setFollowingModalOpen(false);
+      if (!isValidType) {
+        toast.error(t('validation.profilePictureInvalidFileType'));
+        return;
+      }
+
+      if (!isValidSize) {
+        toast.error(t('validation.profilePictureFileTooLarge'));
+        return;
+      }
+
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl);
+
+      try {
+        const result = await updatePicture({ profilePicture: file }).unwrap();
+        if (result.success) {
+          toast.success(t('messages.pictureUpdatedSuccessfully'));
+          onUpdateSuccess();
+        } else {
+          toast.error(
+            t('messages.failedToUpdatePicture', {
+              errorMessage:
+                result.messages && result.messages.length > 0
+                  ? `: ${result.messages[0]}`
+                  : '',
+            }),
+          );
+        }
+      } catch (error) {
+        console.error('Failed to update profile picture:', error);
+        toast.error(t('failedToUpdatePicture', { errorMessage: '' }));
+      } finally {
+        URL.revokeObjectURL(objectUrl);
+      }
+    }
   };
 
   return (
@@ -109,11 +155,43 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
       <Card sx={{ p: 3, boxShadow: 3, borderRadius: 2 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item>
-            <Avatar
-              src={user.profilePictureUrl || ''}
-              alt={user.username}
-              sx={{ width: 120, height: 120 }}
-            />
+            <Box sx={{ position: 'relative' }}>
+              <Avatar
+                src={preview || ''}
+                alt={user.username}
+                sx={{ width: 120, height: 120 }}
+              />
+              <label htmlFor="profile-picture-upload">
+                <input
+                  accept="image/*"
+                  id="profile-picture-upload"
+                  type="file"
+                  hidden
+                  onChange={handleProfilePictureChange}
+                />
+                <Tooltip title={t('uploadPicture')}>
+                  <IconButton
+                    color="primary"
+                    component="span"
+                    sx={{
+                      position: 'absolute',
+                      bottom: 0,
+                      right: 0,
+                      backgroundColor: 'background.paper',
+                      border: '1px solid',
+                      '&:hover': {
+                        backgroundColor: 'primary.main',
+                        '& .MuiSvgIcon-root': {
+                          color: 'background.paper',
+                        },
+                      },
+                    }}
+                  >
+                    <PhotoCamera />
+                  </IconButton>
+                </Tooltip>
+              </label>
+            </Box>
           </Grid>
           <Grid item xs>
             <Box
@@ -155,12 +233,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                 <Button onClick={handleFollowersClick}>
                   {t('followers')}
                   {': '}
+                  {/* Follower count logic */}
                   {!isLoadingFollowers && (followersData?.totalCount || 0)}
                   {isLoadingFollowers && <CircularProgress size={20} />}
                 </Button>
                 <Button onClick={handleFollowingClick}>
                   {t('following')}
                   {': '}
+                  {/* Following count logic */}
                   {!isLoadingFollowings && (followingsData?.totalCount || 0)}
                   {isLoadingFollowings && <CircularProgress size={20} />}
                 </Button>

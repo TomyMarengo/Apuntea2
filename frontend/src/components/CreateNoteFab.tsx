@@ -133,7 +133,7 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
         );
       }
     } catch (error: any) {
-      toast.error(t('noteCreationFailed'));
+      toast.error(t('noteCreationFailed', { errorMessage: '' }));
       console.error('Failed to create note:', error);
     }
   };

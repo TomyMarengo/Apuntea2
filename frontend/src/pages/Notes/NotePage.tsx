@@ -347,7 +347,7 @@ const NotePage: React.FC = () => {
       }
     } catch (error) {
       console.error('Failed to save review:', error);
-      toast.error(t('reviewError'));
+      toast.error(t('reviewError', { errorMessage: '' }));
     }
   };
 

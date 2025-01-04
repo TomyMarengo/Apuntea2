@@ -211,7 +211,7 @@
   },
   "editProfileDialog": {
     "titles": {
-      "editProfile": "Editar Perfil"
+      "xfile": "Editar Perfil"
     },
     "labels": {
       "firstName": "Nombre",
@@ -222,7 +222,7 @@
     },
     "buttons": {
       "close": "Cerrar",
-      "uploadPicture": "Subir Foto",
+      "icture": "Subir Foto",
       "cancel": "Cancelar",
       "saveChanges": "Guardar Cambios",
       "saving": "Guardando..."
@@ -238,12 +238,10 @@
       "usernameInvalid": "El nombre de usuario contiene caracteres inválidos.",
       "usernameMaxLength": "El nombre de usuario no puede exceder los 30 caracteres.",
       "careerIdInvalid": "La carrera no es válida.",
-      "emailInvalid": "La dirección de correo electrónico no es válida.",
-      "profilePicture": "La imagen debe ser JPEG, PNG o JPG y no exceder los 5MB."
+      "emailInvalid": "La dirección de correo electrónico no es válida."
     },
     "messages": {
       "profileUpdatedSuccessfully": "Perfil actualizado exitosamente",
-      "pictureUpdatedSuccessfully": "Foto de perfil actualizada exitosamente",
       "failedToUpdateProfile": "Error al actualizar el perfil{{errorMessage}}"
     }
   },
@@ -470,7 +468,16 @@
     "updateFailed": "Actualización fallida",
     "followers": "Seguidores",
     "following": "Siguiendo",
-    "changePassword": "Cambiar Contraseña"
+    "changePassword": "Cambiar Contraseña",
+    "uploadPicture": "Subir Foto",
+    "validation": {
+      "profilePictureInvalidFileType": "La foto de perfil debe ser de tipo JPG, JPEG o PNG.",
+      "profilePictureFileTooLarge": "La foto de perfil no puede exceder los 64MB."
+    },
+    "messages": {
+      "pictureUpdatedSuccessfully": "¡Foto de perfil actualizada exitosamente!",
+      "failedToUpdatePicture": "Error al actualizar la foto de perfil{{errorMessage}}"
+    }
   },
   "profilePage": {
     "titlePage": "Perfil | Apuntea",

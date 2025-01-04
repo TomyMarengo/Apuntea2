@@ -77,7 +77,7 @@ const DeleteReviewDialog: React.FC<DeleteReviewDialogProps> = ({
       }
     } catch (error) {
       console.error('Failed to delete review:', error);
-      toast.error(t('deleteError'));
+      toast.error(t('deleteError', { errorMessage: '' }));
     }
   };
 

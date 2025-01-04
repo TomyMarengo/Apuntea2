@@ -111,7 +111,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
         );
       }
     } catch (error: any) {
-      toast.error(t('directoryCreationFailed'));
+      toast.error(t('directoryCreationFailed', { errorMessage: '' }));
       console.error('Failed to create directory:', error);
     }
   };

@@ -222,7 +222,6 @@
     },
     "buttons": {
       "close": "Close",
-      "uploadPicture": "Upload Picture",
       "cancel": "Cancel",
       "saveChanges": "Save Changes",
       "saving": "Saving..."
@@ -238,12 +237,10 @@
       "usernameInvalid": "Username contains invalid characters.",
       "usernameMaxLength": "Username cannot exceed 30 characters.",
       "careerIdInvalid": "Career is not valid.",
-      "emailInvalid": "Email address is not valid.",
-      "profilePicture": "Image must be JPEG, PNG, or JPG and not exceed 5MB."
+      "emailInvalid": "Email address is not valid."
     },
     "messages": {
       "profileUpdatedSuccessfully": "Profile updated successfully",
-      "pictureUpdatedSuccessfully": "Profile picture updated successfully",
       "failedToUpdateProfile": "Failed to update profile{{errorMessage}}"
     }
   },
@@ -472,7 +469,16 @@
     "updateFailed": "Update failed",
     "followers": "Followers",
     "following": "Following",
-    "changePassword": "Change Password"
+    "changePassword": "Change Password",
+    "uploadPicture": "Upload Picture",
+    "validation": {
+      "profilePictureInvalidFileType": "Profile picture must be a JPEG, PNG, or JPG.",
+      "profilePictureFileTooLarge": "Profile picture must be less than 64MB."
+    },
+    "messages": {
+      "pictureUpdatedSuccessfully": "Profile picture updated successfully",
+      "failedToUpdatePicture": "Failed to update profile picture{{errorMessage}}"
+    }
   },
   "profilePage": {
     "titlePage": "Profile | Apuntea",

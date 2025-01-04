@@ -80,7 +80,7 @@ const DeleteNoteDialog: React.FC<DeleteNoteDialogProps> = ({
       }
     } catch (err) {
       console.error('Failed to delete note:', err);
-      toast.error(t('deleteError'));
+      toast.error(t('deleteError', { errorMessage: '' }));
     }
   };
 

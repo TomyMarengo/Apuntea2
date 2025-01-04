@@ -106,7 +106,7 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
       }
     } catch (error) {
       console.error('Failed to edit directory:', error);
-      toast.error(t('editFailed'));
+      toast.error(t('editFailed', { errorMessage: '' }));
     }
   };
 
