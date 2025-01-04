@@ -1,4 +1,36 @@
 {
+  "addSubjectDialog": {
+    "title": "Add Subject",
+    "selectSubject": "Select subject",
+    "yearLabel": "Year",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "toast": {
+      "success": "Subject added successfully!",
+      "error": "Failed to add subject."
+    },
+    "invalidUuid": "Invalid unique identifier.",
+    "missingFields": "This field is required.",
+    "yearInvalid": "Year must be a valid number.",
+    "yearPositive": "Year must be positive.",
+    "yearMax": "Year cannot exceed 5."
+  },
+  "createSubjectDialog": {
+    "title": "Create Subject",
+    "nameLabel": "Subject name",
+    "yearLabel": "Year",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "toast": {
+      "success": "Subject created successfully!",
+      "error": "Failed to create subject."
+    },
+    "missingFields": "This field is required.",
+    "invalidName": "The name is invalid or too long.",
+    "yearInvalid": "Year must be a valid number.",
+    "yearPositive": "Year must be positive.",
+    "yearMax": "Year cannot exceed 5."
+  },
   "adminCareersPage": {
     "titlePage": "Manage Careers | Apuntea",
     "institution": "Institution",
@@ -15,31 +47,6 @@
       "name": "Name"
     },
     "sortOrder": "Toggle Sort Order",
-    "addSubjectModal": {
-      "title": "Add Existing Subject",
-      "selectSubject": "Select a subject",
-      "none": "None",
-      "yearLabel": "Year",
-      "cancel": "Cancel",
-      "confirm": "Confirm"
-    },
-    "createSubjectModal": {
-      "title": "Create New Subject",
-      "nameLabel": "Subject Name",
-      "yearLabel": "Year",
-      "cancel": "Cancel",
-      "confirm": "Create"
-    },
-    "toast": {
-      "addSubject": {
-        "success": "Subject added successfully.",
-        "error": "Error adding the subject."
-      },
-      "createSubject": {
-        "success": "Subject created successfully.",
-        "error": "Error creating the subject."
-      }
-    },
     "loadingSubjects": "Loading subjects...",
     "errorFetchingDirectory": "Error fetching directory: {{error}}",
     "noSubjects": "There are no subjects in this career.",

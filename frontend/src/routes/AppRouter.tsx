@@ -3,8 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 
 import AdminRoute from './AdminRoute';
 import PrivateRoute from './PrivateRoute';
-import AdminCareersPage from '../pages/Admin/AdminCareersPage';
-import AdminUsersPage from '../pages/Admin/AdminUsersPage';
+import AdminCareersPage from '../pages/Admin/Careers/AdminCareersPage';
+import AdminUsersPage from '../pages/Admin/Users/AdminUsersPage';
 import DirectoryPage from '../pages/Directories/DirectoryPage';
 import FavoritesPage from '../pages/Favorites/FavoritesPage';
 import ForgotPasswordPage from '../pages/ForgotPassword/ForgotPasswordPage';

@@ -1,4 +1,4 @@
-// src/pages/Admin/AdminUsersPage.tsx
+// src/pages/Admin/Users/AdminUsersPage.tsx
 
 import {
   Box,
@@ -19,12 +19,12 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
-import PaginationBar from '../../components/PaginationBar';
-import ResultsTable from '../../components/ResultsTable';
-import RowUser from '../../components/Row/RowUser';
-import useDebounce from '../../hooks/useDebounce';
-import { useGetUsersQuery } from '../../store/slices/usersApiSlice';
-import { UserStatus, ColumnUser } from '../../types';
+import PaginationBar from '../../../components/PaginationBar';
+import ResultsTable from '../../../components/ResultsTable';
+import RowUser from '../../../components/Row/RowUser';
+import useDebounce from '../../../hooks/useDebounce';
+import { useGetUsersQuery } from '../../../store/slices/usersApiSlice';
+import { UserStatus, ColumnUser } from '../../../types';
 
 const AdminUsersPage: React.FC = () => {
   const { t } = useTranslation('adminUsersPage');

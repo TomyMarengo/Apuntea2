@@ -1,4 +1,36 @@
 {
+  "addSubjectDialog": {
+    "title": "Agregar Asignatura",
+    "selectSubject": "Seleccionar asignatura",
+    "yearLabel": "Año",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "toast": {
+      "success": "¡Asignatura agregada exitosamente!",
+      "error": "Error al agregar la asignatura."
+    },
+    "invalidUuid": "Identificador único inválido.",
+    "missingFields": "Este campo es obligatorio.",
+    "yearInvalid": "El año debe ser un número válido.",
+    "yearPositive": "El año debe ser positivo.",
+    "yearMax": "El año no puede exceder 5."
+  },
+  "createSubjectDialog": {
+    "title": "Crear Asignatura",
+    "nameLabel": "Nombre de la asignatura",
+    "yearLabel": "Año",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "toast": {
+      "success": "¡Asignatura creada exitosamente!",
+      "error": "Error al crear la asignatura."
+    },
+    "missingFields": "Este campo es obligatorio.",
+    "invalidName": "El nombre es inválido o demasiado largo.",
+    "yearInvalid": "El año debe ser un número válido.",
+    "yearPositive": "El año debe ser positivo.",
+    "yearMax": "El año no puede exceder 5."
+  },
   "adminCareersPage": {
     "titlePage": "Administrar Carreras | Apuntea",
     "institution": "Institución",
@@ -15,31 +47,6 @@
       "name": "Nombre"
     },
     "sortOrder": "Cambiar Orden",
-    "addSubjectModal": {
-      "title": "Agregar Asignatura Existente",
-      "selectSubject": "Selecciona una asignatura",
-      "none": "Ninguna",
-      "yearLabel": "Año",
-      "cancel": "Cancelar",
-      "confirm": "Confirmar"
-    },
-    "createSubjectModal": {
-      "title": "Crear Nueva Asignatura",
-      "nameLabel": "Nombre de la Asignatura",
-      "yearLabel": "Año",
-      "cancel": "Cancelar",
-      "confirm": "Crear"
-    },
-    "toast": {
-      "addSubject": {
-        "success": "Asignatura agregada exitosamente.",
-        "error": "Error al agregar la asignatura."
-      },
-      "createSubject": {
-        "success": "Asignatura creada exitosamente.",
-        "error": "Error al crear la asignatura."
-      }
-    },
     "loadingSubjects": "Cargando asignaturas...",
     "errorFetchingDirectory": "Error al obtener el directorio: {{error}}",
     "noSubjects": "No hay asignaturas en esta carrera.",

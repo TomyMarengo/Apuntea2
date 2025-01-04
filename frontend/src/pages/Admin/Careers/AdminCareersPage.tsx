@@ -1,4 +1,4 @@
-// src/pages/AdminCareersPage.tsx
+// src/pages/Admin/Careers/AdminCareersPage.tsx
 
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
@@ -12,31 +12,24 @@ import {
   IconButton,
   Tooltip,
   Typography,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
   CircularProgress,
   Autocomplete,
+  TextField,
 } from '@mui/material';
 import React, { useState, useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
-import ResultsTable from '../../components/ResultsTable';
-import RowSubject from '../../components/Row/RowSubject';
+import AddSubjectDialog from './dialogs/AddSubjectDialog';
+import CreateSubjectDialog from './dialogs/CreateSubjectDialog';
+import ResultsTable from '../../../components/ResultsTable';
+import RowSubject from '../../../components/Row/RowSubject';
 import {
   useGetInstitutionsQuery,
   useGetCareersQuery,
   useGetSubjectsByCareerQuery,
   useGetSubjectCareersQuery,
-  useGetSubjectsNotInCareerQuery,
-  useCreateSubjectMutation,
-  useLinkSubjectCareerMutation,
-} from '../../store/slices/institutionsApiSlice';
+} from '../../../store/slices/institutionsApiSlice';
 import {
   Institution,
   Career,
@@ -44,9 +37,7 @@ import {
   SubjectCareer,
   SubjectWithCareer,
   ColumnSubject,
-} from '../../types';
-
-import 'react-toastify/dist/ReactToastify.css';
+} from '../../../types';
 
 // Utility function for creating a numeric array range
 function range(start: number, end: number): number[] {
@@ -60,20 +51,12 @@ const AdminCareersPage: React.FC = () => {
 
   // Filter / Sort states
   const [yearFilter, setYearFilter] = useState<number | 'ALL'>('ALL');
-  const [sortBy, setSortBy] = useState<'year' | 'name'>('year'); // default sort by year
-  const [sortAsc, setSortAsc] = useState(true); // default ascending
+  const [sortBy, setSortBy] = useState<'year' | 'name'>('year');
+  const [sortAsc, setSortAsc] = useState(true);
 
-  // Modals
+  // Dialog modals
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
-
-  // States for "Add Subject" modal
-  const [selectedSubjectId, setSelectedSubjectId] = useState('');
-  const [addSubjectYear, setAddSubjectYear] = useState(1);
-
-  // States for "Create Subject" modal
-  const [newSubjectName, setNewSubjectName] = useState('');
-  const [newSubjectYear, setNewSubjectYear] = useState(1);
 
   // --- API Calls ---
   const { data: institutions } = useGetInstitutionsQuery();
@@ -100,40 +83,6 @@ const AdminCareersPage: React.FC = () => {
     { institutionId: selectedInstitutionId, careerId: selectedCareerId },
     { skip: !selectedInstitutionId || !selectedCareerId },
   );
-
-  const {
-    data: subjectsNotInCareer,
-    refetch: refetchNotInCareer,
-    isLoading: loadingNotInCareer,
-  } = useGetSubjectsNotInCareerQuery(
-    {
-      careerId: selectedCareerId,
-      url: careers?.find((c) => c.id === selectedCareerId)
-        ?.subjectsNotInCareerUrl,
-    },
-    { skip: !selectedCareerId },
-  );
-
-  const [linkSubjectCareer, { isLoading: linkingSubject }] =
-    useLinkSubjectCareerMutation();
-  const [createSubject, { isLoading: creatingSubject }] =
-    useCreateSubjectMutation();
-
-  // Filter by year
-  const handleYearFilterChange = (event: SelectChangeEvent) => {
-    const val = event.target.value;
-    setYearFilter(val === 'ALL' ? 'ALL' : Number(val));
-  };
-
-  // Sort by year or name
-  const handleSortChange = (event: SelectChangeEvent) => {
-    setSortBy(event.target.value as 'year' | 'name');
-  };
-
-  // Toggle ascending/descending
-  const handleToggleSortOrder = () => {
-    setSortAsc((prev) => !prev);
-  };
 
   useEffect(() => {
     if (selectedCareerId) {
@@ -209,64 +158,27 @@ const AdminCareersPage: React.FC = () => {
     return subjectCareers.reduce((acc, sc) => Math.max(acc, sc.year), 0);
   }, [subjectCareers]);
 
-  // Action: Add an existing subject
+  // Handlers for filters and sorting
+  const handleYearFilterChange = (event: SelectChangeEvent) => {
+    const val = event.target.value;
+    setYearFilter(val === 'ALL' ? 'ALL' : Number(val));
+  };
+
+  const handleSortChange = (event: SelectChangeEvent) => {
+    setSortBy(event.target.value as 'year' | 'name');
+  };
+
+  const handleToggleSortOrder = () => {
+    setSortAsc((prev) => !prev);
+  };
+
+  // Handlers for dialogs
   const handleOpenAddModal = () => {
-    setSelectedSubjectId('');
-    setAddSubjectYear(1);
-    refetchNotInCareer();
     setOpenAddModal(true);
   };
 
-  const handleConfirmAddSubject = async () => {
-    if (!selectedInstitutionId || !selectedCareerId || !selectedSubjectId)
-      return;
-    try {
-      await linkSubjectCareer({
-        institutionId: selectedInstitutionId,
-        careerId: selectedCareerId,
-        subjectId: selectedSubjectId,
-        year: addSubjectYear,
-      }).unwrap();
-
-      toast.success(t('toast.addSubject.success'));
-      // Refresh
-      refetchSubjects();
-      refetchSubjectCareers();
-    } catch (error) {
-      console.error('Failed to link subject:', error);
-      toast.error(t('toast.addSubject.error'));
-    } finally {
-      setOpenAddModal(false);
-    }
-  };
-
-  // Action: Create new subject
   const handleOpenCreateModal = () => {
-    setNewSubjectName('');
-    setNewSubjectYear(1);
     setOpenCreateModal(true);
-  };
-
-  const handleConfirmCreateSubject = async () => {
-    if (!selectedInstitutionId || !selectedCareerId || !newSubjectName) return;
-    try {
-      await createSubject({
-        institutionId: selectedInstitutionId,
-        careerId: selectedCareerId,
-        name: newSubjectName,
-        year: newSubjectYear,
-      }).unwrap();
-
-      toast.success(t('toast.createSubject.success'));
-      // Refresh
-      refetchSubjects();
-      refetchSubjectCareers();
-    } catch (error) {
-      console.error('Failed to create subject:', error);
-      toast.error(t('toast.createSubject.error'));
-    } finally {
-      setOpenCreateModal(false);
-    }
   };
 
   // Determine the page title based on the state
@@ -440,118 +352,25 @@ const AdminCareersPage: React.FC = () => {
             </Typography>
           )}
 
-        {/* Add Subject Modal */}
-        <Dialog
+        {/* Add Subject Dialog */}
+        <AddSubjectDialog
           open={openAddModal}
           onClose={() => setOpenAddModal(false)}
-          maxWidth="xs"
-          fullWidth
-        >
-          <DialogTitle>{t('addSubjectModal.title')}</DialogTitle>
-          <DialogContent>
-            {loadingNotInCareer ? (
-              <Box sx={{ textAlign: 'center', py: 3 }}>
-                <CircularProgress />
-              </Box>
-            ) : (
-              <>
-                <Autocomplete
-                  options={subjectsNotInCareer || []}
-                  getOptionLabel={(option: Subject) => option.name || ''}
-                  value={
-                    subjectsNotInCareer
-                      ? subjectsNotInCareer.find(
-                          (sub) => sub.id === selectedSubjectId,
-                        ) || null
-                      : null
-                  }
-                  onChange={(_, newValue) => {
-                    setSelectedSubjectId(newValue ? newValue.id! : '');
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t('addSubjectModal.selectSubject')}
-                      variant="outlined"
-                      margin="normal"
-                      fullWidth
-                    />
-                  )}
-                  sx={{ mt: 2, width: '100%' }}
-                />
+          selectedInstitutionId={selectedInstitutionId}
+          selectedCareerId={selectedCareerId}
+          refetchSubjects={refetchSubjects}
+          refetchSubjectCareers={refetchSubjectCareers}
+        />
 
-                <TextField
-                  sx={{ mt: 2 }}
-                  type="number"
-                  fullWidth
-                  label={t('addSubjectModal.yearLabel')}
-                  value={addSubjectYear}
-                  onChange={(e) => setAddSubjectYear(Number(e.target.value))}
-                  inputProps={{ min: 1 }}
-                />
-              </>
-            )}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenAddModal(false)}>
-              {t('addSubjectModal.cancel')}
-            </Button>
-            <Button
-              onClick={handleConfirmAddSubject}
-              disabled={
-                !selectedSubjectId || linkingSubject || loadingNotInCareer
-              }
-            >
-              {linkingSubject ? (
-                <CircularProgress size={20} />
-              ) : (
-                t('addSubjectModal.confirm')
-              )}
-            </Button>
-          </DialogActions>
-        </Dialog>
-
-        {/* Create Subject Modal */}
-        <Dialog
+        {/* Create Subject Dialog */}
+        <CreateSubjectDialog
           open={openCreateModal}
           onClose={() => setOpenCreateModal(false)}
-          maxWidth="xs"
-          fullWidth
-        >
-          <DialogTitle>{t('createSubjectModal.title')}</DialogTitle>
-          <DialogContent>
-            <TextField
-              sx={{ mt: 2 }}
-              fullWidth
-              label={t('createSubjectModal.nameLabel')}
-              value={newSubjectName}
-              onChange={(e) => setNewSubjectName(e.target.value)}
-            />
-            <TextField
-              sx={{ mt: 2 }}
-              type="number"
-              fullWidth
-              label={t('createSubjectModal.yearLabel')}
-              value={newSubjectYear}
-              onChange={(e) => setNewSubjectYear(Number(e.target.value))}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setOpenCreateModal(false)}>
-              {t('createSubjectModal.cancel')}
-            </Button>
-            <Button
-              onClick={handleConfirmCreateSubject}
-              disabled={!newSubjectName || creatingSubject}
-            >
-              {creatingSubject ? (
-                <CircularProgress size={20} />
-              ) : (
-                t('createSubjectModal.confirm')
-              )}
-            </Button>
-          </DialogActions>
-        </Dialog>
+          selectedInstitutionId={selectedInstitutionId}
+          selectedCareerId={selectedCareerId}
+          refetchSubjects={refetchSubjects}
+          refetchSubjectCareers={refetchSubjectCareers}
+        />
       </Box>
     </>
   );
