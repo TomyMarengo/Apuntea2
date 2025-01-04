@@ -204,21 +204,21 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
             {breadcrumb[breadcrumb.length - 2].name}
           </MuiLink>
           {/* Current Directory */}
-          (note ? (
-          <MuiLink
-            variant="h6"
-            component={RouterLink}
-            to={`/directories/${currentDirectory?.id}`}
-            underline="hover"
-            color="inherit"
-          >
-            <Typography variant="h6">{currentDirectory?.name}</Typography>
-          </MuiLink>
+          {note ? (
+            <MuiLink
+              variant="h6"
+              component={RouterLink}
+              to={`/directories/${currentDirectory?.id}`}
+              underline="hover"
+              color="inherit"
+            >
+              <Typography variant="h6">{currentDirectory?.name}</Typography>
+            </MuiLink>
           ) : (
-          <Typography variant="h6" color="text.primary">
-            {currentDirectory?.name}
-          </Typography>
-          ))
+            <Typography variant="h6" color="text.primary">
+              {currentDirectory?.name}
+            </Typography>
+          )}
           {note && (
             <Typography variant="h6" color="text.primary">
               {note.name}
