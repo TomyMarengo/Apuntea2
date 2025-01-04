@@ -72,7 +72,11 @@
   },
   "common": {
     "loadingTranslations": "Loading translations...",
-    "errorBoundary": "Something went wrong"
+    "errorBoundary": "Something went wrong",
+    "disableSeasonalTheme": "Disable Seasonal Theme",
+    "enableSeasonalTheme": "Enable Seasonal Theme",
+    "disableDarkMode": "Disable Dark Mode",
+    "enableDarkMode": "Enable Dark Mode"
   },
   "createDirectoryFab": {
     "createNewDirectory": "Create New Directory",

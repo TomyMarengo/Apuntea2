@@ -14,6 +14,7 @@
   "editDirectoryDialog",
   "editNoteDialog",
   "editProfileDialog",
+  "changePasswordDialog",
   "favoriteDirectoryCard",
   "favoriteNoteCard",
   "favoritesPage",

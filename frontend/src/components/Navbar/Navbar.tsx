@@ -10,11 +10,14 @@ import {
   IconButton,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { RootState } from '../../store/store';
 import DarkModeToggle from '../DarkModeToggle';
 import LanguageToggle from '../LanguageToggle';
 import ProfileButton from '../ProfileButton';
+import SeasonalModeToggle from '../SeasonalModeToggle';
 
 interface NavbarProps {
   isLoggedIn: boolean;
@@ -22,12 +25,16 @@ interface NavbarProps {
 
 export default function Navbar({ isLoggedIn }: NavbarProps) {
   const { t } = useTranslation('navbar');
+  const isSeasonalMode = useSelector(
+    (state: RootState) => state.theme.isSeasonalMode,
+  );
+
   return (
     <AppBar
       position="static"
       elevation={0}
       sx={{
-        backgroundColor: 'background.paper',
+        backgroundColor: 'transparent',
         color: 'primary.main',
         boxShadow: 0,
         backgroundImage: 'none',
@@ -49,8 +56,10 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
           <IconButton component={Link} to="/search">
             <SearchIcon sx={{ color: 'primary.main' }} />
           </IconButton>
+
           <LanguageToggle />
-          <DarkModeToggle />
+          {!isSeasonalMode && <DarkModeToggle />}
+          <SeasonalModeToggle />
 
           {isLoggedIn ? (
             <ProfileButton />

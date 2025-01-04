@@ -1,5 +1,4 @@
 // src/App.tsx
-
 import { CssBaseline, Box, GlobalStyles } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { useEffect, useMemo } from 'react';
@@ -14,19 +13,23 @@ import {
   selectCurrentUser,
 } from './store/slices/authSlice';
 import { RootState } from './store/store';
-import { lightTheme, darkTheme } from './theme';
+import { lightTheme, darkTheme, valentinesTheme } from './themes/theme';
 import { Locale } from './types';
 
 function App() {
   const { i18n } = useTranslation();
   const user = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken);
+
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
+  const isSeasonalMode = useSelector(
+    (state: RootState) => state.theme.isSeasonalMode,
+  );
+
   const currentLocale = useSelector(
     (state: RootState) => state.language.locale,
   );
 
-  // Determine the locale based on priority
   const locale = useMemo(() => {
     return (
       currentLocale ||
@@ -36,22 +39,27 @@ function App() {
     );
   }, [currentLocale, user]);
 
-  // Synchronize the Redux locale with the user locale if available
   useEffect(() => {
     i18n.changeLanguage(locale);
   }, [locale, i18n]);
 
   const isLoggedIn = !!user;
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN');
-  const theme = isDarkMode ? darkTheme : lightTheme;
+
+  let selectedTheme;
+  if (isSeasonalMode) {
+    selectedTheme = valentinesTheme;
+  } else {
+    selectedTheme = isDarkMode ? darkTheme : lightTheme;
+  }
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={selectedTheme}>
       <CssBaseline />
       <GlobalStyles
         styles={{
           ':root': {
-            ...theme.custom,
+            ...selectedTheme.custom,
           },
         }}
       />
@@ -70,13 +78,6 @@ function App() {
                 "navbar"
                 "main"
               `,
-          background: `linear-gradient(
-                180deg,
-                var(--gradient-top) 0%,
-                var(--gradient-mid) 42.19%,
-                var(--gradient-bot) 99.99%
-              ) no-repeat fixed`,
-          backgroundBlendMode: 'lighten',
         }}
       >
         {/* Navbar */}

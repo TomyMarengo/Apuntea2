@@ -72,7 +72,11 @@
   },
   "common": {
     "loadingTranslations": "Cargando traducciones...",
-    "errorBoundary": "Algo salió mal"
+    "errorBoundary": "Algo salió mal",
+    "disableSeasonalTheme": "Desactivar tema estacional",
+    "enableSeasonalTheme": "Activar tema estacional",
+    "disableDarkMode": "Desactivar modo oscuro",
+    "enableDarkMode": "Activar modo oscuro"
   },
   "createDirectoryFab": {
     "createNewDirectory": "Crear Nuevo Directorio",

@@ -2,12 +2,14 @@
 
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
+import Tooltip from '@mui/material/Tooltip';
+import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { toggleDarkMode } from '../store/slices/themeSlice';
 import { RootState } from '../store/store';
 
-const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+const DarkModeSwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
   padding: 7,
@@ -68,11 +70,16 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 
 export default function DarkModeToggle() {
   const dispatch = useDispatch();
+  const { t } = useTranslation('common');
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
 
   const handleToggle = () => {
     dispatch(toggleDarkMode());
   };
 
-  return <MaterialUISwitch checked={isDarkMode} onChange={handleToggle} />;
+  return (
+    <Tooltip title={isDarkMode ? t('disableDarkMode') : t('enableDarkMode')}>
+      <DarkModeSwitch checked={isDarkMode} onChange={handleToggle} />
+    </Tooltip>
+  );
 }

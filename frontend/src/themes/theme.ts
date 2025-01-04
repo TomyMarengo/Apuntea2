@@ -1,6 +1,8 @@
-// src/theme.ts
+// src/themes/theme.ts
 
 import { PaletteColorOptions, createTheme, alpha } from '@mui/material/styles';
+
+import { valentinesTheme } from './valentines';
 
 declare module '@mui/material/styles' {
   interface Palette {
@@ -22,7 +24,6 @@ declare module '@mui/material/styles' {
   }
 }
 
-// Función para crear el tema base
 const createBaseTheme = (mode: 'light' | 'dark') => {
   return createTheme({
     palette: {
@@ -90,6 +91,20 @@ const extendThemeWithOverrides = (
 ) => {
   return createTheme(baseTheme, {
     components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            backgroundImage: `linear-gradient(
+              180deg,
+              var(--gradient-top) 0%,
+              var(--gradient-mid) 42.19%,
+              var(--gradient-bot) 99.99%
+            )`,
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'scroll',
+          },
+        },
+      },
       MuiButton: {
         styleOverrides: {
           root: {
@@ -125,3 +140,4 @@ const extendThemeWithOverrides = (
 
 export const lightTheme = extendThemeWithOverrides(lightBaseTheme);
 export const darkTheme = extendThemeWithOverrides(darkBaseTheme);
+export { valentinesTheme };
