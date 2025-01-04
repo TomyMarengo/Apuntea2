@@ -17,6 +17,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
+import ChangePasswordDialog from './dialogs/ChangePasswordDialog';
 import EditProfileDialog from './dialogs/EditProfileDialog';
 import FollowersModal from '../../components/Follow/FollowersModal';
 import FollowingModal from '../../components/Follow/FollowingModal';
@@ -35,6 +36,7 @@ interface ProfileCardProps {
 const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
   const { t } = useTranslation('profileCard');
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [changePasswordModalOpen, setChangePasswordModalOpen] = useState(false); // <-- New state
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
   const [followingModalOpen, setFollowingModalOpen] = useState(false);
   const [updateUser] = useUpdateUserMutation();
@@ -44,6 +46,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
 
   const handleEditClick = () => setEditModalOpen(true);
   const handleEditModalClose = () => setEditModalOpen(false);
+
+  // Handler to open/close Change Password dialog
+  const handleChangePasswordClick = () => setChangePasswordModalOpen(true);
+  const handleChangePasswordModalClose = () =>
+    setChangePasswordModalOpen(false);
 
   const handleToggleNotifications = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -123,6 +130,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
               ) : (
                 <Typography variant="h5">{user.username}</Typography>
               )}
+              {/* Pencil icon for EditProfileDialog */}
               <IconButton onClick={handleEditClick}>
                 <EditIcon />
               </IconButton>
@@ -142,6 +150,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                 <strong>{t('institution')}:</strong>{' '}
                 {user.institution?.name || t('notSet')}
               </Typography>
+
               <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
                 <Button onClick={handleFollowersClick}>
                   {t('followers')}
@@ -156,6 +165,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                   {isLoadingFollowings && <CircularProgress size={20} />}
                 </Button>
               </Box>
+
               <FormControlLabel
                 control={
                   <Switch
@@ -171,14 +181,30 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                 }
                 sx={{ mt: 2 }}
               />
+
+              {/* Button to open the ChangePasswordDialog */}
+              <Box sx={{ mt: 2 }}>
+                <Button variant="outlined" onClick={handleChangePasswordClick}>
+                  {t('changePassword')}
+                </Button>
+              </Box>
             </Box>
           </Grid>
         </Grid>
       </Card>
 
+      {/* Edit Profile Dialog (still using the pencil icon above) */}
       <EditProfileDialog
         open={editModalOpen}
         handleClose={handleEditModalClose}
+        user={user}
+        onUpdateSuccess={onUpdateSuccess}
+      />
+
+      {/* Change Password Dialog */}
+      <ChangePasswordDialog
+        open={changePasswordModalOpen}
+        handleClose={handleChangePasswordModalClose}
         user={user}
         onUpdateSuccess={onUpdateSuccess}
       />

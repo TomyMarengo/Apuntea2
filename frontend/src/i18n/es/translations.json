@@ -207,22 +207,18 @@
   },
   "editProfileDialog": {
     "titles": {
-      "editProfile": "Editar Perfil",
-      "changePassword": "Cambiar Contraseña"
+      "editProfile": "Editar Perfil"
     },
     "labels": {
       "firstName": "Nombre",
       "lastName": "Apellido",
-      "username": "Nombre de Usuario",
-      "email": "Correo Electrónico",
-      "career": "Carrera",
-      "currentPassword": "Contraseña Actual",
-      "newPassword": "Nueva Contraseña",
-      "confirmNewPassword": "Confirmar Nueva Contraseña"
+      "username": "Nombre de usuario",
+      "email": "Correo electrónico",
+      "career": "Carrera"
     },
     "buttons": {
       "close": "Cerrar",
-      "uploadPicture": "Subir Imagen",
+      "uploadPicture": "Subir Foto",
       "cancel": "Cancelar",
       "saveChanges": "Guardar Cambios",
       "saving": "Guardando..."
@@ -235,22 +231,44 @@
       "firstNameMaxLength": "El nombre no puede exceder los 20 caracteres.",
       "lastNameInvalid": "El apellido solo puede contener letras y espacios.",
       "lastNameMaxLength": "El apellido no puede exceder los 20 caracteres.",
-      "usernameInvalid": "El nombre de usuario contiene caracteres no permitidos.",
+      "usernameInvalid": "El nombre de usuario contiene caracteres inválidos.",
       "usernameMaxLength": "El nombre de usuario no puede exceder los 30 caracteres.",
-      "careerIdInvalid": "El ID de carrera no es válido.",
-      "emailInvalid": "El correo electrónico no es válido.",
-      "passwordInvalid": "La contraseña debe tener mayúsculas, minúsculas y números.",
-      "passwordMinLength": "La contraseña debe tener al menos 4 caracteres.",
-      "passwordMaxLength": "La contraseña no puede exceder los 50 caracteres.",
-      "newPasswordShouldBeDifferent": "La nueva contraseña debe ser diferente a la actual.",
-      "passwordsDoNotMatch": "Las contraseñas no coinciden.",
-      "newPasswordRequired": "La nueva contraseña es requerida.",
-      "profilePicture": "La imagen debe ser JPEG, PNG o JPG y no superar los 5MB."
+      "careerIdInvalid": "La carrera no es válida.",
+      "emailInvalid": "La dirección de correo electrónico no es válida.",
+      "profilePicture": "La imagen debe ser JPEG, PNG o JPG y no exceder los 5MB."
+    },
+    "messages": {
+      "profileUpdatedSuccessfully": "Perfil actualizado exitosamente",
+      "failedToUpdateProfile": "Error al actualizar el perfil"
+    }
+  },
+  "changePasswordDialog": {
+    "titles": {
+      "editProfile": "Editar Perfil",
+      "changePassword": "Cambiar Contraseña"
+    },
+    "labels": {
+      "currentPassword": "Contraseña Actual",
+      "newPassword": "Nueva Contraseña",
+      "confirmNewPassword": "Confirmar Nueva Contraseña"
     },
     "messages": {
       "passwordChangedSuccessfully": "Contraseña cambiada exitosamente",
-      "profileUpdatedSuccessfully": "Perfil actualizado exitosamente",
-      "failedToUpdateProfile": "Error al actualizar el perfil"
+      "failedToUpdateProfile": "Error al actualizar el perfil: {{error}}"
+    },
+    "buttons": {
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "saveChanges": "Guardar Cambios",
+      "saving": "Guardando..."
+    },
+    "validation": {
+      "passwordInvalid": "La contraseña debe contener letras mayúsculas, minúsculas y números.",
+      "passwordMinLength": "La contraseña debe tener al menos 4 caracteres.",
+      "passwordMaxLength": "La contraseña no puede exceder los 50 caracteres.",
+      "newPasswordShouldBeDifferent": "La nueva contraseña debe ser diferente de la contraseña actual.",
+      "passwordsDoNotMatch": "Las contraseñas no coinciden.",
+      "newPasswordRequired": "Se requiere una nueva contraseña."
     }
   },
   "favoriteDirectoryCard": {
@@ -446,7 +464,8 @@
     "disableEmailNotifications": "Deshabilitar notificaciones por correo",
     "updateFailed": "Actualización fallida",
     "followers": "Seguidores",
-    "following": "Siguiendo"
+    "following": "Siguiendo",
+    "changePassword": "Cambiar Contraseña"
   },
   "profilePage": {
     "titlePage": "Perfil | Apuntea",

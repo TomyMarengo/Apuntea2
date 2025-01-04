@@ -1,12 +1,7 @@
 // src/pages/Profile/dialogs/EditProfileDialog.tsx
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Close as CloseIcon,
-  PhotoCamera,
-  Visibility,
-  VisibilityOff,
-} from '@mui/icons-material';
+import { Close as CloseIcon, PhotoCamera } from '@mui/icons-material';
 import {
   Dialog,
   DialogTitle,
@@ -22,7 +17,6 @@ import {
   Select,
   MenuItem,
   Typography,
-  InputAdornment,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -53,130 +47,64 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
 }) => {
   const { t } = useTranslation('editProfileDialog');
 
+  // State for preview of the profile picture
   const [preview, setPreview] = useState<string | null>(null);
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
 
+  // RTK mutations
   const [updateUser, { isLoading: isUpdatingUser }] = useUpdateUserMutation();
   const [updatePicture, { isLoading: isUpdatingPicture }] =
     useUpdatePictureMutation();
 
+  // Fetch careers
   const { data: careers, isLoading: isLoadingCareers } = useGetCareersQuery(
     { institutionId: user.institution?.id },
     { skip: !user.institution?.id },
   );
 
-  const editProfileSchema = z
-    .object({
-      firstName: z
-        .string()
-        .regex(
-          /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
-          t('validation.firstNameInvalid'),
-        )
-        .max(20, t('validation.firstNameMaxLength'))
-        .optional(),
-      lastName: z
-        .string()
-        .regex(
-          /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
-          t('validation.lastNameInvalid'),
-        )
-        .max(20, t('validation.lastNameMaxLength'))
-        .optional(),
-      username: z
-        .string()
-        .regex(
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+$/,
-          t('validation.usernameInvalid'),
-        )
-        .max(30, t('validation.usernameMaxLength'))
-        .optional(),
-      email: z.string().email(t('validation.emailInvalid')).optional(),
-      careerId: z.string().uuid(t('validation.careerIdInvalid')).optional(),
-      currentPassword: z
-        .string()
-        .regex(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
-          t('validation.passwordInvalid'),
-        )
-        .min(4, t('validation.passwordMinLength'))
-        .max(50, t('validation.passwordMaxLength'))
-        .optional(),
-      newPassword: z
-        .string()
-        .regex(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
-          t('validation.passwordInvalid'),
-        )
-        .min(4, t('validation.passwordMinLength'))
-        .max(50, t('validation.passwordMaxLength'))
-        .optional(),
-      confirmNewPassword: z
-        .string()
-        .regex(
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
-          t('validation.passwordInvalid'),
-        )
-        .min(4, t('validation.passwordMinLength'))
-        .max(50, t('validation.passwordMaxLength'))
-        .optional(),
-      profilePicture: z
-        .instanceof(FileList)
-        .optional()
-        .refine(
-          (files) => {
-            if (!files) return true;
-            const file = files[0];
-            if (!file) return true;
-            const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-            const isValidType = validTypes.includes(file.type);
-            const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
-            return isValidType && isValidSize;
-          },
-          { message: t('validation.profilePicture') },
-        ),
-    })
-    // Validation 1: currentPassword !== newPassword
-    .refine(
-      (data) => {
-        if (data.newPassword && data.currentPassword) {
-          return data.newPassword !== data.currentPassword;
-        }
-        return true;
-      },
-      {
-        message: t('validation.newPasswordShouldBeDifferent'),
-        path: ['newPassword'],
-      },
-    )
-    // Validation 2: newPassword === confirmNewPassword
-    .refine(
-      (data) => {
-        if (data.newPassword || data.confirmNewPassword) {
-          return data.newPassword === data.confirmNewPassword;
-        }
-        return true;
-      },
-      {
-        message: t('validation.passwordsDoNotMatch'),
-        path: ['confirmNewPassword'],
-      },
-    )
-    // Validation 3: currentPassword === undefined => newPassword === undefined
-    .refine(
-      (data) => {
-        if (!data.currentPassword) {
-          return !data.newPassword;
-        }
-        return true;
-      },
-      {
-        message: t('validation.newPasswordRequired'),
-        path: ['newPassword'],
-      },
-    );
+  // Schema for editing profile (no password fields)
+  const editProfileSchema = z.object({
+    firstName: z
+      .string()
+      .regex(
+        /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
+        t('validation.firstNameInvalid'),
+      )
+      .max(20, t('validation.firstNameMaxLength'))
+      .optional(),
+    lastName: z
+      .string()
+      .regex(
+        /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
+        t('validation.lastNameInvalid'),
+      )
+      .max(20, t('validation.lastNameMaxLength'))
+      .optional(),
+    username: z
+      .string()
+      .regex(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+$/,
+        t('validation.usernameInvalid'),
+      )
+      .max(30, t('validation.usernameMaxLength'))
+      .optional(),
+    email: z.string().email(t('validation.emailInvalid')).optional(),
+    careerId: z.string().uuid(t('validation.careerIdInvalid')).optional(),
+    profilePicture: z
+      .instanceof(FileList)
+      .optional()
+      .refine(
+        (files) => {
+          if (!files) return true;
+          const file = files[0];
+          if (!file) return true;
+          const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+          const isValidType = validTypes.includes(file.type);
+          const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB
+          return isValidType && isValidSize;
+        },
+        { message: t('validation.profilePicture') },
+      ),
+  });
 
   const {
     control,
@@ -192,9 +120,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       username: user.username,
       email: user.email,
       careerId: user.career?.id,
-      currentPassword: undefined,
-      newPassword: undefined,
-      confirmNewPassword: undefined,
       profilePicture: undefined,
     },
   });
@@ -210,17 +135,11 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         username: user.username,
         email: user.email,
         careerId: user.career?.id,
-        currentPassword: undefined,
-        newPassword: undefined,
-        confirmNewPassword: undefined,
         profilePicture: undefined,
       });
       setPreview(null);
-      setShowCurrentPassword(false);
-      setShowNewPassword(false);
-      setShowConfirmNewPassword(false);
     }
-  }, [open, user, reset]);
+  }, [open, user]);
 
   // Update the image preview
   useEffect(() => {
@@ -237,6 +156,9 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
     }
   }, [watchedProfilePicture]);
 
+  /**
+   * Handle form submission for editing user info (no password logic here).
+   */
   const onSubmit = async (data: z.infer<typeof editProfileSchema>) => {
     try {
       // Create an object with only the modified fields
@@ -248,18 +170,8 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       if (dirtyFields.email) updatedFields.email = data.email;
       if (dirtyFields.careerId) updatedFields.careerId = data.careerId;
 
-      if (
-        dirtyFields.newPassword &&
-        dirtyFields.confirmNewPassword &&
-        dirtyFields.currentPassword
-      ) {
-        updatedFields.password = data.newPassword;
-        updatedFields.oldPassword = data.currentPassword;
-      }
-
-      // Send only the modified fields if there are any
+      // Send only the modified fields if there are any (userId is always present)
       if (Object.keys(updatedFields).length > 1) {
-        // userId is always present
         await updateUser(updatedFields).unwrap();
       }
 
@@ -274,13 +186,8 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         }).unwrap();
       }
 
-      // Show success messages
-      if (updatedFields.password) {
-        toast.success(t('messages.passwordChangedSuccessfully'));
-      } else {
-        toast.success(t('messages.profileUpdatedSuccessfully'));
-      }
-
+      // Show success message
+      toast.success(t('messages.profileUpdatedSuccessfully'));
       onUpdateSuccess();
       handleClose();
     } catch (error: any) {
@@ -311,6 +218,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
+        {/* Profile Picture Section */}
         <Box
           sx={{
             display: 'flex',
@@ -361,6 +269,8 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             </Typography>
           )}
         </Box>
+
+        {/* User Info Form */}
         <Box component="form" noValidate autoComplete="off">
           <Controller
             name="firstName"
@@ -456,111 +366,9 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
             )}
           />
         </Box>
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            {t('titles.changePassword')}
-          </Typography>
-          <Controller
-            name="currentPassword"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label={t('labels.currentPassword')}
-                variant="outlined"
-                type={showCurrentPassword ? 'text' : 'password'}
-                fullWidth
-                margin="normal"
-                error={!!errors.currentPassword}
-                helperText={errors.currentPassword?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() =>
-                          setShowCurrentPassword(!showCurrentPassword)
-                        }
-                        edge="end"
-                        tabIndex={-1}
-                      >
-                        {showCurrentPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            )}
-          />
-          <Controller
-            name="newPassword"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label={t('labels.newPassword')}
-                variant="outlined"
-                type={showNewPassword ? 'text' : 'password'}
-                fullWidth
-                margin="normal"
-                error={!!errors.newPassword}
-                helperText={errors.newPassword?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                        edge="end"
-                        tabIndex={-1}
-                      >
-                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            )}
-          />
-          <Controller
-            name="confirmNewPassword"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label={t('labels.confirmNewPassword')}
-                variant="outlined"
-                type={showConfirmNewPassword ? 'text' : 'password'}
-                fullWidth
-                margin="normal"
-                error={!!errors.confirmNewPassword}
-                helperText={errors.confirmNewPassword?.message}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        onClick={() =>
-                          setShowConfirmNewPassword(!showConfirmNewPassword)
-                        }
-                        edge="end"
-                        tabIndex={-1}
-                      >
-                        {showConfirmNewPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            )}
-          />
-        </Box>
       </DialogContent>
+
+      {/* Dialog Actions */}
       <DialogActions>
         <Button
           onClick={handleClose}
