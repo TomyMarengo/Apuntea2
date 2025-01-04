@@ -22,7 +22,7 @@ import useDirectoryBreadcrumb from '../hooks/useDirectoryBreadcrumb';
 import { Directory, Note } from '../types';
 
 interface DirectoryBreadcrumbsProps {
-  currentDirectory: Directory;
+  currentDirectory?: Directory;
   note?: Note;
 }
 
@@ -70,6 +70,12 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
 
   return (
     <Box>
+      {breadcrumb.length === 0 && note && (
+        <Typography variant="h6" color="text.primary">
+          {note.name}
+        </Typography>
+      )}
+
       {breadcrumb.length === 1 && !note && (
         <Typography variant="h6" color="text.primary">
           {t('isRoot')}
@@ -117,15 +123,15 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
             <MuiLink
               variant="h6"
               component={RouterLink}
-              to={`/directories/${currentDirectory.id}`}
+              to={`/directories/${currentDirectory?.id}`}
               underline="hover"
               color="inherit"
             >
-              <Typography variant="h6">{currentDirectory.name}</Typography>
+              <Typography variant="h6">{currentDirectory?.name}</Typography>
             </MuiLink>
           ) : (
             <Typography variant="h6" color="text.primary">
-              {currentDirectory.name}
+              {currentDirectory?.name}
             </Typography>
           )}
 
@@ -136,6 +142,7 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
           )}
         </Breadcrumbs>
       )}
+
       {breadcrumb.length > 2 && (
         <Breadcrumbs
           separator={<NavigateNextIcon fontSize="small" />}
@@ -152,7 +159,6 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
           >
             {breadcrumb[0].name}
           </MuiLink>
-
           {/* Ellipsis */}
           {breadcrumb.length > 3 && (
             <>
@@ -187,7 +193,6 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
               </Menu>
             </>
           )}
-
           {/* Immediate Parent */}
           <MuiLink
             variant="h6"
@@ -198,24 +203,22 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
           >
             {breadcrumb[breadcrumb.length - 2].name}
           </MuiLink>
-
           {/* Current Directory */}
-          {note ? (
-            <MuiLink
-              variant="h6"
-              component={RouterLink}
-              to={`/directories/${currentDirectory.id}`}
-              underline="hover"
-              color="inherit"
-            >
-              <Typography variant="h6">{currentDirectory.name}</Typography>
-            </MuiLink>
+          (note ? (
+          <MuiLink
+            variant="h6"
+            component={RouterLink}
+            to={`/directories/${currentDirectory?.id}`}
+            underline="hover"
+            color="inherit"
+          >
+            <Typography variant="h6">{currentDirectory?.name}</Typography>
+          </MuiLink>
           ) : (
-            <Typography variant="h6" color="text.primary">
-              {currentDirectory.name}
-            </Typography>
-          )}
-
+          <Typography variant="h6" color="text.primary">
+            {currentDirectory?.name}
+          </Typography>
+          ))
           {note && (
             <Typography variant="h6" color="text.primary">
               {note.name}

@@ -407,7 +407,7 @@ const NotePage: React.FC = () => {
             }}
           >
             <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
-              {directoryData && note && (
+              {note && (
                 <DirectoryBreadcrumbs
                   currentDirectory={directoryData}
                   note={note}

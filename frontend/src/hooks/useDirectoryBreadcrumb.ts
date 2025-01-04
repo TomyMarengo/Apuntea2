@@ -6,7 +6,7 @@ import { useLazyGetDirectoryQuery } from '../store/slices/directoriesApiSlice';
 import { Directory } from '../types';
 
 interface UseDirectoryBreadcrumbProps {
-  currentDirectory: Directory;
+  currentDirectory?: Directory;
 }
 
 const useDirectoryBreadcrumb = ({
@@ -35,6 +35,10 @@ const useDirectoryBreadcrumb = ({
           const response = await getDirectory({
             url: currentParentUrl,
           }).unwrap();
+          if (response === null) {
+            break;
+          }
+          console.log('directories:', directories);
           directories.unshift(response);
           currentParentUrl = response.parentUrl;
         }
