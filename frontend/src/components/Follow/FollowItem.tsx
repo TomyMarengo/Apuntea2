@@ -24,9 +24,14 @@ import {
 interface FollowItemProps {
   followId: string;
   currentUserId: string;
+  onChange: () => void;
 }
 
-const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
+const FollowItem: React.FC<FollowItemProps> = ({
+  followId,
+  currentUserId,
+  onChange,
+}) => {
   const { t } = useTranslation('followItem');
 
   const {
@@ -53,6 +58,7 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
           t('successFollow', { username: followUserData?.username }),
         );
         refetch();
+        onChange();
       } else {
         toast.error(t('errorFollow', { username: followUserData?.username }));
       }
@@ -72,6 +78,7 @@ const FollowItem: React.FC<FollowItemProps> = ({ followId, currentUserId }) => {
           t('successUnfollow', { username: followUserData?.username }),
         );
         refetch();
+        onChange();
       } else {
         toast.error(t('errorUnfollow', { username: followUserData?.username }));
       }

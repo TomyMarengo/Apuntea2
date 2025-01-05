@@ -22,6 +22,7 @@ interface FollowersModalProps {
   handleClose: () => void;
   userId: string;
   followingUrl: string;
+  onChange: () => void;
 }
 
 const FollowersModal: React.FC<FollowersModalProps> = ({
@@ -29,6 +30,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
   handleClose,
   userId,
   followingUrl,
+  onChange,
 }) => {
   const { t } = useTranslation('followersModal');
   const [page, setPage] = useState(1);
@@ -38,7 +40,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
   const pageSize = 10;
 
   // Fetch followers based on the current page
-  const { data, error, isLoading, isFetching } = useGetFollowersQuery(
+  const { data, error, isLoading, isFetching, refetch } = useGetFollowersQuery(
     { url: followingUrl, page, pageSize },
     {
       skip: !open,
@@ -90,6 +92,11 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
       setPage((prev) => prev + 1);
     }
   }, [isFetchingMore, hasMore, isLoading, isFetching]);
+
+  const handleChange = () => {
+    refetch();
+    onChange();
+  };
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
@@ -144,6 +151,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
                   key={follower.id}
                   followId={follower.id}
                   currentUserId={userId}
+                  onChange={handleChange}
                 />
               ))}
             </List>

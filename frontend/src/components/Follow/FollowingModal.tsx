@@ -24,6 +24,7 @@ interface FollowingModalProps {
   handleClose: () => void;
   userId: string;
   followedByUrl: string;
+  onChange: () => void;
 }
 
 const FollowingModal: React.FC<FollowingModalProps> = ({
@@ -31,6 +32,7 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
   handleClose,
   userId,
   followedByUrl,
+  onChange,
 }) => {
   const { t } = useTranslation('followingModal');
   const [page, setPage] = useState(1);
@@ -48,6 +50,10 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
     },
   );
 
+  const handleChange = () => {
+    refetch();
+    onChange();
+  };
   // Handle errors
   useEffect(() => {
     if (error) {
@@ -163,6 +169,7 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
                   key={following.id}
                   followId={following.id}
                   currentUserId={userId}
+                  onChange={handleChange}
                 />
               ))}
             </List>

@@ -10,7 +10,6 @@ import {
   Grid,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -43,29 +42,25 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
   const [followersModalOpen, setFollowersModalOpen] = useState(false);
   const [followingModalOpen, setFollowingModalOpen] = useState(false);
 
-  const { data: followersData, isLoading: isLoadingFollowers } =
-    useGetFollowersQuery({
-      url: user.followingUrl,
-      page: 1,
-      pageSize: 1,
-    });
+  const {
+    data: followersData,
+    isLoading: isLoadingFollowers,
+    refetch: refetchGetFollowers,
+  } = useGetFollowersQuery({
+    url: user.followingUrl,
+    page: 1,
+    pageSize: 1,
+  });
 
-  const { data: followingsData, isLoading: isLoadingFollowings } =
-    useGetFollowingsQuery({
-      url: user.followedByUrl,
-      page: 1,
-      pageSize: 1,
-    });
-
-  const [followersCount, setFollowersCount] = useState(
-    followersData?.totalCount || 0,
-  );
-
-  useEffect(() => {
-    if (followersData?.totalCount) {
-      setFollowersCount(followersData.totalCount);
-    }
-  }, [followersData]);
+  const {
+    data: followingsData,
+    isLoading: isLoadingFollowings,
+    refetch: refetchGetFollowings,
+  } = useGetFollowingsQuery({
+    url: user.followedByUrl,
+    page: 1,
+    pageSize: 1,
+  });
 
   const handleFollowersClick = () => {
     setFollowersModalOpen(true);
@@ -86,7 +81,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
   const {
     data: isFollowing,
     isLoading: isCheckLoading,
-    refetch,
+    refetch: refetchIsFollowingUser,
   } = useIsFollowingUserQuery(
     {
       userId: user.id,
@@ -100,8 +95,9 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
       const result = await followUser({ userId: user.id }).unwrap();
       if (result.success) {
         toast.success(t('followed'));
-        setFollowersCount((followersCount) => followersCount + 1); // Incrementa el contador
-        refetch();
+        refetchIsFollowingUser();
+        refetchGetFollowers();
+        refetchGetFollowings();
       } else {
         toast.error(t('followFailed'));
       }
@@ -117,10 +113,12 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
         userId: user.id,
         followerId: currentUserId!,
       }).unwrap();
+
       if (result.success) {
         toast.success(t('unfollowed'));
-        setFollowersCount((followersCount) => Math.max(followersCount - 1, 0)); // Decrementa el contador
-        refetch();
+        refetchIsFollowingUser();
+        refetchGetFollowers();
+        refetchGetFollowings();
       } else {
         toast.error(t('unfollowFailed'));
       }
@@ -211,7 +209,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                 <Button onClick={handleFollowersClick}>
                   {t('followers')}
                   {': '}
-                  {!isLoadingFollowers && (followersCount || 0)}
+                  {!isLoadingFollowers && followersData?.totalCount}
                   {isLoadingFollowers && <CircularProgress size={20} />}
                 </Button>
                 <Button onClick={handleFollowingClick}>

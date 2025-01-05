@@ -90,12 +90,19 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
       pageSize: 1,
     });
 
-  const { data: followingsData, isLoading: isLoadingFollowings } =
-    useGetFollowingsQuery({
-      url: user.followedByUrl,
-      page: 1,
-      pageSize: 1,
-    });
+  const {
+    data: followingsData,
+    isLoading: isLoadingFollowings,
+    refetch: refetchFollowings,
+  } = useGetFollowingsQuery({
+    url: user.followedByUrl,
+    page: 1,
+    pageSize: 1,
+  });
+
+  const handleChangeFollowings = () => {
+    refetchFollowings();
+  };
 
   const handleFollowersClick = () => setFollowersModalOpen(true);
   const handleFollowersModalClose = () => setFollowersModalOpen(false);
@@ -294,6 +301,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
         handleClose={handleFollowersModalClose}
         userId={user.id}
         followingUrl={user.followingUrl}
+        onChange={handleChangeFollowings}
       />
 
       <FollowingModal
@@ -301,6 +309,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
         handleClose={handleFollowingModalClose}
         userId={user.id}
         followedByUrl={user.followedByUrl}
+        onChange={handleChangeFollowings}
       />
     </>
   );
