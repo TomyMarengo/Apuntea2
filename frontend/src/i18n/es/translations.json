@@ -1,36 +1,36 @@
 {
   "addSubjectDialog": {
-    "title": "Agregar Asignatura",
-    "selectSubject": "Seleccionar asignatura",
+    "title": "Agregar Materia",
+    "selectSubject": "Seleccionar materia",
     "yearLabel": "Año",
     "cancel": "Cancelar",
     "confirm": "Confirmar",
     "toast": {
-      "success": "¡Asignatura agregada exitosamente!",
-      "error": "Error al agregar la asignatura."
+      "success": "¡Materia agregada exitosamente!",
+      "error": "Error al agregar la materia."
     },
     "validation": {
-      "subjectInvalid": "Asignatura inválida.",
-      "subjectNotEmpty": "La asignatura es obligatoria.",
+      "subjectInvalid": "Materia inválida.",
+      "subjectNotEmpty": "La materia es obligatoria.",
       "yearInvalid": "El año debe ser un número válido.",
       "yearPositive": "El año debe ser positivo.",
       "yearMax": "El año no puede exceder 5."
     }
   },
   "createSubjectDialog": {
-    "title": "Crear Asignatura",
-    "nameLabel": "Nombre de la asignatura",
+    "title": "Crear Materia",
+    "nameLabel": "Nombre de la materia",
     "yearLabel": "Año",
     "cancel": "Cancelar",
     "confirm": "Confirmar",
     "toast": {
-      "success": "¡Asignatura creada exitosamente!",
-      "error": "Error al crear la asignatura."
+      "success": "¡Materia creada exitosamente!",
+      "error": "Error al crear la materia."
     },
     "validation": {
-      "nameMinLength": "El nombre de la asignatura debe tener al menos 1 caracteres.",
-      "nameMaxLength": "El nombre de la asignatura no puede exceder los 50 caracteres.",
-      "nameInvalid": "Nombre de asignatura inválido.",
+      "nameMinLength": "El nombre de la materia debe tener al menos 1 caracteres.",
+      "nameMaxLength": "El nombre de la materia no puede exceder los 50 caracteres.",
+      "nameInvalid": "Nombre de materia inválido.",
       "yearInvalid": "El año debe ser un número válido.",
       "yearPositive": "El año debe ser positivo.",
       "yearMax": "El año no puede exceder 5."
@@ -52,9 +52,9 @@
       "name": "Nombre"
     },
     "sortOrder": "Cambiar Orden",
-    "loadingSubjects": "Cargando asignaturas...",
+    "loadingSubjects": "Cargando materias...",
     "errorFetchingDirectory": "Error al obtener el directorio: {{error}}",
-    "noSubjects": "No hay asignaturas en esta carrera.",
+    "noSubjects": "No hay materias en esta carrera.",
     "title": "Administrar Carreras"
   },
   "adminUsersPage": {
@@ -451,7 +451,7 @@
     "titlePage": "Apuntes | Apuntea",
     "loading": "Cargando...",
     "errorFetching": "Error al obtener los apuntes.",
-    "noSubjectsForYear": "No hay asignaturas disponibles para el año seleccionado.",
+    "noSubjectsForYear": "No hay materias disponibles para el año seleccionado.",
     "yearButton": "Año {{year}}"
   },
   "paginationBar": {
@@ -537,7 +537,7 @@
   },
   "resultsTable": {
     "name": "Nombre",
-    "subject": "Asignatura",
+    "subject": "Materia",
     "owner": "Propietario",
     "lastModifiedAt": "Última modificación",
     "score": "Puntuación",
@@ -719,9 +719,9 @@
     "mustHaveCareerInstitution": "Debes tener una carrera e institución para ver tus apuntes.",
     "errorFetching": "Error al obtener los apuntes.",
     "notes": "Apuntes",
-    "noSubjects": "No se encontraron asignaturas.",
+    "noSubjects": "No se encontraron materias.",
     "yearButton": "Año {{year}}",
-    "noSubjectsForYear": "No hay asignaturas disponibles para el año seleccionado."
+    "noSubjectsForYear": "No hay materias disponibles para el año seleccionado."
   },
   "userPage": {
     "titlePage": "@{{username}} | Apuntea",
