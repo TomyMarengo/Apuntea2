@@ -52,7 +52,7 @@ const useSearch = (parentId?: string): UseSearchReturn => {
 
   useEffect(() => {
     reset(defaultValues);
-  }, [location.search]);
+  }, [location.pathname]);
 
   const watchedValues = watch();
   const debouncedWord = useDebounce(watchedValues.word, 500);
