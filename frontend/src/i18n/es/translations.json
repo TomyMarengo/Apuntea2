@@ -331,12 +331,19 @@
     "emailSent": "Se envió un código a tu correo. Ingresa el código para continuar.",
     "emailError": "Hubo un error al enviar el código. Verifica tu correo e inténtalo de nuevo.",
     "passwordUpdated": "¡Contraseña actualizada exitosamente!",
-    "codeError": "El código ingresado no es válido. Por favor, verifica y vuelve a intentarlo.",
+    "codeError": "El código ingresado no es válido. Por favor, verifica y vuelve a intentarlo. {{errorMessage}}",
     "validation": {
       "emailInvalid": "Correo electrónico inválido.",
-      "codeLength": "El código debe tener 6 caracteres.",
-      "passwordMinLength": "La contraseña debe tener al menos 4 caracteres."
-    }
+      "codeInvalid": "Código inválido.",
+      "codeRequired": "Código requerido.",
+      "passwordRequired": "Contraseña requerida.",
+      "passwordInvalid": "La contraseña debe contener letras mayúsculas, minúsculas y números.",
+      "passwordMinLength": "La contraseña debe tener al menos 4 caracteres.",
+      "passwordMaxLength": "La contraseña no puede exceder los 50 caracteres."
+    },
+    "failedToInitiatePassword": "Error al iniciar el proceso de recuperación de contraseña.",
+    "userNotFound": "No se encontró un usuario con ese correo electrónico.",
+    "failedToResetPassword": "Error al restablecer la contraseña."
   },
   "homePage": {
     "titlePage": "Inicio | Apuntea",
@@ -374,7 +381,7 @@
     "forgotPassword": "Olvidé mi contraseña",
     "validation": {
       "emailInvalid": "Correo electrónico inválido",
-      "passwordMinLength": "La contraseña debe tener al menos 4 caracteres"
+      "passwordInvalid": "Contraseña inválida"
     },
     "loginError": "Usuario o contraseña incorrectos"
   },
@@ -513,7 +520,9 @@
     "career": "Carrera",
     "validation": {
       "invalidEmail": "Correo electrónico inválido",
+      "passwordInvalid": "La contraseña debe contener letras mayúsculas, minúsculas y números",
       "passwordMinLength": "La contraseña debe tener al menos 4 caracteres",
+      "passwordMaxLength": "La contraseña no puede exceder los 50 caracteres",
       "youMustSelectInstitution": "Debes seleccionar una institución",
       "youMustSelectCareer": "Debes seleccionar una carrera",
       "passwordsDoNotMatch": "Las contraseñas no coinciden"

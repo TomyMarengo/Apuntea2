@@ -37,7 +37,12 @@ export default function LoginPage() {
 
   const loginSchema = z.object({
     email: z.string().email(t('validation.emailInvalid')),
-    password: z.string().min(4, t('validation.passwordMinLength')),
+    password: z
+      .string()
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
+        t('validation.passwordInvalid'),
+      ),
   });
 
   type LoginForm = z.infer<typeof loginSchema>;
@@ -62,6 +67,7 @@ export default function LoginPage() {
         email: data.email,
         password: data.password,
       });
+
       navigate('/');
     } catch (err: any) {
       setLoginError(err.message);

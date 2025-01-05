@@ -49,10 +49,16 @@ export default function RegisterPage() {
       email: z.string().email({ message: t('validation.invalidEmail') }),
       password: z
         .string()
-        .min(4, { message: t('validation.passwordMinLength') }),
+        .regex(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
+          t('validation.passwordInvalid'),
+        )
+        .min(4, { message: t('validation.passwordMinLength') })
+        .max(50, { message: t('validation.passwordMaxLength') }),
       confirmPassword: z
         .string()
-        .min(4, { message: t('validation.passwordMinLength') }),
+        .min(4, { message: t('validation.passwordMinLength') })
+        .max(50, { message: t('validation.passwordMaxLength') }),
       institutionId: z
         .string()
         .nonempty({ message: t('validation.youMustSelectInstitution') }),

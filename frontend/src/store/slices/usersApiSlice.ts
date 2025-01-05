@@ -462,7 +462,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         { type: 'Followers', id: userId },
       ],
     }),
-    requestPasswordChange: builder.mutation<ApiResponse, { email: string }>({
+    requestPasswordChange: builder.mutation<boolean, { email: string }>({
       queryFn: async ({ email }, _queryApi, _extraOptions, baseQuery) => {
         try {
           const result = await baseQuery({
@@ -474,12 +474,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
             },
           });
           if (result.error) {
-            return { data: { success: false, messages: [] } };
+            return { data: false };
           }
-          return { data: { success: true, messages: [] } };
+          return { data: true };
         } catch (error) {
           console.error('Failed to request password change:', error);
-          return { data: { success: false, messages: [] } };
+          return { data: false };
         }
       },
     }),
@@ -503,6 +503,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         });
 
         let errorMessages = extractErrorMessages(result.error);
+        console.log('result!!', result);
 
         return {
           data: {

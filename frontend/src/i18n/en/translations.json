@@ -332,12 +332,19 @@
     "emailSent": "A code has been sent to your email. Enter the code to continue.",
     "emailError": "An error occurred while sending the code. Please check your email and try again.",
     "passwordUpdated": "Password updated successfully!",
-    "codeError": "The entered code is invalid. Please verify and try again.",
+    "codeError": "The entered code is invalid. Please verify and try again. {{errorMessage}}",
     "validation": {
       "emailInvalid": "Invalid email.",
-      "codeLength": "Code must be 6 characters long.",
-      "passwordMinLength": "Password must be at least 4 characters long."
-    }
+      "codeInvalid": "Invalid code.",
+      "codeRequired": "Code is required.",
+      "passwordRequired": "Password is required.",
+      "passwordInvalid": "Password must contain uppercase, lowercase letters, and numbers.",
+      "passwordMinLength": "Password must be at least 4 characters long.",
+      "passwordMaxLength": "Password cannot exceed 50 characters."
+    },
+    "failedToInitiatePassword": "Failed to initiate password change.",
+    "userNotFound": "User not found with the specified email.",
+    "failedToResetPassword": "Failed to reset password."
   },
   "homePage": {
     "titlePage": "Home | Apuntea",
@@ -375,7 +382,7 @@
     "forgotPassword": "Forgot Password",
     "validation": {
       "emailInvalid": "Invalid email",
-      "passwordMinLength": "Password must be at least 4 characters"
+      "passwordInvalid": "Invalid password"
     },
     "loginError": "Invalid email or password"
   },
@@ -515,7 +522,9 @@
     "career": "Career",
     "validation": {
       "invalidEmail": "Invalid email",
+      "passwordInvalid": "Password must contain uppercase, lowercase letters, and numbers",
       "passwordMinLength": "Password must be at least 4 characters",
+      "passwordMaxLength": "Password cannot exceed 50 characters",
       "youMustSelectInstitution": "You must select an institution",
       "youMustSelectCareer": "You must select a career",
       "passwordsDoNotMatch": "Passwords do not match"
