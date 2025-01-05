@@ -301,6 +301,7 @@ export default function RegisterPage() {
                     {...field}
                     options={careers || []}
                     getOptionLabel={(option: any) => option.name}
+                    disabled={isFetchingCareers || careers?.length === 0}
                     value={
                       careers
                         ? careers.find((car: any) => car.id === field.value) ||

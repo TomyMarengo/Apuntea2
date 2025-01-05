@@ -144,6 +144,9 @@ export default function SearchForm({
           <Autocomplete
             options={careers || []}
             getOptionLabel={(option: Career) => option.name || ''}
+            disabled={
+              !institutionId || isFetchingCareers || careers?.length === 0
+            }
             value={
               careers
                 ? careers.find((car: Career) => car.id === careerId) || null
@@ -153,12 +156,7 @@ export default function SearchForm({
               onCareerChange(newValue ? String(newValue.id) : '');
             }}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('career')}
-                variant="outlined"
-                disabled={!institutionId || isFetchingCareers}
-              />
+              <TextField {...params} label={t('career')} variant="outlined" />
             )}
             sx={{ minWidth: 180 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -170,6 +168,7 @@ export default function SearchForm({
           <Autocomplete
             options={subjects || []}
             getOptionLabel={(option: Subject) => option.name || ''}
+            disabled={!careerId || isFetchingSubjects || subjects?.length === 0}
             value={
               subjects
                 ? subjects.find((sub: Subject) => sub.id === subjectId) || null
@@ -179,12 +178,7 @@ export default function SearchForm({
               onSubjectChange(newValue ? String(newValue.id) : '');
             }}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('subject')}
-                variant="outlined"
-                disabled={!careerId || isFetchingSubjects}
-              />
+              <TextField {...params} label={t('subject')} />
             )}
             sx={{ minWidth: 180 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
