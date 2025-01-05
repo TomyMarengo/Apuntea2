@@ -110,7 +110,7 @@ export default function DirectoryPage() {
               {/* Directory Title */}
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography variant="h4">{currentDirectory.name}</Typography>
-                {isOwner && (
+                {ownerUrl && isOwner && (
                   <IconButton onClick={handleEditClick}>
                     <EditIcon />
                   </IconButton>

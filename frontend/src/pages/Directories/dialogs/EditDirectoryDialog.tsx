@@ -16,7 +16,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -72,6 +72,14 @@ const EditDirectoryDialog: React.FC<DirectoryPageProps> = ({
       visible: directory.visible,
     },
   });
+
+  useEffect(() => {
+    reset({
+      name: directory.name,
+      iconColor: `#${directory.iconColor}`,
+      visible: directory.visible,
+    });
+  }, [directory, reset]);
 
   // Handle form submission
   const onSubmit = async (data: DirectoryFormData) => {
