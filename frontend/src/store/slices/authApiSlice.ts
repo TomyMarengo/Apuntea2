@@ -3,6 +3,7 @@
 import { QueryReturnValue } from '@reduxjs/toolkit/query';
 
 import { apiSlice } from './apiSlice';
+import { USER_COLLECTION_CONTENT_TYPE } from '../../contentTypes';
 
 // Minimal credential interfaces
 interface Credentials {
@@ -29,6 +30,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         url: `/users?email=${encodeURIComponent(credentials.email)}`,
         headers: {
           Authorization: `Basic ${btoa(`${credentials.email}:${credentials.password}`)}`,
+          Accept: USER_COLLECTION_CONTENT_TYPE,
         },
       }),
       transformResponse: async (

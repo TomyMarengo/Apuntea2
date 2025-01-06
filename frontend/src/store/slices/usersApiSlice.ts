@@ -4,6 +4,8 @@ import { ApiResponse, apiSlice } from './apiSlice';
 import { setCurrentUser } from './authSlice';
 import { setLocale } from './languageSlice';
 import {
+  USER_COLLECTION_CONTENT_TYPE,
+  USER_CONTENT_TYPE,
   USER_CREATE_CONTENT_TYPE,
   USER_EMAIL_COLLECTION_CONTENT_TYPE,
   USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
@@ -141,7 +143,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           : [{ type: 'Users', id: 'PARTIAL-LIST' }],
     }),
     getUser: builder.query<User, UserArgs>({
-      query: ({ userId, url }) => url || `/users/${userId}`,
+      query: ({ userId, url }) => ({
+        url: url || `/users/${userId}`,
+        headers: {
+          Accept: USER_CONTENT_TYPE,
+        },
+      }),
       transformResponse: (response: any) => {
         return mapApiUser(response);
       },
@@ -523,7 +530,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       ],
     }),
     getUserByEmail: builder.query<User[], string>({
-      query: (email) => ({ url: `/users?email=${encodeURIComponent(email)}` }),
+      query: (email) => ({
+        url: `/users?email=${encodeURIComponent(email)}`,
+        headers: {
+          Accept: USER_COLLECTION_CONTENT_TYPE,
+        },
+      }),
       transformResponse: (response: any) => {
         return Array.isArray(response) ? response.map(mapApiUser) : [];
       },
