@@ -29,9 +29,13 @@ import { NoteCategory } from '../types';
 
 interface CreateNoteFabProps {
   parentId: string;
+  onSuccess: () => void;
 }
 
-const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
+const CreateNoteFab: React.FC<CreateNoteFabProps> = ({
+  parentId,
+  onSuccess,
+}) => {
   const { t } = useTranslation('createNoteFab');
 
   const [createNote, { isLoading }] = useCreateNoteMutation();
@@ -122,6 +126,7 @@ const CreateNoteFab: React.FC<CreateNoteFabProps> = ({ parentId }) => {
           file: undefined,
         });
         setExpanded(false);
+        onSuccess();
       } else {
         toast.error(
           t('noteCreationFailed', {

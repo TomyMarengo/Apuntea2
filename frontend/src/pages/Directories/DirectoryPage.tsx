@@ -80,6 +80,10 @@ export default function DirectoryPage() {
     pageTitle = t('errorFetchingDirectory');
   }
 
+  const onSuccessCreation = (category: string) => {
+    // refetch();
+    setValue('category', category);
+  };
   return (
     <>
       <Helmet>
@@ -181,8 +185,14 @@ export default function DirectoryPage() {
                       gap: 2,
                     }}
                   >
-                    <CreateNoteFab parentId={directoryId} />
-                    <CreateDirectoryFab parentId={directoryId} />
+                    <CreateNoteFab
+                      parentId={directoryId}
+                      onSuccess={() => onSuccessCreation('note')}
+                    />
+                    <CreateDirectoryFab
+                      parentId={directoryId}
+                      onSuccess={() => onSuccessCreation('directory')}
+                    />
                   </Box>
                 )}
 

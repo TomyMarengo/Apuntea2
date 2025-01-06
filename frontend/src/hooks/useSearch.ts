@@ -24,6 +24,7 @@ interface UseSearchReturn {
   totalPages: number;
   currentPage: number;
   pageSize: number;
+  refetch: () => void;
 }
 
 const useSearch = (parentId?: string): UseSearchReturn => {
@@ -132,15 +133,29 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     debouncedWord,
   ]);
 
-  const { data: dataNotes, isLoading: isLoadingNotes } = useSearchNotesQuery(
-    searchArgs,
-    { skip: watchedValues.category === 'directory' },
-  );
+  const {
+    data: dataNotes,
+    isLoading: isLoadingNotes,
+    refetch: refetchNotes,
+  } = useSearchNotesQuery(searchArgs, {
+    skip: watchedValues.category === 'directory',
+  });
 
-  const { data: dataDirs, isLoading: isLoadingDirs } =
-    useSearchDirectoriesQuery(searchArgs, {
-      skip: watchedValues.category !== 'directory',
-    });
+  const {
+    data: dataDirs,
+    isLoading: isLoadingDirs,
+    refetch: refetchDirectories,
+  } = useSearchDirectoriesQuery(searchArgs, {
+    skip: watchedValues.category !== 'directory',
+  });
+
+  const refetch = () => {
+    if (watchedValues.category === 'directory') {
+      refetchDirectories();
+    } else {
+      refetchNotes();
+    }
+  };
 
   const isLoading = isLoadingNotes || isLoadingDirs;
 
@@ -176,6 +191,7 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     totalPages,
     currentPage,
     pageSize,
+    refetch,
   };
 };
 

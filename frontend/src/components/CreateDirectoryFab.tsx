@@ -29,10 +29,12 @@ import { FolderIconColor } from '../types';
 
 interface CreateDirectoryFabProps {
   parentId: string;
+  onSuccess: () => void;
 }
 
 const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
   parentId,
+  onSuccess,
 }) => {
   const { t } = useTranslation('createDirectoryFab');
   const [createDirectory, { isLoading }] = useCreateDirectoryMutation();
@@ -100,6 +102,7 @@ const CreateDirectoryFab: React.FC<CreateDirectoryFabProps> = ({
         toast.success(t('directoryCreated'));
         reset();
         setExpanded(false);
+        onSuccess();
       } else {
         toast.error(
           t('directoryCreationFailed', {
