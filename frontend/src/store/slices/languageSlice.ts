@@ -10,9 +10,10 @@ interface LanguageState {
 
 const loadLanguageFromLocalStorage = (): Locale | undefined => {
   try {
-    const serializedState = localStorage.getItem('language');
-    if (serializedState === null) return undefined;
-    return JSON.parse(serializedState);
+    // const serializedState = localStorage.getItem('language');
+    // if (serializedState === null)
+    // return JSON.parse(serializedState);
+    return navigator.language.split('-')[0] as Locale;
   } catch (e) {
     console.warn('Failed to load language from localStorage:', e);
     return undefined;

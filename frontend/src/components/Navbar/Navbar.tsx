@@ -15,7 +15,6 @@ import { Link } from 'react-router-dom';
 
 import { RootState } from '../../store/store';
 import DarkModeToggle from '../DarkModeToggle';
-import LanguageToggle from '../LanguageToggle';
 import ProfileButton from '../ProfileButton';
 import SeasonalModeToggle from '../SeasonalModeToggle';
 
@@ -57,7 +56,7 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
             <SearchIcon sx={{ color: 'primary.main' }} />
           </IconButton>
 
-          <LanguageToggle />
+          {/* <LanguageToggle /> */}
           {!isSeasonalMode && <DarkModeToggle />}
           <SeasonalModeToggle />
 

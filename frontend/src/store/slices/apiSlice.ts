@@ -18,6 +18,7 @@ const baseQuery = fetchBaseQuery({
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as any; // or RootState if typed
+    headers.set('Accept-Language', state?.language?.locale || 'en');
     if (!headers.has('Authorization')) {
       const token = state.auth?.token;
       const refreshToken = state.auth?.refreshToken;
