@@ -2,7 +2,7 @@ package ar.edu.itba.paw.models.exceptions;
 
 public class UnavailableNameException extends RuntimeException {
     public UnavailableNameException() {
-        super("error.searchable.alreadyExists");
+        super();
     }
 
 

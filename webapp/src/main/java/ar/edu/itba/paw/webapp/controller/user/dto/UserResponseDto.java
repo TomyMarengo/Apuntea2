@@ -34,9 +34,14 @@ public class UserResponseDto {
     private URI reviewsReceived;
 
     public static UserResponseDto fromUser(final User user, final UriInfo uriInfo) {
+        return fromUser(user, uriInfo, false);
+    }
+
+    public static UserResponseDto fromUser(final User user, final UriInfo uriInfo, boolean withEmail) {
         final UserResponseDto userDto = new UserResponseDto();
         userDto.id = user.getUserId();
-        userDto.email = user.getEmail();
+        if (withEmail)
+            userDto.email = user.getEmail();
         userDto.firstName = user.getFirstName();
         userDto.lastName = user.getLastName();
         userDto.locale = user.getLocale().toString();

@@ -195,9 +195,6 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
                 <strong>{t('username')}:</strong> {user.username}
               </Typography>
               <Typography variant="body1" color="textSecondary">
-                <strong>{t('email')}:</strong> {user.email}
-              </Typography>
-              <Typography variant="body1" color="textSecondary">
                 <strong>{t('career')}:</strong>{' '}
                 {user.career?.name || t('notSet')}
               </Typography>

@@ -5,6 +5,7 @@ import { setCurrentUser } from './authSlice';
 import { setLocale } from './languageSlice';
 import {
   USER_CREATE_CONTENT_TYPE,
+  USER_EMAIL_COLLECTION_CONTENT_TYPE,
   USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
   USER_UPDATE_CONTENT_TYPE,
   USER_UPDATE_PASSWORD_CONTENT_TYPE,
@@ -107,7 +108,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         params.append('page', String(page));
         params.append('pageSize', String(pageSize));
 
-        return `/users?${params.toString()}`;
+        return {
+          url: `/users?${params.toString()}`,
+          headers: {
+            Accept: USER_EMAIL_COLLECTION_CONTENT_TYPE,
+          },
+        };
       },
       transformResponse: (response: any, meta: any) => {
         const totalCount = Number(

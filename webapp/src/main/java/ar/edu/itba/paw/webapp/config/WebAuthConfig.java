@@ -107,54 +107,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return jacksonMessageConverter.getObjectMapper();
     }
 
-    /*@Override
-    public void configure(final HttpSecurity http) throws Exception {
-        http.addFilterBefore(new AuthPageFilter(env.getProperty("base.root"), anonymousPaths), DefaultLoginPageGeneratingFilter.class)
-                .sessionManagement()
-                .invalidSessionUrl("/login")
-                .and().authorizeRequests()
-                    .antMatchers(anonymousPaths).anonymous()
-                    .antMatchers(HttpMethod.GET,
-                                "/",
-                                "/institutions",
-                                "/search",
-                                "/notes/{noteId}",
-                                "/notes/{noteId}/download",
-                                "/notes/{noteId}/reviews",
-                                "/directory/{directoryId}",
-                                "/profile/{userId}/picture",
-                                "/user/{userId}/note-board",
-                                "/user/{userId}/reviews"
-
-                    ).permitAll()
-                    .regexMatchers(HttpMethod.GET, "/[0-9][0-9][0-9]").permitAll()
-                    .antMatchers("/manage/**").hasRole(Role.ROLE_ADMIN.getShortName())
-                    .anyRequest().authenticated()
-
-                .and().formLogin()
-                    .loginPage("/login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/", false)
-                    .failureHandler(loginFailureHandler)
-                .and().rememberMe()
-                    .rememberMeParameter("rememberMe")
-                    .userDetailsService(userDetailsService)
-                    .key(StreamUtils.copyToString(remembermeKey.getInputStream(), StandardCharsets.UTF_8))
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(15))
-
-                .and().logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login")
-
-                .and().exceptionHandling()
-                    .accessDeniedPage("/403")
-
-                .and().headers().frameOptions().sameOrigin()
-
-                .and().csrf().disable();
-    }*/
-
     @Bean
     public AbstractAuthFilter abstractAuthFilter() throws Exception {
         AbstractAuthFilter abstractAuthFilter = new AbstractAuthFilter(userService, verificationCodesService);

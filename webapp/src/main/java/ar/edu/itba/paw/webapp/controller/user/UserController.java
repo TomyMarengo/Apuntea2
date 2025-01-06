@@ -47,10 +47,20 @@ public class UserController {
 
     @GET
     @Path("/{id}")
-    @Produces(value = { ApunteaMediaType.USER })
+    @Produces(value = { ApunteaMediaType.USER})
     public Response getUser(@PathParam("id") final UUID id) {
         final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
         return Response.ok(UserResponseDto.fromUser(user, uriInfo)).build();
+    }
+
+    // TODO: Ask if this approach is correct
+    @GET
+    @Path("/{id}")
+    @Secured("ROLE_ADMIN")
+    @Produces(value = { ApunteaMediaType.USER_WITH_EMAIL})
+    public Response getUserWithEmail(@PathParam("id") final UUID id) {
+        final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
+        return Response.ok(UserResponseDto.fromUser(user, uriInfo, true)).build();
     }
 
     @GET
@@ -69,6 +79,29 @@ public class UserController {
         final Collection<UserResponseDto> dtoUsers = userPage.getContent()
                 .stream()
                 .map(u -> UserResponseDto.fromUser(u, uriInfo))
+                .collect(Collectors.toList());
+        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<UserResponseDto>>(dtoUsers) {}),
+                uriInfo,
+                userPage).build();
+    }
+
+    @GET
+    @Secured("ROLE_ADMIN")
+    @Produces(value = { ApunteaMediaType.USER_COLLECTION_WITH_EMAIL })
+    public Response listUsersWithEmail(@Valid @BeanParam final UserQuery userQuery) {
+        final Page<User> userPage = (userQuery.getEmail() != null) ?
+                Page.fromOptional(userService.findByEmail(userQuery.getEmail())) :
+                userService.getUsers(
+                        userQuery.getQuery(),
+                        userQuery.getStatus(),
+                        userQuery.getFollowedBy(),
+                        userQuery.getFollowing(),
+                        userQuery.getPage(),
+                        userQuery.getPageSize()
+                );
+        final Collection<UserResponseDto> dtoUsers = userPage.getContent()
+                .stream()
+                .map(u -> UserResponseDto.fromUser(u, uriInfo, true))
                 .collect(Collectors.toList());
         return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<UserResponseDto>>(dtoUsers) {}),
                 uriInfo,

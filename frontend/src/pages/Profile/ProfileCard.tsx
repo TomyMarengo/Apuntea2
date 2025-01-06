@@ -225,9 +225,6 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, onUpdateSuccess }) => {
                 <strong>{t('username')}:</strong> {user.username}
               </Typography>
               <Typography variant="body1" color="textSecondary">
-                <strong>{t('email')}:</strong> {user.email}
-              </Typography>
-              <Typography variant="body1" color="textSecondary">
                 <strong>{t('career')}:</strong>{' '}
                 {user.career?.name || t('notSet')}
               </Typography>

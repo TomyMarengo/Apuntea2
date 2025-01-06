@@ -16,7 +16,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Component
 public class InvalidExceptionMapper implements ExceptionMapper<InvalidException> {
-    private	static final Logger LOGGER = LoggerFactory.getLogger(InvalidReviewExceptionMapper.class);
+    private	static final Logger LOGGER = LoggerFactory.getLogger(InvalidExceptionMapper.class);
 
     @Autowired
     private MessageSource messageSource;

@@ -17,7 +17,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 @Component
 public class UnavailableNameExceptionMapper implements ExceptionMapper<UnavailableNameException> {
-    private	static final Logger LOGGER = LoggerFactory.getLogger(NotFoundExceptionMapper.class);
+    private	static final Logger LOGGER = LoggerFactory.getLogger(UnavailableNameExceptionMapper.class);
 
     @Autowired
     private MessageSource messageSource;
@@ -25,6 +25,6 @@ public class UnavailableNameExceptionMapper implements ExceptionMapper<Unavailab
     public Response toResponse(UnavailableNameException e) {
         LOGGER.error("{}: {}", e.getClass().getName(), e.getMessage());
         ApiErrorDto errorDto = new ApiErrorDto(messageSource.getMessage("unavailableName", null, LocaleHelper.getLocale()));
-        return Response.status(Response.Status.NOT_FOUND).type(MediaType.APPLICATION_JSON).entity(errorDto).build();
+        return Response.status(Response.Status.BAD_REQUEST).type(MediaType.APPLICATION_JSON).entity(errorDto).build();
     }
 }

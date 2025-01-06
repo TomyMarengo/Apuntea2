@@ -78,7 +78,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       )
       .max(30, t('validation.usernameMaxLength'))
       .optional(),
-    email: z.string().email(t('validation.emailInvalid')).optional(),
     careerId: z.string().uuid(t('validation.careerIdInvalid')).optional(),
   });
 
@@ -93,7 +92,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       firstName: user.firstName,
       lastName: user.lastName,
       username: user.username,
-      email: user.email,
       careerId: user.career?.id,
     },
   });
@@ -105,7 +103,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
         firstName: user.firstName,
         lastName: user.lastName,
         username: user.username,
-        email: user.email,
         careerId: user.career?.id,
       });
     }
@@ -122,7 +119,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
       if (dirtyFields.firstName) updatedFields.firstName = data.firstName;
       if (dirtyFields.lastName) updatedFields.lastName = data.lastName;
       if (dirtyFields.username) updatedFields.username = data.username;
-      if (dirtyFields.email) updatedFields.email = data.email;
       if (dirtyFields.careerId) updatedFields.careerId = data.careerId;
 
       // Update user info if any fields are dirty
@@ -215,21 +211,6 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
                 margin="normal"
                 error={!!errors.username}
                 helperText={errors.username?.message}
-              />
-            )}
-          />
-          <Controller
-            name="email"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label={t('labels.email')}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                error={!!errors.email}
-                helperText={errors.email?.message}
               />
             )}
           />
