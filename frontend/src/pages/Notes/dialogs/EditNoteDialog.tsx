@@ -84,7 +84,8 @@ const EditNoteDialog: React.FC<EditNoteDialogProps> = ({
   const onSubmit = async (data: NoteFormData) => {
     try {
       const result = await updateNote({
-        noteId: note.id,
+        // noteId: note.id,
+        url: note.selfUrl,
         name: data.name,
         visible: data.visible,
         category: data.category as NoteCategory,
