@@ -1,5 +1,3 @@
-// src/components/Follow/FollowersModal.tsx
-
 import {
   Dialog,
   DialogTitle,
@@ -14,7 +12,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { toast } from 'react-toastify';
 
 import FollowItem from './FollowItem';
-import { useGetFollowersQuery } from '../../store/slices/usersApiSlice';
+import { useLazyGetFollowersQuery } from '../../store/slices/usersApiSlice';
 import { User } from '../../types';
 
 interface FollowersModalProps {
@@ -39,14 +37,21 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const pageSize = 10;
 
-  // Fetch followers based on the current page
-  const { data, error, isLoading, isFetching, refetch } = useGetFollowersQuery(
-    { url: followingUrl, page, pageSize },
-    {
-      skip: !open,
-      refetchOnMountOrArgChange: true,
-    },
-  );
+  const [triggerGetFollowers, { data, error, isLoading, isFetching, reset }] =
+    useLazyGetFollowersQuery();
+
+  // Fetch followers when modal opens
+  useEffect(() => {
+    if (open) {
+      setPage(1);
+      setFollowers([]);
+      setHasMore(true);
+      setIsFetchingMore(false);
+      reset();
+      triggerGetFollowers({ url: followingUrl, page: 1, pageSize });
+      console.log('triggerGetFollowers');
+    }
+  }, [open]);
 
   // Handle errors
   useEffect(() => {
@@ -55,46 +60,46 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
     }
   }, [error, t]);
 
-  // Reset state when the modal opens
-  useEffect(() => {
-    if (open) {
-      setPage(1);
-      setFollowers([]);
-      setHasMore(true);
-      setIsFetchingMore(false);
-    }
-  }, [open]);
-
   // Accumulate followers when new data is received
   useEffect(() => {
-    if (data) {
-      // Filter duplicate followers
-      const newFollowers = data.users.filter(
-        (newFollower: User) => !followers.some((f) => f.id === newFollower.id),
-      );
+    if (!isLoading) {
+      const newFollowers =
+        data?.users.filter(
+          (newFollower: User) =>
+            !followers.some((f) => f.id === newFollower.id),
+        ) || [];
 
       setFollowers((prev) => [...prev, ...newFollowers]);
 
-      // Determine if there are more pages to load
-      if (page >= data.totalPages) {
+      if (data && page >= data.totalPages) {
         setHasMore(false);
       }
 
-      // Finish loading
       setIsFetchingMore(false);
     }
-  }, [data, page]);
+  }, [data]);
 
-  // Function to load more data
   const fetchMoreData = useCallback(() => {
     if (!isFetchingMore && hasMore && !isLoading && !isFetching) {
       setIsFetchingMore(true);
-      setPage((prev) => prev + 1);
+      setPage((prev) => {
+        const nextPage = prev + 1;
+        triggerGetFollowers({ url: followingUrl, page: nextPage, pageSize });
+        return nextPage;
+      });
     }
-  }, [isFetchingMore, hasMore, isLoading, isFetching]);
+  }, [
+    isFetchingMore,
+    hasMore,
+    isLoading,
+    isFetching,
+    followingUrl,
+    pageSize,
+    triggerGetFollowers,
+  ]);
 
   const handleChange = () => {
-    refetch();
+    triggerGetFollowers({ url: followingUrl, page: 1, pageSize });
     onChange();
   };
 
