@@ -50,7 +50,7 @@ export default function useLogin() {
       }
 
       // Retrieve complete user data
-      await getLoggedUser({ userId: user.id }).unwrap();
+      await getLoggedUser({ userData: user }).unwrap();
 
       // Decode the token
       token = decode(token);

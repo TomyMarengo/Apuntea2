@@ -38,10 +38,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
         meta: QueryReturnValue<any>,
       ): Promise<LoginResponse> => {
         const [user] = await response;
-        const token = meta.response?.headers
+        const token = (meta as any).response?.headers
           ?.get('Access-Token')
           ?.split(' ')[1];
-        const refreshToken = meta.response?.headers
+        const refreshToken = (meta as any).response?.headers
           ?.get('Refresh-Token')
           ?.split(' ')[1];
         return { token, refreshToken, user };
@@ -59,10 +59,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
         meta: QueryReturnValue<any>,
       ): Promise<LoginResponse> => {
         const user = response;
-        const token = meta.response?.headers
+        const token = (meta as any).response?.headers
           ?.get('Access-Token')
           ?.split(' ')[1];
-        const refreshToken = meta.response?.headers
+        const refreshToken = (meta as any).response?.headers
           ?.get('Refresh-Token')
           ?.split(' ')[1];
         return { user, token, refreshToken };

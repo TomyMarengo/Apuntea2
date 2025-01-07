@@ -28,6 +28,7 @@ interface GetUsersArgs {
 }
 
 interface UserArgs {
+  userData?: any;
   userId?: string;
   url?: string;
 }
@@ -157,14 +158,23 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       ],
     }),
     getLoggedUser: builder.query<User, UserArgs>({
-      async queryFn({ userId, url }, queryApi, _extraOptions, baseQuery) {
+      async queryFn(
+        { userData, userId, url },
+        queryApi,
+        _extraOptions,
+        baseQuery,
+      ) {
         try {
-          const userResult = await baseQuery({
-            url: url || `/users/${userId}`,
-          });
-          if (userResult.error) return { error: userResult.error };
-
-          const userData = userResult.data as any;
+          if (!userData) {
+            const userResult = await baseQuery({
+              url: url || `/users/${userId}`,
+              headers: {
+                Accept: USER_CONTENT_TYPE,
+              },
+            });
+            if (userResult.error) return { error: userResult.error };
+            userData = userResult.data as any;
+          }
 
           let careerData: Career | undefined;
           if (userData.career) {
