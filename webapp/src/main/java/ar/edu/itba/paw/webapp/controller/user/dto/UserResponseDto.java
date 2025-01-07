@@ -32,6 +32,7 @@ public class UserResponseDto {
 
     private URI subjects;
     private URI reviewsReceived;
+    private URI reviews;
 
     public static UserResponseDto fromUser(final User user, final UriInfo uriInfo) {
         return fromUser(user, uriInfo, false);
@@ -67,6 +68,7 @@ public class UserResponseDto {
         userDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("userId", user.getUserId().toString()).build();
         userDto.subjects = uriInfo.getBaseUriBuilder().path("subjects").queryParam("userId", user.getUserId().toString()).build();
         userDto.reviewsReceived = uriInfo.getBaseUriBuilder().path("reviews").queryParam("targetUser", user.getUserId()).build();
+        userDto.reviews = uriInfo.getBaseUriBuilder().path("reviews").queryParam("userId", user.getUserId()).build();
         return userDto;
     }
 
@@ -158,6 +160,10 @@ public class UserResponseDto {
         this.reviewsReceived = reviewsReceived;
     }
 
+    public void setReviews(URI reviews) {
+        this.reviews = reviews;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -230,5 +236,8 @@ public class UserResponseDto {
         return reviewsReceived;
     }
 
+    public URI getReviews() {
+        return reviews;
+    }
 }
 
