@@ -1,5 +1,18 @@
 import { http, HttpResponse } from "msw";
-import {apiUrl} from "../setup/utils";
+import {
+    apiUrl,
+    CREATED_RESPONSE,
+    NO_CONTENT_RESPONSE,
+    NOT_FOUND_RESPONSE,
+    NOT_ACCEPTABLE_RESPONSE,
+    UNSUPPORTED_MEDIA_TYPE_RESPONSE
+} from "../setup/utils";
+import {
+    NOTE_COLLECTION_CONTENT_TYPE,
+    NOTE_CONTENT_TYPE,
+    NOTE_CREATE_CONTENT_TYPE,
+    NOTE_UPDATE_CONTENT_TYPE
+} from "../../contentTypes";
 
 export const existingNoteId = "30f1c039-7714-44ec-a10d-7c8039d16335";
 export const existingNoteName = "formaa";
@@ -50,44 +63,61 @@ const notes = [
     },
 ]
 
-
-
-
 export const notesHandlers = [
     http.get(apiUrl("/notes/:id"), ({request, params}) => {
-        const note = notes.find(note => note.id === params.id);
-        return HttpResponse.json(note);
+        if (request.headers.get("Accept") === NOTE_CONTENT_TYPE) {
+            const note = notes.find(note => note.id === params.id);
+            return HttpResponse.json(note);
+        } else {
+            return NOT_ACCEPTABLE_RESPONSE();
+        }
     }),
     http.post(apiUrl("/notes"), async ( {request}) => {
-        const name = (await request.formData()).get("name");
-        if (notes.find(n => n.name === name)) {
-            return new HttpResponse(JSON.parse({ message: "The file name is already being used" }), {status: 400});
+        if(request.headers.get("Content-Type").substring(NOTE_CREATE_CONTENT_TYPE)) {
+            const name = (await request.formData()).get("name");
+            if (notes.find(n => n.name === name)) {
+                return new HttpResponse(JSON.parse({message: "The file name is already being used"}), {status: 400});
+            }
+            return CREATED_RESPONSE();
+        } else {
+            return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
         }
-        return new HttpResponse(null, {status: 201});
     }),
 
     http.patch(apiUrl("/notes/:id"), async ({request, params}) => {
-        const name = (await request.json()).name;
-        if (notes.find(n => n.id === params.id)) {
-            if (name && notes.find(n => (n.name === name && n.id !== params.id))) {
-                return new HttpResponse(JSON.parse({message: "The file name is already being used"}), {status: 400});
+        if(request.headers.get("Content-Type") === NOTE_UPDATE_CONTENT_TYPE) {
+            const name = (await request.json()).name;
+            if (notes.find(n => n.id === params.id)) {
+                if (name && notes.find(n => (n.name === name && n.id !== params.id))) {
+                    return new HttpResponse(JSON.parse({message: "The file name is already being used"}), {status: 400});
+                }
+                return NO_CONTENT_RESPONSE();
+            } else {
+                return NOT_FOUND_RESPONSE();
             }
-            return new HttpResponse(null, {status: 204});
         } else {
-            return new HttpResponse(null, {status: 404});
+            return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
         }
     }),
 
     http.get(apiUrl("/notes/:noteId/favorites/:userId"), ({request, params}) => {
         if (params.userId === favUserId && params.noteId === favNoteId) {
-            return new HttpResponse(null, {status: 204});
-        } else{
-            return new HttpResponse(null, {status: 404});
+            return NO_CONTENT_RESPONSE();
+        } else {
+            return NOT_FOUND_RESPONSE();
         }
     }),
     http.get(apiUrl("/notes"), ({request, params}) => {
-        //with X-Total-Pages and X-Total-Count headers
-        return new HttpResponse(JSON.stringify(notes), {headers: {"X-Total-Pages": 1, "X-Total-Count": notes.length}, status: 200});
+        if (request.headers.get("Accept") === NOTE_COLLECTION_CONTENT_TYPE) {
+            return new HttpResponse(JSON.stringify(notes), {
+                headers: {
+                    "X-Total-Pages": 1,
+                    "X-Total-Count": notes.length
+                }, status: 200
+            });
+        } else {
+            return NOT_ACCEPTABLE_RESPONSE();
+        }
     }),
 
 ];

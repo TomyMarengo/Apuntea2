@@ -2,8 +2,8 @@
 
 import { ApiResponse, apiSlice } from './apiSlice';
 import {
-  DELETE_REASON_CONTENT_TYPE,
-  NOTE_UPDATE_CONTENT_TYPE,
+  DELETE_REASON_CONTENT_TYPE, NOTE_COLLECTION_CONTENT_TYPE, NOTE_CONTENT_TYPE, NOTE_CREATE_CONTENT_TYPE,
+  NOTE_UPDATE_CONTENT_TYPE, USER_EMAIL_COLLECTION_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Note, NoteCategory } from '../../types';
 import { extractErrorMessages } from '../../utils/helpers';
@@ -65,7 +65,12 @@ interface PaginatedNotesResponse {
 export const notesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getNote: builder.query<Note, NoteQueryArgs>({
-      query: ({ noteId, url }) => url || `/notes/${noteId}`,
+      query: ({ noteId, url }) => ({
+        url: url || `/notes/${noteId}`,
+        headers: {
+          Accept: NOTE_CONTENT_TYPE,
+        }
+      }),
       transformResponse: (response: any) => {
         return mapApiNote(response);
       },
@@ -99,7 +104,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         const result = await baseQuery({
           url: '/notes',
           method: 'POST',
-          body: formData,
+          body: formData
         });
 
         let errorMessages = extractErrorMessages(result.error);
@@ -188,15 +193,20 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       GetUserNotesFavoritesArgs
     >({
       query: ({ userId, page = 1, pageSize = 10, url }) => {
-        if (url) {
-          return url;
-        }
-        const params = new URLSearchParams();
-        params.append('favBy', userId);
-        params.append('page', String(page));
-        params.append('pageSize', String(pageSize));
+        if (!url) {
+          const params = new URLSearchParams();
+          params.append('favBy', userId);
+          params.append('page', String(page));
+          params.append('pageSize', String(pageSize));
 
-        return `/notes?${params.toString()}`;
+          url =  `/notes?${params.toString()}`;
+        }
+        return {
+            url,
+            headers: {
+              Accept: NOTE_COLLECTION_CONTENT_TYPE,
+            }
+        }
       },
       transformResponse: (response: any, meta: any): PaginatedNotesResponse => {
         const totalCount = Number(
@@ -293,7 +303,12 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       },
     }),
     getLatestNotes: builder.query<Note[], NoteQueryArgs>({
-      query: ({ userId, url }) => url || `/notes?userId=${userId}&sortBy=date`,
+      query: ({ userId, url }) => ({
+        url: url || `/notes?userId=${userId}&sortBy=date`,
+        headers: {
+          Accept: NOTE_COLLECTION_CONTENT_TYPE,
+        }
+      }),
       transformResponse: (response: any) => {
         const notes: Note[] = Array.isArray(response)
           ? response.map(mapApiNote)

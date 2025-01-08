@@ -42,10 +42,12 @@ describe('notesApiSlice', () => {
         expect(notes).toEqual(expect.any(Array));
     });
 
+    const testFile = new Blob(['Hello', 'world'], { type: 'text/plain' })
+
     it("should create a note successfully", async () => {
         let { result: wrapperResult} = await useWithWrapper(async ()=> await useCreateNoteMutation(), store);
         const [createNote, createNoteResult] = await wrapperResult.current;
-        const result = await createNote({name: nonExistingNoteName}).unwrap();
+        const result = await createNote({name: nonExistingNoteName, file: testFile}).unwrap();
         expect(result.success).toBe(true);
         expect(result.messages).empty;
     });
@@ -53,7 +55,7 @@ describe('notesApiSlice', () => {
     it("should fail to create a note", async () => {
         let { result: wrapperResult} = await useWithWrapper(async ()=> await useCreateNoteMutation(), store);
         const [createNote, createNoteResult] = await wrapperResult.current;
-        const result = await createNote({name: existingNoteName}).unwrap();
+        const result = await createNote({name: existingNoteName, file: testFile}).unwrap();
         expect(result.success).toBe(false);
         expect(result.messages).not.empty;
     });
@@ -111,9 +113,6 @@ describe('notesApiSlice', () => {
         const { notes, totalCount, totalPages } = result.current.data;
         expectToBePagedContent(notes, totalCount, totalPages);
     });
-
-
-
 });
 
 //--useGetNoteQuery
