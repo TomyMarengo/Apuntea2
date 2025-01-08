@@ -51,18 +51,14 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     defaultValues,
   });
 
-  useEffect(() => {
-    reset(defaultValues);
-  }, [location.pathname]);
-
   const watchedValues = watch();
   const debouncedWord = useDebounce(watchedValues.word, 500);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
+    // if (isFirstRender.current) {
+    //   isFirstRender.current = false;
+    //   return;
+    // }
 
     const params = new URLSearchParams();
 
@@ -84,8 +80,12 @@ const useSearch = (parentId?: string): UseSearchReturn => {
       ? location.search.substring(1)
       : location.search;
 
-    if (newSearch !== currentSearch) {
-      navigate({ search: newSearch });
+    if (
+      newSearch !== currentSearch &&
+      (currentSearch !== '' || isFirstRender.current)
+    ) {
+      navigate({ search: newSearch }, { replace: isFirstRender.current });
+      isFirstRender.current = false;
     }
   }, [
     watchedValues.institutionId,
@@ -156,6 +156,10 @@ const useSearch = (parentId?: string): UseSearchReturn => {
       refetchNotes();
     }
   };
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [location.search]);
 
   const isLoading = isLoadingNotes || isLoadingDirs;
 
