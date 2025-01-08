@@ -2,7 +2,7 @@
 
 import { apiSlice, ApiResponse } from './apiSlice';
 import {
-  DELETE_REASON_CONTENT_TYPE,
+  DELETE_REASON_CONTENT_TYPE, DIRECTORY_COLLECTION_CONTENT_TYPE, DIRECTORY_CONTENT_TYPE,
   DIRECTORY_CREATE_CONTENT_TYPE,
   DIRECTORY_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
@@ -163,7 +163,12 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
     }),
 
     getDirectory: builder.query<Directory, DirectoryQueryArgs>({
-      query: ({ directoryId, url }) => url || `/directories/${directoryId}`,
+      query: ({ directoryId, url }) => ({
+        url: url || `/directories/${directoryId}`,
+        headers: {
+            Accept: DIRECTORY_CONTENT_TYPE,
+        }
+      }),
       transformResponse: (response: any) => {
         return mapApiDirectory(response);
       },
@@ -176,18 +181,22 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
       FavoritesArgs
     >({
       query: ({ userId, rdir, page = 1, pageSize = 10, url }) => {
-        if (url) {
-          return url;
+        if (!url) {
+          const params = new URLSearchParams();
+          params.append('favBy', userId);
+          params.append('page', String(page));
+          params.append('pageSize', String(pageSize));
+          if (rdir) {
+            params.append('rdir', rdir);
+          }
+          url = `/directories?${params.toString()}`
         }
-        const params = new URLSearchParams();
-        params.append('favBy', userId);
-        params.append('page', String(page));
-        params.append('pageSize', String(pageSize));
-        if (rdir) {
-          params.append('rdir', rdir);
-        }
-
-        return `/directories?${params.toString()}`;
+        return {
+            url: url,
+            headers: {
+              Accept: DIRECTORY_COLLECTION_CONTENT_TYPE,
+            }
+        };
       },
       transformResponse: (
         response: any,

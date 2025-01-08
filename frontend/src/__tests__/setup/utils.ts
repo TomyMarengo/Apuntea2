@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { expect } from 'vitest';
+import {HttpResponse} from "msw";
 
 export function setupApiStore(api: any) {
     const store = configureStore({
@@ -22,3 +23,11 @@ export function expectToBePagedContent(collection, totalCount, totalPages) {
     expect(totalCount).toEqual(expect.any(Number));
     expect(totalPages).toEqual(expect.any(Number));
 }
+
+export const NOT_FOUND_RESPONSE = () => new HttpResponse(null, {status: 404});
+export const NOT_ACCEPTABLE_RESPONSE = () => new HttpResponse(null, {status: 406});
+
+export const UNSUPPORTED_MEDIA_TYPE_RESPONSE = () => new HttpResponse(null, {status: 415});
+export const CREATED_RESPONSE = () => new HttpResponse(null, {status: 201});
+export const NO_CONTENT_RESPONSE = () => new HttpResponse(null, {status: 204});
+
