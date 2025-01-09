@@ -166,7 +166,7 @@
     "isRoot": "Directorio Raíz"
   },
   "directoryPage": {
-    "titlePage": "Directorio | Apuntea",
+    "titlePage": "{{directoryName}} | Apuntea",
     "loading": "Cargando...",
     "errorFetchingDirectory": "Error al obtener el directorio.",
     "noResults": "No se encontró contenido."

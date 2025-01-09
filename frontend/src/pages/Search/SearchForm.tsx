@@ -12,9 +12,12 @@ import {
   InputAdornment,
   Button,
   Autocomplete,
+  SelectChangeEvent,
 } from '@mui/material';
-import { Controller, Control, UseFormSetValue } from 'react-hook-form';
+import { useEffect, useCallback, useRef } from 'react';
+import { Controller, Control } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { SearchFormValues } from './searchSchema';
 import {
@@ -27,7 +30,6 @@ import { NoteCategory, Institution, Career, Subject } from '../../types';
 interface SearchFormProps {
   control: Control<SearchFormValues>;
   watch: SearchFormValues;
-  setValue: UseFormSetValue<SearchFormValues>;
   hideInstitution?: boolean;
   hideCareer?: boolean;
   hideSubject?: boolean;
@@ -36,7 +38,6 @@ interface SearchFormProps {
 export default function SearchForm({
   control,
   watch,
-  setValue,
   hideInstitution = false,
   hideCareer = false,
   hideSubject = false,
@@ -46,40 +47,89 @@ export default function SearchForm({
   const { institutionId, careerId, subjectId, word, category, sortBy, asc } =
     watch;
 
+  const navigate = useNavigate();
+
+  // Handler for category changes
   const onCategoryChange = (category: string) => {
-    setValue('category', category);
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set('category', category);
     if (category === 'directory' && sortBy === 'score') {
-      setValue('sortBy', 'modified');
+      newParams.set('sortBy', 'modified');
     }
-    setValue('page', '1');
+    newParams.set('page', '1');
+    navigate(`?${newParams.toString()}`);
   };
 
+  // Handler to toggle ascending/descending
   const onToggleAsc = () => {
-    setValue('asc', asc === 'true' ? 'false' : 'true');
-    setValue('page', '1');
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set('asc', asc === 'true' ? 'false' : 'true');
+    newParams.set('page', '1');
+    navigate(`?${newParams.toString()}`);
   };
 
+  // Handler to clear the word input
   const onClearWord = () => {
-    setValue('word', '');
-    setValue('page', '1');
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set('word', '');
+    newParams.set('page', '1');
+    navigate(`?${newParams.toString()}`);
   };
 
+  // Handler for institution changes
   const onInstitutionChange = (institutionId: string) => {
-    setValue('institutionId', institutionId);
-    setValue('careerId', '');
-    setValue('subjectId', '');
-    setValue('page', '1');
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set('institutionId', institutionId);
+    newParams.set('careerId', '');
+    newParams.set('subjectId', '');
+    newParams.set('page', '1');
+    navigate(`?${newParams.toString()}`);
   };
 
+  // Handler for career changes
   const onCareerChange = (careerId: string) => {
-    setValue('careerId', careerId);
-    setValue('subjectId', '');
-    setValue('page', '1');
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set('careerId', careerId);
+    newParams.set('subjectId', '');
+    newParams.set('page', '1');
+    navigate(`?${newParams.toString()}`);
   };
 
+  // Handler for subject changes
   const onSubjectChange = (subjectId: string) => {
-    setValue('subjectId', subjectId);
-    setValue('page', '1');
+    console.log('subjectId', subjectId);
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set('subjectId', subjectId);
+    newParams.set('page', '1');
+    navigate(`?${newParams.toString()}`);
+  };
+
+  // Ref to hold the debounce timeout
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  // Debounced handler for word changes
+  const onWordChange = useCallback(
+    (value: string) => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+
+      debounceTimeout.current = setTimeout(() => {
+        const newParams = new URLSearchParams(window.location.search);
+        newParams.set('word', value);
+        newParams.set('page', '1');
+        navigate(`?${newParams.toString()}`);
+      }, 500); // 500ms debounce delay
+    },
+    [navigate],
+  );
+
+  // Handler for sortBy changes
+  const onSortByChange = (e: SelectChangeEvent<string>) => {
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set('sortBy', e.target.value as string);
+    newParams.set('page', '1');
+    navigate(`?${newParams.toString()}`);
   };
 
   // Fetch data based on form values
@@ -96,6 +146,15 @@ export default function SearchForm({
       { careerId },
       { skip: !careerId || hideCareer },
     );
+
+  // Cleanup the debounce timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, []);
 
   return (
     <Box
@@ -195,6 +254,10 @@ export default function SearchForm({
               label={t('word')}
               variant="outlined"
               sx={{ flex: 1, minWidth: 220 }}
+              onChange={(e) => {
+                field.onChange(e);
+                onWordChange(e.target.value);
+              }}
               InputProps={{
                 endAdornment: word && (
                   <InputAdornment position="end">
@@ -237,7 +300,7 @@ export default function SearchForm({
             name="sortBy"
             control={control}
             render={({ field }) => (
-              <Select {...field} label={t('sortBy')}>
+              <Select {...field} label={t('sortBy')} onChange={onSortByChange}>
                 <MenuItem value="name">{t('name')}</MenuItem>
                 <MenuItem value="modified">{t('lastModifiedAt')}</MenuItem>
                 {category !== 'directory' && (

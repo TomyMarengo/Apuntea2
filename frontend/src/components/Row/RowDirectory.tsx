@@ -156,15 +156,6 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
     setOpenEditModal(false);
   };
 
-  // Menu action handlers
-  const handleOwnerNotes = () => {
-    const ownerId = directory.ownerUrl?.split('/').pop();
-    if (ownerId) {
-      navigate(`/users/${ownerId}`);
-    }
-    handleMenuClose();
-  };
-
   const handleOpenParent = () => {
     const parentId = directory.parentUrl?.split('/').pop();
     if (parentId) {

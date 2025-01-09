@@ -14,8 +14,8 @@ export default function SearchPage() {
   const {
     control,
     watchedValues,
-    setValue,
     isLoading,
+    isError,
     notes,
     directories,
     totalCount,
@@ -38,11 +38,7 @@ export default function SearchPage() {
           {t('title')}
         </Typography>
 
-        <SearchForm
-          control={control}
-          watch={watchedValues}
-          setValue={setValue}
-        />
+        <SearchForm control={control} watch={watchedValues} />
 
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -71,7 +67,6 @@ export default function SearchPage() {
                 pageSize={pageSize}
                 totalPages={totalPages}
                 totalCount={totalCount}
-                setValue={setValue}
               />
             )}
           </>

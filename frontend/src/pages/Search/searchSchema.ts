@@ -13,6 +13,7 @@ export const searchSchema = z.object({
   asc: z.string(),
   page: z.string(),
   pageSize: z.string(),
+  parentId: z.string().optional(),
 });
 
 export type SearchFormValues = z.infer<typeof searchSchema>;

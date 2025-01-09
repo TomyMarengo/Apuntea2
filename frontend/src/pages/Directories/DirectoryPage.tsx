@@ -8,7 +8,7 @@ import {
   Alert,
   IconButton,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -21,8 +21,8 @@ import DirectoryBreadcrumbs from '../../components/DirectoryBreadcrumbs';
 import PaginationBar from '../../components/PaginationBar';
 import useSearch from '../../hooks/useSearch';
 import { selectCurrentUser } from '../../store/slices/authSlice';
-import { useGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
-import { useGetUserQuery } from '../../store/slices/usersApiSlice';
+import { useLazyGetDirectoryQuery } from '../../store/slices/directoriesApiSlice';
+import { useLazyGetUserQuery } from '../../store/slices/usersApiSlice';
 import SearchForm from '../Search/SearchForm';
 import SearchResultsTable from '../Search/SearchResultsTable';
 
@@ -31,28 +31,39 @@ export default function DirectoryPage() {
   const { t } = useTranslation('directoryPage');
   const user = useSelector(selectCurrentUser);
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [
+    getDirectory,
+    {
+      data: directory,
+      isError: isErrorCurrentDirectory,
+      isLoading: isLoadingCurrentDirectory,
+    },
+  ] = useLazyGetDirectoryQuery();
+  const [
+    getUser,
+    { data: owner, isError: isErrorOwner, isLoading: isLoadingOwner },
+  ] = useLazyGetUserQuery();
 
-  // Fetch the current directory
-  const {
-    data: currentDirectory,
-    isLoading: isLoadingCurrentDirectory,
-    isError: isErrorCurrentDirectory,
-  } = useGetDirectoryQuery({ directoryId }, { skip: !directoryId });
+  useEffect(() => {
+    if (directoryId) {
+      getDirectory({ directoryId });
+    }
+  }, [directoryId, getDirectory]);
 
-  const ownerUrl = currentDirectory?.ownerUrl || '';
-  const {
-    data: ownerData,
-    isLoading: isLoadingOwner,
-    isError: isErrorOwner,
-  } = useGetUserQuery({ url: ownerUrl }, { skip: !ownerUrl });
-
-  const isOwner = user?.id === ownerData?.id;
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (directory?.ownerUrl) {
+        await getUser({ url: directory?.ownerUrl });
+      }
+    };
+    fetchUser();
+  }, [directory, getUser]);
 
   const {
     control,
     watchedValues,
-    setValue,
     isLoading,
+    isError,
     notes,
     directories,
     totalCount,
@@ -73,17 +84,18 @@ export default function DirectoryPage() {
   };
 
   // Determine the page title based on the state
-  let pageTitle = t('titlePage');
-  if (isLoadingCurrentDirectory || isLoadingOwner || isLoading) {
-    pageTitle = t('loading');
-  } else if (isErrorCurrentDirectory || isErrorOwner) {
+  let pageTitle = t('loading');
+  if (isErrorCurrentDirectory || isErrorOwner) {
     pageTitle = t('errorFetchingDirectory');
+  } else if (directory) {
+    pageTitle = t('titlePage', { directoryName: directory.name });
   }
 
   const onSuccessCreation = (category: string) => {
-    // refetch();
-    setValue('category', category);
+    /*
+    setValue('category', category); */
   };
+
   return (
     <>
       <Helmet>
@@ -109,12 +121,12 @@ export default function DirectoryPage() {
           !isLoading &&
           !isErrorCurrentDirectory &&
           !isErrorOwner &&
-          currentDirectory && (
+          directory && (
             <>
               {/* Directory Title */}
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Typography variant="h4">{currentDirectory.name}</Typography>
-                {ownerUrl && isOwner && (
+                <Typography variant="h4">{directory.name}</Typography>
+                {owner && owner.id === user.id && (
                   <IconButton onClick={handleEditClick}>
                     <EditIcon />
                   </IconButton>
@@ -122,14 +134,13 @@ export default function DirectoryPage() {
               </Box>
 
               {/* Directory Breadcrumbs */}
-              <DirectoryBreadcrumbs currentDirectory={currentDirectory} />
+              <DirectoryBreadcrumbs currentDirectory={directory} />
 
               <Box sx={{ mt: 3 }}>
                 {/* Search Component */}
                 <SearchForm
                   control={control}
                   watch={watchedValues}
-                  setValue={setValue}
                   hideInstitution
                   hideCareer
                   hideSubject
@@ -163,7 +174,6 @@ export default function DirectoryPage() {
                       pageSize={pageSize}
                       totalPages={totalPages}
                       totalCount={totalCount}
-                      setValue={setValue}
                     />
                   )}
                 </>
@@ -172,7 +182,7 @@ export default function DirectoryPage() {
               {/* FAB buttons to create notes or directories */}
               {directoryId &&
                 user &&
-                (ownerData?.id === user.id || !currentDirectory.parentUrl) && (
+                (owner?.id === user.id || !directory.parentUrl) && (
                   <Box
                     sx={{
                       display: 'flex',
@@ -200,7 +210,7 @@ export default function DirectoryPage() {
               <EditDirectoryDialog
                 open={openEditDialog}
                 onClose={handleCloseDialog}
-                directory={currentDirectory}
+                directory={directory}
                 showNameOnly
               />
             </>

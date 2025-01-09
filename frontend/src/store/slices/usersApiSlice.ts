@@ -566,6 +566,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetUsersQuery,
   useGetUserQuery,
+  useLazyGetUserPicture,
   useGetUserPictureQuery,
   useGetLoggedUserQuery,
   useLazyGetLoggedUserQuery,

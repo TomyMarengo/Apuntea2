@@ -166,7 +166,7 @@
     "isRoot": "Root Directory"
   },
   "directoryPage": {
-    "titlePage": "Directory | Apuntea",
+    "titlePage": "{{directoryName}} | Apuntea",
     "loading": "Loading...",
     "errorFetchingDirectory": "Error fetching directory.",
     "noResults": "No content found."
