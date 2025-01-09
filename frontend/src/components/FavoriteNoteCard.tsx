@@ -4,7 +4,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Box, Tooltip, IconButton, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -25,6 +25,7 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
   userId,
 }) => {
   const { t } = useTranslation('favoriteNoteCard');
+  const navigate = useNavigate();
   const [removeFavoriteNote] = useRemoveFavoriteNoteMutation();
   const [addFavoriteNote] = useAddFavoriteNoteMutation();
   const { data: isFavApi, refetch } = useGetIsFavoriteNoteQuery(
@@ -32,7 +33,12 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
     { skip: !userId || !note.id },
   );
 
-  // Local isFavorite state
+  const handleNavigate = () => {
+    if (note?.id) {
+      navigate(`/notes/${note.id}`);
+    }
+  };
+
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
 
   useEffect(() => {
@@ -41,11 +47,12 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
     }
   }, [isFavApi]);
 
-  // Toggle function
-  const handleToggleFavorite = async () => {
+  const handleToggleFavorite = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.stopPropagation();
     try {
       if (isFavorite) {
-        // call remove
         const result = await removeFavoriteNote({
           noteId: note.id,
           userId,
@@ -54,13 +61,11 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
           toast.success(t('unfavorited'));
         }
       } else {
-        // call add
         const result = await addFavoriteNote({ noteId: note.id }).unwrap();
         if (result.success) {
           toast.success(t('favorited'));
         }
       }
-      // refetch to confirm
       refetch();
     } catch (error) {
       toast.error(t('errorUnfavorite'));
@@ -70,6 +75,7 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
 
   return (
     <Box
+      onClick={handleNavigate}
       sx={{
         backgroundColor: 'transparent',
         display: 'flex',
@@ -83,37 +89,29 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
         },
       }}
     >
-      {/* Link area for note icon */}
-      <Link
-        to={`/notes/${note.id}`}
-        style={{ textDecoration: 'none', color: 'inherit' }}
-      >
-        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-          <NoteFileIcon fileType={note.fileType} size={48} />
+      <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+        <NoteFileIcon fileType={note.fileType} size={48} />
 
-          {/* Heart icon top-right */}
-          <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
-            <IconButton
-              onClick={handleToggleFavorite}
-              size="small"
-              sx={{
-                position: 'absolute',
-                top: -10,
-                right: -30,
-                zIndex: 999,
-              }}
-            >
-              {isFavorite ? (
-                <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
-              ) : (
-                <FavoriteBorderIcon
-                  sx={{ color: 'error.main', fontSize: 22 }}
-                />
-              )}
-            </IconButton>
-          </Tooltip>
-        </Box>
-      </Link>
+        {/* Heart icon top-right */}
+        <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
+          <IconButton
+            onClick={handleToggleFavorite}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: -10,
+              right: -30,
+              zIndex: 999,
+            }}
+          >
+            {isFavorite ? (
+              <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
+            ) : (
+              <FavoriteBorderIcon sx={{ color: 'error.main', fontSize: 22 }} />
+            )}
+          </IconButton>
+        </Tooltip>
+      </Box>
 
       {/* Name ellipsized */}
       <Typography

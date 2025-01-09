@@ -5,7 +5,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { Box, Tooltip, IconButton, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -25,6 +25,7 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
   userId,
 }) => {
   const { t } = useTranslation('favoriteDirectoryCard');
+  const navigate = useNavigate();
   const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
   const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
   const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
@@ -34,13 +35,23 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
 
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
 
+  const handleNavigate = () => {
+    if (directory?.id) {
+      navigate(`/directories/${directory.id}`);
+    }
+  };
+
   useEffect(() => {
     if (typeof isFavApi?.success === 'boolean') {
       setIsFavorite(isFavApi.success);
     }
   }, [isFavApi]);
 
-  const handleToggleFavorite = async () => {
+  const handleToggleFavorite = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.stopPropagation();
+
     try {
       if (isFavorite) {
         const result = await removeFavoriteDirectory({
@@ -71,6 +82,7 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
 
   return (
     <Box
+      onClick={handleNavigate}
       sx={{
         backgroundColor: 'transparent',
         display: 'flex',
@@ -84,45 +96,36 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
         },
       }}
     >
-      {/* Link for directory icon */}
-      <Link
-        to={`/directories/${directory.id}`}
-        style={{ textDecoration: 'none', color: 'inherit' }}
-      >
-        <Box sx={{ mb: 0.5, position: 'relative', display: 'inline-flex' }}>
-          <FolderIcon
+      <Box sx={{ mb: 0.5, position: 'relative', display: 'inline-flex' }}>
+        <FolderIcon
+          sx={{
+            fontSize: 48,
+            color: directory.iconColor
+              ? `#${directory.iconColor}`
+              : 'primary.main',
+          }}
+        />
+
+        {/* Heart icon top-right */}
+        <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
+          <IconButton
+            onClick={handleToggleFavorite}
+            size="small"
             sx={{
-              fontSize: 48,
-              color: directory.iconColor
-                ? `#${directory.iconColor}`
-                : 'primary.main',
+              position: 'absolute',
+              top: -10,
+              right: -30,
+              zIndex: 999,
             }}
-          />
-
-          {/* Heart icon top-right */}
-          <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
-            <IconButton
-              onClick={handleToggleFavorite}
-              size="small"
-              sx={{
-                position: 'absolute',
-                top: -10,
-                right: -30,
-                zIndex: 999,
-              }}
-            >
-              {isFavorite ? (
-                <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
-              ) : (
-                <FavoriteBorderIcon
-                  sx={{ color: 'error.main', fontSize: 22 }}
-                />
-              )}
-            </IconButton>
-          </Tooltip>
-        </Box>
-      </Link>
-
+          >
+            {isFavorite ? (
+              <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
+            ) : (
+              <FavoriteBorderIcon sx={{ color: 'error.main', fontSize: 22 }} />
+            )}
+          </IconButton>
+        </Tooltip>
+      </Box>
       <Typography
         variant="body2"
         sx={{
