@@ -299,13 +299,13 @@ const AdminCareersPage: React.FC = () => {
 
             {/* Right side: Action Icons */}
             <Box sx={{ display: 'flex', gap: 2 }}>
-              <Tooltip title={t('addSubjectModal.title')}>
+              <Tooltip title={t('addSubject')}>
                 <IconButton color="primary" onClick={handleOpenAddModal}>
                   <LibraryAddIcon />
                 </IconButton>
               </Tooltip>
 
-              <Tooltip title={t('createSubjectModal.title')}>
+              <Tooltip title={t('createSubject')}>
                 <IconButton color="success" onClick={handleOpenCreateModal}>
                   <AddBoxIcon />
                 </IconButton>

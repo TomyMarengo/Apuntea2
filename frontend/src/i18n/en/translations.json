@@ -55,7 +55,9 @@
     "loadingSubjects": "Loading subjects...",
     "errorFetchingDirectory": "Error fetching directory: {{error}}",
     "noSubjects": "There are no subjects in this career.",
-    "title": "Manage Careers"
+    "title": "Manage Careers",
+    "addSubject": "Add Subject",
+    "createSubject": "Create Subject"
   },
   "adminUsersPage": {
     "titlePage": "Manage Users | Apuntea",
@@ -506,7 +508,7 @@
   "recentReviews": {
     "loading": "Loading...",
     "errorFetchingReviews": "Error fetching reviews.",
-    "recentReviews": "Recent reviews",
+    "recentReviews": "Latest reviews from the community",
     "viewMore": "View More",
     "noRecentReviews": "No recent reviews found."
   },

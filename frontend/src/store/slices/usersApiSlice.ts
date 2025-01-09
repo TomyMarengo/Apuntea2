@@ -361,7 +361,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         params.append('page', String(page));
         params.append('pageSize', String(pageSize));
 
-        return url + `&${params.toString()}`;
+        return {
+          url: url + `&${params.toString()}`,
+          headers: {
+            Accept: USER_COLLECTION_CONTENT_TYPE,
+          },
+        };
       },
       transformResponse: (response: any, meta: any) => {
         const totalCount = Number(
@@ -394,7 +399,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         params.append('page', String(page));
         params.append('pageSize', String(pageSize));
 
-        return url + `&${params.toString()}`;
+        return {
+          url: url + `&${params.toString()}`,
+          headers: {
+            Accept: USER_COLLECTION_CONTENT_TYPE,
+          },
+        };
       },
       transformResponse: (response: any, meta: any) => {
         const totalCount = Number(

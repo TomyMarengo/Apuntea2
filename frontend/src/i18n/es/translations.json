@@ -55,7 +55,9 @@
     "loadingSubjects": "Cargando materias...",
     "errorFetchingDirectory": "Error al obtener el directorio: {{error}}",
     "noSubjects": "No hay materias en esta carrera.",
-    "title": "Administrar Carreras"
+    "title": "Administrar Carreras",
+    "addSubject": "Agregar Materia",
+    "createSubject": "Crear Materia"
   },
   "adminUsersPage": {
     "titlePage": "Administrar Usuarios | Apuntea",
@@ -504,7 +506,7 @@
   "recentReviews": {
     "loading": "Cargando...",
     "errorFetchingReviews": "Error al obtener las reseñas.",
-    "recentReviews": "Reseñas recientes",
+    "recentReviews": "Últimas reseñas realizadas por la comunidad",
     "viewMore": "Ver Más",
     "noRecentReviews": "No se encontraron reseñas recientes."
   },
