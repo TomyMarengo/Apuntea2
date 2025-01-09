@@ -4,7 +4,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Box, Tooltip, IconButton, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -25,7 +25,6 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
   userId,
 }) => {
   const { t } = useTranslation('favoriteNoteCard');
-  const navigate = useNavigate();
   const [removeFavoriteNote] = useRemoveFavoriteNoteMutation();
   const [addFavoriteNote] = useAddFavoriteNoteMutation();
   const { data: isFavApi, refetch } = useGetIsFavoriteNoteQuery(
@@ -33,12 +32,7 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
     { skip: !userId || !note.id },
   );
 
-  const handleNavigate = () => {
-    if (note?.id) {
-      navigate(`/notes/${note.id}`);
-    }
-  };
-
+  // Local isFavorite state
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
 
   useEffect(() => {
@@ -50,9 +44,11 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
   const handleToggleFavorite = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
+    event.preventDefault();
     event.stopPropagation();
     try {
       if (isFavorite) {
+        // call remove
         const result = await removeFavoriteNote({
           noteId: note.id,
           userId,
@@ -61,11 +57,13 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
           toast.success(t('unfavorited'));
         }
       } else {
+        // call add
         const result = await addFavoriteNote({ noteId: note.id }).unwrap();
         if (result.success) {
           toast.success(t('favorited'));
         }
       }
+      // refetch to confirm
       refetch();
     } catch (error) {
       toast.error(t('errorUnfavorite'));
@@ -75,7 +73,8 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
 
   return (
     <Box
-      onClick={handleNavigate}
+      component={RouterLink}
+      to={`/notes/${note.id}`}
       sx={{
         backgroundColor: 'transparent',
         display: 'flex',

@@ -5,7 +5,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { Box, Tooltip, IconButton, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -25,7 +25,6 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
   userId,
 }) => {
   const { t } = useTranslation('favoriteDirectoryCard');
-  const navigate = useNavigate();
   const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
   const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
   const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
@@ -34,12 +33,6 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
   );
 
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
-
-  const handleNavigate = () => {
-    if (directory?.id) {
-      navigate(`/directories/${directory.id}`);
-    }
-  };
 
   useEffect(() => {
     if (typeof isFavApi?.success === 'boolean') {
@@ -50,6 +43,7 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
   const handleToggleFavorite = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
+    event.preventDefault();
     event.stopPropagation();
 
     try {
@@ -82,7 +76,8 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
 
   return (
     <Box
-      onClick={handleNavigate}
+      component={RouterLink}
+      to={`/directories/${directory.id}`}
       sx={{
         backgroundColor: 'transparent',
         display: 'flex',
@@ -126,6 +121,7 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
           </IconButton>
         </Tooltip>
       </Box>
+
       <Typography
         variant="body2"
         sx={{

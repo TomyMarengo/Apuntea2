@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
@@ -37,7 +37,6 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   shouldFavorite = false,
 }) => {
   const { t } = useTranslation('subjectDirectoryCard');
-  const navigate = useNavigate();
 
   // Fetch the number of notes for this subject and user
   const { data: notesResult, isLoading: notesLoading } = useSearchNotesQuery(
@@ -66,14 +65,6 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
     },
   );
 
-  // Handle navigation to the directory
-  const handleNavigate = () => {
-    if (directory?.id) {
-      navigate(`/directories/${directory.id}?userId=${userId}`);
-    }
-  };
-
-  // TODO: Implement useFavorite hook
   const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
   const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
   const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
@@ -127,7 +118,10 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
 
   return (
     <Box
-      onClick={handleNavigate}
+      component={RouterLink}
+      to={
+        directory ? `/directories/${directory.id}?userId=${userId}` : '/notes'
+      }
       sx={{
         backgroundColor: 'transparent',
         display: 'flex',
@@ -222,12 +216,6 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
       >
         {subject.name}
       </Typography>
-      {/* Handle Directory Fetch Error */}
-      {dirError && (
-        <Typography variant="caption" color="error">
-          {t('errorFetchingDirectory')}
-        </Typography>
-      )}
     </Box>
   );
 };
