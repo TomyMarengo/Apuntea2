@@ -143,24 +143,28 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
         />
 
         {/* Heart icon top-right */}
-        <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
-          <IconButton
-            onClick={handleToggleFavorite}
-            size="small"
-            sx={{
-              position: 'absolute',
-              top: -10,
-              right: -30,
-              zIndex: 999,
-            }}
-          >
-            {isFavorite ? (
-              <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
-            ) : (
-              <FavoriteBorderIcon sx={{ color: 'error.main', fontSize: 22 }} />
-            )}
-          </IconButton>
-        </Tooltip>
+        {loggedUser && (
+          <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
+            <IconButton
+              onClick={handleToggleFavorite}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: -10,
+                right: -30,
+                zIndex: 999,
+              }}
+            >
+              {isFavorite ? (
+                <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
+              ) : (
+                <FavoriteBorderIcon
+                  sx={{ color: 'error.main', fontSize: 22 }}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
+        )}
 
         {/* Notes Count */}
         <Tooltip

@@ -127,7 +127,7 @@ const FollowItem: React.FC<FollowItemProps> = ({
           </MuiLink>
         }
       />
-      {followId !== currentUserId && (
+      {currentUserId && followId !== currentUserId && (
         <Box>
           {isFollowing?.success ? (
             <Button variant="outlined" color="primary" onClick={handleUnfollow}>

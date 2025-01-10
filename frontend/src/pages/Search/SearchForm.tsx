@@ -379,7 +379,11 @@ export default function SearchForm({
               control={control}
               render={({ field }) => (
                 <Select {...field} label={t('categoryBy')}>
-                  <MenuItem key="all" value="note">
+                  <MenuItem
+                    key="all"
+                    value="note"
+                    onClick={() => onCategoryChange('note')}
+                  >
                     {t('all')}
                   </MenuItem>
                   {Object.values(NoteCategory).map((noteCategory) => (

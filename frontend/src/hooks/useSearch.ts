@@ -37,7 +37,7 @@ const useSearch = (parentId?: string): UseSearchReturn => {
       word: searchParams.get('word') || '',
       category: searchParams.get('category') || 'note',
       sortBy: searchParams.get('sortBy') || 'modified',
-      asc: searchParams.get('asc') || 'true',
+      asc: searchParams.get('asc') || 'false',
       page: searchParams.get('page') || '1',
       pageSize: searchParams.get('pageSize') || '10',
       parentId: parentId || '',

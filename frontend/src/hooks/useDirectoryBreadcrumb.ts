@@ -38,7 +38,6 @@ const useDirectoryBreadcrumb = ({
           if (response === null) {
             break;
           }
-          console.log('directories:', directories);
           directories.unshift(response);
           currentParentUrl = response.parentUrl;
         }

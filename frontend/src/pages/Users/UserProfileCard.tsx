@@ -162,33 +162,35 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
               ) : (
                 <Typography variant="h5">{user.username}</Typography>
               )}
-              <Box sx={{ marginLeft: 'auto' }}>
-                {isFollowing?.success ? (
-                  <Button
-                    variant="outlined"
-                    onClick={handleUnfollow}
-                    disabled={isUnfollowingLoading}
-                  >
-                    {isUnfollowingLoading ? (
-                      <CircularProgress size={24} />
-                    ) : (
-                      t('unfollow')
-                    )}
-                  </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    onClick={handleFollow}
-                    disabled={isFollowingLoading}
-                  >
-                    {isFollowingLoading ? (
-                      <CircularProgress size={24} />
-                    ) : (
-                      t('follow')
-                    )}
-                  </Button>
-                )}
-              </Box>
+              {currentUserId && (
+                <Box sx={{ marginLeft: 'auto' }}>
+                  {isFollowing?.success ? (
+                    <Button
+                      variant="outlined"
+                      onClick={handleUnfollow}
+                      disabled={isUnfollowingLoading}
+                    >
+                      {isUnfollowingLoading ? (
+                        <CircularProgress size={24} />
+                      ) : (
+                        t('unfollow')
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      onClick={handleFollow}
+                      disabled={isFollowingLoading}
+                    >
+                      {isFollowingLoading ? (
+                        <CircularProgress size={24} />
+                      ) : (
+                        t('follow')
+                      )}
+                    </Button>
+                  )}
+                </Box>
+              )}
             </Box>
             <Box sx={{ mt: 1 }}>
               <Typography variant="body1" color="textSecondary">
