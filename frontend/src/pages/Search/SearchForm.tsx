@@ -127,10 +127,14 @@ export default function SearchForm({
 
       debounceTimeout.current = setTimeout(() => {
         const newParams = new URLSearchParams(window.location.search);
-        newParams.set('word', value);
+        if (!value) {
+          newParams.delete('word');
+        } else {
+          newParams.set('word', value);
+        }
         newParams.set('page', '1');
         navigate(`?${newParams.toString()}`);
-      }, 500); // 500ms debounce delay
+      }, 500);
     },
     [navigate],
   );

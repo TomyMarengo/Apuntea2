@@ -45,12 +45,10 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     [searchParams, parentId],
   );
 
-  const { control, watch, reset, formState } = useForm<SearchFormValues>({
+  const { control, watch, reset } = useForm<SearchFormValues>({
     resolver: zodResolver(searchSchema),
     defaultValues,
   });
-
-  console.log('Form state:', formState);
 
   const watchedValues = watch();
 
@@ -73,7 +71,6 @@ const useSearch = (parentId?: string): UseSearchReturn => {
   };
 
   useEffect(() => {
-    console.log('Fetch!');
     reset(defaultValues);
     fetchData(defaultValues);
   }, [searchParams, parentId]);
