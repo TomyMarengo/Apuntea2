@@ -24,7 +24,7 @@ interface FollowingModalProps {
   handleClose: () => void;
   userId: string;
   followedByUrl: string;
-  onChange: () => void;
+  onChange?: () => void;
 }
 
 const FollowingModal: React.FC<FollowingModalProps> = ({
@@ -32,7 +32,7 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
   handleClose,
   userId,
   followedByUrl,
-  onChange,
+  onChange = () => {},
 }) => {
   const { t } = useTranslation('followingModal');
   const [page, setPage] = useState(1);

@@ -152,8 +152,9 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
             };
           }
 
-          const subjectUrl =
-            subjectResult.meta?.response.headers.get('Location');
+          const subjectUrl = (subjectResult.meta as any)?.response.headers.get(
+            'Location',
+          );
           const subjectId = subjectUrl?.split('/').pop();
 
           // Step 2: Associate the subject with the career and year

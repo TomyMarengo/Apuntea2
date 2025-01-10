@@ -16,7 +16,7 @@ public class UserResponseDto {
     private String locale;
     private String username;
     private String status;
-    private Boolean notificationsEnabled;
+    private boolean notificationsEnabled;
 
 
     private URI self;
@@ -30,7 +30,6 @@ public class UserResponseDto {
     private URI followedBy;
     private URI followers;
     private URI notes;
-
     private URI subjects;
     private URI reviewsReceived;
     private URI reviews;

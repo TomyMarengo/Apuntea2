@@ -45,7 +45,7 @@ const baseQueryWithReauth: BaseQueryFn<
       typeof args === 'object' &&
       'headers' in args &&
       args.headers &&
-      args.headers['Content-Type'] === USER_UPDATE_CONTENT_TYPE
+      (args.headers as any)['Content-Type'] === USER_UPDATE_CONTENT_TYPE
     ) {
       throw new Error('InvalidPassword');
     }

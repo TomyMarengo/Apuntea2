@@ -121,7 +121,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           },
         };
       },
-      invalidatesTags: (result, error, { directoryId }) => [
+      invalidatesTags: (_result, _error, { directoryId }) => [
         { type: 'Directories', id: directoryId },
       ],
     }),
@@ -167,7 +167,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: any) => {
         return mapApiDirectory(response);
       },
-      providesTags: (result, error, { directoryId }) => [
+      providesTags: (_result, _error, { directoryId }) => [
         { type: 'Directories', id: directoryId },
       ],
     }),

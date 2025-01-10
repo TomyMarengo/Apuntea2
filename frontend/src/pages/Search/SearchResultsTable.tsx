@@ -6,13 +6,7 @@ import React from 'react';
 import ResultsTable from '../../components/ResultsTable';
 import RowDirectory from '../../components/Row/RowDirectory';
 import RowNote from '../../components/Row/RowNote';
-import {
-  Note,
-  Directory,
-  Column,
-  ColumnNote,
-  ColumnDirectory,
-} from '../../types';
+import { Note, Directory, ColumnNote, ColumnDirectory } from '../../types';
 
 interface Props {
   showNotes: boolean;

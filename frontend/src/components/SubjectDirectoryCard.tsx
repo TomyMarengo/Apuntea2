@@ -55,11 +55,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   const notesCount = notesResult?.totalCount || 0;
 
   // Fetch the Directory data using the rootDirectoryUrl from the subject
-  const {
-    data: directory,
-    isLoading: dirLoading,
-    isError: dirError,
-  } = useGetDirectoryQuery(
+  const { data: directory, isLoading: dirLoading } = useGetDirectoryQuery(
     { url: subject.rootDirectoryUrl },
     {
       skip: !subject.rootDirectoryUrl,

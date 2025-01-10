@@ -20,7 +20,7 @@ interface FollowersModalProps {
   handleClose: () => void;
   userId: string;
   followingUrl: string;
-  onChange: () => void;
+  onChange?: () => void;
 }
 
 const FollowersModal: React.FC<FollowersModalProps> = ({
@@ -28,7 +28,7 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
   handleClose,
   userId,
   followingUrl,
-  onChange,
+  onChange = () => {},
 }) => {
   const { t } = useTranslation('followersModal');
   const [page, setPage] = useState(1);

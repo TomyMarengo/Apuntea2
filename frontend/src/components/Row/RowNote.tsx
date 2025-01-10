@@ -160,19 +160,6 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
     }
   };
 
-  // Menu action handlers
-  const handleOwnerNotes = () => {
-    const ownerId = note.ownerUrl?.split('/').pop();
-    if (ownerId) {
-      if (user?.id === ownerId) {
-        navigate('/notes');
-      } else {
-        navigate(`/users/${ownerId}`);
-      }
-    }
-    handleMenuClose();
-  };
-
   const handleOpenParent = () => {
     const parentId = note.parentUrl?.split('/').pop();
     if (parentId) {

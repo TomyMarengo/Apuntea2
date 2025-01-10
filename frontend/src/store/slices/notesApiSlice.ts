@@ -69,7 +69,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response: any) => {
         return mapApiNote(response);
       },
-      providesTags: (result, error, { noteId }) => [
+      providesTags: (_result, _error, { noteId }) => [
         { type: 'Notes', id: noteId },
       ],
     }),
@@ -143,7 +143,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           },
         };
       },
-      invalidatesTags: (result, error, { noteId }) => [
+      invalidatesTags: (_result, _error, { noteId }) => [
         { type: 'Notes', id: noteId },
       ],
     }),

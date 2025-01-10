@@ -15,7 +15,6 @@ export default function SearchPage() {
     control,
     watchedValues,
     isLoading,
-    isError,
     notes,
     directories,
     totalCount,
