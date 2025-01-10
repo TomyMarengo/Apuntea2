@@ -24,6 +24,7 @@ export function expectToBePagedContent(collection, totalCount, totalPages) {
     expect(totalPages).toEqual(expect.any(Number));
 }
 
+export const UNAUTHORIZED_RESPONSE = () => new HttpResponse(null, {status: 401});
 export const NOT_FOUND_RESPONSE = () => new HttpResponse(null, {status: 404});
 export const NOT_ACCEPTABLE_RESPONSE = () => new HttpResponse(null, {status: 406});
 
