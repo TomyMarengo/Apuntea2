@@ -205,7 +205,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
               />
               <MuiLink
                 component={Link}
-                to={`/directories/${directory.id}`}
+                to={`/directories/${directory.id}?category=directory`}
                 underline="hover"
                 sx={{ ml: 1 }}
               >

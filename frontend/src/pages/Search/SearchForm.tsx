@@ -71,7 +71,7 @@ export default function SearchForm({
   // Handler to clear the word input
   const onClearWord = () => {
     const newParams = new URLSearchParams(window.location.search);
-    newParams.set('word', '');
+    newParams.delete('word');
     newParams.set('page', '1');
     navigate(`?${newParams.toString()}`);
   };
@@ -79,9 +79,13 @@ export default function SearchForm({
   // Handler for institution changes
   const onInstitutionChange = (institutionId: string) => {
     const newParams = new URLSearchParams(window.location.search);
-    newParams.set('institutionId', institutionId);
-    newParams.set('careerId', '');
-    newParams.set('subjectId', '');
+    if (!institutionId) {
+      newParams.delete('institutionId');
+    } else {
+      newParams.set('institutionId', institutionId);
+    }
+    newParams.delete('careerId');
+    newParams.delete('subjectId');
     newParams.set('page', '1');
     navigate(`?${newParams.toString()}`);
   };
@@ -89,17 +93,24 @@ export default function SearchForm({
   // Handler for career changes
   const onCareerChange = (careerId: string) => {
     const newParams = new URLSearchParams(window.location.search);
-    newParams.set('careerId', careerId);
-    newParams.set('subjectId', '');
+    if (!careerId) {
+      newParams.delete('careerId');
+    } else {
+      newParams.set('careerId', careerId);
+    }
+    newParams.delete('subjectId');
     newParams.set('page', '1');
     navigate(`?${newParams.toString()}`);
   };
 
   // Handler for subject changes
   const onSubjectChange = (subjectId: string) => {
-    console.log('subjectId', subjectId);
     const newParams = new URLSearchParams(window.location.search);
-    newParams.set('subjectId', subjectId);
+    if (!subjectId) {
+      newParams.delete('subjectId');
+    } else {
+      newParams.set('subjectId', subjectId);
+    }
     newParams.set('page', '1');
     navigate(`?${newParams.toString()}`);
   };

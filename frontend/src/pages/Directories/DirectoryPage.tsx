@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import EditDirectoryDialog from './dialogs/EditDirectoryDialog';
 import CreateDirectoryFab from '../../components/CreateDirectoryFab';
@@ -29,6 +29,7 @@ import SearchResultsTable from '../Search/SearchResultsTable';
 export default function DirectoryPage() {
   const { directoryId } = useParams<{ directoryId: string }>();
   const { t } = useTranslation('directoryPage');
+  const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [
@@ -91,9 +92,16 @@ export default function DirectoryPage() {
     pageTitle = t('titlePage', { directoryName: directory.name });
   }
 
-  const onSuccessCreation = (category: string) => {
-    /*
-    setValue('category', category); */
+  const onSuccessDirectoryCreation = () => {
+    if (watchedValues.category !== 'directory') {
+      navigate(`/directories/${directoryId}?category=directory`);
+    }
+  };
+
+  const onSuccessNoteCreation = () => {
+    if (watchedValues.category === 'directory') {
+      navigate(`/directories/${directoryId}`);
+    }
   };
 
   return (
@@ -197,11 +205,11 @@ export default function DirectoryPage() {
                   >
                     <CreateNoteFab
                       parentId={directoryId}
-                      onSuccess={() => onSuccessCreation('note')}
+                      onSuccess={onSuccessNoteCreation}
                     />
                     <CreateDirectoryFab
                       parentId={directoryId}
-                      onSuccess={() => onSuccessCreation('directory')}
+                      onSuccess={onSuccessDirectoryCreation}
                     />
                   </Box>
                 )}
