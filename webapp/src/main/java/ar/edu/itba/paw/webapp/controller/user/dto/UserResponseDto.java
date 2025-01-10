@@ -28,6 +28,7 @@ public class UserResponseDto {
     private URI subjectFavorites;
     private URI following;
     private URI followedBy;
+    private URI followers;
     private URI notes;
 
     private URI subjects;
@@ -65,6 +66,7 @@ public class UserResponseDto {
         userDto.subjectFavorites = uriInfo.getBaseUriBuilder().path("directories").queryParam("favBy", user.getUserId()).queryParam("rdir", true).build();
         userDto.following = uriInfo.getBaseUriBuilder().path("users").queryParam("following", user.getUserId().toString()).build();
         userDto.followedBy = uriInfo.getBaseUriBuilder().path("users").queryParam("followedBy", user.getUserId().toString()).build();
+        userDto.followers = uriInfo.getBaseUriBuilder().path("users").path(user.getUserId().toString()).path("followers").build();
         userDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("userId", user.getUserId().toString()).build();
         userDto.subjects = uriInfo.getBaseUriBuilder().path("subjects").queryParam("userId", user.getUserId().toString()).build();
         userDto.reviewsReceived = uriInfo.getBaseUriBuilder().path("reviews").queryParam("targetUser", user.getUserId()).build();
@@ -164,6 +166,10 @@ public class UserResponseDto {
         this.reviews = reviews;
     }
 
+    public void setFollowers(URI followers) {
+        this.followers = followers;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -238,6 +244,10 @@ public class UserResponseDto {
 
     public URI getReviews() {
         return reviews;
+    }
+
+    public URI getFollowers() {
+        return followers;
     }
 }
 

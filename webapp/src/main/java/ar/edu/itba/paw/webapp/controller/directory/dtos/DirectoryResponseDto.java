@@ -20,6 +20,8 @@ public class DirectoryResponseDto {
     private URI owner;
     private URI parent;
     private URI subject;
+    private URI notes;
+    private URI directories;
 
     public static DirectoryResponseDto fromDirectory(Directory directory, UriInfo uriInfo){
         final DirectoryResponseDto directoryDto = new DirectoryResponseDto();
@@ -36,6 +38,8 @@ public class DirectoryResponseDto {
             directoryDto.parent = uriInfo.getBaseUriBuilder().path("directories").path(directory.getParentId().toString()).build();
         if (directory.getSubject() != null)
             directoryDto.subject = uriInfo.getBaseUriBuilder().path("subjects").path(directory.getSubject().getSubjectId().toString()).build();
+        directoryDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("parentId", directory.getId().toString()).build();
+        directoryDto.directories = uriInfo.getBaseUriBuilder().path("directories").queryParam("parentId", directory.getId().toString()).build();
         return directoryDto;
     }
 
@@ -117,5 +121,21 @@ public class DirectoryResponseDto {
 
     public void setSubject(URI subject) {
         this.subject = subject;
+    }
+
+    public URI getNotes() {
+        return notes;
+    }
+
+    public void setNotes(URI notes) {
+        this.notes = notes;
+    }
+
+    public URI getDirectories() {
+        return directories;
+    }
+
+    public void setDirectories(URI directories) {
+        this.directories = directories;
     }
 }
