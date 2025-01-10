@@ -107,7 +107,7 @@
     "hidden": "Oculto",
     "chooseFile": "Elegir Archivo",
     "submit": "Enviar",
-    "missingFields": "Por favor, ingresa el nombre, el archivo y la materia.",
+    "missingFields": "Por favor, ingresa el nombre y el archivo.",
     "noteCreated": "¡Apunte creado exitosamente!",
     "noteCreationFailed": "Error al crear el apunte{{errorMessage}}",
     "theory": "Teoría",

@@ -64,7 +64,6 @@ export default function DirectoryPage() {
     control,
     watchedValues,
     isLoading,
-    isError,
     notes,
     directories,
     totalCount,

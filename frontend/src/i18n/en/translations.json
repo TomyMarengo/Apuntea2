@@ -107,7 +107,7 @@
     "hidden": "Hidden",
     "chooseFile": "Choose File",
     "submit": "Submit",
-    "missingFields": "Please provide note name, file, and subject.",
+    "missingFields": "Please provide note name and the file.",
     "noteCreated": "Note created successfully!",
     "noteCreationFailed": "Failed to create note{{errorMessage}}",
     "theory": "Theory",
