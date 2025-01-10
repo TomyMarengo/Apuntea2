@@ -289,10 +289,73 @@ export default function SearchForm({
 
       {/* ROW 2: Category, Sort By, Ascending/Descending */}
       <Box
-        sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'center' }}
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 2,
+          alignItems: 'center',
+        }}
       >
+        {/* Select Sort By y Toggle Asc */}
+        <Box
+          sx={{
+            display: 'flex',
+          }}
+        >
+          {/* Select Sort By */}
+          <FormControl
+            sx={{
+              minWidth: 150,
+              borderRadius: '4px 0 0 4px',
+            }}
+          >
+            <InputLabel>{t('sortBy')}</InputLabel>
+            <Controller
+              name="sortBy"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  label={t('sortBy')}
+                  onChange={onSortByChange}
+                  sx={{
+                    borderTopRightRadius: 0,
+                    borderBottomRightRadius: 0,
+                  }}
+                >
+                  <MenuItem value="name">{t('name')}</MenuItem>
+                  <MenuItem value="modified">{t('lastModifiedAt')}</MenuItem>
+                  {category !== 'directory' && (
+                    <MenuItem value="score">{t('score')}</MenuItem>
+                  )}
+                </Select>
+              )}
+            />
+          </FormControl>
+
+          {/* Asc/Desc Button */}
+          <Button
+            variant="outlined"
+            onClick={onToggleAsc}
+            sx={{
+              borderRadius: '0 4px 4px 0',
+              minWidth: '60px',
+              padding: '0 16px',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            {asc === 'true' ? t('asc') : t('desc')}
+          </Button>
+        </Box>
+
         {/* Category Buttons */}
-        <Box sx={{ display: 'flex' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 1,
+          }}
+        >
           <Button
             variant={category === 'directory' ? 'contained' : 'outlined'}
             onClick={() => onCategoryChange('directory')}
@@ -302,33 +365,10 @@ export default function SearchForm({
           <Button
             variant={category !== 'directory' ? 'contained' : 'outlined'}
             onClick={() => onCategoryChange('note')}
-            sx={{ ml: 1 }}
           >
             {t('notes')}
           </Button>
         </Box>
-
-        {/* Select Sort By */}
-        <FormControl sx={{ minWidth: 150 }}>
-          <InputLabel>{t('sortBy')}</InputLabel>
-          <Controller
-            name="sortBy"
-            control={control}
-            render={({ field }) => (
-              <Select {...field} label={t('sortBy')} onChange={onSortByChange}>
-                <MenuItem value="name">{t('name')}</MenuItem>
-                <MenuItem value="modified">{t('lastModifiedAt')}</MenuItem>
-                {category !== 'directory' && (
-                  <MenuItem value="score">{t('score')}</MenuItem>
-                )}
-              </Select>
-            )}
-          />
-        </FormControl>
-
-        <Button variant="outlined" onClick={onToggleAsc}>
-          {asc === 'true' ? t('asc') : t('desc')}
-        </Button>
 
         {/* Select Category */}
         {category !== 'directory' && (

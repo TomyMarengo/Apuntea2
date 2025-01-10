@@ -53,7 +53,7 @@
     },
     "sortOrder": "Toggle Sort Order",
     "loadingSubjects": "Loading subjects...",
-    "errorFetchingDirectory": "Error fetching directory: {{error}}",
+    "errorFetchingDirectory": "Error fetching folder: {{error}}",
     "noSubjects": "There are no subjects in this career.",
     "title": "Manage Careers",
     "addSubject": "Add Subject",
@@ -81,7 +81,7 @@
     "enableDarkMode": "Enable Dark Mode"
   },
   "createDirectoryFab": {
-    "createNewDirectory": "Create New Directory",
+    "createNewDirectory": "Create New Folder",
     "name": "Name",
     "iconColor": "Icon Color",
     "chooseColor": "Choose Color",
@@ -89,13 +89,13 @@
     "cancel": "Cancel",
     "visible": "Visible",
     "hidden": "Hidden",
-    "directoryCreated": "Directory created successfully!",
-    "directoryCreationFailed": "Failed to create directory{{errorMessage}}",
+    "directoryCreated": "Folder created successfully!",
+    "directoryCreationFailed": "Failed to create folder{{errorMessage}}",
     "validation": {
       "nameInvalid": "Invalid name format.",
-      "nameNotEmpty": "Directory name cannot be empty.",
-      "nameMinLength": "Directory name must be at least 2 characters long.",
-      "nameMaxLength": "Directory name cannot exceed 50 characters.",
+      "nameNotEmpty": "Folder name cannot be empty.",
+      "nameMinLength": "Folder name must be at least 2 characters long.",
+      "nameMaxLength": "Folder name cannot exceed 50 characters.",
       "colorInvalid": "Please select a valid icon color."
     }
   },
@@ -126,10 +126,10 @@
     }
   },
   "deleteDirectoryDialog": {
-    "deleteSuccess": "Directory deleted successfully.",
-    "deleteError": "Error deleting the directory{{errorMessage}}",
-    "deleteDirectoryTitle": "Delete Directory",
-    "deleteConfirmMessage": "Are you sure you want to delete this directory?",
+    "deleteSuccess": "Folder deleted successfully.",
+    "deleteError": "Error deleting the folder{{errorMessage}}",
+    "deleteDirectoryTitle": "Delete folder",
+    "deleteConfirmMessage": "Are you sure you want to delete this folder?",
     "reason": "Reason for deletion",
     "cancel": "Cancel",
     "delete": "Delete",
@@ -162,19 +162,19 @@
     }
   },
   "directoryBreadcrumbs": {
-    "errorFetchingDirectory": "Error fetching directory.",
-    "isRoot": "Root Directory"
+    "errorFetchingDirectory": "Error fetching folder.",
+    "isRoot": "Root Folder"
   },
   "directoryPage": {
     "titlePage": "{{directoryName}} | Apuntea",
     "loading": "Loading...",
-    "errorFetchingDirectory": "Error fetching directory.",
+    "errorFetchingDirectory": "Error fetching folder.",
     "noResults": "No content found."
   },
   "editDirectoryDialog": {
     "editSuccess": "Edit successful",
     "editFailed": "Edit failed {{errorMessage}}",
-    "editDirectoryTitle": "Edit Directory",
+    "editDirectoryTitle": "Edit Folder",
     "name": "Name",
     "iconColor": "Icon Color",
     "visible": "Visible",
@@ -182,9 +182,9 @@
     "save": "Save",
     "validation": {
       "nameInvalid": "Invalid name format.",
-      "nameNotEmpty": "Directory name cannot be empty.",
-      "nameMinLength": "Directory name must be at least 2 characters long.",
-      "nameMaxLength": "Directory name cannot exceed 50 characters.",
+      "nameNotEmpty": "Folder name cannot be empty.",
+      "nameMinLength": "Folder name must be at least 2 characters long.",
+      "nameMaxLength": "Folder name cannot exceed 50 characters.",
       "colorInvalid": "Please select a valid icon color."
     }
   },
@@ -276,8 +276,8 @@
     }
   },
   "favoriteDirectoryCard": {
-    "favorited": "Directory added to favorites!",
-    "unfavorited": "Directory removed from favorites!",
+    "favorited": "Folder added to favorites!",
+    "unfavorited": "Folder removed from favorites!",
     "removeFavorite": "Remove from favorites",
     "errorUnfavorite": "Failed to update favorite status.",
     "errorFavorite": "Failed to update favorite status."
@@ -294,7 +294,7 @@
     "errorFetching": "Error fetching favorites.",
     "title": "My Favorites",
     "notes": "Notes",
-    "directories": "Directories",
+    "directories": "Carpetas",
     "subjects": "Subjects",
     "noFavorites": "No favorites found."
   },
@@ -569,9 +569,9 @@
   "rowDirectory": {
     "unfavorite": "Unfavorite",
     "favorite": "Favorite",
-    "favoriteRemoved": "Directory removed from favorites!",
-    "favoriteAdded": "Directory added to favorites!",
-    "alreadyDirectoryFavorited": "Directory is already favorited.",
+    "favoriteRemoved": "Folder removed from favorites!",
+    "favoriteAdded": "Folder added to favorites!",
+    "alreadyDirectoryFavorited": "Folder is already favorited.",
     "favoriteActionFailed": "Failed to update favorite status.",
     "copySuccess": "Link copied to clipboard!",
     "copyFailed": "Failed to copy link.",
@@ -579,17 +579,17 @@
     "delete": "Delete",
     "copyLink": "Copy Link",
     "more": "More",
-    "openParentDirectory": "Open parent directory",
-    "openSubjectsDirectories": "Open subject's directory",
-    "deleteDirectory": "Delete Directory",
-    "confirmDelete": "Are you sure you want to delete this directory?",
+    "openParentDirectory": "Open parent folder",
+    "openSubjectsDirectories": "Open subject's folder",
+    "deleteDirectory": "Delete Folder",
+    "confirmDelete": "Are you sure you want to delete this folder?",
     "deleteReason": "Reason",
     "cancel": "Cancel",
     "deleting": "Deleting...",
     "confirm": "Confirm",
     "edit": "Edit",
-    "deleteSuccess": "Directory deleted successfully!",
-    "deleteError": "Error deleting directory.",
+    "deleteSuccess": "Folder deleted successfully!",
+    "deleteError": "Error deleting folder.",
     "unfollow": "Unfollow",
     "follow": "Follow",
     "loginToFavorite": "Login to favorite"
@@ -620,8 +620,8 @@
     "download": "Download",
     "copyLink": "Copy Link",
     "more": "More",
-    "openParentDirectory": "Open parent directory",
-    "openSubjectsDirectories": "Open subject's directory",
+    "openParentDirectory": "Open parent folder",
+    "openSubjectsDirectories": "Open subject's folder",
     "noScore": "No score"
   },
   "rowSubject": {
@@ -698,8 +698,8 @@
     "score": "Score",
     "owner": "Owner",
     "actions": "Actions",
-    "asc": "Ascending",
-    "desc": "Descending",
+    "asc": "Asc",
+    "desc": "Desc",
     "folders": "Folders",
     "notes": "Notes",
     "noInstitution": "No institution",
@@ -714,9 +714,10 @@
   "subjectDirectoryCard": {
     "notesCount": "{{count}} note",
     "notesCount_other": "{{count}} notes",
-    "errorFetchingDirectory": "Error fetching directory.",
-    "favorited": "Directory added to favorites!",
-    "unfavorited": "Directory removed from favorites!",
+    "notesCount_plural": "{{count}} notes",
+    "errorFetchingDirectory": "Error fetching folder.",
+    "favorited": "Folder added to favorites!",
+    "unfavorited": "Folder removed from favorites!",
     "removeFavorite": "Remove from favorites",
     "errorUnfavorite": "Failed to update favorite status.",
     "errorFavorite": "Failed to update favorite status."

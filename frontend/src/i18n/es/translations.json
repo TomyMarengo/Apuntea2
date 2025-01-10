@@ -53,7 +53,7 @@
     },
     "sortOrder": "Cambiar Orden",
     "loadingSubjects": "Cargando materias...",
-    "errorFetchingDirectory": "Error al obtener el directorio: {{error}}",
+    "errorFetchingDirectory": "Error al obtener la carpeta: {{error}}",
     "noSubjects": "No hay materias en esta carrera.",
     "title": "Administrar Carreras",
     "addSubject": "Agregar Materia",
@@ -81,7 +81,7 @@
     "enableDarkMode": "Activar modo oscuro"
   },
   "createDirectoryFab": {
-    "createNewDirectory": "Crear Nuevo Directorio",
+    "createNewDirectory": "Crear nueva carpeta",
     "name": "Nombre",
     "iconColor": "Color del Icono",
     "chooseColor": "Elegir Color",
@@ -89,13 +89,13 @@
     "cancel": "Cancelar",
     "visible": "Visible",
     "hidden": "Oculto",
-    "directoryCreated": "¡Directorio creado exitosamente!",
-    "directoryCreationFailed": "Error al crear el directorio{{errorMessage}}",
+    "directoryCreated": "¡Carpeta creada exitosamente!",
+    "directoryCreationFailed": "Error al crear la carpeta{{errorMessage}}",
     "validation": {
       "nameInvalid": "Formato de nombre inválido.",
       "nameNotEmpty": "El nombre no puede estar vacío.",
-      "nameMinLength": "El nombre del directorio debe tener al menos 2 caracteres.",
-      "nameMaxLength": "El nombre del directorio no puede exceder los 50 caracteres.",
+      "nameMinLength": "El nombre de la carpeta debe tener al menos 2 caracteres.",
+      "nameMaxLength": "El nombre de la carpeta no puede exceder los 50 caracteres.",
       "colorInvalid": "Por favor, selecciona un color de icono válido."
     }
   },
@@ -126,10 +126,10 @@
     }
   },
   "deleteDirectoryDialog": {
-    "deleteSuccess": "Directorio eliminado exitosamente.",
-    "deleteError": "Error al eliminar el directorio{{errorMessage}}",
-    "deleteDirectoryTitle": "Eliminar Directorio",
-    "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar este directorio?",
+    "deleteSuccess": "Carpeta eliminada exitosamente.",
+    "deleteError": "Error al eliminar la carpeta{{errorMessage}}",
+    "deleteDirectoryTitle": "Eliminar carpeta",
+    "deleteConfirmMessage": "¿Estás seguro de que deseas eliminar esta carpeta?",
     "reason": "Razón para la eliminación",
     "cancel": "Cancelar",
     "delete": "Eliminar",
@@ -162,19 +162,19 @@
     }
   },
   "directoryBreadcrumbs": {
-    "errorFetchingDirectory": "Error al cargar el directorio.",
-    "isRoot": "Directorio Raíz"
+    "errorFetchingDirectory": "Error al cargar la carpeta.",
+    "isRoot": "Carpeta Raíz"
   },
   "directoryPage": {
     "titlePage": "{{directoryName}} | Apuntea",
     "loading": "Cargando...",
-    "errorFetchingDirectory": "Error al obtener el directorio.",
+    "errorFetchingDirectory": "Error al obtener la carpeta.",
     "noResults": "No se encontró contenido."
   },
   "editDirectoryDialog": {
     "editSuccess": "Edición exitosa",
     "editFailed": "Edición fallida{{errorMessage}}",
-    "editDirectoryTitle": "Editar directorio",
+    "editDirectoryTitle": "Editar carpeta",
     "name": "Nombre",
     "iconColor": "Color del icono",
     "visible": "Visible",
@@ -183,8 +183,8 @@
     "validation": {
       "nameInvalid": "Formato de nombre inválido.",
       "nameNotEmpty": "El nombre no puede estar vacío.",
-      "nameMinLength": "El nombre del directorio debe tener al menos 2 caracteres.",
-      "nameMaxLength": "El nombre del directorio no puede exceder los 50 caracteres.",
+      "nameMinLength": "El nombre de la carpeta debe tener al menos 2 caracteres.",
+      "nameMaxLength": "El nombre de la carpeta no puede exceder los 50 caracteres.",
       "colorInvalid": "Por favor, selecciona un color de icono válido."
     }
   },
@@ -276,8 +276,8 @@
     }
   },
   "favoriteDirectoryCard": {
-    "favorited": "¡Directorio agregado a favoritos!",
-    "unfavorited": "¡Directorio eliminado de favoritos!",
+    "favorited": "¡Carpeta agregada a favoritos!",
+    "unfavorited": "¡Carpeta eliminada de favoritos!",
     "removeFavorite": "Eliminar de favoritos",
     "errorUnfavorite": "Error al actualizar el estado de favorito."
   },
@@ -567,9 +567,9 @@
   "rowDirectory": {
     "unfavorite": "Eliminar Favorito",
     "favorite": "Favorito",
-    "favoriteRemoved": "¡Directorio eliminado de favoritos!",
-    "favoriteAdded": "¡Directorio agregado a favoritos!",
-    "alreadyDirectoryFavorited": "El directorio ya está en favoritos.",
+    "favoriteRemoved": "¡Carpeta eliminada de favoritos!",
+    "favoriteAdded": "¡Carpeta agregada a favoritos!",
+    "alreadyDirectoryFavorited": "La carpeta ya está en favoritos.",
     "favoriteActionFailed": "Error al actualizar el estado de favorito.",
     "copySuccess": "¡Enlace copiado al portapapeles!",
     "copyFailed": "Error al copiar el enlace.",
@@ -577,17 +577,17 @@
     "delete": "Eliminar",
     "copyLink": "Copiar Enlace",
     "more": "Más",
-    "openParentDirectory": "Abrir directorio padre",
-    "openSubjectsDirectories": "Abrir directorio de la materia",
-    "deleteDirectory": "Eliminar directorio",
-    "confirmDelete": "¿Estás seguro de que deseas eliminar este directorio?",
+    "openParentDirectory": "Abrir carpeta padre",
+    "openSubjectsDirectories": "Abrir carpeta de la materia",
+    "deleteDirectory": "Eliminar carpeta",
+    "confirmDelete": "¿Estás seguro de que deseas eliminar esta carpeta?",
     "deleteReason": "Razón",
     "cancel": "Cancelar",
     "deleting": "Eliminando...",
     "confirm": "Confirmar",
     "edit": "Editar",
-    "deleteSuccess": "¡Directorio eliminado exitosamente!",
-    "deleteError": "Error al eliminar el directorio.",
+    "deleteSuccess": "¡Carpeta eliminada exitosamente!",
+    "deleteError": "Error al eliminar la carpeta.",
     "unfollow": "Dejar de seguir",
     "follow": "Seguir",
     "loginToFavorite": "Inicia sesión para agregar a favoritos"
@@ -618,8 +618,8 @@
     "download": "Descargar",
     "copyLink": "Copiar Enlace",
     "more": "Más",
-    "openParentDirectory": "Abrir directorio padre",
-    "openSubjectsDirectories": "Abrir directorio de la materia",
+    "openParentDirectory": "Abrir carpeta padre",
+    "openSubjectsDirectories": "Abrir carpeta de la materia",
     "noScore": "Sin puntuación"
   },
   "rowSubject": {
@@ -696,8 +696,8 @@
     "score": "Puntuación",
     "owner": "Propietario",
     "actions": "Acciones",
-    "asc": "Ascendente",
-    "desc": "Descendente",
+    "asc": "Asc",
+    "desc": "Desc",
     "folders": "Carpetas",
     "notes": "Apuntes",
     "noInstitution": "Sin institución",
@@ -712,9 +712,9 @@
   "subjectDirectoryCard": {
     "notesCount": "{{count}} apunte",
     "notesCount_other": "{{count}} apuntes",
-    "errorFetchingDirectory": "Error al cargar el directorio.",
-    "favorited": "¡Directorio agregado a favoritos!",
-    "unfavorited": "¡Directorio eliminado de favoritos!",
+    "errorFetchingDirectory": "Error al cargar la carpeta.",
+    "favorited": "¡Carpeta agregada a favoritos!",
+    "unfavorited": "¡Carpeta eliminada de favoritos!",
     "removeFavorite": "Eliminar de favoritos",
     "errorUnfavorite": "Error al actualizar el estado de favorito."
   },

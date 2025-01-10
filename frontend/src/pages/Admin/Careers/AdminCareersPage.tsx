@@ -9,6 +9,7 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  Button,
   IconButton,
   Tooltip,
   Typography,
@@ -277,24 +278,38 @@ const AdminCareersPage: React.FC = () => {
                 </Select>
               </FormControl>
 
-              {/* Sort by year or name */}
-              <FormControl sx={{ minWidth: 140 }}>
-                <InputLabel>{t('sortBy')}</InputLabel>
-                <Select
-                  label={t('sortBy')}
-                  value={sortBy}
-                  onChange={handleSortChange}
-                >
-                  <MenuItem value="year">{t('sortOptions.year')}</MenuItem>
-                  <MenuItem value="name">{t('sortOptions.name')}</MenuItem>
-                </Select>
-              </FormControl>
+              <Box sx={{ display: 'flex' }}>
+                {/* Sort by year or name */}
+                <FormControl sx={{ minWidth: 140 }}>
+                  <InputLabel>{t('sortBy')}</InputLabel>
+                  <Select
+                    label={t('sortBy')}
+                    value={sortBy}
+                    onChange={handleSortChange}
+                    sx={{
+                      borderRadius: '4px 0 0 4px',
+                    }}
+                  >
+                    <MenuItem value="year">{t('sortOptions.year')}</MenuItem>
+                    <MenuItem value="name">{t('sortOptions.name')}</MenuItem>
+                  </Select>
+                </FormControl>
 
-              <Tooltip title={t('sortOrder')}>
-                <IconButton onClick={handleToggleSortOrder}>
-                  {sortAsc ? '↑' : '↓'}
-                </IconButton>
-              </Tooltip>
+                {/* Asc/Desc Button */}
+                <Button
+                  variant="outlined"
+                  onClick={handleToggleSortOrder}
+                  sx={{
+                    borderRadius: '0 4px 4px 0',
+                    minWidth: '60px',
+                    padding: '0 16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  {sortAsc ? t('asc') : t('desc')}
+                </Button>
+              </Box>
             </Box>
 
             {/* Right side: Action Icons */}
