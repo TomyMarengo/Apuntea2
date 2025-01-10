@@ -17,18 +17,25 @@ import {
   useGetSubjectsByCareerQuery,
   useGetSubjectCareersQuery,
 } from '../../store/slices/institutionsApiSlice';
-import { Subject, SubjectCareer, User } from '../../types';
+import { Subject, SubjectCareer, SubjectWithCareer } from '../../types';
 
 interface UserNotesProps {
-  user: User;
+  userId: string;
+  careerId: string;
+  institutionId: string;
 }
 
 const DEFAULT_PAGE_SIZE = 10;
 
-const UserNotes: React.FC<UserNotesProps> = ({ user }) => {
+const UserNotes: React.FC<UserNotesProps> = ({
+  userId,
+  careerId,
+  institutionId,
+}) => {
   const { t } = useTranslation('userNotes');
   const navigate = useNavigate();
 
+  // URL Search Params
   const [searchParams, setSearchParams] = useSearchParams();
   const yearParam = searchParams.get('year');
   const selectedYear = yearParam ? parseInt(yearParam, 10) : null;
@@ -41,9 +48,7 @@ const UserNotes: React.FC<UserNotesProps> = ({ user }) => {
     ? parseInt(pageSizeParam, 10)
     : DEFAULT_PAGE_SIZE;
 
-  const careerId = user.career?.id;
-  const institutionId = user.institution?.id;
-
+  // TODO: Change for URL Hateoas
   const {
     data: subjects,
     isLoading: subjectsLoading,
@@ -55,6 +60,7 @@ const UserNotes: React.FC<UserNotesProps> = ({ user }) => {
     },
   );
 
+  // TODO: Change for URL Hateoas
   const {
     data: subjectCareers,
     isLoading: scLoading,
@@ -69,49 +75,62 @@ const UserNotes: React.FC<UserNotesProps> = ({ user }) => {
     },
   );
 
+  // If loading or error
   const isLoading = subjectsLoading || scLoading;
   const isError = subjectsError || scError;
 
-  const combined = useMemo(() => {
-    if (!subjects || !subjectCareers) return [];
+  // --------------- COMBINE SUBJECTS + SUBJECTCAREERS ---------------
+  const combined: SubjectWithCareer[] = useMemo(() => {
+    if (!subjects || !subjectCareers || subjectsLoading || scLoading) return [];
 
-    const subjectYearMap = new Map<string, number>();
-    subjectCareers.forEach((sc: SubjectCareer) => {
-      const subjectId = sc.subjectUrl.split('/').pop() || '';
-      subjectYearMap.set(subjectId, sc.year);
+    // Create a map from subjectId -> SubjectWithCareer
+    const scMap = new Map<string, Subject>();
+    subjects.forEach((subject: Subject) => {
+      if (subject.id) {
+        scMap.set(subject.selfUrl, subject);
+      }
     });
 
-    const merged = subjects
-      .map((sub: Subject) => {
-        const subId = sub.id || '';
+    // Build the merged array
+    let merged: SubjectWithCareer[] = subjectCareers.map(
+      (subjectcareer: SubjectCareer) => {
+        const matchingSubject = scMap.get(subjectcareer.subjectUrl || '');
         return {
-          ...sub,
-          year: subjectYearMap.get(subId) || 0,
+          subjectId: matchingSubject?.id || '',
+          name: matchingSubject?.name || '',
+          year: subjectcareer?.year ?? 0,
+          subjectUrl: subjectcareer?.subjectUrl || '',
+          subjectCareerUrl: subjectcareer?.selfUrl || '',
+          careerUrl: subjectcareer?.careerUrl || '',
+          rootDirectoryUrl: matchingSubject?.rootDirectoryUrl || '',
         };
-      })
-      .filter((item) => item.year > 0);
-
+      },
+    );
     return merged;
-  }, [subjects, subjectCareers]);
+  }, [subjects, subjectCareers, subjectsLoading, scLoading]);
 
+  // Figure out the unique years
   const uniqueYears = useMemo(() => {
     const yearsSet = new Set<number>();
     combined.forEach((c) => yearsSet.add(c.year));
     return Array.from(yearsSet).sort((a, b) => a - b);
   }, [combined]);
 
+  // Initialize selected year to the first year if not set
   useEffect(() => {
     if (selectedYear === null && uniqueYears.length > 0) {
       const firstYear = uniqueYears[0];
       navigate({ search: `?year=${firstYear}&page=1` }, { replace: true });
     }
-  }, [uniqueYears, selectedYear, navigate]);
+  }, [uniqueYears, selectedYear, setSearchParams, navigate]);
 
+  // Filter subjects by the selected year
   const filteredSubjects = useMemo(() => {
     if (selectedYear === null) return [];
     return combined.filter((item) => item.year === selectedYear);
   }, [combined, selectedYear]);
 
+  // Calculate total pages for pagination
   const totalCount = filteredSubjects.length;
   const totalPages = Math.ceil(totalCount / pageSize);
   const startIndex = (page - 1) * pageSize;
@@ -173,9 +192,9 @@ const UserNotes: React.FC<UserNotesProps> = ({ user }) => {
             >
               {subjectsPage.map((sub) => (
                 <SubjectDirectoryCard
-                  key={sub.id}
+                  key={sub.subjectId}
                   subject={sub}
-                  userId={user.id}
+                  userId={userId}
                 />
               ))}
             </Box>

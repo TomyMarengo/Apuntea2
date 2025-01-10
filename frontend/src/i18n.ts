@@ -22,6 +22,7 @@ i18n.use(initReactI18next).init({
   react: {
     useSuspense: true,
   },
+  pluralSeparator: '_',
 });
 
 export default i18n;

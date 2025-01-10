@@ -451,6 +451,7 @@
     }
   },
   "notesPage": {
+    "title": "Notes",
     "titlePage": "Notes | Apuntea",
     "loading": "Loading...",
     "errorFetching": "Error fetching notes.",
@@ -712,7 +713,7 @@
   },
   "subjectDirectoryCard": {
     "notesCount": "{{count}} note",
-    "notesCount_plural": "{{count}} notes",
+    "notesCount_other": "{{count}} notes",
     "errorFetchingDirectory": "Error fetching directory.",
     "favorited": "Directory added to favorites!",
     "unfavorited": "Directory removed from favorites!",

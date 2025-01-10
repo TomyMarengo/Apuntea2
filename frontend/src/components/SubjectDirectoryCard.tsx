@@ -13,9 +13,11 @@ import {
 } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import { selectCurrentUser } from '../store/slices/authSlice';
 import {
   useGetDirectoryQuery,
   useRemoveFavoriteDirectoryMutation,
@@ -28,15 +30,14 @@ import { SubjectWithCareer } from '../types';
 interface SubjectDirectoryCardProps {
   subject: SubjectWithCareer;
   userId: string;
-  shouldFavorite?: boolean;
 }
 
 const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   subject,
   userId,
-  shouldFavorite = false,
 }) => {
   const { t } = useTranslation('subjectDirectoryCard');
+  const loggedUser = useSelector(selectCurrentUser);
 
   // Fetch the number of notes for this subject and user
   const { data: notesResult, isLoading: notesLoading } = useSearchNotesQuery(
@@ -68,8 +69,8 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
   const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
   const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
-    { directoryId: directory?.id, userId },
-    { skip: dirLoading || !userId || !directory?.id },
+    { directoryId: directory?.id, userId: loggedUser?.id },
+    { skip: dirLoading || !loggedUser || !directory?.id },
   );
 
   const [isFavorite, setIsFavorite] = useState<boolean>(true);
@@ -81,6 +82,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   const handleToggleFavorite = async (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => {
+    event.preventDefault();
     event.stopPropagation();
 
     try {
@@ -145,28 +147,24 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
         />
 
         {/* Heart icon top-right */}
-        {shouldFavorite && (
-          <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
-            <IconButton
-              onClick={handleToggleFavorite}
-              size="small"
-              sx={{
-                position: 'absolute',
-                top: -10,
-                right: -30,
-                zIndex: 999,
-              }}
-            >
-              {isFavorite ? (
-                <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
-              ) : (
-                <FavoriteBorderIcon
-                  sx={{ color: 'error.main', fontSize: 22 }}
-                />
-              )}
-            </IconButton>
-          </Tooltip>
-        )}
+        <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
+          <IconButton
+            onClick={handleToggleFavorite}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: -10,
+              right: -30,
+              zIndex: 999,
+            }}
+          >
+            {isFavorite ? (
+              <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
+            ) : (
+              <FavoriteBorderIcon sx={{ color: 'error.main', fontSize: 22 }} />
+            )}
+          </IconButton>
+        </Tooltip>
 
         {/* Notes Count */}
         <Tooltip

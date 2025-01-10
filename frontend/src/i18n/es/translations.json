@@ -450,6 +450,7 @@
     }
   },
   "notesPage": {
+    "title": "Apuntes",
     "titlePage": "Apuntes | Apuntea",
     "loading": "Cargando...",
     "errorFetching": "Error al obtener los apuntes.",
@@ -710,7 +711,7 @@
   },
   "subjectDirectoryCard": {
     "notesCount": "{{count}} apunte",
-    "notesCount_plural": "{{count}} apuntes",
+    "notesCount_other": "{{count}} apuntes",
     "errorFetchingDirectory": "Error al cargar el directorio.",
     "favorited": "¡Directorio agregado a favoritos!",
     "unfavorited": "¡Directorio eliminado de favoritos!",

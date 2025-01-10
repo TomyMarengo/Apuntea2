@@ -37,13 +37,14 @@ const UserPage: React.FC = () => {
   } = useGetUserQuery({ userId }, { skip: !userId });
 
   const institutionUrl = targetUser?.institutionUrl;
-  const { data: institutionData } = useGetInstitutionQuery(
-    { url: institutionUrl },
-    { skip: !targetUser?.institutionUrl },
-  );
+  const { data: institutionData, isLoading: isLoadingInstitution } =
+    useGetInstitutionQuery(
+      { url: institutionUrl },
+      { skip: !targetUser?.institutionUrl },
+    );
 
   const careerUrl = targetUser?.careerUrl;
-  const { data: careerData } = useGetCareerQuery(
+  const { data: careerData, isLoading: isLoadingCareer } = useGetCareerQuery(
     { url: careerUrl },
     { skip: !targetUser?.careerUrl },
   );
@@ -71,24 +72,13 @@ const UserPage: React.FC = () => {
         <title>{pageTitle}</title>
       </Helmet>
       <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
-        {isLoading && (
+        {isLoading || isLoadingInstitution || isLoadingCareer ? (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
           </Box>
-        )}
-
-        {isError && (
-          <Typography variant="h6" color="error">
-            {t('errorFetchingUser', { error: String(error) })}
-          </Typography>
-        )}
-
-        {!isLoading && !isError && !targetUser && (
-          <Typography variant="h6">{t('userNotFound')}</Typography>
-        )}
-
-        {/* Main Content */}
-        {!isLoading && !isError && targetUser && (
+        ) : isError || !careerData || !institutionData ? (
+          <Typography color="error">{t('errorFetching')}</Typography>
+        ) : (
           <Box sx={{ maxWidth: 1200, margin: '0 auto' }}>
             <Typography variant="h4" gutterBottom>
               {t('profile', {
@@ -99,7 +89,17 @@ const UserPage: React.FC = () => {
             <UserProfileCard user={targetUserWithDetails} />
 
             {/* User Notes */}
-            <UserNotes user={targetUserWithDetails} />
+            {userId && careerData && institutionData ? (
+              <UserNotes
+                userId={userId}
+                careerId={careerData.id}
+                institutionId={institutionData.id}
+              />
+            ) : (
+              <Typography variant="h6" color="error">
+                {t('errorFetchingUser', { error: 'Missing user details' })}
+              </Typography>
+            )}
           </Box>
         )}
       </Box>

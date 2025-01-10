@@ -57,20 +57,20 @@ export interface User {
 }
 
 export interface Institution {
-  id?: string;
-  name?: string;
-  selfUrl?: string;
-  careersUrl?: string;
+  id: string;
+  name: string;
+  selfUrl: string;
+  careersUrl: string;
 }
 
 export interface Career {
-  id?: string;
-  name?: string;
-  selfUrl?: string;
-  institutionUrl?: string;
-  subjectsUrl?: string;
-  subjectCareersUrl?: string;
-  subjectsNotInCareerUrl?: string;
+  id: string;
+  name: string;
+  selfUrl: string;
+  institutionUrl: string;
+  subjectsUrl: string;
+  subjectCareersUrl: string;
+  subjectsNotInCareerUrl: string;
 }
 
 export interface Subject {
