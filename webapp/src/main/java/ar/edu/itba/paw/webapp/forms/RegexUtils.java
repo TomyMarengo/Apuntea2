@@ -8,7 +8,7 @@ public class RegexUtils {
 
     public static final String USERNAME_REGEX = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+$";
 
-    public static final String NAME_REGEX = "([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*";
+    public static final String NAME_REGEX = "^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+( [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*)?$";
 
     public static final String EMAIL_REGEX = "^(?=.{1,64}@)[A-Za-z0-9\\+_-]+(\\.[A-Za-z0-9\\+_-]+)*@[^-][A-Za-z0-9\\+-]+(\\.[A-Za-z0-9\\+-]+)*(\\.[A-Za-z]{2,})$";
 

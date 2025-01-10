@@ -57,7 +57,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
     firstName: z
       .string()
       .regex(
-        /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
+        /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+( [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*)?$/,
         t('validation.firstNameInvalid'),
       )
       .max(20, t('validation.firstNameMaxLength'))
@@ -65,7 +65,7 @@ const EditProfileDialog: React.FC<EditProfileDialogProps> = ({
     lastName: z
       .string()
       .regex(
-        /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+[ ]?)*$/,
+        /^([a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+( [a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*)?$/,
         t('validation.lastNameInvalid'),
       )
       .max(20, t('validation.lastNameMaxLength'))
