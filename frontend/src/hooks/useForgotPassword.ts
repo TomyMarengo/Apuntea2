@@ -25,13 +25,6 @@ export default function useForgotPassword() {
 
   async function handleEmailSubmit(email: string): Promise<boolean> {
     try {
-      const result = await getUserByEmail(email).unwrap();
-      const user = result?.[0];
-
-      if (!user || !user.id) {
-        return false;
-      }
-
       return await requestPasswordChange({
         email,
       }).unwrap();
