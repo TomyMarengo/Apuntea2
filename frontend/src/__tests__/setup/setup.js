@@ -4,12 +4,14 @@ import {notesHandlers} from "../mocks/notesApiMocks.js";
 import {institutionsHandlers} from "../mocks/institutionsApiMocks.js";
 import {usersHandlers} from "../mocks/usersApiMocks.js";
 import {directoriesHandlers} from "../mocks/directoriesApiMocks.js";
+import {reviewsHandles} from "../mocks/reviewsApiMocks.js";
 
 const server = setupServer(...[
     ...notesHandlers,
     ...institutionsHandlers,
     ...usersHandlers,
-    ...directoriesHandlers
+    ...directoriesHandlers,
+     ...reviewsHandles,
     ]
 );
 

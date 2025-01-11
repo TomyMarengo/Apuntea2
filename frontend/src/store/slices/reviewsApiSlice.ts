@@ -2,7 +2,7 @@
 
 import { ApiResponse, apiSlice } from './apiSlice';
 import {
-  DELETE_REASON_CONTENT_TYPE,
+  DELETE_REASON_CONTENT_TYPE, REVIEW_COLLECTION_CONTENT_TYPE, REVIEW_CONTENT_TYPE,
   REVIEW_CREATE_CONTENT_TYPE,
   REVIEW_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
@@ -72,7 +72,12 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           queryUrl += `?${params.toString()}`;
         }
 
-        return queryUrl;
+        return {
+          url: queryUrl,
+          headers: {
+            Accept: REVIEW_COLLECTION_CONTENT_TYPE
+          }
+        };
       },
       transformResponse: (response: any, meta: { response: Response }) => {
         const totalCount = Number(
@@ -103,7 +108,12 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           : [{ type: 'Reviews', id: `LIST_${noteId}` }],
     }),
     getMyReview: builder.query<Review, ReviewArgs>({
-      query: ({ userId, url }) => url + `&userId=${userId}`,
+      query: ({ userId, url }) => ({
+        url: url +`&userId=${userId}`,
+        headers: {
+          Accept: REVIEW_COLLECTION_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any) => {
         const review = Array.isArray(response) ? response[0] : response;
         return mapApiReview(review);
@@ -114,7 +124,12 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
       ],
     }),
     getReview: builder.query<Review, ReviewArgs>({
-      query: ({ noteId, userId, url }) => url || `/reviews/${noteId}_${userId}`,
+      query: ({ noteId, userId, url }) => ({
+        url: url || `/reviews/${noteId}_${userId}`,
+        headers: {
+          Accept: REVIEW_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any) => {
         return mapApiReview(response);
       },
