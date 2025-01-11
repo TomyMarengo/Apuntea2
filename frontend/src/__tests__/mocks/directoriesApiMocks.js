@@ -12,13 +12,6 @@ import {
 
 } from "../../contentTypes";
 
-export const favDirectoryId = "d69cf972-0004-4adf-8e56-8a024e722b35";
-export const favUserId = "a064c84b-b47a-4b25-b663-28e157c531d9";
-export const existingDirectoryId = "d69cf972-0004-4adf-8e56-8a024e722b35";
-export const existingDirectoryName = "aaaa";
-export const nonExistingDirectoryName = "nonExistingName";
-export const nonFavDirectoryId = "cb2cc2d7-3ebe-4968-8654-1a8d6b74eabd";
-export const otherExistingDirectoryName = "Apuntes Logica Computacional";
 
 const directories = [
     {
@@ -47,6 +40,16 @@ const directories = [
     },
 ]
 
+export const favDirectoryId = directories[0].id;
+export const favUserId = "a064c84b-b47a-4b25-b663-28e157c531d9";
+export const existingDirectoryId = directories[0].id;
+export const existingDirectoryName = directories[0].name;
+export const nonExistingDirectoryName = "nonExistingName";
+export const nonFavDirectoryId = directories[1].id;
+export const otherExistingDirectoryName = directories[1].name;
+
+export const fileErrorMsg = "The file name is already being used";
+
 export const directoriesHandlers = [
     http.get(apiUrl("/directories/:id"), ({request, params}) => {
         if (request.headers.get("Accept") === DIRECTORY_CONTENT_TYPE) {
@@ -60,7 +63,7 @@ export const directoriesHandlers = [
         if(request.headers.get("Content-Type") === DIRECTORY_CREATE_CONTENT_TYPE) {
             const name = (await request.json()).name;
             if (directories.find(n => n.name === name)) {
-                return new HttpResponse(JSON.parse({message: "The file name is already being used"}), {status: 400});
+                return new HttpResponse(JSON.stringify({message: fileErrorMsg}), {status: 400});
             }
             return CREATED_RESPONSE();
         } else {
@@ -73,7 +76,7 @@ export const directoriesHandlers = [
             const name = (await request.json()).name;
             if (directories.find(n => n.id === params.id)) {
                 if (name && directories.find(n => (n.name === name && n.id !== params.id))) {
-                    return new HttpResponse(JSON.parse({message: "The file name is already being used"}), {status: 400});
+                    return new HttpResponse(JSON.stringify({message: fileErrorMsg}), {status: 400});
                 }
                 return NO_CONTENT_RESPONSE();
             } else {

@@ -14,16 +14,6 @@ import {
     NOTE_UPDATE_CONTENT_TYPE
 } from "../../contentTypes";
 
-export const existingNoteId = "30f1c039-7714-44ec-a10d-7c8039d16335";
-export const existingNoteName = "formaa";
-export const otherExistingNoteName = "Numerical Methods by John Mathews";
-export const nonExistingNoteName = "nonExistingNoteName";
-
-export const favUserId = "a064c84b-b47a-4b25-b663-28e157c531d9";
-
-export const favNoteId = "30f1c039-7714-44ec-a10d-7c8039d16335";
-export const nonFavNoteId = "db3d94d2-c646-4d55-9655-785dd39341cc";
-
 const notes = [
     {
         "avgScore": 0.0,
@@ -62,6 +52,17 @@ const notes = [
         "visible": true
     },
 ]
+export const existingNoteId = notes[0].id;
+export const existingNoteName = notes[0].name;
+export const otherExistingNoteName = notes[1].name;
+export const nonExistingNoteName = "nonExistingNoteName";
+
+export const favUserId = "a064c84b-b47a-4b25-b663-28e157c531d9";
+
+export const favNoteId = notes[0].id;
+export const nonFavNoteId = notes[1].id;
+export const fileErrorMsg = "The file name is already being used";
+
 
 export const notesHandlers = [
     http.get(apiUrl("/notes/:id"), ({request, params}) => {
@@ -73,10 +74,10 @@ export const notesHandlers = [
         }
     }),
     http.post(apiUrl("/notes"), async ( {request}) => {
-        if(request.headers.get("Content-Type").substring(NOTE_CREATE_CONTENT_TYPE)) {
+        if(request.headers.get("Content-Type").includes(NOTE_CREATE_CONTENT_TYPE)) {
             const name = (await request.formData()).get("name");
             if (notes.find(n => n.name === name)) {
-                return new HttpResponse(JSON.parse({message: "The file name is already being used"}), {status: 400});
+                return new HttpResponse(JSON.stringify({message: "The file name is already being used"}), {status: 400});
             }
             return CREATED_RESPONSE();
         } else {
@@ -89,7 +90,7 @@ export const notesHandlers = [
             const name = (await request.json()).name;
             if (notes.find(n => n.id === params.id)) {
                 if (name && notes.find(n => (n.name === name && n.id !== params.id))) {
-                    return new HttpResponse(JSON.parse({message: "The file name is already being used"}), {status: 400});
+                    return new HttpResponse(JSON.stringify({message: "The file name is already being used"}), {status: 400});
                 }
                 return NO_CONTENT_RESPONSE();
             } else {

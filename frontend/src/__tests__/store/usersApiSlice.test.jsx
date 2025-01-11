@@ -13,7 +13,7 @@ import {
     existingUsername, followerUserId,
     nonExistingEmail,
     nonExistingUsername, passwordChangeCode,
-    someUserId
+    someUserId, usedUsernameMsg
 } from "../mocks/usersApiMocks";
 
 function setupNotesApiStore() {
@@ -65,12 +65,12 @@ describe('usersApiSlice', () => {
         expect(result.messages).empty;
     });
 
-    it("should fail to modify a user", async () => {
+    it("should fail to modify a user and relay error messages", async () => {
         let { result: wrapperResult} = await useWithWrapper(async ()=> await useUpdateUserMutation(), store);
         const [updateUser] = await wrapperResult.current;
         const result = await updateUser({userId: someUserId, username: existingUsername}).unwrap();
         expect(result.success).toBe(false);
-        expect(result.messages).not.empty;
+        expect(result.messages).contains(usedUsernameMsg);
     });
 
     it("should update user status successfully", async () => {

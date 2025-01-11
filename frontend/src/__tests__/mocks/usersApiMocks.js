@@ -66,6 +66,9 @@ export const followerUserId = users[1].id;
 
 export const passwordChangeCode = "1234";
 
+export const usedUsernameMsg = "The username is already in use";
+export const usedMailMsg = "The email is already in use";
+
 export const usersHandlers = [
     http.get(apiUrl("/users"), ({request}) => {
         if (request.headers.get("Accept") === USER_EMAIL_COLLECTION_CONTENT_TYPE) {
@@ -113,7 +116,7 @@ export const usersHandlers = [
             const user = await request.json();
             if (users.find(u => u.id === params.id)) {
                 if (user.username && users.find(u => (u.username === user.username))) {
-                    return new HttpResponse(JSON.parse({message: "The username is already in use"}), {status: 400});
+                    return new HttpResponse(JSON.stringify({message: usedUsernameMsg}), {status: 400});
                 }
                 return NO_CONTENT_RESPONSE();
             } else {

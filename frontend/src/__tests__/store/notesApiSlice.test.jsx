@@ -15,7 +15,7 @@ import {useWithWrapper} from "../setup/wrapper.jsx";
 import {
     existingNoteId,
     existingNoteName,
-    favUserId,
+    favUserId, fileErrorMsg,
     nonExistingNoteName,
     nonFavNoteId, otherExistingNoteName
 } from "../mocks/notesApiMocks.js";
@@ -52,12 +52,12 @@ describe('notesApiSlice', () => {
         expect(result.messages).empty;
     });
 
-    it("should fail to create a note", async () => {
+    it("should fail to create a note and relay error messages", async () => {
         let { result: wrapperResult} = await useWithWrapper(async ()=> await useCreateNoteMutation(), store);
         const [createNote, createNoteResult] = await wrapperResult.current;
         const result = await createNote({name: existingNoteName, file: testFile}).unwrap();
         expect(result.success).toBe(false);
-        expect(result.messages).not.empty;
+        expect(result.messages).contain(fileErrorMsg);
     });
 
     it("should modify note successfully with nonExistingNoteName", async () => {
@@ -84,12 +84,12 @@ describe('notesApiSlice', () => {
         expect(result.messages).empty;
     });
 
-    it("should fail to modify name", async () => {
+    it("should fail to modify name and relay error messages", async () => {
         let { result: wrapperResult} = await useWithWrapper(async ()=> await useUpdateNoteMutation(), store);
         const [updateNote] = await wrapperResult.current;
         const result = await updateNote({noteId: existingNoteId, name: otherExistingNoteName}).unwrap();
         expect(result.success).toBe(false);
-        expect(result.messages).not.empty;
+        expect(result.messages).contain(fileErrorMsg);
     });
 
     it("should get the note as favorite", async () => {

@@ -8,7 +8,7 @@ import {describe, expect, it} from "vitest";
 import {
     existingDirectoryId,
     existingDirectoryName,
-    favUserId,
+    favUserId, fileErrorMsg,
     nonExistingDirectoryName, nonFavDirectoryId,
     otherExistingDirectoryName
 } from "../mocks/directoriesApiMocks";
@@ -38,12 +38,12 @@ describe('directoriesApiSlice', () => {
         expect(result.messages).empty;
     });
 
-    it("should fail to create a directory", async () => {
+    it("should fail to create a directory and relay error messages", async () => {
         let { result: wrapperResult} = await useWithWrapper(async ()=> await useCreateDirectoryMutation(), store);
         const [createDirectory, createDirectoryResult] = await wrapperResult.current;
         const result = await createDirectory({name: existingDirectoryName}).unwrap();
         expect(result.success).toBe(false);
-        expect(result.messages).not.empty;
+        expect(result.messages).contains(fileErrorMsg);
     });
 
     it("should modify directory successfully with nonExistingDirectoryName", async () => {
@@ -70,12 +70,12 @@ describe('directoriesApiSlice', () => {
         expect(result.messages).empty;
     });
 
-    it("should fail to modify name", async () => {
+    it("should fail to modify name and relay error messages", async () => {
         let { result: wrapperResult} = await useWithWrapper(async ()=> await useUpdateDirectoryMutation(), store);
         const [updateDirectory] = await wrapperResult.current;
         const result = await updateDirectory({directoryId: existingDirectoryId, name: otherExistingDirectoryName}).unwrap();
         expect(result.success).toBe(false);
-        expect(result.messages).not.empty;
+        expect(result.messages).contains(fileErrorMsg);
     });
 
     it("should get the directory as favorite", async () => {
@@ -101,12 +101,12 @@ describe('directoriesApiSlice', () => {
     });
 });
 
-// useCreateDirectoryMutation,
-// useUpdateDirectoryMutation,
-// useDeleteDirectoryMutation,
-// useGetDirectoryQuery,
-// useLazyGetDirectoryQuery,
-// useGetUserDirectoriesFavoritesQuery,
-// useGetIsFavoriteDirectoryQuery,
-// useAddFavoriteDirectoryMutation,
-// useRemoveFavoriteDirectoryMutation,
+//--useCreateDirectoryMutation,
+//--useUpdateDirectoryMutation,
+//  useDeleteDirectoryMutation,
+//--useGetDirectoryQuery,
+//  useLazyGetDirectoryQuery,
+//--useGetUserDirectoriesFavoritesQuery,
+//--useGetIsFavoriteDirectoryQuery,
+//  useAddFavoriteDirectoryMutation,
+//  useRemoveFavoriteDirectoryMutation,
