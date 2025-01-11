@@ -10,6 +10,8 @@ import {
   IconButton,
 } from '@mui/material';
 import dayjs from 'dayjs';
+import 'dayjs/locale/en';
+import 'dayjs/locale/es';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -40,7 +42,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   shouldDelete = false,
   onDeleteSuccess,
 }) => {
-  const { t } = useTranslation('reviewCard');
+  const { t, i18n } = useTranslation('reviewCard');
   const user = useSelector(selectCurrentUser);
 
   const { data: userData } = useGetUserQuery(
@@ -63,7 +65,9 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     setOpenDeleteModal(true);
   };
 
-  const formattedDate = dayjs(review.createdAt).format('LL');
+  dayjs.locale(i18n.language);
+
+  const formattedDate = dayjs(review.createdAt).format(t('dateFormat'));
 
   const token = useSelector(selectCurrentToken);
 

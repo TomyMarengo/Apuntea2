@@ -144,7 +144,9 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
 
         {/* Heart icon top-right */}
         {loggedUser && (
-          <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
+          <Tooltip
+            title={isFavorite ? t('removeFavorite')! : t('addFavorite')!}
+          >
             <IconButton
               onClick={handleToggleFavorite}
               size="small"

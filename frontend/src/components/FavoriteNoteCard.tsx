@@ -92,7 +92,7 @@ const FavoriteNoteCard: React.FC<FavoriteNoteCardProps> = ({
         <NoteFileIcon fileType={note.fileType} size={48} />
 
         {/* Heart icon top-right */}
-        <Tooltip title={isFavorite ? t('removeFavorite')! : t('favorited')!}>
+        <Tooltip title={isFavorite ? t('removeFavorite')! : t('addFavorite')!}>
           <IconButton
             onClick={handleToggleFavorite}
             size="small"

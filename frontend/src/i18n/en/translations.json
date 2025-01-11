@@ -278,6 +278,7 @@
   "favoriteDirectoryCard": {
     "favorited": "Folder added to favorites!",
     "unfavorited": "Folder removed from favorites!",
+    "addFavorite": "Add to favorites",
     "removeFavorite": "Remove from favorites",
     "errorUnfavorite": "Failed to update favorite status.",
     "errorFavorite": "Failed to update favorite status."
@@ -285,6 +286,7 @@
   "favoriteNoteCard": {
     "favorited": "Note added to favorites!",
     "unfavorited": "Note removed from favorites!",
+    "addFavorite": "Add to favorites",
     "removeFavorite": "Remove from favorites",
     "errorUnfavorite": "Failed to update favorite status."
   },
@@ -554,7 +556,8 @@
   },
   "reviewCard": {
     "you": "You",
-    "hiddenNote": "Hidden note"
+    "hiddenNote": "Hidden note",
+    "dateFormat": "LL"
   },
   "reviewsPage": {
     "titlePage": "Reviews | Apuntea",
@@ -616,6 +619,7 @@
     "deleteError": "Error deleting note.",
     "unfavorite": "Unfavorite",
     "favorite": "Favorite",
+    "edit": "Edit",
     "loginToFavorite": "Login to favorite",
     "download": "Download",
     "copyLink": "Copy Link",
@@ -718,6 +722,7 @@
     "errorFetchingDirectory": "Error fetching folder.",
     "favorited": "Folder added to favorites!",
     "unfavorited": "Folder removed from favorites!",
+    "addFavorite": "Add to favorites",
     "removeFavorite": "Remove from favorites",
     "errorUnfavorite": "Failed to update favorite status.",
     "errorFavorite": "Failed to update favorite status."

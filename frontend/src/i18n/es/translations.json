@@ -278,12 +278,14 @@
   "favoriteDirectoryCard": {
     "favorited": "¡Carpeta agregada a favoritos!",
     "unfavorited": "¡Carpeta eliminada de favoritos!",
+    "addFavorite": "Agregar a favoritos",
     "removeFavorite": "Eliminar de favoritos",
     "errorUnfavorite": "Error al actualizar el estado de favorito."
   },
   "favoriteNoteCard": {
     "favorited": "¡Apunte agregado a favoritos!",
     "unfavorited": "¡Apunte eliminado de favoritos!",
+    "addFavorite": "Agregar a favoritos",
     "removeFavorite": "Eliminar de favoritos",
     "errorUnfavorite": "Error al actualizar el estado de favorito."
   },
@@ -552,7 +554,8 @@
   },
   "reviewCard": {
     "hiddenNote": "Apunte oculto",
-    "you": "Tú"
+    "you": "Tú",
+    "dateFormat": "LL"
   },
   "reviewsPage": {
     "titlePage": "Reseñas | Apuntea",
@@ -614,6 +617,7 @@
     "deleteError": "Error al eliminar el apunte.",
     "unfavorite": "Eliminar Favorito",
     "favorite": "Favorito",
+    "edit": "Editar",
     "loginToFavorite": "Inicia sesión para agregar a favoritos",
     "download": "Descargar",
     "copyLink": "Copiar Enlace",
@@ -715,6 +719,7 @@
     "errorFetchingDirectory": "Error al cargar la carpeta.",
     "favorited": "¡Carpeta agregada a favoritos!",
     "unfavorited": "¡Carpeta eliminada de favoritos!",
+    "addFavorite": "Agregar a favoritos",
     "removeFavorite": "Eliminar de favoritos",
     "errorUnfavorite": "Error al actualizar el estado de favorito."
   },
