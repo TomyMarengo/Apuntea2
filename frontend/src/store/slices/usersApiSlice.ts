@@ -4,6 +4,7 @@ import { ApiResponse, apiSlice } from './apiSlice';
 import { setCurrentUser } from './authSlice';
 import { setLocale } from './languageSlice';
 import {
+  CAREER_CONTENT_TYPE, INSTITUTION_CONTENT_TYPE,
   USER_COLLECTION_CONTENT_TYPE,
   USER_CONTENT_TYPE,
   USER_CREATE_CONTENT_TYPE,
@@ -178,7 +179,12 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
           let careerData: Career | undefined;
           if (userData.career) {
-            const careerResult = await baseQuery({ url: userData.career });
+            const careerResult = await baseQuery({
+              url: userData.career,
+              headers: {
+                Accept: CAREER_CONTENT_TYPE
+              }
+            });
             if (!careerResult.error) {
               careerData = careerResult.data as Career;
             }
@@ -188,6 +194,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           if (userData.institution) {
             const institutionResult = await baseQuery({
               url: userData.institution,
+              headers: {
+                  Accept: INSTITUTION_CONTENT_TYPE
+              }
             });
             if (!institutionResult.error) {
               institutionData = institutionResult.data as Institution;
@@ -536,7 +545,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         });
 
         let errorMessages = extractErrorMessages(result.error);
-        console.log('result!!', result);
 
         return {
           data: {

@@ -24,11 +24,11 @@ export function expectToBePagedContent(collection, totalCount, totalPages) {
     expect(totalPages).toEqual(expect.any(Number));
 }
 
-export const UNAUTHORIZED_RESPONSE = () => new HttpResponse(null, {status: 401});
-export const NOT_FOUND_RESPONSE = () => new HttpResponse(null, {status: 404});
-export const NOT_ACCEPTABLE_RESPONSE = () => new HttpResponse(null, {status: 406});
+export const UNAUTHORIZED_RESPONSE = () => new HttpResponse(JSON.stringify({message: "unauthorized"}), {status: 401});
+export const NOT_FOUND_RESPONSE = () => new HttpResponse(JSON.stringify({message: "not found"}), {status: 404});
+export const NOT_ACCEPTABLE_RESPONSE = () => new HttpResponse(JSON.stringify({message: "not acceptable media type"}), {status: 406});
 
-export const UNSUPPORTED_MEDIA_TYPE_RESPONSE = () => new HttpResponse(null, {status: 415});
+export const UNSUPPORTED_MEDIA_TYPE_RESPONSE = () => new HttpResponse(JSON.stringify({message: "unsupported media type"}), {status: 415});
 export const CREATED_RESPONSE = () => new HttpResponse(null, {status: 201});
 export const NO_CONTENT_RESPONSE = () => new HttpResponse(null, {status: 204});
 

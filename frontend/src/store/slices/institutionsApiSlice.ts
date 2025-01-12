@@ -2,8 +2,11 @@
 
 import { apiSlice, ApiResponse } from './apiSlice';
 import {
+  CAREER_COLLECTION_CONTENT_TYPE,
+  CAREER_CONTENT_TYPE,
+  INSTITUTION_COLLECTION_CONTENT_TYPE, INSTITUTION_CONTENT_TYPE, SUBJECT_CAREER_COLLECTION_CONTENT_TYPE,
   SUBJECT_CAREER_CONTENT_TYPE,
-  SUBJECT_CAREER_CREATE_CONTENT_TYPE,
+  SUBJECT_CAREER_CREATE_CONTENT_TYPE, SUBJECT_COLLECTION_CONTENT_TYPE,
   SUBJECT_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Institution, Career, Subject, SubjectCareer } from '../../types';
@@ -82,7 +85,12 @@ interface UnlinkSubjectArgs {
 export const institutionsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getInstitutions: builder.query<Institution[], void>({
-      query: () => '/institutions',
+      query: () => ({
+        url: '/institutions',
+        headers: {
+          Accept: INSTITUTION_COLLECTION_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any) => {
         const institutions: Institution[] = Array.isArray(response)
           ? response.map(mapApiInstitution)
@@ -93,14 +101,22 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 86400,
     }),
     getInstitution: builder.query<Institution, InstitutionQueryArgs>({
-      query: ({ institutionId, url }) =>
-        url || `/institutions/${institutionId}`,
+      query: ({ institutionId, url }) => ({
+        url: url || `/institutions/${institutionId}`,
+        headers: {
+          Accept: INSTITUTION_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any) => mapApiInstitution(response),
       keepUnusedDataFor: 86400,
     }),
     getCareers: builder.query<Career[], InstitutionQueryArgs>({
-      query: ({ institutionId, url }) =>
-        url || `/institutions/${institutionId}/careers`,
+      query: ({ institutionId, url }) => ({
+        url: url || `/institutions/${institutionId}/careers`,
+        headers: {
+          Accept: CAREER_COLLECTION_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any) => {
         const careers: Career[] = Array.isArray(response)
           ? response.map(mapApiCareer)
@@ -111,20 +127,29 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 86400,
     }),
     getCareer: builder.query<Career, CareerQueryArgs>({
-      query: ({ institutionId, careerId, url }) =>
-        url || `/institutions/${institutionId}/careers/${careerId}`,
+      query: ({ institutionId, careerId, url }) => ({
+        url: url || `/institutions/${institutionId}/careers/${careerId}`,
+        headers: {
+          Accept: CAREER_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any) => mapApiCareer(response),
       keepUnusedDataFor: 86400,
     }),
     getSubject: builder.query<Subject, SubjectQueryArgs>({
-      query: ({ subjectId, url }) => url || `/subjects/${subjectId}`,
+      query: ({ subjectId, url }) => ({
+        url: url || `/subjects/${subjectId}`,
+        headers: {
+            Accept: SUBJECT_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any) => mapApiSubject(response),
       providesTags: ['Subjects'],
       keepUnusedDataFor: 86400,
     }),
     createSubject: builder.mutation<ApiResponse, CreateSubjectArgs>({
       async queryFn(
-        { name, year, institutionId, careerId, url },
+        { name, year, institutionId, careerId, subjectCareerUrl, url },
         _queryApi,
         _extraOptions,
         baseQuery,
@@ -160,7 +185,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           // Step 2: Associate the subject with the career and year
           if (institutionId && careerId) {
             const subjectCareerResult = await baseQuery({
-              url: `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
+              url: subjectCareerUrl || `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
               method: 'POST',
               body: JSON.stringify({ subjectId, year }),
               headers: {
@@ -275,12 +300,12 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
               },
             });
             if (subjectCareerResult.error) {
-              return { data: { success: false, messages: [] } };
+              let errorMessages = extractErrorMessages(subjectCareerResult.error);
+              return { data: { success: false, messages: errorMessages } };
             }
           }
           return { data: { success: true, messages: [] } };
         } catch (error) {
-          console.error('Failed to link subject to career:', error);
           return { data: { success: false, messages: [] } };
         }
       },
@@ -315,7 +340,12 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ['Subjects'],
     }),
     getSubjectsNotInCareer: builder.query<Subject[], CareerQueryArgs>({
-      query: ({ careerId, url }) => url || `/subjects?notInCareer=${careerId}`,
+      query: ({ careerId, url }) => ({
+        url: url || `/subjects?notInCareer=${careerId}`,
+        headers: {
+          Accept: SUBJECT_COLLECTION_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any) => {
         const subjects: Subject[] = Array.isArray(response)
           ? response.map(mapApiSubject)
@@ -326,7 +356,12 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 86400,
     }),
     getSubjectsByCareer: builder.query<Subject[], SubjectsByCareerArgs>({
-      query: ({ careerId, url }) => url || `/subjects?careerId=${careerId}`,
+      query: ({ careerId, url }) => ({
+        url: url || `/subjects?careerId=${careerId}`,
+        headers: {
+          Accept: SUBJECT_COLLECTION_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any): Subject[] => {
         const subjects: Subject[] = Array.isArray(response)
           ? response.map(mapApiSubject)
@@ -337,9 +372,12 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 86400,
     }),
     getSubjectCareers: builder.query<SubjectCareer[], CareerQueryArgs>({
-      query: ({ institutionId, careerId, url }) =>
-        url ||
-        `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
+      query: ({ institutionId, careerId, url }) => ({
+        url: url ||`/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
+        headers: {
+          Accept: SUBJECT_CAREER_COLLECTION_CONTENT_TYPE
+        }
+      }),
       transformResponse: (response: any) => {
         const subjectCareers: SubjectCareer[] = Array.isArray(response)
           ? response.map(mapApiSubjectCareer)
@@ -351,8 +389,12 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
     }),
     getCareerSubjectsByYear: builder.query<Subject[], CareerSubjectsByYearArgs>(
       {
-        query: ({ careerId, year, url }) =>
-          url || `/subjects?careerId=${careerId}&year=${year}`,
+        query: ({ careerId, year, url }) => ({
+          url: url || `/subjects?careerId=${careerId}&year=${year}`,
+          headers: {
+            Accept: SUBJECT_COLLECTION_CONTENT_TYPE
+          }
+        }),
         transformResponse: (response: any) => {
           const subjects: Subject[] = Array.isArray(response)
             ? response.map(mapApiSubject)

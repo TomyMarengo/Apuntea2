@@ -3,7 +3,7 @@ import {
     apiUrl,
     CREATED_RESPONSE,
     NO_CONTENT_RESPONSE,
-    NOT_ACCEPTABLE_RESPONSE,
+    NOT_ACCEPTABLE_RESPONSE, NOT_FOUND_RESPONSE,
     UNSUPPORTED_MEDIA_TYPE_RESPONSE
 } from "../setup/utils";
 import {
@@ -71,7 +71,7 @@ export const reviewsHandles = [
             if (review) {
                 return new HttpResponse(JSON.stringify(review), {status: 200});
             } else {
-                return new HttpResponse({status: 404});
+                return NOT_FOUND_RESPONSE();
             }
         } else {
             return NOT_ACCEPTABLE_RESPONSE();
