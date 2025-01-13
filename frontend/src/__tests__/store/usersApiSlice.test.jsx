@@ -236,22 +236,3 @@ describe('usersApiSlice', () => {
     expect(result.success).toBe(false);
   });
 });
-
-//--useGetUsersQuery,
-//--useGetUserQuery,
-//  useGetUserPictureQuery,
-//--useGetLoggedUserQuery,
-//  useLazyGetLoggedUserQuery,
-//  useUpdatePictureMutation,
-//--useUpdateUserMutation,
-//--useCreateUserMutation,
-//--useGetFollowersQuery,
-//--useGetFollowingsQuery,
-//  useFollowUserMutation,
-//  useUnfollowUserMutation,
-//--useIsFollowingUserQuery,
-//--useUpdateUserStatusMutation,
-//  useLazyGetUserQuery,
-//  useLazyGetUserByEmailQuery,
-//--useRequestPasswordChangeMutation,
-//--useUpdateUserPasswordMutation,

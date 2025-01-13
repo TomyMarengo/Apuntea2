@@ -114,10 +114,3 @@ describe('reviewsApiSlice', () => {
     expect(result.messages).contain(invalidScoreMsg);
   });
 });
-
-//--useGetReviewsQuery,
-//--useGetMyReviewQuery,
-//--useGetReviewQuery,
-//--useCreateReviewMutation,
-//--useUpdateReviewMutation,
-//  useDeleteReviewMutation,

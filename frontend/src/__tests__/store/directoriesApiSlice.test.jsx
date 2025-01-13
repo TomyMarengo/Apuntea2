@@ -160,13 +160,3 @@ describe('directoriesApiSlice', () => {
     expectToBePagedContent(directories, totalCount, totalPages);
   });
 });
-
-//--useCreateDirectoryMutation,
-//--useUpdateDirectoryMutation,
-//  useDeleteDirectoryMutation,
-//--useGetDirectoryQuery,
-//  useLazyGetDirectoryQuery,
-//--useGetUserDirectoriesFavoritesQuery,
-//--useGetIsFavoriteDirectoryQuery,
-//  useAddFavoriteDirectoryMutation,
-//  useRemoveFavoriteDirectoryMutation,

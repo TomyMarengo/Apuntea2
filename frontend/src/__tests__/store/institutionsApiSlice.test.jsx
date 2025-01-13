@@ -262,17 +262,3 @@ describe('institutionsApiSlice', () => {
     expect(subjects).not.empty;
   });
 });
-
-//--useGetInstitutionsQuery,
-//--useGetInstitutionQuery,
-//--useGetCareersQuery,
-//--useGetCareerQuery,
-//--useGetSubjectQuery,
-//--useCreateSubjectMutation,
-//--useUpdateSubjectMutation,
-//--useGetSubjectsNotInCareerQuery,
-//--useGetSubjectsByCareerQuery,
-//--useLinkSubjectCareerMutation,
-//  useUnlinkSubjectCareerMutation,
-//--useGetSubjectCareersQuery,
-//--useGetCareerSubjectsByYearQuery,

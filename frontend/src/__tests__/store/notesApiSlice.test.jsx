@@ -136,15 +136,3 @@ describe('notesApiSlice', () => {
     expectToBePagedContent(notes, totalCount, totalPages);
   });
 });
-
-//--useGetNoteQuery
-//  useGetNoteFileQuery,
-//--useCreateNoteMutation,
-//--useUpdateNoteMutation,
-//  useDeleteNoteMutation,
-//--useGetUserNotesFavoritesQuery,
-//--useGetIsFavoriteNoteQuery,
-//  useAddFavoriteNoteMutation,
-//  useRemoveFavoriteNoteMutation,
-//  useAddInteractionNoteMutation,
-//--useGetLatestNotesQuery,
