@@ -2,7 +2,9 @@
 
 import { apiSlice, ApiResponse } from './apiSlice';
 import {
-  DELETE_REASON_CONTENT_TYPE, DIRECTORY_COLLECTION_CONTENT_TYPE, DIRECTORY_CONTENT_TYPE,
+  DELETE_REASON_CONTENT_TYPE,
+  DIRECTORY_COLLECTION_CONTENT_TYPE,
+  DIRECTORY_CONTENT_TYPE,
   DIRECTORY_CREATE_CONTENT_TYPE,
   DIRECTORY_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
@@ -166,8 +168,8 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
       query: ({ directoryId, url }) => ({
         url: url || `/directories/${directoryId}`,
         headers: {
-            Accept: DIRECTORY_CONTENT_TYPE,
-        }
+          Accept: DIRECTORY_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => {
         return mapApiDirectory(response);
@@ -189,13 +191,13 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           if (rdir) {
             params.append('rdir', rdir);
           }
-          url = `/directories?${params.toString()}`
+          url = `/directories?${params.toString()}`;
         }
         return {
-            url: url,
-            headers: {
-              Accept: DIRECTORY_COLLECTION_CONTENT_TYPE,
-            }
+          url: url,
+          headers: {
+            Accept: DIRECTORY_COLLECTION_CONTENT_TYPE,
+          },
         };
       },
       transformResponse: (

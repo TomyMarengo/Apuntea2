@@ -4,9 +4,12 @@ import { apiSlice, ApiResponse } from './apiSlice';
 import {
   CAREER_COLLECTION_CONTENT_TYPE,
   CAREER_CONTENT_TYPE,
-  INSTITUTION_COLLECTION_CONTENT_TYPE, INSTITUTION_CONTENT_TYPE, SUBJECT_CAREER_COLLECTION_CONTENT_TYPE,
+  INSTITUTION_COLLECTION_CONTENT_TYPE,
+  INSTITUTION_CONTENT_TYPE,
+  SUBJECT_CAREER_COLLECTION_CONTENT_TYPE,
   SUBJECT_CAREER_CONTENT_TYPE,
-  SUBJECT_CAREER_CREATE_CONTENT_TYPE, SUBJECT_COLLECTION_CONTENT_TYPE,
+  SUBJECT_CAREER_CREATE_CONTENT_TYPE,
+  SUBJECT_COLLECTION_CONTENT_TYPE,
   SUBJECT_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Institution, Career, Subject, SubjectCareer } from '../../types';
@@ -54,6 +57,7 @@ interface CreateSubjectArgs {
   year: number;
   institutionId?: string;
   careerId?: string;
+  subjectCareerUrl?: string;
   url?: string;
 }
 
@@ -88,8 +92,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: '/institutions',
         headers: {
-          Accept: INSTITUTION_COLLECTION_CONTENT_TYPE
-        }
+          Accept: INSTITUTION_COLLECTION_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => {
         const institutions: Institution[] = Array.isArray(response)
@@ -104,8 +108,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       query: ({ institutionId, url }) => ({
         url: url || `/institutions/${institutionId}`,
         headers: {
-          Accept: INSTITUTION_CONTENT_TYPE
-        }
+          Accept: INSTITUTION_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => mapApiInstitution(response),
       keepUnusedDataFor: 86400,
@@ -114,8 +118,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       query: ({ institutionId, url }) => ({
         url: url || `/institutions/${institutionId}/careers`,
         headers: {
-          Accept: CAREER_COLLECTION_CONTENT_TYPE
-        }
+          Accept: CAREER_COLLECTION_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => {
         const careers: Career[] = Array.isArray(response)
@@ -130,8 +134,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       query: ({ institutionId, careerId, url }) => ({
         url: url || `/institutions/${institutionId}/careers/${careerId}`,
         headers: {
-          Accept: CAREER_CONTENT_TYPE
-        }
+          Accept: CAREER_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => mapApiCareer(response),
       keepUnusedDataFor: 86400,
@@ -140,8 +144,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       query: ({ subjectId, url }) => ({
         url: url || `/subjects/${subjectId}`,
         headers: {
-            Accept: SUBJECT_CONTENT_TYPE
-        }
+          Accept: SUBJECT_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => mapApiSubject(response),
       providesTags: ['Subjects'],
@@ -185,7 +189,9 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           // Step 2: Associate the subject with the career and year
           if (institutionId && careerId) {
             const subjectCareerResult = await baseQuery({
-              url: subjectCareerUrl || `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
+              url:
+                subjectCareerUrl ||
+                `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
               method: 'POST',
               body: JSON.stringify({ subjectId, year }),
               headers: {
@@ -300,12 +306,14 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
               },
             });
             if (subjectCareerResult.error) {
-              let errorMessages = extractErrorMessages(subjectCareerResult.error);
+              let errorMessages = extractErrorMessages(
+                subjectCareerResult.error,
+              );
               return { data: { success: false, messages: errorMessages } };
             }
           }
           return { data: { success: true, messages: [] } };
-        } catch (error) {
+        } catch (_error) {
           return { data: { success: false, messages: [] } };
         }
       },
@@ -343,8 +351,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       query: ({ careerId, url }) => ({
         url: url || `/subjects?notInCareer=${careerId}`,
         headers: {
-          Accept: SUBJECT_COLLECTION_CONTENT_TYPE
-        }
+          Accept: SUBJECT_COLLECTION_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => {
         const subjects: Subject[] = Array.isArray(response)
@@ -359,8 +367,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
       query: ({ careerId, url }) => ({
         url: url || `/subjects?careerId=${careerId}`,
         headers: {
-          Accept: SUBJECT_COLLECTION_CONTENT_TYPE
-        }
+          Accept: SUBJECT_COLLECTION_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any): Subject[] => {
         const subjects: Subject[] = Array.isArray(response)
@@ -373,10 +381,12 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
     }),
     getSubjectCareers: builder.query<SubjectCareer[], CareerQueryArgs>({
       query: ({ institutionId, careerId, url }) => ({
-        url: url ||`/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
+        url:
+          url ||
+          `/institutions/${institutionId}/careers/${careerId}/subjectcareers`,
         headers: {
-          Accept: SUBJECT_CAREER_COLLECTION_CONTENT_TYPE
-        }
+          Accept: SUBJECT_CAREER_COLLECTION_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => {
         const subjectCareers: SubjectCareer[] = Array.isArray(response)
@@ -392,8 +402,8 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
         query: ({ careerId, year, url }) => ({
           url: url || `/subjects?careerId=${careerId}&year=${year}`,
           headers: {
-            Accept: SUBJECT_COLLECTION_CONTENT_TYPE
-          }
+            Accept: SUBJECT_COLLECTION_CONTENT_TYPE,
+          },
         }),
         transformResponse: (response: any) => {
           const subjects: Subject[] = Array.isArray(response)

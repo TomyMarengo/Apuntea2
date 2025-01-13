@@ -6,11 +6,12 @@
   "scripts": {
     "generate-namespaces": "node src/scripts/generateNamespaces.js",
     "dev": "npm run generate-namespaces && vite",
-    "build": "tsc -b && npm run generate-namespaces && vite build && echo '<%@ page session=\"false\" %> ' > ./dist/.tmp && cat ./dist/index.html >> ./dist/.tmp && cp ./dist/.tmp ./dist/index.html && rm ./dist/.tmp\n",
+    "build": "tsc -b && npm run test && npm run generate-namespaces && vite build && echo '<%@ page session=\"false\" %> ' > ./dist/.tmp && cat ./dist/index.html >> ./dist/.tmp && cp ./dist/.tmp ./dist/index.html && rm ./dist/.tmp\n",
     "preview": "vite preview",
     "lint": "eslint . --ext .ts,.tsx,.js --max-warnings=0",
     "lint:fix": "eslint . --ext .ts,.tsx,.js --fix",
-    "format": "prettier --write \"**/*.{js,ts,tsx,json,css,md}\""
+    "format": "prettier --write \"**/*.{js,ts,tsx,json,css,md}\"",
+    "test": "vitest run"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

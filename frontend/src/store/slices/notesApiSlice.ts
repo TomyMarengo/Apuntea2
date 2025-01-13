@@ -2,8 +2,10 @@
 
 import { ApiResponse, apiSlice } from './apiSlice';
 import {
-  DELETE_REASON_CONTENT_TYPE, NOTE_COLLECTION_CONTENT_TYPE, NOTE_CONTENT_TYPE, NOTE_CREATE_CONTENT_TYPE,
-  NOTE_UPDATE_CONTENT_TYPE, USER_EMAIL_COLLECTION_CONTENT_TYPE,
+  DELETE_REASON_CONTENT_TYPE,
+  NOTE_COLLECTION_CONTENT_TYPE,
+  NOTE_CONTENT_TYPE,
+  NOTE_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Note, NoteCategory } from '../../types';
 import { extractErrorMessages } from '../../utils/helpers';
@@ -69,7 +71,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         url: url || `/notes/${noteId}`,
         headers: {
           Accept: NOTE_CONTENT_TYPE,
-        }
+        },
       }),
       transformResponse: (response: any) => {
         return mapApiNote(response);
@@ -104,7 +106,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         const result = await baseQuery({
           url: '/notes',
           method: 'POST',
-          body: formData
+          body: formData,
         });
 
         let errorMessages = extractErrorMessages(result.error);
@@ -199,14 +201,14 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           params.append('page', String(page));
           params.append('pageSize', String(pageSize));
 
-          url =  `/notes?${params.toString()}`;
+          url = `/notes?${params.toString()}`;
         }
         return {
-            url,
-            headers: {
-              Accept: NOTE_COLLECTION_CONTENT_TYPE,
-            }
-        }
+          url,
+          headers: {
+            Accept: NOTE_COLLECTION_CONTENT_TYPE,
+          },
+        };
       },
       transformResponse: (response: any, meta: any): PaginatedNotesResponse => {
         const totalCount = Number(
@@ -307,7 +309,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         url: url || `/notes?userId=${userId}&sortBy=date`,
         headers: {
           Accept: NOTE_COLLECTION_CONTENT_TYPE,
-        }
+        },
       }),
       transformResponse: (response: any) => {
         const notes: Note[] = Array.isArray(response)

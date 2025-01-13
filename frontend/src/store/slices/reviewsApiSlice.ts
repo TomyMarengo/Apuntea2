@@ -2,7 +2,9 @@
 
 import { ApiResponse, apiSlice } from './apiSlice';
 import {
-  DELETE_REASON_CONTENT_TYPE, REVIEW_COLLECTION_CONTENT_TYPE, REVIEW_CONTENT_TYPE,
+  DELETE_REASON_CONTENT_TYPE,
+  REVIEW_COLLECTION_CONTENT_TYPE,
+  REVIEW_CONTENT_TYPE,
   REVIEW_CREATE_CONTENT_TYPE,
   REVIEW_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
@@ -75,8 +77,8 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
         return {
           url: queryUrl,
           headers: {
-            Accept: REVIEW_COLLECTION_CONTENT_TYPE
-          }
+            Accept: REVIEW_COLLECTION_CONTENT_TYPE,
+          },
         };
       },
       transformResponse: (response: any, meta: { response: Response }) => {
@@ -109,10 +111,10 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
     }),
     getMyReview: builder.query<Review, ReviewArgs>({
       query: ({ userId, url }) => ({
-        url: url +`&userId=${userId}`,
+        url: url + `&userId=${userId}`,
         headers: {
-          Accept: REVIEW_COLLECTION_CONTENT_TYPE
-        }
+          Accept: REVIEW_COLLECTION_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => {
         const review = Array.isArray(response) ? response[0] : response;
@@ -127,8 +129,8 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
       query: ({ noteId, userId, url }) => ({
         url: url || `/reviews/${noteId}_${userId}`,
         headers: {
-          Accept: REVIEW_CONTENT_TYPE
-        }
+          Accept: REVIEW_CONTENT_TYPE,
+        },
       }),
       transformResponse: (response: any) => {
         return mapApiReview(response);
