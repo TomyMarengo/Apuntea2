@@ -338,7 +338,6 @@ export const institutionsHandlers = [
           return NOT_FOUND_RESPONSE();
         }
         const subjectCareer = await request.json();
-        console.log(subjectCareer);
         return subjectCareer.year >= 0
           ? CREATED_RESPONSE(
               apiUrl(
@@ -394,7 +393,6 @@ export const institutionsHandlers = [
             (institution) => institution.id === params.institutionId,
           ) === undefined
         ) {
-          console.log('hola');
           return NOT_FOUND_RESPONSE();
         }
         return HttpResponse.json(subjectCareers);
