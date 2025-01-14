@@ -55,8 +55,6 @@ export default function useForgotPassword() {
       }).unwrap();
 
       if (!resultUpdate.success) {
-        console.log(resultUpdate);
-        console.log(resultUpdate.messages);
         throw new Error(resultUpdate.messages[0]);
       }
     } catch (error: any) {

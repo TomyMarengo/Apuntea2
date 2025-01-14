@@ -49,7 +49,6 @@ const FollowersModal: React.FC<FollowersModalProps> = ({
       setIsFetchingMore(false);
       reset();
       triggerGetFollowers({ url: followingUrl, page: 1, pageSize });
-      console.log('triggerGetFollowers');
     }
   }, [open]);
 

@@ -121,7 +121,7 @@ const NotePage: React.FC = () => {
       setIsFavorite(isFavData?.success);
   }, [isFavData]);
 
-  const isOwner = user && note && user.id === note.ownerUrl?.split('/').pop();
+  const isOwner = user && note && user.selfUrl === note.ownerUrl;
   const isAdmin = token?.payload?.authorities?.includes('ROLE_ADMIN') ?? false;
 
   const handleToggleFavorite = async () => {

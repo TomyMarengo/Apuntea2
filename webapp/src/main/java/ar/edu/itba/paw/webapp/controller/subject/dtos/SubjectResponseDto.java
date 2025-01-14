@@ -10,6 +10,7 @@ import java.util.UUID;
 public class SubjectResponseDto {
     private UUID id;
     private String name;
+    private UUID rootDirectoryId;
 
     private URI self;
     private URI rootDirectory;
@@ -18,6 +19,7 @@ public class SubjectResponseDto {
         final SubjectResponseDto subjectDto = new SubjectResponseDto();
         subjectDto.id = subject.getSubjectId();
         subjectDto.name = subject.getName();
+        subjectDto.rootDirectoryId = subject.getRootDirectoryId();
 
         subjectDto.self = uriInfo.getBaseUriBuilder().path("subjects").path(subject.getSubjectId().toString()).build();
         subjectDto.rootDirectory = uriInfo.getBaseUriBuilder().path("directories").path(subject.getRootDirectoryId().toString()).build();
@@ -48,4 +50,12 @@ public class SubjectResponseDto {
     }
 
     public void setRootDirectory(URI rootDirectory) { this.rootDirectory = rootDirectory; }
+
+    public UUID getRootDirectoryId() {
+        return rootDirectoryId;
+    }
+
+    public void setRootDirectoryId(UUID rootDirectoryId) {
+        this.rootDirectoryId = rootDirectoryId;
+    }
 }

@@ -132,7 +132,6 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
 
       // Update user password
       const result = await updateUser(updateArgs).unwrap();
-      console.log('Password updated:', result);
       if (result?.success) {
         toast.success(t('messages.passwordChangedSuccessfully'));
         onUpdateSuccess();

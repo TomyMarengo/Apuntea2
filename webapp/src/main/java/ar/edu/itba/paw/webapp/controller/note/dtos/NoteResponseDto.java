@@ -22,7 +22,6 @@ public class NoteResponseDto {
 
     private Float avgScore;
 
-    //creation properties
     private UUID parentId;
 
     private UUID subjectId;
@@ -50,6 +49,8 @@ public class NoteResponseDto {
         noteDto.interactions = note.getInteractions();
         noteDto.fileType = note.getFileType();
         noteDto.avgScore = note.getAvgScore();
+
+        noteDto.parentId = note.getParentId();
 
         noteDto.subject = uriInfo.getBaseUriBuilder().path("subjects").path(note.getSubject().getSubjectId().toString()).build();
 

@@ -15,6 +15,8 @@ public class DirectoryResponseDto {
     private String iconColor;
     private Boolean visible;
 
+    private UUID parentId;
+
     //URIS
     private URI self;
     private URI owner;
@@ -31,13 +33,17 @@ public class DirectoryResponseDto {
         directoryDto.lastModifiedAt = directory.getLastModifiedAt();
         directoryDto.iconColor = directory.getIconColor();
         directoryDto.visible = directory.isVisible();
+
         directoryDto.self = uriInfo.getBaseUriBuilder().path("directories").path(directory.getId().toString()).build();
         if (directory.getUser() != null)
             directoryDto.owner = uriInfo.getBaseUriBuilder().path("users").path(directory.getUser().getUserId().toString()).build();
-        if(directory.getParentId() != null)
+        if(directory.getParentId() != null){
             directoryDto.parent = uriInfo.getBaseUriBuilder().path("directories").path(directory.getParentId().toString()).build();
-        if (directory.getSubject() != null)
+            directoryDto.parentId = directory.getParentId();
+        }
+        if (directory.getSubject() != null){
             directoryDto.subject = uriInfo.getBaseUriBuilder().path("subjects").path(directory.getSubject().getSubjectId().toString()).build();
+        }
         directoryDto.notes = uriInfo.getBaseUriBuilder().path("notes").queryParam("parentId", directory.getId().toString()).build();
         directoryDto.directories = uriInfo.getBaseUriBuilder().path("directories").queryParam("parentId", directory.getId().toString()).build();
         return directoryDto;
@@ -137,5 +143,13 @@ public class DirectoryResponseDto {
 
     public void setDirectories(URI directories) {
         this.directories = directories;
+    }
+
+    public UUID getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(UUID parentId) {
+        this.parentId = parentId;
     }
 }

@@ -319,8 +319,8 @@
     "errorUnfollow": "Ocurrió un error al dejar de seguir a {{username}}.",
     "loading": "Cargando...",
     "errorLoadingUser": "Error al cargar el usuario.",
-    "Follow": "Seguir",
-    "Unfollow": "Dejar de seguir"
+    "follow": "Seguir",
+    "unfollow": "Dejar de seguir"
   },
   "forgotPasswordPage": {
     "titlePage": "Recuperar Contraseña | Apuntea",

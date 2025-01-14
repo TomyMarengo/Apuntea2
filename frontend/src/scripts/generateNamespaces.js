@@ -49,7 +49,6 @@ const outputPath = path.join(__dirname, '../namespaces.json');
 // Write the namespaces array to namespaces.json
 try {
   fs.writeFileSync(outputPath, namespacesArray, 'utf-8');
-  console.log('Namespaces list successfully generated in namespaces.json.');
 } catch (error) {
   console.error(`Error writing to ${outputPath}:`, error);
   process.exit(1);

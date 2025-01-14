@@ -47,6 +47,7 @@ export const mapApiNote = (apiNote: any): Note => {
     createdAt: apiNote.createdAt,
     lastModifiedAt: apiNote.lastModifiedAt,
     avgScore: apiNote.avgScore,
+    parentId: apiNote.parentId,
     selfUrl: apiNote.self,
     fileUrl: apiNote.file,
     interactions: apiNote.interactions,
@@ -66,6 +67,7 @@ export const mapApiDirectory = (apiDirectory: any): Directory => {
     iconColor: apiDirectory.iconColor,
     createdAt: apiDirectory.createdAt,
     lastModifiedAt: apiDirectory.lastModifiedAt,
+    parentId: apiDirectory.parentId,
     selfUrl: apiDirectory.self,
     ownerUrl: apiDirectory.owner,
     parentUrl: apiDirectory.parent,
@@ -98,6 +100,7 @@ export const mapApiSubject = (apiSubject: any): Subject => {
   return {
     id: apiSubject.id,
     name: apiSubject.name,
+    rootDirectoryId: apiSubject.rootDirectoryId,
     selfUrl: apiSubject.self,
     rootDirectoryUrl: apiSubject.rootDirectory,
   };

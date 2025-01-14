@@ -184,7 +184,16 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           const subjectUrl = (subjectResult.meta as any)?.response.headers.get(
             'Location',
           );
-          const subjectId = subjectUrl?.split('/').pop();
+
+          const subject = await baseQuery({
+            url: subjectUrl,
+            method: 'GET',
+            headers: {
+              Accept: SUBJECT_CONTENT_TYPE,
+            },
+          });
+
+          const subjectId = (subject.data as any)?.id as string;
 
           // Step 2: Associate the subject with the career and year
           if (institutionId && careerId) {

@@ -39,7 +39,7 @@ import {
 } from '../../store/slices/directoriesApiSlice';
 import { useGetSubjectQuery } from '../../store/slices/institutionsApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
-import { Directory, Subject, Column } from '../../types';
+import { Directory, Column } from '../../types';
 
 interface RowDirectoryProps {
   directory: Directory;
@@ -157,16 +157,16 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
   };
 
   const handleOpenParent = () => {
-    const parentId = directory.parentUrl?.split('/').pop();
-    if (parentId) {
-      navigate(`/directories/${parentId}/`);
+    console.log(directory);
+    if (directory.parentId) {
+      navigate(`/directories/${directory.parentId}/`);
     }
     handleMenuClose();
   };
 
   const handleSubjectDirectories = () => {
-    const subjectDirectoryUrl = (subjectData as Subject)?.rootDirectoryUrl;
-    const subjectDirectoryId = subjectDirectoryUrl?.split('/').pop();
+    console.log(subjectData);
+    const subjectDirectoryId = subjectData?.rootDirectoryId;
     if (subjectDirectoryId) {
       navigate(`/directories/${subjectDirectoryId}/`);
     }
@@ -187,7 +187,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
 
   const token = useSelector(selectCurrentToken);
 
-  const isOwner = user?.id === directory.ownerUrl?.split('/').pop();
+  const isOwner = user?.selfUrl === directory.ownerUrl;
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;
 
   const renderCell = (column: Column) => {

@@ -320,8 +320,8 @@
     "errorUnfollow": "An error occurred while unfollowing {{username}}.",
     "loading": "Loading...",
     "errorLoadingUser": "Error loading user.",
-    "Follow": "Follow",
-    "Unfollow": "Unfollow"
+    "follow": "Follow",
+    "unfollow": "Unfollow"
   },
   "forgotPasswordPage": {
     "titlePage": "Forgot Password | Apuntea",

@@ -76,6 +76,7 @@ export interface Career {
 export interface Subject {
   id: string;
   name: string;
+  rootDirectoryId: string;
   selfUrl: string;
   rootDirectoryUrl: string;
 }
@@ -131,6 +132,7 @@ export interface Note {
   createdAt: string;
   lastModifiedAt: string;
   avgScore: number;
+  parentId: string;
   selfUrl: string;
   fileUrl?: string;
   interactions?: number;
@@ -148,6 +150,7 @@ export interface Directory {
   iconColor: string;
   createdAt: string;
   lastModifiedAt: string;
+  parentId?: string;
   selfUrl?: string;
   ownerUrl?: string;
   parentUrl?: string;

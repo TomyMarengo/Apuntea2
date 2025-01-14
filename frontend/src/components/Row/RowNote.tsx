@@ -39,7 +39,7 @@ import {
   useGetIsFavoriteNoteQuery,
 } from '../../store/slices/notesApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
-import { Note, Subject, Column } from '../../types';
+import { Note, Column } from '../../types';
 import NoteFileIcon from '../NoteFileIcon';
 
 interface RowNoteProps {
@@ -161,16 +161,15 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
   };
 
   const handleOpenParent = () => {
-    const parentId = note.parentUrl?.split('/').pop();
-    if (parentId) {
-      navigate(`/directories/${parentId}/`);
+    if (note.parentId) {
+      navigate(`/directories/${note.parentId}/`);
     }
     handleMenuClose();
   };
 
   const handleSubjectDirectories = () => {
-    const subjectDirectoryUrl = (subjectData as Subject)?.rootDirectoryUrl;
-    const subjectDirectoryId = subjectDirectoryUrl?.split('/').pop();
+    console.log('subjectData', subjectData);
+    const subjectDirectoryId = subjectData?.rootDirectoryId;
     if (subjectDirectoryId) {
       navigate(`/directories/${subjectDirectoryId}/`);
     }
@@ -208,7 +207,7 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
     setOpenEditDialog(false);
   };
 
-  const isOwner = user?.id === note.ownerUrl?.split('/').pop();
+  const isOwner = user?.selfUrl === note.ownerUrl;
   const isAdmin = token?.payload?.authorities.includes('ROLE_ADMIN') || false;
 
   const renderCell = (column: Column) => {
