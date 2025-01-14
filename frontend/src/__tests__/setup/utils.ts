@@ -2,13 +2,18 @@ import { configureStore } from '@reduxjs/toolkit';
 import { HttpResponse } from 'msw';
 import { expect } from 'vitest';
 
-export function setupApiStore(api: any) {
+export function setupApiStore(apis: any) {
+  const reducer = {};
+  for (const api of apis) {
+    reducer[api.reducerPath] = api.reducer;
+  }
   const store = configureStore({
-    reducer: {
-      [api.reducerPath]: api.reducer,
-    },
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+    reducer: reducer,
+    middleware: (getDefaultMiddleware) => {
+        return getDefaultMiddleware().concat(
+            apis.map((api) => api.middleware),
+        );
+    }
   });
 
   return store;

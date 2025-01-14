@@ -28,7 +28,7 @@ import {
 
 // Set up the API store for institutions
 function setupInstitutionsApiStore() {
-  return setupApiStore(institutionsApiSlice);
+  return setupApiStore([institutionsApiSlice]);
 }
 
 const store = setupInstitutionsApiStore();
