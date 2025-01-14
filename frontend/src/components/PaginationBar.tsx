@@ -36,7 +36,10 @@ export default function PaginationBar({
     }
   }
 
-  const from = (currentPage - 1) * pageSize + 1;
+  const from = Math.min(
+    totalCount - pageSize,
+    (currentPage - 1) * pageSize + 1,
+  );
   const to = Math.min(currentPage * pageSize, totalCount);
 
   return (
