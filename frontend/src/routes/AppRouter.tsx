@@ -12,6 +12,7 @@ import HomePage from '../pages/Home/HomePage';
 import LoginPage from '../pages/Login/LoginPage';
 import NotePage from '../pages/Notes/NotePage';
 import NotesPage from '../pages/Notes/NotesPage';
+import NotFoundPage from '../pages/NotFound/NotFoundPage';
 import ProfilePage from '../pages/Profile/ProfilePage';
 import RegisterPage from '../pages/Register/RegisterPage';
 import ReviewsPage from '../pages/Reviews/ReviewsPage';
@@ -81,6 +82,7 @@ export default function AppRouter() {
           </AdminRoute>
         }
       />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

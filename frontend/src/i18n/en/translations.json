@@ -350,6 +350,13 @@
     "userNotFound": "User not found with the specified email.",
     "failedToResetPassword": "Failed to reset password."
   },
+  "notFoundPage": {
+    "titlePage": "Page Not Found | Apuntea",
+    "imageAlt": "Page Not Found Image",
+    "title": "Page not found",
+    "description": "We are sorry, but the page you are looking for does not exist",
+    "goHome": "Go to Homepage"
+  },
   "homePage": {
     "titlePage": "Home | Apuntea",
     "welcome": "Welcome to <appName>Apuntea</appName>",

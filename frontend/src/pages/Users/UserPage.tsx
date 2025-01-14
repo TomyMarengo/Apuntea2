@@ -62,9 +62,15 @@ const UserPage: React.FC = () => {
     pageTitle = t('loading');
   } else if (isError) {
     pageTitle = t('errorFetchingUser', { error: String(error) });
-  } else if (!targetUser) {
+  } /*else if (!targetUser) {
     pageTitle = t('userNotFound');
-  }
+  }*/
+
+  useEffect(() => {
+    if (isError && !isLoading) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [isError, isLoading]);
 
   return (
     <>

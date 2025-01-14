@@ -60,6 +60,12 @@ export default function DirectoryPage() {
     fetchUser();
   }, [directory, getUser]);
 
+  useEffect(() => {
+    if (!isLoadingCurrentDirectory && isErrorCurrentDirectory) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [isLoadingCurrentDirectory, isErrorCurrentDirectory]);
+
   const {
     control,
     watchedValues,

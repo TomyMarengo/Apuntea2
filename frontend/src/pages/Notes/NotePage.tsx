@@ -24,7 +24,7 @@ import { useForm } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
@@ -55,6 +55,7 @@ import { Token } from '../../types';
 
 const NotePage: React.FC = () => {
   const { t } = useTranslation('notePage');
+  const navigate = useNavigate();
   const { noteId } = useParams<{ noteId: string }>();
   const user = useSelector(selectCurrentUser);
   const token = useSelector(
@@ -369,6 +370,12 @@ const NotePage: React.FC = () => {
   } else if (!note) {
     pageTitle = t('noteNotFound');
   }
+
+  useEffect(() => {
+    if (!noteLoading && (noteError || !note)) {
+      navigate('/not-found', { replace: true });
+    }
+  }, [noteError, note, noteLoading]);
 
   return (
     <>

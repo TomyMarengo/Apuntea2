@@ -349,6 +349,13 @@
     "userNotFound": "No se encontró un usuario con ese correo electrónico.",
     "failedToResetPassword": "Error al restablecer la contraseña."
   },
+  "notFoundPage": {
+    "titlePage": "Página no encontrada | Apuntea",
+    "imageAlt": "Imagen Página no encontrada",
+    "title": "Página no encontrada",
+    "description": "Lo sentimos, la página que buscas no existe",
+    "goHome": "Ir al Inicio"
+  },
   "homePage": {
     "titlePage": "Inicio | Apuntea",
     "welcome": "Bienvenido a <appName>Apuntea</appName>",
