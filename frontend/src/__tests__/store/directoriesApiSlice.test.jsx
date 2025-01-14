@@ -21,7 +21,7 @@ import { useWithWrapper } from '../setup/wrapper.jsx';
 import { waitFor } from '@testing-library/react';
 
 function setupDirectoriesApiStore() {
-  return setupApiStore([directoriesApiSlice]);
+  return setupApiStore(directoriesApiSlice);
 }
 const store = setupDirectoriesApiStore();
 describe('directoriesApiSlice', () => {

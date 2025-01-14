@@ -23,60 +23,60 @@ import {
 
 const users = [
   {
-    career:
-      'http://localhost:8080/paw-2023b-12/api/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/4e0e1cef-808b-4b5c-9ef2-c08c90d3c22d',
-    directoryFavorites:
-      'http://localhost:8080/paw-2023b-12/api/directories?favBy=409f7319-b248-4d38-a450-4305ef0f094b',
-    followedBy:
-      'http://localhost:8080/paw-2023b-12/api/users?followedBy=409f7319-b248-4d38-a450-4305ef0f094b',
-    following:
-      'http://localhost:8080/paw-2023b-12/api/users?following=409f7319-b248-4d38-a450-4305ef0f094b',
+    career: apiUrl(
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/4e0e1cef-808b-4b5c-9ef2-c08c90d3c22d',
+    ),
+    directoryFavorites: apiUrl(
+      '/directories?favBy=409f7319-b248-4d38-a450-4305ef0f094b',
+    ),
+    followedBy: apiUrl(
+      '/users?followedBy=409f7319-b248-4d38-a450-4305ef0f094b',
+    ),
+    following: apiUrl('/users?following=409f7319-b248-4d38-a450-4305ef0f094b'),
     id: '409f7319-b248-4d38-a450-4305ef0f094b',
-    institution:
-      'http://localhost:8080/paw-2023b-12/api/institutions/4212733e-b8b8-473a-967b-944148bb2f60',
+    institution: apiUrl('/institutions/4212733e-b8b8-473a-967b-944148bb2f60'),
     locale: 'es',
-    noteFavorites:
-      'http://localhost:8080/paw-2023b-12/api/notes?favBy=409f7319-b248-4d38-a450-4305ef0f094b',
-    notes:
-      'http://localhost:8080/paw-2023b-12/api/notes?userId=409f7319-b248-4d38-a450-4305ef0f094b',
+    noteFavorites: apiUrl('/notes?favBy=409f7319-b248-4d38-a450-4305ef0f094b'),
+    notes: apiUrl('/notes?userId=409f7319-b248-4d38-a450-4305ef0f094b'),
     notificationsEnabled: true,
-    reviewsReceived:
-      'http://localhost:8080/paw-2023b-12/api/reviews?targetUser=409f7319-b248-4d38-a450-4305ef0f094b',
-    self: 'http://localhost:8080/paw-2023b-12/api/users/409f7319-b248-4d38-a450-4305ef0f094b',
+    reviewsReceived: apiUrl(
+      '/reviews?targetUser=409f7319-b248-4d38-a450-4305ef0f094b',
+    ),
+    self: apiUrl('/users/409f7319-b248-4d38-a450-4305ef0f094b'),
     status: 'ACTIVE',
-    subjectFavorites:
-      'http://localhost:8080/paw-2023b-12/api/directories?favBy=409f7319-b248-4d38-a450-4305ef0f094b&rdir=true',
-    subjects:
-      'http://localhost:8080/paw-2023b-12/api/subjects?userId=409f7319-b248-4d38-a450-4305ef0f094b',
+    subjectFavorites: apiUrl(
+      '/directories?favBy=409f7319-b248-4d38-a450-4305ef0f094b&rdir=true',
+    ),
+    subjects: apiUrl('/subjects?userId=409f7319-b248-4d38-a450-4305ef0f094b'),
     username: 'aluinfo',
     email: 'aluinfo@itba.edu.ar',
   },
   {
-    career:
-      'http://localhost:8080/paw-2023b-12/api/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/73396ae1-d40b-48c0-9121-21f9b25c51eb',
-    directoryFavorites:
-      'http://localhost:8080/paw-2023b-12/api/directories?favBy=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
-    followedBy:
-      'http://localhost:8080/paw-2023b-12/api/users?followedBy=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
-    following:
-      'http://localhost:8080/paw-2023b-12/api/users?following=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
+    career: apiUrl(
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/73396ae1-d40b-48c0-9121-21f9b25c51eb',
+    ),
+    directoryFavorites: apiUrl(
+      '/directories?favBy=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
+    ),
+    followedBy: apiUrl(
+      '/users?followedBy=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
+    ),
+    following: apiUrl('/users?following=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6'),
     id: '10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
-    institution:
-      'http://localhost:8080/paw-2023b-12/api/institutions/4212733e-b8b8-473a-967b-944148bb2f60',
+    institution: apiUrl('/institutions/4212733e-b8b8-473a-967b-944148bb2f60'),
     locale: 'es',
-    noteFavorites:
-      'http://localhost:8080/paw-2023b-12/api/notes?favBy=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
-    notes:
-      'http://localhost:8080/paw-2023b-12/api/notes?userId=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
+    noteFavorites: apiUrl('/notes?favBy=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6'),
+    notes: apiUrl('/notes?userId=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6'),
     notificationsEnabled: true,
-    reviewsReceived:
-      'http://localhost:8080/paw-2023b-12/api/reviews?targetUser=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
-    self: 'http://localhost:8080/paw-2023b-12/api/users/10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
+    reviewsReceived: apiUrl(
+      '/reviews?targetUser=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
+    ),
+    self: apiUrl('/users/10dda953-9e81-4ba0-aaa5-b1e4574ca4c6'),
     status: 'ACTIVE',
-    subjectFavorites:
-      'http://localhost:8080/paw-2023b-12/api/directories?favBy=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6&rdir=true',
-    subjects:
-      'http://localhost:8080/paw-2023b-12/api/subjects?userId=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6',
+    subjectFavorites: apiUrl(
+      '/directories?favBy=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6&rdir=true',
+    ),
+    subjects: apiUrl('/subjects?userId=10dda953-9e81-4ba0-aaa5-b1e4574ca4c6'),
     username: 'alumeca',
     email: 'alumeca@itba.edu.ar',
   },

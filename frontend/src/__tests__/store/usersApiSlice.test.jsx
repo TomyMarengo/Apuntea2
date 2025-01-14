@@ -26,10 +26,10 @@ import {
   someUserId,
   usedUsernameMsg,
 } from '../mocks/usersApiMocks';
-import {institutionsApiSlice} from "../../store/slices/institutionsApiSlice";
+import { institutionsApiSlice } from '../../store/slices/institutionsApiSlice';
 
 function setupNotesApiStore() {
-  return setupApiStore([usersApiSlice, institutionsApiSlice]);
+  return setupApiStore(usersApiSlice);
 }
 const store = setupNotesApiStore();
 describe('usersApiSlice', () => {

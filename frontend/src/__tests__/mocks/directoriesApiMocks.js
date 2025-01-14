@@ -22,13 +22,10 @@ const directories = [
     id: 'd69cf972-0004-4adf-8e56-8a024e722b35',
     lastModifiedAt: '2023-10-30T02:12:08.326',
     name: 'aaaa',
-    owner:
-      'http://localhost:8080/paw-2023b-12/api/users/a064c84b-b47a-4b25-b663-28e157c531d9',
-    parent:
-      'http://localhost:8080/paw-2023b-12/api/directories/7a2f0b06-21a8-4d26-bda1-4ab2af663716',
-    self: 'http://localhost:8080/paw-2023b-12/api/directories/d69cf972-0004-4adf-8e56-8a024e722b35',
-    subject:
-      'http://localhost:8080/paw-2023b-12/api/subjects/09236392-978a-4c4a-913a-524c102f2ab0',
+    owner: apiUrl('users/a064c84b-b47a-4b25-b663-28e157c531d9'),
+    parent: apiUrl('/directories/7a2f0b06-21a8-4d26-bda1-4ab2af663716'),
+    self: apiUrl('/directories/d69cf972-0004-4adf-8e56-8a024e722b35'),
+    subject: apiUrl('/subjects/09236392-978a-4c4a-913a-524c102f2ab0'),
     visible: true,
   },
   {
@@ -37,13 +34,10 @@ const directories = [
     id: 'cb2cc2d7-3ebe-4968-8654-1a8d6b74eabd',
     lastModifiedAt: '2023-10-02T11:56:40.756282',
     name: 'Apuntes Logica Computacional',
-    owner:
-      'http://localhost:8080/paw-2023b-12/api/users/a4187437-724d-4a18-81d9-d751270942e2',
-    parent:
-      'http://localhost:8080/paw-2023b-12/api/directories/e85dbab4-e159-40b9-b08b-c4b34a5f6ac7',
-    self: 'http://localhost:8080/paw-2023b-12/api/directories/cb2cc2d7-3ebe-4968-8654-1a8d6b74eabd',
-    subject:
-      'http://localhost:8080/paw-2023b-12/api/subjects/db895f9d-b5ad-49ac-9ecc-9715f51871e1',
+    owner: apiUrl('/users/a4187437-724d-4a18-81d9-d751270942e2'),
+    parent: apiUrl('/directories/e85dbab4-e159-40b9-b08b-c4b34a5f6ac7'),
+    self: apiUrl('/directories/cb2cc2d7-3ebe-4968-8654-1a8d6b74eabd'),
+    subject: apiUrl('/subjects/db895f9d-b5ad-49ac-9ecc-9715f51871e1'),
     visible: true,
   },
 ];

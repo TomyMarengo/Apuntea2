@@ -19,7 +19,7 @@ import {
 
 // Setup API store helper for reviews API
 function setupReviewsApiStore() {
-  return setupApiStore([reviewsApiSlice]);
+  return setupApiStore(reviewsApiSlice);
 }
 const store = setupReviewsApiStore();
 

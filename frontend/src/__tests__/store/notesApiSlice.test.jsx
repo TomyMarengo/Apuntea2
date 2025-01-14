@@ -23,7 +23,7 @@ import {
 } from '../mocks/notesApiMocks.js';
 // Setup API store helper
 function setupNotesApiStore() {
-  return setupApiStore([notesApiSlice]);
+  return setupApiStore(notesApiSlice);
 }
 const store = setupNotesApiStore();
 describe('notesApiSlice', () => {

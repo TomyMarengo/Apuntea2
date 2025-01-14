@@ -20,46 +20,40 @@ const notes = [
     avgScore: 0.0,
     category: 'THEORY',
     createdAt: '2024-02-02T19:03:53.496',
-    file: 'http://localhost:8080/paw-2023b-12/api/notes/30f1c039-7714-44ec-a10d-7c8039d16335/file',
+    file: apiUrl('/notes/30f1c039-7714-44ec-a10d-7c8039d16335/file'),
     fileType: 'mp4',
     id: '30f1c039-7714-44ec-a10d-7c8039d16335',
     interactions: 0,
-    interactionsUri:
-      'http://localhost:8080/paw-2023b-12/api/notes/30f1c039-7714-44ec-a10d-7c8039d16335/interactions',
+    interactionsUri: apiUrl(
+      '/notes/30f1c039-7714-44ec-a10d-7c8039d16335/interactions',
+    ),
     lastModifiedAt: '2024-02-02T19:03:53.496',
     name: 'formaa',
-    owner:
-      'http://localhost:8080/paw-2023b-12/api/users/a064c84b-b47a-4b25-b663-28e157c531d9',
-    parent:
-      'http://localhost:8080/paw-2023b-12/api/directories/fd25786e-030c-4597-bc1e-0e8f4c41e0c1',
-    reviews:
-      'http://localhost:8080/paw-2023b-12/api/reviews?noteId=30f1c039-7714-44ec-a10d-7c8039d16335',
-    self: 'http://localhost:8080/paw-2023b-12/api/notes/30f1c039-7714-44ec-a10d-7c8039d16335',
-    subject:
-      'http://localhost:8080/paw-2023b-12/api/subjects/99e70441-65f0-4aed-9f31-c681ca07ae52',
+    owner: apiUrl('/users/a064c84b-b47a-4b25-b663-28e157c531d9'),
+    parent: apiUrl('/directories/fd25786e-030c-4597-bc1e-0e8f4c41e0c1'),
+    reviews: apiUrl('/reviews?noteId=30f1c039-7714-44ec-a10d-7c8039d16335'),
+    self: apiUrl('/notes/30f1c039-7714-44ec-a10d-7c8039d16335'),
+    subject: apiUrl('/subjects/99e70441-65f0-4aed-9f31-c681ca07ae52'),
     visible: true,
   },
   {
     avgScore: 0.0,
     category: 'THEORY',
     createdAt: '2023-09-18T11:16:44.506421',
-    file: 'http://localhost:8080/paw-2023b-12/api/notes/db3d94d2-c646-4d55-9655-785dd39341cc/file',
+    file: apiUrl('/notes/db3d94d2-c646-4d55-9655-785dd39341cc/file'),
     fileType: 'pdf',
     id: 'db3d94d2-c646-4d55-9655-785dd39341cc',
     interactions: 0,
-    interactionsUri:
-      'http://localhost:8080/paw-2023b-12/api/notes/db3d94d2-c646-4d55-9655-785dd39341cc/interactions',
+    interactionsUri: apiUrl(
+      '/notes/db3d94d2-c646-4d55-9655-785dd39341cc/interactions',
+    ),
     lastModifiedAt: '2023-10-02T10:24:05.169806',
     name: 'Numerical Methods by John Mathews',
-    owner:
-      'http://localhost:8080/paw-2023b-12/api/users/a4187437-724d-4a18-81d9-d751270942e2',
-    parent:
-      'http://localhost:8080/paw-2023b-12/api/directories/d187d207-e92c-45d6-9c88-fd3f50c8d87d',
-    reviews:
-      'http://localhost:8080/paw-2023b-12/api/reviews?noteId=db3d94d2-c646-4d55-9655-785dd39341cc',
-    self: 'http://localhost:8080/paw-2023b-12/api/notes/db3d94d2-c646-4d55-9655-785dd39341cc',
-    subject:
-      'http://localhost:8080/paw-2023b-12/api/subjects/221f8752-463e-4c29-8667-31097219152f',
+    owner: apiUrl('/users/a4187437-724d-4a18-81d9-d751270942e2'),
+    parent: apiUrl('/directories/d187d207-e92c-45d6-9c88-fd3f50c8d87d'),
+    reviews: apiUrl('/reviews?noteId=db3d94d2-c646-4d55-9655-785dd39341cc'),
+    self: apiUrl('/notes/db3d94d2-c646-4d55-9655-785dd39341cc'),
+    subject: apiUrl('/subjects/221f8752-463e-4c29-8667-31097219152f'),
     visible: true,
   },
 ];
@@ -87,14 +81,14 @@ export const notesHandlers = [
     if (
       request.headers.get('Content-Type').includes(NOTE_CREATE_CONTENT_TYPE)
     ) {
-      console.log("1", request)
+      console.log('1', request);
       try {
-        console.log("2")
-        console.log("3", await request.formData())
-      } catch (error){
-        console.log("4")
+        console.log('2');
+        console.log('3', await request.formData());
+      } catch (error) {
+        console.log('4');
       }
-      console.log("5")
+      console.log('5');
       // const name = (await request.formData())?.get('name');
       if (notes.find((n) => n.name === name)) {
         return new HttpResponse(
