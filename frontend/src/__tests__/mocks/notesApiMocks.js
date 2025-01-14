@@ -67,6 +67,7 @@ export const favUserId = 'a064c84b-b47a-4b25-b663-28e157c531d9';
 export const favNoteId = notes[0].id;
 export const nonFavNoteId = notes[1].id;
 export const fileErrorMsg = 'The file name is already being used';
+export const newId = '00000000-0000-0000-0000-000000000000';
 
 export const notesHandlers = [
   http.get(apiUrl('/notes/:id'), ({ request, params }) => {
@@ -81,22 +82,14 @@ export const notesHandlers = [
     if (
       request.headers.get('Content-Type').includes(NOTE_CREATE_CONTENT_TYPE)
     ) {
-      console.log('1', request);
-      try {
-        console.log('2');
-        console.log('3', await request.formData());
-      } catch (error) {
-        console.log('4');
-      }
-      console.log('5');
-      // const name = (await request.formData())?.get('name');
+      const name = (await request.formData())?.get('name');
       if (notes.find((n) => n.name === name)) {
         return new HttpResponse(
           JSON.stringify({ message: 'The file name is already being used' }),
           { status: 400 },
         );
       }
-      return CREATED_RESPONSE();
+      return CREATED_RESPONSE(apiUrl(`/notes/${newId}`));
     } else {
       return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
     }

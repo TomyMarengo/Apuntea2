@@ -42,6 +42,13 @@ export const UNSUPPORTED_MEDIA_TYPE_RESPONSE = () =>
   new HttpResponse(JSON.stringify({ message: 'unsupported media type' }), {
     status: 415,
   });
-export const CREATED_RESPONSE = () => new HttpResponse(null, { status: 201 });
+export const CREATED_RESPONSE = (location: string) =>
+  new HttpResponse(null, {
+    status: 201,
+    headers: {
+      Location: location,
+    },
+  });
+
 export const NO_CONTENT_RESPONSE = () =>
   new HttpResponse(null, { status: 204 });

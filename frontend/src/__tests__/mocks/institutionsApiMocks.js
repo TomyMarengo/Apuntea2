@@ -183,6 +183,7 @@ export const invalidName = '-';
 
 export const emptyNameMsg = 'The parameter must not be empty';
 export const invalidYearMsg = 'The year must be greater than 0';
+export const newId = '00000000-0000-0000-0000-000000000000';
 
 const subjectCareers = [
   {
@@ -287,11 +288,17 @@ export const institutionsHandlers = [
   http.post(apiUrl('/subjects'), async ({ request }) => {
     if (request.headers.get('Content-Type') === SUBJECT_CONTENT_TYPE) {
       const subject = await request.json();
-      return subject.name && subject.name !== ''
-        ? CREATED_RESPONSE()
-        : new HttpResponse(JSON.stringify({ message: emptyNameMsg }), {
-            status: 400,
-          });
+      if (subject.name && subject.name !== '') {
+        subject.id = newId;
+        subject.rootDirectory = apiUrl(`/directories/${newId}`);
+        subject.self = apiUrl(`/subjects/${newId}`);
+        subjects.push(subject);
+        return CREATED_RESPONSE(subject.self);
+      } else {
+        return new HttpResponse(JSON.stringify({ message: emptyNameMsg }), {
+          status: 400,
+        });
+      }
     } else {
       return NOT_ACCEPTABLE_RESPONSE();
     }
@@ -331,8 +338,13 @@ export const institutionsHandlers = [
           return NOT_FOUND_RESPONSE();
         }
         const subjectCareer = await request.json();
+        console.log(subjectCareer);
         return subjectCareer.year >= 0
-          ? CREATED_RESPONSE()
+          ? CREATED_RESPONSE(
+              apiUrl(
+                `/institutions/${params.institutionId}/careers/${params.careerId}/subjectcareers/${subjectCareer.subjectId}`,
+              ),
+            )
           : new HttpResponse(JSON.stringify({ message: invalidYearMsg }), {
               status: 400,
             });

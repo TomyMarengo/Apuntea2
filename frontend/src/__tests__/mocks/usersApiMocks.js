@@ -94,6 +94,7 @@ export const passwordChangeCode = '1234';
 
 export const usedUsernameMsg = 'The username is already in use';
 export const usedMailMsg = 'The email is already in use';
+export const newId = '00000000-0000-0000-0000-000000000000';
 
 export const usersHandlers = [
   http.get(apiUrl('/users'), ({ request }) => {
@@ -128,7 +129,7 @@ export const usersHandlers = [
       if (users.find((u) => u.email === user.email)) {
         return new HttpResponse(undefined, { status: 400 });
       }
-      return CREATED_RESPONSE();
+      return CREATED_RESPONSE(apiUrl(`/users/${newId}`));
     } else if (
       request.headers.get('Content-Type') ===
       USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE

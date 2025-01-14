@@ -57,6 +57,7 @@ export const someUserId = reviews[0].userId;
 export const someNoteId = reviews[0].noteId;
 
 export const invalidScoreMsg = 'The Score is invalid';
+export const newId = '00000000-0000-0000-0000-000000000000';
 export const reviewsHandles = [
   http.get(apiUrl('/reviews'), ({ request, params }) => {
     if (request.headers.get('Accept') === REVIEW_COLLECTION_CONTENT_TYPE) {
@@ -105,7 +106,7 @@ export const reviewsHandles = [
           status: 400,
         });
       }
-      return CREATED_RESPONSE();
+      return CREATED_RESPONSE(apiUrl(`/reviews/${newId}_${newId}`));
     } else {
       return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
     }

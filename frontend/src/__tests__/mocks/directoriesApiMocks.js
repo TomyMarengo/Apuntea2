@@ -52,6 +52,8 @@ export const otherExistingDirectoryName = directories[1].name;
 
 export const fileErrorMsg = 'The file name is already being used';
 
+export const newId = '00000000-0000-0000-0000-000000000000';
+
 export const directoriesHandlers = [
   http.get(apiUrl('/directories/:id'), ({ request, params }) => {
     if (request.headers.get('Accept') === DIRECTORY_CONTENT_TYPE) {
@@ -71,7 +73,7 @@ export const directoriesHandlers = [
           status: 400,
         });
       }
-      return CREATED_RESPONSE();
+      return CREATED_RESPONSE(apiUrl(`/directories/${newId}`));
     } else {
       return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
     }
