@@ -25,7 +25,7 @@ public class CareerResponseDto {
         careerDto.name = career.getName();
         UriBuilder builder = uriInfo.getBaseUriBuilder();
 
-        careerDto.institution = builder.path("institution").path(career.getInstitutionId().toString()).build();
+        careerDto.institution = builder.path("institutions").path(career.getInstitutionId().toString()).build();
         careerDto.self = builder.path("careers").path(career.getCareerId().toString()).build();
         careerDto.subjectCareers = builder.path("subjectcareers").build();
         careerDto.subjects = uriInfo.getBaseUriBuilder().path("subjects").queryParam("careerId", career.getCareerId().toString()).build();

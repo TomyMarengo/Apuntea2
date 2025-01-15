@@ -47,8 +47,8 @@ function range(start: number, end: number): number[] {
 
 const AdminCareersPage: React.FC = () => {
   const { t } = useTranslation('adminCareersPage');
-  const [selectedInstitutionId, setSelectedInstitutionId] = useState('');
-  const [selectedCareerId, setSelectedCareerId] = useState('');
+  const [selectedInstitution, setSelectedInstitution] = useState<Institution>();
+  const [selectedCareer, setSelectedCareer] = useState<Career>();
 
   // Filter / Sort states
   const [yearFilter, setYearFilter] = useState<number | 'ALL'>('ALL');
@@ -63,8 +63,8 @@ const AdminCareersPage: React.FC = () => {
   const { data: institutions } = useGetInstitutionsQuery();
 
   const { data: careers, isLoading: isLoadingCareers } = useGetCareersQuery(
-    { institutionId: selectedInstitutionId },
-    { skip: !selectedInstitutionId },
+    { institutionId: selectedInstitution?.id },
+    { skip: !selectedInstitution },
   );
 
   const {
@@ -72,8 +72,9 @@ const AdminCareersPage: React.FC = () => {
     refetch: refetchSubjects,
     isLoading: loadingSubjects,
   } = useGetSubjectsByCareerQuery(
-    { careerId: selectedCareerId },
-    { skip: !selectedCareerId },
+    // { careerId: selectedCareerId },
+    { url: selectedCareer?.subjectsUrl },
+    { skip: !selectedCareer },
   );
 
   const {
@@ -81,16 +82,17 @@ const AdminCareersPage: React.FC = () => {
     refetch: refetchSubjectCareers,
     isLoading: loadingSubjectCareers,
   } = useGetSubjectCareersQuery(
-    { institutionId: selectedInstitutionId, careerId: selectedCareerId },
-    { skip: !selectedInstitutionId || !selectedCareerId },
+    // { institutionId: selectedInstitutionId, careerId: selectedCareerId },
+    { url: selectedCareer?.subjectCareersUrl },
+    { skip: !selectedInstitution || !selectedCareer },
   );
 
   useEffect(() => {
-    if (selectedCareerId) {
+    if (selectedCareer) {
       refetchSubjects();
       refetchSubjectCareers();
     }
-  }, [selectedCareerId, refetchSubjects, refetchSubjectCareers]);
+  }, [selectedCareer, refetchSubjects, refetchSubjectCareers]);
 
   // --------------- COMBINE SUBJECTS + SUBJECTCAREERS ---------------
   const combinedSubjects: SubjectWithCareer[] = useMemo(() => {
@@ -201,13 +203,13 @@ const AdminCareersPage: React.FC = () => {
             value={
               institutions
                 ? institutions.find(
-                    (inst: Institution) => inst.id === selectedInstitutionId,
+                    (inst: Institution) => inst.id === selectedInstitution?.id,
                   ) || null
                 : null
             }
             onChange={(_, newValue) => {
-              setSelectedInstitutionId(newValue?.id ?? '');
-              setSelectedCareerId('');
+              setSelectedInstitution(newValue || undefined);
+              setSelectedCareer(undefined);
             }}
             renderInput={(params) => (
               <TextField
@@ -227,12 +229,13 @@ const AdminCareersPage: React.FC = () => {
             getOptionLabel={(option: Career) => option.name || ''}
             value={
               careers
-                ? careers.find((car: Career) => car.id === selectedCareerId) ||
-                  null
+                ? careers.find(
+                    (car: Career) => car.id === selectedCareer?.id,
+                  ) || null
                 : null
             }
             onChange={(_, newValue) => {
-              setSelectedCareerId(newValue?.id ?? '');
+              setSelectedCareer(newValue ?? undefined);
             }}
             renderInput={(params) => (
               <TextField
@@ -240,7 +243,7 @@ const AdminCareersPage: React.FC = () => {
                 label={t('career')}
                 variant="outlined"
                 margin="normal"
-                disabled={!selectedInstitutionId || isLoadingCareers}
+                disabled={!selectedInstitution || isLoadingCareers}
               />
             )}
             isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -248,7 +251,7 @@ const AdminCareersPage: React.FC = () => {
           />
         </Box>
 
-        {selectedCareerId && (
+        {selectedCareer && (
           <Box
             sx={{
               display: 'flex',
@@ -330,7 +333,7 @@ const AdminCareersPage: React.FC = () => {
         )}
 
         {/* Loading indicator for the main table */}
-        {(loadingSubjects || loadingSubjectCareers) && selectedCareerId && (
+        {(loadingSubjects || loadingSubjectCareers) && selectedCareer && (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
             <CircularProgress size={24} />
             <Typography variant="body2">{t('loadingSubjects')}</Typography>
@@ -338,7 +341,7 @@ const AdminCareersPage: React.FC = () => {
         )}
 
         {/* Results Table */}
-        {selectedCareerId &&
+        {selectedCareer &&
           combinedSubjects.length > 0 &&
           !loadingSubjects &&
           !loadingSubjectCareers && (
@@ -349,8 +352,8 @@ const AdminCareersPage: React.FC = () => {
                     <RowSubject
                       key={item.subjectId}
                       data={item}
-                      institutionId={selectedInstitutionId}
-                      careerId={selectedCareerId}
+                      institutionId={selectedInstitution?.id ?? ''}
+                      careerId={selectedCareer?.id ?? ''}
                     />
                   ),
               )}
@@ -358,7 +361,7 @@ const AdminCareersPage: React.FC = () => {
           )}
 
         {/* If we have a valid career but no subjects */}
-        {selectedCareerId &&
+        {selectedCareer &&
           combinedSubjects.length === 0 &&
           !loadingSubjects &&
           !loadingSubjectCareers && (
@@ -371,8 +374,7 @@ const AdminCareersPage: React.FC = () => {
         <AddSubjectDialog
           open={openAddModal}
           onClose={() => setOpenAddModal(false)}
-          selectedInstitutionId={selectedInstitutionId}
-          selectedCareerId={selectedCareerId}
+          selectedCareer={selectedCareer}
           refetchSubjects={refetchSubjects}
           refetchSubjectCareers={refetchSubjectCareers}
         />
@@ -381,8 +383,7 @@ const AdminCareersPage: React.FC = () => {
         <CreateSubjectDialog
           open={openCreateModal}
           onClose={() => setOpenCreateModal(false)}
-          selectedInstitutionId={selectedInstitutionId}
-          selectedCareerId={selectedCareerId}
+          selectedCareer={selectedCareer}
           refetchSubjects={refetchSubjects}
           refetchSubjectCareers={refetchSubjectCareers}
         />

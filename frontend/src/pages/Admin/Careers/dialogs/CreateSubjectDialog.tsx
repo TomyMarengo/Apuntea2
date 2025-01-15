@@ -17,12 +17,12 @@ import { toast } from 'react-toastify';
 import { z } from 'zod';
 
 import { useCreateSubjectMutation } from '../../../../store/slices/institutionsApiSlice';
+import { Career } from '../../../../types';
 
 interface CreateSubjectDialogProps {
   open: boolean;
   onClose: () => void;
-  selectedInstitutionId: string;
-  selectedCareerId: string;
+  selectedCareer?: Career;
   refetchSubjects: () => void;
   refetchSubjectCareers: () => void;
 }
@@ -30,8 +30,7 @@ interface CreateSubjectDialogProps {
 const CreateSubjectDialog: React.FC<CreateSubjectDialogProps> = ({
   open,
   onClose,
-  selectedInstitutionId,
-  selectedCareerId,
+  selectedCareer,
   refetchSubjects,
   refetchSubjectCareers,
 }) => {
@@ -83,11 +82,12 @@ const CreateSubjectDialog: React.FC<CreateSubjectDialogProps> = ({
 
   // Handle form submission
   const onSubmit = async (data: CreateSubjectFormData) => {
-    if (!selectedInstitutionId || !selectedCareerId || !data.name) return;
+    if (!selectedCareer || !data.name) return;
     try {
       await createSubject({
-        institutionId: selectedInstitutionId,
-        careerId: selectedCareerId,
+        // institutionId: selectedInstitutionId,
+        // careerId: selectedCareerId,
+        subjectCareerUrl: selectedCareer.subjectCareersUrl,
         name: data.name,
         year: data.year,
       }).unwrap();

@@ -196,7 +196,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
           const subjectId = (subject.data as any)?.id as string;
 
           // Step 2: Associate the subject with the career and year
-          if (institutionId && careerId) {
+          if (subjectCareerUrl || (institutionId && careerId)) {
             const subjectCareerResult = await baseQuery({
               url:
                 subjectCareerUrl ||

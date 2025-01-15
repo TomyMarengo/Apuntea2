@@ -22,13 +22,12 @@ import {
   useGetSubjectsNotInCareerQuery,
   useLinkSubjectCareerMutation,
 } from '../../../../store/slices/institutionsApiSlice';
-import { Subject } from '../../../../types';
+import { Career, Subject } from '../../../../types';
 
 interface AddSubjectDialogProps {
   open: boolean;
   onClose: () => void;
-  selectedInstitutionId: string;
-  selectedCareerId: string;
+  selectedCareer?: Career;
   refetchSubjects: () => void;
   refetchSubjectCareers: () => void;
 }
@@ -36,8 +35,7 @@ interface AddSubjectDialogProps {
 const AddSubjectDialog: React.FC<AddSubjectDialogProps> = ({
   open,
   onClose,
-  selectedInstitutionId,
-  selectedCareerId,
+  selectedCareer,
   refetchSubjects,
   refetchSubjectCareers,
 }) => {
@@ -48,10 +46,9 @@ const AddSubjectDialog: React.FC<AddSubjectDialogProps> = ({
     refetch: refetchNotInCareer,
     isLoading: loadingNotInCareer,
   } = useGetSubjectsNotInCareerQuery(
-    {
-      careerId: selectedCareerId, // TODO: pass notInCareerUrl
-    },
-    { skip: !selectedCareerId },
+    // { careerId: selectedCareerId},
+    { url: selectedCareer?.subjectsNotInCareerUrl },
+    { skip: !selectedCareer },
   );
 
   const [linkSubjectCareer, { isLoading: linkingSubject }] =
@@ -107,11 +104,11 @@ const AddSubjectDialog: React.FC<AddSubjectDialogProps> = ({
 
   // Handle form submission
   const onSubmit = async (data: AddSubjectFormData) => {
-    if (!selectedInstitutionId || !selectedCareerId || !data.subjectId) return;
+    if (!selectedCareer || !data.subjectId) return;
     try {
       await linkSubjectCareer({
-        institutionId: selectedInstitutionId,
-        careerId: selectedCareerId,
+        // careerId: selectedCareerId,
+        url: selectedCareer.subjectCareersUrl,
         subjectId: data.subjectId,
         year: data.year,
       }).unwrap();
