@@ -44,11 +44,13 @@ import { Directory, Column } from '../../types';
 interface RowDirectoryProps {
   directory: Directory;
   columnsToShow: Column[];
+  isDirectoryPage: boolean;
 }
 
 const RowDirectory: React.FC<RowDirectoryProps> = ({
   directory,
   columnsToShow,
+  isDirectoryPage,
 }) => {
   const { t } = useTranslation('rowDirectory');
   const navigate = useNavigate();
@@ -157,7 +159,6 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
   };
 
   const handleOpenParent = () => {
-    console.log(directory);
     if (directory.parentId) {
       navigate(`/directories/${directory.parentId}/`);
     }
@@ -165,7 +166,6 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
   };
 
   const handleSubjectDirectories = () => {
-    console.log(subjectData);
     const subjectDirectoryId = subjectData?.rootDirectoryId;
     if (subjectDirectoryId) {
       navigate(`/directories/${subjectDirectoryId}/`);
@@ -215,7 +215,17 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
           </TableCell>
         );
       case 'subject':
-        return <TableCell key={column.id}>{subjectName}</TableCell>;
+        return (
+          <TableCell key={column.id}>
+            <MuiLink
+              component={Link}
+              to={`/directories/${subjectData?.rootDirectoryId}`}
+              underline="hover"
+            >
+              {subjectName}
+            </MuiLink>
+          </TableCell>
+        );
       case 'owner':
         return (
           <TableCell key={column.id}>
@@ -299,11 +309,13 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
                 )}
 
                 {/* More Menu */}
-                <Tooltip title={t('more')}>
-                  <IconButton onClick={handleMenuClick} size="small">
-                    <MoreVertIcon />
-                  </IconButton>
-                </Tooltip>
+                {!isDirectoryPage && (
+                  <Tooltip title={t('more')}>
+                    <IconButton onClick={handleMenuClick} size="small">
+                      <MoreVertIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
 
                 <Menu
                   anchorEl={anchorEl}

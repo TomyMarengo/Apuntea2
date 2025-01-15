@@ -45,9 +45,14 @@ import NoteFileIcon from '../NoteFileIcon';
 interface RowNoteProps {
   note: Note;
   columnsToShow: Column[];
+  isDirectoryPage: boolean;
 }
 
-const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
+const RowNote: React.FC<RowNoteProps> = ({
+  note,
+  columnsToShow,
+  isDirectoryPage,
+}) => {
   const { t } = useTranslation('rowNote');
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
@@ -230,7 +235,17 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
           </TableCell>
         );
       case 'subject':
-        return <TableCell key={column.id}>{subjectName}</TableCell>;
+        return (
+          <TableCell key={column.id}>
+            <MuiLink
+              component={Link}
+              to={`/directories/${subjectData?.rootDirectoryId}`}
+              underline="hover"
+            >
+              {subjectName}
+            </MuiLink>
+          </TableCell>
+        );
       case 'owner':
         return (
           <TableCell key={column.id}>
@@ -325,12 +340,16 @@ const RowNote: React.FC<RowNoteProps> = ({ note, columnsToShow }) => {
                     </IconButton>
                   </Tooltip>
                 )}
+
                 {/* More Menu */}
-                <Tooltip title={t('more')}>
-                  <IconButton onClick={handleMenuClick} size="small">
-                    <MoreVertIcon />
-                  </IconButton>
-                </Tooltip>
+                {!isDirectoryPage && (
+                  <Tooltip title={t('more')}>
+                    <IconButton onClick={handleMenuClick} size="small">
+                      <MoreVertIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+
                 <Menu
                   anchorEl={anchorEl}
                   open={openMenu}

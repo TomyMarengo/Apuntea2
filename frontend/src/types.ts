@@ -174,7 +174,7 @@ export interface Column {
   priority: number; // Minor number, higher priority
 }
 
-export const ColumnDirectory: Column[] = [
+export const ColumnDirectorySearch: Column[] = [
   { id: 'name', label: 'name', priority: 2 },
   { id: 'subject', label: 'subject', priority: 3 },
   { id: 'owner', label: 'owner', priority: 4 },
@@ -182,12 +182,27 @@ export const ColumnDirectory: Column[] = [
   { id: 'actions', label: 'actions', align: 'right', priority: 1 },
 ];
 
-export const ColumnNote: Column[] = [
+export const ColumnDirectoryDirectoryPage: Column[] = [
+  { id: 'name', label: 'name', priority: 2 },
+  { id: 'owner', label: 'owner', priority: 3 },
+  { id: 'lastModifiedAt', label: 'lastModifiedAt', priority: 4 },
+  { id: 'actions', label: 'actions', align: 'right', priority: 1 },
+];
+
+export const ColumnNoteSearch: Column[] = [
   { id: 'name', label: 'name', priority: 2 },
   { id: 'subject', label: 'subject', priority: 3 },
   { id: 'owner', label: 'owner', priority: 4 },
   { id: 'lastModifiedAt', label: 'lastModifiedAt', priority: 5 },
   { id: 'score', label: 'score', priority: 6 },
+  { id: 'actions', label: 'actions', align: 'right', priority: 1 },
+];
+
+export const ColumnNoteDirectoryPage: Column[] = [
+  { id: 'name', label: 'name', priority: 2 },
+  { id: 'owner', label: 'owner', priority: 3 },
+  { id: 'lastModifiedAt', label: 'lastModifiedAt', priority: 4 },
+  { id: 'score', label: 'score', priority: 3 },
   { id: 'actions', label: 'actions', align: 'right', priority: 1 },
 ];
 

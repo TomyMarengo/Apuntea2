@@ -1,12 +1,20 @@
 // src/pages/Search/SearchResultsTable.tsx
 
 import { useMediaQuery, useTheme } from '@mui/material';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import ResultsTable from '../../components/ResultsTable';
 import RowDirectory from '../../components/Row/RowDirectory';
 import RowNote from '../../components/Row/RowNote';
-import { Note, Directory, ColumnNote, ColumnDirectory } from '../../types';
+import {
+  Note,
+  Directory,
+  ColumnNoteSearch,
+  ColumnDirectorySearch,
+  ColumnDirectoryDirectoryPage,
+  ColumnNoteDirectoryPage,
+} from '../../types';
 
 interface Props {
   showNotes: boolean;
@@ -23,11 +31,22 @@ const SearchResultsTable: React.FC<Props> = ({
 }) => {
   const theme = useTheme();
 
+  const location = useLocation();
+  const isDirectoryPage = useMemo(() => {
+    return location.pathname.includes('directories');
+  }, [location.pathname]);
+
   // Breakpoints
   const isXs = useMediaQuery(theme.breakpoints.down('sm')); // <600px
   const isSm = useMediaQuery(theme.breakpoints.between('sm', 'md')); // 600px - 960px
   const isMd = useMediaQuery(theme.breakpoints.between('md', 'lg')); // 960px - 1280px
-  const columns = showNotes ? ColumnNote : ColumnDirectory;
+
+  const columns = useMemo(() => {
+    if (isDirectoryPage) {
+      return showNotes ? ColumnNoteDirectoryPage : ColumnDirectoryDirectoryPage;
+    }
+    return showNotes ? ColumnNoteSearch : ColumnDirectorySearch;
+  }, [isDirectoryPage, showNotes]);
 
   // Determine the maximum number of visible columns based on screen size
   let maxVisibleColumns = columns.length; // Default: show all
@@ -58,7 +77,12 @@ const SearchResultsTable: React.FC<Props> = ({
     <ResultsTable columns={columnsToShow}>
       {showNotes &&
         notes.map((note) => (
-          <RowNote key={note.id} note={note} columnsToShow={columnsToShow} />
+          <RowNote
+            key={note.id}
+            note={note}
+            columnsToShow={columnsToShow}
+            isDirectoryPage={isDirectoryPage}
+          />
         ))}
       {showDirectories &&
         directories.map((dir) => (
@@ -66,6 +90,7 @@ const SearchResultsTable: React.FC<Props> = ({
             key={dir.id}
             directory={dir}
             columnsToShow={columnsToShow}
+            isDirectoryPage={isDirectoryPage}
           />
         ))}
     </ResultsTable>
