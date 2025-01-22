@@ -73,7 +73,7 @@ public class ReviewController {
     }
 
     @POST
-    @Consumes(value = { ApunteaMediaType.REVIEW_CREATE })
+    @Consumes(value = { ApunteaMediaType.REVIEW })
     public Response createReview(@Valid final ReviewCreationDto reviewCreationDto) {
         final Review review = noteService.createReview(
                 reviewCreationDto.getNoteId(),
@@ -87,7 +87,7 @@ public class ReviewController {
 
     @PATCH
     @Path("/{noteId}_{userId}")
-    @Produces(value = { ApunteaMediaType.REVIEW_UPDATE })
+    @Produces(value = { ApunteaMediaType.REVIEW })
     @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
     public Response updateReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Valid final ReviewUpdateDto reviewUpdateDto) {
         noteService.updateReview(noteId, reviewUpdateDto.getScore(), reviewUpdateDto.getContent());

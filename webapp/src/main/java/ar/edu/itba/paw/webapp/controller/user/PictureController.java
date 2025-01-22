@@ -38,7 +38,7 @@ public class PictureController {
     }
 
     @POST
-    @Consumes(value = {ApunteaMediaType.PICTURE_UPDATE})
+    @Consumes(value = {ApunteaMediaType.FORM_DATA})
     public Response createProfilePicture(@Valid @BeanParam final PictureDto pictureDto){
         UUID pictureId = userService.updateProfilePicture(pictureDto.getProfilePictureBytes(), pictureDto.getProfilePictureExtension());
         return Response.created(uriInfo.getAbsolutePathBuilder().path(pictureId.toString()).build()).build();

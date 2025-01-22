@@ -3,8 +3,7 @@ import { http, HttpResponse } from 'msw';
 import {
   NOTE_COLLECTION_CONTENT_TYPE,
   NOTE_CONTENT_TYPE,
-  NOTE_CREATE_CONTENT_TYPE,
-  NOTE_UPDATE_CONTENT_TYPE,
+  MULTIPART_FORM_DATA_CONTENT_TYPE,
 } from '../../contentTypes';
 import {
   apiUrl,
@@ -80,7 +79,9 @@ export const notesHandlers = [
   }),
   http.post(apiUrl('/notes'), async ({ request }) => {
     if (
-      request.headers.get('Content-Type').includes(NOTE_CREATE_CONTENT_TYPE)
+      request.headers
+        .get('Content-Type')
+        .includes(MULTIPART_FORM_DATA_CONTENT_TYPE)
     ) {
       const name = (await request.formData())?.get('name');
       if (notes.find((n) => n.name === name)) {
@@ -96,7 +97,7 @@ export const notesHandlers = [
   }),
 
   http.patch(apiUrl('/notes/:id'), async ({ request, params }) => {
-    if (request.headers.get('Content-Type') === NOTE_UPDATE_CONTENT_TYPE) {
+    if (request.headers.get('Content-Type') === NOTE_CONTENT_TYPE) {
       const name = (await request.json()).name;
       if (notes.find((n) => n.id === params.id)) {
         if (name && notes.find((n) => n.name === name && n.id !== params.id)) {

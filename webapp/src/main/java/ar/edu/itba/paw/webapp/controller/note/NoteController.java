@@ -83,7 +83,7 @@ public class NoteController {
     }
 
     @POST
-    @Consumes(value = { ApunteaMediaType.NOTE_CREATE })
+    @Consumes(value = { ApunteaMediaType.FORM_DATA })
     public  Response createNote(@Valid @NotNull(message = "error.body.empty") @BeanParam final NoteCreationDto noteDto) {
         final UUID noteId = noteService.createNote(
                 noteDto.getName(),
@@ -98,7 +98,7 @@ public class NoteController {
 
     @PATCH
     @Path("/{id}")
-    @Consumes(value = { ApunteaMediaType.NOTE_UPDATE })
+    @Consumes(value = { ApunteaMediaType.NOTE })
     public Response updateNote(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final NoteUpdateDto noteDto) {
         noteService.update(id, noteDto.getName(), noteDto.getVisible(), noteDto.getCategory());
         return Response.noContent().build();

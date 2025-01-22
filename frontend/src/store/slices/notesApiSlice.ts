@@ -5,7 +5,6 @@ import {
   DELETE_REASON_CONTENT_TYPE,
   NOTE_COLLECTION_CONTENT_TYPE,
   NOTE_CONTENT_TYPE,
-  NOTE_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Note, NoteCategory } from '../../types';
 import { extractErrorMessages } from '../../utils/helpers';
@@ -137,7 +136,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify(body),
           headers: {
-            'Content-Type': NOTE_UPDATE_CONTENT_TYPE,
+            'Content-Type': NOTE_CONTENT_TYPE,
           },
         });
 

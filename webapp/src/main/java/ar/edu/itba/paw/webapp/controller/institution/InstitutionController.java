@@ -116,7 +116,7 @@ public class InstitutionController {
 
     @POST
     @Path("/{institutionId}/careers/{careerId}/subjectcareers")
-    @Consumes(value = { ApunteaMediaType.SUBJECT_CAREER_CREATE })
+    @Consumes(value = { ApunteaMediaType.SUBJECT_CAREER })
     @Secured({"ROLE_ADMIN"})
     public Response addSubjectCareer(@Valid @BeanParam final InstitutionCareerPathParams instCarParams, @Valid final SubjectCareerCreationDto scDto) {
         if (subjectService.linkSubjectToCareer(scDto.getSubjectId(), instCarParams.getCareerId(), scDto.getYear()))

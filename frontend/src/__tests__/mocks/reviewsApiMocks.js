@@ -2,8 +2,7 @@ import { http, HttpResponse } from 'msw';
 
 import {
   REVIEW_COLLECTION_CONTENT_TYPE,
-  REVIEW_CREATE_CONTENT_TYPE,
-  REVIEW_UPDATE_CONTENT_TYPE,
+  REVIEW_CONTENT_TYPE,
 } from '../../contentTypes';
 import {
   apiUrl,
@@ -99,7 +98,7 @@ export const reviewsHandles = [
     }
   }),
   http.post(apiUrl('/reviews'), async ({ request }) => {
-    if (request.headers.get('Content-Type') === REVIEW_CREATE_CONTENT_TYPE) {
+    if (request.headers.get('Content-Type') === REVIEW_CONTENT_TYPE) {
       let review = await request.json();
       if (!review.score || review.score < 1 || review.score > 5) {
         return new HttpResponse(JSON.stringify({ message: invalidScoreMsg }), {
@@ -112,7 +111,7 @@ export const reviewsHandles = [
     }
   }),
   http.patch(apiUrl('/reviews/:noteIdUserId'), async ({ request }) => {
-    if (request.headers.get('Content-Type') === REVIEW_UPDATE_CONTENT_TYPE) {
+    if (request.headers.get('Content-Type') === REVIEW_CONTENT_TYPE) {
       let review = await request.json();
       if (!review.score || review.score < 1 || review.score > 5) {
         return new HttpResponse(JSON.stringify({ message: invalidScoreMsg }), {

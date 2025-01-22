@@ -4,10 +4,8 @@ import { favNoteId, favUserId } from './notesApiMocks.js';
 import {
   USER_COLLECTION_CONTENT_TYPE,
   USER_CONTENT_TYPE,
-  USER_CREATE_CONTENT_TYPE,
   USER_EMAIL_COLLECTION_CONTENT_TYPE,
   USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
-  USER_UPDATE_CONTENT_TYPE,
   USER_UPDATE_PASSWORD_CONTENT_TYPE,
   USER_UPDATE_STATUS_CONTENT_TYPE,
 } from '../../contentTypes';
@@ -124,7 +122,7 @@ export const usersHandlers = [
     return HttpResponse.json(user);
   }),
   http.post(apiUrl('/users'), async ({ request }) => {
-    if (request.headers.get('Content-Type') === USER_CREATE_CONTENT_TYPE) {
+    if (request.headers.get('Content-Type') === USER_CONTENT_TYPE) {
       const user = await request.json();
       if (users.find((u) => u.email === user.email)) {
         return new HttpResponse(undefined, { status: 400 });
@@ -144,7 +142,7 @@ export const usersHandlers = [
     }
   }),
   http.patch(apiUrl('/users/:id'), async ({ request, params }) => {
-    if (request.headers.get('Content-Type') === USER_UPDATE_CONTENT_TYPE) {
+    if (request.headers.get('Content-Type') === USER_CONTENT_TYPE) {
       const user = await request.json();
       if (users.find((u) => u.id === params.id)) {
         if (user.username && users.find((u) => u.username === user.username)) {

@@ -79,7 +79,7 @@ public class DirectoryController {
     }
 
     @POST
-    @Consumes(value = { ApunteaMediaType.DIRECTORY_CREATE })
+    @Consumes(value = { ApunteaMediaType.DIRECTORY })
     public Response createDirectory(@Valid final DirectoryCreationDto directoryDto) {
         final UUID DirectoryId = directoryService.create(
             directoryDto.getName(),
@@ -92,7 +92,7 @@ public class DirectoryController {
 
     @PATCH
     @Path("/{id}")
-    @Consumes(value = { ApunteaMediaType.DIRECTORY_UPDATE })
+    @Consumes(value = { ApunteaMediaType.DIRECTORY })
     public Response updateDirectory(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final DirectoryUpdateDto directoryDto) {
         directoryService.update(id, directoryDto.getName(), directoryDto.getVisible(), directoryDto.getIconColor());
         return Response.noContent().build();

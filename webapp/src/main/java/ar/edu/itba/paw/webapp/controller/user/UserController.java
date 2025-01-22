@@ -110,7 +110,7 @@ public class UserController {
 
 
     @POST
-    @Consumes(value = { ApunteaMediaType.USER_CREATE })
+    @Consumes(value = { ApunteaMediaType.USER })
     public Response createUser(@Valid final UserCreationDto userDto) {
         final UUID userId = userService.create(userDto.getEmail(), userDto.getPassword(), userDto.getCareerId(), Role.ROLE_STUDENT);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
@@ -119,7 +119,7 @@ public class UserController {
     @PATCH
     @Path("/{id}")
     @PreAuthorize("@userPermissions.isCurrentUser(#id)")
-    @Consumes(value = { ApunteaMediaType.USER_UPDATE })
+    @Consumes(value = { ApunteaMediaType.USER })
     public Response updateUser(@PathParam("id") final UUID id, @Valid final UserUpdateDto userDto) {
         userService.updateProfile(userDto.getFirstName(), userDto.getLastName(), userDto.getUsername(), userDto.getCareerId());
         if (userDto.getPassword() != null)

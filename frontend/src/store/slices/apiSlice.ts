@@ -9,7 +9,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 
 import { setCredentials, logOut, invalidateToken } from './authSlice';
-import { USER_UPDATE_CONTENT_TYPE } from '../../contentTypes';
+import { USER_CONTENT_TYPE } from '../../contentTypes';
 import { decode } from '../../utils/helpers';
 const baseUrl = import.meta.env.VITE_API_URL as string;
 
@@ -45,7 +45,7 @@ const baseQueryWithReauth: BaseQueryFn<
       typeof args === 'object' &&
       'headers' in args &&
       args.headers &&
-      (args.headers as any)['Content-Type'] === USER_UPDATE_CONTENT_TYPE
+      (args.headers as any)['Content-Type'] === USER_CONTENT_TYPE
     ) {
       throw new Error('InvalidPassword');
     }

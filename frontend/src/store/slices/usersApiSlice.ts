@@ -8,10 +8,8 @@ import {
   INSTITUTION_CONTENT_TYPE,
   USER_COLLECTION_CONTENT_TYPE,
   USER_CONTENT_TYPE,
-  USER_CREATE_CONTENT_TYPE,
   USER_EMAIL_COLLECTION_CONTENT_TYPE,
   USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
-  USER_UPDATE_CONTENT_TYPE,
   USER_UPDATE_PASSWORD_CONTENT_TYPE,
   USER_UPDATE_STATUS_CONTENT_TYPE,
 } from '../../contentTypes.ts';
@@ -300,7 +298,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify(data),
           headers: {
-            'Content-Type': USER_UPDATE_CONTENT_TYPE,
+            'Content-Type': USER_CONTENT_TYPE,
           },
         });
 
@@ -360,7 +358,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: JSON.stringify(userInfo),
         headers: {
-          'Content-Type': USER_CREATE_CONTENT_TYPE,
+          'Content-Type': USER_CONTENT_TYPE,
         },
       }),
       transformResponse: async (_response: any, meta: any) => {

@@ -7,7 +7,6 @@ import {
   INSTITUTION_CONTENT_TYPE,
   SUBJECT_CAREER_COLLECTION_CONTENT_TYPE,
   SUBJECT_CAREER_CONTENT_TYPE,
-  SUBJECT_CAREER_CREATE_CONTENT_TYPE,
   SUBJECT_COLLECTION_CONTENT_TYPE,
   SUBJECT_CONTENT_TYPE,
 } from '../../contentTypes';
@@ -324,10 +323,7 @@ export const institutionsHandlers = [
   http.post(
     apiUrl('/institutions/:institutionId/careers/:careerId/subjectcareers'),
     async ({ request, params }) => {
-      if (
-        request.headers.get('Content-Type') ===
-        SUBJECT_CAREER_CREATE_CONTENT_TYPE
-      ) {
+      if (request.headers.get('Content-Type') === SUBJECT_CAREER_CONTENT_TYPE) {
         if (
           careers.find((career) => career.id === params.careerId) ===
             undefined ||

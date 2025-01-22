@@ -8,7 +8,6 @@ import {
   INSTITUTION_CONTENT_TYPE,
   SUBJECT_CAREER_COLLECTION_CONTENT_TYPE,
   SUBJECT_CAREER_CONTENT_TYPE,
-  SUBJECT_CAREER_CREATE_CONTENT_TYPE,
   SUBJECT_COLLECTION_CONTENT_TYPE,
   SUBJECT_CONTENT_TYPE,
 } from '../../contentTypes.ts';
@@ -204,7 +203,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
               method: 'POST',
               body: JSON.stringify({ subjectId, year }),
               headers: {
-                'Content-Type': SUBJECT_CAREER_CREATE_CONTENT_TYPE,
+                'Content-Type': SUBJECT_CAREER_CONTENT_TYPE,
               },
             });
 
@@ -311,7 +310,7 @@ export const institutionsApiSlice = apiSlice.injectEndpoints({
               method: 'POST',
               body: JSON.stringify({ subjectId, year }),
               headers: {
-                'Content-Type': SUBJECT_CAREER_CREATE_CONTENT_TYPE,
+                'Content-Type': SUBJECT_CAREER_CONTENT_TYPE,
               },
             });
             if (subjectCareerResult.error) {

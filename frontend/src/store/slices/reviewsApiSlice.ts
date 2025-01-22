@@ -5,8 +5,6 @@ import {
   DELETE_REASON_CONTENT_TYPE,
   REVIEW_COLLECTION_CONTENT_TYPE,
   REVIEW_CONTENT_TYPE,
-  REVIEW_CREATE_CONTENT_TYPE,
-  REVIEW_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Review } from '../../types';
 import { extractErrorMessages } from '../../utils/helpers';
@@ -151,7 +149,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: JSON.stringify({ noteId, score, content }),
           headers: {
-            'Content-Type': REVIEW_CREATE_CONTENT_TYPE,
+            'Content-Type': REVIEW_CONTENT_TYPE,
           },
         });
         let errorMessages = extractErrorMessages(result.error);
@@ -180,7 +178,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify({ score, content }),
           headers: {
-            'Content-Type': REVIEW_UPDATE_CONTENT_TYPE,
+            'Content-Type': REVIEW_CONTENT_TYPE,
           },
         });
         let errorMessages = extractErrorMessages(result.error);

@@ -3,8 +3,6 @@ import { http, HttpResponse } from 'msw';
 import {
   DIRECTORY_CONTENT_TYPE,
   DIRECTORY_COLLECTION_CONTENT_TYPE,
-  DIRECTORY_CREATE_CONTENT_TYPE,
-  DIRECTORY_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes';
 import {
   apiUrl,
@@ -66,7 +64,7 @@ export const directoriesHandlers = [
     }
   }),
   http.post(apiUrl('/directories'), async ({ request }) => {
-    if (request.headers.get('Content-Type') === DIRECTORY_CREATE_CONTENT_TYPE) {
+    if (request.headers.get('Content-Type') === DIRECTORY_CONTENT_TYPE) {
       const name = (await request.json()).name;
       if (directories.find((n) => n.name === name)) {
         return new HttpResponse(JSON.stringify({ message: fileErrorMsg }), {
@@ -80,7 +78,7 @@ export const directoriesHandlers = [
   }),
 
   http.patch(apiUrl('/directories/:id'), async ({ request, params }) => {
-    if (request.headers.get('Content-Type') === DIRECTORY_UPDATE_CONTENT_TYPE) {
+    if (request.headers.get('Content-Type') === DIRECTORY_CONTENT_TYPE) {
       const name = (await request.json()).name;
       if (directories.find((n) => n.id === params.id)) {
         if (

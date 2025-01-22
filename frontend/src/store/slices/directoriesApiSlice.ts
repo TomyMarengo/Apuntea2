@@ -5,8 +5,6 @@ import {
   DELETE_REASON_CONTENT_TYPE,
   DIRECTORY_COLLECTION_CONTENT_TYPE,
   DIRECTORY_CONTENT_TYPE,
-  DIRECTORY_CREATE_CONTENT_TYPE,
-  DIRECTORY_UPDATE_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { Directory } from '../../types';
 import { extractErrorMessages } from '../../utils/helpers.ts';
@@ -80,7 +78,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           method: 'POST',
           body: JSON.stringify({ name, parentId, visible, iconColor }),
           headers: {
-            'Content-Type': DIRECTORY_CREATE_CONTENT_TYPE,
+            'Content-Type': DIRECTORY_CONTENT_TYPE,
           },
         });
         let errorMessages = extractErrorMessages(result.error);
@@ -111,7 +109,7 @@ export const directoriesApiSlice = apiSlice.injectEndpoints({
           method: 'PATCH',
           body: JSON.stringify(body),
           headers: {
-            'Content-Type': DIRECTORY_UPDATE_CONTENT_TYPE,
+            'Content-Type': DIRECTORY_CONTENT_TYPE,
           },
         });
         let errorMessages = extractErrorMessages(result.error);
