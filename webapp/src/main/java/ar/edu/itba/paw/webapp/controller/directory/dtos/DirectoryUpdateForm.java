@@ -1,13 +1,13 @@
 package ar.edu.itba.paw.webapp.controller.directory.dtos;
 
-import ar.edu.itba.paw.webapp.forms.SearchableCreationDto;
+import ar.edu.itba.paw.webapp.forms.SearchableUpdateDto;
 import ar.edu.itba.paw.webapp.forms.RegexUtils;
 
 import javax.validation.constraints.Pattern;
 
-public class DirectoryCreationDto extends SearchableCreationDto {
+public class DirectoryUpdateForm extends SearchableUpdateDto {
     @Pattern(regexp = RegexUtils.AVAILABLE_FOLDER_COLORS_REGEX, message = "{validation.validColors}")
-    private String iconColor = "BBBBBB";
+    private String iconColor;
 
     public String getIconColor() {
         return iconColor;

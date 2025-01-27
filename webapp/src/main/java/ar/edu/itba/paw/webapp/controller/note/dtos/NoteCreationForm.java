@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.controller.note.dtos;
 
-import ar.edu.itba.paw.webapp.forms.SearchableCreationDto;
+import ar.edu.itba.paw.webapp.forms.SearchableCreationForm;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -9,7 +9,7 @@ import ar.edu.itba.paw.webapp.forms.RegexUtils;
 import javax.validation.constraints.*;
 
 
-public class NoteCreationDto extends SearchableCreationDto {
+public class NoteCreationForm extends SearchableCreationForm {
     @NotNull(message = "{error.param.empty}")
     @FormDataParam("file")
     private byte[] file;

@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @NonExistingCreateSearchable()
-public abstract class SearchableCreationDto {
+public abstract class SearchableCreationForm {
     @NotEmpty(message = "{error.param.empty}")
     @Size(min = 2, max = 50, message = "{error.param.length}")
     @Pattern(regexp = RegexUtils.FILE_REGEX, message = "{validation.searchable.name}")

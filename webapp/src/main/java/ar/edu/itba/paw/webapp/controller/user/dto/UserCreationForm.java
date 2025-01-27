@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
-public class UserCreationDto {
+public class UserCreationForm {
 
     @NotEmpty(message = "{error.param.empty}")
     @Email(message = "{error.email.invalid}")
@@ -25,7 +25,7 @@ public class UserCreationDto {
     @NotNull(message = "{error.param.empty}")
     private UUID careerId;
 
-    public UserCreationDto() {
+    public UserCreationForm() {
     }
 
     public String getEmail() {

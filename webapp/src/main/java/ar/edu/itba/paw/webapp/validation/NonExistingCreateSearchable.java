@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.webapp.validation;
 
 import ar.edu.itba.paw.services.SearchService;
-import ar.edu.itba.paw.webapp.forms.SearchableCreationDto;
+import ar.edu.itba.paw.webapp.forms.SearchableCreationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Constraint;
@@ -32,7 +32,7 @@ public @interface NonExistingCreateSearchable {
     @interface List {
         NonExistingCreateSearchable[] nonExistingFile();
     }
-    class NonExistingCreateSearchableValidator implements ConstraintValidator<NonExistingCreateSearchable, SearchableCreationDto> {
+    class NonExistingCreateSearchableValidator implements ConstraintValidator<NonExistingCreateSearchable, SearchableCreationForm> {
         @Autowired
         private SearchService searchService;
 
@@ -41,7 +41,7 @@ public @interface NonExistingCreateSearchable {
         }
 
         @Override
-        public boolean isValid(SearchableCreationDto value, ConstraintValidatorContext context) {
+        public boolean isValid(SearchableCreationForm value, ConstraintValidatorContext context) {
             return !searchService.findByName(value.getParentId(), value.getName()).isPresent();
         }
     }

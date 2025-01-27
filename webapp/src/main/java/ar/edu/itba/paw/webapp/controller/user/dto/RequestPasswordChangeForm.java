@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.controller.user.dto;
 
 import org.hibernate.validator.constraints.Email;
 
-public class RequestPasswordChangeDto {
+public class RequestPasswordChangeForm {
     @Email(message = "{error.email.invalid}")
     private String email;
 

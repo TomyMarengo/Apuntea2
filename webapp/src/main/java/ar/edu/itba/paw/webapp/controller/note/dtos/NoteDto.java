@@ -7,7 +7,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class NoteResponseDto {
+public class NoteDto {
     private UUID id;
     private String name;
     private LocalDateTime createdAt;
@@ -36,10 +36,10 @@ public class NoteResponseDto {
 
     private URI interactionsUri;
 
-    public NoteResponseDto() {
+    public NoteDto() {
     }
-    public static NoteResponseDto fromNote(Note note, UriInfo uriInfo){
-        final NoteResponseDto noteDto = new NoteResponseDto();
+    public static NoteDto fromNote(Note note, UriInfo uriInfo){
+        final NoteDto noteDto = new NoteDto();
         noteDto.id = note.getId();
         noteDto.name = note.getName();
         noteDto.createdAt = note.getCreatedAt();

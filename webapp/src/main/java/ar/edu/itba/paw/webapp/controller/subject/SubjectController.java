@@ -4,8 +4,8 @@ import ar.edu.itba.paw.models.exceptions.institutional.SubjectNotFoundException;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.services.SubjectService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
+import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectForm;
 import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectDto;
-import ar.edu.itba.paw.webapp.controller.subject.dtos.SubjectResponseDto;
 import ar.edu.itba.paw.webapp.controller.utils.CacheUtils;
 import ar.edu.itba.paw.webapp.forms.queries.SubjectQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +36,8 @@ public class SubjectController {
         final List<Subject> subjects = (subjectQuery.getCareerId() != null || subjectQuery.getUserId() != null )?
                 subjectService.getSubjects(subjectQuery.getCareerId(), subjectQuery.getYear(), subjectQuery.getUserId()):
                 subjectService.getSubjectsByCareerComplemented(subjectQuery.getNotInCareer());
-        final Collection<SubjectResponseDto> subjectDtos = subjects.stream().map(s->SubjectResponseDto.fromSubject(s, uriInfo)).collect(java.util.stream.Collectors.toList());
-        return Response.ok(new GenericEntity<Collection<SubjectResponseDto>>(subjectDtos){}).build();
+        final Collection<SubjectDto> subjectDtos = subjects.stream().map(s-> SubjectDto.fromSubject(s, uriInfo)).collect(java.util.stream.Collectors.toList());
+        return Response.ok(new GenericEntity<Collection<SubjectDto>>(subjectDtos){}).build();
     }
 
     @GET
@@ -45,14 +45,14 @@ public class SubjectController {
     @Produces(value = { ApunteaMediaType.SUBJECT})
     public Response getSubject(@Context final Request request, @PathParam("subjectId") final UUID subjectId){
         final Subject sub = subjectService.getSubject(subjectId).orElseThrow(SubjectNotFoundException::new);
-        return CacheUtils.conditionalCache(Response.ok(SubjectResponseDto.fromSubject(sub, uriInfo)), request, sub.hashCode()).build();
+        return CacheUtils.conditionalCache(Response.ok(SubjectDto.fromSubject(sub, uriInfo)), request, sub.hashCode()).build();
     }
 
     @POST
     @Consumes(value = { ApunteaMediaType.SUBJECT })
     @Secured({"ROLE_ADMIN"})
-    public Response createSubject(@Valid final SubjectDto subjectDto) {
-        UUID subjectId = subjectService.createSubject(subjectDto.getName());
+    public Response createSubject(@Valid final SubjectForm subjectForm) {
+        UUID subjectId = subjectService.createSubject(subjectForm.getName());
         return Response.created(uriInfo.getAbsolutePathBuilder().path(subjectId.toString()).build()).build();
     }
 
@@ -60,8 +60,8 @@ public class SubjectController {
     @Path("/{subjectId}")
     @Consumes(value = { ApunteaMediaType.SUBJECT })
     @Secured({"ROLE_ADMIN"})
-    public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @Valid SubjectDto subjectDto) {
-        subjectService.updateSubject(subjectId, subjectDto.getName());
+    public Response updateSubject(@PathParam("subjectId") final UUID subjectId, @Valid SubjectForm subjectForm) {
+        subjectService.updateSubject(subjectId, subjectForm.getName());
         return Response.noContent().build();
     }
 

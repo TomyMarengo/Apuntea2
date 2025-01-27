@@ -6,9 +6,9 @@ import ar.edu.itba.paw.models.exceptions.note.ReviewNotFoundException;
 import ar.edu.itba.paw.models.note.Review;
 import ar.edu.itba.paw.services.NoteService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewCreationDto;
-import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewResponseDto;
-import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewUpdateDto;
+import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewCreationForm;
+import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewDto;
+import ar.edu.itba.paw.webapp.controller.review.dtos.ReviewUpdateForm;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.dto.DeleteReasonDto;
 import ar.edu.itba.paw.webapp.forms.queries.ReviewQuery;
@@ -43,7 +43,7 @@ public class ReviewController {
     @Produces(value = { ApunteaMediaType.REVIEW })
     public Response getReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId) {
         final Review review = noteService.getReview(noteId, userId).orElseThrow(ReviewNotFoundException::new);
-        final ReviewResponseDto reviewRespDto = ReviewResponseDto.fromReview(review, uriInfo);
+        final ReviewDto reviewRespDto = ReviewDto.fromReview(review, uriInfo);
         return Response.ok(reviewRespDto).build();
     }
 
@@ -63,22 +63,22 @@ public class ReviewController {
                     reviewQuery.getPageSize()
             );
 
-        final Collection<ReviewResponseDto> reviewDtos = reviewPage.getContent()
+        final Collection<ReviewDto> reviewDtos = reviewPage.getContent()
                 .stream()
-                .map(d -> ReviewResponseDto.fromReview(d, uriInfo))
+                .map(d -> ReviewDto.fromReview(d, uriInfo))
                 .collect(Collectors.toList());
-        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<ReviewResponseDto>>(reviewDtos) {}),
+        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<ReviewDto>>(reviewDtos) {}),
                 uriInfo,
                 reviewPage).build();
     }
 
     @POST
     @Consumes(value = { ApunteaMediaType.REVIEW })
-    public Response createReview(@Valid final ReviewCreationDto reviewCreationDto) {
+    public Response createReview(@Valid final ReviewCreationForm reviewCreationForm) {
         final Review review = noteService.createReview(
-                reviewCreationDto.getNoteId(),
-                reviewCreationDto.getScore(),
-                reviewCreationDto.getContent()
+                reviewCreationForm.getNoteId(),
+                reviewCreationForm.getScore(),
+                reviewCreationForm.getContent()
         );
         if (review == null)
             throw new ConflictResponseException("error.review.alreadyExists");
@@ -89,8 +89,8 @@ public class ReviewController {
     @Path("/{noteId}_{userId}")
     @Produces(value = { ApunteaMediaType.REVIEW })
     @PreAuthorize("@userPermissions.isCurrentUser(#userId)")
-    public Response updateReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Valid final ReviewUpdateDto reviewUpdateDto) {
-        noteService.updateReview(noteId, reviewUpdateDto.getScore(), reviewUpdateDto.getContent());
+    public Response updateReview(@PathParam("noteId") final UUID noteId, @PathParam("userId") final UUID userId, @Valid final ReviewUpdateForm reviewUpdateForm) {
+        noteService.updateReview(noteId, reviewUpdateForm.getScore(), reviewUpdateForm.getContent());
         return Response.noContent().build();
     }
 

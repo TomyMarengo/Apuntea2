@@ -6,10 +6,10 @@ import ar.edu.itba.paw.models.exceptions.ConflictResponseException;
 import ar.edu.itba.paw.models.exceptions.FavoriteNotFoundException;
 import ar.edu.itba.paw.services.*;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryCreationDto;
-import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryUpdateDto;
+import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryCreationForm;
+import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryUpdateForm;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
-import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryResponseDto;
+import ar.edu.itba.paw.webapp.controller.directory.dtos.DirectoryDto;
 import ar.edu.itba.paw.webapp.dto.DeleteReasonDto;
 import ar.edu.itba.paw.webapp.forms.queries.DirectoryQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class DirectoryController {
         final Optional<Directory> maybeDirectory = directoryService.getDirectoryById(id);
         if (!maybeDirectory.isPresent())
             return Response.status(Response.Status.NOT_FOUND).build();
-        final DirectoryResponseDto directoryDto = DirectoryResponseDto.fromDirectory(maybeDirectory.get(), uriInfo);
+        final DirectoryDto directoryDto = DirectoryDto.fromDirectory(maybeDirectory.get(), uriInfo);
         return Response.ok(directoryDto).build();
     }
 
@@ -68,24 +68,24 @@ public class DirectoryController {
                 directoryQuery.getPage(),
                 directoryQuery.getPageSize()
         );
-        final Collection<DirectoryResponseDto> dtoDirectories = directoryPage.getContent()
+        final Collection<DirectoryDto> dtoDirectories = directoryPage.getContent()
                 .stream()
-                .map(d -> DirectoryResponseDto.fromDirectory(d, uriInfo))
+                .map(d -> DirectoryDto.fromDirectory(d, uriInfo))
                 .collect(Collectors.toList());
 
-        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<DirectoryResponseDto>>(dtoDirectories) {}),
+        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<DirectoryDto>>(dtoDirectories) {}),
                 uriInfo,
                 directoryPage).build();
     }
 
     @POST
     @Consumes(value = { ApunteaMediaType.DIRECTORY })
-    public Response createDirectory(@Valid final DirectoryCreationDto directoryDto) {
+    public Response createDirectory(@Valid final DirectoryCreationForm directoryForm) {
         final UUID DirectoryId = directoryService.create(
-            directoryDto.getName(),
-            directoryDto.getParentId(),
-            directoryDto.getVisible(),
-            directoryDto.getIconColor()
+            directoryForm.getName(),
+            directoryForm.getParentId(),
+            directoryForm.getVisible(),
+            directoryForm.getIconColor()
         );
         return Response.created(uriInfo.getAbsolutePathBuilder().path(DirectoryId.toString()).build()).build();
     }
@@ -93,8 +93,8 @@ public class DirectoryController {
     @PATCH
     @Path("/{id}")
     @Consumes(value = { ApunteaMediaType.DIRECTORY })
-    public Response updateDirectory(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final DirectoryUpdateDto directoryDto) {
-        directoryService.update(id, directoryDto.getName(), directoryDto.getVisible(), directoryDto.getIconColor());
+    public Response updateDirectory(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final DirectoryUpdateForm directoryForm) {
+        directoryService.update(id, directoryForm.getName(), directoryForm.getVisible(), directoryForm.getIconColor());
         return Response.noContent().build();
     }
 

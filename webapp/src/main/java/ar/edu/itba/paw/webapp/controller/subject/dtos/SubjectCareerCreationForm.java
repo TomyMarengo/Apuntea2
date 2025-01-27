@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.Range;
 
 import java.util.UUID;
 
-public class SubjectCareerCreationDto {
+public class SubjectCareerCreationForm {
     @Range(min = 1, max = 5, message = "{error.param.range}")
     private int year;
 

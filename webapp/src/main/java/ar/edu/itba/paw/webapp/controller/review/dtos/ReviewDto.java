@@ -7,7 +7,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class ReviewResponseDto {
+public class ReviewDto {
     private UUID userId;
     private UUID noteId;
     private String content;
@@ -17,11 +17,11 @@ public class ReviewResponseDto {
     private URI note;
     private URI user;
 
-    public ReviewResponseDto() {
+    public ReviewDto() {
     }
 
-    public static ReviewResponseDto fromReview(final Review review, final UriInfo uriInfo) {
-        final ReviewResponseDto dto = new ReviewResponseDto();
+    public static ReviewDto fromReview(final Review review, final UriInfo uriInfo) {
+        final ReviewDto dto = new ReviewDto();
         dto.userId = review.getUser().getUserId();
         dto.noteId = review.getNote().getId();
         dto.content = review.getContent();

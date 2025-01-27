@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @AttributeDependence(baseField = "password", dependentField = "oldPassword")
-public class UserUpdateDto {
+public class UserUpdateForm {
     @Pattern(regexp = RegexUtils.NAME_REGEX, message = "{validation.user.name}")
     @Size(max = 20, message = "{error.param.length}")
     private String firstName;

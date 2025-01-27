@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.net.URI;
 import java.util.UUID;
 
-public class DirectoryResponseDto {
+public class DirectoryDto {
     private UUID id;
     private String name;
     private LocalDateTime createdAt;
@@ -25,8 +25,8 @@ public class DirectoryResponseDto {
     private URI notes;
     private URI directories;
 
-    public static DirectoryResponseDto fromDirectory(Directory directory, UriInfo uriInfo){
-        final DirectoryResponseDto directoryDto = new DirectoryResponseDto();
+    public static DirectoryDto fromDirectory(Directory directory, UriInfo uriInfo){
+        final DirectoryDto directoryDto = new DirectoryDto();
         directoryDto.id = directory.getId();
         directoryDto.name = directory.getName();
         directoryDto.createdAt = directory.getCreatedAt();

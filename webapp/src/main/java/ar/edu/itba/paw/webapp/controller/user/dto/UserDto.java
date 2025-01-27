@@ -8,7 +8,7 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.UUID;
 
-public class UserResponseDto {
+public class UserDto {
     private UUID id;
     private String email;
     private String firstName;
@@ -34,12 +34,12 @@ public class UserResponseDto {
     private URI reviewsReceived;
     private URI reviews;
 
-    public static UserResponseDto fromUser(final User user, final UriInfo uriInfo) {
+    public static UserDto fromUser(final User user, final UriInfo uriInfo) {
         return fromUser(user, uriInfo, false);
     }
 
-    public static UserResponseDto fromUser(final User user, final UriInfo uriInfo, boolean withEmail) {
-        final UserResponseDto userDto = new UserResponseDto();
+    public static UserDto fromUser(final User user, final UriInfo uriInfo, boolean withEmail) {
+        final UserDto userDto = new UserDto();
         userDto.id = user.getUserId();
         if (withEmail)
             userDto.email = user.getEmail();

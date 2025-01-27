@@ -14,7 +14,6 @@ import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.controller.user.dto.*;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
 import ar.edu.itba.paw.webapp.forms.queries.UserQuery;
-import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,7 +49,7 @@ public class UserController {
     @Produces(value = { ApunteaMediaType.USER})
     public Response getUser(@PathParam("id") final UUID id) {
         final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
-        return Response.ok(UserResponseDto.fromUser(user, uriInfo)).build();
+        return Response.ok(UserDto.fromUser(user, uriInfo)).build();
     }
 
     // TODO: Ask if this approach is correct
@@ -60,7 +59,7 @@ public class UserController {
     @Produces(value = { ApunteaMediaType.USER_WITH_EMAIL})
     public Response getUserWithEmail(@PathParam("id") final UUID id) {
         final User user = userService.findById(id).orElseThrow(UserNotFoundException::new);
-        return Response.ok(UserResponseDto.fromUser(user, uriInfo, true)).build();
+        return Response.ok(UserDto.fromUser(user, uriInfo, true)).build();
     }
 
     @GET
@@ -76,11 +75,11 @@ public class UserController {
                     userQuery.getPage(),
                     userQuery.getPageSize()
             );
-        final Collection<UserResponseDto> dtoUsers = userPage.getContent()
+        final Collection<UserDto> dtoUsers = userPage.getContent()
                 .stream()
-                .map(u -> UserResponseDto.fromUser(u, uriInfo))
+                .map(u -> UserDto.fromUser(u, uriInfo))
                 .collect(Collectors.toList());
-        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<UserResponseDto>>(dtoUsers) {}),
+        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<UserDto>>(dtoUsers) {}),
                 uriInfo,
                 userPage).build();
     }
@@ -99,11 +98,11 @@ public class UserController {
                         userQuery.getPage(),
                         userQuery.getPageSize()
                 );
-        final Collection<UserResponseDto> dtoUsers = userPage.getContent()
+        final Collection<UserDto> dtoUsers = userPage.getContent()
                 .stream()
-                .map(u -> UserResponseDto.fromUser(u, uriInfo, true))
+                .map(u -> UserDto.fromUser(u, uriInfo, true))
                 .collect(Collectors.toList());
-        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<UserResponseDto>>(dtoUsers) {}),
+        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<UserDto>>(dtoUsers) {}),
                 uriInfo,
                 userPage).build();
     }
@@ -111,8 +110,8 @@ public class UserController {
 
     @POST
     @Consumes(value = { ApunteaMediaType.USER })
-    public Response createUser(@Valid final UserCreationDto userDto) {
-        final UUID userId = userService.create(userDto.getEmail(), userDto.getPassword(), userDto.getCareerId(), Role.ROLE_STUDENT);
+    public Response createUser(@Valid final UserCreationForm userForm) {
+        final UUID userId = userService.create(userForm.getEmail(), userForm.getPassword(), userForm.getCareerId(), Role.ROLE_STUDENT);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(userId.toString()).build()).build();
     }
 
@@ -120,12 +119,12 @@ public class UserController {
     @Path("/{id}")
     @PreAuthorize("@userPermissions.isCurrentUser(#id)")
     @Consumes(value = { ApunteaMediaType.USER })
-    public Response updateUser(@PathParam("id") final UUID id, @Valid final UserUpdateDto userDto) {
-        userService.updateProfile(userDto.getFirstName(), userDto.getLastName(), userDto.getUsername(), userDto.getCareerId());
-        if (userDto.getPassword() != null)
-            userService.updateCurrentUserPassword(userDto.getPassword());
-        if (userDto.getNotificationsEnabled() != null)
-            userService.updateNotificationsEnabled(userDto.getNotificationsEnabled());
+    public Response updateUser(@PathParam("id") final UUID id, @Valid final UserUpdateForm userForm) {
+        userService.updateProfile(userForm.getFirstName(), userForm.getLastName(), userForm.getUsername(), userForm.getCareerId());
+        if (userForm.getPassword() != null)
+            userService.updateCurrentUserPassword(userForm.getPassword());
+        if (userForm.getNotificationsEnabled() != null)
+            userService.updateNotificationsEnabled(userForm.getNotificationsEnabled());
         return Response.noContent().build();
     }
 
@@ -134,8 +133,8 @@ public class UserController {
     @Secured("ROLE_VERIFY")
     @PreAuthorize("@userPermissions.isCurrentUser(#id)")
     @Consumes(value = { ApunteaMediaType.USER_UPDATE_PASSWORD })
-    public Response updateUserPassword(@PathParam("id") final UUID id, @Valid final UserPasswordUpdateDto userDto) {
-        userService.updateCurrentUserPassword(userDto.getPassword());
+    public Response updateUserPassword(@PathParam("id") final UUID id, @Valid final UserPasswordUpdateForm userForm) {
+        userService.updateCurrentUserPassword(userForm.getPassword());
         return Response.noContent().build();
     }
 
@@ -154,8 +153,8 @@ public class UserController {
     @POST
     @Secured("ROLE_ANONYMOUS")
     @Consumes(value = { ApunteaMediaType.USER_REQUEST_PASSWORD_CHANGE })
-    public Response requestPasswordChange(@Valid final RequestPasswordChangeDto emailDto) {
-        verificationCodesService.sendForgotPasswordCode(emailDto.getEmail());
+    public Response requestPasswordChange(@Valid final RequestPasswordChangeForm emailForm) {
+        verificationCodesService.sendForgotPasswordCode(emailForm.getEmail());
         return Response.noContent().build();
     }
 

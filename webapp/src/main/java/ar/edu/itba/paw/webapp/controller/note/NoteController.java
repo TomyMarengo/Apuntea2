@@ -11,9 +11,9 @@ import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
 import ar.edu.itba.paw.webapp.dto.DeleteReasonDto;
 import ar.edu.itba.paw.webapp.controller.utils.CacheUtils;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
-import ar.edu.itba.paw.webapp.controller.note.dtos.NoteCreationDto;
-import ar.edu.itba.paw.webapp.controller.note.dtos.NoteResponseDto;
-import ar.edu.itba.paw.webapp.controller.note.dtos.NoteUpdateDto;
+import ar.edu.itba.paw.webapp.controller.note.dtos.NoteCreationForm;
+import ar.edu.itba.paw.webapp.controller.note.dtos.NoteDto;
+import ar.edu.itba.paw.webapp.controller.note.dtos.NoteUpdateForm;
 import ar.edu.itba.paw.webapp.forms.queries.NoteQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -51,7 +51,7 @@ public class NoteController {
         final Optional<Note> maybeNote = noteService.getNoteById(id);
         if (!maybeNote.isPresent())
             return Response.status(Response.Status.NOT_FOUND).build();
-        final NoteResponseDto noteDto = NoteResponseDto.fromNote(maybeNote.get(), uriInfo);
+        final NoteDto noteDto = NoteDto.fromNote(maybeNote.get(), uriInfo);
         return Response.ok(noteDto).build();
     }
 
@@ -72,26 +72,26 @@ public class NoteController {
                 noteQuery.getPage(),
                 noteQuery.getPageSize()
         );
-        final Collection<NoteResponseDto> noteDtos = notePage.getContent()
+        final Collection<NoteDto> noteDtos = notePage.getContent()
                 .stream()
-                .map(n -> NoteResponseDto.fromNote(n, uriInfo))
+                .map(n -> NoteDto.fromNote(n, uriInfo))
                 .collect(Collectors.toList());
 
-        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<NoteResponseDto>>(noteDtos) {}),
+        return ControllerUtils.addPaginationLinks(Response.ok(new GenericEntity<Collection<NoteDto>>(noteDtos) {}),
                 uriInfo,
                 notePage).build();
     }
 
     @POST
     @Consumes(value = { ApunteaMediaType.FORM_DATA })
-    public  Response createNote(@Valid @NotNull(message = "error.body.empty") @BeanParam final NoteCreationDto noteDto) {
+    public  Response createNote(@Valid @NotNull(message = "error.body.empty") @BeanParam final NoteCreationForm noteForm) {
         final UUID noteId = noteService.createNote(
-                noteDto.getName(),
-                noteDto.getParentId(),
-                noteDto.getVisible(),
-                noteDto.getFile(),
-                noteDto.getMimeType(),
-                noteDto.getCategory()
+                noteForm.getName(),
+                noteForm.getParentId(),
+                noteForm.getVisible(),
+                noteForm.getFile(),
+                noteForm.getMimeType(),
+                noteForm.getCategory()
         );
         return Response.created(uriInfo.getAbsolutePathBuilder().path(noteId.toString()).build()).build();
     }
@@ -99,8 +99,8 @@ public class NoteController {
     @PATCH
     @Path("/{id}")
     @Consumes(value = { ApunteaMediaType.NOTE })
-    public Response updateNote(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final NoteUpdateDto noteDto) {
-        noteService.update(id, noteDto.getName(), noteDto.getVisible(), noteDto.getCategory());
+    public Response updateNote(@PathParam("id") final UUID id, @Valid @NotNull(message = "error.body.empty") final NoteUpdateForm noteForm) {
+        noteService.update(id, noteForm.getName(), noteForm.getVisible(), noteForm.getCategory());
         return Response.noContent().build();
     }
 

@@ -8,17 +8,17 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.UUID;
 
-public class SubjectCareerResponseDto {
+public class SubjectCareerDto {
     private int year;
 
     private URI self;
     private URI career;
     private URI subject;
 
-    public SubjectCareerResponseDto() {
+    public SubjectCareerDto() {
     }
 
-    public SubjectCareerResponseDto(int year, UUID institutionId, UUID careerId, UUID subjectId, UriInfo uriInfo) {
+    public SubjectCareerDto(int year, UUID institutionId, UUID careerId, UUID subjectId, UriInfo uriInfo) {
         this.year = year;
         UriBuilder ub = uriInfo.getBaseUriBuilder().path("institutions").path(institutionId.toString())
                 .path("careers").path(careerId.toString());
@@ -28,8 +28,8 @@ public class SubjectCareerResponseDto {
     }
 
 
-    public static SubjectCareerResponseDto fromSubjectCareer(SubjectCareer sc, UriInfo uriInfo) {
-        SubjectCareerResponseDto scDto = new SubjectCareerResponseDto();
+    public static SubjectCareerDto fromSubjectCareer(SubjectCareer sc, UriInfo uriInfo) {
+        SubjectCareerDto scDto = new SubjectCareerDto();
         scDto.year = sc.getYear();
 
         UUID subjectId = sc.getSubject().getSubjectId();

@@ -2,11 +2,10 @@ package ar.edu.itba.paw.webapp.controller.note.dtos;
 
 import ar.edu.itba.paw.webapp.forms.SearchableUpdateDto;
 import ar.edu.itba.paw.webapp.forms.RegexUtils;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;
 
-public class NoteUpdateDto extends SearchableUpdateDto {
+public class NoteUpdateForm extends SearchableUpdateDto {
     @Pattern(regexp = RegexUtils.CATEGORY_REGEX, message = "{validation.category}")
     private String category;
 
