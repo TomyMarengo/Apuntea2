@@ -2,12 +2,11 @@ package ar.edu.itba.paw.webapp.controller.user.dto;
 
 import ar.edu.itba.paw.models.user.UserStatus;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class UserStatusDto {
+public class UserStatusForm {
     @NotNull(message = "{error.param.empty}")
     @Pattern(regexp = "^(active|banned)$")
     private String status;
@@ -15,7 +14,7 @@ public class UserStatusDto {
     @Size(max = 255, message = "{error.param.length}")
     private String reason;
 
-    public UserStatusDto() {
+    public UserStatusForm() {
     }
 
     public String getStatus() {

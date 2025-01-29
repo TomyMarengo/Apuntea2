@@ -5,7 +5,7 @@ public class ApunteaMediaType {
 
     public static final String USER = "application/vnd.apuntea.user-v1.0+json";
     public static final String USER_WITH_EMAIL = "application/vnd.apuntea.user-with-email-v1.0+json";
-    public static final String USER_UPDATE_STATUS = "application/vnd.apuntea.user-update-status-v1.0+json";
+    public static final String USER_STATUS_REASON = "application/vnd.apuntea.status-reason-v1.0+json";
     public static final String USER_UPDATE_PASSWORD = "application/vnd.apuntea.user-update-password-v1.0+json";
     public static final String USER_REQUEST_PASSWORD_CHANGE = "application/vnd.apuntea.request-password-change-v1.0+json";
     public static final String USER_COLLECTION = "application/vnd.apuntea.user-collection-v1.0+json";

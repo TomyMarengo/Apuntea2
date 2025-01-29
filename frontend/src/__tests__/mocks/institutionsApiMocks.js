@@ -16,6 +16,7 @@ import {
   NO_CONTENT_RESPONSE,
   NOT_ACCEPTABLE_RESPONSE,
   NOT_FOUND_RESPONSE,
+  UNSUPPORTED_MEDIA_TYPE_RESPONSE,
 } from '../setup/utils';
 const institutions = [
   {
@@ -299,7 +300,7 @@ export const institutionsHandlers = [
         });
       }
     } else {
-      return NOT_ACCEPTABLE_RESPONSE();
+      return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
     }
   }),
   http.put(apiUrl('/subjects/:subjectId'), async ({ request, params }) => {
@@ -317,7 +318,7 @@ export const institutionsHandlers = [
             status: 400,
           });
     } else {
-      return NOT_ACCEPTABLE_RESPONSE();
+      return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
     }
   }),
   http.post(
@@ -344,7 +345,7 @@ export const institutionsHandlers = [
               status: 400,
             });
       } else {
-        return NOT_ACCEPTABLE_RESPONSE();
+        return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
       }
     },
   ),
@@ -372,7 +373,7 @@ export const institutionsHandlers = [
               status: 400,
             });
       } else {
-        return NOT_ACCEPTABLE_RESPONSE();
+        return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
       }
     },
   ),

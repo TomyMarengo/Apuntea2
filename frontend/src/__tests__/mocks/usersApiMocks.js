@@ -1,13 +1,12 @@
 import { http, HttpResponse } from 'msw';
 
-import { favNoteId, favUserId } from './notesApiMocks.js';
 import {
   USER_COLLECTION_CONTENT_TYPE,
   USER_CONTENT_TYPE,
   USER_EMAIL_COLLECTION_CONTENT_TYPE,
   USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
   USER_UPDATE_PASSWORD_CONTENT_TYPE,
-  USER_UPDATE_STATUS_CONTENT_TYPE,
+  USER_STATUS_REASON_CONTENT_TYPE,
 } from '../../contentTypes';
 import {
   apiUrl,
@@ -141,6 +140,19 @@ export const usersHandlers = [
       return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
     }
   }),
+  http.post(apiUrl('/users/:id'), async ({ request, params }) => {
+    if (
+      request.headers.get('Content-Type') === USER_STATUS_REASON_CONTENT_TYPE
+    ) {
+      if (users.find((u) => u.id === params.id)) {
+        return NO_CONTENT_RESPONSE();
+      } else {
+        return NOT_FOUND_RESPONSE();
+      }
+    } else {
+      return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
+    }
+  }),
   http.patch(apiUrl('/users/:id'), async ({ request, params }) => {
     if (request.headers.get('Content-Type') === USER_CONTENT_TYPE) {
       const user = await request.json();
@@ -151,14 +163,6 @@ export const usersHandlers = [
             { status: 400 },
           );
         }
-        return NO_CONTENT_RESPONSE();
-      } else {
-        return NOT_FOUND_RESPONSE();
-      }
-    } else if (
-      request.headers.get('Content-Type') === USER_UPDATE_STATUS_CONTENT_TYPE
-    ) {
-      if (users.find((u) => u.id === params.id)) {
         return NO_CONTENT_RESPONSE();
       } else {
         return NOT_FOUND_RESPONSE();
@@ -180,7 +184,7 @@ export const usersHandlers = [
       }
       return UNAUTHORIZED_RESPONSE();
     } else {
-      return NOT_ACCEPTABLE_RESPONSE();
+      return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
     }
   }),
   http.get(apiUrl('/users/:userId/followers/:followerId'), ({ params }) => {

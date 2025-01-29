@@ -2,8 +2,8 @@ export const ERROR_CONTENT_TYPE = 'application/vnd.apuntea.error-v1.0+json';
 export const USER_CONTENT_TYPE = 'application/vnd.apuntea.user-v1.0+json';
 export const USER_EMAIL_CONTENT_TYPE =
   'application/vnd.apuntea.user-with-email-v1.0+json';
-export const USER_UPDATE_STATUS_CONTENT_TYPE =
-  'application/vnd.apuntea.user-update-status-v1.0+json';
+export const USER_STATUS_REASON_CONTENT_TYPE =
+  'application/vnd.apuntea.status-reason-v1.0+json';
 export const USER_UPDATE_PASSWORD_CONTENT_TYPE =
   'application/vnd.apuntea.user-update-password-v1.0+json';
 export const USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE =

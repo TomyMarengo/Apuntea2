@@ -138,11 +138,11 @@ public class UserController {
         return Response.noContent().build();
     }
 
-    @PATCH
+    @POST
     @Path("/{id}")
     @Secured("ROLE_ADMIN")
-    @Consumes(value = { ApunteaMediaType.USER_UPDATE_STATUS })
-    public Response updateUserStatus(@PathParam("id") final UUID id, @Valid final UserStatusDto userStatusDto) {
+    @Consumes(value = { ApunteaMediaType.USER_STATUS_REASON })
+    public Response updateUserStatus(@PathParam("id") final UUID id, @Valid final UserStatusForm userStatusDto) {
         if (userStatusDto.getUserStatus().equals(UserStatus.BANNED))
             userService.banUser(id, userStatusDto.getReason());
         else if (userStatusDto.getUserStatus().equals(UserStatus.ACTIVE))

@@ -11,7 +11,7 @@ import {
   USER_EMAIL_COLLECTION_CONTENT_TYPE,
   USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
   USER_UPDATE_PASSWORD_CONTENT_TYPE,
-  USER_UPDATE_STATUS_CONTENT_TYPE,
+  USER_STATUS_REASON_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { User, Career, Institution, UserStatus } from '../../types';
 import { extractErrorMessages } from '../../utils/helpers';
@@ -332,10 +332,10 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
         const result = await baseQuery({
           url: url || `/users/${userId}`,
-          method: 'PATCH',
+          method: 'POST',
           body: JSON.stringify(data),
           headers: {
-            'Content-Type': USER_UPDATE_STATUS_CONTENT_TYPE,
+            'Content-Type': USER_STATUS_REASON_CONTENT_TYPE,
           },
         });
 
