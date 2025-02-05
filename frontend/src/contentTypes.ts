@@ -4,8 +4,8 @@ export const USER_EMAIL_CONTENT_TYPE =
   'application/vnd.apuntea.user-with-email-v1.0+json';
 export const USER_STATUS_REASON_CONTENT_TYPE =
   'application/vnd.apuntea.status-reason-v1.0+json';
-export const USER_UPDATE_PASSWORD_CONTENT_TYPE =
-  'application/vnd.apuntea.user-update-password-v1.0+json';
+export const USER_PASSWORD_CONTENT_TYPE =
+  'application/vnd.apuntea.user-password-v1.0+json';
 export const USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE =
   'application/vnd.apuntea.request-password-change-v1.0+json';
 export const USER_COLLECTION_CONTENT_TYPE =

@@ -10,7 +10,7 @@ import {
   USER_CONTENT_TYPE,
   USER_EMAIL_COLLECTION_CONTENT_TYPE,
   USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
-  USER_UPDATE_PASSWORD_CONTENT_TYPE,
+  USER_PASSWORD_CONTENT_TYPE,
   USER_STATUS_REASON_CONTENT_TYPE,
 } from '../../contentTypes.ts';
 import { User, Career, Institution, UserStatus } from '../../types';
@@ -86,7 +86,6 @@ interface UpdateUserStatusArgs {
 }
 
 interface UpdatePasswordArgs {
-  userId: string;
   password: string;
   email: string;
   code: string;
@@ -527,18 +526,18 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
     updateUserPassword: builder.mutation<ApiResponse, UpdatePasswordArgs>({
       queryFn: async (
-        { userId, password, email, code },
+        { password, email, code },
         _api,
         _extraOptions,
         baseQuery,
       ) => {
         const authorization = btoa(`${email}:${code}`);
         const result = await baseQuery({
-          url: `/users/${userId}`,
-          method: 'PATCH',
+          url: `/users`,
+          method: 'POST',
           body: JSON.stringify({ password }),
           headers: {
-            'Content-Type': USER_UPDATE_PASSWORD_CONTENT_TYPE,
+            'Content-Type': USER_PASSWORD_CONTENT_TYPE,
             Authorization: `Basic ${authorization}`,
           },
         });
@@ -552,20 +551,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           },
         };
       },
-      invalidatesTags: (_result, _error, { userId }) => [
-        { type: 'Users', id: userId },
-      ],
-    }),
-    getUserByEmail: builder.query<User[], string>({
-      query: (email) => ({
-        url: `/users?email=${encodeURIComponent(email)}`,
-        headers: {
-          Accept: USER_COLLECTION_CONTENT_TYPE,
-        },
-      }),
-      transformResponse: (response: any) => {
-        return Array.isArray(response) ? response.map(mapApiUser) : [];
-      },
+      // invalidatesTags: (_result, _error, { userId }) => [
+      //   { type: 'Users', id: userId },
+      // ],
     }),
   }),
 });
@@ -589,7 +577,6 @@ export const {
   useIsFollowingUserQuery,
   useUpdateUserStatusMutation,
   useLazyGetUserQuery,
-  useLazyGetUserByEmailQuery,
   useRequestPasswordChangeMutation,
   useUpdateUserPasswordMutation,
 } = usersApiSlice;

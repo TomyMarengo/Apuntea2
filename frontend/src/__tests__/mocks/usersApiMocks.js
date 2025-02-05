@@ -5,7 +5,7 @@ import {
   USER_CONTENT_TYPE,
   USER_EMAIL_COLLECTION_CONTENT_TYPE,
   USER_REQUEST_PASSWORD_CHANGE_CONTENT_TYPE,
-  USER_UPDATE_PASSWORD_CONTENT_TYPE,
+  USER_PASSWORD_CONTENT_TYPE,
   USER_STATUS_REASON_CONTENT_TYPE,
 } from '../../contentTypes';
 import {
@@ -136,6 +136,15 @@ export const usersHandlers = [
         return NO_CONTENT_RESPONSE();
       }
       return NOT_FOUND_RESPONSE();
+    } else if (
+      request.headers.get('Content-Type') === USER_PASSWORD_CONTENT_TYPE
+    ) {
+      const auth = request.headers.get('Authorization');
+      const [email, code] = atob(auth.split(' ')[1]).split(':');
+      if (users.find((u) => u.email === email && code === passwordChangeCode)) {
+        return NO_CONTENT_RESPONSE();
+      }
+      return UNAUTHORIZED_RESPONSE();
     } else {
       return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
     }
@@ -167,22 +176,6 @@ export const usersHandlers = [
       } else {
         return NOT_FOUND_RESPONSE();
       }
-    } else if (
-      request.headers.get('Content-Type') === USER_UPDATE_PASSWORD_CONTENT_TYPE
-    ) {
-      const auth = request.headers.get('Authorization');
-      const [email, code] = atob(auth.split(' ')[1]).split(':');
-      if (
-        users.find(
-          (u) =>
-            u.email === email &&
-            u.id === params.id &&
-            code === passwordChangeCode,
-        )
-      ) {
-        return NO_CONTENT_RESPONSE();
-      }
-      return UNAUTHORIZED_RESPONSE();
     } else {
       return UNSUPPORTED_MEDIA_TYPE_RESPONSE();
     }

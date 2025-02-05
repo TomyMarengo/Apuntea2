@@ -149,10 +149,9 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/users").anonymous()
+                .antMatchers(HttpMethod.POST, "/api/users").hasAnyRole(Role.ROLE_ANONYMOUS.getShortName(), Role.ROLE_VERIFY.getShortName())
                 .antMatchers(HttpMethod.GET, PERMIT_ALL_ENDPOINTS).not().hasRole(Role.ROLE_VERIFY.getShortName()) // During the verification process, users can only change their passwords
                 .antMatchers(HttpMethod.HEAD, PERMIT_ALL_ENDPOINTS).not().hasRole(Role.ROLE_VERIFY.getShortName())
-                .antMatchers(HttpMethod.PATCH, "/api/users/{userId}").authenticated()
                 .anyRequest().hasAnyRole(Role.ROLE_ADMIN.getShortName(), Role.ROLE_STUDENT.getShortName())
                 .and().addFilterAfter(abstractAuthFilter(), AnonymousAuthenticationFilter.class);
     }

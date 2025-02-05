@@ -42,18 +42,17 @@ export default function useLogin() {
     try {
       // Perform authentication
       const result = await login(credentials).unwrap();
-      let { token, refreshToken, user } = result as LoginResponse;
+      let { token, refreshToken } = result as LoginResponse;
 
-      // Verify that the user was obtained
-      if (!user || !user.id) {
+      token = decode(token);
+
+      //Verify that the user was obtained
+      if (!token || !token.payload || !token.payload.userId) {
         throw new Error('User not found in login response');
       }
 
       // Retrieve complete user data
-      await getLoggedUser({ userData: user }).unwrap();
-
-      // Decode the token
-      token = decode(token);
+      await getLoggedUser({ userId: token?.payload?.userId }).unwrap();
 
       // Update the state with the complete user data
       dispatch(setCredentials({ token, refreshToken }));

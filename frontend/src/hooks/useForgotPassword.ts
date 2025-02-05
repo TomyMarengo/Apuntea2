@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import {
   useRequestPasswordChangeMutation,
   useUpdateUserPasswordMutation,
-  useLazyGetUserByEmailQuery,
 } from '../store/slices/usersApiSlice';
 
 interface ForgotPasswordRequest {
@@ -18,7 +17,6 @@ interface ForgotPasswordRequest {
  * 2) updateUserPassword => updates the user password after verifying the code
  */
 export default function useForgotPassword() {
-  const [getUserByEmail] = useLazyGetUserByEmailQuery();
   const [requestPasswordChange] = useRequestPasswordChangeMutation();
   const [updateUserPassword] = useUpdateUserPasswordMutation();
   const { t } = useTranslation('forgotPasswordPage');
@@ -40,15 +38,8 @@ export default function useForgotPassword() {
     newPassword,
   }: ForgotPasswordRequest): Promise<void> {
     try {
-      const result = await getUserByEmail(email).unwrap();
-      const user = result?.[0];
-
-      if (!user || !user.id) {
-        throw new Error(t('userNotFound'));
-      }
 
       const resultUpdate = await updateUserPassword({
-        userId: user.id,
         email,
         code,
         password: newPassword,

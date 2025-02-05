@@ -128,12 +128,18 @@ public class UserController {
         return Response.noContent().build();
     }
 
-    @PATCH
-    @Path("/{id}")
+    @POST
+    @Secured("ROLE_ANONYMOUS")
+    @Consumes(value = { ApunteaMediaType.USER_REQUEST_PASSWORD_CHANGE })
+    public Response requestPasswordChange(@Valid final RequestPasswordChangeForm emailForm) {
+        verificationCodesService.sendForgotPasswordCode(emailForm.getEmail());
+        return Response.noContent().build();
+    }
+
+    @POST
     @Secured("ROLE_VERIFY")
-    @PreAuthorize("@userPermissions.isCurrentUser(#id)")
-    @Consumes(value = { ApunteaMediaType.USER_UPDATE_PASSWORD })
-    public Response updateUserPassword(@PathParam("id") final UUID id, @Valid final UserPasswordUpdateForm userForm) {
+    @Consumes(value = { ApunteaMediaType.USER_PASSWORD})
+    public Response updateUserPassword(@Valid final UserPasswordUpdateForm userForm) {
         userService.updateCurrentUserPassword(userForm.getPassword());
         return Response.noContent().build();
     }
@@ -147,14 +153,6 @@ public class UserController {
             userService.banUser(id, userStatusDto.getReason());
         else if (userStatusDto.getUserStatus().equals(UserStatus.ACTIVE))
             userService.unbanUser(id);
-        return Response.noContent().build();
-    }
-
-    @POST
-    @Secured("ROLE_ANONYMOUS")
-    @Consumes(value = { ApunteaMediaType.USER_REQUEST_PASSWORD_CHANGE })
-    public Response requestPasswordChange(@Valid final RequestPasswordChangeForm emailForm) {
-        verificationCodesService.sendForgotPasswordCode(emailForm.getEmail());
         return Response.noContent().build();
     }
 

@@ -30,7 +30,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.query<LoginResponse, Credentials>({
       query: (credentials) => ({
-        url: `/users?email=${encodeURIComponent(credentials.email)}`,
+        url: `/users?pageSize=1`,
         headers: {
           Authorization: `Basic ${btoa(`${credentials.email}:${credentials.password}`)}`,
           Accept: USER_COLLECTION_CONTENT_TYPE,
@@ -40,14 +40,15 @@ export const authApiSlice = apiSlice.injectEndpoints({
         response: any,
         meta: QueryReturnValue<any>,
       ): Promise<LoginResponse> => {
-        const [user] = await response;
+        const user = await response;
+        console.log(user);
         const token = (meta as any).response?.headers
           ?.get('Access-Token')
           ?.split(' ')[1];
         const refreshToken = (meta as any).response?.headers
           ?.get('Refresh-Token')
           ?.split(' ')[1];
-        return { token, refreshToken, user };
+        return { token, refreshToken };
       },
     }),
     register: builder.query<LoginResponse, RegisterArgs>({
