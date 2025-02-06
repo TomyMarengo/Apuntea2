@@ -65,9 +65,7 @@ public class UserController {
     @GET
     @Produces(value = { ApunteaMediaType.USER_COLLECTION })
     public Response listUsers(@Valid @BeanParam final UserQuery userQuery) {
-        final Page<User> userPage = (userQuery.getEmail() != null) ?
-           Page.fromOptional(userService.findByEmail(userQuery.getEmail())) :
-                userService.getUsers(
+        final Page<User> userPage = userService.getUsers(
                     userQuery.getQuery(),
                     userQuery.getStatus(),
                     userQuery.getFollowedBy(),
@@ -88,9 +86,7 @@ public class UserController {
     @Secured("ROLE_ADMIN")
     @Produces(value = { ApunteaMediaType.USER_COLLECTION_WITH_EMAIL })
     public Response listUsersWithEmail(@Valid @BeanParam final UserQuery userQuery) {
-        final Page<User> userPage = (userQuery.getEmail() != null) ?
-                Page.fromOptional(userService.findByEmail(userQuery.getEmail())) :
-                userService.getUsers(
+        final Page<User> userPage = userService.getUsers(
                         userQuery.getQuery(),
                         userQuery.getStatus(),
                         userQuery.getFollowedBy(),
