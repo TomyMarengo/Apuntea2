@@ -2,8 +2,7 @@ package ar.edu.itba.paw.webapp.validation;
 
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.services.CareerService;
-import ar.edu.itba.paw.services.InstitutionService;
-import ar.edu.itba.paw.webapp.controller.institution.dtos.InstitutionCareerPathParams;
+import ar.edu.itba.paw.webapp.forms.InstitutionCareerPathParams;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.Constraint;

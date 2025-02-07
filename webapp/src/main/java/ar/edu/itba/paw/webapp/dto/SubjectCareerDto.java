@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.subject.dtos;
+package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.models.institutional.Career;
 import ar.edu.itba.paw.models.institutional.SubjectCareer;

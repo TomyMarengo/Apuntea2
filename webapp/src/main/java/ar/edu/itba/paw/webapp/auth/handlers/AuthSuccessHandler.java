@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.auth.handlers;
 
+import ar.edu.itba.paw.models.user.Role;
 import ar.edu.itba.paw.webapp.auth.ApunteaUserDetails;
 import ar.edu.itba.paw.webapp.auth.jwt.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,8 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws MalformedURLException {
-        if(authentication instanceof UsernamePasswordAuthenticationToken || (authentication instanceof JwtAuthToken && ((JwtTokenDetails) authentication.getDetails()).getTokenType().equals(JwtTokenType.REFRESH))) {
+        if((authentication instanceof UsernamePasswordAuthenticationToken && authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals(Role.ROLE_VERIFY.getRole())))
+                || (authentication instanceof JwtAuthToken && ((JwtTokenDetails) authentication.getDetails()).getTokenType().equals(JwtTokenType.REFRESH))) {
             ApunteaUserDetails userDetails = (ApunteaUserDetails) authentication.getPrincipal();
             response.addHeader("Access-Token", "Bearer " + jwtTokenService.createAccessToken(userDetails));
             response.addHeader("Refresh-Token", "Bearer " + jwtTokenService.createRefreshToken(userDetails));

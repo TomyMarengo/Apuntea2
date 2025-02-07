@@ -2,7 +2,7 @@ package ar.edu.itba.paw.webapp.controller.user;
 
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.controller.user.dto.PictureDto;
+import ar.edu.itba.paw.webapp.dto.PictureDto;
 import ar.edu.itba.paw.webapp.controller.utils.CacheUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

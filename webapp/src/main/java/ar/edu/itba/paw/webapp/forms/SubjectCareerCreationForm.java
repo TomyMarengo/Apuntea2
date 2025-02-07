@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.subject.dtos;
+package ar.edu.itba.paw.webapp.forms;
 
 import org.hibernate.validator.constraints.Range;
 

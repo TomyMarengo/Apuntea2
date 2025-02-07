@@ -11,8 +11,9 @@ import ar.edu.itba.paw.services.SecurityService;
 import ar.edu.itba.paw.services.UserService;
 import ar.edu.itba.paw.services.VerificationCodesService;
 import ar.edu.itba.paw.webapp.api.ApunteaMediaType;
-import ar.edu.itba.paw.webapp.controller.user.dto.*;
 import ar.edu.itba.paw.webapp.controller.utils.ControllerUtils;
+import ar.edu.itba.paw.webapp.dto.UserDto;
+import ar.edu.itba.paw.webapp.forms.*;
 import ar.edu.itba.paw.webapp.forms.queries.UserQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -52,7 +53,6 @@ public class UserController {
         return Response.ok(UserDto.fromUser(user, uriInfo)).build();
     }
 
-    // TODO: Ask if this approach is correct
     @GET
     @Path("/{id}")
     @Secured("ROLE_ADMIN")
@@ -132,6 +132,8 @@ public class UserController {
         return Response.noContent().build();
     }
 
+    //Its POST and not PATCH because it's impossible to obtain the user's id or URN by the email alone
+    //And because an OTP is required to change the password, the OTP will be consumed with the request used for fetching the user's id or URN
     @POST
     @Secured("ROLE_VERIFY")
     @Consumes(value = { ApunteaMediaType.USER_PASSWORD})

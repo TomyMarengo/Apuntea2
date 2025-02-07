@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.note.dtos;
+package ar.edu.itba.paw.webapp.forms;
 
 import ar.edu.itba.paw.webapp.forms.SearchableUpdateDto;
 import ar.edu.itba.paw.webapp.forms.RegexUtils;

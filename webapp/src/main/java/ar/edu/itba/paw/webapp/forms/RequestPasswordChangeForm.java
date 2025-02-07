@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.user.dto;
+package ar.edu.itba.paw.webapp.forms;
 
 import org.hibernate.validator.constraints.Email;
 

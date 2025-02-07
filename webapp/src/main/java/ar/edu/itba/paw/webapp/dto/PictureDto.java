@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.user.dto;
+package ar.edu.itba.paw.webapp.dto;
 
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;

@@ -1,4 +1,4 @@
-package ar.edu.itba.paw.webapp.controller.institution.dtos;
+package ar.edu.itba.paw.webapp.forms;
 
 import ar.edu.itba.paw.webapp.validation.InstitutionCareerRelation;
 
