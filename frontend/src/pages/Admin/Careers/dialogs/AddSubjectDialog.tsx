@@ -46,7 +46,6 @@ const AddSubjectDialog: React.FC<AddSubjectDialogProps> = ({
     refetch: refetchNotInCareer,
     isLoading: loadingNotInCareer,
   } = useGetSubjectsNotInCareerQuery(
-    // { careerId: selectedCareerId},
     { url: selectedCareer?.subjectsNotInCareerUrl },
     { skip: !selectedCareer },
   );
@@ -107,7 +106,6 @@ const AddSubjectDialog: React.FC<AddSubjectDialogProps> = ({
     if (!selectedCareer || !data.subjectId) return;
     try {
       await linkSubjectCareer({
-        // careerId: selectedCareerId,
         url: selectedCareer.subjectCareersUrl,
         subjectId: data.subjectId,
         year: data.year,

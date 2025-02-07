@@ -17,21 +17,16 @@ import {
   useGetSubjectsByCareerQuery,
   useGetSubjectCareersQuery,
 } from '../../store/slices/institutionsApiSlice';
-import { Subject, SubjectCareer, SubjectWithCareer } from '../../types';
+import { Career, Subject, SubjectCareer, SubjectWithCareer } from '../../types';
 
 interface UserNotesProps {
   userId: string;
-  careerId: string;
-  institutionId: string;
+  career: Career;
 }
 
 const DEFAULT_PAGE_SIZE = 10;
 
-const UserNotes: React.FC<UserNotesProps> = ({
-  userId,
-  careerId,
-  institutionId,
-}) => {
+const UserNotes: React.FC<UserNotesProps> = ({ userId, career }) => {
   const { t } = useTranslation('userNotes');
   const navigate = useNavigate();
 
@@ -48,30 +43,27 @@ const UserNotes: React.FC<UserNotesProps> = ({
     ? parseInt(pageSizeParam, 10)
     : DEFAULT_PAGE_SIZE;
 
-  // TODO: Change for URL Hateoas
   const {
     data: subjects,
     isLoading: subjectsLoading,
     isError: subjectsError,
   } = useGetSubjectsByCareerQuery(
-    { careerId },
+    { url: career?.subjectsUrl },
     {
-      skip: !careerId,
+      skip: !career?.subjectsUrl,
     },
   );
 
-  // TODO: Change for URL Hateoas
   const {
     data: subjectCareers,
     isLoading: scLoading,
     isError: scError,
   } = useGetSubjectCareersQuery(
     {
-      institutionId,
-      careerId,
+      url: career?.subjectCareersUrl,
     },
     {
-      skip: !careerId || !institutionId,
+      skip: !career?.subjectCareersUrl,
     },
   );
 

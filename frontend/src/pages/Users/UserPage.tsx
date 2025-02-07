@@ -10,10 +10,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import UserNotes from './UserNotes';
 import UserProfileCard from './UserProfileCard';
 import { selectCurrentUser } from '../../store/slices/authSlice';
-import {
-  useGetInstitutionQuery,
-  useGetCareerQuery,
-} from '../../store/slices/institutionsApiSlice';
+import { useGetCareerQuery } from '../../store/slices/institutionsApiSlice';
 import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import { User } from '../../types';
 
@@ -36,13 +33,6 @@ const UserPage: React.FC = () => {
     error,
   } = useGetUserQuery({ userId }, { skip: !userId });
 
-  const institutionUrl = targetUser?.institutionUrl;
-  const { data: institutionData, isLoading: isLoadingInstitution } =
-    useGetInstitutionQuery(
-      { url: institutionUrl },
-      { skip: !targetUser?.institutionUrl },
-    );
-
   const careerUrl = targetUser?.careerUrl;
   const { data: careerData, isLoading: isLoadingCareer } = useGetCareerQuery(
     { url: careerUrl },
@@ -52,7 +42,6 @@ const UserPage: React.FC = () => {
   const targetUserWithDetails = {
     ...targetUser,
     career: careerData,
-    institution: institutionData,
   } as User;
 
   let pageTitle = t('titlePage', {
@@ -78,11 +67,11 @@ const UserPage: React.FC = () => {
         <title>{pageTitle}</title>
       </Helmet>
       <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
-        {isLoading || isLoadingInstitution || isLoadingCareer ? (
+        {isLoading || isLoadingCareer ? (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
           </Box>
-        ) : isError || !careerData || !institutionData ? (
+        ) : isError || !careerData ? (
           <Typography color="error">{t('errorFetching')}</Typography>
         ) : (
           <Box sx={{ maxWidth: 1200, margin: '0 auto' }}>
@@ -95,12 +84,8 @@ const UserPage: React.FC = () => {
             <UserProfileCard user={targetUserWithDetails} />
 
             {/* User Notes */}
-            {userId && careerData && institutionData ? (
-              <UserNotes
-                userId={userId}
-                careerId={careerData.id}
-                institutionId={institutionData.id}
-              />
+            {userId && careerData ? (
+              <UserNotes userId={userId} career={careerData} />
             ) : (
               <Typography variant="h6" color="error">
                 {t('errorFetchingUser', { error: 'Missing user details' })}

@@ -15,7 +15,11 @@ import {
 } from '../../contentTypes.ts';
 import { User, Career, Institution, UserStatus } from '../../types';
 import { extractErrorMessages } from '../../utils/helpers';
-import { mapApiUser } from '../../utils/mappers';
+import {
+  mapApiCareer,
+  mapApiInstitution,
+  mapApiUser,
+} from '../../utils/mappers';
 
 interface GetUsersArgs {
   url?: string;
@@ -184,7 +188,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
               },
             });
             if (!careerResult.error) {
-              careerData = careerResult.data as Career;
+              careerData = mapApiCareer(careerResult.data) as Career;
             }
           }
 
@@ -197,7 +201,9 @@ export const usersApiSlice = apiSlice.injectEndpoints({
               },
             });
             if (!institutionResult.error) {
-              institutionData = institutionResult.data as Institution;
+              institutionData = mapApiInstitution(
+                institutionResult.data,
+              ) as Institution;
             }
           }
 
@@ -551,9 +557,6 @@ export const usersApiSlice = apiSlice.injectEndpoints({
           },
         };
       },
-      // invalidatesTags: (_result, _error, { userId }) => [
-      //   { type: 'Users', id: userId },
-      // ],
     }),
   }),
 });

@@ -72,7 +72,6 @@ const AdminCareersPage: React.FC = () => {
     refetch: refetchSubjects,
     isLoading: loadingSubjects,
   } = useGetSubjectsByCareerQuery(
-    // { careerId: selectedCareerId },
     { url: selectedCareer?.subjectsUrl },
     { skip: !selectedCareer },
   );
@@ -82,7 +81,6 @@ const AdminCareersPage: React.FC = () => {
     refetch: refetchSubjectCareers,
     isLoading: loadingSubjectCareers,
   } = useGetSubjectCareersQuery(
-    // { institutionId: selectedInstitutionId, careerId: selectedCareerId },
     { url: selectedCareer?.subjectCareersUrl },
     { skip: !selectedInstitution || !selectedCareer },
   );

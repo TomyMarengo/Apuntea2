@@ -14,24 +14,18 @@ export default function NotesPage() {
   // Current logged user
   const user = useSelector(selectCurrentUser);
   const userId = user?.id;
-  const careerId = user?.career?.id;
-  const institutionId = user?.institution?.id;
 
   return (
     <>
       <Helmet>
         <title>{t('titlePage')}</title>
       </Helmet>
-      {!userId || !careerId || !institutionId ? (
+      {!userId || !user?.career ? (
         <Box display="flex" justifyContent="center" alignItems="center">
           <CircularProgress />
         </Box>
       ) : (
-        <UserNotes
-          userId={userId}
-          careerId={careerId}
-          institutionId={institutionId}
-        />
+        <UserNotes userId={userId} career={user?.career} />
       )}
     </>
   );

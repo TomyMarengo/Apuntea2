@@ -36,6 +36,6 @@ export const NOTE_COLLECTION_CONTENT_TYPE =
 export const MULTIPART_FORM_DATA_CONTENT_TYPE = 'multipart/form-data';
 export const DELETE_REASON_CONTENT_TYPE =
   'application/vnd.apuntea.delete-reason-v1.0+json';
-export const REVIEW_CONTENT_TYPE = 'application/vnd.apuntea.review-v1.0+json'; // ???
+export const REVIEW_CONTENT_TYPE = 'application/vnd.apuntea.review-v1.0+json';
 export const REVIEW_COLLECTION_CONTENT_TYPE =
   'application/vnd.apuntea.review-collection-v1.0+json';

@@ -37,11 +37,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
         },
       }),
       transformResponse: async (
-        response: any,
+        // response: any,
         meta: QueryReturnValue<any>,
       ): Promise<LoginResponse> => {
-        const user = await response;
-        console.log(user);
         const token = (meta as any).response?.headers
           ?.get('Access-Token')
           ?.split(' ')[1];

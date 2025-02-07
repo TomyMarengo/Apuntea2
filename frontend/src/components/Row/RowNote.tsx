@@ -173,7 +173,6 @@ const RowNote: React.FC<RowNoteProps> = ({
   };
 
   const handleSubjectDirectories = () => {
-    console.log('subjectData', subjectData);
     const subjectDirectoryId = subjectData?.rootDirectoryId;
     if (subjectDirectoryId) {
       navigate(`/directories/${subjectDirectoryId}/`);
