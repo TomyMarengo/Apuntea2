@@ -204,7 +204,6 @@ public class SubjectJpaDaoTest {
         subjectDao.delete(subject);
         em.flush();
 
-//        assertTrue(result);
         assertTrue(inserted);
         assertTrue(inserted2);
         assertEquals(0, countRows(em, SUBJECTS, "subject_id = '" + subject.getSubjectId() + "'"));

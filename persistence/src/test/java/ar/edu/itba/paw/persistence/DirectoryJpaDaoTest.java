@@ -181,7 +181,7 @@ public class DirectoryJpaDaoTest {
         insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(pepeUser).visible(false));
         insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(saidmanUser).visible(true));
         directoryDao.loadRootDirsFileQuantity(Collections.singletonList(EDA_DIRECTORY_ID), PEPE_ID, PEPE_ID);
-        assertEquals(3, edaDir.getQtyFiles()); // 2 previously loaded notes + newNoteP
+        assertEquals(3, edaDir.getQtyFiles()); /* 2 previously loaded notes + newNoteP */
     }
 
     @Test
@@ -191,33 +191,8 @@ public class DirectoryJpaDaoTest {
         insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(pepeUser).visible(false));
         insertNote(em, nb.name("temp").parentId(EDA_DIRECTORY_ID).user(saidmanUser).visible(true));
         directoryDao.loadRootDirsFileQuantity(Collections.singletonList(EDA_DIRECTORY_ID), PEPE_ID, SAIDMAN_ID);
-        assertEquals(2, edaDir.getQtyFiles()); // only the 2 previously loaded notes
+        assertEquals(2, edaDir.getQtyFiles()); /* only the 2 previously loaded notes */
     }
-
-    /*@Test
-    public void testLoadDirectoryFavorites() {
-        Directory.DirectoryBuilder db = new Directory.DirectoryBuilder()
-                .parent(em.getReference(Directory.class, EDA_DIRECTORY_ID))
-                .user(pepeUser)
-                .visible(true);
-        Directory faved1 = insertDirectory(em, db.name("faved1"));
-        Directory faved2 = insertDirectory(em, db.name("faved2"));
-        Directory nofaved = insertDirectory(em, db.name("nofaved"));
-        Directory[] directories = {faved1, faved2};
-        insertFavoriteDirectory(em, faved1.getId(), SAIDMAN_ID);
-        insertFavoriteDirectory(em, faved2.getId(), SAIDMAN_ID);
-        boolean wasFaved1 = faved1.isFavorite();
-        boolean wasFaved2 = faved2.isFavorite();
-
-        directoryDao.loadDirectoryFavorites(Arrays.stream(directories).map(Directory::getId).collect(Collectors.toList()), SAIDMAN_ID);
-
-        assertTrue(faved1.isFavorite());
-        assertTrue(faved2.isFavorite());
-        assertFalse(nofaved.isFavorite());
-        assertFalse(wasFaved1);
-        assertFalse(wasFaved2);
-
-    }*/
 
     @Test
     public void testFindDirectoriesByIds(){

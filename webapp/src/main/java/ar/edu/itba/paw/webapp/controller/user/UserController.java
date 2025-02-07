@@ -132,8 +132,8 @@ public class UserController {
         return Response.noContent().build();
     }
 
-    //Its POST and not PATCH because it's impossible to obtain the user's id or URN by the email alone
-    //And because an OTP is required to change the password, the OTP will be consumed with the request used for fetching the user's id or URN
+    /* POST and not PATCH because it's impossible to obtain the user's id or URN by the email alone
+       And because an OTP is required to change the password, the OTP will be consumed with the request used for fetching the user's id or URN */
     @POST
     @Secured("ROLE_VERIFY")
     @Consumes(value = { ApunteaMediaType.USER_PASSWORD})

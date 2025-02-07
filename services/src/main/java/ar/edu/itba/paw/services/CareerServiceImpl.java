@@ -30,16 +30,6 @@ public class CareerServiceImpl implements CareerService {
         return careerDao.getCareerById(careerId);
     }
 
-//    @Transactional
-//    @Override
-//    public List<CareerDto> getCareersByCurrentUserInstitution() {
-//        User currentUser = securityService.getCurrentUserOrThrow();
-//        return careerDao.getCareersByUserInstitution(currentUser)
-//                .stream()
-//                .map(CareerDto::new)
-//                .collect(Collectors.toList());
-//    }
-
     @Transactional(readOnly = true)
     @Override
     public Collection<Career> getCareers(UUID institutionId) {

@@ -38,7 +38,6 @@ public class DirectoryServiceImpl implements DirectoryService {
     @Override
     public UUID create(String name, UUID parentId, boolean visible, String iconColor) {
         User user = securityService.getCurrentUserOrThrow();
-//        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
         return directoryDao.create(name, parentId, user, visible, iconColor).getId();
     }
 
@@ -77,8 +76,6 @@ public class DirectoryServiceImpl implements DirectoryService {
            The parentId param is incompatible with the isRdir param.
            When both are present, the isRdir param is ignored.
         */
-//        if (!navigate && isRdir != null)
-//            throw new InvalidQueryException();
 
         SearchArguments searchArgumentsWithoutPaging = sab.build();
         int countTotalResults = navigate? directoryDao.countNavigationResults(searchArgumentsWithoutPaging, isRdir) : directoryDao.countSearchResults(searchArgumentsWithoutPaging);
@@ -145,14 +142,6 @@ public class DirectoryServiceImpl implements DirectoryService {
         directoryDao.getDirectoryById(directoryId, user.getUserId()).orElseThrow(DirectoryNotFoundException::new);
         return directoryDao.isFavorite(user.getUserId(), directoryId);
     }
-
-    /*@Transactional
-    @Override
-    public DirectoryFavoriteGroups getFavorites() {
-        User currentUser = securityService.getCurrentUserOrThrow();
-        Map<Boolean, List<Directory>> directories = currentUser.getDirectoryFavorites().stream().collect(Collectors.partitioningBy(Directory::isRootDirectory));
-        return new DirectoryFavoriteGroups(directories.get(true), directories.get(false));
-    }*/
 
     @Transactional
     @Override

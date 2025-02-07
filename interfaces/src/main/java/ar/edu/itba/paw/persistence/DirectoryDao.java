@@ -22,7 +22,7 @@ public interface DirectoryDao {
 
     boolean delete(UUID directoryId, UUID currentUserId);
 
-    boolean delete(UUID directoryId); // Strong delete
+    boolean delete(UUID directoryId); /* Strong delete */
 
     boolean isFavorite(UUID userId, UUID directoryId);
 
@@ -30,7 +30,7 @@ public interface DirectoryDao {
 
     boolean removeFavorite(UUID userId, UUID directoryId);
 
-    // Warning, this method does not check visibility!
+    /* Warning, this method does not check visibility! */
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds, SortArguments sortArgs);
 
     List<Directory> findDirectoriesByIds(List<UUID> directoryIds);

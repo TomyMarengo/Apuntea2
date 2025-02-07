@@ -270,7 +270,6 @@ public class UserJpaDaoTest {
         final int STUDENTS_LENGTH = 20;
         int oldUsers = countRows(em, USER_ROLES);
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        // 100 should be more than enough to get all students, change in the future if necessary
         List<User> users = userDao.getUsers("", null, null, null, 1, 100);
         assertEquals(oldUsers + STUDENTS_LENGTH, users.size());
 
@@ -318,24 +317,14 @@ public class UserJpaDaoTest {
         final int STUDENTS_LENGTH = 20;
         int oldUsers = countRows(em, USER_ROLES);
         for (int i = 0; i < STUDENTS_LENGTH; i++) insertStudent(em, "student" + (i + 1) + "@mail.com", "", ING_INF_ID, "es");
-        // 100 should be more than enough to get all students, change in the future if necessary
         List<User> users = userDao.getUsers("", UserStatus.ACTIVE, null, null, 1, 100);
-        assertEquals(oldUsers - 1 + STUDENTS_LENGTH, users.size()); // oldUsers - 1, because there is a banned student
+        assertEquals(oldUsers - 1 + STUDENTS_LENGTH, users.size()); /* oldUsers - 1, because there is a banned student */
 
         for (int i = 0; i < STUDENTS_LENGTH; i++) {
             final int finalI = i;
             assertTrue(users.stream().anyMatch(u -> u.getEmail().equals("student" + (finalI + 1) + "@mail.com")));
         }
     }
-
-    /*@Test
-    public void followTest() {
-        User follower1 = insertStudent(em, "student1@mail.com", "", ING_INF_ID, "es");
-        User student = insertStudent(em, "producer@mail.com", "", ING_INF_ID, "es");
-        userDao.follow(follower1.getUserId(), student.getUserId());
-        em.flush();
-        assertEquals(1, countRows(em, "follows", "follower_id = '" + follower1.getUserId() + "' AND followed_id = '" + student.getUserId() + "'"));
-    }*/
 
     @Test
     public void unfollowTest() {

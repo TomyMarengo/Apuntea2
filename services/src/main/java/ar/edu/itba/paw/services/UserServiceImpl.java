@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     private	static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private static final int BAN_DURATION = 3;
     private static final String[] ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"};
-    private static final int MAX_PROFILE_PICTURE_SIZE = 64 * 1024 * 1024; // 64 MB
+    private static final int MAX_PROFILE_PICTURE_SIZE = 64 * 1024 * 1024; /* 64 MB */
 
     @Autowired
     public UserServiceImpl(final UserDao userDao, final CareerDao careerDao, PasswordEncoder passwordEncoder, final SecurityService securityService,
@@ -186,7 +186,6 @@ public class UserServiceImpl implements UserService {
         User user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
         if (!userDao.unbanUser(user)) {
             LOGGER.warn("Error while unbanning user with id: {}", userId);
-//            throw new InvalidUserException();
         } else {
             emailService.sendUnbanEmail(user);
         }
@@ -199,7 +198,6 @@ public class UserServiceImpl implements UserService {
         User admin = securityService.getAdminOrThrow();
         if (!userDao.banUser(user, admin, LocalDateTime.now().plusDays(BAN_DURATION), reason)) {
             LOGGER.warn("Could not ban user with id: {}", userId);
-//            throw new InvalidUserException();
         } else {
             emailService.sendBanEmail(user, reason, BAN_DURATION);
         }

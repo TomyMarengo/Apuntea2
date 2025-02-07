@@ -30,7 +30,7 @@ public @interface AttributeDependence {
         private MessageSource messageSource;
 
         private String baseField;
-        private String[] dependentField; //by default OR
+        private String[] dependentField; /* by default OR */
 
         @Override
         public void initialize(AttributeDependence constraintAnnotation) {

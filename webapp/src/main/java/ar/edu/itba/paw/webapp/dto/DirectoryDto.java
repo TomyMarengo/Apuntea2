@@ -17,7 +17,7 @@ public class DirectoryDto {
 
     private UUID parentId;
 
-    //URIS
+    /* URIS */
     private URI self;
     private URI owner;
     private URI parent;

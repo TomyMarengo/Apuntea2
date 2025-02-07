@@ -24,7 +24,7 @@ public class ApunteaMediaType {
     public static final String NOTE_COLLECTION = "application/vnd.apuntea.note-collection-v1.0+json";
     public static final String DELETE_REASON = "application/vnd.apuntea.delete-reason-v1.0+json";
 
-    public static final String REVIEW = "application/vnd.apuntea.review-v1.0+json"; // ???
+    public static final String REVIEW = "application/vnd.apuntea.review-v1.0+json";
     public static final String REVIEW_COLLECTION = "application/vnd.apuntea.review-collection-v1.0+json";
 
     public static final String FORM_DATA = "multipart/form-data";

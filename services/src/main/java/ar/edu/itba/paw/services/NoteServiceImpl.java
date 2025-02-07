@@ -35,7 +35,7 @@ public class  NoteServiceImpl implements NoteService {
     private final SearchService searchService;
 
     private static final String[] ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png", "pdf", "mp4", "mp3"};
-    private static final int MAX_FILE_SIZE = 100 * 1024 * 1024; // 100 MB
+    private static final int MAX_FILE_SIZE = 100 * 1024 * 1024; /* 100 MB */
 
     @Autowired
     public NoteServiceImpl(final UserDao userDao, final NoteDao noteDao, final DirectoryDao directoryDao, final SecurityService securityService, final EmailService emailService, final SearchService searchService) {
@@ -51,7 +51,6 @@ public class  NoteServiceImpl implements NoteService {
     @Override
     public UUID createNote(final String name, final UUID parentId, final boolean visible, final byte[] file, final String mimeType, final String category) {
         User user = securityService.getCurrentUserOrThrow();
-//        if (searchService.findByName(parentId, name).isPresent()) throw new UnavailableNameException();
 
         Directory rootDir = directoryDao.getDirectoryRoot(parentId).orElseThrow(InvalidDirectoryException::new);
         Subject subject = rootDir.getSubject();
@@ -229,13 +228,6 @@ public class  NoteServiceImpl implements NoteService {
         }
         return false;
     }
-
-//    @Transactional
-//    @Override
-//    public Collection<Note> getFavorites() {
-//        User currentUser = securityService.getCurrentUserOrThrow();
-//        return currentUser.getNoteFavorites();
-//    }
 
     @Transactional
     @Override

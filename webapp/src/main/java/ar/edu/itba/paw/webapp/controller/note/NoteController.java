@@ -104,7 +104,7 @@ public class NoteController {
         return Response.noContent().build();
     }
 
-    // Delete with body is not standard according to RFC 9110
+    /* Delete with body is not standard according to RFC 9110 */
     @POST
     @Path("/{id}")
     @Consumes(value = { ApunteaMediaType.DELETE_REASON })

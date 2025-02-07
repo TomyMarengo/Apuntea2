@@ -26,7 +26,7 @@ public class NoteDto {
 
     private UUID subjectId;
 
-    //URIS
+    /* URIS */
     private URI self;
     private URI owner;
     private URI parent;

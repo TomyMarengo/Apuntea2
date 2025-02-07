@@ -69,7 +69,6 @@ public class DirectoryJpaDao implements DirectoryDao {
 
     @Override
     public List<Directory> getDirectoryPath(UUID directoryId) {
-        // Right now no user validation is needed, might change later
         @SuppressWarnings("unchecked")
         List<UUID> directoryIds = ((List<String>) em.createNativeQuery(
                 "WITH RECURSIVE Ancestors(directory_id, parent_id, level) AS ( " +
@@ -86,7 +85,6 @@ public class DirectoryJpaDao implements DirectoryDao {
 
     @Override
     public Optional<Directory> getDirectoryRoot(UUID directoryId) {
-        // Right now no user validation is needed, might change later
         @SuppressWarnings("unchecked")
         Optional<UUID> maybeRootDirId = ((Optional<String>) em.createNativeQuery(
                         "WITH RECURSIVE Ancestors(directory_id, parent_id) AS ( " +
@@ -148,16 +146,6 @@ public class DirectoryJpaDao implements DirectoryDao {
         return query.getResultList();
     }
 
-    /*@Override
-    public void loadDirectoryFavorites(List<UUID> directoryIds, UUID currentUserId) {
-        if (currentUserId == null) return;
-        List<Directory> favorites = em.createQuery("SELECT d FROM User u JOIN u.directoryFavorites d WHERE d.directoryId IN :directoryIds AND u.userId = :userId", Directory.class)
-                .setParameter("userId", currentUserId)
-                .setParameter("directoryIds", directoryIds)
-                .getResultList();
-        favorites.forEach(dir -> dir.setFavorite(true));
-    }*/
-
     @Override
     public List<Directory> findDirectoriesByIds(List<UUID> directoryIds) {
         return findDirectoriesByIds(directoryIds, new SortArguments(SortArguments.SortBy.DATE, true));
@@ -217,7 +205,7 @@ public class DirectoryJpaDao implements DirectoryDao {
                 .append(DaoUtils.SORTBY.getOrDefault(sortArgs.getSortBy(), NAME))
                 .append(" FROM Normalized_Directories t ")
                 .appendIfPresent(sa.getFavBy(), "INNER JOIN Directory_Favorites df ON t.id = df.directory_id AND df.user_id = :favBy ")
-                .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");//u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
+                .append("LEFT JOIN Users u ON t.user_id = u.user_id WHERE TRUE ");
         if (isRdir != null)
             queryCreator.append(" AND u.user_id IS ").append(isRdir? "NULL " : "NOT NULL ");
         queryCreator.addConditionIfPresent(PARENT_ID, "=", "AND", sa.getParentId());

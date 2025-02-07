@@ -60,15 +60,6 @@ public class NoteServiceImplTest {
         assertEquals(expectedNoteId, noteId);
     }
 
-//    @Test(expected = UnavailableNameException.class)
-//    public void testCreateNoteNameUsed() {
-//        Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
-//        UUID expectedNoteId = UUID.randomUUID();
-//        Mockito.when(searchService.findByName(Mockito.any(), Mockito.anyString())).thenReturn(Optional.of(UUID.randomUUID()));
-//        noteService.createNote("new", UUID.randomUUID(), true, new byte[]{0}, "png" , Category.EXAM.getFormattedName());
-//        fail();
-//    }
-
     @Test(expected = NoteNotFoundException.class)
     public void testUpdateNoteNotFound() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());

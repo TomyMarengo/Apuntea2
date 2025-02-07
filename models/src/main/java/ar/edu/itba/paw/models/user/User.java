@@ -56,7 +56,6 @@ public class User {
         this.roles = builder.roles;
         this.locale = builder.locale;
         this.status = builder.status;
-//        this.notificationsEnabled = true;
     }
 
     public String getEmail() {

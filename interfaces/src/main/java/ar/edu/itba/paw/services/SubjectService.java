@@ -2,7 +2,6 @@ package ar.edu.itba.paw.services;
 
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.institutional.SubjectCareer;
-//import ar.edu.itba.paw.models.institutional.dtos.SubjectDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +13,6 @@ public interface SubjectService {
     List<Subject> getSubjects(UUID careerId, Integer year, UUID userId);
     List<SubjectCareer> getSubjectCareers(UUID careerId);
     List<Subject> getSubjectsByCareerComplemented(UUID careerId);
-//    Map<Integer, List<Subject>> getSubjectsByUserIdGroupByYear(UUID userId);
     UUID createSubject(String name);
     boolean linkSubjectToCareer(UUID subjectId, UUID careerId, int year);
 

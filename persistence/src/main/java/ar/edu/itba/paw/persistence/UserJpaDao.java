@@ -32,8 +32,6 @@ class UserJpaDao implements UserDao {
         if (following != null)
             queryBuilder.append("JOIN Follows f ON u.user_id = f.follower_id AND f.followed_id = :following ");
 
-
-        //.append("WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') ")
         queryBuilder.append("WHERE (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!') ")
                 .append(status != null ? " AND u.status = :status" : "")
                 .append(" ORDER BY u.email");
@@ -73,7 +71,6 @@ class UserJpaDao implements UserDao {
         if (following != null)
             queryBuilder.append("JOIN Follows f ON u.user_id = f.follower_id AND f.followed_id = :following ");
 
-        //.append("WHERE NOT EXISTS (SELECT 1 FROM User_Roles ur WHERE ur.user_id = u.user_id AND ur.role_name = 'ROLE_ADMIN') ")
         queryBuilder.append("WHERE (lower(u.username) LIKE lower(:searchWord) ESCAPE '!' OR lower(u.email) LIKE lower(:searchWord) ESCAPE '!') ")
                 .append(status != null ? " AND u.status = :status" : "");
 

@@ -36,7 +36,6 @@ public interface NoteService {
 
     boolean deleteReview(UUID noteId, UUID userId, String reason);
 
-    //    Collection<Note> getFavorites();
     boolean isFavorite(UUID noteId);
 
     boolean addFavorite(UUID noteId);

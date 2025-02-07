@@ -85,9 +85,9 @@ public class AbstractAuthFilter extends AbstractAuthenticationProcessingFilter {
         });
     }
 
-    // https://stackoverflow.com/questions/16000517/how-to-get-password-from-http-basic-authentication
+    /* https://stackoverflow.com/questions/16000517/how-to-get-password-from-http-basic-authentication */
     private Credentials getCredentialsFromBasic(String basic){
-        // Authorization:Basic email:password
+        /* Authorization:Basic email:password */
         String base64Credentials = basic.substring(BASIC_LENGTH).trim();
         byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
         String credentials = new String(credDecoded, StandardCharsets.UTF_8);

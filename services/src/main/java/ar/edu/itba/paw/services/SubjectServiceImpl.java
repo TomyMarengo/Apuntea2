@@ -46,7 +46,6 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional(readOnly = true)
     public List<Subject> getSubjects(UUID careerId, Integer year, UUID userId) {
-//        careerDao.getCareerById(careerId).orElseThrow(InvalidSubjectException::new);
         User user = null;
         if (userId != null) {
             user = userDao.findById(userId).orElseThrow(UserNotFoundException::new);
@@ -57,7 +56,6 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional(readOnly = true)
     public List<Subject> getSubjectsByCareerComplemented(UUID careerId) {
-//        careerDao.getCareerById(careerId).orElseThrow(InvalidSubjectException::new); //TODO : change exception to 422
         return subjectDao.getSubjectsByCareerIdComplemented(careerId);
     }
 

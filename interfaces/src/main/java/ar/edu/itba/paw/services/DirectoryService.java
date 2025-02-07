@@ -17,7 +17,7 @@ public interface DirectoryService {
     void update(UUID directoryId, String name, Boolean visible, String iconColor);
     void delete(UUID directoryId, String reason);
     void delete(UUID directoryId);
-//    DirectoryFavoriteGroups getFavorites();
+
     boolean isFavorite(UUID directoryId);
     boolean addFavorite(UUID directoryId);
     boolean removeFavorite(UUID directoryId);

@@ -33,7 +33,7 @@ public class ServiceTestUtils {
     static UUID TVM_ID = UUID.fromString("a0000000-0000-0000-0000-000000000006");
 
 
-    //inserted in test
+    /* inserted in test */
     static UUID TMP_PARENT_DIR_ID = UUID.fromString("dF000000-0000-0000-0000-000000000000");
     static UUID TMP_NOTE_ID_1 = UUID.fromString("aF000000-0000-0000-0000-000000000001");
     static UUID TMP_NOTE_ID_2 = UUID.fromString("aF000000-0000-0000-0000-000000000002");

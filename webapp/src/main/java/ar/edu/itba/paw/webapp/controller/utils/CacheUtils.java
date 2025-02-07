@@ -6,8 +6,8 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 
 public class CacheUtils {
-    public static final int MAX_TIME_UNCONDITIONAL = 31536000; // 1 year
-    public static final int MAX_TIME_CONDITIONAL = 86400; // 1 day
+    public static final int MAX_TIME_UNCONDITIONAL = 31536000; /* 1 year */
+    public static final int MAX_TIME_CONDITIONAL = 86400; /* 1 day */
     private CacheUtils() {
     }
 

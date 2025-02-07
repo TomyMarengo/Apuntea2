@@ -22,8 +22,6 @@ public class UserNoteInteraction {
     @MapsId
     private Note note;
 
-    // Create enum for different interaction types
-    // private InteractionType type;
 
     /* package-private */ UserNoteInteraction() {}
 

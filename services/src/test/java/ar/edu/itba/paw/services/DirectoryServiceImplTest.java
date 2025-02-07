@@ -49,7 +49,7 @@ public class DirectoryServiceImplTest {
     public void testDeleteNotAdminNotOwnerId() {
         Mockito.when(securityService.getCurrentUserOrThrow()).thenReturn(mockUser());
         Mockito.when(directoryDao.getDirectoryById(Mockito.any(), Mockito.any())).thenReturn(Optional.of(mockDirectory("dir")));
-        Mockito.when(directoryDao.delete(Mockito.any(), Mockito.any())).thenReturn(false); // The deletion failed
+        Mockito.when(directoryDao.delete(Mockito.any(), Mockito.any())).thenReturn(false); /* The deletion failed */
         directoryService.delete(EDA_DIRECTORY_ID, null);
         Assert.fail();
     }

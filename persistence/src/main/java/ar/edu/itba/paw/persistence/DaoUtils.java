@@ -74,14 +74,14 @@ public class DaoUtils {
 
     static String escapeLikeString(String str) {
         return "%" + str
-                .replace("!", "!!") // Use ! as escape character
+                .replace("!", "!!") /* Use ! as escape character */
                 .replace("%", "!%")
                 .replace("_", "!_")
                 .replace("[", "![")
                 + "%";
     }
 
-    private DaoUtils() {} // Make class non-instantiable
+    private DaoUtils() {} /* Make class non-instantiable */
 
 
     static void applyInstitutionalFilters(final QueryCreator queryCreator, final SearchArguments sa) {

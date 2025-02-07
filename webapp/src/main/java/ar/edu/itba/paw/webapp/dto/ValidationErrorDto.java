@@ -11,7 +11,7 @@ public class ValidationErrorDto {
     private Object field;
     private boolean notFound = false;
 
-    private static final Class<?>[] notFoundValidators = {InstitutionCareerRelation.class}; // Validators that when they fail, the error is "not found"
+    private static final Class<?>[] notFoundValidators = {InstitutionCareerRelation.class}; /* Validators that when they fail, the error is "not found" */
 
     public static ValidationErrorDto fromValidationException(final ConstraintViolation<?> constraintViolation) {
         final ValidationErrorDto validationErrorDto = new ValidationErrorDto();
@@ -27,7 +27,7 @@ public class ValidationErrorDto {
         validationErrorDto.message = constraintViolation.getMessage();
         validationErrorDto.field = StreamSupport.stream(() -> constraintViolation.getPropertyPath().spliterator(), Spliterator.ORDERED, false)
                 .reduce((first, second) -> second).orElseThrow(RuntimeException::new).getName();
-//        apiErrorDto.value = constraintViolation.getInvalidValue();
+
         return validationErrorDto;
     }
 
@@ -51,11 +51,4 @@ public class ValidationErrorDto {
         return notFound;
     }
 
-//    public Object getValue() {
-//        return value;
-//    }
-//
-//    public void setValue(Object value) {
-//        this.value = value;
-//    }
 }

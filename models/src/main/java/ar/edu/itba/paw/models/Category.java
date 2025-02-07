@@ -7,7 +7,7 @@ public enum Category {
     OTHER("other"),
 
     DIRECTORY("directory"),
-    NOTE("note"); // Abstraction for all categories except directory
+    NOTE("note"); /* Abstraction for all categories except directory */
 
     private final String displayName;
 

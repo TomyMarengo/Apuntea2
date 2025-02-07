@@ -18,22 +18,22 @@ import java.util.Collections;
 import java.util.UUID;
 
 public class TestUtils {
-    // Institutions
+    /* Institutions */
     static UUID ITBA_ID = UUID.fromString("10000000-0000-0000-0000-000000000000");
     static UUID UTN_ID = UUID.fromString("10000000-0000-0000-0000-000000000001");
 
-    // Careers
+    /* Careers */
     static UUID ING_INF_ID = UUID.fromString("c0000000-0000-0000-0000-000000000000");
     static UUID ING_MEC_ID = UUID.fromString("c0000000-0000-0000-0000-000000000001");
 
     static UUID ING_SIS_ID = UUID.fromString("c0000000-0000-0000-0000-000000000002");
 
-    // Subjects
+    /* Subjects */
     static UUID EDA_ID = UUID.fromString("50000000-0000-0000-0000-000000000000");
     static UUID PAW_ID = UUID.fromString("50000000-0000-0000-0000-000000000001");
     static UUID MATE_ID = UUID.fromString("50000000-0000-0000-0000-000000000005");
 
-    // Notes, directories
+    /* Notes, directories */
     static UUID EDA_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000000");
     static UUID PAW_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-000000000001");
     static UUID MATE_DIRECTORY_ID = UUID.fromString("d0000000-0000-0000-0000-00000000000b");
@@ -48,7 +48,7 @@ public class TestUtils {
     static UUID JAVA_BEANS_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000005");
     static UUID PARCIAL_DINAMICA_FLUIDOS_NOTE_ID = UUID.fromString("a0000000-0000-0000-0000-000000000004");
 
-    // Users
+    /* Users */
     static UUID PEPE_ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
     static UUID JAIMITO_ID = UUID.fromString("00000000-0000-0000-0000-000000000001");
     static UUID CARLADMIN_ID = UUID.fromString("00000000-0000-0000-0000-000000000002");
@@ -108,7 +108,7 @@ public class TestUtils {
     static Note insertNote(EntityManager em, Note.NoteBuilder builder, byte [] file) {
         Note note = builder.build();
         em.persist(note);
-        NoteFile nf = new NoteFile(file, note); // Empty file for testing
+        NoteFile nf = new NoteFile(file, note); /* Empty file for testing */
         nf.setNote(note);
         em.persist(nf);
         em.flush();

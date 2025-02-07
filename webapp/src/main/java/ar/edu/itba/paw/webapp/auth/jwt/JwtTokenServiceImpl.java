@@ -32,8 +32,8 @@ public class JwtTokenServiceImpl implements JwtTokenService {
     @Autowired
     private Environment environment;
 
-    private static final long ACCESS_TOKEN_DURATION_SECS = 10 * 60;  // 10 min
-    private static final long REFRESH_TOKEN_DURATION_SECS = 2 * 60 * 60; // 2h
+    private static final long ACCESS_TOKEN_DURATION_SECS = 10 * 60;  /* 10 min */
+    private static final long REFRESH_TOKEN_DURATION_SECS = 2 * 60 * 60; /* 2h */
 
     private static final String AUTHORITIES_CLAIM = "authorities";
     private static final String TOKEN_TYPE_CLAIM = "tokenType";
@@ -66,7 +66,6 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .withClaim(AUTHORITIES_CLAIM, roles)
                 .withClaim(TOKEN_TYPE_CLAIM, tokenType.getType())
                 .withClaim(USER_ID_CLAIM, userDetails.getUserId().toString());
-//                .withClaim(EMAIL_CLAIM, userDetails.getUsername());
 
         return token.sign(Algorithm.HMAC256(jwtSecret.getBytes()));
 

@@ -132,8 +132,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
-
-    // TODO: Change to more specific endpoints
     private static final String[] PERMIT_ALL_ENDPOINTS = {
             "/api/users/**", "/api/directories/**", "/api/notes/**", "/api/reviews/**", "/api/institutions/**", "/api/pictures/{id}", "/api/subjects/**"
     };
@@ -150,7 +148,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and().headers().cacheControl().disable()
                 .and().authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/users").hasAnyRole(Role.ROLE_ANONYMOUS.getShortName(), Role.ROLE_VERIFY.getShortName())
-                .antMatchers(HttpMethod.GET, PERMIT_ALL_ENDPOINTS).not().hasRole(Role.ROLE_VERIFY.getShortName()) // During the verification process, users can only change their passwords
+                .antMatchers(HttpMethod.GET, PERMIT_ALL_ENDPOINTS).not().hasRole(Role.ROLE_VERIFY.getShortName()) /* During the verification process, users can only change their passwords */
                 .antMatchers(HttpMethod.HEAD, PERMIT_ALL_ENDPOINTS).not().hasRole(Role.ROLE_VERIFY.getShortName())
                 .anyRequest().hasAnyRole(Role.ROLE_ADMIN.getShortName(), Role.ROLE_STUDENT.getShortName())
                 .and().addFilterAfter(abstractAuthFilter(), AnonymousAuthenticationFilter.class);

@@ -6,7 +6,6 @@ import org.springframework.security.core.AuthenticationException;
 
 public class InvalidJwtTokenException extends AuthenticationException implements ApiHttpError {
 
-//    private static final ApiErrorCode CODE = ApiErrorCode.INVALID_JWT_CLAIM;
     private static final HttpStatus STATUS = HttpStatus.UNAUTHORIZED;
     private final String details;
 
