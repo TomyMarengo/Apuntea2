@@ -26,7 +26,11 @@ export default function HomePage() {
       title: t('cards.findNotes.title'),
       description: t('cards.findNotes.description'),
       icon: <Search sx={{ fontSize: 100 }} />,
-      link: '/search',
+      link:
+        '/search' +
+        (isLoggedIn && user.institution && user.career
+          ? `?institutionId=${user.institution?.id}&careerId=${user.career?.id}`
+          : ''),
     },
     {
       title: isLoggedIn

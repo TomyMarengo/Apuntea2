@@ -27,6 +27,7 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
   const isSeasonalMode = useSelector(
     (state: RootState) => state.theme.isSeasonalMode,
   );
+  const user = useSelector((state: RootState) => state.auth.user);
 
   return (
     <AppBar
@@ -52,7 +53,15 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
 
         {/* Right Side */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <IconButton component={Link} to="/search">
+          <IconButton
+            component={Link}
+            to={
+              '/search' +
+              (user && user.institution && user.career
+                ? `?institutionId=${user.institution?.id}&careerId=${user.career?.id}`
+                : '')
+            }
+          >
             <SearchIcon sx={{ color: 'primary.main' }} />
           </IconButton>
 
