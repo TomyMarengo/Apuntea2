@@ -29,7 +29,7 @@ import { SubjectWithCareer } from '../types';
 
 interface SubjectDirectoryCardProps {
   subject: SubjectWithCareer;
-  userId: string;
+  userId?: string; // Optional userId to show notes count
 }
 
 const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
@@ -85,7 +85,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
       if (isFavorite) {
         const result = await removeFavoriteDirectory({
           directoryId: directory?.id,
-          userId,
+          userId: loggedUser?.id,
         }).unwrap();
         if (result) {
           toast.success(t('unfavorited'));
@@ -118,7 +118,11 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
     <Box
       component={RouterLink}
       to={
-        directory ? `/directories/${directory.id}?userId=${userId}` : '/notes'
+        directory
+          ? `/directories/${directory.id}${userId ? `?userId=${userId}` : ''}`
+          : userId
+            ? '/notes'
+            : '/myCareer'
       }
       sx={{
         backgroundColor: 'transparent',
@@ -169,37 +173,39 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
         )}
 
         {/* Notes Count */}
-        <Tooltip
-          placement="right"
-          title={
-            notesLoading || dirLoading
-              ? ''
-              : t('notesCount', { count: notesCount })
-          }
-        >
-          <Box
-            sx={{
-              position: 'absolute',
-              top: -8,
-              left: -20,
-              backgroundColor: 'none',
-              width: 24,
-              height: 24,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+        {userId && (
+          <Tooltip
+            placement="right"
+            title={
+              notesLoading || dirLoading
+                ? ''
+                : t('notesCount', { count: notesCount })
+            }
           >
-            {notesLoading || dirLoading ? (
-              <CircularProgress size={12} />
-            ) : (
-              <>
-                <Typography variant="subtitle2">{notesCount}</Typography>
-                <DescriptionIcon fontSize="inherit" sx={{ ml: 0.3 }} />
-              </>
-            )}
-          </Box>
-        </Tooltip>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: -8,
+                left: -20,
+                backgroundColor: 'none',
+                width: 24,
+                height: 24,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {notesLoading || dirLoading ? (
+                <CircularProgress size={12} />
+              ) : (
+                <>
+                  <Typography variant="subtitle2">{notesCount}</Typography>
+                  <DescriptionIcon fontSize="inherit" sx={{ ml: 0.3 }} />
+                </>
+              )}
+            </Box>
+          </Tooltip>
+        )}
       </Box>
 
       {/* Subject Name and Year */}

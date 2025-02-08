@@ -20,7 +20,7 @@ import {
 import { Career, Subject, SubjectCareer, SubjectWithCareer } from '../../types';
 
 interface UserNotesProps {
-  userId: string;
+  userId?: string;
   career: Career;
 }
 
@@ -150,7 +150,7 @@ const UserNotes: React.FC<UserNotesProps> = ({ userId, career }) => {
         <>
           {/* Title */}
           <Typography variant="h5" sx={{ mb: 3 }}>
-            {t('notes')}
+            {userId ? t('notes') : t('mycareer')}
           </Typography>
 
           {/* Row with year buttons */}

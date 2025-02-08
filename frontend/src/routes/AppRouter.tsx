@@ -10,6 +10,7 @@ import FavoritesPage from '../pages/Favorites/FavoritesPage';
 import ForgotPasswordPage from '../pages/ForgotPassword/ForgotPasswordPage';
 import HomePage from '../pages/Home/HomePage';
 import LoginPage from '../pages/Login/LoginPage';
+import CareerPage from '../pages/Notes/CareerPage';
 import NotePage from '../pages/Notes/NotePage';
 import NotesPage from '../pages/Notes/NotesPage';
 import NotFoundPage from '../pages/NotFound/NotFoundPage';
@@ -62,6 +63,14 @@ export default function AppRouter() {
         element={
           <PrivateRoute>
             <NotesPage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/mycareer"
+        element={
+          <PrivateRoute>
+            <CareerPage />
           </PrivateRoute>
         }
       />

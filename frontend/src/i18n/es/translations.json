@@ -399,6 +399,7 @@
   "miniSidebar": {
     "admin": "Administrar",
     "mynotes": "Mis Apuntes",
+    "mycareer": "Mi Carrera",
     "myfavorites": "Mis Favoritos",
     "myreviews": "Mis Reseñas",
     "adminuser": "Usuarios",
@@ -463,6 +464,14 @@
     "titlePage": "Apuntes | Apuntea",
     "loading": "Cargando...",
     "errorFetching": "Error al obtener los apuntes.",
+    "noSubjectsForYear": "No hay materias disponibles para el año seleccionado.",
+    "yearButton": "Año {{year}}"
+  },
+  "careerPage": {
+    "title": "Mi Carrera",
+    "titlePage": "Mi Carrera | Apuntea",
+    "loading": "Cargando...",
+    "errorFetching": "Error al obtener las materias.",
     "noSubjectsForYear": "No hay materias disponibles para el año seleccionado.",
     "yearButton": "Año {{year}}"
   },

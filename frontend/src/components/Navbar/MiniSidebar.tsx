@@ -5,6 +5,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FolderSharedIcon from '@mui/icons-material/FolderShared';
 import NotesIcon from '@mui/icons-material/Notes';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
+import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
 import {
   Box,
   Divider,
@@ -31,6 +32,11 @@ const MiniSidebar: React.FC<MiniSidebarProps> = ({ isAdmin }) => {
       label: t('mynotes'),
       icon: <FolderSharedIcon sx={{ color: 'primary.main' }} />,
       to: '/notes',
+    },
+    {
+      label: t('mycareer'),
+      icon: <SchoolRoundedIcon sx={{ color: 'primary.main' }} />,
+      to: '/mycareer',
     },
     {
       label: t('myfavorites'),

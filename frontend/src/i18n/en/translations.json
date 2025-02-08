@@ -400,6 +400,7 @@
   "miniSidebar": {
     "admin": "Admin",
     "mynotes": "My Notes",
+    "mycareer": "My Career",
     "myfavorites": "My Favorites",
     "myreviews": "My Reviews",
     "adminuser": "Users",
@@ -460,10 +461,18 @@
     }
   },
   "notesPage": {
-    "title": "Notes",
+    "title": "Notesa",
     "titlePage": "Notes | Apuntea",
     "loading": "Loading...",
     "errorFetching": "Error fetching notes.",
+    "noSubjectsForYear": "No subjects available for the selected year.",
+    "yearButton": "Year {{year}}"
+  },
+  "careerPage": {
+    "title": "My Career",
+    "titlePage": "My Career | Apuntea",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching subjects.",
     "noSubjectsForYear": "No subjects available for the selected year.",
     "yearButton": "Year {{year}}"
   },
@@ -738,6 +747,7 @@
     "mustHaveCareerInstitution": "You must have a career and institution set to view your notes.",
     "errorFetching": "Error fetching user notes.",
     "notes": "Notes",
+    "mycareer": "My Career",
     "noSubjects": "No subjects found.",
     "yearButton": "Year {{year}}",
     "noSubjectsForYear": "No subjects available for the selected year."
