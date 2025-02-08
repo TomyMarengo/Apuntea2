@@ -13,6 +13,7 @@ import {
   Button,
   Autocomplete,
   SelectChangeEvent,
+  Chip,
 } from '@mui/material';
 import { useEffect, useCallback, useRef } from 'react';
 import { Controller, Control } from 'react-hook-form';
@@ -25,6 +26,7 @@ import {
   useGetCareersQuery,
   useGetSubjectsByCareerQuery,
 } from '../../store/slices/institutionsApiSlice';
+import { useGetUserQuery } from '../../store/slices/usersApiSlice';
 import { NoteCategory, Institution, Career, Subject } from '../../types';
 
 interface SearchFormProps {
@@ -33,6 +35,8 @@ interface SearchFormProps {
   hideInstitution?: boolean;
   hideCareer?: boolean;
   hideSubject?: boolean;
+  totalDirectories?: number;
+  totalNotes?: number;
 }
 
 export default function SearchForm({
@@ -41,11 +45,21 @@ export default function SearchForm({
   hideInstitution = false,
   hideCareer = false,
   hideSubject = false,
+  totalDirectories = 0,
+  totalNotes = 0,
 }: SearchFormProps) {
   const { t } = useTranslation('searchForm');
 
-  const { institutionId, careerId, subjectId, word, category, sortBy, asc } =
-    watch;
+  const {
+    institutionId,
+    careerId,
+    subjectId,
+    word,
+    category,
+    sortBy,
+    asc,
+    userId,
+  } = watch;
 
   const navigate = useNavigate();
 
@@ -146,6 +160,19 @@ export default function SearchForm({
     newParams.set('page', '1');
     navigate(`?${newParams.toString()}`);
   };
+
+  // Handler for userId changes
+  const onUserIdRemove = () => {
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.delete('userId');
+    newParams.set('page', '1');
+    navigate(`?${newParams.toString()}`);
+  };
+
+  const { data: userData } = useGetUserQuery(
+    { userId: userId },
+    { skip: !userId },
+  );
 
   // Fetch data based on form values
   const { data: institutions, isFetching: isFetchingInstitutions } =
@@ -360,16 +387,15 @@ export default function SearchForm({
             variant={category === 'directory' ? 'contained' : 'outlined'}
             onClick={() => onCategoryChange('directory')}
           >
-            {t('folders')}
+            {`${t('folders')}${totalDirectories ? ` ${totalDirectories}` : ''}`}
           </Button>
           <Button
             variant={category !== 'directory' ? 'contained' : 'outlined'}
             onClick={() => onCategoryChange('note')}
           >
-            {t('notes')}
+            {`${t('notes')}${totalNotes ? ` ${totalNotes}` : ''}`}
           </Button>
         </Box>
-
         {/* Select Category */}
         {category !== 'directory' && (
           <FormControl sx={{ minWidth: 150 }}>
@@ -399,6 +425,23 @@ export default function SearchForm({
               )}
             />
           </FormControl>
+        )}
+
+        {/* Select User */}
+        {userId && userData && (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+            }}
+          >
+            <Chip
+              label={t('by', { username: userData.username })}
+              variant="outlined"
+              onDelete={onUserIdRemove}
+              size="medium"
+            />
+          </Box>
         )}
       </Box>
     </Box>

@@ -73,6 +73,8 @@ export default function DirectoryPage() {
     notes,
     directories,
     totalCount,
+    totalNotes,
+    totalDirectories,
     totalPages,
     currentPage,
     pageSize,
@@ -154,6 +156,8 @@ export default function DirectoryPage() {
                 <SearchForm
                   control={control}
                   watch={watchedValues}
+                  totalNotes={totalNotes}
+                  totalDirectories={totalDirectories}
                   hideInstitution
                   hideCareer
                   hideSubject

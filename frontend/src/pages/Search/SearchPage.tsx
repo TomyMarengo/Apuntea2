@@ -18,6 +18,8 @@ export default function SearchPage() {
     notes,
     directories,
     totalCount,
+    totalNotes,
+    totalDirectories,
     totalPages,
     currentPage,
     pageSize,
@@ -37,7 +39,12 @@ export default function SearchPage() {
           {t('title')}
         </Typography>
 
-        <SearchForm control={control} watch={watchedValues} />
+        <SearchForm
+          control={control}
+          watch={watchedValues}
+          totalNotes={totalNotes}
+          totalDirectories={totalDirectories}
+        />
 
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>

@@ -20,6 +20,8 @@ interface UseSearchReturn {
   notes: Note[];
   directories: Directory[];
   totalCount: number;
+  totalNotes: number;
+  totalDirectories: number;
   totalPages: number;
   currentPage: number;
   pageSize: number;
@@ -65,8 +67,15 @@ const useSearch = (parentId?: string): UseSearchReturn => {
   const fetchData = async (data: SearchFormValues) => {
     if (data.category === 'directory') {
       await getDirectories(data);
+      await getNotes({ ...data, category: 'note', page: '1', pageSize: '1' });
     } else {
       await getNotes(data);
+      await getDirectories({
+        ...data,
+        category: 'directory',
+        page: '1',
+        pageSize: '1',
+      });
     }
   };
 
@@ -82,6 +91,9 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     (watchedValues.category === 'directory'
       ? dirsData?.totalCount
       : notesData?.totalCount) || 0;
+
+  const totalNotes = notesData?.totalCount || 0;
+  const totalDirectories = dirsData?.totalCount || 0;
   const totalPages =
     (watchedValues.category === 'directory'
       ? dirsData?.totalPages
@@ -100,6 +112,8 @@ const useSearch = (parentId?: string): UseSearchReturn => {
     notes,
     directories,
     totalCount,
+    totalNotes,
+    totalDirectories,
     totalPages,
     currentPage,
     pageSize,

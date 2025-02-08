@@ -724,7 +724,8 @@
     "notes": "Notes",
     "noInstitution": "No institution",
     "noCareer": "No career",
-    "noSubject": "No subject"
+    "noSubject": "No subject",
+    "by": "By: {{username}}"
   },
   "searchPage": {
     "titlePage": "Search | Apuntea",

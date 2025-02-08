@@ -48,7 +48,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
       pageSize: 1,
     },
     {
-      skip: !subject.subjectId || !userId,
+      skip: !subject.subjectId, //|| !userId,
     },
   );
 
@@ -173,7 +173,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
         )}
 
         {/* Notes Count */}
-        {userId && (
+        {
           <Tooltip
             placement="right"
             title={
@@ -205,7 +205,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
               )}
             </Box>
           </Tooltip>
-        )}
+        }
       </Box>
 
       {/* Subject Name and Year */}

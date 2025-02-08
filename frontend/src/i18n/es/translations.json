@@ -722,7 +722,8 @@
     "notes": "Apuntes",
     "noInstitution": "Sin institución",
     "noCareer": "Sin carrera",
-    "noSubject": "Sin materia"
+    "noSubject": "Sin materia",
+    "by": "De: {{username}}"
   },
   "searchPage": {
     "titlePage": "Buscar | Apuntea",
