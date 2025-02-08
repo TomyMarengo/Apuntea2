@@ -1,18 +1,16 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.models.Category;
-import ar.edu.itba.paw.models.exceptions.note.InvalidReviewException;
 import ar.edu.itba.paw.models.institutional.Subject;
 import ar.edu.itba.paw.models.note.*;
 import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -73,6 +71,9 @@ public class NoteJpaDao implements NoteDao {
 
     @Override
     public boolean delete(UUID noteId) {
+        Note n = em.find(Note.class, noteId);
+        if (n != null)
+            Hibernate.initialize(n.getUser());
         return em.createQuery("DELETE FROM Note n WHERE n.id = :noteId")
                 .setParameter("noteId", noteId)
                 .executeUpdate() == 1;

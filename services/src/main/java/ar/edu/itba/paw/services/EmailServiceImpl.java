@@ -103,6 +103,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendDeleteNoteEmail(Note note, String reason) {
         final User owner = note.getUser();
+        LOGGER.info("Requested Delete Note Email");
         if (!owner.getNotificationsEnabled()) {
             LOGGER.info("User {} has notifications disabled, skipping delete note email", owner.getEmail());
             return;
@@ -127,6 +128,7 @@ public class EmailServiceImpl implements EmailService {
     @Async
     @Override
     public void sendDeleteDirectoryEmail(Directory directory, String reason) {
+        LOGGER.info("Requested Delete Directory Email");
         final User owner = directory.getUser();
         if (!owner.getNotificationsEnabled()) {
             LOGGER.info("User {} has notifications disabled, skipping delete directory email", owner.getEmail());

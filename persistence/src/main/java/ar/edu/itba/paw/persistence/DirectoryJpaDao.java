@@ -4,6 +4,7 @@ import ar.edu.itba.paw.models.directory.Directory;
 import ar.edu.itba.paw.models.search.SearchArguments;
 import ar.edu.itba.paw.models.search.SortArguments;
 import ar.edu.itba.paw.models.user.User;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -109,6 +110,9 @@ public class DirectoryJpaDao implements DirectoryDao {
 
     @Override
     public boolean delete(UUID directoryId) {
+        Directory directory = em.find(Directory.class, directoryId);
+        if (directory != null)
+            Hibernate.initialize(directory.getUser());
         return em.createQuery("DELETE FROM Directory d WHERE d.id = :directoryId")
                 .setParameter("directoryId", directoryId)
                 .executeUpdate() == 1;
