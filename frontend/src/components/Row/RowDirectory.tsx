@@ -55,6 +55,13 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
   const { t } = useTranslation('rowDirectory');
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
+  const searchParams = new URLSearchParams(window.location.search);
+  const keptSearchParams = new URLSearchParams();
+  keptSearchParams.set('category', searchParams.get('category') || '');
+  keptSearchParams.set('asc', searchParams.get('asc') || '');
+  keptSearchParams.set('sortBy', searchParams.get('sortBy') || '');
+  keptSearchParams.set('page', '1');
+  keptSearchParams.set('userId', searchParams.get('userId') || '');
 
   // Fetch subject data
   const {
@@ -205,7 +212,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
               />
               <MuiLink
                 component={Link}
-                to={`/directories/${directory.id}?category=directory`}
+                to={`/directories/${directory.id}?${keptSearchParams.toString()}`}
                 underline="hover"
                 sx={{ ml: 1 }}
               >
@@ -219,7 +226,7 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
           <TableCell key={column.id}>
             <MuiLink
               component={Link}
-              to={`/directories/${subjectData?.rootDirectoryId}`}
+              to={`/directories/${subjectData?.rootDirectoryId}?${keptSearchParams.toString()}`}
               underline="hover"
             >
               {subjectName}

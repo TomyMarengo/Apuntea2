@@ -33,6 +33,13 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
   const { t } = useTranslation('directoryBreadcrumbs');
 
   const navigate = useNavigate();
+  const searchParams = new URLSearchParams(window.location.search);
+  const keptSearchParams = new URLSearchParams();
+  keptSearchParams.set('category', searchParams.get('category') || '');
+  keptSearchParams.set('asc', searchParams.get('asc') || '');
+  keptSearchParams.set('sortBy', searchParams.get('sortBy') || '');
+  keptSearchParams.set('page', '1');
+  keptSearchParams.set('userId', searchParams.get('userId') || '');
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -90,7 +97,7 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
           <MuiLink
             variant="h6"
             component={RouterLink}
-            to={`/directories/${breadcrumb[0].id}`}
+            to={`/directories/${breadcrumb[0].id}?${keptSearchParams.toString()}`}
             underline="hover"
             color="inherit"
           >
@@ -111,7 +118,7 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
           <MuiLink
             variant="h6"
             component={RouterLink}
-            to={`/directories/${breadcrumb[0].id}`}
+            to={`/directories/${breadcrumb[0].id}?${keptSearchParams.toString()}`}
             underline="hover"
             color="inherit"
           >
@@ -153,7 +160,7 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
           <MuiLink
             variant="h6"
             component={RouterLink}
-            to={`/directories/${breadcrumb[0].id}`}
+            to={`/directories/${breadcrumb[0].id}?${keptSearchParams.toString()}`}
             underline="hover"
             color="inherit"
           >
@@ -183,7 +190,9 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
                   <MenuItem
                     key={dir.id}
                     onClick={() => {
-                      navigate(`/directories/${dir.id}`);
+                      navigate(
+                        `/directories/${dir.id}?${keptSearchParams.toString()}`,
+                      );
                       handleMenuClose();
                     }}
                   >
@@ -197,7 +206,7 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
           <MuiLink
             variant="h6"
             component={RouterLink}
-            to={`/directories/${breadcrumb[breadcrumb.length - 2].id}`}
+            to={`/directories/${breadcrumb[breadcrumb.length - 2].id}?${keptSearchParams.toString()}`}
             underline="hover"
             color="inherit"
           >
@@ -208,7 +217,7 @@ const DirectoryBreadcrumbs: React.FC<DirectoryBreadcrumbsProps> = ({
             <MuiLink
               variant="h6"
               component={RouterLink}
-              to={`/directories/${currentDirectory?.id}`}
+              to={`/directories/${currentDirectory?.id}?${keptSearchParams.toString()}`}
               underline="hover"
               color="inherit"
             >
