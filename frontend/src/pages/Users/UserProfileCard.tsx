@@ -92,7 +92,10 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ user }) => {
 
   const handleFollow = async () => {
     try {
-      const result = await followUser({ userId: user.id }).unwrap();
+      const result = await followUser({
+        userId: user.id,
+        url: user.followersUrl,
+      }).unwrap();
       if (result.success) {
         toast.success(t('followed'));
         refetchIsFollowingUser();

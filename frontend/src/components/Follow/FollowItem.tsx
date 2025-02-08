@@ -15,34 +15,30 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
-  useGetUserQuery,
   useIsFollowingUserQuery,
   useFollowUserMutation,
   useUnfollowUserMutation,
 } from '../../store/slices/usersApiSlice';
+import { User } from '../../types';
 
 interface FollowItemProps {
-  followId: string;
+  // followId: string;
+  targetUser: User;
   currentUserId: string;
   onChange: () => void;
 }
 
 const FollowItem: React.FC<FollowItemProps> = ({
-  followId,
+  // followId,
+  targetUser,
   currentUserId,
   onChange,
 }) => {
   const { t } = useTranslation('followItem');
 
-  const {
-    data: followUserData,
-    error: userError,
-    isLoading: userLoading,
-  } = useGetUserQuery({ userId: followId });
-
   const { data: isFollowing, refetch } = useIsFollowingUserQuery(
-    { userId: followId, followerId: currentUserId },
-    { skip: !followId || !currentUserId },
+    { userId: targetUser.id, followerId: currentUserId },
+    { skip: !targetUser || !currentUserId },
   );
 
   const [followUser] = useFollowUserMutation();
@@ -51,83 +47,58 @@ const FollowItem: React.FC<FollowItemProps> = ({
   const handleFollow = async () => {
     try {
       const result = await followUser({
-        userId: followId,
+        userId: targetUser.id,
+        url: targetUser.followersUrl,
       }).unwrap();
       if (result.success) {
-        toast.success(
-          t('successFollow', { username: followUserData?.username }),
-        );
+        toast.success(t('successFollow', { username: targetUser?.username }));
         refetch();
         onChange();
       } else {
-        toast.error(t('errorFollow', { username: followUserData?.username }));
+        toast.error(t('errorFollow', { username: targetUser?.username }));
       }
     } catch {
-      toast.error(t('errorFollow', { username: followUserData?.username }));
+      toast.error(t('errorFollow', { username: targetUser?.username }));
     }
   };
 
   const handleUnfollow = async () => {
     try {
       const result = await unfollowUser({
-        userId: followId,
+        userId: targetUser.id,
         followerId: currentUserId,
       }).unwrap();
       if (result.success) {
-        toast.success(
-          t('successUnfollow', { username: followUserData?.username }),
-        );
+        toast.success(t('successUnfollow', { username: targetUser?.username }));
         refetch();
         onChange();
       } else {
-        toast.error(t('errorUnfollow', { username: followUserData?.username }));
+        toast.error(t('errorUnfollow', { username: targetUser?.username }));
       }
     } catch {
-      toast.error(t('errorUnfollow', { username: followUserData?.username }));
+      toast.error(t('errorUnfollow', { username: targetUser?.username }));
     }
   };
-
-  if (userLoading) {
-    return (
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar />
-        </ListItemAvatar>
-        <ListItemText primary={t('loading')} />
-      </ListItem>
-    );
-  }
-
-  if (userError || !followUserData) {
-    return (
-      <ListItem>
-        <ListItemText primary={t('errorLoadingUser')} />
-      </ListItem>
-    );
-  }
 
   return (
     <ListItem>
       <ListItemAvatar>
-        <Avatar
-          src={followUserData.profilePictureUrl}
-          alt={followUserData.username}
-        />
+        <Avatar src={targetUser.profilePictureUrl} alt={targetUser.username} />
       </ListItemAvatar>
       <ListItemText
         primary={
           <MuiLink
             component={Link}
-            to={`/users/${followUserData.id}`}
+            to={`/users/${targetUser.id}`}
             underline="hover"
           >
-            {`${followUserData.firstName || ''} ${
-              followUserData.lastName || followUserData.username
+            {`${targetUser.firstName || ''} ${
+              targetUser.lastName || targetUser.username
             }`}
           </MuiLink>
         }
       />
-      {currentUserId && followId !== currentUserId && (
+      {currentUserId && targetUser.id !== currentUserId && (
         <Box>
           {isFollowing?.success ? (
             <Button variant="outlined" color="primary" onClick={handleUnfollow}>

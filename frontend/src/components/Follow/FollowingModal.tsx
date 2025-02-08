@@ -176,7 +176,7 @@ const FollowingModal: React.FC<FollowingModalProps> = ({
               {followings.map((following) => (
                 <FollowItem
                   key={following.id}
-                  followId={following.id}
+                  targetUser={following}
                   currentUserId={userId}
                   onChange={handleChange}
                 />

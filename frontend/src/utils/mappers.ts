@@ -33,6 +33,7 @@ export const mapApiUser = (apiUser: any): User => {
     directoryFavoritesUrl: apiUser.directoryFavorites,
     followedByUrl: apiUser.followedBy,
     followingUrl: apiUser.following,
+    followersUrl: apiUser.followers,
     profilePictureUrl: apiUser.profilePicture,
   };
 };

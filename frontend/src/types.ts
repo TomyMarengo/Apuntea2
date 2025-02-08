@@ -51,6 +51,7 @@ export interface User {
   directoryFavoritesUrl: string;
   followedByUrl: string;
   followingUrl: string;
+  followersUrl: string;
   profilePictureUrl: string;
   career?: Career;
   institution?: Institution;
