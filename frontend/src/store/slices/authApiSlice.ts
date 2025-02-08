@@ -37,7 +37,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         },
       }),
       transformResponse: async (
-        // response: any,
+        _response: any,
         meta: QueryReturnValue<any>,
       ): Promise<LoginResponse> => {
         const token = (meta as any).response?.headers
