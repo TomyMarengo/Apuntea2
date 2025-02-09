@@ -50,13 +50,13 @@ export const someInstitutionId = institutions[0].id;
 const careers = [
   {
     id: 'b15f32b8-5256-4a63-8298-5e52299a589d',
-    institution: apiUrl('/institution/4212733e-b8b8-473a-967b-944148bb2f60'),
+    institution: apiUrl('/institutions/4212733e-b8b8-473a-967b-944148bb2f60'),
     name: 'Bioingeniería',
     self: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/b15f32b8-5256-4a63-8298-5e52299a589d',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/b15f32b8-5256-4a63-8298-5e52299a589d',
     ),
     subjectCareers: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/b15f32b8-5256-4a63-8298-5e52299a589d/subjectcareers',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/b15f32b8-5256-4a63-8298-5e52299a589d/subjectcareers',
     ),
     subjects: apiUrl('/subjects?careerId=b15f32b8-5256-4a63-8298-5e52299a589d'),
     subjectsNotInCareer: apiUrl(
@@ -65,13 +65,13 @@ const careers = [
   },
   {
     id: 'b19783c2-7de8-4b72-b9f7-5f2a6058cd75',
-    institution: apiUrl('/institution/4212733e-b8b8-473a-967b-944148bb2f60'),
+    institution: apiUrl('/institutions/4212733e-b8b8-473a-967b-944148bb2f60'),
     name: 'Ingeniería Electrónica',
     self: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/b19783c2-7de8-4b72-b9f7-5f2a6058cd75',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/b19783c2-7de8-4b72-b9f7-5f2a6058cd75',
     ),
     subjectCareers: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/b19783c2-7de8-4b72-b9f7-5f2a6058cd75/subjectcareers',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/b19783c2-7de8-4b72-b9f7-5f2a6058cd75/subjectcareers',
     ),
     subjects: apiUrl('/subjects?careerId=b19783c2-7de8-4b72-b9f7-5f2a6058cd75'),
     subjectsNotInCareer: apiUrl(
@@ -80,13 +80,13 @@ const careers = [
   },
   {
     id: '6264c0ca-839f-48cb-ab5a-ed94303e15f6',
-    institution: apiUrl('/institution/4212733e-b8b8-473a-967b-944148bb2f60'),
+    institution: apiUrl('/institutions/4212733e-b8b8-473a-967b-944148bb2f60'),
     name: 'Ingeniería en Petróleo',
     self: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/6264c0ca-839f-48cb-ab5a-ed94303e15f6',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/6264c0ca-839f-48cb-ab5a-ed94303e15f6',
     ),
     subjectCareers: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/6264c0ca-839f-48cb-ab5a-ed94303e15f6/subjectcareers',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/6264c0ca-839f-48cb-ab5a-ed94303e15f6/subjectcareers',
     ),
     subjects: apiUrl('/subjects?careerId=6264c0ca-839f-48cb-ab5a-ed94303e15f6'),
     subjectsNotInCareer: apiUrl(
@@ -95,13 +95,13 @@ const careers = [
   },
   {
     id: '2ddd6bf0-2293-4a32-b2b0-739c08b99c33',
-    institution: apiUrl('/institution/4212733e-b8b8-473a-967b-944148bb2f60'),
+    institution: apiUrl('/institutions/4212733e-b8b8-473a-967b-944148bb2f60'),
     name: 'Ingeniería Industrial',
     self: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/2ddd6bf0-2293-4a32-b2b0-739c08b99c33',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/2ddd6bf0-2293-4a32-b2b0-739c08b99c33',
     ),
     subjectCareers: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/2ddd6bf0-2293-4a32-b2b0-739c08b99c33/subjectcareers',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/2ddd6bf0-2293-4a32-b2b0-739c08b99c33/subjectcareers',
     ),
     subjects: apiUrl('/subjects?careerId=2ddd6bf0-2293-4a32-b2b0-739c08b99c33'),
     subjectsNotInCareer: apiUrl(
@@ -110,13 +110,13 @@ const careers = [
   },
   {
     id: '4e0e1cef-808b-4b5c-9ef2-c08c90d3c22d',
-    institution: apiUrl('/institution/4212733e-b8b8-473a-967b-944148bb2f60'),
+    institution: apiUrl('/institutions/4212733e-b8b8-473a-967b-944148bb2f60'),
     name: 'Ingeniería Informática',
     self: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/4e0e1cef-808b-4b5c-9ef2-c08c90d3c22d',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/4e0e1cef-808b-4b5c-9ef2-c08c90d3c22d',
     ),
     subjectCareers: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/4e0e1cef-808b-4b5c-9ef2-c08c90d3c22d/subjectcareers',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/4e0e1cef-808b-4b5c-9ef2-c08c90d3c22d/subjectcareers',
     ),
     subjects: apiUrl('/subjects?careerId=4e0e1cef-808b-4b5c-9ef2-c08c90d3c22d'),
     subjectsNotInCareer: apiUrl(
@@ -125,13 +125,13 @@ const careers = [
   },
   {
     id: '73396ae1-d40b-48c0-9121-21f9b25c51eb',
-    institution: apiUrl('/institution/4212733e-b8b8-473a-967b-944148bb2f60'),
+    institution: apiUrl('/institutions/4212733e-b8b8-473a-967b-944148bb2f60'),
     name: 'Ingeniería Mecánica',
     self: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/73396ae1-d40b-48c0-9121-21f9b25c51eb',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/73396ae1-d40b-48c0-9121-21f9b25c51eb',
     ),
     subjectCareers: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/73396ae1-d40b-48c0-9121-21f9b25c51eb/subjectcareers',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/73396ae1-d40b-48c0-9121-21f9b25c51eb/subjectcareers',
     ),
     subjects: apiUrl('/subjects?careerId=73396ae1-d40b-48c0-9121-21f9b25c51eb'),
     subjectsNotInCareer: apiUrl(
@@ -140,13 +140,13 @@ const careers = [
   },
   {
     id: '929c7530-5fef-4b28-8fd7-fc6e06818543',
-    institution: apiUrl('/institution/4212733e-b8b8-473a-967b-944148bb2f60'),
+    institution: apiUrl('/institutions/4212733e-b8b8-473a-967b-944148bb2f60'),
     name: 'Ingeniería Química',
     self: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/929c7530-5fef-4b28-8fd7-fc6e06818543',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/929c7530-5fef-4b28-8fd7-fc6e06818543',
     ),
     subjectCareers: apiUrl(
-      '/institution/4212733e-b8b8-473a-967b-944148bb2f60/careers/929c7530-5fef-4b28-8fd7-fc6e06818543/subjectcareers',
+      '/institutions/4212733e-b8b8-473a-967b-944148bb2f60/careers/929c7530-5fef-4b28-8fd7-fc6e06818543/subjectcareers',
     ),
     subjects: apiUrl('/subjects?careerId=929c7530-5fef-4b28-8fd7-fc6e06818543'),
     subjectsNotInCareer: apiUrl(
