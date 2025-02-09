@@ -111,8 +111,12 @@ const UserNotes: React.FC<UserNotesProps> = ({ userId, career }) => {
   // Initialize selected year to the first year if not set
   useEffect(() => {
     if (selectedYear === null && uniqueYears.length > 0) {
-      const firstYear = uniqueYears[0];
-      navigate({ search: `?year=${firstYear}&page=1` }, { replace: true });
+      const params = new URLSearchParams(location.search);
+      params.set('year', String(uniqueYears[0]));
+      params.set('page', '1');
+      navigate({
+        search: params.toString(),
+      });
     }
   }, [uniqueYears, selectedYear, setSearchParams, navigate]);
 
@@ -148,11 +152,6 @@ const UserNotes: React.FC<UserNotesProps> = ({ userId, career }) => {
         <Typography color="error">{t('errorFetching')}</Typography>
       ) : (
         <>
-          {/* Title */}
-          <Typography variant="h5" sx={{ mb: 3 }}>
-            {userId ? t('notes') : t('mycareer')}
-          </Typography>
-
           {/* Row with year buttons */}
           <Stack direction="row" spacing={2} sx={{ mb: 4 }}>
             {uniqueYears.length === 0 ? (

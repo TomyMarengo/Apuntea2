@@ -110,9 +110,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
   };
 
   // Determine the color for the FolderIcon
-  const folderColor = directory?.iconColor
-    ? `#${directory.iconColor}`
-    : 'primary.main';
+  const folderColor = 'primary.dark';
 
   return (
     <Box
@@ -120,9 +118,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
       to={
         directory
           ? `/directories/${directory.id}${userId ? `?userId=${userId}` : ''}`
-          : userId
-            ? '/notes'
-            : '/myCareer'
+          : '/notes'
       }
       sx={{
         backgroundColor: 'transparent',
@@ -143,6 +139,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
           sx={{
             fontSize: 48,
             color: folderColor,
+            opacity: notesCount > 0 || (!userId && !dirLoading) ? 1 : 0.4,
           }}
         />
 

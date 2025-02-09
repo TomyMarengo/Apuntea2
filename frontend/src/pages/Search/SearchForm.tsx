@@ -14,6 +14,7 @@ import {
   Autocomplete,
   SelectChangeEvent,
   Chip,
+  Badge,
 } from '@mui/material';
 import { useEffect, useCallback, useRef } from 'react';
 import { Controller, Control } from 'react-hook-form';
@@ -380,20 +381,61 @@ export default function SearchForm({
         <Box
           sx={{
             display: 'flex',
-            gap: 1,
+            gap: 2,
           }}
         >
           <Button
             variant={category === 'directory' ? 'contained' : 'outlined'}
             onClick={() => onCategoryChange('directory')}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              paddingRight: '24px',
+            }}
+            endIcon={
+              <Badge
+                badgeContent={totalDirectories}
+                color="secondary"
+                max={99}
+                showZero
+                sx={{
+                  marginLeft: '8px',
+                  marginBottom: '3px',
+                  '.MuiBadge-dot': {
+                    borderRadius: '50%',
+                  },
+                }}
+              />
+            }
           >
-            {`${t('folders')}${totalDirectories ? ` ${totalDirectories}` : ''}`}
+            {`${t('folders')}`}
           </Button>
+
           <Button
             variant={category !== 'directory' ? 'contained' : 'outlined'}
             onClick={() => onCategoryChange('note')}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              paddingRight: '24px',
+            }}
+            endIcon={
+              <Badge
+                badgeContent={totalNotes}
+                color="secondary"
+                max={99}
+                showZero
+                sx={{
+                  marginLeft: '8px',
+                  marginBottom: '3px',
+                  '.MuiBadge-dot': {
+                    borderRadius: '50%',
+                  },
+                }}
+              />
+            }
           >
-            {`${t('notes')}${totalNotes ? ` ${totalNotes}` : ''}`}
+            {`${t('notes')}`}
           </Button>
         </Box>
         {/* Select Category */}
@@ -440,6 +482,7 @@ export default function SearchForm({
               variant="outlined"
               onDelete={onUserIdRemove}
               size="medium"
+              color="primary"
             />
           </Box>
         )}

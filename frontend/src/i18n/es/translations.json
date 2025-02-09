@@ -399,7 +399,6 @@
   "miniSidebar": {
     "admin": "Administrar",
     "mynotes": "Mis Apuntes",
-    "mycareer": "Mi Carrera",
     "myfavorites": "Mis Favoritos",
     "myreviews": "Mis Reseñas",
     "adminuser": "Usuarios",
@@ -465,15 +464,9 @@
     "loading": "Cargando...",
     "errorFetching": "Error al obtener los apuntes.",
     "noSubjectsForYear": "No hay materias disponibles para el año seleccionado.",
-    "yearButton": "Año {{year}}"
-  },
-  "careerPage": {
-    "title": "Mi Carrera",
-    "titlePage": "Mi Carrera | Apuntea",
-    "loading": "Cargando...",
-    "errorFetching": "Error al obtener las materias.",
-    "noSubjectsForYear": "No hay materias disponibles para el año seleccionado.",
-    "yearButton": "Año {{year}}"
+    "yearButton": "Año {{year}}",
+    "myNotes": "Mis Apuntes",
+    "onlyMyNotes": "Solo mostrar mis apuntes"
   },
   "paginationBar": {
     "totalCount": "Mostrando {{from}} a {{to}} de {{totalCount}} resultados"
@@ -753,7 +746,8 @@
     "profile": "Perfil de {{username}}",
     "userNotFound": "Usuario no encontrado.",
     "errorFetchingUser": "Error al obtener el usuario.",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "notes": "Apuntes de {{username}}"
   },
   "userProfileCard": {
     "username": "Nombre de usuario",

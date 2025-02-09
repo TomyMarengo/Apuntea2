@@ -98,7 +98,12 @@ const UserPage: React.FC = () => {
 
             {/* User Notes */}
             {userId && careerData ? (
-              <UserNotes userId={userId} career={careerData} />
+              <Box>
+                <Typography variant="h5" sx={{ mt: 3 }}>
+                  {t('notes', { username: targetUser?.username })}
+                </Typography>
+                <UserNotes userId={userId} career={careerData} />
+              </Box>
             ) : (
               <Typography variant="h6" color="error">
                 {t('errorFetchingUser', { error: 'Missing user details' })}

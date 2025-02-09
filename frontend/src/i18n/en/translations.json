@@ -400,7 +400,6 @@
   "miniSidebar": {
     "admin": "Admin",
     "mynotes": "My Notes",
-    "mycareer": "My Career",
     "myfavorites": "My Favorites",
     "myreviews": "My Reviews",
     "adminuser": "Users",
@@ -466,15 +465,9 @@
     "loading": "Loading...",
     "errorFetching": "Error fetching notes.",
     "noSubjectsForYear": "No subjects available for the selected year.",
-    "yearButton": "Year {{year}}"
-  },
-  "careerPage": {
-    "title": "My Career",
-    "titlePage": "My Career | Apuntea",
-    "loading": "Loading...",
-    "errorFetching": "Error fetching subjects.",
-    "noSubjectsForYear": "No subjects available for the selected year.",
-    "yearButton": "Year {{year}}"
+    "yearButton": "Year {{year}}",
+    "myNotes": "My Notes",
+    "onlyMyNotes": "Only show my notes"
   },
   "paginationBar": {
     "totalCount": "Showing {{from}} to {{to}} of {{totalCount}} result",
@@ -748,7 +741,6 @@
     "mustHaveCareerInstitution": "You must have a career and institution set to view your notes.",
     "errorFetching": "Error fetching user notes.",
     "notes": "Notes",
-    "mycareer": "My Career",
     "noSubjects": "No subjects found.",
     "yearButton": "Year {{year}}",
     "noSubjectsForYear": "No subjects available for the selected year."
@@ -758,7 +750,8 @@
     "profile": "Profile of {{username}}",
     "userNotFound": "User not found.",
     "errorFetchingUser": "Error fetching user data.",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "notes": "{{username}}'s Notes"
   },
   "userProfileCard": {
     "username": "Username",
