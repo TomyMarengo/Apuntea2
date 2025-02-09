@@ -114,9 +114,12 @@ const UserNotes: React.FC<UserNotesProps> = ({ userId, career }) => {
       const params = new URLSearchParams(location.search);
       params.set('year', String(uniqueYears[0]));
       params.set('page', '1');
-      navigate({
-        search: params.toString(),
-      });
+      navigate(
+        {
+          search: params.toString(),
+        },
+        { replace: true },
+      );
     }
   }, [uniqueYears, selectedYear, setSearchParams, navigate]);
 

@@ -28,13 +28,6 @@ public class VerificationCodesServiceImplTest {
     @InjectMocks
     private VerificationCodesServiceImpl verificationCodesService;
 
-    @Test(expected = UserNotFoundException.class)
-    public void testVerifyInvalidCode() {
-        verificationCodesService.sendForgotPasswordCode("user@mail.com");
-        Assert.fail();
-    }
-
-
     @Test
     public void testVerifyForgotPasswordCode() {
         Mockito.when(verificationCodesDao.verifyForgotPasswordCode(Mockito.any(), Mockito.any())).thenReturn(true);
@@ -53,11 +46,5 @@ public class VerificationCodesServiceImplTest {
         Mockito.when(verificationCodesDao.verifyForgotPasswordCode(Mockito.any(), Mockito.any())).thenReturn(true);
         Mockito.when(verificationCodesDao.deleteVerificationCodes(Mockito.any())).thenReturn(false);
         Assert.assertFalse(verificationCodesService.verifyForgotPasswordCode("user@mail.com", "code"));
-    }
-
-    @Test(expected = UserNotFoundException.class)
-    public void testSendForgotPasswordToInvalidEmail() {
-        verificationCodesService.sendForgotPasswordCode("user@mail.com");
-        Assert.fail();
     }
 }

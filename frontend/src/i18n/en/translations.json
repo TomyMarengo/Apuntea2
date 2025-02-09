@@ -467,7 +467,7 @@
     "noSubjectsForYear": "No subjects available for the selected year.",
     "yearButton": "Year {{year}}",
     "myNotes": "My Notes",
-    "onlyMyNotes": "Only show my notes"
+    "onlyMyNotes": "Only my notes"
   },
   "paginationBar": {
     "totalCount": "Showing {{from}} to {{to}} of {{totalCount}} result",

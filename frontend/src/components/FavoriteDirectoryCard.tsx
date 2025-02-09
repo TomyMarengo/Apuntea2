@@ -95,9 +95,9 @@ const FavoriteDirectoryCard: React.FC<FavoriteDirectoryCardProps> = ({
         <FolderIcon
           sx={{
             fontSize: 48,
-            color: directory.iconColor
+            color: directory.parentId
               ? `#${directory.iconColor}`
-              : 'primary.main',
+              : 'primary.dark',
           }}
         />
 

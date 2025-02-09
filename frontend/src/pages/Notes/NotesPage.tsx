@@ -29,19 +29,19 @@ export default function NotesPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const switchState = params.get('onlyMyNotes') === 'true';
+    const switchState = params.get('onlyMyNotes') !== 'false';
     setIsChecked(switchState);
   }, [location.search]);
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newCheckedState = event.target.checked;
-    setIsChecked(newCheckedState);
+    // setIsChecked(newCheckedState);
 
     const params = new URLSearchParams(location.search);
     if (newCheckedState) {
       params.set('onlyMyNotes', 'true');
     } else {
-      params.delete('onlyMyNotes');
+      params.set('onlyMyNotes', 'false');
     }
 
     navigate({

@@ -466,7 +466,7 @@
     "noSubjectsForYear": "No hay materias disponibles para el año seleccionado.",
     "yearButton": "Año {{year}}",
     "myNotes": "Mis Apuntes",
-    "onlyMyNotes": "Solo mostrar mis apuntes"
+    "onlyMyNotes": "Solo mis apuntes"
   },
   "paginationBar": {
     "totalCount": "Mostrando {{from}} a {{to}} de {{totalCount}} resultados"

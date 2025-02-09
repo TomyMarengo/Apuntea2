@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.services;
 
-import ar.edu.itba.paw.models.exceptions.user.UserNotFoundException;
 import ar.edu.itba.paw.models.user.User;
 import ar.edu.itba.paw.models.user.VerificationCode;
 import ar.edu.itba.paw.persistence.UserDao;
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 public class VerificationCodesServiceImpl implements VerificationCodesService  {
@@ -30,11 +29,16 @@ public class VerificationCodesServiceImpl implements VerificationCodesService  {
 
     @Override
     @Transactional
-    public void sendForgotPasswordCode(String email) {
-        Random rnd = new Random();
-        int number = rnd.nextInt(999999);
+    public void sendForgotPasswordCode(final String email) {
+        final Random rnd = new Random();
+        final int number = rnd.nextInt(999999);
 
-        User user = userDao.findByEmail(email).orElseThrow(UserNotFoundException::new);
+        final Optional<User> maybeUser = userDao.findByEmail(email);//.orElseThrow(UserNotFoundException::new);
+        if (!maybeUser.isPresent()) {
+            LOGGER.info("User with email {} not found", email);
+            return;
+        }
+        final User user = maybeUser.get();
 
         VerificationCode verificationCode = verificationCodeDao.saveVerificationCode(String.format("%06d", number), user, LocalDateTime.now().plusMinutes(10));
         LOGGER.info("New verification code stored into database for user {}", user.getEmail());
@@ -43,7 +47,7 @@ public class VerificationCodesServiceImpl implements VerificationCodesService  {
 
     @Override
     @Transactional
-    public boolean verifyForgotPasswordCode(String email, String code) {
+    public boolean verifyForgotPasswordCode(final String email, final String code) {
         return verificationCodeDao.verifyForgotPasswordCode(email, code) && verificationCodeDao.deleteVerificationCodes(email);
     }
 }
