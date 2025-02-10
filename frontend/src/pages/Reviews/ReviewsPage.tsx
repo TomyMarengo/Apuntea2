@@ -46,7 +46,7 @@ const ReviewsPage: React.FC = () => {
     () => ({
       filter: searchParams.get('filter') || 'received',
       page: searchParams.get('page') || '1',
-      pageSize: searchParams.get('pageSize') || '1',
+      pageSize: searchParams.get('pageSize') || '10',
     }),
     [searchParams],
   );
