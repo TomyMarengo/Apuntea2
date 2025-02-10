@@ -117,8 +117,6 @@ public class User {
     public String getDisplayName() {
         if (username != null) {
             return username;
-        } else if (firstName != null && lastName != null) {
-            return firstName + " " + lastName;
         }
         return email.split("@")[0];
     }
