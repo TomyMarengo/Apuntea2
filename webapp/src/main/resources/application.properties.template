@@ -4,6 +4,7 @@ datasource.password:
 jwt.secret:
 jwt.issuer:
 
+base.root:
 base.url:
 
 mail.address:
