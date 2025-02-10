@@ -327,6 +327,8 @@
     "loading": "Cargando...",
     "errorFetching": "Error al recuperar la contraseña.",
     "title": "Olvidé mi contraseña",
+    "subtitleEmail": "Ingresa tu correo electrónico para recuperar tu contraseña",
+    "subtitleCode": "Ingresa el código de verificación y tu nueva contraseña",
     "emailLabel": "Correo electrónico",
     "submitEmail": "Enviar correo",
     "codeLabel": "Código de verificación",
@@ -382,6 +384,7 @@
   },
   "loginPage": {
     "titlePage": "Iniciar Sesión | Apuntea",
+    "subtitle": "Bienvenido de vuelta! Inicia sesión para continuar.",
     "loading": "Cargando...",
     "errorFetching": "Error al iniciar sesión: {{error}}",
     "login": "Iniciar Sesión",
@@ -526,6 +529,7 @@
   },
   "registerPage": {
     "titlePage": "Registro | Apuntea",
+    "subtitle": "¡Únete a la comunidad! Regístrate para comenzar a compartir tus apuntes.",
     "loading": "Cargando...",
     "errorFetching": "Error al registrar: {{error}}",
     "signup": "Registrarse",

@@ -267,18 +267,27 @@ export default function ForgotPasswordPage() {
           minHeight: '80vh',
         }}
       >
-        <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
-          <CardContent>
-            <Typography variant="h4" gutterBottom align="center">
-              {t('title')}
-            </Typography>
-            {step === 'email' && (
+        <Card sx={{ p: 7 }}>
+          <Typography variant="h4" gutterBottom align="center">
+            {t('title')}
+          </Typography>
+
+          {step === 'email' && (
+            <>
+              <Typography variant="body1" align="center" sx={{ mb: 2 }}>
+                {t('subtitleEmail')}
+              </Typography>
               <EmailForm onSubmit={onSubmitEmail} loading={loading} />
-            )}
-            {step === 'code' && (
+            </>
+          )}
+          {step === 'code' && (
+            <>
+              <Typography variant="body1" align="center" sx={{ mb: 2 }}>
+                {t('subtitleCode')}
+              </Typography>
               <CodeAndPasswordForm onSubmit={onSubmitCode} loading={loading} />
-            )}
-          </CardContent>
+            </>
+          )}
         </Card>
       </Box>
     </>

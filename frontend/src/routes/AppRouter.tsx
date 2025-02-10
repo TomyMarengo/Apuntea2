@@ -2,6 +2,7 @@
 import { Routes, Route } from 'react-router-dom';
 
 import AdminRoute from './AdminRoute';
+import NotLoggedInRoute from './NotLoggedInRoute';
 import PrivateRoute from './PrivateRoute';
 import AdminCareersPage from '../pages/Admin/Careers/AdminCareersPage';
 import AdminUsersPage from '../pages/Admin/Users/AdminUsersPage';
@@ -24,9 +25,32 @@ export default function AppRouter() {
     <Routes>
       {/* Public routes */}
       <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+
+      <Route
+        path="/login"
+        element={
+          <NotLoggedInRoute>
+            <LoginPage />
+          </NotLoggedInRoute>
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <NotLoggedInRoute>
+            <RegisterPage />
+          </NotLoggedInRoute>
+        }
+      />
+      <Route
+        path="/forgotpassword"
+        element={
+          <NotLoggedInRoute>
+            <ForgotPasswordPage />
+          </NotLoggedInRoute>
+        }
+      />
+
       <Route path="/search" element={<SearchPage />} />
       <Route path="/notes/:noteId" element={<NotePage />} />
       <Route path="/directories/:directoryId" element={<DirectoryPage />} />

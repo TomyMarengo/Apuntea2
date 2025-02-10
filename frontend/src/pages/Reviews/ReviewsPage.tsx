@@ -51,12 +51,7 @@ const ReviewsPage: React.FC = () => {
     [searchParams],
   );
 
-  const {
-    control,
-    watch,
-    reset,
-    formState: { dirtyFields },
-  } = useForm<ReviewsFormValues>({
+  const { control, watch, reset } = useForm<ReviewsFormValues>({
     resolver: zodResolver(reviewsSchema),
     defaultValues,
   });

@@ -86,13 +86,12 @@ const AddSubjectDialog: React.FC<AddSubjectDialogProps> = ({
 
   useEffect(() => {
     if (open) {
-      refetchNotInCareer();
       reset({
         subjectId: '',
         year: 1,
       });
     }
-  }, [open, refetchNotInCareer, reset]);
+  }, [open, reset]);
 
   // Find the currently selected subject object
   const selectedSubjectObject = useMemo(() => {

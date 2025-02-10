@@ -83,8 +83,6 @@ interface UnlinkSubjectArgs {
   url?: string;
 }
 
-//TODO: Pensar mejor los invalidateTags y provideTags
-
 export const institutionsApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getInstitutions: builder.query<Institution[], void>({

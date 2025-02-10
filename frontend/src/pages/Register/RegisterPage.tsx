@@ -148,214 +148,209 @@ export default function RegisterPage() {
           minHeight: '80vh',
         }}
       >
-        <Card sx={{ maxWidth: 500, width: '100%', mx: 2 }}>
-          <CardContent>
-            <Typography variant="h4" gutterBottom align="center">
-              {t('signup')}
-            </Typography>
+        <Card sx={{ maxWidth: 600, p: 7 }}>
+          <Typography variant="h4" gutterBottom align="center">
+            {t('signup')}
+          </Typography>
+          <Typography variant="body1" align="center" sx={{ mb: 2 }}>
+            {t('subtitle')}
+          </Typography>
 
-            <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-              <TextField
-                label={t('email')}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                {...register('email')}
-                error={!!errors.email}
-                helperText={
-                  <Box minHeight="1.5em">
-                    {errors.email ? t(errors.email.message as string) : ''}
-                  </Box>
-                }
-                InputProps={{
-                  endAdornment: watch('email') ? (
-                    <InputAdornment position="end">
+          <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              label={t('email')}
+              variant="outlined"
+              fullWidth
+              sx={{ mt: 1, mb: 0 }}
+              {...register('email')}
+              error={!!errors.email}
+              helperText={
+                <Box minHeight="2em">
+                  {errors.email ? t(errors.email.message as string) : ''}
+                </Box>
+              }
+              InputProps={{
+                endAdornment: watch('email') ? (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => handleClearField('email')}
+                      tabIndex={-1}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ) : null,
+              }}
+            />
+            <TextField
+              label={t('password')}
+              variant="outlined"
+              fullWidth
+              sx={{ mt: 1, mb: 0 }}
+              type={showPassword ? 'text' : 'password'}
+              {...register('password')}
+              error={!!errors.password}
+              helperText={
+                <Box minHeight="2em">
+                  {errors.password ? t(errors.password.message as string) : ''}
+                </Box>
+              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleTogglePassword} tabIndex={-1}>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                    {watch('password') && (
                       <IconButton
-                        onClick={() => handleClearField('email')}
+                        onClick={() => handleClearField('password')}
                         tabIndex={-1}
                       >
                         <CloseIcon />
                       </IconButton>
-                    </InputAdornment>
-                  ) : null,
-                }}
-              />
-              <TextField
-                label={t('password')}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type={showPassword ? 'text' : 'password'}
-                {...register('password')}
-                error={!!errors.password}
-                helperText={
-                  <Box minHeight="1.5em">
-                    {errors.password
-                      ? t(errors.password.message as string)
-                      : ''}
-                  </Box>
-                }
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePassword} tabIndex={-1}>
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                      {watch('password') && (
-                        <IconButton
-                          onClick={() => handleClearField('password')}
-                          tabIndex={-1}
-                        >
-                          <CloseIcon />
-                        </IconButton>
-                      )}
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <TextField
-                label={t('confirmPassword')}
-                variant="outlined"
-                fullWidth
-                margin="normal"
-                type={showConfirmPassword ? 'text' : 'password'}
-                {...register('confirmPassword')}
-                error={!!errors.confirmPassword}
-                helperText={
-                  <Box minHeight="1.5em">
-                    {errors.confirmPassword
-                      ? t(errors.confirmPassword.message as string)
-                      : ''}
-                  </Box>
-                }
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
+                    )}
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              label={t('confirmPassword')}
+              variant="outlined"
+              fullWidth
+              sx={{ mt: 1, mb: 0 }}
+              type={showConfirmPassword ? 'text' : 'password'}
+              {...register('confirmPassword')}
+              error={!!errors.confirmPassword}
+              helperText={
+                <Box minHeight="2em">
+                  {errors.confirmPassword
+                    ? t(errors.confirmPassword.message as string)
+                    : ''}
+                </Box>
+              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleToggleConfirmPassword}
+                      tabIndex={-1}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                    {watch('confirmPassword') && (
                       <IconButton
-                        onClick={handleToggleConfirmPassword}
+                        onClick={() => handleClearField('confirmPassword')}
                         tabIndex={-1}
                       >
-                        {showConfirmPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
+                        <CloseIcon />
                       </IconButton>
-                      {watch('confirmPassword') && (
-                        <IconButton
-                          onClick={() => handleClearField('confirmPassword')}
-                          tabIndex={-1}
-                        >
-                          <CloseIcon />
-                        </IconButton>
-                      )}
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <Controller
-                name="institutionId"
-                control={control}
-                render={({ field }) => (
-                  <Autocomplete
-                    {...field}
-                    options={institutions || []}
-                    getOptionLabel={(option: any) => option.name}
-                    value={
-                      institutions
-                        ? institutions.find(
-                            (inst: any) => inst.id === field.value,
-                          ) || null
-                        : null
-                    }
-                    onChange={(_, newValue) => {
-                      field.onChange(newValue ? newValue.id : '');
-                      setValue('careerId', '');
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={t('institution')}
-                        variant="outlined"
-                        margin="normal"
-                        error={!!errors.institutionId}
-                        helperText={
-                          errors.institutionId
-                            ? t(errors.institutionId.message as string)
-                            : ''
-                        }
-                      />
                     )}
-                    isOptionEqualToValue={(option, value) =>
-                      option.id === value.id
-                    }
-                    sx={{ minWidth: 180, width: '100%' }}
-                  />
-                )}
-              />
-              <Controller
-                name="careerId"
-                control={control}
-                render={({ field }) => (
-                  <Autocomplete
-                    {...field}
-                    options={careers || []}
-                    getOptionLabel={(option: any) => option.name}
-                    disabled={isFetchingCareers || careers?.length === 0}
-                    value={
-                      careers
-                        ? careers.find((car: any) => car.id === field.value) ||
-                          null
-                        : null
-                    }
-                    onChange={(_, newValue) => {
-                      field.onChange(newValue ? newValue.id : '');
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={t('career')}
-                        variant="outlined"
-                        margin="normal"
-                        error={!!errors.careerId}
-                        helperText={
-                          errors.careerId
-                            ? t(errors.careerId.message as string)
-                            : ''
-                        }
-                        disabled={!watch('institutionId') || isFetchingCareers}
-                      />
-                    )}
-                    isOptionEqualToValue={(option, value) =>
-                      option.id === value.id
-                    }
-                    sx={{ minWidth: 180, width: '100%' }}
-                  />
-                )}
-              />
-              {registerError && (
-                <Typography variant="body2" color="error" sx={{ mt: 1 }}>
-                  {registerError}
-                </Typography>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Controller
+              name="institutionId"
+              control={control}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  options={institutions || []}
+                  getOptionLabel={(option: any) => option.name}
+                  value={
+                    institutions
+                      ? institutions.find(
+                          (inst: any) => inst.id === field.value,
+                        ) || null
+                      : null
+                  }
+                  onChange={(_, newValue) => {
+                    field.onChange(newValue ? newValue.id : '');
+                    setValue('careerId', '');
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t('institution')}
+                      variant="outlined"
+                      sx={{ mt: 1, mb: 0 }}
+                      error={!!errors.institutionId}
+                      helperText={
+                        errors.institutionId
+                          ? t(errors.institutionId.message as string)
+                          : ''
+                      }
+                    />
+                  )}
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value.id
+                  }
+                  sx={{ minWidth: 180, width: '100%' }}
+                />
               )}
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                sx={{ mt: 2 }}
-                disabled={loading}
-              >
-                {loading ? <CircularProgress size={24} /> : t('signup')}
-              </Button>
-            </Box>
-            <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-              {t('alreadyHaveAccount')}{' '}
-              <RouterLink to="/login" style={{ color: '#1976d2' }}>
-                {t('login')}
-              </RouterLink>
-            </Typography>
-          </CardContent>
+            />
+            <Controller
+              name="careerId"
+              control={control}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  options={careers || []}
+                  getOptionLabel={(option: any) => option.name}
+                  disabled={isFetchingCareers || careers?.length === 0}
+                  value={
+                    careers
+                      ? careers.find((car: any) => car.id === field.value) ||
+                        null
+                      : null
+                  }
+                  onChange={(_, newValue) => {
+                    field.onChange(newValue ? newValue.id : '');
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t('career')}
+                      variant="outlined"
+                      sx={{ mt: 1, mb: 0 }}
+                      error={!!errors.careerId}
+                      helperText={
+                        errors.careerId
+                          ? t(errors.careerId.message as string)
+                          : ''
+                      }
+                      disabled={!watch('institutionId') || isFetchingCareers}
+                    />
+                  )}
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value.id
+                  }
+                  sx={{ minWidth: 180, width: '100%' }}
+                />
+              )}
+            />
+            {registerError && (
+              <Typography variant="body2" color="error" sx={{ mt: 1 }}>
+                {registerError}
+              </Typography>
+            )}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ mt: 2 }}
+              disabled={loading}
+            >
+              {loading ? <CircularProgress size={24} /> : t('signup')}
+            </Button>
+          </Box>
+          <Typography variant="body2" align="center" sx={{ mt: 4 }}>
+            {t('alreadyHaveAccount')}{' '}
+            <RouterLink to="/login" style={{ color: '#1976d2' }}>
+              {t('login')}
+            </RouterLink>
+          </Typography>
         </Card>
       </Box>
     </>

@@ -37,12 +37,7 @@ export default function LoginPage() {
 
   const loginSchema = z.object({
     email: z.string().email(t('validation.emailInvalid')),
-    password: z
-      .string()
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/,
-        t('validation.passwordInvalid'),
-      ),
+    password: z.string(),
   });
 
   type LoginForm = z.infer<typeof loginSchema>;
@@ -107,10 +102,13 @@ export default function LoginPage() {
           minHeight: '80vh',
         }}
       >
-        <Card sx={{ maxWidth: 400, width: '100%', mx: 2 }}>
+        <Card sx={{ maxWidth: 600, p: 7 }}>
           <CardContent>
             <Typography variant="h4" gutterBottom align="center">
               {t('login')}
+            </Typography>
+            <Typography variant="body1" align="center" sx={{ mb: 2 }}>
+              {t('subtitle')}
             </Typography>
 
             <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -119,11 +117,11 @@ export default function LoginPage() {
                 label={t('email')}
                 variant="outlined"
                 fullWidth
-                margin="normal"
+                sx={{ mt: 1, mb: 0 }}
                 {...register('email')}
                 error={!!errors.email}
                 helperText={
-                  <Box minHeight="1.5em">
+                  <Box minHeight="2em">
                     {errors.email ? t(errors.email.message as string) : ''}
                   </Box>
                 }
@@ -146,12 +144,12 @@ export default function LoginPage() {
                 label={t('password')}
                 variant="outlined"
                 fullWidth
-                margin="normal"
+                sx={{ mt: 1, mb: 0 }}
                 type={showPassword ? 'text' : 'password'}
                 {...register('password')}
                 error={!!errors.password}
                 helperText={
-                  <Box minHeight="1.5em">
+                  <Box minHeight="2em">
                     {errors.password
                       ? t(errors.password.message as string)
                       : ''}
@@ -189,14 +187,14 @@ export default function LoginPage() {
                 variant="contained"
                 color="primary"
                 fullWidth
-                sx={{ mt: 2 }}
+                sx={{ mt: 1 }}
                 disabled={loading}
               >
                 {loading ? <CircularProgress size={24} /> : t('login')}
               </Button>
             </Box>
 
-            <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+            <Typography variant="body2" align="center" sx={{ mt: 4 }}>
               {t('noAccount')}{' '}
               <RouterLink to="/register" style={{ color: '#1976d2' }}>
                 {t('signup')}

@@ -328,6 +328,8 @@
     "loading": "Loading...",
     "errorFetching": "Error recovering password.",
     "title": "Forgot My Password",
+    "subtitleEmail": "Enter your email address to receive a code to reset your password.",
+    "subtitleCode": "Enter the code sent to your email and your new password.",
     "emailLabel": "Email Address",
     "submitEmail": "Submit Email",
     "codeLabel": "Verification Code",
@@ -383,6 +385,7 @@
   },
   "loginPage": {
     "titlePage": "Login | Apuntea",
+    "subtitle": "Welcome back! Log in to your account",
     "loading": "Loading...",
     "errorFetching": "Error logging in: {{error}}",
     "login": "Login",
@@ -528,6 +531,7 @@
   },
   "registerPage": {
     "titlePage": "Register | Apuntea",
+    "subtitle": "Create an account to start sharing your notes",
     "loading": "Loading...",
     "errorFetching": "Error registering: {{error}}",
     "signup": "Sign Up",
