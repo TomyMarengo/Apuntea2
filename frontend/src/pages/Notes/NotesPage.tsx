@@ -3,53 +3,58 @@
 import {
   Box,
   CircularProgress,
-  FormControlLabel,
-  Switch,
   Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  SelectChangeEvent,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useForm, Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { selectCurrentUser } from '../../store/slices/authSlice';
 import UserNotes from '../Users/UserNotes';
 
 export default function NotesPage() {
   const { t } = useTranslation('notesPage');
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   // Current logged user
   const user = useSelector(selectCurrentUser);
   const userId = user?.id;
-  const [isChecked, setIsChecked] = useState(true);
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const defaultValues = useMemo(
+    () => ({
+      filter: searchParams.get('filter') || 'myNotes',
+      page: searchParams.get('page') || '1',
+    }),
+    [searchParams],
+  );
+
+  const { control, watch, reset } = useForm({
+    defaultValues,
+  });
+
+  const watchedValues = watch();
+  const filter = watchedValues.filter;
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const switchState = params.get('onlyMyNotes') !== 'false';
-    setIsChecked(switchState);
-  }, [location.search]);
+    reset(defaultValues);
+  }, [searchParams]);
 
-  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newCheckedState = event.target.checked;
-    // setIsChecked(newCheckedState);
-
-    const params = new URLSearchParams(location.search);
-    if (newCheckedState) {
-      params.set('onlyMyNotes', 'true');
-    } else {
-      params.set('onlyMyNotes', 'false');
-    }
-
-    navigate({
-      pathname: location.pathname,
-      search: params.toString(),
-    });
+  const onFilterChange = (e: SelectChangeEvent<string>) => {
+    const newParams = new URLSearchParams(window.location.search);
+    newParams.set('filter', e.target.value as string);
+    navigate(`?${newParams.toString()}`);
   };
-  const notesUserId = isChecked ? userId : undefined;
+
+  const notesUserId = watchedValues.filter === 'myNotes' ? userId : undefined;
 
   return (
     <>
@@ -62,19 +67,39 @@ export default function NotesPage() {
         </Box>
       ) : (
         <Box sx={{ p: 3 }}>
-          <Typography variant="h5" sx={{ mb: 3 }}>
-            {t('myNotes')}
-          </Typography>
-          <FormControlLabel
-            control={
-              <Switch
-                defaultChecked
-                checked={isChecked}
-                onChange={handleSwitchChange}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 3,
+              gap: 2,
+            }}
+          >
+            <Typography variant="h5">{t('title')}</Typography>
+
+            <FormControl variant="outlined" sx={{ minWidth: 200 }}>
+              <InputLabel id="filter-select-label">
+                {t('filterLabel')}
+              </InputLabel>
+              <Controller
+                name="filter"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    labelId="filter-select-label"
+                    value={filter}
+                    onChange={onFilterChange}
+                    label={t('filterLabel')}
+                  >
+                    <MenuItem value="myNotes">{t('myNotes')}</MenuItem>
+                    <MenuItem value="allNotes">{t('allNotes')}</MenuItem>
+                  </Select>
+                )}
               />
-            }
-            label={t('onlyMyNotes')}
-          />
+            </FormControl>
+          </Box>
           {/* Title */}
           <UserNotes userId={notesUserId} career={user?.career} />
         </Box>

@@ -226,6 +226,7 @@ export const reviewsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetReviewsQuery,
+  useLazyGetReviewsQuery,
   useGetMyReviewQuery,
   useGetReviewQuery,
   useCreateReviewMutation,

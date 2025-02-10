@@ -236,7 +236,7 @@ export default function SearchForm({
                 disabled={isFetchingInstitutions}
               />
             )}
-            sx={{ minWidth: 180 }}
+            sx={{ flex: 1 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         )}
@@ -260,7 +260,7 @@ export default function SearchForm({
             renderInput={(params) => (
               <TextField {...params} label={t('career')} variant="outlined" />
             )}
-            sx={{ minWidth: 180 }}
+            sx={{ flex: 1 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         )}
@@ -282,7 +282,7 @@ export default function SearchForm({
             renderInput={(params) => (
               <TextField {...params} label={t('subject')} />
             )}
-            sx={{ minWidth: 180 }}
+            sx={{ flex: 1 }}
             isOptionEqualToValue={(option, value) => option.id === value.id}
           />
         )}
@@ -296,7 +296,7 @@ export default function SearchForm({
               {...field}
               label={t('word')}
               variant="outlined"
-              sx={{ flex: 1, minWidth: 220 }}
+              sx={{ flex: 1 }}
               onChange={(e) => {
                 field.onChange(e);
                 onWordChange(e.target.value);
@@ -321,15 +321,133 @@ export default function SearchForm({
           display: 'flex',
           flexWrap: 'wrap',
           gap: 2,
-          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 2,
+            }}
+          >
+            {/* Category Buttons */}
+            <Button
+              variant={category === 'directory' ? 'contained' : 'outlined'}
+              onClick={() => onCategoryChange('directory')}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingRight: '24px',
+              }}
+              endIcon={
+                <Badge
+                  badgeContent={totalDirectories}
+                  color="secondary"
+                  max={99}
+                  showZero
+                  sx={{
+                    marginLeft: '8px',
+                    '.MuiBadge-dot': {
+                      borderRadius: '50%',
+                    },
+                  }}
+                />
+              }
+            >
+              {`${t('folders')}`}
+            </Button>
+
+            <Button
+              variant={category !== 'directory' ? 'contained' : 'outlined'}
+              onClick={() => onCategoryChange('note')}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingRight: '24px',
+              }}
+              endIcon={
+                <Badge
+                  badgeContent={totalNotes}
+                  color="secondary"
+                  max={99}
+                  showZero
+                  sx={{
+                    marginLeft: '8px',
+                    '.MuiBadge-dot': {
+                      borderRadius: '50%',
+                    },
+                  }}
+                />
+              }
+            >
+              {`${t('notes')}`}
+            </Button>
+          </Box>
+
+          {/* Select Category */}
+          {category !== 'directory' && (
+            <FormControl sx={{ minWidth: 150 }}>
+              <InputLabel>{t('categoryBy')}</InputLabel>
+              <Controller
+                name="category"
+                control={control}
+                render={({ field }) => (
+                  <Select {...field} label={t('categoryBy')}>
+                    <MenuItem
+                      key="all"
+                      value="note"
+                      onClick={() => onCategoryChange('note')}
+                    >
+                      {t('all')}
+                    </MenuItem>
+                    {Object.values(NoteCategory).map((noteCategory) => (
+                      <MenuItem
+                        key={noteCategory}
+                        value={noteCategory}
+                        onClick={() => onCategoryChange(noteCategory)}
+                      >
+                        {t(noteCategory.toLowerCase())}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              />
+            </FormControl>
+          )}
+        </Box>
+
         {/* Select Sort By y Toggle Asc */}
         <Box
           sx={{
             display: 'flex',
           }}
         >
+          {/* Select User */}
+          {userId && userData && (
+            <Box
+              sx={{
+                display: 'flex',
+                alignSelf: 'center',
+                marginRight: '12px',
+              }}
+            >
+              <Chip
+                label={t('by', { username: userData.username })}
+                variant="outlined"
+                onDelete={onUserIdRemove}
+                size="medium"
+                color="primary"
+              />
+            </Box>
+          )}
           {/* Select Sort By */}
           <FormControl
             sx={{
@@ -376,116 +494,6 @@ export default function SearchForm({
             {asc === 'true' ? t('asc') : t('desc')}
           </Button>
         </Box>
-
-        {/* Category Buttons */}
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 2,
-          }}
-        >
-          <Button
-            variant={category === 'directory' ? 'contained' : 'outlined'}
-            onClick={() => onCategoryChange('directory')}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              paddingRight: '24px',
-            }}
-            endIcon={
-              <Badge
-                badgeContent={totalDirectories}
-                color="secondary"
-                max={99}
-                showZero
-                sx={{
-                  marginLeft: '8px',
-                  marginBottom: '3px',
-                  '.MuiBadge-dot': {
-                    borderRadius: '50%',
-                  },
-                }}
-              />
-            }
-          >
-            {`${t('folders')}`}
-          </Button>
-
-          <Button
-            variant={category !== 'directory' ? 'contained' : 'outlined'}
-            onClick={() => onCategoryChange('note')}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              paddingRight: '24px',
-            }}
-            endIcon={
-              <Badge
-                badgeContent={totalNotes}
-                color="secondary"
-                max={99}
-                showZero
-                sx={{
-                  marginLeft: '8px',
-                  marginBottom: '3px',
-                  '.MuiBadge-dot': {
-                    borderRadius: '50%',
-                  },
-                }}
-              />
-            }
-          >
-            {`${t('notes')}`}
-          </Button>
-        </Box>
-        {/* Select Category */}
-        {category !== 'directory' && (
-          <FormControl sx={{ minWidth: 150 }}>
-            <InputLabel>{t('categoryBy')}</InputLabel>
-            <Controller
-              name="category"
-              control={control}
-              render={({ field }) => (
-                <Select {...field} label={t('categoryBy')}>
-                  <MenuItem
-                    key="all"
-                    value="note"
-                    onClick={() => onCategoryChange('note')}
-                  >
-                    {t('all')}
-                  </MenuItem>
-                  {Object.values(NoteCategory).map((noteCategory) => (
-                    <MenuItem
-                      key={noteCategory}
-                      value={noteCategory}
-                      onClick={() => onCategoryChange(noteCategory)}
-                    >
-                      {t(noteCategory.toLowerCase())}
-                    </MenuItem>
-                  ))}
-                </Select>
-              )}
-            />
-          </FormControl>
-        )}
-
-        {/* Select User */}
-        {userId && userData && (
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1,
-            }}
-          >
-            <Chip
-              label={t('by', { username: userData.username })}
-              variant="outlined"
-              onDelete={onUserIdRemove}
-              size="medium"
-              color="primary"
-            />
-          </Box>
-        )}
       </Box>
     </Box>
   );

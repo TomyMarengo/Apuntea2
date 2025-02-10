@@ -143,7 +143,7 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
           sx={{
             fontSize: 48,
             color: folderColor,
-            opacity: notesCount > 0 || (!userId && !dirLoading) ? 1 : 0.4,
+            opacity: notesCount > 0 ? 1 : 0.4,
           }}
         />
 

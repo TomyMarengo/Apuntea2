@@ -399,7 +399,7 @@
   },
   "miniSidebar": {
     "admin": "Admin",
-    "mynotes": "My Notes",
+    "mynotes": "My Career",
     "myfavorites": "My Favorites",
     "myreviews": "My Reviews",
     "adminuser": "Users",
@@ -460,14 +460,16 @@
     }
   },
   "notesPage": {
-    "title": "Notesa",
-    "titlePage": "Notes | Apuntea",
+    "title": "My Career",
+    "titlePage": "My Career | Apuntea",
     "loading": "Loading...",
     "errorFetching": "Error fetching notes.",
     "noSubjectsForYear": "No subjects available for the selected year.",
     "yearButton": "Year {{year}}",
     "myNotes": "My Notes",
-    "onlyMyNotes": "Only my notes"
+    "allNotes": "All Notes",
+    "onlyMyNotes": "Only my notes",
+    "filterLabel": "Filter Notes"
   },
   "paginationBar": {
     "totalCount": "Showing {{from}} to {{to}} of {{totalCount}} result",

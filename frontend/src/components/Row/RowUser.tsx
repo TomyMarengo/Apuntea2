@@ -132,9 +132,7 @@ const RowUser: FC<RowUserProps> = ({ user }) => {
           <Button onClick={() => setOpenUnbanModal(false)}>
             {t('modals.cancel')}
           </Button>
-          <Button onClick={handleUnbanConfirm} color="error">
-            {t('modals.confirm')}
-          </Button>
+          <Button onClick={handleUnbanConfirm}>{t('modals.confirm')}</Button>
         </DialogActions>
       </Dialog>
     </>
