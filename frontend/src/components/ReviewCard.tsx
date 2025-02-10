@@ -45,12 +45,12 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   const { t, i18n } = useTranslation('reviewCard');
   const user = useSelector(selectCurrentUser);
 
-  const { data: userData } = useGetUserQuery(
+  const { data: userData, isLoading: isLoadingUser } = useGetUserQuery(
     { url: review.userUrl },
     { skip: !review.userUrl },
   );
 
-  const { data: noteData } = useGetNoteQuery(
+  const { data: noteData, isLoading: isLoadingNote } = useGetNoteQuery(
     { url: review.noteUrl },
     { skip: !review.noteUrl },
   );
@@ -100,15 +100,15 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           }}
         >
           <Avatar src={userData?.profilePictureUrl || ''} />
-          {userData?.id !== user?.id ? (
+          {isLoadingUser ? (
+            <Typography variant="subtitle2">{t('loadingUser')}</Typography>
+          ) : userData?.id !== user?.id ? (
             <Link
               component={RouterLink}
               to={`/users/${review.userId}`}
               underline="hover"
             >
-              <Typography variant="subtitle2">
-                {userData?.username || `User ${review.userId}`}
-              </Typography>
+              <Typography variant="subtitle2">{userData?.username}</Typography>
             </Link>
           ) : (
             <Typography variant="subtitle2">{t('you')}</Typography>
@@ -141,7 +141,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
           alignItems: 'center',
         }}
       >
-        {noteData && noteId !== noteData.id && (
+        {isLoadingNote ? (
+          <Typography variant="caption">{t('loadingNote')}</Typography>
+        ) : !noteData ? (
+          <Typography variant="caption" color="text.secondary">
+            {t('hiddenNote')}
+          </Typography>
+        ) : noteId !== noteData.id ? (
           <Link
             component={RouterLink}
             to={`/notes/${review.noteId}`}
@@ -151,11 +157,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
               {noteData.name}
             </Typography>
           </Link>
-        )}
-        {!noteData && (
-          <Typography variant="caption" color="text.secondary">
-            {t('hiddenNote')}
-          </Typography>
+        ) : (
+          <></>
         )}
         <Typography
           variant="caption"

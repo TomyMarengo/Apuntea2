@@ -570,8 +570,10 @@
     "actions": "Actions"
   },
   "reviewCard": {
-    "you": "You",
+    "loadingNote": "Loading note...",
+    "loadingUser": "Loading user...",
     "hiddenNote": "Hidden note",
+    "you": "You",
     "dateFormat": "LL"
   },
   "reviewsPage": {

@@ -41,14 +41,11 @@ const AddSubjectDialog: React.FC<AddSubjectDialogProps> = ({
 }) => {
   const { t } = useTranslation('addSubjectDialog');
 
-  const {
-    data: subjectsNotInCareer,
-    refetch: refetchNotInCareer,
-    isLoading: loadingNotInCareer,
-  } = useGetSubjectsNotInCareerQuery(
-    { url: selectedCareer?.subjectsNotInCareerUrl },
-    { skip: !selectedCareer },
-  );
+  const { data: subjectsNotInCareer, isLoading: loadingNotInCareer } =
+    useGetSubjectsNotInCareerQuery(
+      { url: selectedCareer?.subjectsNotInCareerUrl },
+      { skip: !selectedCareer },
+    );
 
   const [linkSubjectCareer, { isLoading: linkingSubject }] =
     useLinkSubjectCareerMutation();

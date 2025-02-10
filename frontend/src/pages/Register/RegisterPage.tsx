@@ -14,7 +14,6 @@ import {
   Box,
   Typography,
   Card,
-  CardContent,
   CircularProgress,
   Autocomplete,
 } from '@mui/material';

@@ -568,6 +568,8 @@
     "actions": "Acciones"
   },
   "reviewCard": {
+    "loadingNote": "Cargando apunte...",
+    "loadingUser": "Cargando usuario...",
     "hiddenNote": "Apunte oculto",
     "you": "Tú",
     "dateFormat": "LL"

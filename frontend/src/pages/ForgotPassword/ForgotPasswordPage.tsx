@@ -14,7 +14,6 @@ import {
   Box,
   Typography,
   Card,
-  CardContent,
   CircularProgress,
 } from '@mui/material';
 import { useState } from 'react';
