@@ -57,7 +57,6 @@ const RowDirectory: React.FC<RowDirectoryProps> = ({
   const user = useSelector(selectCurrentUser);
   const searchParams = new URLSearchParams(window.location.search);
   const keptSearchParams = new URLSearchParams();
-  keptSearchParams.set('category', searchParams.get('category') || '');
   keptSearchParams.set('asc', searchParams.get('asc') || '');
   keptSearchParams.set('sortBy', searchParams.get('sortBy') || '');
   keptSearchParams.set('page', '1');

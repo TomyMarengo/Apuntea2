@@ -64,7 +64,11 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
 
   const [removeFavoriteDirectory] = useRemoveFavoriteDirectoryMutation();
   const [addFavoriteDirectory] = useAddFavoriteDirectoryMutation();
-  const { data: isFavApi, refetch } = useGetIsFavoriteDirectoryQuery(
+  const {
+    data: isFavApi,
+    refetch,
+    isLoading: isFavLoading,
+  } = useGetIsFavoriteDirectoryQuery(
     { directoryId: directory?.id, userId: loggedUser?.id },
     { skip: dirLoading || !loggedUser || !directory?.id },
   );
@@ -148,24 +152,36 @@ const SubjectDirectoryCard: React.FC<SubjectDirectoryCardProps> = ({
           <Tooltip
             title={isFavorite ? t('removeFavorite')! : t('addFavorite')!}
           >
-            <IconButton
-              onClick={handleToggleFavorite}
-              size="small"
-              sx={{
-                position: 'absolute',
-                top: -10,
-                right: -30,
-                zIndex: 999,
-              }}
-            >
-              {isFavorite ? (
-                <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
-              ) : (
-                <FavoriteBorderIcon
-                  sx={{ color: 'error.main', fontSize: 22 }}
-                />
-              )}
-            </IconButton>
+            {isFavLoading ? (
+              <CircularProgress
+                size={16}
+                sx={{
+                  position: 'absolute',
+                  top: -2,
+                  right: -22,
+                  zIndex: 999,
+                }}
+              />
+            ) : (
+              <IconButton
+                onClick={handleToggleFavorite}
+                size="small"
+                sx={{
+                  position: 'absolute',
+                  top: -10,
+                  right: -30,
+                  zIndex: 999,
+                }}
+              >
+                {isFavorite ? (
+                  <FavoriteIcon sx={{ color: 'error.main', fontSize: 22 }} />
+                ) : (
+                  <FavoriteBorderIcon
+                    sx={{ color: 'error.main', fontSize: 22 }}
+                  />
+                )}
+              </IconButton>
+            )}
           </Tooltip>
         )}
 

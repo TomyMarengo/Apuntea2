@@ -304,7 +304,7 @@ const NotePage: React.FC = () => {
     resolver: zodResolver(reviewSchema),
     defaultValues: {
       content: myReviewData?.content || '',
-      score: myReviewData?.score || 1,
+      score: myReviewData?.score || 5,
     },
   });
 
