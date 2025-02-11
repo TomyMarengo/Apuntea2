@@ -1,55 +1,43 @@
+# Apuntea
 
-# Trabajo Práctico PAW - Apuntea - TPE Final
-Para la entrega final del trabajo práctico de la materia Proyecto de Aplicaciones Web, se terminará de implementar la aplicación Apuntea, un organizador de apuntes y carpetas para alumnos universitarios.
-Se migrará de su diseño anterior siguiendo el patrón MVC a una arquitectura basada en una API REST y un frontend SPA.
- 
+For the final delivery of the Web Applications Project (PAW) course, the Apuntea application has been fully implemented. Apuntea is a platform designed to share and organize study notes for university students.
 
-## Instrucciones de configuración e instalación
-1. Instalar [Tomcat 7.0.76](https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.76/)
-2. Configurar el archivo `application.properties` que se encuentra en `/webapp/src/main/java/resources`. Para esto debe utilizarse el template `application.properties.template` que se encuentra en el mismo directorio.
+This version of Apuntea has been migrated from its previous design, which followed the MVC pattern, to a modern architecture based on a REST API and a Single Page Application (SPA) frontend. The previous version, which used different technologies, can be found at [this repository](https://github.com/TomyMarengo/Apuntea).
 
-## Instrucciones de testing
-1. Para correr todos los tests, ejecutar el comando `mvn test`.
-2. Para correr solo los tests de frontend, ejecutar el comando `npx vitest` en la carpeta `/frontend`.
+The backend is developed using **Java Spring**, providing a robust and scalable REST API, while the frontend is built with **React**, enabling a dynamic and responsive user experience.
 
-## Versiones de software probadas para desarrollo y producción
-* Java 8
-* Tomcat 7.0.76
-* Maven 3.6.3 / 3.9.4
-* Postgres 14.3
-* Node v22.12.0
-* NPM 10.9.0
-* React 18.3.1
+## Setup and Installation Instructions
 
-## Usuarios
-### Administrador
-* Usuario: admin@apuntea.com
-* Contraseña: Admin1
+1. Install [Tomcat 7.0.76](https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.76/).
+2. Create the `application.properties` file in the `/webapp/src/main/resources` folder based on the [`application.properties.template`](./webapp/src/main/resources/application.properties.template).
+3. Create the `.env` file in the `/frontend` folder based on the [.env.template](./frontend/.env.template).
+4. Create the database in PostgreSQL and add at least one institution, one degree program, and one user with the `ROLE_ADMIN` role to enable course management within the application.
+5. Run `mvn clean install` and move the `webapp/target/webapp.war` file to the `webapps` folder of Tomcat.
 
-### Alumno ITBA Ingeniería Informática
-* Usuario: aluinfo@itba.edu.ar
-* Contraseña: Itba1
+## Testing Instructions
 
-### Alumno ITBA Ingeniería Mecánica
-* Usuario: alumeca@itba.edu.ar
-* Contraseña: Itba1
+1. To run all tests, execute:
+   ```sh
+   mvn test
+   ```
+2. To run only frontend tests, navigate to the `/frontend` folder and execute:
+   ```sh
+   npx vitest
+   ```
 
-### Alumno UTN
-* Usuario: alu@utn.edu.ar
-* Contraseña: Utn1
+## Tested Software Versions for Development and Production
 
-## Autores
-* Liu, Jonathan Daniel 62533
-* Marengo, Tomás Santiago 61587
-* Vilamowski, Abril 62495
-* Wischñevsky, David 62494
+- Java 8
+- Tomcat 7.0.76
+- Maven 3.6.3 or 3.9.4
+- PostgreSQL 14.3
+- Node.js 22.12.0
+- NPM 10.9.0
+- React 18.3.1
 
-## Acerca de
-Este trabajo fue realizado como entrega final del Trabajo Práctico de la materia Proyecto de Aplicaciones Web, en el tercer año de la carrera de Ingeniería Informática en el ITBA.
+## Authors
 
-
-### Profesores
-* Sotuyo Dodero, Juan Martín
-* D'onofrio, Nicolás
-* Arce, Julián
-* Quesada, Francisco
+- **Liu**, Jonathan Daniel
+- **Marengo**, Tomás Santiago
+- **Vilamowski**, Abril
+- **Wischñevsky**, David
